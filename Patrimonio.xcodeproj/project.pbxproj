@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		79058371262C79050061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058370262C79050061F296 /* SocioEconomyModel */; };
+		79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058372262C790F0061F296 /* SocioEconomyModel */; };
 		790631A3262C735800359F9F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790631A2262C735800359F9F /* Test.swift */; };
 		790631A4262C735800359F9F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790631A2262C735800359F9F /* Test.swift */; };
 		7920DC66262C700500536B03 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7920DC65262C700500536B03 /* Tests_iOS.swift */; };
@@ -63,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79058371262C79050061F296 /* SocioEconomyModel in Frameworks */,
 				7920DC92262C720D00536B03 /* AppFoundation in Frameworks */,
 				79FC3D3B262C760A00A6184B /* Statistics in Frameworks */,
 			);
@@ -72,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */,
 				7920DC94262C721400536B03 /* AppFoundation in Frameworks */,
 				79FC3D3D262C761400A6184B /* Statistics in Frameworks */,
 			);
@@ -190,6 +194,7 @@
 			packageProductDependencies = (
 				7920DC91262C720D00536B03 /* AppFoundation */,
 				79FC3D3A262C760A00A6184B /* Statistics */,
+				79058370262C79050061F296 /* SocioEconomyModel */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -211,6 +216,7 @@
 			packageProductDependencies = (
 				7920DC93262C721400536B03 /* AppFoundation */,
 				79FC3D3C262C761400A6184B /* Statistics */,
+				79058372262C790F0061F296 /* SocioEconomyModel */,
 			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
@@ -728,6 +734,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		79058370262C79050061F296 /* SocioEconomyModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SocioEconomyModel;
+		};
+		79058372262C790F0061F296 /* SocioEconomyModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SocioEconomyModel;
+		};
 		7920DC91262C720D00536B03 /* AppFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppFoundation;
