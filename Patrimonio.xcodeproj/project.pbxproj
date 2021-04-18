@@ -19,6 +19,8 @@
 		7920DC78262C700500536B03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7920DC4C262C700500536B03 /* Assets.xcassets */; };
 		7920DC92262C720D00536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC91262C720D00536B03 /* AppFoundation */; };
 		7920DC94262C721400536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC93262C721400536B03 /* AppFoundation */; };
+		79FC3D3B262C760A00A6184B /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC3D3A262C760A00A6184B /* Statistics */; };
+		79FC3D3D262C761400A6184B /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC3D3C262C761400A6184B /* Statistics */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7920DC92262C720D00536B03 /* AppFoundation in Frameworks */,
+				79FC3D3B262C760A00A6184B /* Statistics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +73,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7920DC94262C721400536B03 /* AppFoundation in Frameworks */,
+				79FC3D3D262C761400A6184B /* Statistics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,6 +189,7 @@
 			name = "Patrimonio (iOS)";
 			packageProductDependencies = (
 				7920DC91262C720D00536B03 /* AppFoundation */,
+				79FC3D3A262C760A00A6184B /* Statistics */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -205,6 +210,7 @@
 			name = "Patrimonio (macOS)";
 			packageProductDependencies = (
 				7920DC93262C721400536B03 /* AppFoundation */,
+				79FC3D3C262C761400A6184B /* Statistics */,
 			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
@@ -729,6 +735,14 @@
 		7920DC93262C721400536B03 /* AppFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppFoundation;
+		};
+		79FC3D3A262C760A00A6184B /* Statistics */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Statistics;
+		};
+		79FC3D3C262C761400A6184B /* Statistics */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Statistics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

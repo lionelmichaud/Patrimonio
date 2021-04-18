@@ -7,6 +7,8 @@
 
 import Foundation
 import AppFoundation
+import Statistics
 
 let test = SortingOrder.ascending
+let point = Point()
 

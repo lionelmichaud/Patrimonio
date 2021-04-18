@@ -5,6 +5,9 @@
       location = "group:Shared/Modules/AppFoundation">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/Statistics">
+   </FileRef>
+   <FileRef
       location = "container:Patrimonio.xcodeproj">
    </FileRef>
 </Workspace>
