@@ -14,12 +14,12 @@ import Statistics
 
 // MARK: - SINGLETON: Modèle de pension de retraite
 
-struct Retirement {
+public struct Retirement {
     
     // MARK: - Nested types
     
-    struct Model: BundleCodable {
-        static var defaultFileName : String = "RetirementModelConfig.json"
+    public struct Model: BundleCodable {
+        public static var defaultFileName : String = "RetirementModelConfig.json"
         var regimeGeneral: RegimeGeneral
         var regimeAgirc  : RegimeAgirc
         var reversion    : PensionReversion

@@ -9,8 +9,9 @@ import Foundation
 import AppFoundation
 import Statistics
 import SocioEconomyModel
-import UnemployementModel
 import Retirement
+import UnemployementModel
+import HumanLifeModel
 
 // AppFoundation
 let test = SortingOrder.ascending
@@ -22,8 +23,11 @@ let point = Point()
 let tax    = SocioEconomy.RandomVariable.pensionDevaluationRate
 let smodel = SocioEconomy.model
 
-// UnemployementModel
-let uemodel = Unemployment.model
+// HumanLifeModel
+let hlmodel = HumanLife.model
 
 // Retirement
 let rmodel = Retirement.model
+
+// UnemployementModel
+let uemodel = Unemployment.model
