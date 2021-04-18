@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Shared/Modules/UnemployementModel">
-   </FileRef>
-   <FileRef
       location = "group:Shared/Modules/AppFoundation">
    </FileRef>
    <FileRef
@@ -12,6 +9,12 @@
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/SocioEconomyModel">
+   </FileRef>
+   <FileRef
+      location = "group:Shared/Modules/UnemployementModel">
+   </FileRef>
+   <FileRef
+      location = "group:Shared/Modules/RetirementModel">
    </FileRef>
    <FileRef
       location = "container:Patrimonio.xcodeproj">
