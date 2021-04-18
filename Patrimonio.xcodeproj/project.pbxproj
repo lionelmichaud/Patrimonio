@@ -27,6 +27,8 @@
 		79706281262C7B82009A18F0 /* UnemployementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79706280262C7B82009A18F0 /* UnemployementModel */; };
 		79B2FE2C262C7DF900EBFF56 /* RetirementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2FE2B262C7DF900EBFF56 /* RetirementModel */; };
 		79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2FE2D262C7E0000EBFF56 /* RetirementModel */; };
+		79EF7E68262C8A3600E9C0FF /* FiscalModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF7E67262C8A3600E9C0FF /* FiscalModel */; };
+		79EF7E6A262C8A3D00E9C0FF /* FiscalModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF7E69262C8A3D00E9C0FF /* FiscalModel */; };
 		79FC3D3B262C760A00A6184B /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC3D3A262C760A00A6184B /* Statistics */; };
 		79FC3D3D262C761400A6184B /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC3D3C262C761400A6184B /* Statistics */; };
 /* End PBXBuildFile section */
@@ -72,6 +74,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				796F2F92262C855A002D20D1 /* HumanLifeModel in Frameworks */,
+				79EF7E68262C8A3600E9C0FF /* FiscalModel in Frameworks */,
 				79058371262C79050061F296 /* SocioEconomyModel in Frameworks */,
 				7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */,
 				79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */,
@@ -85,6 +88,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				796F2F90262C8553002D20D1 /* HumanLifeModel in Frameworks */,
+				79EF7E6A262C8A3D00E9C0FF /* FiscalModel in Frameworks */,
 				79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */,
 				79706281262C7B82009A18F0 /* UnemployementModel in Frameworks */,
 				79B2FE2C262C7DF900EBFF56 /* RetirementModel in Frameworks */,
@@ -210,6 +214,7 @@
 				7970627E262C7B7C009A18F0 /* UnemployementModel */,
 				79B2FE2D262C7E0000EBFF56 /* RetirementModel */,
 				796F2F91262C855A002D20D1 /* HumanLifeModel */,
+				79EF7E67262C8A3600E9C0FF /* FiscalModel */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -235,6 +240,7 @@
 				79706280262C7B82009A18F0 /* UnemployementModel */,
 				79B2FE2B262C7DF900EBFF56 /* RetirementModel */,
 				796F2F8F262C8553002D20D1 /* HumanLifeModel */,
+				79EF7E69262C8A3D00E9C0FF /* FiscalModel */,
 			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
@@ -791,6 +797,14 @@
 		79B2FE2D262C7E0000EBFF56 /* RetirementModel */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RetirementModel;
+		};
+		79EF7E67262C8A3600E9C0FF /* FiscalModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FiscalModel;
+		};
+		79EF7E69262C8A3D00E9C0FF /* FiscalModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FiscalModel;
 		};
 		79FC3D3A262C760A00A6184B /* Statistics */ = {
 			isa = XCSwiftPackageProductDependency;

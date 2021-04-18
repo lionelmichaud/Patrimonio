@@ -12,6 +12,7 @@ import SocioEconomyModel
 import Retirement
 import UnemployementModel
 import HumanLifeModel
+import FiscalModel
 
 // AppFoundation
 let test = SortingOrder.ascending
