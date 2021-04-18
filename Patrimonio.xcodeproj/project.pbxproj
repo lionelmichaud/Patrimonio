@@ -21,6 +21,8 @@
 		7920DC78262C700500536B03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7920DC4C262C700500536B03 /* Assets.xcassets */; };
 		7920DC92262C720D00536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC91262C720D00536B03 /* AppFoundation */; };
 		7920DC94262C721400536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC93262C721400536B03 /* AppFoundation */; };
+		7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 7970627E262C7B7C009A18F0 /* UnemployementModel */; };
+		79706281262C7B82009A18F0 /* UnemployementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79706280262C7B82009A18F0 /* UnemployementModel */; };
 		79FC3D3B262C760A00A6184B /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC3D3A262C760A00A6184B /* Statistics */; };
 		79FC3D3D262C761400A6184B /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC3D3C262C761400A6184B /* Statistics */; };
 /* End PBXBuildFile section */
@@ -66,6 +68,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				79058371262C79050061F296 /* SocioEconomyModel in Frameworks */,
+				7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */,
 				7920DC92262C720D00536B03 /* AppFoundation in Frameworks */,
 				79FC3D3B262C760A00A6184B /* Statistics in Frameworks */,
 			);
@@ -76,6 +79,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */,
+				79706281262C7B82009A18F0 /* UnemployementModel in Frameworks */,
 				7920DC94262C721400536B03 /* AppFoundation in Frameworks */,
 				79FC3D3D262C761400A6184B /* Statistics in Frameworks */,
 			);
@@ -195,6 +199,7 @@
 				7920DC91262C720D00536B03 /* AppFoundation */,
 				79FC3D3A262C760A00A6184B /* Statistics */,
 				79058370262C79050061F296 /* SocioEconomyModel */,
+				7970627E262C7B7C009A18F0 /* UnemployementModel */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -217,6 +222,7 @@
 				7920DC93262C721400536B03 /* AppFoundation */,
 				79FC3D3C262C761400A6184B /* Statistics */,
 				79058372262C790F0061F296 /* SocioEconomyModel */,
+				79706280262C7B82009A18F0 /* UnemployementModel */,
 			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
@@ -749,6 +755,14 @@
 		7920DC93262C721400536B03 /* AppFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppFoundation;
+		};
+		7970627E262C7B7C009A18F0 /* UnemployementModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UnemployementModel;
+		};
+		79706280262C7B82009A18F0 /* UnemployementModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UnemployementModel;
 		};
 		79FC3D3A262C760A00A6184B /* Statistics */ = {
 			isa = XCSwiftPackageProductDependency;

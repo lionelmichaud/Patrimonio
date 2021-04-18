@@ -9,6 +9,7 @@ import Foundation
 import AppFoundation
 import Statistics
 import SocioEconomyModel
+import UnemployementModel
 
 // AppFoundation
 let test = SortingOrder.ascending
