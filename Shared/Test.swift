@@ -12,6 +12,7 @@ import SocioEconomyModel
 import UnemployementModel
 import HumanLifeModel
 import FiscalModel
+import RetirementModel
 
 // AppFoundation
 let test = SortingOrder.ascending
@@ -27,7 +28,7 @@ let smodel = SocioEconomy.model
 let hlmodel = HumanLife.model
 
 // Retirement
-//let rmodel = Retirement.model
+let rmodel = Retirement.model
 
 // UnemployementModel
 let uemodel = Unemployment.model
