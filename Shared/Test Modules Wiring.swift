@@ -38,4 +38,4 @@ let uemodel = Unemployment.model
 let fmodel = Fiscal.model
 
 // EconomyModel
-let emodel = EconomyModel()
+let emodel = Economy.model

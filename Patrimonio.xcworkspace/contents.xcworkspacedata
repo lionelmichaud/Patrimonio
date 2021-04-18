@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Shared/Modules/EconomyModel">
-   </FileRef>
-   <FileRef
       location = "group:Shared/Modules/AppFoundation">
    </FileRef>
    <FileRef
@@ -12,6 +9,9 @@
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/FiscalModel">
+   </FileRef>
+   <FileRef
+      location = "group:Shared/Modules/EconomyModel">
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/SocioEconomyModel">

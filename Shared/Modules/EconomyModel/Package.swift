@@ -17,7 +17,9 @@ let package = Package(
             // Dependencies declare other packages that this package depends on.
             // Using 'path', we can depend on a local package that's
             // located at a given path relative to our package's folder:
-            .package(path: "../AppFoundation")
+            //.package(url: "https://github.com/t-ae/rng-extension.git", from: "1.0.0"),
+            .package(path: "../AppFoundation"),
+            .package(path: "../Statistics")
         ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -26,7 +28,9 @@ let package = Package(
             name: "EconomyModel",
             dependencies:
                 [
-                    "AppFoundation"
+                    //.product(name: "RNGExtension", package: "RNGExtension"),
+                    "AppFoundation",
+                    "Statistics"
                 ]),
         .testTarget(
             name: "EconomyModelTests",

@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		79058371262C79050061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058370262C79050061F296 /* SocioEconomyModel */; };
 		79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058372262C790F0061F296 /* SocioEconomyModel */; };
-		790631A3262C735800359F9F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790631A2262C735800359F9F /* Test.swift */; };
-		790631A4262C735800359F9F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790631A2262C735800359F9F /* Test.swift */; };
+		790631A3262C735800359F9F /* Test Modules Wiring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790631A2262C735800359F9F /* Test Modules Wiring.swift */; };
+		790631A4262C735800359F9F /* Test Modules Wiring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790631A2262C735800359F9F /* Test Modules Wiring.swift */; };
 		7920DC66262C700500536B03 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7920DC65262C700500536B03 /* Tests_iOS.swift */; };
 		7920DC71262C700500536B03 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7920DC70262C700500536B03 /* Tests_macOS.swift */; };
 		7920DC73262C700500536B03 /* PatrimonioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7920DC4A262C700400536B03 /* PatrimonioApp.swift */; };
@@ -53,7 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		790631A2262C735800359F9F /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		790631A2262C735800359F9F /* Test Modules Wiring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test Modules Wiring.swift"; sourceTree = "<group>"; };
 		7920DC4A262C700400536B03 /* PatrimonioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatrimonioApp.swift; sourceTree = "<group>"; };
 		7920DC4B262C700400536B03 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7920DC4C262C700500536B03 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -137,7 +137,7 @@
 				7920DC4A262C700400536B03 /* PatrimonioApp.swift */,
 				7920DC4B262C700400536B03 /* ContentView.swift */,
 				7920DC4C262C700500536B03 /* Assets.xcassets */,
-				790631A2262C735800359F9F /* Test.swift */,
+				790631A2262C735800359F9F /* Test Modules Wiring.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -374,7 +374,7 @@
 			files = (
 				7920DC75262C700500536B03 /* ContentView.swift in Sources */,
 				7920DC73262C700500536B03 /* PatrimonioApp.swift in Sources */,
-				790631A3262C735800359F9F /* Test.swift in Sources */,
+				790631A3262C735800359F9F /* Test Modules Wiring.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,7 +384,7 @@
 			files = (
 				7920DC76262C700500536B03 /* ContentView.swift in Sources */,
 				7920DC74262C700500536B03 /* PatrimonioApp.swift in Sources */,
-				790631A4262C735800359F9F /* Test.swift in Sources */,
+				790631A4262C735800359F9F /* Test Modules Wiring.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
