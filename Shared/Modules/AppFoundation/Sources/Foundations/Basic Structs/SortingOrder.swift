@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Ordre de tri
 
-enum SortingOrder {
+public enum SortingOrder {
     case ascending
     case descending
     

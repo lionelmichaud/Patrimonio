@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		790631A3262C735800359F9F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790631A2262C735800359F9F /* Test.swift */; };
+		790631A4262C735800359F9F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790631A2262C735800359F9F /* Test.swift */; };
 		7920DC66262C700500536B03 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7920DC65262C700500536B03 /* Tests_iOS.swift */; };
 		7920DC71262C700500536B03 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7920DC70262C700500536B03 /* Tests_macOS.swift */; };
 		7920DC73262C700500536B03 /* PatrimonioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7920DC4A262C700400536B03 /* PatrimonioApp.swift */; };
@@ -15,6 +17,8 @@
 		7920DC76262C700500536B03 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7920DC4B262C700400536B03 /* ContentView.swift */; };
 		7920DC77262C700500536B03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7920DC4C262C700500536B03 /* Assets.xcassets */; };
 		7920DC78262C700500536B03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7920DC4C262C700500536B03 /* Assets.xcassets */; };
+		7920DC92262C720D00536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC91262C720D00536B03 /* AppFoundation */; };
+		7920DC94262C721400536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC93262C721400536B03 /* AppFoundation */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		790631A2262C735800359F9F /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		7920DC4A262C700400536B03 /* PatrimonioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatrimonioApp.swift; sourceTree = "<group>"; };
 		7920DC4B262C700400536B03 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7920DC4C262C700500536B03 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -56,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7920DC92262C720D00536B03 /* AppFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7920DC94262C721400536B03 /* AppFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +99,7 @@
 				7920DC64262C700500536B03 /* Tests iOS */,
 				7920DC6F262C700500536B03 /* Tests macOS */,
 				7920DC52262C700500536B03 /* Products */,
+				7920DC90262C720D00536B03 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,6 +109,7 @@
 				7920DC4A262C700400536B03 /* PatrimonioApp.swift */,
 				7920DC4B262C700400536B03 /* ContentView.swift */,
 				7920DC4C262C700500536B03 /* Assets.xcassets */,
+				790631A2262C735800359F9F /* Test.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -151,6 +160,13 @@
 			path = "Tests macOS";
 			sourceTree = "<group>";
 		};
+		7920DC90262C720D00536B03 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -167,6 +183,9 @@
 			dependencies = (
 			);
 			name = "Patrimonio (iOS)";
+			packageProductDependencies = (
+				7920DC91262C720D00536B03 /* AppFoundation */,
+			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
 			productType = "com.apple.product-type.application";
@@ -184,6 +203,9 @@
 			dependencies = (
 			);
 			name = "Patrimonio (macOS)";
+			packageProductDependencies = (
+				7920DC93262C721400536B03 /* AppFoundation */,
+			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
 			productType = "com.apple.product-type.application";
@@ -310,6 +332,7 @@
 			files = (
 				7920DC75262C700500536B03 /* ContentView.swift in Sources */,
 				7920DC73262C700500536B03 /* PatrimonioApp.swift in Sources */,
+				790631A3262C735800359F9F /* Test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,6 +342,7 @@
 			files = (
 				7920DC76262C700500536B03 /* ContentView.swift in Sources */,
 				7920DC74262C700500536B03 /* PatrimonioApp.swift in Sources */,
+				790631A4262C735800359F9F /* Test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -696,6 +720,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7920DC91262C720D00536B03 /* AppFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppFoundation;
+		};
+		7920DC93262C721400536B03 /* AppFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppFoundation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7920DC45262C700400536B03 /* Project object */;
 }
