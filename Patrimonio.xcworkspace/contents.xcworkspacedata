@@ -2,22 +2,25 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Shared/Modules/AppFoundation">
+      location = "group:Shared/Modules/EconomyModel">
    </FileRef>
    <FileRef
-      location = "group:Shared/Modules/FiscalModel">
+      location = "group:Shared/Modules/AppFoundation">
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/Statistics">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/FiscalModel">
+   </FileRef>
+   <FileRef
       location = "group:Shared/Modules/SocioEconomyModel">
    </FileRef>
    <FileRef
-      location = "group:Shared/Modules/UnemployementModel">
+      location = "group:Shared/Modules/HumanLifeModel">
    </FileRef>
    <FileRef
-      location = "group:Shared/Modules/HumanLifeModel">
+      location = "group:Shared/Modules/UnemployementModel">
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/RetirementModel">

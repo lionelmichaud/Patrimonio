@@ -13,6 +13,7 @@ import UnemployementModel
 import HumanLifeModel
 import FiscalModel
 import RetirementModel
+import EconomyModel
 
 // AppFoundation
 let test = SortingOrder.ascending
@@ -35,3 +36,6 @@ let uemodel = Unemployment.model
 
 // FiscalModel
 let fmodel = Fiscal.model
+
+// EconomyModel
+let emodel = EconomyModel()
