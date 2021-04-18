@@ -190,6 +190,6 @@ public struct DiscreteRandomGenerator: RandomGenerator, Codable {
     }
 }
 
-struct Random {
-    static var `default` = SystemRandomNumberGenerator()
+public struct Random {
+    public static var `default` = SystemRandomNumberGenerator()
 }
