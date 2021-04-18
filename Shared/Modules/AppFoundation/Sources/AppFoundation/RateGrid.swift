@@ -15,15 +15,15 @@ enum RateGridError: Error {
 }
 
 // MARK: - Tranche de barême
-struct RateSlice: Codable {
-    let floor : Double // euro
-    let rate  : Double // %
+public struct RateSlice: Codable {
+    public let floor : Double // euro
+    public let rate  : Double // %
     var disc  : Double // euro
     
     /// Calcule la taxe ou l'impôt pour un montant taxable donné situé dans cette tranche
     /// - Parameter taxableValue: montant taxable
     /// - Returns: montant de la taxe ou de l'impôt
-    func tax(for taxableValue: Double) throws -> Double {
+    public func tax(for taxableValue: Double) throws -> Double {
         guard taxableValue >= floor else {
             throw RateGridError.notInRightSlice
         }
@@ -32,9 +32,9 @@ struct RateSlice: Codable {
 }
 
 // MARK: - Barême fiscal
-typealias RateGrid = [RateSlice]
+public typealias RateGrid = [RateSlice]
 
-extension RateGrid {
+public extension RateGrid {
     
     /// Vérifie la validité des données d'entrées du barême
     func checkValidity() throws {
@@ -83,7 +83,7 @@ extension RateGrid {
     }
 }
 
-protocol RateGridable {
+public protocol RateGridable {
     var grid: RateGrid { get set }
     
     /// Initialise les coefficients du barême
@@ -105,7 +105,7 @@ protocol RateGridable {
     func tax(for taxableValue: Double) -> Double?
 }
 
-extension RateGridable {
+public extension RateGridable {
     mutating func initializeGrid() throws {
         try grid.initialize()
     }

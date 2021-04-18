@@ -2,10 +2,10 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Shared/Modules/FiscalModel">
+      location = "group:Shared/Modules/AppFoundation">
    </FileRef>
    <FileRef
-      location = "group:Shared/Modules/AppFoundation">
+      location = "group:Shared/Modules/FiscalModel">
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/Statistics">

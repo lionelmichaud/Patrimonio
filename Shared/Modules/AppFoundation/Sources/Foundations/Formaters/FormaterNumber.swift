@@ -8,7 +8,7 @@
 
 import Foundation
 
-var valueKiloFormatter: NumberFormatter = {
+public var valueKiloFormatter: NumberFormatter = {
     let numFormatter = NumberFormatter()
     
     numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
@@ -21,7 +21,7 @@ var valueKiloFormatter: NumberFormatter = {
     return numFormatter
 }()
 
-var valueKilo€Formatter: NumberFormatter = {
+public var valueKilo€Formatter: NumberFormatter = {
     let numFormatter = NumberFormatter()
     
     numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
@@ -38,7 +38,7 @@ var valueKilo€Formatter: NumberFormatter = {
     return numFormatter
 }()
 
-var value€Formatter: NumberFormatter = {
+public var value€Formatter: NumberFormatter = {
     let numFormatter = NumberFormatter()
     numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
     numFormatter.isLenient             = true
@@ -47,7 +47,7 @@ var value€Formatter: NumberFormatter = {
     return numFormatter
 }()
 
-var percentFormatter: NumberFormatter = {
+public var percentFormatter: NumberFormatter = {
     let numFormatter = NumberFormatter()
     numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
     numFormatter.isLenient             = true
@@ -60,7 +60,7 @@ var percentFormatter: NumberFormatter = {
     return numFormatter
 }()
 
-var percentIntegerFormatter: NumberFormatter = {
+public var percentIntegerFormatter: NumberFormatter = {
     let numFormatter = NumberFormatter()
     numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
     numFormatter.isLenient             = true
@@ -73,7 +73,7 @@ var percentIntegerFormatter: NumberFormatter = {
     return numFormatter
 }()
 
-var decimalFormatter: NumberFormatter = {
+public var decimalFormatter: NumberFormatter = {
     let numFormatter = NumberFormatter()
     numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
     numFormatter.isLenient             = true
@@ -85,7 +85,7 @@ var decimalFormatter: NumberFormatter = {
     return numFormatter
 }()
 
-var decimalIntegerFormatter: NumberFormatter = {
+public var decimalIntegerFormatter: NumberFormatter = {
     let numFormatter = NumberFormatter()
     numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
     numFormatter.isLenient             = true
@@ -97,7 +97,7 @@ var decimalIntegerFormatter: NumberFormatter = {
     return numFormatter
 }()
 
-var decimalX100IntegerFormatter: NumberFormatter = {
+public var decimalX100IntegerFormatter: NumberFormatter = {
     let numFormatter = NumberFormatter()
     numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
     numFormatter.isLenient             = true
@@ -110,7 +110,7 @@ var decimalX100IntegerFormatter: NumberFormatter = {
     return numFormatter
 }()
 
-extension Double {
+public extension Double {
     var €String: String {
         value€Formatter.string(from: self as NSNumber) ?? ""
     }

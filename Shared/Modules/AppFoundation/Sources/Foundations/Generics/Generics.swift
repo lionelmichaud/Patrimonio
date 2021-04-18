@@ -8,7 +8,7 @@
 
 import Foundation
 
-func rawValueGeneric<T: CaseIterable >(of enu: T) -> Int where T: Equatable, T.AllCases == [T] {
+public func rawValueGeneric<T: CaseIterable >(of enu: T) -> Int where T: Equatable, T.AllCases == [T] {
     if Mirror(reflecting: enu).children.count != 0 {
         // le swich case possède des associated values
         let selfCaseName = Mirror(reflecting: enu).children.first!.label!

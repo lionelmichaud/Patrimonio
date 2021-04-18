@@ -9,6 +9,7 @@
 import Foundation
 import os
 import AppFoundation
+import FiscalModel
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.UnemploymentCompensation")
 

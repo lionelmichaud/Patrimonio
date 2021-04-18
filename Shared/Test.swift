@@ -9,7 +9,6 @@ import Foundation
 import AppFoundation
 import Statistics
 import SocioEconomyModel
-import Retirement
 import UnemployementModel
 import HumanLifeModel
 import FiscalModel
@@ -28,7 +27,10 @@ let smodel = SocioEconomy.model
 let hlmodel = HumanLife.model
 
 // Retirement
-let rmodel = Retirement.model
+//let rmodel = Retirement.model
 
 // UnemployementModel
 let uemodel = Unemployment.model
+
+// FiscalModel
+let fmodel = Fiscal.model

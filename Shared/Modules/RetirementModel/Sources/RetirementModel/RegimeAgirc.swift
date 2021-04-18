@@ -11,6 +11,7 @@ import os
 import AppFoundation
 import Statistics
 import SocioEconomyModel
+import FiscalModel
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.RegimeAgirc")
 
