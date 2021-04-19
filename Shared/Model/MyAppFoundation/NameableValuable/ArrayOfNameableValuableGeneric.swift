@@ -49,8 +49,8 @@ struct ArrayOfNameableValuable<E>: Codable, Versionable where
 
     init(for aClass     : AnyClass,
          fileNamePrefix : String = "") {
-        let testBundle = Bundle(for: aClass)
-        self = testBundle.decode(ArrayOfNameableValuable.self,
+        let bundle = Bundle(for: aClass)
+        self = bundle.decode(ArrayOfNameableValuable.self,
                                  from                 : fileNamePrefix + String(describing: E.self) + ".json",
                                  dateDecodingStrategy : .iso8601,
                                  keyDecodingStrategy  : .useDefaultKeys)
@@ -69,9 +69,9 @@ struct ArrayOfNameableValuable<E>: Codable, Versionable where
 
     func storeItemsToFile(for aClass     : AnyClass,
                           fileNamePrefix : String = "") {
-        let testBundle = Bundle(for: aClass)
+        let bundle = Bundle(for: aClass)
         // encode to JSON file
-        testBundle.encode(self,
+        bundle.encode(self,
                           to                   : fileNamePrefix + self.fileNamePrefix! + String(describing: E.self) + ".json",
                           dateEncodingStrategy : .iso8601,
                           keyEncodingStrategy  : .useDefaultKeys)

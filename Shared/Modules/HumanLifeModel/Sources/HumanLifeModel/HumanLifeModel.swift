@@ -28,8 +28,8 @@ public struct HumanLife {
     
     public struct Model: BundleCodable {
         public static var defaultFileName : String = "HumanLifeModelConfig.json"
-        var menLifeExpectation    : ModelRandomizer<DiscreteRandomGenerator>
-        var womenLifeExpectation  : ModelRandomizer<DiscreteRandomGenerator>
+        public var menLifeExpectation    : ModelRandomizer<DiscreteRandomGenerator>
+        public var womenLifeExpectation  : ModelRandomizer<DiscreteRandomGenerator>
         var nbOfYearsOfdependency : ModelRandomizer<DiscreteRandomGenerator>
         
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main

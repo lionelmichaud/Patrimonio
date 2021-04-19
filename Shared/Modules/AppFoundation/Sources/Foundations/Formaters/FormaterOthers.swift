@@ -9,7 +9,7 @@
 import Foundation
 
 @available(OSX 10.11, *)
-var personNameFormatter : PersonNameComponentsFormatter = {
+public var personNameFormatter : PersonNameComponentsFormatter = {
     let formatter = PersonNameComponentsFormatter()
     formatter.style = .long
     return formatter

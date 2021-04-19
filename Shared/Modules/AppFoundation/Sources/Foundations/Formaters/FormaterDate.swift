@@ -8,7 +8,7 @@
 
 import Foundation
 
-var longDateFormatter : DateFormatter = {
+public var longDateFormatter : DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateStyle = .long
     formatter.timeStyle = .none
@@ -16,7 +16,7 @@ var longDateFormatter : DateFormatter = {
     return formatter
 }()
 
-var mediumDateFormatter : DateFormatter = {
+public var mediumDateFormatter : DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateStyle = .medium
     formatter.timeStyle = .none
@@ -24,7 +24,7 @@ var mediumDateFormatter : DateFormatter = {
     return formatter
 }()
 
-var shortDateFormatter : DateFormatter = {
+public var shortDateFormatter : DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateStyle = .short
     formatter.timeStyle = .none
@@ -32,42 +32,42 @@ var shortDateFormatter : DateFormatter = {
     return formatter
 }()
 
-var dayMonthLongFormatter : DateFormatter = {
+public var dayMonthLongFormatter : DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "ddMMMM" // format Janv., Fevr., Mars
     formatter.locale = Locale(identifier: "fr_FR") // French Locale (fr_FR)
     return formatter
 }()
 
-var dayMonthMediumFormatter : DateFormatter = {
+public var dayMonthMediumFormatter : DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "dd/MMM" // format Janv., Fevr., Mars
     formatter.locale = Locale(identifier: "fr_FR") // French Locale (fr_FR)
     return formatter
 }()
 
-var dayMonthShortFormatter : DateFormatter = {
+public var dayMonthShortFormatter : DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "dd/MM" // format Janv., Fevr., Mars
     formatter.locale = Locale(identifier: "fr_FR") // French Locale (fr_FR)
     return formatter
 }()
 
-var monthLongFormatter : DateFormatter = {
+public var monthLongFormatter : DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "MMMM" // format January, February, March
     formatter.locale = Locale(identifier: "fr_FR") // French Locale (fr_FR)
     return formatter
 }()
 
-var monthMediumFormatter : DateFormatter = {
+public var monthMediumFormatter : DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "MMM" // format Janv., Fevr., Mars
     formatter.locale = Locale(identifier: "fr_FR") // French Locale (fr_FR)
     return formatter
 }()
 
-var monthShortFormatter : DateFormatter = {
+public var monthShortFormatter : DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "MM" // format 01, 02, 03
     formatter.locale = Locale(identifier: "fr_FR") // French Locale (fr_FR)
