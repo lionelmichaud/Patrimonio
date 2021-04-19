@@ -41,7 +41,6 @@
 		7998E159262DB2FD00DA4A12 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E157262DB2FD00DA4A12 /* Person.swift */; };
 		7998E15F262DB31400DA4A12 /* Sex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E15E262DB31400DA4A12 /* Sex.swift */; };
 		7998E160262DB31400DA4A12 /* Sex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E15E262DB31400DA4A12 /* Sex.swift */; };
-		7998E167262DB36100DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E166262DB36100DA4A12 /* TypePreservingCodingAdapter */; };
 		7998E16D262DB38700DA4A12 /* Seniority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E16C262DB38700DA4A12 /* Seniority.swift */; };
 		7998E16E262DB38700DA4A12 /* Seniority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E16C262DB38700DA4A12 /* Seniority.swift */; };
 		7998E178262DB46800DA4A12 /* PersonCoderPreservingType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E177262DB46800DA4A12 /* PersonCoderPreservingType.swift */; };
@@ -60,6 +59,8 @@
 		7998E1A5262DBE3E00DA4A12 /* Adult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E19F262DBE3E00DA4A12 /* Adult.swift */; };
 		7998E1AB262DBE4600DA4A12 /* Child.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E1AA262DBE4600DA4A12 /* Child.swift */; };
 		7998E1AC262DBE4600DA4A12 /* Child.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E1AA262DBE4600DA4A12 /* Child.swift */; };
+		7998E1C7262DC5C500DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */; };
+		7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E1CC262DC66700DA4A12 /* TypePreservingCodingAdapter */; };
 		79B2FE2C262C7DF900EBFF56 /* RetirementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2FE2B262C7DF900EBFF56 /* RetirementModel */; };
 		79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2FE2D262C7E0000EBFF56 /* RetirementModel */; };
 		79E713EC262C9886000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713EB262C9886000FD625 /* EconomyModel */; };
@@ -131,7 +132,7 @@
 				79EF7E68262C8A3600E9C0FF /* FiscalModel in Frameworks */,
 				79058371262C79050061F296 /* SocioEconomyModel in Frameworks */,
 				7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */,
-				7998E167262DB36100DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
+				7998E1C7262DC5C500DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
 				79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */,
 				7920DC92262C720D00536B03 /* AppFoundation in Frameworks */,
 				79FC3D3B262C760A00A6184B /* Statistics in Frameworks */,
@@ -147,6 +148,7 @@
 				79EF7E6A262C8A3D00E9C0FF /* FiscalModel in Frameworks */,
 				79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */,
 				79706281262C7B82009A18F0 /* UnemployementModel in Frameworks */,
+				7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
 				79B2FE2C262C7DF900EBFF56 /* RetirementModel in Frameworks */,
 				7920DC94262C721400536B03 /* AppFoundation in Frameworks */,
 				79FC3D3D262C761400A6184B /* Statistics in Frameworks */,
@@ -301,8 +303,8 @@
 				7998E189262DB5FB00DA4A12 /* Family+Protocols.swift */,
 				7998E177262DB46800DA4A12 /* PersonCoderPreservingType.swift */,
 				7998E156262DB2E400DA4A12 /* PersonModel */,
-				7998E19B262DBE0600DA4A12 /* Adult */,
-				7998E19C262DBE1C00DA4A12 /* Child */,
+				7998E19B262DBE0600DA4A12 /* AdultModel */,
+				7998E19C262DBE1C00DA4A12 /* ChildModel */,
 			);
 			path = FamilyModel;
 			sourceTree = "<group>";
@@ -319,22 +321,22 @@
 			path = PersonModel;
 			sourceTree = "<group>";
 		};
-		7998E19B262DBE0600DA4A12 /* Adult */ = {
+		7998E19B262DBE0600DA4A12 /* AdultModel */ = {
 			isa = PBXGroup;
 			children = (
 				7998E19F262DBE3E00DA4A12 /* Adult.swift */,
 				7998E19D262DBE3E00DA4A12 /* Adult+Pension.swift */,
 				7998E19E262DBE3E00DA4A12 /* Adult+Unemployement.swift */,
 			);
-			path = Adult;
+			path = AdultModel;
 			sourceTree = "<group>";
 		};
-		7998E19C262DBE1C00DA4A12 /* Child */ = {
+		7998E19C262DBE1C00DA4A12 /* ChildModel */ = {
 			isa = PBXGroup;
 			children = (
 				7998E1AA262DBE4600DA4A12 /* Child.swift */,
 			);
-			path = Child;
+			path = ChildModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -362,7 +364,7 @@
 				796F2F91262C855A002D20D1 /* HumanLifeModel */,
 				79EF7E67262C8A3600E9C0FF /* FiscalModel */,
 				79E713ED262C9891000FD625 /* EconomyModel */,
-				7998E166262DB36100DA4A12 /* TypePreservingCodingAdapter */,
+				7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -390,6 +392,7 @@
 				796F2F8F262C8553002D20D1 /* HumanLifeModel */,
 				79EF7E69262C8A3D00E9C0FF /* FiscalModel */,
 				79E713EB262C9886000FD625 /* EconomyModel */,
+				7998E1CC262DC66700DA4A12 /* TypePreservingCodingAdapter */,
 			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
@@ -466,7 +469,7 @@
 			);
 			mainGroup = 7920DC44262C700400536B03;
 			packageReferences = (
-				7998E165262DB36100DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */,
+				7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */,
 			);
 			productRefGroup = 7920DC52262C700500536B03 /* Products */;
 			projectDirPath = "";
@@ -944,7 +947,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7998E165262DB36100DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */ = {
+		7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git";
 			requirement = {
@@ -987,9 +990,14 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = UnemployementModel;
 		};
-		7998E166262DB36100DA4A12 /* TypePreservingCodingAdapter */ = {
+		7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7998E165262DB36100DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */;
+			package = 7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */;
+			productName = TypePreservingCodingAdapter;
+		};
+		7998E1CC262DC66700DA4A12 /* TypePreservingCodingAdapter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */;
 			productName = TypePreservingCodingAdapter;
 		};
 		79B2FE2B262C7DF900EBFF56 /* RetirementModel */ = {

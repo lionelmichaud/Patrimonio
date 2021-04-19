@@ -24,21 +24,21 @@ public struct Fiscal {
         
         var PASS                     : Double // Plafond Annuel de la Sécurité Sociale en €
         // impôts
-        var incomeTaxes              : IncomeTaxesModel
+        public var incomeTaxes              : IncomeTaxesModel
         var isf                      : IsfModel
         var estateCapitalGainIrpp    : RealEstateCapitalGainIrppModel
         // charges sociales
         var estateCapitalGainTaxes   : RealEstateCapitalGainTaxesModel
         public var pensionTaxes             : PensionTaxesModel
         var financialRevenuTaxes     : FinancialRevenuTaxesModel
-        var turnoverTaxes            : TurnoverTaxesModel
+        public var turnoverTaxes            : TurnoverTaxesModel
         public var allocationChomageTaxes   : AllocationChomageTaxesModel
         public var layOffTaxes              : LayOffTaxes
         var lifeInsuranceTaxes       : LifeInsuranceTaxes
         var companyProfitTaxes       : CompanyProfitTaxesModel
         // autres
         var demembrement             : DemembrementModel
-        var inheritanceDonation      : InheritanceDonation
+        public var inheritanceDonation      : InheritanceDonation
         var lifeInsuranceInheritance : LifeInsuranceInheritance
         
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main

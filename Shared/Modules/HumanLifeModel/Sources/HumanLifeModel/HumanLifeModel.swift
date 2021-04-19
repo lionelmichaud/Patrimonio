@@ -30,7 +30,7 @@ public struct HumanLife {
         public static var defaultFileName : String = "HumanLifeModelConfig.json"
         public var menLifeExpectation    : ModelRandomizer<DiscreteRandomGenerator>
         public var womenLifeExpectation  : ModelRandomizer<DiscreteRandomGenerator>
-        var nbOfYearsOfdependency : ModelRandomizer<DiscreteRandomGenerator>
+        public var nbOfYearsOfdependency : ModelRandomizer<DiscreteRandomGenerator>
         
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
         func initialized() -> Model {

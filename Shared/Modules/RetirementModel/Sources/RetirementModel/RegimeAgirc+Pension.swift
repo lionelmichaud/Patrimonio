@@ -26,15 +26,15 @@ extension RegimeAgirc {
     /// - Returns: pension Agirc
     /// - Waring:
     ///   - avant l'age du taux plein l'abattement est définitif
-    func pension(lastAgircKnownSituation  : RegimeAgircSituation, // swiftlint:disable:this function_parameter_count
-                 birthDate                : Date,
-                 lastKnownSituation       : RegimeGeneralSituation,
-                 dateOfRetirement         : Date,
-                 dateOfEndOfUnemployAlloc : Date?,
-                 dateOfPensionLiquid      : Date,
-                 nbEnfantNe               : Int,
-                 nbEnfantACharge          : Int,
-                 during year              : Int? = nil) ->
+    public func pension(lastAgircKnownSituation  : RegimeAgircSituation, // swiftlint:disable:this function_parameter_count
+                        birthDate                : Date,
+                        lastKnownSituation       : RegimeGeneralSituation,
+                        dateOfRetirement         : Date,
+                        dateOfEndOfUnemployAlloc : Date?,
+                        dateOfPensionLiquid      : Date,
+                        nbEnfantNe               : Int,
+                        nbEnfantACharge          : Int,
+                        during year              : Int? = nil) ->
     (coefMinoration       : Double,
      majorationPourEnfant : Double,
      projectedNbOfPoints  : Int,

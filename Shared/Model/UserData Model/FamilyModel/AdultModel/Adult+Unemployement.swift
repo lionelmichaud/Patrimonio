@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppFoundation
 
 extension Adult {
     /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de cessation d'activité et égale ou inférieure à l'année de fin de droit d'allocation chomage

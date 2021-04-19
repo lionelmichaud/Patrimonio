@@ -11,7 +11,7 @@ import AppFoundation
 
 // MARK: - Impôts sur le revenu
 
-struct IncomeTaxesModel: Codable {
+public struct IncomeTaxesModel: Codable {
     
     // MARK: - Nested types
     
@@ -33,10 +33,10 @@ struct IncomeTaxesModel: Codable {
                              irppWithChildren    : Double,
                              irppWithoutChildren : Double)]
     
-    struct Model: BundleCodable, Versionable, RateGridable {
-        static var defaultFileName : String = "IncomeTaxesModel.json"
-        var version           : Version
-        var grid              : RateGrid
+    public struct Model: BundleCodable, Versionable, RateGridable {
+        public static var defaultFileName : String = "IncomeTaxesModel.json"
+        public var version           : Version
+        public var grid              : RateGrid
         let turnOverRebate    : Double // 34.0 %
         let minTurnOverRebate : Double // 305 €
         let salaryRebate      : Double // 10.0 %
@@ -48,7 +48,7 @@ struct IncomeTaxesModel: Codable {
     // MARK: - Properties
     
     // barême de l'exoneration de charges sociale sur les plus-values immobilières
-    var model: Model
+    public var model: Model
     
     // MARK: - Methods
 
@@ -89,7 +89,7 @@ struct IncomeTaxesModel: Codable {
     ///   - [reference](https://www.economie.gouv.fr/particuliers/decote-impot-revenu)
     ///   - [reference](https://www.service-public.fr/professionnels-entreprises/vosdroits/F32105)
     ///   - [micr-entrepreneur](https://www.service-public.fr/professionnels-entreprises/vosdroits/F23267)
-    func taxableIncome(from personalIncome: WorkIncomeType) -> Double {
+    public func taxableIncome(from personalIncome: WorkIncomeType) -> Double {
         switch personalIncome {
             case .salary(_, let taxableSalary, _, _, _):
                 guard taxableSalary >= 0 else {

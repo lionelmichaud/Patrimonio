@@ -18,7 +18,7 @@ struct InheritanceSharing {
 ///  - Note:
 ///   - [service-public.fr](https://www.service-public.fr/particuliers/vosdroits/F14198)
 ///   - [capital.fr](https://www.capital.fr/votre-argent/succession-les-mesures-a-prendre-pour-proteger-son-conjoint-1027822)
-struct InheritanceDonation: Codable {
+public struct InheritanceDonation: Codable {
     
     // MARK: - Nested types
 
@@ -28,12 +28,12 @@ struct InheritanceDonation: Codable {
     }
     
     // options fiscale du conjoint à la succession
-    enum FiscalOption: String, PickableEnum, Codable {
+    public enum FiscalOption: String, PickableEnum, Codable {
         case fullUsufruct      = "100% Usufruit"
         case quotiteDisponible = "Quotité disponible"
         case usufructPlusBare  = "1/4 PP + 3/4 UF"
         
-        var pickerString: String {
+        public var pickerString: String {
             self.rawValue
         }
         
@@ -93,10 +93,10 @@ struct InheritanceDonation: Codable {
         }
     }
     
-    struct Model: BundleCodable, Versionable {
-        static var defaultFileName: String = "InheritanceDonationModel.json"
+    public struct Model: BundleCodable, Versionable {
+        public static var defaultFileName: String = "InheritanceDonationModel.json"
         
-        var version              : Version
+        public var version              : Version
         var gridDonationConjoint : RateGrid
         var abatConjoint         : Double //  80_724€
         var gridLigneDirecte     : RateGrid
@@ -107,7 +107,7 @@ struct InheritanceDonation: Codable {
     
     // MARK: - Properties
 
-    var model: Model
+    public var model: Model
     
     // MARK: - Methods
 

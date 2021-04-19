@@ -141,7 +141,7 @@ public struct LayoffCompensation: Codable {
     ///   - yearlyWorkIncomeBrut: dernier salaire annuel brut
     ///   - nbYearsSeniority: nombre d'année d'ancienneté au moment du licenciement
     /// - Returns: montant de l'indemnité de licenciement selon le Code du travail (Légale)
-    func layoffCompensationLegal(yearlyWorkIncomeBrut   : Double,
+    public func layoffCompensationLegal(yearlyWorkIncomeBrut   : Double,
                                  nbYearsSeniority years : Int) -> Double {
         let nbMonth = layoffCompensationLegalInMonth(nbYearsSeniority : years)
         // indemnité brute légale basée sur le dernier salaire brut
@@ -156,7 +156,7 @@ public struct LayoffCompensation: Codable {
     ///   - age: age au moment du licenciement
     ///   - nbYearsSeniority: nombre d'année d'ancienneté au moment du licenciement
     /// - Returns: montant de l'indemnité de licenciement selon la Convention de la Métalurgie ou Supra-convention
-    func layoffCompensation(actualCompensationBrut : Double? = nil,
+    public func layoffCompensation(actualCompensationBrut : Double? = nil,
                             causeOfRetirement      : Unemployment.Cause,
                             yearlyWorkIncomeBrut   : Double,
                             age                    : Int,

@@ -9,7 +9,7 @@
 import Foundation
 import AppFoundation
 
-struct PensionReversion: Codable {
+public struct PensionReversion: Codable {
     
     // MARK: - Nested types
     
@@ -43,8 +43,8 @@ struct PensionReversion: Codable {
                            dateEncodingStrategy : dateEncodingStrategy,
                            keyEncodingStrategy  : keyEncodingStrategy)
     }
-    func pensionReversion(pensionDecedent : Double,
-                          pensionSpouse   : Double) -> Double {
+    public func pensionReversion(pensionDecedent : Double,
+                                 pensionSpouse   : Double) -> Double {
         (pensionDecedent + pensionSpouse) * model.tauxReversion / 100.0
     }
 }

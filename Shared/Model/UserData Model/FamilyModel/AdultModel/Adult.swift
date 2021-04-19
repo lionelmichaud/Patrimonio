@@ -7,6 +7,11 @@
 //
 
 import Foundation
+import AppFoundation
+import FiscalModel
+import HumanLifeModel
+import UnemployementModel
+import RetirementModel
 
 struct BrutNetTaxable {
     var brut    : Double

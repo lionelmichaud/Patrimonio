@@ -11,7 +11,7 @@ import AppFoundation
 import HumanLifeModel
 
 // MARK: - Person
-class Person : ObservableObject, Identifiable, Codable {
+class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible {
     
     // MARK: - Nested types
 
@@ -57,7 +57,20 @@ class Person : ObservableObject, Identifiable, Codable {
     var datedLifeEvents       : DatedLifeEvents {
         return [.deces:yearOfDeath]
     }
-    
+    var description: String {
+        return """
+        
+        NAME: \(displayName)
+        - seniority: \(String(describing: type(of: self)))
+        - sexe:      \(sexe)
+        - birthdate: \(mediumDateFormatter.string(from: birthDate))
+        - age:       \(ageComponents.description)
+        - age of death:  \(ageOfDeath)
+        - year of death: \(yearOfDeath)
+
+        """
+    }
+
     // MARK: - Initialization
 
     // reads from JSON
@@ -170,21 +183,5 @@ extension Person: Comparable {
     static func < (lhs: Person, rhs: Person) -> Bool {
         // trier par date de naissance croissante
         lhs.birthDate < rhs.birthDate
-    }
-}
-
-extension Person: CustomStringConvertible {
-    var description: String {
-        return """
-        
-        NAME: \(displayName)
-        - seniority: \(String(describing: type(of: self)))
-        - sexe:      \(sexe)
-        - birthdate: \(mediumDateFormatter.string(from: birthDate))
-        - age:       \(ageComponents.description)
-        - age of death:  \(ageOfDeath)
-        - year of death: \(yearOfDeath)
-
-        """
     }
 }

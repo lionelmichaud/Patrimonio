@@ -16,13 +16,20 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 
 // MARK: - Régime Général
 
-struct RegimeGeneralSituation: Codable {
-    var atEndOf           : Int    = Date.now.year
-    var nbTrimestreAcquis : Int    = 0
-    var sam               : Double = 0
+public struct RegimeGeneralSituation: Codable {
+    var atEndOf           : Int
+    var nbTrimestreAcquis : Int
+    var sam               : Double
+
+    public init() {
+        self.atEndOf           = Date.now.year
+        self.nbTrimestreAcquis = 0
+        self.sam               = 0
+    }
+    
 }
 
-struct RegimeGeneral: Codable {
+public struct RegimeGeneral: Codable {
     
     // MARK: - Nested types
     

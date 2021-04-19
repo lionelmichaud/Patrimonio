@@ -14,7 +14,7 @@ public struct Unemployment {
     
     // MARK: - Nested types
 
-    enum Cause: String, PickableEnum, Codable {
+    public enum Cause: String, PickableEnum, Codable {
         case demission                          = "Démission"
         case licenciement                       = "Licenciement"
         case ruptureConventionnelleIndividuelle = "Rupture individuelle"
@@ -23,15 +23,15 @@ public struct Unemployment {
         
         // methods
         
-        var pickerString: String {
+        public var pickerString: String {
             return self.rawValue
         }
     }
     
     public struct Model: BundleCodable {
         public static var defaultFileName : String = "UnemploymentModelConfig.json"
-        var indemniteLicenciement  : LayoffCompensation
-        var allocationChomage      : UnemploymentCompensation
+        public var indemniteLicenciement  : LayoffCompensation
+        public var allocationChomage      : UnemploymentCompensation
     }
     
     // MARK: - Static Properties
@@ -43,7 +43,7 @@ public struct Unemployment {
     /// Indique si la personne à droit à une allocation et une indemnité
     /// - Parameter cause: cause de la cessation d'activité
     /// - Returns: vrai si a droit
-    static func canReceiveAllocation(for cause: Cause) -> Bool {
+    public static func canReceiveAllocation(for cause: Cause) -> Bool {
         cause != .demission
     }
 

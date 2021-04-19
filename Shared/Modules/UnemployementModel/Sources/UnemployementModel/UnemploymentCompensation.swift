@@ -22,7 +22,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 // https://www.cadremploi.fr/editorial/conseils/droit-du-travail/detail/article/ce-que-les-cadres-doivent-savoir-sur-la-nouvelle-convention-dassurance-chomage0.html
 // https://www.cadremploi.fr/editorial/conseils/droit-du-travail/detail/article/allocations-chomage-combien-toucheriez-vous.html
 
-struct UnemploymentCompensation: Codable {
+public struct UnemploymentCompensation: Codable {
     
     // MARK: - Nested types
 
@@ -78,7 +78,7 @@ struct UnemploymentCompensation: Codable {
     /// Durée d'indemnisation en mois
     /// - Parameter age: age au moment du licenciement
     /// - Returns: durée d'indemnisation en mois
-    func durationInMonth(age: Int) -> Int? {
+    public func durationInMonth(age: Int) -> Int? {
         model.durationGrid.last(\.maxDuration, where: \.fromAge, <=, age)
     }
     
@@ -94,8 +94,8 @@ struct UnemploymentCompensation: Codable {
     ///           - Ne diminue pas la durée totale d'indemnisation.
     ///           - Repousse uniquement le point de départ.
     ///  - [village-justice.com](https://www.village-justice.com/articles/differe-indemnisation-les-regles-avant-apres-reforme,34272.html)
-    func differeSpecifique(compensationSupralegal : Double,
-                           causeOfUnemployement   : Unemployment.Cause) -> Int {
+    public func differeSpecifique(compensationSupralegal : Double,
+                                  causeOfUnemployement   : Unemployment.Cause) -> Int {
         let delay = (compensationSupralegal / model.delayModel.ratioDiffereSpecifique).rounded(.down)
         // plafonnemment différent selon la cause de licenciement
         let plafond = (causeOfUnemployement == .planSauvegardeEmploi) ?
@@ -111,7 +111,7 @@ struct UnemploymentCompensation: Codable {
     /// - Returns: Période avant réduction de l'allocation journalière en mois
     ///            Retourne `nil` s'il n'y aura jamais de réduction
     /// - Note: La période commence au premier jour d'indemnisation
-    func reductionAfter(age: Int, SJR: Double) -> Int? {
+    public func reductionAfter(age: Int, SJR: Double) -> Int? {
         guard let slice = model.durationGrid.last(where: \.fromAge, <=, age) else {
             customLog.log(level: .error, "reduction:slice = nil")
             fatalError("reduction:slice = nil")
@@ -132,7 +132,7 @@ struct UnemploymentCompensation: Codable {
     /// - Returns: Coefficient de réduction de l'allocation journalière et durée de carence avant réduction
     ///            `afterMonth` = `nil` s'il n'y aura jamais de réduction
     /// - Note: La période commence au premier jour d'indemnisation
-    func reduction(age: Int, daylyAlloc: Double) ->
+    public func reduction(age: Int, daylyAlloc: Double) ->
     (percentReduc : Double,
      afterMonth   : Int?) {
         guard let slice = model.durationGrid.last(where: \.fromAge, <=, age) else {
@@ -154,7 +154,7 @@ struct UnemploymentCompensation: Codable {
     ///   - SJR: Salaire Journalier de Référence
     /// - Returns: Allocation de recherche d'emploi (ARE) avant son éventuelle réduction
     /// - Note: [unedic.org](https://www.unedic.org/indemnisation/vos-questions-sur-indemnisation-assurance-chomage/comment-est-calculee-mon-allocation-chomage)
-    func daylyAllocBeforeReduction(SJR: Double)
+    public func daylyAllocBeforeReduction(SJR: Double)
     -> (brut: Double,
         net : Double) {
         

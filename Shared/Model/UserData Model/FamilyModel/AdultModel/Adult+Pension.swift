@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import AppFoundation
+import FiscalModel
+import RetirementModel
 
 extension Adult {
     /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime général

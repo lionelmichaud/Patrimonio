@@ -20,9 +20,9 @@ public struct Retirement {
     
     public struct Model: BundleCodable {
         public static var defaultFileName : String = "RetirementModelConfig.json"
-        var regimeGeneral: RegimeGeneral
-        var regimeAgirc  : RegimeAgirc
-        var reversion    : PensionReversion
+        public var regimeGeneral: RegimeGeneral
+        public var regimeAgirc  : RegimeAgirc
+        public var reversion    : PensionReversion
     }
     
     // MARK: - Static methods

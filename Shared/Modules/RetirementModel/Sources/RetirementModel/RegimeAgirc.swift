@@ -17,13 +17,19 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 
 // MARK: - Régime Complémentaire AGIRC-ARCCO
 
-struct RegimeAgircSituation: Codable {
-    var atEndOf     : Int = Date.now.year
-    var nbPoints    : Int = 0
-    var pointsParAn : Int = 0
+public struct RegimeAgircSituation: Codable {
+    public init() {
+        self.atEndOf     = Date.now.year
+        self.nbPoints    = 0
+        self.pointsParAn = 0
+    }
+    
+    var atEndOf     : Int
+    var nbPoints    : Int
+    var pointsParAn : Int
 }
 
-struct RegimeAgirc: Codable {
+public struct RegimeAgirc: Codable {
     
     // MARK: - Nested types
     

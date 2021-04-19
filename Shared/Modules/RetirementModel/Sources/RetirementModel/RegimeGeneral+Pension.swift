@@ -47,13 +47,13 @@ extension RegimeGeneral {
     ///   - nbEnfant: nb d'enfant aus sens de la retraite (pour les majorations)
     ///   - year: année de calcul
     /// - Returns: Les données relatives à la pension de retraite ou nil
-    func pension(birthDate                : Date, // swiftlint:disable:this function_parameter_count
-                 dateOfRetirement         : Date,
-                 dateOfEndOfUnemployAlloc : Date?,
-                 dateOfPensionLiquid      : Date,
-                 lastKnownSituation       : RegimeGeneralSituation,
-                 nbEnfant                 : Int,
-                 during year              : Int? = nil)
+    public func pension(birthDate                : Date, // swiftlint:disable:this function_parameter_count
+                        dateOfRetirement         : Date,
+                        dateOfEndOfUnemployAlloc : Date?,
+                        dateOfPensionLiquid      : Date,
+                        lastKnownSituation       : RegimeGeneralSituation,
+                        nbEnfant                 : Int,
+                        during year              : Int? = nil)
     -> (brut : Double,
         net  : Double)? {
         if let (_, _, _, _, _, pensionBrute, pensionNette) = pension(

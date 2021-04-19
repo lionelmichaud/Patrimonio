@@ -10,13 +10,13 @@ import Foundation
 import AppFoundation
 
 // MARK: - Charges sociales sur chiffre d'affaire
-struct TurnoverTaxesModel: Codable {
+public struct TurnoverTaxesModel: Codable {
     
     // MARK: Nested types
     
-    struct Model: BundleCodable, Versionable {
-        static var defaultFileName : String = "TurnoverTaxesModel.json"
-        var version: Version
+    public struct Model: BundleCodable, Versionable {
+        public static var defaultFileName : String = "TurnoverTaxesModel.json"
+        public var version: Version
         let URSSAF : Double // 24 // %
         var total  : Double {
             URSSAF // %
@@ -25,13 +25,13 @@ struct TurnoverTaxesModel: Codable {
     
     // MARK: Properties
     
-    var model: Model
+    public var model: Model
     
     // MARK: Methods
     
     /// chiffre d'affaire net de charges sociales
     /// - Parameter brut: chiffre d'affaire brut
-    func net(_ brut: Double) -> Double {
+    public func net(_ brut: Double) -> Double {
         guard brut > 0.0 else {
             return 0.0
         }

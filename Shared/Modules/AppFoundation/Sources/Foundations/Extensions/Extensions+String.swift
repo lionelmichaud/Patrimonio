@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension String {
+public extension String {
     /// Counting words in a string
     ///
     /// Usage:
@@ -128,7 +128,7 @@ extension String {
 
 }
 
-extension String {
+public extension String {
 //    let subscript1 = "Hello, world!"[7...]
 //    let subscript2 = "Hello, world!"[7...11]
 
@@ -170,7 +170,7 @@ extension String {
     }
 }
 
-extension String {
+public extension String {
     var splittedLines: [String] {
         split(separator: "\n", omittingEmptySubsequences: false).map {String($0)}
     }
@@ -183,7 +183,7 @@ extension String {
     }
 }
 
-extension Array where Element == String {
+public extension Array where Element == String {
     func withPrefix(_ prefix: String) -> [String] {
         self.map { prefix + $0 }
     }

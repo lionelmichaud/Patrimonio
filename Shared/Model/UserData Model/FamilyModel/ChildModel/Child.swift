@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppFoundation
 
 // MARK: -
 final class Child: Person {
@@ -24,7 +25,10 @@ final class Child: Person {
         dateOfUniversityComp.date!
     }
     var dateOfUniversityComp: DateComponents { // computed
-        DateComponents(calendar: Date.calendar, year: birthDate.year + ageOfUniversity, month: 09, day: 30)
+        DateComponents(calendar : Date.calendar,
+                       year     : birthDate.year + ageOfUniversity,
+                       month    : 09,
+                       day      : 30)
     }
     
     @Published var ageOfIndependence: Int = 24
@@ -32,7 +36,10 @@ final class Child: Person {
         dateOfIndependenceComp.date!
     }
     var dateOfIndependenceComp: DateComponents { // computed
-        DateComponents(calendar: Date.calendar, year: birthDate.year + ageOfIndependence, month: 09, day: 30)
+        DateComponents(calendar : Date.calendar,
+                       year     : birthDate.year + ageOfIndependence,
+                       month    : 09,
+                       day      : 30)
     }
     override var datedLifeEvents: DatedLifeEvents {
         var dic = super.datedLifeEvents
@@ -40,6 +47,7 @@ final class Child: Person {
         dic[.independance] = dateOfIndependence.year
         return dic
     }
+    
     override var description: String {
         super.description +
         """
@@ -55,7 +63,7 @@ final class Child: Person {
     required init(from decoder: Decoder) throws {
         // Get our container for this subclass' coding keys
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        ageOfUniversity   = try container.decode(Int.self, forKey   : .age_Of_University)
+        ageOfUniversity   = try container.decode(Int.self, forKey : .age_Of_University)
         ageOfIndependence = try container.decode(Int.self, forKey : .age_Of_Independence)
         
         // Get superDecoder for superclass and call super.init(from:) with it
@@ -64,10 +72,15 @@ final class Child: Person {
     }
 
     override init(sexe       : Sexe,
-                  givenName  : String, familyName  : String,
+                  givenName  : String,
+                  familyName : String,
                   birthDate  : Date,
                   ageOfDeath : Int = CalendarCst.forever) {
-        super.init(sexe: sexe, givenName: givenName, familyName: familyName, birthDate: birthDate, ageOfDeath: ageOfDeath)
+        super.init(sexe       : sexe,
+                   givenName  : givenName,
+                   familyName : familyName,
+                   birthDate  : birthDate,
+                   ageOfDeath : ageOfDeath)
     }
     
     // MARK: - methods
