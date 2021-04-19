@@ -30,4 +30,3 @@ enum Sexe: Int, PickableEnum, Codable {
         }
     }
 }
-

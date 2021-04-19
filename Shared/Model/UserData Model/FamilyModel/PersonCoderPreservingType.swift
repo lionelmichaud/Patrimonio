@@ -35,4 +35,3 @@ struct PersonCoderPreservingType {
             .register(alias: "enfant", for: Child.self)
     }
 }
-

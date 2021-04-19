@@ -10,6 +10,6 @@ final class RetirementModelTests: XCTestCase {
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testExample", testExample)
     ]
 }

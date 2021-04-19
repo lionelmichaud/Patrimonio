@@ -30,4 +30,3 @@ enum Seniority: Int, PickableEnum {
         }
     }
 }
-

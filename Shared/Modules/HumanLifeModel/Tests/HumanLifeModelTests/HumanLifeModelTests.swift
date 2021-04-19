@@ -10,6 +10,6 @@ final class HumanLifeModelTests: XCTestCase {
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testExample", testExample)
     ]
 }

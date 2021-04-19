@@ -22,4 +22,3 @@ extension Double: SinLog {
         return Foundation.log(x)
     }
 }
-

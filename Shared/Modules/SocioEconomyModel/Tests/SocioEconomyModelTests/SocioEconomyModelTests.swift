@@ -10,6 +10,6 @@ final class SocioEconomyModelTests: XCTestCase {
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testExample", testExample)
     ]
 }

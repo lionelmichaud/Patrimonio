@@ -22,7 +22,6 @@ public struct Uniform<Base: RandomNumberGenerator> {
     }
 }
 
-
 public struct Normal<Base: RandomNumberGenerator> {
     public var base: Base
     

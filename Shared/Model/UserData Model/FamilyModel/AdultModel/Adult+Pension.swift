@@ -11,19 +11,43 @@ import AppFoundation
 import FiscalModel
 import RetirementModel
 
+// MARK: - EXTENSION: Retraite Régime Général
 extension Adult {
+    // MARK: - Computed Properties
+    
+    var dateOfPensionLiquid              : Date { // computed
+        Date.calendar.date(from: dateOfPensionLiquidComp)!
+    } // computed
+    var dateOfPensionLiquidComp          : DateComponents { // computed
+        let liquidDate = Date.calendar.date(byAdding: ageOfPensionLiquidComp, to: birthDate)
+        return Date.calendar.dateComponents([.year, .month, .day], from: liquidDate!)
+    } // computed
+    var displayDateOfPensionLiquid       : String { // computed
+        mediumDateFormatter.string(from: dateOfPensionLiquid)
+    } // computed
+    var pensionRegimeGeneral: (brut: Double, net: Double) {
+        // pension du régime général
+        if let (brut, net) =
+            Retirement.model.regimeGeneral.pension(
+                birthDate                : birthDate,
+                dateOfRetirement         : dateOfRetirement,
+                dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation,
+                dateOfPensionLiquid      : dateOfPensionLiquid,
+                lastKnownSituation       : lastKnownPensionSituation,
+                nbEnfant                 : 3) {
+            return (brut, net)
+        } else {
+            return (0, 0)
+        }
+    } // computed
+    
+    // MARK: - Methods
+    
     /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime général
     /// - Parameter year: première année incluant des revenus
     func isPensioned(during year: Int) -> Bool {
         isAlive(atEndOf: year) && (dateOfPensionLiquid.year <= year)
     }
-    
-    /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime complémentaire
-    /// - Parameter year: première année incluant des revenus
-    func isAgircPensioned(during year: Int) -> Bool {
-        isAlive(atEndOf: year) && (dateOfAgircPensionLiquid.year <= year)
-    }
-    
     func pensionRegimeGeneral(during year: Int)
     -> (brut: Double, net: Double) {
         // pension du régime général
@@ -41,7 +65,47 @@ extension Adult {
             return (0, 0)
         }
     }
+}
+
+// MARK: - EXTENSION: Retraite Régime Complémentaire
+extension Adult {
+    // MARK: - Computed Properties
     
+    var dateOfAgircPensionLiquid              : Date { // computed
+        Date.calendar.date(from: dateOfAgircPensionLiquidComp)!
+    } // computed
+    var dateOfAgircPensionLiquidComp          : DateComponents { // computed
+        let liquidDate = Date.calendar.date(byAdding: ageOfAgircPensionLiquidComp, to: birthDate)
+        return Date.calendar.dateComponents([.year, .month, .day], from: liquidDate!)
+    } // computed
+    var displayDateOfAgircPensionLiquid       : String { // computed
+        mediumDateFormatter.string(from: dateOfAgircPensionLiquid)
+    } // computed
+    var pensionRegimeAgirc: (brut: Double, net: Double) {
+        if let pensionAgirc =
+            Retirement.model.regimeAgirc.pension(
+                lastAgircKnownSituation  : lastKnownAgircPensionSituation,
+                birthDate                : birthDate,
+                lastKnownSituation       : lastKnownPensionSituation,
+                dateOfRetirement         : dateOfRetirement,
+                dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation,
+                dateOfPensionLiquid      : dateOfAgircPensionLiquid,
+                nbEnfantNe               : Adult.adultRelativesProvider.nbOfChildren,
+                nbEnfantACharge          : Adult.adultRelativesProvider.nbOfFiscalChildren(during: dateOfAgircPensionLiquid.year)) {
+            return (pensionAgirc.pensionBrute,
+                    pensionAgirc.pensionNette)
+        } else {
+            return (0, 0)
+        }
+    } // computed
+
+    // MARK: - Methods
+    
+    /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime complémentaire
+    /// - Parameter year: première année incluant des revenus
+    func isAgircPensioned(during year: Int) -> Bool {
+        isAlive(atEndOf: year) && (dateOfAgircPensionLiquid.year <= year)
+    }
     func pensionRegimeAgirc(during year: Int)
     -> (brut: Double, net: Double) {
         if let pensionAgirc =
@@ -61,7 +125,10 @@ extension Adult {
             return (0, 0)
         }
     }
-    
+}
+
+// MARK: - EXTENSION: Retraite Tous Régimes
+extension Adult {
     /// Calcul de la pension de retraite
     /// - Parameter year: année
     /// - Returns: pension brute, nette de charges sociales, taxable à l'IRPP
