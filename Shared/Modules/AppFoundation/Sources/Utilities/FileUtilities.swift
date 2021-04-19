@@ -12,18 +12,23 @@ import Foundation
 /// - Returns: URL du dossier Document de l'App
 func getDocumentsDirectory() -> URL? {
     do {
-        let possibleURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let possibleURL = try FileManager.default.url(for            : .documentDirectory,
+                                                      in             : .userDomainMask,
+                                                      appropriateFor : nil,
+                                                      create         : true)
         return possibleURL
     } catch let error {
         print("ERROR: \(error.localizedDescription)")
         return nil
-    }}
+    }
+}
 
 /// URL du dossier 'Application Support' de l'App. Si le dossier n'existe pas, le créer. Si la création échoue alors fataError.
 /// - Returns: URL du dossier 'Application Support' de l'App
 func getAppSupportDirectory() -> URL {
     // find all possible application support directories for this user
-    guard let appSupportDirectory = FileManager.default.urls(for : .applicationSupportDirectory, in  : .userDomainMask).first else {
+    guard let appSupportDirectory = FileManager.default.urls(for : .applicationSupportDirectory,
+                                                             in  : .userDomainMask).first else {
         // le dossier 'Application Support' n'existe pas -> le créer
         do {
             // créer le dossier 'Application Support'
@@ -37,7 +42,8 @@ func getAppSupportDirectory() -> URL {
             fatalError()
         }
         // la création du dossier 'Application Support' a réussie
-        guard let appSupportDirectory = FileManager.default.urls(for : .applicationSupportDirectory, in  : .userDomainMask).first else {
+        guard let appSupportDirectory = FileManager.default.urls(for : .applicationSupportDirectory,
+                                                                 in  : .userDomainMask).first else {
             print("La recherche de 'Library/Application Support' a échouée")
             fatalError()
         }

@@ -23,11 +23,3 @@ extension Double: SinLog {
     }
 }
 
-extension Float80: SinLog {
-    static func sin(_ x: Float80) -> Float80 {
-        return Foundation.sin(x)
-    }
-    static func log(_ x: Float80) -> Float80 {
-        return Foundation.log(x)
-    }
-}

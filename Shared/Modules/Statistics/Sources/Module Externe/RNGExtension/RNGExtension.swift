@@ -66,13 +66,6 @@ public struct Normal<Base: RandomNumberGenerator> {
     public mutating func next(mu: Double, sigma: Double) -> Double {
         return next_generic(mu: mu, sigma: sigma)
     }
-    
-    /// Returns a value from N(mu, sigma^2) distribution.
-    /// - Precondition:
-    ///   - `sigma` >= 0
-    public mutating func next(mu: Float80, sigma: Float80) -> Float80 {
-        return next_generic(mu: mu, sigma: sigma)
-    }
 }
 
 extension RandomNumberGenerator {

@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// Usage:
+///     @NonNegative var score = 0
 @propertyWrapper public struct NonNegative<T: Numeric & Comparable> {
     var value: T
     

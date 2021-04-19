@@ -25,17 +25,17 @@ let point = Point()
 let tax    = SocioEconomy.RandomVariable.pensionDevaluationRate
 let smodel = SocioEconomy.model
 
-// HumanLifeModel
-let hlmodel = HumanLife.model
-
-// Retirement
-let rmodel = Retirement.model
-
 // UnemployementModel
 let uemodel = Unemployment.model
 
+// HumanLifeModel
+let hlmodel = HumanLife.model
+
 // FiscalModel
 let fmodel = Fiscal.model
+
+// Retirement
+let rmodel = Retirement.model
 
 // EconomyModel
 let emodel = Economy.model

@@ -10,12 +10,12 @@ import Foundation
 
 // MARK: - Protocol apportant Codable JSON à partir d'un fichier d'un Bundle de l'application
 
-public protocol BundleCodable: Codable {
+public protocol BundleDecodable: Decodable {
     
     static var defaultFileName : String { get set }
     
     /// Lit le modèle dans un fichier JSON du Bundle Main
-    init()
+    init() // depuis le fichier nommé: defaultFileName
     init(from file: String?)
     init(from file            : String?,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy,
@@ -26,9 +26,14 @@ public protocol BundleCodable: Codable {
          from file            : String?,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy,
          keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy)
+}
     
+public protocol BundleEncodable: Encodable {
+
+    static var defaultFileName : String { get set }
+
     /// Encode l'objet dans un fichier stocké dans le Bundle Main de l'Application
-    func saveToBundle()
+    func saveToBundle() // dans le fichier nommé: defaultFileName
     func saveToBundle(to file: String?)
     func saveToBundle(to file              : String?,
                       dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
@@ -41,7 +46,7 @@ public protocol BundleCodable: Codable {
                       keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy)
 }
 
-public extension BundleCodable {
+public extension BundleDecodable {
     init() {
         self = Bundle.main.decode(Self.self,
                                   from                 : Self.defaultFileName,
@@ -74,7 +79,9 @@ public extension BundleCodable {
                                  dateDecodingStrategy : dateDecodingStrategy,
                                  keyDecodingStrategy  : keyDecodingStrategy)
     }
+}
     
+public extension BundleEncodable {
     func saveToBundle() {
         Bundle.main.encode(self,
                            to                   : Self.defaultFileName,
@@ -109,3 +116,5 @@ public extension BundleCodable {
                           keyEncodingStrategy  : keyEncodingStrategy)
     }
 }
+
+public typealias BundleCodable = BundleEncodable & BundleDecodable
