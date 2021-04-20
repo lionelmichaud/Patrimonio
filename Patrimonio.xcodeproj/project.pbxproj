@@ -276,7 +276,7 @@
 			path = PatrimoinModel;
 			sourceTree = "<group>";
 		};
-		7977FE70262E4F72005A1CB1 /* Expenses */ = {
+		7977FE70262E4F72005A1CB1 /* ExpenseModel */ = {
 			isa = PBXGroup;
 			children = (
 				7977FE8B262E5282005A1CB1 /* LifeExpense.swift */,
@@ -284,7 +284,7 @@
 				7977FE84262E50C5005A1CB1 /* LifeExpenseCategory.swift */,
 				7977FE79262E4FA3005A1CB1 /* TimeSpan.swift */,
 			);
-			path = Expenses;
+			path = ExpenseModel;
 			sourceTree = "<group>";
 		};
 		7998E13A262D6A0000DA4A12 /* Model */ = {
@@ -342,9 +342,7 @@
 				7998E189262DB5FB00DA4A12 /* Family+Protocols.swift */,
 				7998E177262DB46800DA4A12 /* PersonCoderPreservingType.swift */,
 				7998E156262DB2E400DA4A12 /* PersonModel */,
-				7998E19B262DBE0600DA4A12 /* AdultModel */,
-				7998E19C262DBE1C00DA4A12 /* ChildModel */,
-				7977FE70262E4F72005A1CB1 /* Expenses */,
+				7977FE70262E4F72005A1CB1 /* ExpenseModel */,
 			);
 			path = FamilyModel;
 			sourceTree = "<group>";
@@ -357,6 +355,8 @@
 				7998E15E262DB31400DA4A12 /* Sex.swift */,
 				7998E16C262DB38700DA4A12 /* Seniority.swift */,
 				7998E157262DB2FD00DA4A12 /* Person.swift */,
+				7998E19B262DBE0600DA4A12 /* AdultModel */,
+				7998E19C262DBE1C00DA4A12 /* ChildModel */,
 			);
 			path = PersonModel;
 			sourceTree = "<group>";
