@@ -20,10 +20,10 @@ public struct IncomeTaxesModel: Codable {
         case gridSliceIssue
     }
     
-    typealias IRPP = (amount         : Double,
-                      familyQuotient : Double,
-                      marginalRate   : Double,
-                      averageRate    : Double)
+    public typealias IRPP = (amount         : Double,
+                             familyQuotient : Double,
+                             marginalRate   : Double,
+                             averageRate    : Double)
     
     typealias SlicedIRPP = [(size                : Double,
                              sizeithChildren     : Double,
@@ -67,7 +67,7 @@ public struct IncomeTaxesModel: Codable {
     ///   - nbChildren: nombre d'enfants
     /// - Returns: Quotion familial
     /// - Note: [reference](https://www.economie.gouv.fr/particuliers/quotient-familial)
-    func familyQuotient(nbAdults: Int, nbChildren: Int) throws -> Double {
+    public func familyQuotient(nbAdults: Int, nbChildren: Int) throws -> Double {
         guard nbAdults >= 0 else {
             throw ModelError.outOfBounds
         }
@@ -224,9 +224,9 @@ public struct IncomeTaxesModel: Codable {
     ///   - nbChildren: nombre d'enfant dans la famille
     /// - Returns: Impôt sur le revenu
     /// - Note: [reference](https://www.economie.gouv.fr/particuliers/tranches-imposition-impot-revenu)
-    func irpp(taxableIncome : Double,
-              nbAdults      : Int,
-              nbChildren    : Int) throws -> IRPP {
+    public func irpp(taxableIncome : Double,
+                     nbAdults      : Int,
+                     nbChildren    : Int) throws -> IRPP {
         guard nbAdults != 0 && taxableIncome >= 0.0 else {
             return (amount         : 0.0,
                     familyQuotient : 0.0,

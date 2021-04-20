@@ -50,7 +50,7 @@ public struct SocioEconomy {
         public static var defaultFileName : String = "SocioEconomyModelConfig.json"
         var pensionDevaluationRate     : ModelRandomizer<BetaRandomGenerator>
         var nbTrimTauxPlein            : ModelRandomizer<DiscreteRandomGenerator>
-        var expensesUnderEvaluationRate: ModelRandomizer<BetaRandomGenerator>
+        public var expensesUnderEvaluationRate: ModelRandomizer<BetaRandomGenerator>
         
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
         func initialized() -> Model {

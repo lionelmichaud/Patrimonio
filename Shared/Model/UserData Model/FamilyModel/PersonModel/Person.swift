@@ -54,9 +54,6 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     }
     var displayName           : String = ""
     var displayBirthDate      : String = ""
-    var datedLifeEvents       : DatedLifeEvents {
-        return [.deces:yearOfDeath]
-    }
     var description: String {
         return """
         

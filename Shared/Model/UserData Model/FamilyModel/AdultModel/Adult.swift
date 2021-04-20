@@ -136,14 +136,6 @@ final class Adult: Person {
     var yearOfDependency                : Int {
         return yearOfDeath - nbOfYearOfDependency
     } // computed
-    
-    override var datedLifeEvents: DatedLifeEvents {
-        var dic = super.datedLifeEvents
-        dic[.cessationActivite]  = dateOfRetirement.year
-        dic[.liquidationPension] = dateOfPensionLiquid.year
-        dic[.dependence]         = yearOfDependency
-        return dic
-    }
     override var description: String {
         return super.description +
         """

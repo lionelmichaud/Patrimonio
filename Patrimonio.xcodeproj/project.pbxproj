@@ -25,6 +25,18 @@
 		796F2F92262C855A002D20D1 /* HumanLifeModel in Frameworks */ = {isa = PBXBuildFile; productRef = 796F2F91262C855A002D20D1 /* HumanLifeModel */; };
 		7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 7970627E262C7B7C009A18F0 /* UnemployementModel */; };
 		79706281262C7B82009A18F0 /* UnemployementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79706280262C7B82009A18F0 /* UnemployementModel */; };
+		7977FE5B262E302F005A1CB1 /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE5A262E302F005A1CB1 /* Family.swift */; };
+		7977FE5C262E302F005A1CB1 /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE5A262E302F005A1CB1 /* Family.swift */; };
+		7977FE62262E3375005A1CB1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE61262E3375005A1CB1 /* Constants.swift */; };
+		7977FE63262E3375005A1CB1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE61262E3375005A1CB1 /* Constants.swift */; };
+		7977FE7A262E4FA3005A1CB1 /* TimeSpan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE79262E4FA3005A1CB1 /* TimeSpan.swift */; };
+		7977FE7B262E4FA3005A1CB1 /* TimeSpan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE79262E4FA3005A1CB1 /* TimeSpan.swift */; };
+		7977FE85262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE84262E50C5005A1CB1 /* LifeExpenseCategory.swift */; };
+		7977FE86262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE84262E50C5005A1CB1 /* LifeExpenseCategory.swift */; };
+		7977FE8C262E5282005A1CB1 /* LifeExpense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE8B262E5282005A1CB1 /* LifeExpense.swift */; };
+		7977FE8D262E5282005A1CB1 /* LifeExpense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE8B262E5282005A1CB1 /* LifeExpense.swift */; };
+		7977FE93262E53B5005A1CB1 /* LifeExpensesDic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE92262E53B5005A1CB1 /* LifeExpensesDic.swift */; };
+		7977FE94262E53B5005A1CB1 /* LifeExpensesDic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE92262E53B5005A1CB1 /* LifeExpensesDic.swift */; };
 		7998E144262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E13D262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift */; };
 		7998E145262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E13D262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift */; };
 		7998E146262D6A0000DA4A12 /* NameableValuableArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E13E262D6A0000DA4A12 /* NameableValuableArray.swift */; };
@@ -104,6 +116,12 @@
 		7920DC6C262C700500536B03 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7920DC70262C700500536B03 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		7920DC72262C700500536B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7977FE5A262E302F005A1CB1 /* Family.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Family.swift; sourceTree = "<group>"; };
+		7977FE61262E3375005A1CB1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		7977FE79262E4FA3005A1CB1 /* TimeSpan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeSpan.swift; sourceTree = "<group>"; };
+		7977FE84262E50C5005A1CB1 /* LifeExpenseCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeExpenseCategory.swift; sourceTree = "<group>"; };
+		7977FE8B262E5282005A1CB1 /* LifeExpense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeExpense.swift; sourceTree = "<group>"; };
+		7977FE92262E53B5005A1CB1 /* LifeExpensesDic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeExpensesDic.swift; sourceTree = "<group>"; };
 		7998E13D262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayOfNameableValuableGeneric.swift; sourceTree = "<group>"; };
 		7998E13E262D6A0000DA4A12 /* NameableValuableArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameableValuableArray.swift; sourceTree = "<group>"; };
 		7998E13F262D6A0000DA4A12 /* DicOfNameableValuableArrayGeneric.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DicOfNameableValuableArrayGeneric.swift; sourceTree = "<group>"; };
@@ -251,6 +269,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		792819FA262F4E7C00E58A34 /* PatrimoinModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = PatrimoinModel;
+			sourceTree = "<group>";
+		};
+		7977FE70262E4F72005A1CB1 /* Expenses */ = {
+			isa = PBXGroup;
+			children = (
+				7977FE8B262E5282005A1CB1 /* LifeExpense.swift */,
+				7977FE92262E53B5005A1CB1 /* LifeExpensesDic.swift */,
+				7977FE84262E50C5005A1CB1 /* LifeExpenseCategory.swift */,
+				7977FE79262E4FA3005A1CB1 /* TimeSpan.swift */,
+			);
+			path = Expenses;
+			sourceTree = "<group>";
+		};
 		7998E13A262D6A0000DA4A12 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -263,6 +299,7 @@
 		7998E13B262D6A0000DA4A12 /* MyAppFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				7977FE61262E3375005A1CB1 /* Constants.swift */,
 				7998E13C262D6A0000DA4A12 /* NameableValuable */,
 				7998E140262D6A0000DA4A12 /* NamedValue */,
 			);
@@ -293,6 +330,7 @@
 			isa = PBXGroup;
 			children = (
 				7998E155262DB2D300DA4A12 /* FamilyModel */,
+				792819FA262F4E7C00E58A34 /* PatrimoinModel */,
 			);
 			path = "UserData Model";
 			sourceTree = "<group>";
@@ -300,11 +338,13 @@
 		7998E155262DB2D300DA4A12 /* FamilyModel */ = {
 			isa = PBXGroup;
 			children = (
+				7977FE5A262E302F005A1CB1 /* Family.swift */,
 				7998E189262DB5FB00DA4A12 /* Family+Protocols.swift */,
 				7998E177262DB46800DA4A12 /* PersonCoderPreservingType.swift */,
 				7998E156262DB2E400DA4A12 /* PersonModel */,
 				7998E19B262DBE0600DA4A12 /* AdultModel */,
 				7998E19C262DBE1C00DA4A12 /* ChildModel */,
+				7977FE70262E4F72005A1CB1 /* Expenses */,
 			);
 			path = FamilyModel;
 			sourceTree = "<group>";
@@ -534,7 +574,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#if which swiftlint >/dev/null; then\n#    swiftlint\n#else\n#    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n#fi\n";
 		};
 		7998E1D5262DC83300DA4A12 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -551,7 +591,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#if which swiftlint >/dev/null; then\n#    swiftlint\n#else\n#    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n#fi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -561,6 +601,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7998E158262DB2FD00DA4A12 /* Person.swift in Sources */,
+				7977FE62262E3375005A1CB1 /* Constants.swift in Sources */,
 				7998E15F262DB31400DA4A12 /* Sex.swift in Sources */,
 				7998E183262DB5D500DA4A12 /* LifeEvent.swift in Sources */,
 				7998E1A4262DBE3E00DA4A12 /* Adult.swift in Sources */,
@@ -569,16 +610,21 @@
 				7998E1A2262DBE3E00DA4A12 /* Adult+Unemployement.swift in Sources */,
 				7998E18A262DB5FB00DA4A12 /* Family+Protocols.swift in Sources */,
 				7998E16D262DB38700DA4A12 /* Seniority.swift in Sources */,
+				7977FE85262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */,
 				7998E14A262D6A0000DA4A12 /* ItemSelectionList.swift in Sources */,
 				7998E178262DB46800DA4A12 /* PersonCoderPreservingType.swift in Sources */,
+				7977FE5B262E302F005A1CB1 /* Family.swift in Sources */,
 				7998E14C262D6A0000DA4A12 /* NamedValueTable.swift in Sources */,
+				7977FE93262E53B5005A1CB1 /* LifeExpensesDic.swift in Sources */,
 				7998E146262D6A0000DA4A12 /* NameableValuableArray.swift in Sources */,
 				7998E148262D6A0000DA4A12 /* DicOfNameableValuableArrayGeneric.swift in Sources */,
 				7998E144262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift in Sources */,
 				7920DC73262C700500536B03 /* PatrimonioApp.swift in Sources */,
+				7977FE7A262E4FA3005A1CB1 /* TimeSpan.swift in Sources */,
 				790631A3262C735800359F9F /* Test Modules Wiring.swift in Sources */,
 				7998E1A0262DBE3E00DA4A12 /* Adult+Pension.swift in Sources */,
 				7998E1AB262DBE4600DA4A12 /* Child.swift in Sources */,
+				7977FE8C262E5282005A1CB1 /* LifeExpense.swift in Sources */,
 				7998E191262DB8E800DA4A12 /* DateBoundary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -588,6 +634,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7998E159262DB2FD00DA4A12 /* Person.swift in Sources */,
+				7977FE63262E3375005A1CB1 /* Constants.swift in Sources */,
 				7998E160262DB31400DA4A12 /* Sex.swift in Sources */,
 				7998E184262DB5D500DA4A12 /* LifeEvent.swift in Sources */,
 				7998E1A5262DBE3E00DA4A12 /* Adult.swift in Sources */,
@@ -596,16 +643,21 @@
 				7998E1A3262DBE3E00DA4A12 /* Adult+Unemployement.swift in Sources */,
 				7998E18B262DB5FB00DA4A12 /* Family+Protocols.swift in Sources */,
 				7998E16E262DB38700DA4A12 /* Seniority.swift in Sources */,
+				7977FE86262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */,
 				7998E14B262D6A0000DA4A12 /* ItemSelectionList.swift in Sources */,
 				7998E179262DB46800DA4A12 /* PersonCoderPreservingType.swift in Sources */,
+				7977FE5C262E302F005A1CB1 /* Family.swift in Sources */,
 				7998E14D262D6A0000DA4A12 /* NamedValueTable.swift in Sources */,
+				7977FE94262E53B5005A1CB1 /* LifeExpensesDic.swift in Sources */,
 				7998E147262D6A0000DA4A12 /* NameableValuableArray.swift in Sources */,
 				7998E149262D6A0000DA4A12 /* DicOfNameableValuableArrayGeneric.swift in Sources */,
 				7998E145262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift in Sources */,
 				7920DC74262C700500536B03 /* PatrimonioApp.swift in Sources */,
+				7977FE7B262E4FA3005A1CB1 /* TimeSpan.swift in Sources */,
 				790631A4262C735800359F9F /* Test Modules Wiring.swift in Sources */,
 				7998E1A1262DBE3E00DA4A12 /* Adult+Pension.swift in Sources */,
 				7998E1AC262DBE4600DA4A12 /* Child.swift in Sources */,
+				7977FE8D262E5282005A1CB1 /* LifeExpense.swift in Sources */,
 				7998E192262DB8E800DA4A12 /* DateBoundary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

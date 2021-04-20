@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Bool {
+public extension Bool {
     var frenchString: String {
         self ? "OUI" : "NON"
     }
