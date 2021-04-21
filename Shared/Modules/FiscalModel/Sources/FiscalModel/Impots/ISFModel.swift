@@ -20,9 +20,9 @@ public struct IsfModel: Codable {
         case irppSlicesIssue
     }
     
-    typealias ISF = (amount       : Double,
-                     taxable      : Double,
-                     marginalRate : Double)
+    public typealias ISF = (amount       : Double,
+                            taxable      : Double,
+                            marginalRate : Double)
     
     typealias SlicedISF = [(size                : Double,
                             sizeithChildren     : Double,

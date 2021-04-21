@@ -39,7 +39,7 @@ public struct Fiscal {
         // autres
         public var demembrement             : DemembrementModel
         public var inheritanceDonation      : InheritanceDonation
-        var lifeInsuranceInheritance : LifeInsuranceInheritance
+        public var lifeInsuranceInheritance : LifeInsuranceInheritance
         
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
         func initialized() -> Model {

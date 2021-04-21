@@ -69,7 +69,7 @@ final class Family: ObservableObject {
         // injection de family dans la propriété statique de Adult
         Adult.setAdultRelativesProvider(self)
         // injection de family dans la propriété statique de Patrimoin
-        //Patrimoin.family = self
+        Patrimoin.family = self
     }
     
     // MARK: - Methodes

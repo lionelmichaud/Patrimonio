@@ -42,8 +42,8 @@ public struct InheritanceDonation: Codable {
         ///   - nbChildren: nombre d'enfantss héritiers survivants
         ///   - spouseAge: age du conjoint survivant
         /// - Returns: valeurs respectives en % des parts d'un héritage [0, 1]
-        func sharedValues(nbChildren : Int,
-                          spouseAge  : Int)
+        public func sharedValues(nbChildren : Int,
+                                 spouseAge  : Int)
         -> (forChild  : Double,
             forSpouse : Double) {
             if nbChildren == 0 {
@@ -113,7 +113,7 @@ public struct InheritanceDonation: Codable {
 
     /// Calcule la part d'héritage de chaque enfant en l'absence de conjoint survivant
     /// - Parameter nbChildren: nb d'enfant à se partager l'héritage
-    static func childShare(nbChildren: Int) -> Double {
+    public static func childShare(nbChildren: Int) -> Double {
         guard nbChildren > 0 else { return 0 }
         return 1.0 / nbChildren.double()
     }
@@ -128,7 +128,7 @@ public struct InheritanceDonation: Codable {
     /// - Parameter partSuccession: part successorale de l'enfant
     /// - Returns: taxe et montant net
     /// - Note: le conjoint est exonéré de droit de succession
-    func heritageOfChild(partSuccession: Double) throws
+    public func heritageOfChild(partSuccession: Double) throws
     -> (netAmount : Double,
         taxe      : Double) {
         // abattement avant application du barême
@@ -166,7 +166,7 @@ public struct InheritanceDonation: Codable {
 
 // MARK: - Droits de succession sur assurance vie
 ///  - Note: [Reference](https://www.impots.gouv.fr/portail/international-particulier/questions/comment-sont-imposees-les-assurances-vie-en-cas-de-deces-du)
-struct LifeInsuranceInheritance: Codable {
+public struct LifeInsuranceInheritance: Codable {
 
     // MARK: - Nested types
 
@@ -194,7 +194,7 @@ struct LifeInsuranceInheritance: Codable {
     
     /// Calcul les taxes sur la transmission de l'assurance vie vers un enfant
     /// - Parameter partSuccession: masse transmise vers un enfant
-    func heritageOfChild(partSuccession: Double) throws
+    public func heritageOfChild(partSuccession: Double) throws
     -> (netAmount : Double,
         taxe      : Double) {
         // application du barême
@@ -209,7 +209,7 @@ struct LifeInsuranceInheritance: Codable {
     
     /// Calcul les taxes sur la transmission de l'assurance vie vers un conjoint
     /// - Parameter partSuccession: masse transmise vers un conjoint
-    func heritageToConjoint(partSuccession: Double)
+    public func heritageToConjoint(partSuccession: Double)
     -> (netAmount : Double,
         taxe      : Double) {
         // les sommes héritées par le conjoint, par le partenaire pacsé et sous certaines conditions
