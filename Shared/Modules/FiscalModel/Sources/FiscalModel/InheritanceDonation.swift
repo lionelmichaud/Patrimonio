@@ -9,9 +9,9 @@
 import Foundation
 import AppFoundation
 
-struct InheritanceSharing {
-    var forChild : (usufruct: Double, bare: Double)
-    var forSpouse: (usufruct: Double, bare: Double)
+public struct InheritanceSharing {
+    public var forChild : (usufruct: Double, bare: Double)
+    public var forSpouse: (usufruct: Double, bare: Double)
 }
 
 // MARK: - Droits de succession en ligne directe et de donation au conjoint
@@ -73,7 +73,7 @@ public struct InheritanceDonation: Codable {
             }
         }
         
-        func shares(nbChildren: Int) -> InheritanceSharing {
+        public func shares(nbChildren: Int) -> InheritanceSharing {
             switch self {
                 case .fullUsufruct:
                     return InheritanceSharing(forChild : (usufruct: 0, bare: 1 / nbChildren.double()),

@@ -69,7 +69,7 @@ final class Family: ObservableObject {
         // injection de family dans la propriété statique de Adult
         Adult.setAdultRelativesProvider(self)
         // injection de family dans la propriété statique de Patrimoin
-        Patrimoin.family = self
+        //Patrimoin.family = self
     }
     
     // MARK: - Methodes
@@ -308,8 +308,9 @@ extension Family: CustomStringConvertible {
     var description: String {
         var desc =
         """
+
         FAMILLE:
-        - Nombre d'adultes davarla famille: \(nbOfAdults)
+        - Nombre d'adultes dans ls famille: \(nbOfAdults)
         - Nombre d'enfants dans la famille: \(nbOfChildren)
         - family net income:     \(workNetIncome.€String)
         - family taxable income: \(workTaxableIncome.€String)

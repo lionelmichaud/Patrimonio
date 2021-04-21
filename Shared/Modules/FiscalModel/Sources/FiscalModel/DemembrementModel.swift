@@ -12,7 +12,7 @@ import AppFoundation
 // MARK: - Démembrement de propriété
 
 ///  - Note: [Reference](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006310173/)
-struct DemembrementModel: Codable {
+public struct DemembrementModel: Codable {
 
     // MARK: - Nested types
 
@@ -45,8 +45,8 @@ struct DemembrementModel: Codable {
     ///   - assetValue: valeur du bien en pleine propriété
     ///   - usufructuary: age de l'usufruitier
     /// - Returns: valeurs de l'usufruit et de la nue-propriété
-    func demembrement(of assetValue   : Double,
-                      usufructuaryAge : Int) throws
+    public func demembrement(of assetValue   : Double,
+                             usufructuaryAge : Int) throws
     -> (usufructValue : Double,
         bareValue     : Double) {
         guard usufructuaryAge > 0 else {

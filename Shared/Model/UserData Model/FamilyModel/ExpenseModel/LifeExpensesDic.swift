@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import NamedValue
 
 // MARK: - Dictionnaire de Dépenses par catégorie (un tableau de dépenses par catégorie)
 

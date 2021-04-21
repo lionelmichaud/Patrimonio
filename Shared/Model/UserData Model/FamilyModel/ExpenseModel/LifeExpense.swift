@@ -9,6 +9,7 @@
 import Foundation
 import Statistics
 import SocioEconomyModel
+import NamedValue
 
 // MARK: - Tableau de Dépenses
 

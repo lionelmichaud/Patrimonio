@@ -13,10 +13,10 @@ private let customLog = Logger(subsystem: Bundle.main.bundleIdentifier ?? "MyApp
 
 // MARK: - Liste des items affichés sur un Graph et sélectionnables individuellement
 
-typealias ItemSelection = (label: String, selected: Bool)
-typealias ItemSelectionList = [ItemSelection]
+public typealias ItemSelection = (label: String, selected: Bool)
+public typealias ItemSelectionList = [ItemSelection]
 
-extension ItemSelectionList {
+public extension ItemSelectionList {
     /// retourne true si la liste d'items contient l'item sélectionné
     /// - Parameters:
     ///   - name: nom de l'item recherché

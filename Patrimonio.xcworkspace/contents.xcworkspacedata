@@ -26,6 +26,9 @@
       location = "group:Shared/Modules/RetirementModel">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/NamedValue">
+   </FileRef>
+   <FileRef
       location = "container:Patrimonio.xcodeproj">
    </FileRef>
 </Workspace>

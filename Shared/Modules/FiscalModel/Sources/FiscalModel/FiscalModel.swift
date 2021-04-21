@@ -37,7 +37,7 @@ public struct Fiscal {
         var lifeInsuranceTaxes       : LifeInsuranceTaxes
         var companyProfitTaxes       : CompanyProfitTaxesModel
         // autres
-        var demembrement             : DemembrementModel
+        public var demembrement             : DemembrementModel
         public var inheritanceDonation      : InheritanceDonation
         var lifeInsuranceInheritance : LifeInsuranceInheritance
         

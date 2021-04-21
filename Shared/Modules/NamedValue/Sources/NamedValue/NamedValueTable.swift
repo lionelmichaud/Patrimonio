@@ -10,20 +10,20 @@ import Foundation
 
 // MARK: - Table nommée de couples (nom, valeur)
 
-typealias NamedValue = (name: String, value: Double)
+public typealias NamedValue = (name: String, value: Double)
 
-typealias NamedValueArray = [NamedValue]
+public typealias NamedValueArray = [NamedValue]
 
-struct NamedValueTable: HasNamedValuedTable {
+public struct NamedValueTable: HasNamedValuedTable {
     
     // MARK: - Properties
     
-    var tableName: String
-    var namedValues = NamedValueArray()
+    public var tableName: String
+    public var namedValues = NamedValueArray()
 }
 
 extension NamedValueTable: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         """
         Nom de la table: \(tableName)
         Valeurs de la table:
@@ -36,7 +36,7 @@ extension NamedValueTable: CustomStringConvertible {
 
 // MARK: - Protocol de Table nommée de couples (nom, valeur)
 
-protocol HasNamedValuedTable {
+public protocol HasNamedValuedTable {
 
     // MARK: - Properties
     
@@ -69,27 +69,27 @@ protocol HasNamedValuedTable {
 }
 
 extension HasNamedValuedTable {
-    var total: Double {
+    public var total: Double {
         namedValues
             .reduce(.zero, {result, element in result + element.value})
     }
     /// tableau des noms
-    var namesArray: [String] {
+    public var namesArray: [String] {
         namedValues
             .map(\.name)
     }
     /// tableau des valeurs
-    var valuesArray: [Double] {
+    public var valuesArray: [Double] {
         namedValues
             .map(\.value)
     }
     /// liste des noms au format CSV
-    var headerCSV: String {
+    public var headerCSV: String {
         namesArray
             .joined(separator: "; ") + "; " + tableName.uppercased() + " TOTAL"
     }
     /// liste des valeurs au format CSV
-    var valuesCSV: String {
+    public var valuesCSV: String {
         namedValues
             .map { (namedValue: NamedValue) -> String in namedValue.value.roundedString }
             .joined(separator: "; ") + "; " + total.roundedString
@@ -98,20 +98,20 @@ extension HasNamedValuedTable {
     // MARK: - Methods
     
     /// tableau des noms en ne gardant que ceux contenu dans itemSelectionList
-    func filtredNames(with itemSelectionList: ItemSelectionList) -> [String] {
+    public func filtredNames(with itemSelectionList: ItemSelectionList) -> [String] {
         namedValues
             .filter({ itemSelectionList.contains($0.name) })
             .map(\.name)
     }
     
     /// tableau des valeurs en ne gardant que celles dont le nomn associé est contenu dans itemSelectionList
-    func filtredValues(with itemSelectionList: ItemSelectionList) -> [Double] {
+    public func filtredValues(with itemSelectionList: ItemSelectionList) -> [Double] {
         namedValues
             .filter({ itemSelectionList.contains($0.name) })
             .map(\.value)
     }
     
-    func filtredTableName(with itemSelectionList: ItemSelectionList) -> [String] {
+    public func filtredTableName(with itemSelectionList: ItemSelectionList) -> [String] {
         if itemSelectionList.contains(tableName) {
             return [tableName]
         } else {
@@ -119,7 +119,7 @@ extension HasNamedValuedTable {
         }
     }
     
-    func filtredTableValue(with itemSelectionList: ItemSelectionList) -> [Double] {
+    public func filtredTableValue(with itemSelectionList: ItemSelectionList) -> [Double] {
         if itemSelectionList.contains(tableName) {
             return [total]
         } else {

@@ -10,14 +10,14 @@ import Foundation
 
 // MARK: Protocol d'Item Valuable et Nameable
 
-protocol NameableValuable {
+public protocol NameableValuable {
     var name: String { get }
     func value(atEndOf year: Int) -> Double
 }
 
 // MARK: - Extensions de Array
 
-extension Array where Element: NameableValuable {
+public extension Array where Element: NameableValuable {
     /// Somme de toutes les valeurs d'un Array
     ///
     /// Usage:
@@ -35,7 +35,7 @@ extension Array where Element: NameableValuable {
 
 // MARK: - Protocol Table d'Item Valuable and Nameable
 
-protocol NameableValuableArray: Codable {
+public protocol NameableValuableArray: Codable {
     associatedtype Item: Codable, Identifiable, NameableValuable
     
     // MARK: - Properties
@@ -80,7 +80,7 @@ protocol NameableValuableArray: Codable {
 }
 
 // implémentation par défaut
-extension NameableValuableArray {
+public extension NameableValuableArray {
     var currentValue      : Double {
         items.sumOfValues(atEndOf : Date.now.year)
     }

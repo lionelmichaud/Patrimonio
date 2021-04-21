@@ -21,6 +21,22 @@
 		7920DC78262C700500536B03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7920DC4C262C700500536B03 /* Assets.xcassets */; };
 		7920DC92262C720D00536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC91262C720D00536B03 /* AppFoundation */; };
 		7920DC94262C721400536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC93262C721400536B03 /* AppFoundation */; };
+		79281A09262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */; };
+		79281A0A262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */; };
+		79569929262F7C940015AF34 /* Owners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79569928262F7C940015AF34 /* Owners.swift */; };
+		7956992A262F7C940015AF34 /* Owners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79569928262F7C940015AF34 /* Owners.swift */; };
+		79569930262F83170015AF34 /* Ownership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7956992F262F83170015AF34 /* Ownership.swift */; };
+		79569931262F83170015AF34 /* Ownership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7956992F262F83170015AF34 /* Ownership.swift */; };
+		79569937262F86C60015AF34 /* Ownership+TransferBareOwnership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79569936262F86C50015AF34 /* Ownership+TransferBareOwnership.swift */; };
+		79569938262F86C60015AF34 /* Ownership+TransferBareOwnership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79569936262F86C50015AF34 /* Ownership+TransferBareOwnership.swift */; };
+		7956993E262F884C0015AF34 /* Ownership+TransferFullOwnership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7956993D262F884C0015AF34 /* Ownership+TransferFullOwnership.swift */; };
+		7956993F262F884C0015AF34 /* Ownership+TransferFullOwnership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7956993D262F884C0015AF34 /* Ownership+TransferFullOwnership.swift */; };
+		79569945262F885B0015AF34 /* Ownership+TransferLifeInsurance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79569944262F885B0015AF34 /* Ownership+TransferLifeInsurance.swift */; };
+		79569946262F885B0015AF34 /* Ownership+TransferLifeInsurance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79569944262F885B0015AF34 /* Ownership+TransferLifeInsurance.swift */; };
+		7956994C262F8B5C0015AF34 /* Ownable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7956994B262F8B5C0015AF34 /* Ownable.swift */; };
+		7956994D262F8B5C0015AF34 /* Ownable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7956994B262F8B5C0015AF34 /* Ownable.swift */; };
+		7956995C262F90250015AF34 /* NamedValue in Frameworks */ = {isa = PBXBuildFile; productRef = 7956995B262F90250015AF34 /* NamedValue */; };
+		7956995E262F90310015AF34 /* NamedValue in Frameworks */ = {isa = PBXBuildFile; productRef = 7956995D262F90310015AF34 /* NamedValue */; };
 		796F2F90262C8553002D20D1 /* HumanLifeModel in Frameworks */ = {isa = PBXBuildFile; productRef = 796F2F8F262C8553002D20D1 /* HumanLifeModel */; };
 		796F2F92262C855A002D20D1 /* HumanLifeModel in Frameworks */ = {isa = PBXBuildFile; productRef = 796F2F91262C855A002D20D1 /* HumanLifeModel */; };
 		7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 7970627E262C7B7C009A18F0 /* UnemployementModel */; };
@@ -37,18 +53,6 @@
 		7977FE8D262E5282005A1CB1 /* LifeExpense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE8B262E5282005A1CB1 /* LifeExpense.swift */; };
 		7977FE93262E53B5005A1CB1 /* LifeExpensesDic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE92262E53B5005A1CB1 /* LifeExpensesDic.swift */; };
 		7977FE94262E53B5005A1CB1 /* LifeExpensesDic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE92262E53B5005A1CB1 /* LifeExpensesDic.swift */; };
-		7998E144262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E13D262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift */; };
-		7998E145262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E13D262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift */; };
-		7998E146262D6A0000DA4A12 /* NameableValuableArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E13E262D6A0000DA4A12 /* NameableValuableArray.swift */; };
-		7998E147262D6A0000DA4A12 /* NameableValuableArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E13E262D6A0000DA4A12 /* NameableValuableArray.swift */; };
-		7998E148262D6A0000DA4A12 /* DicOfNameableValuableArrayGeneric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E13F262D6A0000DA4A12 /* DicOfNameableValuableArrayGeneric.swift */; };
-		7998E149262D6A0000DA4A12 /* DicOfNameableValuableArrayGeneric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E13F262D6A0000DA4A12 /* DicOfNameableValuableArrayGeneric.swift */; };
-		7998E14A262D6A0000DA4A12 /* ItemSelectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E141262D6A0000DA4A12 /* ItemSelectionList.swift */; };
-		7998E14B262D6A0000DA4A12 /* ItemSelectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E141262D6A0000DA4A12 /* ItemSelectionList.swift */; };
-		7998E14C262D6A0000DA4A12 /* NamedValueTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E142262D6A0000DA4A12 /* NamedValueTable.swift */; };
-		7998E14D262D6A0000DA4A12 /* NamedValueTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E142262D6A0000DA4A12 /* NamedValueTable.swift */; };
-		7998E14E262D6A0000DA4A12 /* DicOfNamedValueTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E143262D6A0000DA4A12 /* DicOfNamedValueTable.swift */; };
-		7998E14F262D6A0000DA4A12 /* DicOfNamedValueTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E143262D6A0000DA4A12 /* DicOfNamedValueTable.swift */; };
 		7998E158262DB2FD00DA4A12 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E157262DB2FD00DA4A12 /* Person.swift */; };
 		7998E159262DB2FD00DA4A12 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E157262DB2FD00DA4A12 /* Person.swift */; };
 		7998E15F262DB31400DA4A12 /* Sex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E15E262DB31400DA4A12 /* Sex.swift */; };
@@ -116,18 +120,19 @@
 		7920DC6C262C700500536B03 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7920DC70262C700500536B03 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		7920DC72262C700500536B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeInsuranceClause.swift; sourceTree = "<group>"; };
+		79569928262F7C940015AF34 /* Owners.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Owners.swift; sourceTree = "<group>"; };
+		7956992F262F83170015AF34 /* Ownership.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ownership.swift; sourceTree = "<group>"; };
+		79569936262F86C50015AF34 /* Ownership+TransferBareOwnership.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ownership+TransferBareOwnership.swift"; sourceTree = "<group>"; };
+		7956993D262F884C0015AF34 /* Ownership+TransferFullOwnership.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ownership+TransferFullOwnership.swift"; sourceTree = "<group>"; };
+		79569944262F885B0015AF34 /* Ownership+TransferLifeInsurance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ownership+TransferLifeInsurance.swift"; sourceTree = "<group>"; };
+		7956994B262F8B5C0015AF34 /* Ownable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ownable.swift; sourceTree = "<group>"; };
 		7977FE5A262E302F005A1CB1 /* Family.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Family.swift; sourceTree = "<group>"; };
 		7977FE61262E3375005A1CB1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7977FE79262E4FA3005A1CB1 /* TimeSpan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeSpan.swift; sourceTree = "<group>"; };
 		7977FE84262E50C5005A1CB1 /* LifeExpenseCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeExpenseCategory.swift; sourceTree = "<group>"; };
 		7977FE8B262E5282005A1CB1 /* LifeExpense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeExpense.swift; sourceTree = "<group>"; };
 		7977FE92262E53B5005A1CB1 /* LifeExpensesDic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeExpensesDic.swift; sourceTree = "<group>"; };
-		7998E13D262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayOfNameableValuableGeneric.swift; sourceTree = "<group>"; };
-		7998E13E262D6A0000DA4A12 /* NameableValuableArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameableValuableArray.swift; sourceTree = "<group>"; };
-		7998E13F262D6A0000DA4A12 /* DicOfNameableValuableArrayGeneric.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DicOfNameableValuableArrayGeneric.swift; sourceTree = "<group>"; };
-		7998E141262D6A0000DA4A12 /* ItemSelectionList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemSelectionList.swift; sourceTree = "<group>"; };
-		7998E142262D6A0000DA4A12 /* NamedValueTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedValueTable.swift; sourceTree = "<group>"; };
-		7998E143262D6A0000DA4A12 /* DicOfNamedValueTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DicOfNamedValueTable.swift; sourceTree = "<group>"; };
 		7998E157262DB2FD00DA4A12 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		7998E15E262DB31400DA4A12 /* Sex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sex.swift; sourceTree = "<group>"; };
 		7998E16C262DB38700DA4A12 /* Seniority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Seniority.swift; sourceTree = "<group>"; };
@@ -150,6 +155,7 @@
 				79EF7E68262C8A3600E9C0FF /* FiscalModel in Frameworks */,
 				79058371262C79050061F296 /* SocioEconomyModel in Frameworks */,
 				7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */,
+				7956995C262F90250015AF34 /* NamedValue in Frameworks */,
 				7998E1C7262DC5C500DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
 				79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */,
 				7920DC92262C720D00536B03 /* AppFoundation in Frameworks */,
@@ -166,6 +172,7 @@
 				79EF7E6A262C8A3D00E9C0FF /* FiscalModel in Frameworks */,
 				79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */,
 				79706281262C7B82009A18F0 /* UnemployementModel in Frameworks */,
+				7956995E262F90310015AF34 /* NamedValue in Frameworks */,
 				7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
 				79B2FE2C262C7DF900EBFF56 /* RetirementModel in Frameworks */,
 				7920DC94262C721400536B03 /* AppFoundation in Frameworks */,
@@ -272,8 +279,31 @@
 		792819FA262F4E7C00E58A34 /* PatrimoinModel */ = {
 			isa = PBXGroup;
 			children = (
+				79281A07262F502900E58A34 /* Ownership */,
 			);
 			path = PatrimoinModel;
+			sourceTree = "<group>";
+		};
+		79281A07262F502900E58A34 /* Ownership */ = {
+			isa = PBXGroup;
+			children = (
+				79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */,
+				79569928262F7C940015AF34 /* Owners.swift */,
+				7956992F262F83170015AF34 /* Ownership.swift */,
+				7956993D262F884C0015AF34 /* Ownership+TransferFullOwnership.swift */,
+				79569936262F86C50015AF34 /* Ownership+TransferBareOwnership.swift */,
+				79569944262F885B0015AF34 /* Ownership+TransferLifeInsurance.swift */,
+				7956994B262F8B5C0015AF34 /* Ownable.swift */,
+			);
+			path = Ownership;
+			sourceTree = "<group>";
+		};
+		79569952262F8DA30015AF34 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				7977FE61262E3375005A1CB1 /* Constants.swift */,
+			);
+			path = Persistence;
 			sourceTree = "<group>";
 		};
 		7977FE70262E4F72005A1CB1 /* ExpenseModel */ = {
@@ -299,31 +329,9 @@
 		7998E13B262D6A0000DA4A12 /* MyAppFoundation */ = {
 			isa = PBXGroup;
 			children = (
-				7977FE61262E3375005A1CB1 /* Constants.swift */,
-				7998E13C262D6A0000DA4A12 /* NameableValuable */,
-				7998E140262D6A0000DA4A12 /* NamedValue */,
+				79569952262F8DA30015AF34 /* Persistence */,
 			);
 			path = MyAppFoundation;
-			sourceTree = "<group>";
-		};
-		7998E13C262D6A0000DA4A12 /* NameableValuable */ = {
-			isa = PBXGroup;
-			children = (
-				7998E13D262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift */,
-				7998E13E262D6A0000DA4A12 /* NameableValuableArray.swift */,
-				7998E13F262D6A0000DA4A12 /* DicOfNameableValuableArrayGeneric.swift */,
-			);
-			path = NameableValuable;
-			sourceTree = "<group>";
-		};
-		7998E140262D6A0000DA4A12 /* NamedValue */ = {
-			isa = PBXGroup;
-			children = (
-				7998E141262D6A0000DA4A12 /* ItemSelectionList.swift */,
-				7998E142262D6A0000DA4A12 /* NamedValueTable.swift */,
-				7998E143262D6A0000DA4A12 /* DicOfNamedValueTable.swift */,
-			);
-			path = NamedValue;
 			sourceTree = "<group>";
 		};
 		7998E154262DB27500DA4A12 /* UserData Model */ = {
@@ -406,6 +414,7 @@
 				79EF7E67262C8A3600E9C0FF /* FiscalModel */,
 				79E713ED262C9891000FD625 /* EconomyModel */,
 				7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */,
+				7956995B262F90250015AF34 /* NamedValue */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -435,6 +444,7 @@
 				79EF7E69262C8A3D00E9C0FF /* FiscalModel */,
 				79E713EB262C9886000FD625 /* EconomyModel */,
 				7998E1CC262DC66700DA4A12 /* TypePreservingCodingAdapter */,
+				7956995D262F90310015AF34 /* NamedValue */,
 			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
@@ -601,24 +611,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				7998E158262DB2FD00DA4A12 /* Person.swift in Sources */,
+				79569930262F83170015AF34 /* Ownership.swift in Sources */,
+				79569929262F7C940015AF34 /* Owners.swift in Sources */,
 				7977FE62262E3375005A1CB1 /* Constants.swift in Sources */,
 				7998E15F262DB31400DA4A12 /* Sex.swift in Sources */,
 				7998E183262DB5D500DA4A12 /* LifeEvent.swift in Sources */,
 				7998E1A4262DBE3E00DA4A12 /* Adult.swift in Sources */,
-				7998E14E262D6A0000DA4A12 /* DicOfNamedValueTable.swift in Sources */,
 				7920DC75262C700500536B03 /* ContentView.swift in Sources */,
 				7998E1A2262DBE3E00DA4A12 /* Adult+Unemployement.swift in Sources */,
 				7998E18A262DB5FB00DA4A12 /* Family+Protocols.swift in Sources */,
 				7998E16D262DB38700DA4A12 /* Seniority.swift in Sources */,
 				7977FE85262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */,
-				7998E14A262D6A0000DA4A12 /* ItemSelectionList.swift in Sources */,
+				79281A09262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */,
+				79569937262F86C60015AF34 /* Ownership+TransferBareOwnership.swift in Sources */,
+				7956993E262F884C0015AF34 /* Ownership+TransferFullOwnership.swift in Sources */,
+				7956994C262F8B5C0015AF34 /* Ownable.swift in Sources */,
 				7998E178262DB46800DA4A12 /* PersonCoderPreservingType.swift in Sources */,
 				7977FE5B262E302F005A1CB1 /* Family.swift in Sources */,
-				7998E14C262D6A0000DA4A12 /* NamedValueTable.swift in Sources */,
 				7977FE93262E53B5005A1CB1 /* LifeExpensesDic.swift in Sources */,
-				7998E146262D6A0000DA4A12 /* NameableValuableArray.swift in Sources */,
-				7998E148262D6A0000DA4A12 /* DicOfNameableValuableArrayGeneric.swift in Sources */,
-				7998E144262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift in Sources */,
+				79569945262F885B0015AF34 /* Ownership+TransferLifeInsurance.swift in Sources */,
 				7920DC73262C700500536B03 /* PatrimonioApp.swift in Sources */,
 				7977FE7A262E4FA3005A1CB1 /* TimeSpan.swift in Sources */,
 				790631A3262C735800359F9F /* Test Modules Wiring.swift in Sources */,
@@ -634,24 +645,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				7998E159262DB2FD00DA4A12 /* Person.swift in Sources */,
+				79569931262F83170015AF34 /* Ownership.swift in Sources */,
+				7956992A262F7C940015AF34 /* Owners.swift in Sources */,
 				7977FE63262E3375005A1CB1 /* Constants.swift in Sources */,
 				7998E160262DB31400DA4A12 /* Sex.swift in Sources */,
 				7998E184262DB5D500DA4A12 /* LifeEvent.swift in Sources */,
 				7998E1A5262DBE3E00DA4A12 /* Adult.swift in Sources */,
-				7998E14F262D6A0000DA4A12 /* DicOfNamedValueTable.swift in Sources */,
 				7920DC76262C700500536B03 /* ContentView.swift in Sources */,
 				7998E1A3262DBE3E00DA4A12 /* Adult+Unemployement.swift in Sources */,
 				7998E18B262DB5FB00DA4A12 /* Family+Protocols.swift in Sources */,
 				7998E16E262DB38700DA4A12 /* Seniority.swift in Sources */,
 				7977FE86262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */,
-				7998E14B262D6A0000DA4A12 /* ItemSelectionList.swift in Sources */,
+				79281A0A262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */,
+				79569938262F86C60015AF34 /* Ownership+TransferBareOwnership.swift in Sources */,
+				7956993F262F884C0015AF34 /* Ownership+TransferFullOwnership.swift in Sources */,
+				7956994D262F8B5C0015AF34 /* Ownable.swift in Sources */,
 				7998E179262DB46800DA4A12 /* PersonCoderPreservingType.swift in Sources */,
 				7977FE5C262E302F005A1CB1 /* Family.swift in Sources */,
-				7998E14D262D6A0000DA4A12 /* NamedValueTable.swift in Sources */,
 				7977FE94262E53B5005A1CB1 /* LifeExpensesDic.swift in Sources */,
-				7998E147262D6A0000DA4A12 /* NameableValuableArray.swift in Sources */,
-				7998E149262D6A0000DA4A12 /* DicOfNameableValuableArrayGeneric.swift in Sources */,
-				7998E145262D6A0000DA4A12 /* ArrayOfNameableValuableGeneric.swift in Sources */,
+				79569946262F885B0015AF34 /* Ownership+TransferLifeInsurance.swift in Sources */,
 				7920DC74262C700500536B03 /* PatrimonioApp.swift in Sources */,
 				7977FE7B262E4FA3005A1CB1 /* TimeSpan.swift in Sources */,
 				790631A4262C735800359F9F /* Test Modules Wiring.swift in Sources */,
@@ -1064,6 +1076,14 @@
 		7920DC93262C721400536B03 /* AppFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppFoundation;
+		};
+		7956995B262F90250015AF34 /* NamedValue */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NamedValue;
+		};
+		7956995D262F90310015AF34 /* NamedValue */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NamedValue;
 		};
 		796F2F8F262C8553002D20D1 /* HumanLifeModel */ = {
 			isa = XCSwiftPackageProductDependency;

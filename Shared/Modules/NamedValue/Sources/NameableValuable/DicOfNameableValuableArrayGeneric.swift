@@ -11,7 +11,7 @@ import AppFoundation
 
 // MARK: - Dictionnaire de [Category : Table d'Item Valuable and Namable]
 
-struct DictionaryOfNameableValuableArray <ItemCategory, ArrayOfItems>: CustomStringConvertible
+public struct DictionaryOfNameableValuableArray <ItemCategory, ArrayOfItems>: CustomStringConvertible
 where ItemCategory: PickableEnum,
       ItemCategory: Codable,
       ArrayOfItems: NameableValuableArray,
@@ -19,9 +19,9 @@ where ItemCategory: PickableEnum,
 
     // properties
 
-    var perCategory = [ItemCategory: ArrayOfItems]()
+    public var perCategory = [ItemCategory: ArrayOfItems]()
 
-    var description: String {
+    public var description: String {
         var desc = ""
         perCategory.sorted(by: \.key.displayString).forEach { cat, items in
             desc += "- \(cat.description.uppercased()):\n"
@@ -36,7 +36,7 @@ where ItemCategory: PickableEnum,
     /// Lire toutes les dépenses dans des fichiers au format JSON.
     /// Un fichier par catégorie de dépense.
     /// nom du fichier "Category_LifeExpense.json"
-    init() {
+    public init() {
         for category in ItemCategory.allCases {
             // charger les Items de cette catégorie à partir du fichier JSON associé à cette catégorie
             perCategory[category] = ArrayOfItems(fileNamePrefix: category.pickerString + "_")
@@ -47,7 +47,7 @@ where ItemCategory: PickableEnum,
 
     /// Enregistrer toutes les dépenses dans des fichiers au format JSON..
     /// Un fichier par catégorie de dépense.
-    func storeToFile() {
+    public func storeToFile() {
         for category in perCategory.keys {
             // encode to JSON file
             perCategory[category]?.storeItemsToFile()
