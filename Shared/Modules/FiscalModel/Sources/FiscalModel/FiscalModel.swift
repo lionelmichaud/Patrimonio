@@ -25,12 +25,12 @@ public struct Fiscal {
         var PASS                     : Double // Plafond Annuel de la Sécurité Sociale en €
         // impôts
         public var incomeTaxes              : IncomeTaxesModel
-        var isf                      : IsfModel
-        var estateCapitalGainIrpp    : RealEstateCapitalGainIrppModel
+        public var isf                      : IsfModel
+        public var estateCapitalGainIrpp    : RealEstateCapitalGainIrppModel
         // charges sociales
-        var estateCapitalGainTaxes   : RealEstateCapitalGainTaxesModel
+        public var estateCapitalGainTaxes   : RealEstateCapitalGainTaxesModel
         public var pensionTaxes             : PensionTaxesModel
-        var financialRevenuTaxes     : FinancialRevenuTaxesModel
+        public var financialRevenuTaxes     : FinancialRevenuTaxesModel
         public var turnoverTaxes            : TurnoverTaxesModel
         public var allocationChomageTaxes   : AllocationChomageTaxesModel
         public var layOffTaxes              : LayOffTaxes

@@ -11,7 +11,7 @@ import AppFoundation
 
 // MARK: - Impôts sur plus-values immobilières
 /// impôts sur plus-values immobilières
-struct RealEstateCapitalGainIrppModel: Codable {
+public struct RealEstateCapitalGainIrppModel: Codable {
     
     // MARK: - Nested types
 
@@ -59,8 +59,8 @@ struct RealEstateCapitalGainIrppModel: Codable {
      - [notaires](https://www.notaires.fr/fr/immobilier-fiscalité/fiscalité-et-gestion-du-patrimoine/les-plus-values-immobilières)
      - [impots gouv](https://www.service-public.fr/particuliers/vosdroits/F10864)
      **/
-    func irpp (capitalGain       : Double,
-               detentionDuration : Int) -> Double {
+    public func irpp (capitalGain       : Double,
+                      detentionDuration : Int) -> Double {
         guard capitalGain > 0 else {
             return 0
         }

@@ -102,7 +102,7 @@ public struct InheritanceDonation: Codable {
         var gridLigneDirecte     : RateGrid
         var abatLigneDirecte     : Double // 100_000€
         let fraisFunéraires      : Double //   1_500€
-        let decoteResidence      : Double // 20% // %
+        public let decoteResidence      : Double // 20% // %
     }
     
     // MARK: - Properties

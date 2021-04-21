@@ -11,7 +11,7 @@ import AppFoundation
 
 // MARK: - Table d'Item Generic Valuable and Nameable
 
-struct ArrayOfNameableValuable<E>: Codable, Versionable where
+public struct ArrayOfNameableValuable<E>: Codable, Versionable where
     E: Codable,
     E: Identifiable,
     E: CustomStringConvertible,
@@ -19,16 +19,16 @@ struct ArrayOfNameableValuable<E>: Codable, Versionable where
 
     // MARK: - Properties
 
-    var items          = [E]()
+    public var items          = [E]()
     var fileNamePrefix : String?
-    var version        : Version
+    public var version        : Version
     var currentValue   : Double {
         items.sumOfValues(atEndOf: Date.now.year)
     } // computed
 
     // MARK: - Subscript
 
-    subscript(idx: Int) -> E {
+    public subscript(idx: Int) -> E {
         get {
             return  items[idx]
         }
@@ -39,7 +39,7 @@ struct ArrayOfNameableValuable<E>: Codable, Versionable where
 
     // MARK: - Initializers
 
-    init(fileNamePrefix: String = "") {
+    public init(fileNamePrefix: String = "") {
         self = Bundle.main.decode(ArrayOfNameableValuable.self,
                                   from                 : fileNamePrefix + String(describing: E.self) + ".json",
                                   dateDecodingStrategy : .iso8601,
@@ -47,8 +47,8 @@ struct ArrayOfNameableValuable<E>: Codable, Versionable where
         self.fileNamePrefix = fileNamePrefix
     }
 
-    init(for aClass     : AnyClass,
-         fileNamePrefix : String = "") {
+    public init(for aClass     : AnyClass,
+                fileNamePrefix : String = "") {
         let bundle = Bundle(for: aClass)
         self = bundle.decode(ArrayOfNameableValuable.self,
                                  from                 : fileNamePrefix + String(describing: E.self) + ".json",
@@ -103,7 +103,7 @@ struct ArrayOfNameableValuable<E>: Codable, Versionable where
         self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
     }
 
-    func value(atEndOf: Int) -> Double {
+    public func value(atEndOf: Int) -> Double {
         items.sumOfValues(atEndOf: atEndOf)
     }
 
@@ -117,7 +117,7 @@ struct ArrayOfNameableValuable<E>: Codable, Versionable where
 }
 
 extension ArrayOfNameableValuable: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         items.reduce("") { r, item in
             r + item.description + "\n\n"
         }

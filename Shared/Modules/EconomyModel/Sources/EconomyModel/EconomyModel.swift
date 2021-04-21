@@ -16,11 +16,11 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 
 // MARK: - DI: Protocol InflationProviderProtocol
 
-protocol InflationProviderProtocol {
+public protocol InflationProviderProtocol {
     func inflation(withMode simulationMode: SimulationModeEnum) -> Double
 }
 
-protocol FinancialRatesProviderProtocol {
+public protocol FinancialRatesProviderProtocol {
     func rates(in year            : Int,
                withMode mode      : SimulationModeEnum,
                simulateVolatility : Bool)
@@ -32,7 +32,7 @@ protocol FinancialRatesProviderProtocol {
         stockRate   : Double)
 }
 
-typealias EconomyModelProviderProtocol = InflationProviderProtocol & FinancialRatesProviderProtocol
+public typealias EconomyModelProviderProtocol = InflationProviderProtocol & FinancialRatesProviderProtocol
 
 // MARK: - SINGLETON: Economy Model
 
@@ -40,7 +40,7 @@ public struct Economy {
     
     // MARK: - Nested Types
     
-    enum ModelError: Error {
+    public enum ModelError: Error {
         case outOfBounds
     }
     
@@ -144,9 +144,9 @@ public struct Economy {
         /// - Returns: Taux Oblig / Taux Action
         /// - Important: Les taux changent d'une année à l'autre seuelement en mode Monté-Carlo
         ///             et si la ‘volatilité‘ à été activée dans le fichier de conf
-        func rates(in year            : Int,
-                   withMode mode      : SimulationModeEnum,
-                   simulateVolatility : Bool)
+        public func rates(in year            : Int,
+                          withMode mode      : SimulationModeEnum,
+                          simulateVolatility : Bool)
         -> (securedRate : Double,
             stockRate   : Double) {
             if mode == .random && simulateVolatility {
@@ -165,7 +165,7 @@ public struct Economy {
         /// - Parameters:
         ///   - mode: mode de simulation : Monté-Carlo ou Détermnisite
         /// - Returns: Taux Oblig / Taux Action
-        func rates(withMode mode : SimulationModeEnum)
+        public func rates(withMode mode : SimulationModeEnum)
         -> (securedRate : Double,
             stockRate   : Double) {
             (securedRate : randomizers.securedRate.value(withMode: mode),
@@ -249,7 +249,7 @@ public struct Economy {
                                       lastYear           : lastYear)
         }
         
-        func inflation(withMode simulationMode: SimulationModeEnum) -> Double {
+        public func inflation(withMode simulationMode: SimulationModeEnum) -> Double {
             randomizers.inflation.value(withMode: simulationMode)
         }
     }

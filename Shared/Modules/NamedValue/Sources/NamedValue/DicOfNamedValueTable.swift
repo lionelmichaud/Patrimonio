@@ -11,7 +11,7 @@ import AppFoundation
 
 // MARK: - Protocol Dictionnaire de NamedValueTable
 
-protocol DictionaryOfNamedValueTable {
+public protocol DictionaryOfNamedValueTable {
     associatedtype Category: PickableEnum
     
     // MARK: - Properties
@@ -64,7 +64,7 @@ protocol DictionaryOfNamedValueTable {
 }
 
 // implémntation par défaut
-extension DictionaryOfNamedValueTable {
+public extension DictionaryOfNamedValueTable {
     subscript(category: Category) -> NamedValueTable? {
         get {
             return perCategory[category]

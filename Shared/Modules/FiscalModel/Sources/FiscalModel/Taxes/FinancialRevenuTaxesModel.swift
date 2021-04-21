@@ -10,7 +10,7 @@ import Foundation
 import AppFoundation
 
 // MARK: - Charges sociales sur revenus financiers (dividendes, plus values, loyers...)
-struct FinancialRevenuTaxesModel: Codable {
+public struct FinancialRevenuTaxesModel: Codable {
     
     // MARK: Nested types
     
@@ -33,13 +33,13 @@ struct FinancialRevenuTaxesModel: Codable {
     
     /// revenus financiers nets de charges sociales
     /// - Parameter brut: revenus financiers bruts
-    func net(_ brut: Double) -> Double {
+    public func net(_ brut: Double) -> Double {
         return brut - socialTaxes(brut)
     }
     
     /// charges sociales sur les revenus financiers
     /// - Parameter brut: revenus financiers bruts
-    func socialTaxes(_ brut: Double) -> Double {
+    public func socialTaxes(_ brut: Double) -> Double {
         guard brut > 0.0 else {
             return 0.0
         }
@@ -48,7 +48,7 @@ struct FinancialRevenuTaxesModel: Codable {
     
     /// revenus financiers bruts avant charges sociales
     /// - Parameter net: revenus financiers nets
-    func brut(_ net: Double) -> Double {
+    public func brut(_ net: Double) -> Double {
         guard net >= 0.0 else {
             return net
         }

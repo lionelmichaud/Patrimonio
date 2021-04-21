@@ -12,7 +12,7 @@ import os
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "FinancialMath")
 
-enum FinancialMathError: Error {
+public enum FinancialMathError: Error {
     case negativeNbPeriod
     case periodOutOfBound
 }

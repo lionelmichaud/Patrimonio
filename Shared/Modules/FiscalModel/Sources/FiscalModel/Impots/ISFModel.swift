@@ -11,7 +11,7 @@ import AppFoundation
 
 // MARK: - Impôts sur la fortune
 
-struct IsfModel: Codable {
+public struct IsfModel: Codable {
     
     // MARK: - Nested types
     
@@ -32,10 +32,10 @@ struct IsfModel: Codable {
                             irppWithChildren    : Double,
                             irppWithoutChildren : Double)]
     
-    struct Model: BundleCodable, Versionable, RateGridable {
-        static var defaultFileName : String = "IsfModel.json"
-        var version         : Version
-        var grid            : RateGrid // barême de l'ISF
+    public struct Model: BundleCodable, Versionable, RateGridable {
+        public static var defaultFileName : String = "IsfModel.json"
+        public var version         : Version
+        public var grid            : RateGrid // barême de l'ISF
         let seuil           : Double // 1_300_000 // €
         var seuil2          : Double // 1_400_000 // €
         // Un système de décote a été mis en place pour les patrimoines nets taxables compris entre 1,3 million et 1,4 million d’euros.
@@ -43,9 +43,9 @@ struct IsfModel: Codable {
         let decote€         : Double // 17_500 // €
         let decoteCoef      : Double // 1.25 // %
         // décote sur la résidence principale
-        let decoteResidence : Double // 30% // %
+        public let decoteResidence : Double // 30% // %
         // décote d'un bien en location
-        let decoteLocation  : Double // 10% à 30% // %
+        public let decoteLocation  : Double // 10% à 30% // %
         // décote d'un bien en location
         let decoteIndivision: Double // 30% // %
     }
@@ -53,7 +53,7 @@ struct IsfModel: Codable {
     // MARK: - Properties
     
     // barême de l'exoneration de charges sociale sur les plus-values immobilières
-    var model: Model
+    public var model: Model
     
     // MARK: - Methods
 

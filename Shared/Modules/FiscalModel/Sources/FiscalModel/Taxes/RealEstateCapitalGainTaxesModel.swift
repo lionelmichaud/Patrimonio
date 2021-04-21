@@ -10,7 +10,7 @@ import Foundation
 import AppFoundation
 
 // MARK: - Charges sociales sur plus-values immobilières
-struct RealEstateCapitalGainTaxesModel: Codable {
+public struct RealEstateCapitalGainTaxesModel: Codable {
     
     // MARK: - Nested types
     
@@ -62,8 +62,8 @@ struct RealEstateCapitalGainTaxesModel: Codable {
      - [notaires](https://www.notaires.fr/fr/immobilier-fiscalité/fiscalité-et-gestion-du-patrimoine/les-plus-values-immobilières)
      - [impots gouv](https://www.service-public.fr/particuliers/vosdroits/F10864)
      **/
-    func socialTaxes (capitalGain       : Double,
-                      detentionDuration : Int) -> Double {
+    public func socialTaxes (capitalGain       : Double,
+                             detentionDuration : Int) -> Double {
         guard capitalGain > 0 else {
             return 0
         }
