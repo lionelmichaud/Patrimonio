@@ -1,0 +1,66 @@
+{
+    "items" : [
+        {
+            "id" : "45325B0E-331D-481F-9C34-57C088289751",
+            "value" : 150,
+            "proportional" : true,
+            "name" : "Divertissement - culture",
+            "note" : "Actualisé le ",
+            "timeSpan" : {
+                "ending_to" : {
+                    "fixedYear" : 0,
+                    "event"     : "Dépendance",
+                    "group"     : "Tous les Adultes",
+                    "order"     : "Date au plus tard",
+                }
+            }
+        },
+        {
+            "id" : "45325B0E-331D-481F-9C34-57C088289753",
+            "value" : 350,
+            "proportional" : true,
+            "name" : "Club / association (sport, hobby, art...)",
+            "note" : "Actualisé le 16/02/2021\nTennis, Piscine, Pelote, Surf, Yoga...",
+            "timeSpan" : {
+                "ending_to" : {
+                    "fixedYear" : 0,
+                    "event"     : "Dépendance",
+                    "group"     : "Tous les Adultes",
+                    "order"     : "Date au plus tard",
+                }
+            }
+        },
+        {
+            "id" : "45325B0E-331D-481F-9C34-57C088289752",
+            "value" : 300,
+            "proportional" : true,
+            "name" : "Restaurants, bars...",
+            "note" : "Actualisé le 16/02/2021",
+            "timeSpan" : {
+                "ending_to" : {
+                    "fixedYear" : 0,
+                    "event"     : "Dépendance",
+                    "group"     : "Tous les Adultes",
+                    "order"     : "Date au plus tard",
+                }
+            }
+        },
+        {
+            "id" : "45325B0E-331D-481F-9C34-57C088289754",
+            "value" : 150,
+            "proportional" : false,
+            "name" : "Loisirs - Autres",
+            "note" : "Actualisé le 16/02/2021",
+            "timeSpan" : {
+                "ending_to" : {
+                    "fixedYear" : 0,
+                    "event"     : "Dépendance",
+                    "group"     : "Tous les Adultes",
+                    "order"     : "Date au plus tard",
+                }
+            }
+        }
+        
+    ]
+}
+

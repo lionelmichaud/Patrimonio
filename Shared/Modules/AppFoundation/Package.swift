@@ -23,7 +23,8 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "AppFoundation",
-            dependencies: [],
+            dependencies: [
+            ],
             path: "Sources"
             //            resources: [
             //                .process("Media.xcassets") // We will store out assets here
@@ -31,6 +32,9 @@ let package = Package(
         ), // This allows us to have a better folder structure)
         .testTarget(
             name: "AppFoundationTests",
-            dependencies: ["AppFoundation"])
+            dependencies: [
+                "AppFoundation"
+            ]
+        )
     ]
 )

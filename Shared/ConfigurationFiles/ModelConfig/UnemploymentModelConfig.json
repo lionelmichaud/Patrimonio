@@ -1,0 +1,159 @@
+{
+    "indemniteLicenciement" :
+    {
+        "model" :
+        {
+            "version" :
+            {
+                "version" : "0.1",
+                "date"    : "2021-01-28T23:00:00+01:00",
+                "comment" : null
+            },
+            "legalGrid" : [
+                {
+                    "nbYears" : 10,
+                    "coef"    : 0.25
+                },
+                {
+                    "nbYears" : 100,
+                    "coef"    : 0.33333333
+                }
+            ],
+
+            "metallurgieGrid" : [
+                {
+                    "nbYears" : 7,
+                    "coef"    : 0.2
+                },
+                {
+                    "nbYears" : 100,
+                    "coef"    : 0.6
+                }
+            ],
+
+            "correctionAgeGrid" : [
+                {
+                    "age" : 0,
+                    "correctionAncienneteGrid" : [
+                        {
+                            "anciennete" : 0,
+                            "majoration" : 0.0,
+                            "min"        : 0,
+                            "max"        : 18
+                        }
+                    ]
+                },
+                {
+                    "age" : 50,
+                    "correctionAncienneteGrid" : [
+                        {
+                            "anciennete" : 0,
+                            "majoration" : 0.0,
+                            "min"        : 0,
+                            "max"        : 18
+                        },
+                        {
+                            "anciennete" : 5,
+                            "majoration" : 20.0,
+                            "min"        : 3,
+                            "max"        : 18
+                        }
+                    ]
+                },
+                {
+                    "age" : 55,
+                    "correctionAncienneteGrid" : [
+                        {
+                            "anciennete" : 0,
+                            "majoration" : 0.0,
+                            "min"        : 0,
+                            "max"        : 18
+                        },
+                        {
+                            "anciennete" : 2,
+                            "majoration" : 0.0,
+                            "min"        : 2,
+                            "max"        : 18
+                        },
+                        {
+                            "anciennete" : 5,
+                            "majoration" : 30.0,
+                            "min"        : 6,
+                            "max"        : 18
+                        }
+                    ]
+                }
+
+            ],
+
+            "irppDiscount" : {
+                "multipleOfConventionalCompensation" : 1.0,
+                "multipleOfLastSalaryBrut"           : 2.0,
+                "multipleOfActualCompensation"       : 0.5,
+                "maxDiscount"                        : 246816.0
+            }
+        }
+
+    },
+    
+    "allocationChomage" :
+    {
+        "model" :
+        {
+            "version" :
+            {
+                "version" : "0.1",
+                "date"    : "2021-01-28T23:00:00+01:00",
+                "comment" : null
+            },
+            "durationGrid" : [
+                {
+                    "fromAge"             : 0,
+                    "maxDuration"         : 24,
+                    "reduction"           : 30.0,
+                    "reductionAfter"      : 6,
+                    "reductionSeuilAlloc" : 84.67
+                },
+                {
+                    "fromAge"             : 53,
+                    "maxDuration"         : 30,
+                    "reduction"           : 30.0,
+                    "reductionAfter"      : 6,
+                    "reductionSeuilAlloc" : 84.67
+                },
+                {
+                    "fromAge"             : 55,
+                    "maxDuration"         : 36,
+                    "reduction"           : 30.0,
+                    "reductionAfter"      : 6,
+                    "reductionSeuilAlloc" : 84.67
+                },
+                {
+                    "fromAge"             : 57,
+                    "maxDuration"         : 36,
+                    "reduction"           : 0.0,
+                    "reductionAfter"      : 6,
+                    "reductionSeuilAlloc" : 84.67
+                }
+            ],
+            
+            "delayModel" :
+            {
+                "delaiAttente"                        : 7,
+                "ratioDiffereSpecifique"              : 95.8,
+                "maxDiffereSpecifique"                : 150,
+                "maxDiffereSpecifiqueLicenciementEco" : 75
+            },
+            
+            "amountModel" :
+            {
+                "case1Rate"          : 40.4,
+                "case1Fix"           : 12.05,
+                "case2Rate"          : 57.0,
+                "minAllocationEuro"  : 29.38,
+                "maxAllocationPcent" : 75.0,
+                "maxAllocationEuro"  : 256.96
+            }
+        }
+    }
+}

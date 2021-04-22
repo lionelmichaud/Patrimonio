@@ -23,6 +23,11 @@
 		7920DC94262C721400536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC93262C721400536B03 /* AppFoundation */; };
 		79281A09262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */; };
 		79281A0A262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */; };
+		7946F16F2630E3EF00D13434 /* ConfigurationFiles in Resources */ = {isa = PBXBuildFile; fileRef = 7946F16E2630E3EF00D13434 /* ConfigurationFiles */; };
+		7946F1702630E3EF00D13434 /* ConfigurationFiles in Resources */ = {isa = PBXBuildFile; fileRef = 7946F16E2630E3EF00D13434 /* ConfigurationFiles */; };
+		7946F1762630E40800D13434 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 7946F1752630E40800D13434 /* Resources */; };
+		7946F1772630E40800D13434 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 7946F1752630E40800D13434 /* Resources */; };
+		7946F1812630F65D00D13434 /* HumanLifeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7946F1802630F65D00D13434 /* HumanLifeTests.swift */; };
 		79569929262F7C940015AF34 /* Owners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79569928262F7C940015AF34 /* Owners.swift */; };
 		7956992A262F7C940015AF34 /* Owners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79569928262F7C940015AF34 /* Owners.swift */; };
 		79569930262F83170015AF34 /* Ownership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7956992F262F83170015AF34 /* Ownership.swift */; };
@@ -177,6 +182,9 @@
 		7920DC70262C700500536B03 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		7920DC72262C700500536B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeInsuranceClause.swift; sourceTree = "<group>"; };
+		7946F16E2630E3EF00D13434 /* ConfigurationFiles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ConfigurationFiles; sourceTree = "<group>"; };
+		7946F1752630E40800D13434 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
+		7946F1802630F65D00D13434 /* HumanLifeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HumanLifeTests.swift; sourceTree = "<group>"; };
 		79569928262F7C940015AF34 /* Owners.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Owners.swift; sourceTree = "<group>"; };
 		7956992F262F83170015AF34 /* Ownership.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ownership.swift; sourceTree = "<group>"; };
 		79569936262F86C50015AF34 /* Ownership+TransferBareOwnership.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ownership+TransferBareOwnership.swift"; sourceTree = "<group>"; };
@@ -299,6 +307,8 @@
 		7920DC49262C700400536B03 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				7946F1752630E40800D13434 /* Resources */,
+				7946F16E2630E3EF00D13434 /* ConfigurationFiles */,
 				7920DC4A262C700400536B03 /* PatrimonioApp.swift */,
 				7920DC4B262C700400536B03 /* ContentView.swift */,
 				7998E13A262D6A0000DA4A12 /* Model */,
@@ -348,6 +358,7 @@
 		7920DC6F262C700500536B03 /* Tests macOS */ = {
 			isa = PBXGroup;
 			children = (
+				7946F1802630F65D00D13434 /* HumanLifeTests.swift */,
 				7920DC70262C700500536B03 /* Tests_macOS.swift */,
 				7920DC72262C700500536B03 /* Info.plist */,
 			);
@@ -429,7 +440,7 @@
 			children = (
 				7998E155262DB2D300DA4A12 /* FamilyModel */,
 				792819FA262F4E7C00E58A34 /* PatrimoinModel */,
-				79EC47EB263089140006EE44 /* Succession */,
+				79EC47EB263089140006EE44 /* SuccessionManager */,
 				79EC47DD263084330006EE44 /* Simulation */,
 			);
 			path = "UserData Model";
@@ -501,15 +512,15 @@
 			path = Simulation;
 			sourceTree = "<group>";
 		};
-		79EC47EB263089140006EE44 /* Succession */ = {
+		79EC47EB263089140006EE44 /* SuccessionManager */ = {
 			isa = PBXGroup;
 			children = (
-				79EC4808263098340006EE44 /* OwnershipManager.swift */,
 				79EC47C8263081D60006EE44 /* Succession.swift */,
+				79EC4808263098340006EE44 /* OwnershipManager.swift */,
 				79EC481E26309EFB0006EE44 /* LegalSuccessionManager.swift */,
 				79EC481D26309EFB0006EE44 /* LifeInsuranceSuccessionManager.swift */,
 			);
-			path = Succession;
+			path = SuccessionManager;
 			sourceTree = "<group>";
 		};
 		79EC47FD263096200006EE44 /* Taxes */ = {
@@ -696,6 +707,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7920DC77262C700500536B03 /* Assets.xcassets in Resources */,
+				7946F16F2630E3EF00D13434 /* ConfigurationFiles in Resources */,
+				7946F1762630E40800D13434 /* Resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,6 +717,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7920DC78262C700500536B03 /* Assets.xcassets in Resources */,
+				7946F1702630E3EF00D13434 /* ConfigurationFiles in Resources */,
+				7946F1772630E40800D13434 /* Resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -896,6 +911,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7920DC71262C700500536B03 /* Tests_macOS.swift in Sources */,
+				7946F1812630F65D00D13434 /* HumanLifeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -966,6 +982,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1019,6 +1037,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;

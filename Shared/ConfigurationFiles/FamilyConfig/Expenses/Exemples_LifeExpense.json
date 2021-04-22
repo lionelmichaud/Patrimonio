@@ -1,0 +1,105 @@
+{
+    "items" : [
+        {
+            "id" : "45325B0E-331D-481F-9C34-57C088289753",
+            "value" : 0,
+            "proportional" : false,
+            "name" : "Depuis",
+            "note" : "Actualisé le ",
+            "timeSpan" : {
+                "starting_from" :
+                {
+                    "fixedYear": 2028,
+                    "event"    : "Fin d'activité professionnelle",
+                    "group"    : null,
+                    "order"    : null,
+                    "name"     : "M. Lionel MICHAUD"
+                }
+            }
+        },
+        {
+            "id" : "B4EFF395-7A51-47AB-AD29-E7461ECB9ADA",
+            "value" : 0,
+            "proportional" : false,
+            "name" : "Jusqu'à",
+            "note" : "Actualisé le ",
+            "timeSpan" : {
+                "ending_to" :
+                {
+                    "fixedYear": 2022,
+                    "event"    : "Décès",
+                    "group"    : null,
+                    "name"     : "Mme. Vanessa MICHAUD"
+                }
+            }
+        },
+        {
+            "id" : "562EE2A1-4FF5-450D-8BAE-3E8B803928DA",
+            "value" : 0,
+            "proportional" : false,
+            "name" : "De...à...",
+            "note" : "Actualisé le ",
+            "timeSpan" : {
+                "spanning_from" :
+                {
+                    "fixedYear": 2024,
+                    "event"    : "Liquidation de pension",
+                    "group"    : null,
+                    "name"     : "M. Lionel MICHAUD"
+                },
+                "spanning_to" :
+                {
+                    "fixedYear": 2025,
+                    "event"    : "Dépendance",
+                    "group"    : null,
+                    "name"     : "M. Lionel MICHAUD"
+                }
+            }
+        },
+        {
+            "id" : "662EE2A1-4FF5-450D-8BAE-3E8B803928DA",
+            "value" : 0,
+            "proportional" : false,
+            "name" : "Exceptionnelle",
+            "note" : "Actualisé le ",
+            "timeSpan" : {
+                "exceptional_in" : 2026
+            }
+        },
+        {
+            "id" : "680924FC-ABD5-4587-BA4B-4DDD6F7F04D5",
+            "value" : 0,
+            "proportional" : false,
+            "name" : "Périodique",
+            "note" : "Actualisé le ",
+            "timeSpan" : {
+                "periodic_period" : 7,
+                "periodic_from" :
+                {
+                    "fixedYear": 2020,
+                    "event"    : null,
+                    "group"    : null,
+                    "name"     : ""
+                },
+                "periodic_to" :
+                {
+                    "fixedYear": 2022,
+                    "event"    : null,
+                    "group"    : null,
+                    "name"     : ""
+                }
+            }
+        },
+        {
+            "id" : "29C6B93B-3A68-4963-AF77-775E65451189",
+            "value" : 1500,
+            "proportional" : true,
+            "name" : "Adultes",
+            "note" : "Actualisé le ",
+            "timeSpan" : {
+                "permanent" : true
+            }
+        }
+    ]
+}
+

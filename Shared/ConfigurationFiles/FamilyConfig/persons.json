@@ -1,0 +1,160 @@
+[
+    {
+        "__type_preserving_strategy" : 0,
+        "__preserved_type" : "Adult.Type",
+        "name" : {
+            "familyName" : "MICHAUD",
+            "namePrefix" : "M.",
+            "givenName"  : "Lionel"
+        },
+        "sexe"                 : 0,
+        "birth_Date"    : "1964-09-22T23:00:00+01:00",
+        "fiscal_option" : "Quotité disponible",
+        "work_Income"   : {
+            "salary_brutSalary"      : 98400,
+            "salary_taxableSalary"   : 80712,
+            "salary_netSalary"       : 77000,
+            "salary_fromDate"        : "2001-11-19T23:00:00+01:00",
+            "salary_healthInsurance" : 700
+        },
+        "nb_Of_Child_Birth"        : 0,
+        "age_Of_Pension_Liquid" : {
+            "year"  : 62,
+            "month" : 0,
+            "day"   : 1,
+            "calendar" : {
+                "locale" : {
+                    "identifier" : "fr_FR"
+                },
+                "timeZone" : {
+                    "identifier" : "Europe\/Paris"
+                },
+                "identifier" : "gregorian",
+                "minimumDaysInFirstWeek" : 4,
+                "firstWeekday" : 2
+            },
+        },
+        "regime_General_Situation" : {
+            "atEndOf"           : 2019,
+            "nbTrimestreAcquis" : 135,
+            "sam"               : 36698
+        },
+        "age_Of_Agirc_Pension_Liquid" : {
+            "year" : 62,
+            "month": 0,
+            "day"  : 1,
+            "calendar" : {
+                "locale" : {
+                    "identifier" : "fr_FR"
+                },
+                "timeZone" : {
+                    "identifier" : "Europe\/Paris"
+                },
+                "identifier" : "gregorian",
+                "minimumDaysInFirstWeek" : 4,
+                "firstWeekday" : 2
+            },
+        },
+        "regime_Agirc_Situation" : {
+            "atEndOf"     : 2018,
+            "nbPoints"    : 17907,
+            "pointsParAn" : 788
+        },
+        "date_Of_Retirement"           : "2022-01-01T23:00:00+01:00",
+        "cause_Retirement"             : "PSE",
+        "layoff_Compensation_Bonified" : null
+    },
+    
+    {
+        "__type_preserving_strategy" : 0,
+        "__preserved_type" : "Adult.Type",
+        "name" : {
+            "familyName" : "MICHAUD",
+            "namePrefix" : "Mme.",
+            "givenName" : "Vanessa"
+        },
+        "sexe"                 : 1,
+        "birth_Date"    : "1968-12-17T23:00:00+01:00",
+        "fiscal_option" : "Quotité disponible",
+        "work_Income"   : {
+            "turnOver_BNC" : 48000,
+            "turnOver_incomeLossInsurance" : 4046
+        },
+        "nb_Of_Child_Birth"       : 2,
+        "age_Of_Pension_Liquid" : {
+            "year" : 62,
+            "month": 0,
+            "day"  : 1,
+            "calendar" : {
+                "locale" : {
+                    "identifier" : "fr_FR"
+                },
+                "timeZone" : {
+                    "identifier" : "Europe\/Paris"
+                },
+                "identifier" : "gregorian",
+                "minimumDaysInFirstWeek" : 4,
+                "firstWeekday" : 2
+            },
+            "month" : 0
+        },
+        "regime_General_Situation" : {
+            "atEndOf"           : 2019,
+            "nbTrimestreAcquis" : 143,
+            "sam"               : 31857
+        },
+        "age_Of_Agirc_Pension_Liquid" : {
+            "year" : 62,
+            "month": 0,
+            "day"  : 1,
+            "calendar" : {
+                "locale" : {
+                    "identifier" : "fr_FR"
+                },
+                "timeZone" : {
+                    "identifier" : "Europe\/Paris"
+                },
+                "identifier" : "gregorian",
+                "minimumDaysInFirstWeek" : 4,
+                "firstWeekday" : 2
+            },
+            "month" : 0
+        },
+        "regime_Agirc_Situation" : {
+            "atEndOf"     : 2013,
+            "nbPoints"    : 4428,
+            "pointsParAn" : 0
+        },
+        "date_Of_Retirement"           : "2031-01-01T22:00:00Z",
+        "cause_Retirement"             : "Démission",
+        "layoff_Compensation_Bonified" : null
+    },
+    
+    {
+        "__type_preserving_strategy" : 0,
+        "__preserved_type" : "Child.Type",
+        "name" : {
+            "familyName" : "MICHAUD",
+            "namePrefix" : "Mme",
+            "givenName" : "Lou-Ann"
+        },
+        "sexe" : 1,
+        "birth_Date" : "2004-02-04T23:00:00+01:00",
+        "age_Of_University"   : 21,
+        "age_Of_Independence" : 24
+    },
+    
+    {
+        "__type_preserving_strategy" : 0,
+        "__preserved_type" : "Child.Type",
+        "name" : {
+            "familyName" : "MICHAUD",
+            "namePrefix" : "M.",
+            "givenName" : "Arthur"
+        },
+        "sexe" : 0,
+        "birth_Date" : "2005-09-30T23:00:00+01:00",
+        "age_Of_University"   : 21,
+        "age_Of_Independence" : 24
+    }
+]
