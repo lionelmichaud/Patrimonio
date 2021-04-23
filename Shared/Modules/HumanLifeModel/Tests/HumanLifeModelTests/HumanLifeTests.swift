@@ -12,12 +12,7 @@ import XCTest
 class HumanLifeTests: XCTestCase {
     
     func test_loading_from_main_bundle() {
-        XCTAssertNoThrow(HumanLife.Model(for                  : HumanLifeTests.self,
-                                         from                 : nil,
-                                         dateDecodingStrategy : .iso8601,
-                                         keyDecodingStrategy  : .useDefaultKeys)
-                            .initialized(),
-                         "Failed to read model from Main Bundle ")
+        XCTAssertNoThrow(HumanLife.Model().initialized(), "Failed to read model from Main Bundle ")
     }
     
     func test_saving_to_test_bundle() throws {

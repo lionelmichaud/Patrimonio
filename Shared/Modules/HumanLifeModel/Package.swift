@@ -27,9 +27,19 @@ let package = Package(
                 [
                     "AppFoundation",
                     "Statistics"
-                ]),
+                ]
+//            resources:
+//                [
+//                    .copy("HumanLifeModelConfig.json")
+//                ]
+        ),
         .testTarget(
             name: "HumanLifeModelTests",
-            dependencies: ["HumanLifeModel"])
+            dependencies: ["HumanLifeModel"]
+//            resources:
+//                [
+//                    .copy("HumanLifeModelConfig.json")
+//                ]
+        )
     ]
 )

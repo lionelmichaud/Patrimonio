@@ -67,4 +67,3 @@ extension ArrayOfNameableValuable where E: Ownable {
                                evaluationMethod : evaluationMethod)
     }
 }
-
