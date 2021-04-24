@@ -21,14 +21,14 @@ public struct Version: Codable {
     
     // MARK: - Properties
     
-    var name    : String?
-    var version : String? // "Major.Minor.Patch"
-    var date    : Date?
-    var comment : String?
+    public var name    : String?
+    public var version : String? // "Major.Minor.Patch"
+    public var date    : Date?
+    public var comment : String?
     
     // MARK: - Computed Properties
     
-    var major   : Int? {
+    public var major   : Int? {
         guard let version = version else { return nil }
         if let major = version.split(whereSeparator: { $0 == "." }).first {
             return Int(major)
@@ -36,7 +36,7 @@ public struct Version: Codable {
             return nil
         }
     }
-    var minor   : Int? {
+    public var minor   : Int? {
         guard let version = version else { return nil }
         let parts = version.split(whereSeparator: { $0 == "." })
         if parts.count >= 1 {
@@ -45,7 +45,7 @@ public struct Version: Codable {
             return nil
         }
     }
-    var patch   : Int? {
+    public var patch   : Int? {
         guard let version = version else { return nil }
         let parts = version.split(whereSeparator: { $0 == "." })
         if parts.count >= 2 {
@@ -57,9 +57,9 @@ public struct Version: Codable {
     
     // MARK: - Static Methods
     
-    static func toVersion(major: Int,
-                          minor: Int,
-                          patch: Int?) -> String {
+    public static func toVersion(major : Int,
+                                 minor : Int,
+                                 patch : Int?) -> String {
         if let patch = patch {
             return String(major) + "." + String(minor) + "." + String(patch)
         } else {
@@ -69,7 +69,7 @@ public struct Version: Codable {
     
     // MARK: - Methods
     
-    mutating func initializeWithBundleValues() {
+    public mutating func initializeWithBundleValues() {
         if version == nil {
             version = Bundle.mainAppVersion
         }

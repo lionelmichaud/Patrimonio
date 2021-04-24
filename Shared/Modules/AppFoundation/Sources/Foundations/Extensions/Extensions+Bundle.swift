@@ -28,7 +28,7 @@ extension Bundle {
     }
     
     static var mainAppVersion: String? {
-        Bundle.main.appVersion
+        self.main.appVersion
     }
     static var mainAppName: String? {
         Bundle.main.appName

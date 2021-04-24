@@ -7,8 +7,9 @@
 
 import SwiftUI
 
+// TODO: - décommenter les lignes
 @main
-struct PatrimonioApp: App {
+struct AppMain: App {
 
     // MARK: - Properties
 
@@ -17,10 +18,18 @@ struct PatrimonioApp: App {
     // dans une propriété statique des autres Classes pendant son initialisation
     @StateObject private var family     = Family()
     @StateObject private var patrimoine = Patrimoin()
-    
+//    @StateObject private var simulation = Simulation()
+
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        MainScene(family     : family,
+                  patrimoine : patrimoine)
+//                  simulation : simulation)
+        .commands { AppCommands() }
+        
+        #if os(macOS)
+        Settings {
+            SettingsView()
         }
+        #endif
     }
 }
