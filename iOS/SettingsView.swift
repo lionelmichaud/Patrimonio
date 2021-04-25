@@ -14,17 +14,20 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             List {
-                NavigationLink("A propos",
-                               destination: AppVersionView())
+                NavigationLink(destination: AppVersionView()) {
+                    Label("Version", systemImage: "info.circle")
+                }
                     .isDetailLink(true)
                 
-                NavigationLink("Simulation",
-                               destination: SimulationUserSettings())
+                NavigationLink(destination: SimulationUserSettings()) {
+                    Label("Simulation", systemImage: "function")
+                }
                     .isDetailLink(true)
 
-                NavigationLink("Graphiques",
-                               destination: GraphicUserSettings(ownership        : $ownership,
-                                                                evaluationMethod : $evaluationMethod))
+                NavigationLink(destination: GraphicUserSettings(ownership        : $ownership,
+                                                                evaluationMethod : $evaluationMethod)) {
+                    Label("Graphiques", systemImage: "chart.bar.xaxis")
+                }
                     .isDetailLink(true)
             }
             .listStyle(SidebarListStyle())

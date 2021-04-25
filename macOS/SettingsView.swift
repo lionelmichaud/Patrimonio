@@ -19,23 +19,23 @@ struct SettingsView: View {
         TabView {
             AppVersionView()
                 .tabItem {
-                    Label("Version", systemImage: "gear")
+                    Label("Version", systemImage: "info.circle")
                 }
                 .tag(Tabs.version)
             SimulationUserSettings()
                 .tabItem {
-                    Label("Simulation", systemImage: "gear")
+                    Label("Simulation", systemImage: "function")
                 }
                 .tag(Tabs.simulation)
             GraphicUserSettings(ownership        : $ownership,
                                 evaluationMethod : $evaluationMethod)
                 .tabItem {
-                    Label("Graphiques", systemImage: "star")
+                    Label("Graphiques", systemImage: "chart.bar.xaxis")
                 }
                 .tag(Tabs.graphique)
         }
-        .padding(20)
-        .frame(width: 375, height: 150)
+        .padding(30)
+        .frame(width: 600, height: 300)
     }
 }
 

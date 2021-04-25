@@ -11,7 +11,7 @@ import NamedValue
 
 // TODO: - décommenter les lignes
 class UIState: ObservableObject {
-    enum Tab: Int {
+    enum Tab: Int, Hashable {
         case userSettings, family, expense, asset, scenario, simulation
     }
     
@@ -66,9 +66,9 @@ class UIState: ObservableObject {
     
     // MARK: - Etat des filtres graphes Bilan
     struct BalanceSheetChartState {
-        var nameSelection     : String                                     = AppSettings.shared.allPersonsLabel
+        var nameSelection : String = AppSettings.shared.allPersonsLabel
 //        var combination       : SocialAccounts.AssetLiabilitiesCombination = .both
-        var itemSelection     : ItemSelectionList                          = []
+        var itemSelection : ItemSelectionList = []
     }
     
     // MARK: - Etat des filtres graphes Cash Flow
@@ -87,7 +87,8 @@ class UIState: ObservableObject {
         var evalDate: Double = Date.now.year.double()
     }
 
-    @Published var selectedTab         = Tab.userSettings
+    @Published var selectedTab         : Tab  = Tab.userSettings
+    @Published var selectedSideBarItem : Tab? = Tab.family
     @Published var patrimoineViewState = PatrimoineViewState()
     @Published var scenarioViewState   = ScenarioViewState()
     @Published var simulationViewState = SimulationViewState()

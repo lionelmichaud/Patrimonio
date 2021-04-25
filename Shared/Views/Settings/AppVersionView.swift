@@ -9,8 +9,8 @@ import SwiftUI
 
 struct AppVersionView: View {
     var body: some View {
-        GroupBox {
-            Text(AppVersion.shared.name ?? "?")
+        VStack {
+            Text(AppVersion.shared.name ?? "Patrimonio")
                 .font(.title)
                 .fontWeight(.heavy)
                 .frame(maxWidth: .infinity)

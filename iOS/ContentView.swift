@@ -27,32 +27,32 @@ struct ContentView: View {
             
             /// composition de la famille
 //            FamilyView()
-            EmptyView()
+            AppVersionView()
                 .tabItem { Label("Famille", systemImage: "person.2.fill") }
                 .tag(UIState.Tab.family)
             
             /// dépenses de la famille
 //            ExpenseView()
-            EmptyView()
+            AppVersionView()
                 .tabItem { Label("Dépenses", systemImage: "cart.fill") }
                 .tag(UIState.Tab.expense)
 
             /// actifs & passifs du patrimoine de la famille
 //            PatrimoineView()
-            EmptyView()
+            AppVersionView()
                 .tabItem { Label("Patrimoine", systemImage: "dollarsign.circle.fill") }
                 .tag(UIState.Tab.asset)
 
             /// scenario paramètrique de simulation
 //            ScenarioView()
-            EmptyView()
+            AppVersionView()
                 .tabItem { Label("Scénarios", systemImage: "slider.horizontal.3") }
                 .tag(UIState.Tab.scenario)
 
             /// calcul et présentation des résultats de simulation
 //            SimulationView()
-            EmptyView()
-                .tabItem { Label("Simulation", systemImage: "chart.bar.fill") }
+            AppVersionView()
+                .tabItem { Label("Simulation", systemImage: "function") }
                 .tag(UIState.Tab.simulation)
         }
     }
