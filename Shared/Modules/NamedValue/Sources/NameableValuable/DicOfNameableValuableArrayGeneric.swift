@@ -57,7 +57,7 @@ where ItemCategory: PickableEnum,
     /// Somme de toutes les dépenses, toutes catégories confondues
     /// - Parameter atEndOf: année de calcul
     /// - Returns: dépenses totales
-    func value(atEndOf: Int) -> Double {
+    public func value(atEndOf: Int) -> Double {
         var sum = 0.0
         perCategory.forEach { (_, expenseArray) in
             sum += expenseArray.value(atEndOf: atEndOf)
@@ -68,7 +68,7 @@ where ItemCategory: PickableEnum,
     /// Liste complète à plat de toutes les dépenses valorisées, toutes catégories confondues
     /// - Parameter atEndOf: année de calcul
     /// - Returns: liste complète à plat de toutes les dépenses
-    func namedValueTable(atEndOf: Int) -> NamedValueArray {
+    public func namedValueTable(atEndOf: Int) -> NamedValueArray {
         var table = NamedValueArray()
         perCategory.forEach { (_, expenseArray) in
             table += expenseArray.namedValueTable(atEndOf: atEndOf)
@@ -79,7 +79,7 @@ where ItemCategory: PickableEnum,
     /// Dictionnaire des dépenses valorisées  par catégorie
     /// - Parameter atEndOf: année de calcul
     /// - Returns: dictionnaire des dépenses par catégorie
-    func namedValueTable(atEndOf: Int) -> [ItemCategory: NamedValueArray] {
+    public func namedValueTable(atEndOf: Int) -> [ItemCategory: NamedValueArray] {
         var dico = [ItemCategory: NamedValueArray]()
         for category in ItemCategory.allCases {
             if let exps = perCategory[category] {
@@ -94,7 +94,7 @@ where ItemCategory: PickableEnum,
     ///   - atEndOf: année de calcul
     ///   - inCategory: catégorie de dépenses à prendre
     /// - Returns: liste des dépenses de cette catégorie
-    func namedValueTable(atEndOf: Int, inCategory: ItemCategory) -> NamedValueArray {
+    public func namedValueTable(atEndOf: Int, inCategory: ItemCategory) -> NamedValueArray {
         if let exps = perCategory[inCategory] {
             return exps.namedValueTable(atEndOf: atEndOf)
         } else {

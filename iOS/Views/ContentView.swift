@@ -13,7 +13,8 @@ struct ContentView: View {
     
     // MARK: - Environment Properties
 
-    @EnvironmentObject private var uiState: UIState
+    @EnvironmentObject private var uiState    : UIState
+    @EnvironmentObject private var simulation : Simulation
     //@SceneStorage("selectedTab") var selection = UIState.Tab.family
     
     // MARK: - Properties
@@ -27,13 +28,12 @@ struct ContentView: View {
             
             /// composition de la famille
 //            FamilyView()
-            AppVersionView()
+            FamilyView()
                 .tabItem { Label("Famille", systemImage: "person.2.fill") }
                 .tag(UIState.Tab.family)
             
             /// dépenses de la famille
-//            ExpenseView()
-            AppVersionView()
+            ExpenseView(simulationReseter: simulation)
                 .tabItem { Label("Dépenses", systemImage: "cart.fill") }
                 .tag(UIState.Tab.expense)
 

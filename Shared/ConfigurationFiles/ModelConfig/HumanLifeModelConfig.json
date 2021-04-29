@@ -1,4 +1,6 @@
 {
+    "minAgeUniversity"   : 18,
+    "minAgeIndependance" : 24,
     "menLifeExpectation" :
     {
         "name"    : "Espérance de Vie d'un Homme",

@@ -17,9 +17,9 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 // MARK: - Régime Général
 
 public struct RegimeGeneralSituation: Codable {
-    var atEndOf           : Int
-    var nbTrimestreAcquis : Int
-    var sam               : Double
+    public var atEndOf           : Int
+    public var nbTrimestreAcquis : Int
+    public var sam               : Double
 
     public init() {
         self.atEndOf           = Date.now.year
@@ -126,7 +126,7 @@ public struct RegimeGeneral: Codable {
     
     private var model: Model
     
-    var ageMinimumLegal: Int {
+    public var ageMinimumLegal: Int {
         model.ageMinimumLegal
     }
     
@@ -200,10 +200,10 @@ public struct RegimeGeneral: Codable {
     ///   - dureeDeReference: nombre de trimestres de référence pour obtenir le taux plein
     ///   - dateOfPensionLiquid: date de demande de liquidation de la pension
     /// - Returns: décote (-) ou surcote (+) en nmbre de trimestre
-    func nbTrimestreSurDecote(birthDate           : Date,
-                              dureeAssurance      : Int,
-                              dureeDeReference    : Int,
-                              dateOfPensionLiquid : Date) -> Int? {
+    public func nbTrimestreSurDecote(birthDate           : Date,
+                                     dureeAssurance      : Int,
+                                     dureeDeReference    : Int,
+                                     dateOfPensionLiquid : Date) -> Int? {
         let result = nbTrimestreDecote(birthDate           : birthDate,
                                        dureeAssurance      : dureeAssurance,
                                        dureeDeReference    : dureeDeReference,
@@ -426,7 +426,7 @@ public struct RegimeGeneral: Codable {
     /// Trouve l'age minimum pour bénéficer du taux plein sans avoir le nb de trimestres minimum
     /// - Parameter birthYear: Année de naissance
     /// - Returns: Age minimum pour bénéficer du taux plein sans avoir le nb de trimestres minimumou nil
-    func ageTauxPleinLegal(birthYear : Int) -> Int? {
+    public func ageTauxPleinLegal(birthYear : Int) -> Int? {
         model.dureeDeReferenceGrid.last(\.ageTauxPlein, where: \.birthYear, <=, birthYear)
     }
     
@@ -453,8 +453,8 @@ public struct RegimeGeneral: Codable {
     /// - Returns: date d'obtention de tous les trimestres nécessaire pour obtenir le taux plein de retraite
     /// - Warning: la calcul suppose que l'on continue à accumuler des trimestre en continu à partir de la date
     ///            du dernier relevé. C'est donc un meilleur cas.
-    func dateAgeTauxPlein(birthDate          : Date,
-                          lastKnownSituation : RegimeGeneralSituation) -> Date? {
+    public func dateAgeTauxPlein(birthDate          : Date,
+                                 lastKnownSituation : RegimeGeneralSituation) -> Date? {
         guard let dureeDeReference = dureeDeReference(birthYear: birthDate.year) else {
             customLog.log(level: .default, "duree De Reference = nil")
             return nil

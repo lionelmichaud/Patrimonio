@@ -180,7 +180,6 @@ struct TimeSpanEditView: View {
                 ()
         }
     }
-    
 }
 
 struct TimeSpanEditView_Previews: PreviewProvider {

@@ -18,8 +18,13 @@ public struct NamedValueTable: HasNamedValuedTable {
     
     // MARK: - Properties
     
-    public var tableName: String
+    public var tableName   = ""
     public var namedValues = NamedValueArray()
+
+    // MARK: - Initializer
+    public init(tableName: String) {
+        self.tableName = tableName
+    }
 }
 
 extension NamedValueTable: CustomStringConvertible {

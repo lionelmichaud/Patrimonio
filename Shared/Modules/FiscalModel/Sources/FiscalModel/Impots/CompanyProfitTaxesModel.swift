@@ -10,7 +10,7 @@ import Foundation
 import AppFoundation
 
 // MARK: - Impots sur les sociétés (SCI)
-struct CompanyProfitTaxesModel: Codable {
+public struct CompanyProfitTaxesModel: Codable {
     
     // MARK: Nested types
     
@@ -37,7 +37,7 @@ struct CompanyProfitTaxesModel: Codable {
     
     /// impôts sur les bénéfices
     /// - Parameter brut: bénéfice brut
-    func IS(_ brut: Double) -> Double {
+    public func IS(_ brut: Double) -> Double {
         guard brut >= 0.0 else {
             return 0.0
         }

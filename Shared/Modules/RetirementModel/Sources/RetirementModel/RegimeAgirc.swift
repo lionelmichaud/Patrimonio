@@ -24,9 +24,9 @@ public struct RegimeAgircSituation: Codable {
         self.pointsParAn = 0
     }
     
-    var atEndOf     : Int
-    var nbPoints    : Int
-    var pointsParAn : Int
+    public var atEndOf     : Int
+    public var nbPoints    : Int
+    public var pointsParAn : Int
 }
 
 public struct RegimeAgirc: Codable {
@@ -51,10 +51,10 @@ public struct RegimeAgirc: Codable {
         var plafondMajoEnfantNe   : Double // €
     }
     
-    struct Model: BundleCodable, Versionable {
-        static var defaultFileName : String = "RegimeAgircModel.json"
+    public struct Model: BundleCodable, Versionable {
+        public static var defaultFileName : String = "RegimeAgircModel.json"
 
-        var version              : Version
+        public var version              : Version
         let gridAvant62          : [SliceAvantAgeLegal]
         let gridApres62          : [SliceApresAgeLegal]
         let valeurDuPoint        : Double // 1.2714
@@ -116,11 +116,11 @@ public struct RegimeAgirc: Codable {
     
     private var model: Model
     
-    var valeurDuPoint : Double {
+    public var valeurDuPoint : Double {
         model.valeurDuPoint
     }
     
-    var ageMinimum    : Int {
+    public var ageMinimum    : Int {
         model.ageMinimum
     }
     

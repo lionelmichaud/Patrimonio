@@ -31,7 +31,9 @@ public struct HumanLife {
         public var menLifeExpectation    : ModelRandomizer<DiscreteRandomGenerator>
         public var womenLifeExpectation  : ModelRandomizer<DiscreteRandomGenerator>
         public var nbOfYearsOfdependency : ModelRandomizer<DiscreteRandomGenerator>
-        
+        public let minAgeUniversity      : Int
+        public let minAgeIndependance    : Int
+
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
         func initialized() -> Model {
             var model = self

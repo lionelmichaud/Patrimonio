@@ -20,7 +20,7 @@ struct MainScene: Scene {
 
     @ObservedObject var family     : Family
     @ObservedObject var patrimoine : Patrimoin
-//    @ObservedObject var simulation : Simulation
+    @ObservedObject var simulation : Simulation
     
     /// object that you want to use throughout your views and that will be specific to each scene
     @StateObject private var uiState = UIState()
@@ -32,7 +32,7 @@ struct MainScene: Scene {
                 .environmentObject(uiState)
                 .environmentObject(family)
                 .environmentObject(patrimoine)
-//                .environmentObject(simulation)
+                .environmentObject(simulation)
         }
         .onChange(of: scenePhase) { scenePhase in
             switch scenePhase {

@@ -34,8 +34,8 @@ public struct Fiscal {
         public var turnoverTaxes            : TurnoverTaxesModel
         public var allocationChomageTaxes   : AllocationChomageTaxesModel
         public var layOffTaxes              : LayOffTaxes
-        var lifeInsuranceTaxes       : LifeInsuranceTaxes
-        var companyProfitTaxes       : CompanyProfitTaxesModel
+        public var lifeInsuranceTaxes       : LifeInsuranceTaxes
+        public var companyProfitTaxes       : CompanyProfitTaxesModel
         // autres
         public var demembrement             : DemembrementModel
         public var inheritanceDonation      : InheritanceDonation

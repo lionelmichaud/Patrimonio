@@ -12,4 +12,13 @@ public extension Bool {
     var frenchString: String {
         self ? "OUI" : "NON"
     }
+
+    static var iOS13: Bool {
+        guard #available(iOS 14, *) else {
+            // It's iOS 13 so return true.
+            return true
+        }
+        // It's iOS 14 so return false.
+        return false
+    }
 }

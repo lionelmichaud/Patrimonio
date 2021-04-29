@@ -20,12 +20,12 @@ public struct PensionTaxesModel: Codable {
         case outOfBounds
     }
     
-    struct Model: BundleCodable, Versionable {
-        static var defaultFileName : String = "PensionTaxesModel.json"
-        var version           : Version
+    public struct Model: BundleCodable, Versionable {
+        public static var defaultFileName : String = "PensionTaxesModel.json"
+        public var version           : Version
         let rebate            : Double // 10.0 // %
         let minRebate         : Double // 393   // € par déclarant
-        let maxRebate         : Double // 3_850 // € par foyer fiscal
+        public let maxRebate         : Double // 3_850 // € par foyer fiscal
         let CSGdeductible     : Double // 5.9 // %
         let CRDS              : Double // 0.5 // % https://www.agirc-arrco.fr/fileadmin/agircarrco/documents/Doc_specif_page/prelevements_sociaux_bareme.pdf
         let CSG               : Double // 8.3 // % https://www.agirc-arrco.fr/fileadmin/agircarrco/documents/Doc_specif_page/prelevements_sociaux_bareme.pdf
@@ -41,7 +41,7 @@ public struct PensionTaxesModel: Codable {
     
     // MARK: - Properties
 
-    var model: Model
+    public var model: Model
     
     // MARK: - Methods
 

@@ -69,7 +69,7 @@ public struct IsfModel: Codable {
     ///   - inhabitedAsset: valeur nette de la résidence principale en €
     /// - Returns: Impôt sur le revenu
     /// - Note: [reference](https://www.impots.gouv.fr/portail/particulier/calcul-de-lifi)
-    func isf (taxableAsset : Double) throws -> ISF {
+    public func isf (taxableAsset : Double) throws -> ISF {
         // seuil d'imposition
         guard taxableAsset > model.seuil else {
             return (amount       : 0,

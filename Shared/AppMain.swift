@@ -18,12 +18,12 @@ struct AppMain: App {
     // dans une propriété statique des autres Classes pendant son initialisation
     @StateObject private var family     = Family()
     @StateObject private var patrimoine = Patrimoin()
-//    @StateObject private var simulation = Simulation()
+    @StateObject private var simulation = Simulation()
 
     var body: some Scene {
         MainScene(family     : family,
-                  patrimoine : patrimoine)
-//                  simulation : simulation)
+                  patrimoine : patrimoine,
+                  simulation : simulation)
         .commands { AppCommands() }
         
         #if os(macOS)

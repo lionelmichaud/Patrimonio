@@ -10,18 +10,18 @@ import Foundation
 import AppFoundation
 
 // MARK: - Impôt sur les plus-values d'assurance vie-Assurance vies
-struct LifeInsuranceTaxes: Codable {
+public struct LifeInsuranceTaxes: Codable {
     
     // MARK: Nested types
     
-    struct Model: BundleCodable, Versionable {
-        static var defaultFileName : String = "LifeInsuranceTaxesModel.json"
+    public struct Model: BundleCodable, Versionable {
+        public static var defaultFileName : String = "LifeInsuranceTaxesModel.json"
         
-        var version        : Version
-        let rebatePerPerson: Double // 4800.0 // euros
+        public var version        : Version
+        public let rebatePerPerson: Double // 4800.0 // euros
     }
     
     // MARK: Properties
     
-    var model: Model
+    public var model: Model
 }
