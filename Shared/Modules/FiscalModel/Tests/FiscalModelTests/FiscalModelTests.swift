@@ -1,15 +1,26 @@
+//
+//  FiscalModelTests.swift
+//  PatrimoineTests
+//
+//  Created by Lionel MICHAUD on 15/01/2021.
+//  Copyright © 2021 Lionel MICHAUD. All rights reserved.
+//
+
 import XCTest
 @testable import FiscalModel
 
-final class FiscalModelTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(FiscalModel().text, "Hello, World!")
+class FiscalModelTests: XCTestCase {
+
+    func test_loading_from_main_bundle() {
+        XCTAssertNoThrow(Fiscal.Model(), "Failed to read model from Main Bundle ")
+    }
+    
+    func test_saving_to_test_bundle() throws {
+        let model = Fiscal.Model()
+        model.saveToBundle(for: FiscalModelTests.self,
+                             to: nil,
+                             dateEncodingStrategy: .iso8601,
+                             keyEncodingStrategy: .useDefaultKeys)
     }
 
-    static var allTests = [
-        ("testExample", testExample)
-    ]
 }

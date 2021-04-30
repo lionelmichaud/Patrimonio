@@ -15,7 +15,7 @@ struct ValuedRevenues {
     
     // MARK: - Properties
 
-    let name : String
+    var name : String
     var perCategory: [RevenueCategory: RevenuesInCategory] = [:]
     
     /// revenus imposable de l'année précédente et reporté à l'année courante
@@ -46,7 +46,7 @@ struct ValuedRevenues {
             + taxableIrppRevenueDelayedFromLastYear.value(atEndOf: 0)
     }
 
-    /// tableau des noms de catégories et valeurs total des revenus de cette catégorie
+    /// tableau des noms de catégories et valeurs total "créditée" des revenus de cette catégorie
     var summary: NamedValueTable {
         var table = NamedValueTable(tableName: name)
         
@@ -137,7 +137,14 @@ struct RevenuesInCategory {
         self.credits      = NamedValueTable(tableName: name + " PERCU")
         self.taxablesIrpp = NamedValueTable(tableName: name + " TAXABLE")
     }
-    
-    // MARK: - Methods
+}
 
+extension RevenuesInCategory: CustomStringConvertible {
+    var description: String {
+        var desc = "Nom: \(name)\n"
+        desc += credits.description.withPrefixedSplittedLines("  ") + "\n"
+        desc += taxablesIrpp.description.withPrefixedSplittedLines("  ") + "\n"
+
+        return desc
+    }
 }

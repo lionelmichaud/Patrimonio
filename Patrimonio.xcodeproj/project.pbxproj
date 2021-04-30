@@ -778,7 +778,6 @@
 				7998E155262DB2D300DA4A12 /* FamilyModel */,
 				792819FA262F4E7C00E58A34 /* PatrimoinModel */,
 				79EC47EB263089140006EE44 /* SuccessionManager */,
-				79EC47DD263084330006EE44 /* Simulation */,
 			);
 			path = "UserData Model";
 			sourceTree = "<group>";
@@ -917,13 +916,6 @@
 				79EC47B326307C910006EE44 /* ValuedLiabilities.swift */,
 			);
 			path = Liabilities;
-			sourceTree = "<group>";
-		};
-		79EC47DD263084330006EE44 /* Simulation */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Simulation;
 			sourceTree = "<group>";
 		};
 		79EC47EB263089140006EE44 /* SuccessionManager */ = {

@@ -1,12 +1,12 @@
 import XCTest
-@testable import NamedValue
+@testable import FiscalModel
 
-final class NamedValueTests: XCTestCase {
+final class FiscalTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(NamedValue().text, "Hello, World!")
+        //XCTAssertEqual(FiscalModel().text, "Hello, World!")
     }
 
     static var allTests = [

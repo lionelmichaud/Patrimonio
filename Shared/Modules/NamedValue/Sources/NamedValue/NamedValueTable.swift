@@ -32,7 +32,7 @@ extension NamedValueTable: CustomStringConvertible {
         """
         Nom de la table: \(tableName)
         Valeurs de la table:
-        
+
         """
             +
             namedValues.description

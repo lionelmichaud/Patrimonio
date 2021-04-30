@@ -16,10 +16,10 @@ public protocol DictionaryOfNamedValueTable {
     
     // MARK: - Properties
     
-    var name       : String { get set }
-    var perCategory: [Category: NamedValueTable] { get set }
-    subscript(category: Category) -> NamedValueTable? { get set }
-    
+    var name        : String { get set }
+    var perCategory : [Category : NamedValueTable] { get set }
+    subscript(category : Category) -> NamedValueTable? { get set }
+
     /// Valeur totale de tous les items
     var total: Double { get }
     
