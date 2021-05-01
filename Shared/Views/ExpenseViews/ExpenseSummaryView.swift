@@ -69,7 +69,7 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
     let evalDate : Double
     let category : LifeExpenseCategory
 
-    static let ColorsTable: [NSUIColor] = [#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)]
+    static let ColorsTable: [NSUIColor] = [#colorLiteral(red: 0.9171036869, green: 0.9171036869, blue: 0.9171036869, alpha: 0), #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)]
     
     /// Créer le dataset du graphique
     /// - Returns: dataset
@@ -230,10 +230,10 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
 
         // mettre à joure en fonction de la position du slider de date d'évaluation
         let ll1 = ChartLimitLine(limit: evalDate+0.5, label: "date d'évaluation")
-        ll1.lineWidth = 2
+        ll1.lineWidth       = 2
         ll1.lineDashLengths = [10, 10]
-        ll1.labelPosition = .bottomRight
-        ll1.valueFont = .systemFont(ofSize: 10)
+        ll1.labelPosition   = .bottomRight
+        ll1.valueFont       = .systemFont(ofSize : 10)
         chartView.leftAxis.removeAllLimitLines()
         chartView.leftAxis.addLimitLine(ll1)
 

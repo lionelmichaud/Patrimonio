@@ -1154,6 +1154,7 @@
 				79EC479F26307B8C0006EE44 /* XCRemoteSwiftPackageReference "Foil" */,
 				79B272992634E80C00298E5D /* XCRemoteSwiftPackageReference "Charts" */,
 				791ED0E9263A0A1200701202 /* XCRemoteSwiftPackageReference "StepperView" */,
+				79754456263C6C9800B03CA3 /* XCRemoteSwiftPackageReference "swift-numerics" */,
 			);
 			productRefGroup = 7920DC52262C700500536B03 /* Products */;
 			projectDirPath = "";
@@ -1715,6 +1716,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
@@ -1741,6 +1743,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
@@ -1907,6 +1910,14 @@
 			requirement = {
 				kind = upToNextMinorVersion;
 				minimumVersion = 1.5.2;
+			};
+		};
+		79754456263C6C9800B03CA3 /* XCRemoteSwiftPackageReference "swift-numerics" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-numerics.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
 			};
 		};
 		7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */ = {

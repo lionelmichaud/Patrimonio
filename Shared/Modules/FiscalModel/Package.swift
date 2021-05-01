@@ -27,9 +27,14 @@ let package = Package(
             dependencies:
                 [
                     "AppFoundation"
-                ]),
+                ]
+        ),
         .testTarget(
             name: "FiscalModelTests",
-            dependencies: ["FiscalModel"])
+            dependencies: ["FiscalModel"],
+            resources: [
+                .process("Resources") // We will store out assets here
+            ]
+        )
     ]
 )

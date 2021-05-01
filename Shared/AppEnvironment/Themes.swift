@@ -120,7 +120,7 @@ struct ListTheme {
     }
     
     static let rowsBaseColor = Color("listRowBaseColor")
-    static var listTheme: [ListRowTheme] = [
+    static var shared: [ListRowTheme] = [
         // 0
         ListRowTheme(indent          : 0,
                      labelFontSize   : 17,
@@ -143,6 +143,6 @@ struct ListTheme {
                      opacity         : 0.0)
     ]
     static subscript(idx: Int) -> ListRowTheme {
-        ListTheme.listTheme[idx]
+        ListTheme.shared[idx]
     }
 }
