@@ -18,6 +18,7 @@ public struct LayOffTaxes: Codable {
     struct SocialTaxes: Codable {
         let maxRebateCoef : Double // 2 x PASS
         var maxRebate     : Double {
+            // TODO: - Injecter la dépendance
             maxRebateCoef * Fiscal.model.PASS
         }
         let rate          : Double // 13 % (le même que sur le salaire)

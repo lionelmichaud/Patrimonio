@@ -132,17 +132,6 @@ public struct RegimeAgirc: Codable {
     
     // MARK: - Methods
     
-    /// Encode l'objet dans un fichier stocké dans le Bundle de contenant la définition de la classe aClass
-    func saveToBundle(for aClass           : AnyClass,
-                      to file              : String?,
-                      dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
-                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) {
-        model.saveToBundle(for                  : aClass,
-                           to                   : file,
-                           dateEncodingStrategy : dateEncodingStrategy,
-                           keyEncodingStrategy  : keyEncodingStrategy)
-    }
-    
     /// Age minimum pour demander la liquidation de pension Agirc
     /// - Parameter birthDate: date de naissance
     /// - Returns: Age minimum pour demander la liquidation de pension Agirc

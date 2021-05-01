@@ -8,96 +8,58 @@
 
 import Foundation
 
-// MARK: - Protocol apportant Codable JSON à partir d'un fichier d'un Bundle de l'application
+// MARK: - Protocol apportant Decodable JSON à partir d'un fichier d'un Bundle de l'application
 
 public protocol BundleDecodable: Decodable {
     
     static var defaultFileName : String { get set }
     
     /// Lit le modèle dans un fichier JSON du Bundle Main
-    init(from file            : String?,
-         dateDecodingStrategy : JSONDecoder.DateDecodingStrategy,
-         keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy)
-    
-    /// Lit l'objet depuis un fichier stocké dans le Bundle de contenant la définition de la classe aClass
-    init(for aClass           : AnyClass,
-         from file            : String?,
+    init(fromFile file        : String?,
+         fromBundle bundle    : Bundle,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy,
          keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy)
 }
-    
-public protocol BundleEncodable: Encodable {
 
-    static var defaultFileName : String { get set }
-
-    /// Encode l'objet dans un fichier stocké dans le Bundle Main de l'Application
-    func saveToBundle(to file              : String?,
-                      dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
-                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy)
-
-    /// Encode l'objet dans un fichier stocké dans le Bundle de contenant la définition de la classe aClass
-    func saveToBundle(for aClass           : AnyClass,
-                      to file              : String?,
-                      dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
-                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy)
-}
-
+// implémentation par défaut
 public extension BundleDecodable {
-    init(from file            : String? = nil,
+    init(fromFile file        : String?                          = nil,
+         fromBundle bundle    : Bundle                           = Bundle.main,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy = .iso8601,
-         keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy = .useDefaultKeys) {
-        self = Bundle.main.decode(Self.self,
-                                  from                 : file ?? Self.defaultFileName,
-                                  dateDecodingStrategy : dateDecodingStrategy,
-                                  keyDecodingStrategy  : keyDecodingStrategy)
-    }
-    
-    init(for aClass           : AnyClass,
-         from file            : String? = nil,
-         dateDecodingStrategy : JSONDecoder.DateDecodingStrategy = .iso8601,
-         keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy = .useDefaultKeys) {
-        let bundle = Bundle(for: aClass)
+         keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) {
         self = bundle.decode(Self.self,
                              from                 : file ?? Self.defaultFileName,
                              dateDecodingStrategy : dateDecodingStrategy,
                              keyDecodingStrategy  : keyDecodingStrategy)
     }
 }
-    
+
+// MARK: - Protocol apportant Encodable JSON à partir d'un fichier d'un Bundle de l'application
+
+public protocol BundleEncodable: Encodable {
+
+    static var defaultFileName : String { get set }
+
+    /// Encode l'objet dans un fichier stocké dans le Bundle Main de l'Application
+    func saveToBundle(toFile file          : String?,
+                      toBundle bundle      : Bundle,
+                      dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
+                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy)
+}
+
+// implémentation par défaut
 public extension BundleEncodable {
-    func saveToBundle() {
-        Bundle.main.encode(self,
-                           to                   : Self.defaultFileName,
-                           dateEncodingStrategy : .iso8601,
-                           keyEncodingStrategy  : .useDefaultKeys)
-    }
-    
-    func saveToBundle(to file: String?) {
-        Bundle.main.encode(self,
-                           to                   : file ?? Self.defaultFileName,
-                           dateEncodingStrategy : .iso8601,
-                           keyEncodingStrategy  : .useDefaultKeys)
-    }
-    
-    func saveToBundle(to file              : String? = nil,
+    func saveToBundle(toFile file          : String?                          = nil,
+                      toBundle bundle      : Bundle                           = Bundle.main,
                       dateEncodingStrategy : JSONEncoder.DateEncodingStrategy = .iso8601,
-                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy = .useDefaultKeys) {
-        Bundle.main.encode(self,
+                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) {
+        bundle.encode(self,
                            to                   : file ?? Self.defaultFileName,
                            dateEncodingStrategy : dateEncodingStrategy,
                            keyEncodingStrategy  : keyEncodingStrategy)
     }
-    
-    func saveToBundle(for aClass           : AnyClass,
-                      to file              : String? = nil,
-                      dateEncodingStrategy : JSONEncoder.DateEncodingStrategy = .iso8601,
-                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy = .useDefaultKeys) {
-        let bundle = Bundle(for: aClass)
-        bundle.encode(self,
-                      to                   : file ?? Self.defaultFileName,
-                      dateEncodingStrategy : dateEncodingStrategy,
-                      keyEncodingStrategy  : keyEncodingStrategy)
-    }
 }
+
+// MARK: - Protocol apportant Codable JSON à partir d'un fichier d'un Bundle de l'application
 
 public typealias BundleCodable = BundleEncodable & BundleDecodable

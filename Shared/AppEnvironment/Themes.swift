@@ -20,11 +20,13 @@ struct ChartThemes {
     }
     
     struct DarkChartColors { // UIColor
-        static let labelTextColor  = #colorLiteral(red                        : 1, green                        : 1, blue                        : 1, alpha                        : 1)
-        static let backgroundColor = #colorLiteral(red : 0, green : 0, blue : 0, alpha : 1)
-        static let borderColor     = #colorLiteral(red : 0, green : 0, blue : 0, alpha : 1)
-        static let legendColor     = #colorLiteral(red : 1, green : 1, blue : 1, alpha : 1)
-        static let valueColor      = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        static let gridColor           = #colorLiteral(red          : 0.6000000238, green          : 0.6000000238, blue          : 0.6000000238, alpha          : 1)
+        static let gridBackgroundColor = #colorLiteral(red     : 0, green     : 0, blue     : 0, alpha     : 1)
+        static let backgroundColor     = #colorLiteral(red     : 0, green     : 0, blue     : 0, alpha     : 1)
+        static let borderColor         = #colorLiteral(red     : 0, green     : 0, blue     : 0, alpha     : 1)
+        static let valueColor          = #colorLiteral(red     : 1, green     : 1, blue     : 1, alpha     : 1)
+        static let legendColor         = #colorLiteral(red     : 1, green     : 1, blue     : 1, alpha     : 1)
+        static let labelTextColor      = #colorLiteral(red     : 1, green     : 1, blue     : 1, alpha     : 1)
     }
     
     struct LightChartColors { // UIColor
@@ -33,6 +35,8 @@ struct ChartThemes {
         static let backgroundColor     = #colorLiteral(red     : 1, green     : 1, blue     : 1, alpha     : 1)
         static let borderColor         = #colorLiteral(red         : 1, green         : 1, blue         : 1, alpha         : 1)
         static let valueColor          = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        static let legendColor         = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        static let labelTextColor      = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
     
     struct ChartDefaults {

@@ -12,15 +12,14 @@ import XCTest
 class FiscalModelTests: XCTestCase {
 
     func test_loading_from_main_bundle() {
-        XCTAssertNoThrow(Fiscal.Model(), "Failed to read model from Main Bundle ")
+        XCTAssertNoThrow(Fiscal.Model(fromBundle: Bundle.module), "Failed to read model from Main Bundle ")
     }
     
     func test_saving_to_test_bundle() throws {
-        let model = Fiscal.Model()
-        model.saveToBundle(for: FiscalModelTests.self,
-                             to: nil,
-                             dateEncodingStrategy: .iso8601,
-                             keyEncodingStrategy: .useDefaultKeys)
+        let model = Fiscal.Model(fromBundle: Bundle.module)
+        model.saveToBundle(toBundle             : Bundle.module,
+                           dateEncodingStrategy : .iso8601,
+                           keyEncodingStrategy  : .useDefaultKeys)
     }
 
 }

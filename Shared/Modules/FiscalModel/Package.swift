@@ -17,7 +17,8 @@ let package = Package(
             // Dependencies declare other packages that this package depends on.
             // Using 'path', we can depend on a local package that's
             // located at a given path relative to our package's folder:
-            .package(path: "../AppFoundation")
+            .package(path: "../AppFoundation"),
+                .package(url: "https://github.com/apple/swift-numerics.git", from: "0.0.8")
         ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -31,7 +32,10 @@ let package = Package(
         ),
         .testTarget(
             name: "FiscalModelTests",
-            dependencies: ["FiscalModel"],
+            dependencies: [
+                .product(name: "Numerics", package: "swift-numerics"),
+                "FiscalModel"
+            ],
             resources: [
                 .process("Resources") // We will store out assets here
             ]

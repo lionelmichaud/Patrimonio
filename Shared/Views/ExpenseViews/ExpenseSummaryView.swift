@@ -69,7 +69,7 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
     let evalDate : Double
     let category : LifeExpenseCategory
 
-    static let ColorsTable: [NSUIColor] = [#colorLiteral(red: 0.9171036869, green: 0.9171036869, blue: 0.9171036869, alpha: 0), #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)]
+    static let ColorsTable: [NSUIColor] = [#colorLiteral(red: 0.9171036869, green: 0.9171036869, blue: 0.9171036869, alpha: 0), #colorLiteral(red: 0.843980968, green: 0.4811213613, blue: 0.2574525177, alpha: 1)]
     
     /// Créer le dataset du graphique
     /// - Returns: dataset
@@ -126,7 +126,7 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
         chartView.doubleTapToZoomEnabled    = true
         chartView.dragEnabled               = true
         chartView.drawGridBackgroundEnabled = true
-        chartView.gridBackgroundColor       = ChartThemes.LightChartColors.gridBackgroundColor
+        chartView.gridBackgroundColor       = ChartThemes.DarkChartColors.gridBackgroundColor
         chartView.backgroundColor           = ChartThemes.DarkChartColors.backgroundColor
         chartView.borderColor               = ChartThemes.DarkChartColors.borderColor
         chartView.borderLineWidth           = 1.0
@@ -144,7 +144,7 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
         let xAxis = chartView.xAxis
         xAxis.drawAxisLineEnabled  = true
         xAxis.labelPosition        = .bottom
-        xAxis.labelFont            = ChartThemes.ChartDefaults.smallLabelFont
+        xAxis.labelFont            = ChartThemes.ChartDefaults.largeLabelFont
         xAxis.labelTextColor       = ChartThemes.DarkChartColors.labelTextColor
         xAxis.granularityEnabled   = false
         xAxis.granularity          = 1
@@ -161,7 +161,7 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
         leftAxis.enabled              = true
         leftAxis.drawAxisLineEnabled  = true
         leftAxis.drawGridLinesEnabled = true
-        leftAxis.labelFont            = ChartThemes.ChartDefaults.smallLabelFont
+        leftAxis.labelFont            = ChartThemes.ChartDefaults.largeLabelFont
         leftAxis.labelTextColor       = ChartThemes.DarkChartColors.labelTextColor
         leftAxis.granularityEnabled   = true // autoriser la réducion du nombre de label
         leftAxis.granularity          = 1    // à utiliser sans dépasser .labelCount
@@ -174,8 +174,8 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
         rightAxis.enabled              = true
         rightAxis.drawAxisLineEnabled  = true
         rightAxis.drawGridLinesEnabled = false
-        leftAxis.labelFont             = ChartThemes.ChartDefaults.smallLabelFont
-        leftAxis.labelTextColor        = ChartThemes.DarkChartColors.labelTextColor
+        rightAxis.labelFont            = ChartThemes.ChartDefaults.largeLabelFont
+        rightAxis.labelTextColor       = ChartThemes.DarkChartColors.labelTextColor
         rightAxis.granularityEnabled   = true // autoriser la réducion du nombre de label
         rightAxis.granularity          = 1    // à utiliser sans dépasser .labelCount
         rightAxis.labelCount           = 15   // nombre maxi
@@ -220,7 +220,7 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
         // ajouter le dataset au graphique
         let data = BarChartData(dataSet: dataSet)
 
-        data.setValueTextColor(ChartThemes.LightChartColors.valueColor)
+        data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
         data.setValueFont(ChartThemes.ChartDefaults.valueFont)
         data.barWidth = 0.5
 
@@ -234,6 +234,7 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
         ll1.lineDashLengths = [10, 10]
         ll1.labelPosition   = .bottomRight
         ll1.valueFont       = .systemFont(ofSize : 10)
+        ll1.valueTextColor  = ChartThemes.DarkChartColors.labelTextColor
         chartView.leftAxis.removeAllLimitLines()
         chartView.leftAxis.addLimitLine(ll1)
 
