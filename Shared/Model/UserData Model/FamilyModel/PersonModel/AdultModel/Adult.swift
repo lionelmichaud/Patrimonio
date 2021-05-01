@@ -51,7 +51,7 @@ final class Adult: Person {
     @Published var nbOfChildBirth: Int = 0
     
     /// SUCCESSION: option fiscale
-    @Published var fiscalOption : InheritanceDonation.FiscalOption = .fullUsufruct
+    @Published var fiscalOption : InheritanceFiscalOption = .fullUsufruct
 
     /// ACTIVITE: revenus du travail
     @Published var workIncome : WorkIncomeType?
@@ -162,7 +162,7 @@ final class Adult: Person {
             try container.decode(Int.self,
                                  forKey : .nb_Of_Child_Birth)
         fiscalOption =
-            try container.decode(InheritanceDonation.FiscalOption.self,
+            try container.decode(InheritanceFiscalOption.self,
                                  forKey : .fiscal_option)
         dateOfRetirement =
             try container.decode(Date.self,

@@ -48,7 +48,7 @@ struct SCI {
     mutating func transferOwnershipOf(decedentName       : String,
                                       chidrenNames       : [String]?,
                                       spouseName         : String?,
-                                      spouseFiscalOption : InheritanceDonation.FiscalOption?) {
+                                      spouseFiscalOption : InheritanceFiscalOption?) {
         for idx in 0..<scpis.items.count {
             try! scpis.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,

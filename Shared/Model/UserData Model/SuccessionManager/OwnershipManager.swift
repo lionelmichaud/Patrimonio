@@ -20,7 +20,7 @@ struct OwnershipManager {
                              decedentName       : String,
                              chidrenNames       : [String]?,
                              spouseName         : String?,
-                             spouseFiscalOption : InheritanceDonation.FiscalOption?) {
+                             spouseFiscalOption : InheritanceFiscalOption?) {
         patrimoine.assets.transferOwnershipOf(decedentName       : decedentName,
                                               chidrenNames       : chidrenNames,
                                               spouseName         : spouseName,
@@ -41,7 +41,7 @@ struct OwnershipManager {
         }
         // rechercher un conjont survivant
         var spouseName         : String?
-        var spouseFiscalOption : InheritanceDonation.FiscalOption?
+        var spouseFiscalOption : InheritanceFiscalOption?
         if let decedent = decedent as? Adult, let spouse = family.spouseOf(decedent) {
             if spouse.isAlive(atEndOf: year) {
                 spouseName         = spouse.displayName

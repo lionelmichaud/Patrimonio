@@ -17,13 +17,18 @@ class InheritanceDonationTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
+        
         let model = InheritanceDonation.Model(fromBundle: Bundle.module)
         InheritanceDonationTests.inheritanceDonation = InheritanceDonation(model: model)
-        try! InheritanceDonationTests.inheritanceDonation.initialize()
+        do {
+            try InheritanceDonationTests.inheritanceDonation.initialize()
+        } catch {
+            XCTFail("Failed to initialize the model")
+        }
     }
     
     // MARK: Tests
-
+    
     func test_calcul_heritage_enfant() throws {
         var partSuccession: Double
         var theory: Double
@@ -117,68 +122,84 @@ class InheritanceDonationTests: XCTestCase {
 
 class FiscalOptionTests: XCTestCase {
     
+    static var fiscalModel: Fiscal.Model!
+    
+    override class func setUp() {
+        super.setUp()
+        
+        FiscalOptionTests.fiscalModel = Fiscal.Model(fromBundle: Bundle.module).initialized()
+        
+        let model = InheritanceDonation.Model(fromBundle: Bundle.module)
+        InheritanceDonationTests.inheritanceDonation = InheritanceDonation(model: model)
+        do {
+            try InheritanceDonationTests.inheritanceDonation.initialize()
+        } catch {
+            XCTFail("Failed to initialize the model")
+        }
+    }
+    
     func test_shared_value() {
         var nbChildren   : Int
         var spouseAge    : Int
-        var fiscalOption : InheritanceDonation.FiscalOption
+        var fiscalOption : InheritanceFiscalOption
         
         // test de fullUsufruct
         nbChildren = 0
         spouseAge  = 75
         fiscalOption = .fullUsufruct
         
-        var result = fiscalOption.sharedValues(
-            nbChildren : nbChildren,
-            spouseAge  : spouseAge)
+        var result = fiscalOption.sharedValues(nbChildren        : nbChildren,
+                                               spouseAge         : spouseAge,
+                                               demembrementModel : FiscalOptionTests.fiscalModel.demembrement)
         XCTAssertEqual(1.0, result.forSpouse)
         XCTAssertEqual(0.0, result.forChild)
-
+        
         nbChildren = 2
         spouseAge  = 65
         
-        result = fiscalOption.sharedValues(
-            nbChildren : nbChildren,
-            spouseAge  : spouseAge)
+        result = fiscalOption.sharedValues(nbChildren        : nbChildren,
+                                           spouseAge         : spouseAge,
+                                           demembrementModel : FiscalOptionTests.fiscalModel.demembrement)
         XCTAssertEqual(0.4, result.forSpouse)
         XCTAssertEqual(0.6 / Double(nbChildren), result.forChild)
-
+        
         // test de quotiteDisponible
         nbChildren = 0
         spouseAge  = 75
         fiscalOption = .quotiteDisponible
         
-        result = fiscalOption.sharedValues(
-            nbChildren : nbChildren,
-            spouseAge  : spouseAge)
+        result = fiscalOption.sharedValues(nbChildren        : nbChildren,
+                                           spouseAge         : spouseAge,
+                                           demembrementModel : FiscalOptionTests.fiscalModel.demembrement)
         XCTAssertEqual(1.0, result.forSpouse)
         XCTAssertEqual(0.0, result.forChild)
         
         nbChildren = 2
         spouseAge  = 75
         
-        result = fiscalOption.sharedValues(
-            nbChildren : nbChildren,
-            spouseAge  : spouseAge)
+        result = fiscalOption.sharedValues(nbChildren        : nbChildren,
+                                           spouseAge         : spouseAge,
+                                           demembrementModel : FiscalOptionTests.fiscalModel.demembrement)
         XCTAssertEqual(1.0/3.0, result.forSpouse)
         XCTAssertEqual((1.0 - 1.0/3.0) / Double(nbChildren), result.forChild)
-
+        
         // test de usufructPlusBare
         nbChildren = 0
         spouseAge  = 75
         fiscalOption = .usufructPlusBare
         
-        result = fiscalOption.sharedValues(
-            nbChildren : nbChildren,
-            spouseAge  : spouseAge)
+        result = fiscalOption.sharedValues(nbChildren        : nbChildren,
+                                           spouseAge         : spouseAge,
+                                           demembrementModel : FiscalOptionTests.fiscalModel.demembrement)
         XCTAssertEqual(1.0, result.forSpouse)
         XCTAssertEqual(0.0, result.forChild)
         
         nbChildren = 2
         spouseAge  = 75
         
-        result = fiscalOption.sharedValues(
-            nbChildren : nbChildren,
-            spouseAge  : spouseAge)
+        result = fiscalOption.sharedValues(nbChildren        : nbChildren,
+                                           spouseAge         : spouseAge,
+                                           demembrementModel : FiscalOptionTests.fiscalModel.demembrement)
         XCTAssertEqual(0.25 + 0.3 * 0.75, result.forSpouse)
         XCTAssertEqual((1.0 - (0.25 + 0.3 * 0.75)) / Double(nbChildren), result.forChild)
     }
@@ -192,9 +213,14 @@ class LifeInsuranceInheritanceTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
+        
         let model = LifeInsuranceInheritance.Model(fromBundle: Bundle.module)
         LifeInsuranceInheritanceTests.lifeInsuranceInheritance = LifeInsuranceInheritance(model: model)
-        try! LifeInsuranceInheritanceTests.lifeInsuranceInheritance.initialize()
+        do {
+            try LifeInsuranceInheritanceTests.lifeInsuranceInheritance.initialize()
+        } catch {
+            XCTFail("Failed to initialize the model")
+        }
     }
     
     func date(year: Int, month: Int, day: Int) -> Date {

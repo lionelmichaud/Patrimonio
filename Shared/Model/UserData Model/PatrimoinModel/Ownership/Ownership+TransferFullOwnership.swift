@@ -127,7 +127,7 @@ extension Ownership {
     mutating func transferFullOwnership(of decedentName         : String,
                                         toSpouse spouseName     : String,
                                         toChildren chidrenNames : [String]?,
-                                        spouseFiscalOption      : InheritanceDonation.FiscalOption?) {
+                                        spouseFiscalOption      : InheritanceFiscalOption?) {
         // il y a un conoint survivant
         if let chidrenNames = chidrenNames {
             // il y a des enfants héritiers

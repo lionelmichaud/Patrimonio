@@ -56,7 +56,7 @@ struct Liabilities {
     mutating func transferOwnershipOf(decedentName       : String,
                                       chidrenNames       : [String]?,
                                       spouseName         : String?,
-                                      spouseFiscalOption : InheritanceDonation.FiscalOption?) {
+                                      spouseFiscalOption : InheritanceFiscalOption?) {
         for idx in 0..<loans.items.count {
             try! loans.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,

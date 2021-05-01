@@ -19,7 +19,11 @@ class IsfModelTests: XCTestCase {
         super.setUp()
         let model = IsfModel.Model(fromBundle: Bundle.module)
         IsfModelTests.isfTaxes = IsfModel(model: model)
-        try! IsfModelTests.isfTaxes.initialize()
+        do {
+            try IsfModelTests.isfTaxes.initialize()
+        } catch {
+            XCTFail("Failed to initialize the model")
+        }
     }
     
     // MARK: Tests

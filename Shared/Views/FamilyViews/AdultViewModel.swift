@@ -13,7 +13,7 @@ import RetirementModel
 // MARK: - Adult View Model
 
 class AdultViewModel: ObservableObject {
-    @Published var fiscalOption              = InheritanceDonation.FiscalOption.fullUsufruct
+    @Published var fiscalOption              = InheritanceFiscalOption.fullUsufruct
     @Published var dateRetirement            = Date()
     @Published var causeOfRetirement         = Unemployment.Cause.demission
     @Published var hasAllocationSupraLegale  = false

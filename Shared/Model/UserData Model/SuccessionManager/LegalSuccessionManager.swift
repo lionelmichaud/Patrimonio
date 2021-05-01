@@ -63,8 +63,9 @@ struct LegalSuccessionManager {
             // parts d'héritage résultant de l'option fiscale retenue par le conjoint
             inheritanceShares = (conjointSurvivant as! Adult)
                 .fiscalOption
-                .sharedValues(nbChildren : family.nbOfChildrenAlive(atEndOf: year),
-                              spouseAge  : conjointSurvivant.age(atEndOf: year))
+                .sharedValues(nbChildren        : family.nbOfChildrenAlive(atEndOf: year),
+                              spouseAge         : conjointSurvivant.age(atEndOf: year),
+                              demembrementModel : Fiscal.model.demembrement)
             
             // calculer la part d'héritage du conjoint
             let share = inheritanceShares.forSpouse

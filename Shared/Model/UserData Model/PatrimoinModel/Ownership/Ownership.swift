@@ -285,7 +285,7 @@ struct Ownership {
     private mutating func transferUsufructAndBareOwnership(of decedentName         : String,
                                                            toSpouse spouseName     : String,
                                                            toChildren chidrenNames : [String]?,
-                                                           spouseFiscalOption      : InheritanceDonation.FiscalOption?) {
+                                                           spouseFiscalOption      : InheritanceFiscalOption?) {
         if let chidrenNames = chidrenNames {
             // il y a des enfants héritiers
             // transmission NP + UF selon l'option fiscale du conjoint survivant
@@ -360,7 +360,7 @@ struct Ownership {
     mutating func transferOwnershipOf(decedentName       : String, // swiftlint:disable:this cyclomatic_complexity
                                       chidrenNames       : [String]?,
                                       spouseName         : String?,
-                                      spouseFiscalOption : InheritanceDonation.FiscalOption?) throws {
+                                      spouseFiscalOption : InheritanceFiscalOption?) throws {
         guard isValid else {
             customLogOwnership.log(level: .error, "Tentative de transfert de propriéta avec 'ownership' invalide")
             throw OwnershipError.invalidOwnership

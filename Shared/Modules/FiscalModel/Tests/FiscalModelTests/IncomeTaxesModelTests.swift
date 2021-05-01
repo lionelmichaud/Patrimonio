@@ -20,7 +20,11 @@ class IncomeTaxesModelTests: XCTestCase {
         super.setUp()
         let model = IncomeTaxesModel.Model(fromBundle: Bundle.module)
         IncomeTaxesModelTests.incomeTaxes = IncomeTaxesModel(model: model)
-        try! IncomeTaxesModelTests.incomeTaxes.initialize()
+        do {
+            try IncomeTaxesModelTests.incomeTaxes.initialize()
+        } catch {
+            XCTFail("Failed to initialize the model")
+        }
     }
     
     // MARK: Tests

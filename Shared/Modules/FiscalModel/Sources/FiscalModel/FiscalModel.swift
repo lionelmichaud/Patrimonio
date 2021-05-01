@@ -22,7 +22,7 @@ public struct Fiscal {
         
         // MARK: - Properties
         
-        var PASS                     : Double // Plafond Annuel de la Sécurité Sociale en €
+        public var PASS                     : Double // Plafond Annuel de la Sécurité Sociale en €
         // impôts
         public var incomeTaxes              : IncomeTaxesModel
         public var isf                      : IsfModel

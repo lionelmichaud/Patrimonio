@@ -10,27 +10,31 @@ import XCTest
 @testable import FiscalModel
 
 class LayOffTaxesTests: XCTestCase {
-
-    static var layOffTaxes: LayOffTaxes!
+    
+    static var fiscalModel: Fiscal.Model!
+    static var layOffTaxesModel: LayOffTaxes!
     
     // MARK: Helpers
     
     override class func setUp() {
         super.setUp()
+        
+        LayOffTaxesTests.fiscalModel = Fiscal.Model(fromBundle: Bundle.module).initialized()
+        
         let model = LayOffTaxes.Model(fromBundle: Bundle.module)
-        LayOffTaxesTests.layOffTaxes = LayOffTaxes(model: model)
+        LayOffTaxesTests.layOffTaxesModel = LayOffTaxes(model: model)
     }
     
     // MARK: Tests
     
     func test_calcul_maxRebate() {
-        XCTAssertEqual(2.0 * Fiscal.model.PASS,
-                       LayOffTaxesTests.layOffTaxes.model.socialTaxes.maxRebate)
+        XCTAssertEqual(2.0 * LayOffTaxesTests.fiscalModel.PASS,
+                       LayOffTaxesTests.layOffTaxesModel.model.socialTaxes.maxRebate)
     }
 
     func test_calcul_CsgCrds_total() {
         XCTAssertEqual(6.8 + 2.9,
-                       LayOffTaxesTests.layOffTaxes.model.csgCrds.total)
+                       LayOffTaxesTests.layOffTaxesModel.model.csgCrds.total)
     }
 
     func test_calcul_net_indemnite_legal() {
@@ -41,7 +45,7 @@ class LayOffTaxesTests: XCTestCase {
         var compensationTaxable      = indemniteRelle
         
         // when
-        let net = LayOffTaxesTests.layOffTaxes.net(compensationConventional: indemniteConventionnelle,
+        let net = LayOffTaxesTests.layOffTaxesModel.net(compensationConventional: indemniteConventionnelle,
                                                    compensationBrut: indemniteRelle,
                                                    compensationTaxable: &compensationTaxable,
                                                    irppDiscount: indemniteNonImposbale)
@@ -51,7 +55,7 @@ class LayOffTaxesTests: XCTestCase {
         let baseCotisationSociale = indemniteRelle - discountCotisationSociale
         let cotisationSociale = baseCotisationSociale * 13.0 / 100.0
         
-        let discountCsgCrds = min(2.0 * Fiscal.model.PASS, indemniteConventionnelle)
+        let discountCsgCrds = min(2.0 * LayOffTaxesTests.fiscalModel.PASS, indemniteConventionnelle)
         let baseCsgCrds = indemniteRelle - discountCsgCrds
         let CsgCrds = baseCsgCrds * (6.8 + 2.9) / 100.0
         
@@ -67,17 +71,17 @@ class LayOffTaxesTests: XCTestCase {
         var compensationTaxable      = indemniteRelle
 
         // when
-        let net = LayOffTaxesTests.layOffTaxes.net(compensationConventional: indemniteConventionnelle,
+        let net = LayOffTaxesTests.layOffTaxesModel.net(compensationConventional: indemniteConventionnelle,
                                                    compensationBrut: indemniteRelle,
                                                    compensationTaxable: &compensationTaxable,
                                                    irppDiscount: indemniteNonImposbale)
         
         // then
-        let discountCotisationSociale = 2.0 * Fiscal.model.PASS
+        let discountCotisationSociale = 2.0 * LayOffTaxesTests.fiscalModel.PASS
         let baseCotisationSociale = indemniteRelle - discountCotisationSociale
         let cotisationSociale = baseCotisationSociale * 13.0 / 100.0
         
-        let discountCsgCrds = min(2.0 * Fiscal.model.PASS, indemniteConventionnelle)
+        let discountCsgCrds = min(2.0 * LayOffTaxesTests.fiscalModel.PASS, indemniteConventionnelle)
         let baseCsgCrds = indemniteRelle - discountCsgCrds
         let CsgCrds = baseCsgCrds * (6.8 + 2.9) / 100.0
         

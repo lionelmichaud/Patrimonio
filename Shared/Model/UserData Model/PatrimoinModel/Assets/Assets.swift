@@ -117,7 +117,7 @@ struct Assets {
     mutating func transferOwnershipOf(decedentName       : String,
                                       chidrenNames       : [String]?,
                                       spouseName         : String?,
-                                      spouseFiscalOption : InheritanceDonation.FiscalOption?) {
+                                      spouseFiscalOption : InheritanceFiscalOption?) {
         for idx in 0..<periodicInvests.items.count {
             switch periodicInvests[idx].type {
                 case .lifeInsurance(_, let clause):
