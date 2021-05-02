@@ -34,6 +34,10 @@ let package = Package(
                 ]),
         .testTarget(
             name: "EconomyModelTests",
-            dependencies: ["EconomyModel"])
+            dependencies: ["EconomyModel"],
+            resources: [
+                .process("Resources") // We will store out assets here
+            ]
+        )
     ]
 )

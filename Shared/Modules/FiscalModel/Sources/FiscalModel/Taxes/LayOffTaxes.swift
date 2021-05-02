@@ -11,15 +11,17 @@ import AppFoundation
 
 // MARK: - Charges sociales sur l'indemnité de licenciement
 // https://www.service-public.fr/particuliers/vosdroits/F987
+
 public struct LayOffTaxes: Codable {
     
     // MARK: - Nested types
 
     struct SocialTaxes: Codable {
+        var PASS          : Double? // injecté à l'initialization par le père FiscalModel
         let maxRebateCoef : Double // 2 x PASS
         var maxRebate     : Double {
             // TODO: - Injecter la dépendance
-            maxRebateCoef * Fiscal.model.PASS
+            maxRebateCoef * PASS!
         }
         let rate          : Double // 13 % (le même que sur le salaire)
     }
@@ -34,7 +36,7 @@ public struct LayOffTaxes: Codable {
         static var defaultFileName : String = "LayOffTaxesModel.json"
         
         var version     : Version
-        let socialTaxes : SocialTaxes
+        var socialTaxes : SocialTaxes
         let csgCrds     : CsgCrds
     }
     
@@ -43,6 +45,11 @@ public struct LayOffTaxes: Codable {
     var model: Model
     
     // MARK: - Methods
+    
+    /// Initializer les paramètres calculés pour les tranches d'imposition à partir des seuils et des taux
+    mutating func initialize(PASS: Double) {
+        model.socialTaxes.PASS = PASS
+    }
     
     /// Calcul des charges sociales dûes sur une indemnité de licenciement
     /// - Parameters:

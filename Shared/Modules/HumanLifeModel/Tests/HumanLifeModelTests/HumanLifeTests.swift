@@ -12,15 +12,14 @@ import XCTest
 class HumanLifeTests: XCTestCase {
     
     func test_loading_from_main_bundle() {
-        XCTAssertNoThrow(HumanLife.Model().initialized(), "Failed to read model from Main Bundle ")
+        XCTAssertNoThrow(HumanLife.Model(fromBundle: Bundle.module).initialized(), "Failed to read model from Main Bundle ")
     }
     
     func test_saving_to_test_bundle() throws {
-        let model = HumanLife.Model().initialized()
-        model.saveToBundle(for: HumanLifeTests.self,
-                             to: nil,
-                             dateEncodingStrategy: .iso8601,
-                             keyEncodingStrategy: .useDefaultKeys)
+        let model = HumanLife.Model(fromBundle: Bundle.module).initialized()
+        model.saveToBundle(toBundle             : Bundle.module,
+                           dateEncodingStrategy : .iso8601,
+                           keyEncodingStrategy  : .useDefaultKeys)
     }
 
 }

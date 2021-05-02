@@ -28,18 +28,15 @@ let package = Package(
                     "AppFoundation",
                     "Statistics"
                 ]
-//            resources:
-//                [
-//                    .copy("HumanLifeModelConfig.json")
-//                ]
         ),
         .testTarget(
             name: "HumanLifeModelTests",
-            dependencies: ["HumanLifeModel"]
-//            resources:
-//                [
-//                    .copy("HumanLifeModelConfig.json")
-//                ]
+            dependencies: [
+                "HumanLifeModel"
+            ],
+            resources: [
+                .process("Resources") // We will store out assets here
+            ]
         )
     ]
 )

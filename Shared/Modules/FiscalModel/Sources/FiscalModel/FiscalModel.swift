@@ -10,6 +10,7 @@ import Foundation
 import AppFoundation
 
 // MARK: - SINGLETON: Modèle fiscal
+
 public struct Fiscal {
     
     // MARK: - Nested types
@@ -54,6 +55,7 @@ public struct Fiscal {
             } catch {
                 fatalError("Failed to initialize Fiscal.model.isf\n" + convertErrorToString(error))
             }
+            model.layOffTaxes.initialize(PASS: PASS)
             do {
                 try model.inheritanceDonation.initialize()
             } catch {
