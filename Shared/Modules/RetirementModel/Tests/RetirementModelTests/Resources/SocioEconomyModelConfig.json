@@ -17,7 +17,7 @@
             "pdfMax"   : null,
             "cdfCurve" : null
         },
-        "defaultValue" : 1.0,
+        "defaultValue" : 2.0,
         "randomValue"  : 0.0
     },
     
@@ -40,7 +40,7 @@
             ],
             "pc" : null
         },
-        "defaultValue" : 0,
+        "defaultValue" : 4,
         "randomValue"  : 0.0
     },
     
@@ -62,8 +62,7 @@
             "pdfMax"   : null,
             "cdfCurve" : null
         },
-        "defaultValue" : 5.0,
+        "defaultValue" : 10.0,
         "randomValue"  : 0.0
     }
 }
-

@@ -8,11 +8,13 @@
 
 import XCTest
 @testable import FiscalModel
+import AppFoundation
 
 class FiscalModelTests: XCTestCase {
 
-    func test_loading_from_main_bundle() {
-        XCTAssertNoThrow(Fiscal.Model(fromBundle: Bundle.module).initialized(), "Failed to read model from Main Bundle ")
+    func test_loading_from_module_bundle() {
+        XCTAssertNoThrow(Fiscal.Model(fromBundle: Bundle.module).initialized(),
+                         "Failed to read model from Main Bundle \(String(describing: Bundle.module.resourcePath))")
     }
     
     func test_saving_to_test_bundle() throws {

@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import UnemployementModel
+import FiscalModel
 
 class LayoffCompensationTests: XCTestCase {
 
@@ -19,12 +20,7 @@ class LayoffCompensationTests: XCTestCase {
         super.setUp()
         let model = LayoffCompensation.Model(fromBundle: Bundle.module)
         LayoffCompensationTests.layoffCompensation = LayoffCompensation(model: model)
-        LayoffCompensation.setFiscalModel(
-            Fiscal.Model(for: FiscalModelTests.self,
-                         from                 : "FiscalModelConfig.json",
-                         dateDecodingStrategy : .iso8601,
-                         keyDecodingStrategy  : .useDefaultKeys)
-                .initialized())
+        LayoffCompensation.setFiscalModel(Fiscal.Model(fromBundle: Bundle.module).initialized())
     }
     
     func date(year: Int, month: Int, day: Int) -> Date {

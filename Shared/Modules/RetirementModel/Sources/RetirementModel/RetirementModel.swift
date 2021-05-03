@@ -23,10 +23,17 @@ public struct Retirement {
         public var regimeGeneral: RegimeGeneral
         public var regimeAgirc  : RegimeAgirc
         public var reversion    : PensionReversion
+        
+        /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
+        func initialized() -> Model {
+            var model = self
+            model.regimeAgirc.setRegimeGeneral(regimeGeneral)
+            return model
+        }
     }
     
     // MARK: - Static methods
-
+    
     /// Définir le mode de simulation à utiliser pour tous les calculs futurs
     /// - Parameter simulationMode: mode de simulation à utiliser
     static func setSimulationMode(to simulationMode : SimulationModeEnum) {
@@ -38,10 +45,9 @@ public struct Retirement {
     
     // MARK: - Static properties
     
-    public static var model: Model = Model()
+    public static var model: Model = Model().initialized()
     
     // MARK: - Initializer
     
-    private init() {
-    }
+    private init() { }
 }

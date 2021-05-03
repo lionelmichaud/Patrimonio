@@ -57,11 +57,12 @@ public struct LayoffCompensation: Codable {
     
     // MARK: - Static Properties
 
-    private static var fiscalModel: Fiscal.Model = Fiscal.model
+    private static var fiscalModel: Fiscal.Model!
 
     // MARK: - Static Methods
-
-    static func setFiscalModel(_ model: Fiscal.Model) {
+    
+    /// Utiliser pour les Tets Unitaires. Permet d'injecter un modèle fiscal lu en fichier de test
+    public static func setFiscalModel(_ model: Fiscal.Model) {
         fiscalModel = model
     }
 

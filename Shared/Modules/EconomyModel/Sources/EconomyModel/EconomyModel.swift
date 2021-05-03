@@ -43,12 +43,12 @@ public struct Economy {
         case outOfBounds
     }
     
-    enum RandomVariable: String, PickableEnum {
+    public enum RandomVariable: String, PickableEnum {
         case inflation   = "Inflation"
         case securedRate = "Rendements Sûrs"
         case stockRate   = "Rendements Actions"
         
-        var pickerString: String {
+        public var pickerString: String {
             return self.rawValue
         }
     }
@@ -128,12 +128,24 @@ public struct Economy {
         
         // MARK: - Properties
         
-        var randomizers        : RandomizersModel = RandomizersModel().initialized() // les modèles de générateurs aléatoires
+        var randomizers        : RandomizersModel // les modèles de générateurs aléatoires
         var firstYearSampled   : Int = 0
         // utilisés uniqument si mode == .random && randomizers.simulateVolatility
         var securedRateSamples : [Double] = [ ] // les échatillons tirés aléatoirement à chaque simulation
         var stockRateSamples   : [Double] = [ ] // les échatillons tirés aléatoirement à chaque simulation
         
+        // MARK: - Methods
+        
+        init() {
+            self.randomizers = RandomizersModel().initialized()
+        }
+        
+        /// A utiliser uniquement pour les Tests Unitaires
+        /// - Parameter fromBundle: le Bundle dans lequel chercher le fichier de configuration JSON
+        init(fromBundle: Bundle) {
+            self.randomizers = RandomizersModel(fromBundle: fromBundle).initialized()
+        }
+
         // MARK: - Methods
         
         /// Retourne les taux pour une année donnée

@@ -53,7 +53,7 @@ public struct SocioEconomy {
         public var expensesUnderEvaluationRate: ModelRandomizer<BetaRandomGenerator>
         
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
-        func initialized() -> Model {
+        public func initialized() -> Model {
             var model = self
             model.pensionDevaluationRate.rndGenerator.initialize()
             model.nbTrimTauxPlein.rndGenerator.initialize()

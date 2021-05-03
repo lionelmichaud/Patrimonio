@@ -8,19 +8,21 @@
 
 import XCTest
 @testable import EconomyModel
+import AppFoundation
 
 class EconomyModelTests: XCTestCase {
     
-    func test_loading_from_main_bundle() throws {
-        XCTAssertNoThrow(Economy.Model(), "Failed to read model from Main Bundle ")
+    func test_loading_from_module_bundle() throws {
+        XCTAssertNoThrow(Economy.Model(fromBundle: Bundle.module),
+                         "Failed to read model from Main Bundle \(String(describing: Bundle.module.resourcePath))")
     }
     
     func test_saving_to_test_bundle() throws {
-        let model = Economy.RandomizersModel().initialized()
-        //model.saveToBundle(toBundle: Bundle.module)
+        let model = Economy.RandomizersModel(fromBundle: Bundle.module).initialized()
+        model.saveToBundle(toBundle: Bundle.module)
     }
     func test_generation_aleatoire_outOfBounds() {
-        let model = Economy.Model()
+        let model = Economy.Model(fromBundle: Bundle.module)
         
         XCTAssertThrowsError(try model.nextRun(withMode: .random,
                                                simulateVolatility: false,
@@ -56,7 +58,7 @@ class EconomyModelTests: XCTestCase {
     }
     
     func test_generation_aleatoire() throws {
-        let model = Economy.Model()
+        let model = Economy.Model(fromBundle: Bundle.module)
         let firstYear = 2020
         let lastYear = 2030
         
@@ -111,7 +113,7 @@ class EconomyModelTests: XCTestCase {
     }
     
     func test_reinit_rejeu() throws {
-        let model = Economy.Model()
+        let model = Economy.Model(fromBundle: Bundle.module)
         let firstYear = 2020
         let lastYear = 2030
         var dico = Economy.DictionaryOfRandomVariable()

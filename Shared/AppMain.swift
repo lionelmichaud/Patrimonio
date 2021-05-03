@@ -32,4 +32,9 @@ struct AppMain: App {
         }
         #endif
     }
+
+    init() {
+        /// Coordonne les diffférents singletons du modèle en terme de dépendance
+        let _ = Coordinator.shared
+    }
 }

@@ -8,6 +8,9 @@
 
 import XCTest
 @testable import RetirementModel
+import AppFoundation
+import FiscalModel
+import SocioEconomyModel
 
 class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
     
@@ -40,8 +43,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
     // MARK: Tests
     
     func test_saving_to_test_bundle() throws {
-        RegimeGeneralTest.regimeGeneral.saveToBundle(for                  : RegimeGeneralTest.self,
-                                                     to                   : nil,
+        RegimeGeneralTest.regimeGeneral.saveToBundle(toBundle             : Bundle.module,
                                                      dateEncodingStrategy : .iso8601,
                                                      keyEncodingStrategy  : .useDefaultKeys)
     }

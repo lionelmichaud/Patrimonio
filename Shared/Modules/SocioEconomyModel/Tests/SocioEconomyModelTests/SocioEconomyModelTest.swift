@@ -11,8 +11,9 @@ import XCTest
 
 class SocioEconomyModelTest: XCTestCase {
 
-    func test_loading_from_main_bundle() throws {
-        XCTAssertNoThrow(SocioEconomy.Model(fromBundle: Bundle.module).initialized(), "Failed to read model from Main Bundle ")
+    func test_loading_from_module_bundle() throws {
+        XCTAssertNoThrow(SocioEconomy.Model(fromBundle: Bundle.module).initialized(),
+                         "Failed to read model from Main Bundle \(String(describing: Bundle.module.resourcePath))")
     }
     
     func test_saving_to_test_bundle() throws {

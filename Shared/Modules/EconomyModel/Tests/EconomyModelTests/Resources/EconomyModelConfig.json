@@ -65,7 +65,6 @@
         "randomValue"  : 0.0
     },
     
-    "simulateVolatility": false,
     "securedVolatility" : 0.5,
     "stockVolatility"   : 14.0
 }

@@ -24,7 +24,7 @@ class PensionReversionTest: XCTestCase {
     // MARK: Tests
     
     func test_saving_to_test_bundle() throws {
-        PensionReversionTest.reversion.saveToBundle(toBundle             : Bundle.module,
+        PensionReversionTest.reversion.model.saveToBundle(toBundle             : Bundle.module,
                                                     dateEncodingStrategy : .iso8601,
                                                     keyEncodingStrategy  : .useDefaultKeys)
     }

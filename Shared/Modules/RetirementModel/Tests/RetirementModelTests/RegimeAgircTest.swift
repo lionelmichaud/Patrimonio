@@ -8,6 +8,9 @@
 
 import XCTest
 @testable import RetirementModel
+import AppFoundation
+import FiscalModel
+import SocioEconomyModel
 
 class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
     
@@ -27,6 +30,8 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
         RegimeAgirc.setFiscalModel(
             Fiscal.Model(fromBundle: Bundle.module)
                 .initialized())
+        RegimeAgircTest.regimeAgirc.setRegimeGeneral(
+            RegimeGeneral(model: RegimeGeneral.Model(fromBundle: Bundle.module)))
     }
     
     func date(year: Int, month: Int, day: Int) -> Date {
@@ -40,8 +45,7 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
     // MARK: Tests
     
     func test_saving_to_test_bundle() throws {
-        RegimeAgircTest.regimeAgirc.saveToBundle(for                  : RegimeAgircTest.self,
-                                                 to                   : nil,
+        RegimeAgircTest.regimeAgirc.saveToBundle(toBundle             : Bundle.module,
                                                  dateEncodingStrategy : .iso8601,
                                                  keyEncodingStrategy  : .useDefaultKeys)
     }

@@ -61,7 +61,7 @@ public struct UnemploymentCompensation: Codable {
     
     // MARK: - Static Properties
 
-    private static var fiscalModel: Fiscal.Model = Fiscal.model
+    private static var fiscalModel: Fiscal.Model!
 
     // MARK: - Properties
 
@@ -69,7 +69,7 @@ public struct UnemploymentCompensation: Codable {
     
     // MARK: - Static Methods
 
-    static func setFiscalModel(_ model: Fiscal.Model) {
+    public static func setFiscalModel(_ model: Fiscal.Model) {
         fiscalModel = model
     }
 

@@ -18,15 +18,23 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 // MARK: - Régime Complémentaire AGIRC-ARCCO
 
 public struct RegimeAgircSituation: Codable {
+    public var atEndOf     : Int
+    public var nbPoints    : Int
+    public var pointsParAn : Int
+    
+    internal init(atEndOf     : Int,
+                  nbPoints    : Int,
+                  pointsParAn : Int) {
+        self.atEndOf     = atEndOf
+        self.nbPoints    = nbPoints
+        self.pointsParAn = pointsParAn
+    }
+    
     public init() {
         self.atEndOf     = Date.now.year
         self.nbPoints    = 0
         self.pointsParAn = 0
     }
-    
-    public var atEndOf     : Int
-    public var nbPoints    : Int
-    public var pointsParAn : Int
 }
 
 public struct RegimeAgirc: Codable {
@@ -51,31 +59,32 @@ public struct RegimeAgirc: Codable {
         var plafondMajoEnfantNe   : Double // €
     }
     
-    public struct Model: BundleCodable, Versionable {
+    struct Model: BundleCodable, Versionable {
         public static var defaultFileName : String = "RegimeAgircModel.json"
 
-        public var version              : Version
+        public var version       : Version
         let gridAvant62          : [SliceAvantAgeLegal]
         let gridApres62          : [SliceApresAgeLegal]
         let valeurDuPoint        : Double // 1.2714
         let ageMinimum           : Int    // 57
         let majorationPourEnfant : MajorationPourEnfant
+        var regimeGeneral        : RegimeGeneral!
     }
     
     // MARK: - Static Properties
     
     private static var simulationMode: SimulationModeEnum = .deterministic
     // dependencies to other Models
-    private static var pensionDevaluationRateProvider: PensionDevaluationRateProviderProtocol = SocioEconomy.model
-    static var fiscalModel: Fiscal.Model = Fiscal.model
+    private static var pensionDevaluationRateProvider: PensionDevaluationRateProviderProtocol!
+    static var fiscalModel: Fiscal.Model!
 
     // MARK: - Static Methods
 
-    static func setPensionDevaluationRateProvider(_ provider : PensionDevaluationRateProviderProtocol) {
+    public static func setPensionDevaluationRateProvider(_ provider : PensionDevaluationRateProviderProtocol) {
         pensionDevaluationRateProvider = provider
     }
 
-    static func setFiscalModel(_ model: Fiscal.Model) {
+    public static func setFiscalModel(_ model: Fiscal.Model) {
         fiscalModel = model
     }
 
@@ -131,6 +140,22 @@ public struct RegimeAgirc: Codable {
     }
     
     // MARK: - Methods
+    
+    mutating func setRegimeGeneral(_ regimeGeneral: RegimeGeneral) {
+        model.regimeGeneral = regimeGeneral
+    }
+    
+    /// Encode l'objet dans un fichier stocké dans le Bundle de contenant la définition de la classe aClass
+    func saveToBundle(toFile file          : String? = nil,
+                      toBundle bundle      : Bundle,
+                      dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
+                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) {
+        
+        model.saveToBundle(toFile: file,
+                           toBundle: bundle,
+                           dateEncodingStrategy: dateEncodingStrategy,
+                           keyEncodingStrategy:  keyEncodingStrategy)
+    }
     
     /// Age minimum pour demander la liquidation de pension Agirc
     /// - Parameter birthDate: date de naissance
@@ -251,7 +276,7 @@ public struct RegimeAgirc: Codable {
         //    Le nombre de trimestres excédentaire est arrondi au chiffre inférieur
         let nbTrimPostAgeLegalMin = -(delai.year! * 4 + q1)
         
-        let ecartTrimAgircLegal = (Retirement.model.regimeGeneral.ageMinimumLegal - model.ageMinimum) * 4
+        let ecartTrimAgircLegal = (model.regimeGeneral.ageMinimumLegal - model.ageMinimum) * 4
         //let eacrtTrimLegalTauxPlein =
         
         switch ndTrimAvantAgeLegal {
@@ -318,7 +343,7 @@ public struct RegimeAgirc: Codable {
                                   during year              : Int) -> Double? {
         // nombre de trimestre manquant au moment de la liquidation de la pension pour pour obtenir le taux plein
         guard let nbTrimAudelaDuTauxPlein =
-                -Retirement.model.regimeGeneral.nbTrimManquantPourTauxPlein(
+                -model.regimeGeneral.nbTrimManquantPourTauxPlein(
                     birthDate                : birthDate,
                     lastKnownSituation       : lastKnownSituation,
                     dateOfRetirement         : dateOfRetirement,
@@ -331,7 +356,7 @@ public struct RegimeAgirc: Codable {
         // age actuel et age du taux plein
         let age = year - birthDate.year
         guard let ageTauxPleinLegal =
-                Retirement.model.regimeGeneral.ageTauxPleinLegal(birthYear: birthDate.year) else {
+                model.regimeGeneral.ageTauxPleinLegal(birthYear: birthDate.year) else {
             customLog.log(level: .default, "ageTauxPleinLegal: Age Du Taux Plein = nil")
             return nil
         }
@@ -352,7 +377,7 @@ public struct RegimeAgirc: Codable {
         switch nbTrimAudelaDuTauxPlein {
             case ...(-1):
                 // Liquidation de la pension AVANT l'obtention du taux plein
-                guard let dateAgeMinimumLegal = Retirement.model.regimeGeneral.dateAgeMinimumLegal(birthDate: birthDate) else {
+                guard let dateAgeMinimumLegal = model.regimeGeneral.dateAgeMinimumLegal(birthDate: birthDate) else {
                     customLog.log(level: .error,
                                   "coefMinorationMajoration:dateAgeMinimumLegal = nil")
                     fatalError("coefMinorationMajoration:dateAgeMinimumLegal = nil")
