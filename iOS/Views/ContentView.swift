@@ -15,14 +15,13 @@ struct ContentView: View {
 
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var simulation : Simulation
-    //@SceneStorage("selectedTab") var selection = UIState.Tab.family
+    @SceneStorage("selectedTab") var selection = UIState.Tab.family
     
     // MARK: - Properties
 
     var body: some View {
         TabView(selection: $uiState.selectedTab) {
             /// composition de la famille
-//            FamilyView()
             FamilyView()
                 .tabItem { Label("Famille", systemImage: "person.2.fill") }
                 .tag(UIState.Tab.family)
@@ -62,7 +61,7 @@ struct ContentView_Previews: PreviewProvider {
     static let uiState    = UIState()
     static let family     = Family()
     static let patrimoine = Patrimoin()
-//    static let simulation = Simulation()
+    static let simulation = Simulation()
 
     static var previews: some View {
         Group {
@@ -70,7 +69,7 @@ struct ContentView_Previews: PreviewProvider {
                 .environmentObject(uiState)
                 .environmentObject(family)
                 .environmentObject(patrimoine)
-//                .environmentObject(simulation)
+                .environmentObject(simulation)
                 .environment(\.locale, .init(identifier: "fr"))
             //                .previewDevice(PreviewDevice(rawValue: "iPhone X"))
             //                .previewDisplayName("iPhone X")

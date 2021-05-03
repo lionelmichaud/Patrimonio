@@ -56,9 +56,9 @@ public struct ArrayOfNameableValuable<E>: Codable, Versionable where
                                  keyDecodingStrategy  : .useDefaultKeys)
         self.fileNamePrefix = fileNamePrefix
     }
-
+    
     // MARK: - Methods
-
+    
     func storeItemsToFile(fileNamePrefix: String = "") {
         // encode to JSON file
         Bundle.main.encode(self,
@@ -66,48 +66,48 @@ public struct ArrayOfNameableValuable<E>: Codable, Versionable where
                            dateEncodingStrategy : .iso8601,
                            keyEncodingStrategy  : .useDefaultKeys)
     }
-
+    
     func storeItemsToFile(for aClass     : AnyClass,
                           fileNamePrefix : String = "") {
         let bundle = Bundle(for: aClass)
         // encode to JSON file
         bundle.encode(self,
-                          to                   : fileNamePrefix + self.fileNamePrefix! + String(describing: E.self) + ".json",
-                          dateEncodingStrategy : .iso8601,
-                          keyEncodingStrategy  : .useDefaultKeys)
+                      to                   : fileNamePrefix + self.fileNamePrefix! + String(describing: E.self) + ".json",
+                      dateEncodingStrategy : .iso8601,
+                      keyEncodingStrategy  : .useDefaultKeys)
     }
-
-    mutating func move(from indexes   : IndexSet,
-                       to destination : Int,
-                       fileNamePrefix : String = "") {
+    
+    public mutating func move(from indexes   : IndexSet,
+                              to destination : Int,
+                              fileNamePrefix : String = "") {
         items.move(fromOffsets: indexes, toOffset: destination)
         self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
     }
-
-    mutating func delete(at offsets     : IndexSet,
-                         fileNamePrefix : String = "") {
+    
+    public mutating func delete(at offsets     : IndexSet,
+                                fileNamePrefix : String = "") {
         items.remove(atOffsets: offsets)
         self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
     }
-
-    mutating func add(_ item         : E,
-                      fileNamePrefix : String = "") {
+    
+    public mutating func add(_ item         : E,
+                             fileNamePrefix : String = "") {
         items.append(item)
         self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
     }
-
-    mutating func update(with item      : E,
-                         at index       : Int,
-                         fileNamePrefix : String = "") {
+    
+    public mutating func update(with item      : E,
+                                at index       : Int,
+                                fileNamePrefix : String = "") {
         items[index] = item
         self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
     }
-
+    
     public func value(atEndOf: Int) -> Double {
         items.sumOfValues(atEndOf: atEndOf)
     }
-
-    func namedValueTable(atEndOf: Int) -> NamedValueArray {
+    
+    public func namedValueTable(atEndOf: Int) -> NamedValueArray {
         var table = NamedValueArray()
         for item in items {
             table.append((name: item.name, value: item.value(atEndOf: atEndOf)))
