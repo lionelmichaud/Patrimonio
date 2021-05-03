@@ -21,11 +21,6 @@ struct ContentView: View {
 
     var body: some View {
         TabView(selection: $uiState.selectedTab) {
-            /// préférences
-            SettingsView()
-                .tabItem { Label("Préférences", systemImage: "gear") }
-                .tag(UIState.Tab.userSettings)
-            
             /// composition de la famille
 //            FamilyView()
             FamilyView()
@@ -54,6 +49,11 @@ struct ContentView: View {
             AppVersionView()
                 .tabItem { Label("Simulation", systemImage: "function") }
                 .tag(UIState.Tab.simulation)
+            /// préférences
+            SettingsView()
+                .tabItem { Label("Préférences", systemImage: "gear") }
+                .tag(UIState.Tab.userSettings)
+            
         }
     }
 }

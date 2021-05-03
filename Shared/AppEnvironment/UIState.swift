@@ -87,7 +87,7 @@ class UIState: ObservableObject {
         var evalDate: Double = Date.now.year.double()
     }
 
-    @Published var selectedTab         : Tab  = Tab.userSettings
+    @Published var selectedTab         : Tab  = Tab.family
     @Published var selectedSideBarItem : Tab? = Tab.family
     @Published var patrimoineViewState = PatrimoineViewState()
     @Published var scenarioViewState   = ScenarioViewState()
