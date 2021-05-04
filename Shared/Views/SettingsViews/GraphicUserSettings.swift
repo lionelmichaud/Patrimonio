@@ -11,8 +11,8 @@ import AppFoundation
 struct GraphicUserSettings: View {
     @EnvironmentObject var patrimoine : Patrimoin
     // TODO: - décommenter les lignes commentées
-//    @EnvironmentObject var simulation : Simulation
-//    @EnvironmentObject var uiState    : UIState
+    @EnvironmentObject var simulation : Simulation
+    @EnvironmentObject var uiState    : UIState
     // si la variable d'état est locale (@State) cela ne fonctionne pas correctement
     @Binding var ownership        : OwnershipNature
     @Binding var evaluationMethod : AssetEvaluationMethod
@@ -26,8 +26,8 @@ struct GraphicUserSettings: View {
                               perform: { newValue in
                                 UserSettings.shared.ownershipSelection = newValue
                                 // remettre à zéro la simulation et sa vue
-//                                simulation.reset(withPatrimoine: patrimoine)
-//                                uiState.resetSimulation()
+                                simulation.reset(withPatrimoine: patrimoine)
+                                uiState.resetSimulation()
                               })
             }
             
@@ -38,8 +38,8 @@ struct GraphicUserSettings: View {
                               perform: { newValue in
                                 UserSettings.shared.assetEvaluationMethod = newValue
                                 // remettre à zéro la simulation et sa vue
-//                                simulation.reset(withPatrimoine: patrimoine)
-//                                uiState.resetSimulation()
+                                simulation.reset(withPatrimoine: patrimoine)
+                                uiState.resetSimulation()
                               })
             }
         }

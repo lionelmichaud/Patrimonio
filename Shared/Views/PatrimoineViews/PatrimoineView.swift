@@ -14,7 +14,13 @@ struct PatrimoineView: View {
 
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading) {
+            Group {
+                Button("Réinitialiser",
+                       action: {
+                        self.patrimoine.reload()
+                        uiState.patrimoineViewState.evalDate = Date.now.year.double()
+                       })
+                    .capsuleButtonStyle()
                 List {
                     // entête
                     PatrimoineHeaderView()
@@ -30,13 +36,9 @@ struct PatrimoineView: View {
                 .environment(\.horizontalSizeClass, .regular)
             }
             .navigationTitle("Patrimoine")
-            .navigationBarItems(
-                leading: EditButton(),
-                trailing: Button("Réinitialiser",
-                                 action: {
-                                    self.patrimoine.reload()
-                                    uiState.patrimoineViewState.evalDate = Date.now.year.double()
-                                 }))
+            .toolbar {
+                EditButton()
+            }
 
             // vue par défaut
             PatrimoineSummaryView()

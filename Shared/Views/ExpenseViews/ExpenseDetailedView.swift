@@ -96,7 +96,7 @@ struct ExpenseDetailedView: View {
             TimeSpanEditView(timeSpanVM: $expenseVM.timeSpanVM)
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
-        .navigationTitle(Text("Dépense " + category.displayString))
+        .navigationTitle(Text("Poste de Dépenses: " + category.displayString))
         .navigationBarTitleDisplayModeInline()
         .toolbar {
             ToolbarItem(placement: .automatic) {

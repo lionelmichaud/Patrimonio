@@ -34,7 +34,7 @@ struct FamilySectionView : View {
             ForEach(family.members) { member in
                 NavigationLink(destination: PersonDetailView().environmentObject(member)) {
                     Label(title: { MemberRowView(member: member) },
-                          icon : { Image(systemName: "person.fill") } )
+                          icon : { Image(systemName: "person.fill") })
                 }
                 .isDetailLink(true)
             }
