@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension ClosedRange {
+public extension ClosedRange {
     func hasIntersection(with: ClosedRange) -> Bool where Bound: Strideable, Bound.Stride: SignedInteger {
         return self.clamped(to: with).count > 1 ||
             with.clamped(to: self) .count > 1

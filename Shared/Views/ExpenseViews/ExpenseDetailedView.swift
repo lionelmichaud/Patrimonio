@@ -228,7 +228,7 @@ struct ExpenseDetailedView_Previews: PreviewProvider {
     }
     static var simulationReseter = FakeSimulationReseter()
     static var family     = Family()
-    //static var simulation = Simulation()
+    static var simulation = Simulation()
     static var patrimoine = Patrimoin()
     static var uiState    = UIState()
     
@@ -241,7 +241,7 @@ struct ExpenseDetailedView_Previews: PreviewProvider {
                             family   : family,
                             simulationReseter: simulationReseter)
             .environmentObject(family)
-            //.environmentObject(simulation)
+            .environmentObject(simulation)
             .environmentObject(patrimoine)
             .environmentObject(uiState)
     }

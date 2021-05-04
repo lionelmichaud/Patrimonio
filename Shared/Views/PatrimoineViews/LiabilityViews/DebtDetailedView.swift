@@ -1,5 +1,5 @@
 //
-//  LoanDetailedView.swift
+//  DebtDetailedView.swift
 //  Patrimoine
 //
 //  Created by Lionel MICHAUD on 30/04/2020.
@@ -8,16 +8,16 @@
 
 import SwiftUI
 
-struct LoanDetailedView: View {
+struct DebtDetailedView: View {
     @EnvironmentObject var family     : Family
     @EnvironmentObject var patrimoine : Patrimoin
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
-
+    
     // commun
-    private var originalItem     : Loan?
+    private var originalItem     : Debt?
+    @State private var localItem : Debt
     @State private var alertItem : AlertItem?
-    @State private var localItem : Loan
     @State private var index     : Int?
     // à adapter
     
@@ -30,76 +30,45 @@ struct LoanDetailedView: View {
             OwnershipView(ownership  : $localItem.ownership,
                           totalValue : localItem.value(atEndOf : Date.now.year))
             
-            // acquisition
+            /// acquisition
             Section(header: Text("CARCTERISTIQUES")) {
                 AmountEditView(label  : "Montant emprunté",
-                               amount : $localItem.loanedValue)
-                YearPicker(title     : "Première année (inclue)",
-                           inRange   : Date.now.year - 20 ... min(localItem.lastYear, Date.now.year + 50),
-                           selection : $localItem.firstYear)
-                YearPicker(title     : "Dernière année (inclue)",
-                           inRange   : max(localItem.firstYear, Date.now.year - 20) ... Date.now.year + 50,
-                           selection : $localItem.lastYear)
-                LabeledText(label: "Durée du prêt",
-                                text : "\(localItem.lastYear - localItem.firstYear + 1) ans")
-                    .foregroundColor(.secondary)
-            }
-            
-            Section(header: Text("CONDITIONS")) {
-                PercentEditView(label   : "Taux d'intérêt annuel",
-                                percent : $localItem.interestRate)
-                AmountEditView(label  : "Montant mensuel de l'assurance",
-                               amount : $localItem.monthlyInsurance)
-                AmountView(label  : "Remboursement annuel (de janvier \(localItem.firstYear) à décembre \(localItem.lastYear))",
-                           amount : localItem.yearlyPayement(localItem.firstYear))
-                    .foregroundColor(.secondary)
-                AmountView(label  : "Remboursement mensuel (de janvier \(localItem.firstYear) à décembre \(localItem.lastYear))",
-                           amount : localItem.yearlyPayement(localItem.firstYear)/12.0)
-                    .foregroundColor(.secondary)
-                AmountView(label  : "Remboursement restant (au 31/12/\(Date.now.year))",
-                           amount : localItem.value(atEndOf: Date.now.year))
-                    .foregroundColor(.secondary)
-                AmountView(label  : "Remboursement total",
-                           amount : localItem.totalPayement)
-                    .foregroundColor(.secondary)
-                AmountView(label  : "Coût total du crédit",
-                           amount : localItem.costOfCredit)
-                    .foregroundColor(.secondary)
+                               amount : $localItem.value)
             }
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
-        //.onAppear(perform: onAppear)
-        .navigationTitle("Emprunt")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarItems(
-            leading: Button(
-                action : duplicate,
-                label  : { Text("Dupliquer") })
-                .capsuleButtonStyle()
-                .disabled((index == nil) || changeOccured()),
-            trailing: Button(
-                action: applyChanges,
-                label: {
-                    Text("Sauver")
-                })
-                .disabled(!changeOccured())
-        )
+        .navigationTitle("Dette")
+        .navigationBarTitleDisplayModeInline()
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                Button(
+                    action : duplicate,
+                    label  : { Image(systemName: "doc.on.doc.fill") })
+                    //.capsuleButtonStyle()
+                    .disabled((index == nil) || changeOccured())
+            }
+            ToolbarItem(placement: .automatic) {
+                Button(
+                    action : applyChanges,
+                    label  : { Image(systemName: "externaldrive.fill") })
+                    .disabled(!changeOccured())
+            }
+        }
         .alert(item: $alertItem, content: myAlert)
     }
     
-    init(item       : Loan?,
+    init(item       : Debt?,
          family     : Family,
          patrimoine : Patrimoin) {
-        self.originalItem = item
+        self.originalItem       = item
         if let initialItemValue = item {
             // modification d'un élément existant
             _localItem = State(initialValue: initialItemValue)
-            _index     = State(initialValue: patrimoine.liabilities.loans.items.firstIndex(of: initialItemValue))
+            _index     = State(initialValue: patrimoine.liabilities.debts.items.firstIndex(of: initialItemValue))
             // specific
         } else {
             // création d'un nouvel élément
-            var newItem = Loan(firstYear : Date.now.year,
-                               lastYear  : Date.now.year)
+            var newItem = Debt(name: "", note: "", value: 0)
             // définir le délégué pour la méthode ageOf qui par défaut est nil à la création de l'objet
             newItem.ownership.setDelegateForAgeOf(delegate: family.ageOf)
             _localItem = State(initialValue: newItem)
@@ -118,7 +87,7 @@ struct LoanDetailedView: View {
         localItem.id = UUID()
         localItem.name += "-copie"
         // ajouter un élément à la liste
-        patrimoine.liabilities.loans.add(localItem)
+        patrimoine.liabilities.debts.add(localItem)
         // revenir à l'élement avant duplication
         localItem = originalItem!
         
@@ -132,16 +101,15 @@ struct LoanDetailedView: View {
 
         if let index = index {
             // modifier un éléménet existant
-            patrimoine.liabilities.loans.update(with: localItem, at: index)
+            patrimoine.liabilities.debts.update(with: localItem, at: index)
         } else {
             // générer un nouvel identifiant pour le nouvel item
             localItem.id = UUID()
             // définir le délégué pour la méthode ageOf qui par défaut est nil à la création de l'objet
             localItem.ownership.setDelegateForAgeOf(delegate: family.ageOf)
             // ajouter le nouvel élément à la liste
-            patrimoine.liabilities.loans.add(localItem)
+            patrimoine.liabilities.debts.add(localItem)
         }
-        
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
@@ -151,7 +119,7 @@ struct LoanDetailedView: View {
     }
     
     private func isValid() -> Bool {
-        if localItem.loanedValue > 0 {
+        if localItem.value > 0 {
             self.alertItem = AlertItem(title         : Text("Erreur"),
                                        message       : Text("Le montant emprunté doit être négatif"),
                                        dismissButton : .default(Text("OK")))
@@ -176,19 +144,19 @@ struct LoanDetailedView: View {
     }
 }
 
-struct LoanDetailedView_Previews: PreviewProvider {
+struct DebtDetailedView_Previews: PreviewProvider {
     static var family     = Family()
     static var patrimoine = Patrimoin()
-    
+
     static var previews: some View {
         return
             NavigationView {
-                LoanDetailedView(item       : patrimoine.liabilities.loans[0],
+                DebtDetailedView(item       : patrimoine.liabilities.debts[0],
                                  family     : family,
                                  patrimoine : patrimoine)
                     .environmentObject(family)
                     .environmentObject(patrimoine)
             }
-            .previewDisplayName("LoanDetailedView")
+            .previewDisplayName("DebtDetailedView")
     }
 }

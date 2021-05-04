@@ -22,7 +22,7 @@ public struct ArrayOfNameableValuable<E>: Codable, Versionable where
     public var items          = [E]()
     var fileNamePrefix : String?
     public var version        : Version
-    var currentValue   : Double {
+    public var currentValue   : Double {
         items.sumOfValues(atEndOf: Date.now.year)
     } // computed
 

@@ -32,8 +32,7 @@ struct ContentView: View {
                 .tag(UIState.Tab.expense)
 
             /// actifs & passifs du patrimoine de la famille
-//            PatrimoineView()
-            AppVersionView()
+            PatrimoineView()
                 .tabItem { Label("Patrimoine", systemImage: "dollarsign.circle.fill") }
                 .tag(UIState.Tab.asset)
 

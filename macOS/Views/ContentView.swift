@@ -43,9 +43,8 @@ struct ContentView: View {
                 .tag(UIState.Tab.expense)
 
                 /// actifs & passifs du patrimoine de la famille
-                //            PatrimoineView()
                 NavigationLink(
-                    destination: AppVersionView(),
+                    destination: PatrimoineView(),
                     tag: UIState.Tab.asset,
                     selection: $uiState.selectedSideBarItem
                 ) {
