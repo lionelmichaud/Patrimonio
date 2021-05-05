@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Encodage JSON vers un fichier désigné par son URL
 
-extension URL {
+public extension URL {
     func encode <T: Encodable> (_ object: T,
                                 to file: String,
                                 dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate,
@@ -48,7 +48,7 @@ extension URL {
 
 // MARK: - Déodage JSON vers un fichier désigné par son URL
 
-extension URL {
+public extension URL {
     func decode <T: Decodable> (_ type: T.Type,
                                 from file: String,
                                 dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,

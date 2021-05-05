@@ -43,8 +43,7 @@ struct ContentView: View {
                 .tag(UIState.Tab.scenario)
 
             /// calcul et présentation des résultats de simulation
-//            SimulationView()
-            AppVersionView()
+            SimulationView()
                 .tabItem { Label("Simulation", systemImage: "function") }
                 .tag(UIState.Tab.simulation)
             /// préférences

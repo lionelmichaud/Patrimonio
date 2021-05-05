@@ -47,5 +47,6 @@ struct TableView_Previews: PreviewProvider {
                          value: 12345,
                          indentLevel: 0,
                          header: true)
+            .previewDevice("iPhone 12")
     }
 }

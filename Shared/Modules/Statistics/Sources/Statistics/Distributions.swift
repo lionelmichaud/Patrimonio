@@ -8,24 +8,24 @@
 
 import Foundation
 
-struct BetaDistribution: Distribution {
-    typealias Number = Double
+public struct BetaDistribution: Distribution {
+    public typealias Number = Double
     
-    static var cdfCurveSamplesNumber : Int = 1000
+    public static var cdfCurveSamplesNumber : Int = 1000
 
     // MARK: - Properties
     
-    var minX     : Double?
-    var maxX     : Double?
-    var pdfMax   : Double?
-    var cdfCurve : Curve?
+    public var minX     : Double?
+    public var maxX     : Double?
+    public var pdfMax   : Double?
+    public var cdfCurve : Curve?
 
     let alpha : Double
     let beta  : Double
 
     // MARK: - Methods
     
-    func pdf(_ x: Double) -> Double {
+    public func pdf(_ x: Double) -> Double {
         var xl = x
         if let minX = minX, let maxX = maxX {
             precondition(x >= minX, "BetaDistribution: X < minX")

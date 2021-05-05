@@ -53,17 +53,17 @@ public struct Economy {
         }
     }
     
-    typealias DictionaryOfRandomVariable = [RandomVariable: Double]
+    public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
     // MARK: - Modèles statistiques de générateurs aléatoires
-    struct RandomizersModel: BundleCodable {
-        static var defaultFileName : String = "EconomyModelConfig.json"
+    public struct RandomizersModel: BundleCodable {
+        public static var defaultFileName : String = "EconomyModelConfig.json"
         
         // MARK: - Properties
         
-        var inflation   : ModelRandomizer<BetaRandomGenerator>
-        var securedRate : ModelRandomizer<BetaRandomGenerator> // moyenne annuelle
-        var stockRate   : ModelRandomizer<BetaRandomGenerator> // moyenne annuelle
+        public var inflation   : ModelRandomizer<BetaRandomGenerator>
+        public var securedRate : ModelRandomizer<BetaRandomGenerator> // moyenne annuelle
+        public var stockRate   : ModelRandomizer<BetaRandomGenerator> // moyenne annuelle
         //var simulateVolatility: Bool = false
         var securedVolatility : Double // % [0, 100]
         var stockVolatility   : Double // % [0, 100]
@@ -128,7 +128,7 @@ public struct Economy {
         
         // MARK: - Properties
         
-        var randomizers        : RandomizersModel // les modèles de générateurs aléatoires
+        public var randomizers        : RandomizersModel // les modèles de générateurs aléatoires
         var firstYearSampled   : Int = 0
         // utilisés uniqument si mode == .random && randomizers.simulateVolatility
         var securedRateSamples : [Double] = [ ] // les échatillons tirés aléatoirement à chaque simulation
@@ -212,7 +212,7 @@ public struct Economy {
         
         /// Remettre à zéro les historiques des tirages aléatoires
         /// - Note : Appeler avant de lancer une simulation
-        func resetRandomHistory() {
+        public func resetRandomHistory() {
             randomizers.resetRandomHistory()
         }
         
@@ -222,10 +222,10 @@ public struct Economy {
         ///   - lastYear: dernière année
         /// - Returns: dictionnaire des échantillon de valeurs moyennes pour le prochain Run
         /// - Note : Appeler avant de lancer un Run de simulation
-        func nextRun(withMode           : SimulationModeEnum,
-                     simulateVolatility : Bool,
-                     firstYear          : Int,
-                     lastYear           : Int) throws -> DictionaryOfRandomVariable {
+        public func nextRun(withMode           : SimulationModeEnum,
+                            simulateVolatility : Bool,
+                            firstYear          : Int,
+                            lastYear           : Int) throws -> DictionaryOfRandomVariable {
             guard lastYear >= firstYear else {
                 customLog.log(level: .fault, "nextRun: lastYear < firstYear")
                 throw ModelError.outOfBounds
@@ -246,11 +246,11 @@ public struct Economy {
         ///   - firstYear: première année
         ///   - lastYear: dernière année
         /// - Note : Appeler avant de rejouer un Run de simulation
-        func setRandomValue(to values          : DictionaryOfRandomVariable,
-                            withMode           : SimulationModeEnum,
-                            simulateVolatility : Bool,
-                            firstYear          : Int,
-                            lastYear           : Int) throws {
+        public func setRandomValue(to values          : DictionaryOfRandomVariable,
+                                   withMode           : SimulationModeEnum,
+                                   simulateVolatility : Bool,
+                                   firstYear          : Int,
+                                   lastYear           : Int) throws {
             // Définir une valeur pour chaque variable aléatoire avant un rejeu
             randomizers.setRandomValue(to: values)
             // à partir de la nouvelle valeure moyenne, tirer au hazard une valeur pour chaque année

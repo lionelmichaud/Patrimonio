@@ -25,13 +25,13 @@ public struct IncomeTaxesModel: Codable {
                              marginalRate   : Double,
                              averageRate    : Double)
     
-    typealias SlicedIRPP = [(size                : Double,
-                             sizeithChildren     : Double,
-                             sizeithoutChildren  : Double,
-                             rate                : Double,
-                             irppMax             : Double,
-                             irppWithChildren    : Double,
-                             irppWithoutChildren : Double)]
+    public typealias SlicedIRPP = [(size                : Double,
+                                    sizeithChildren     : Double,
+                                    sizeithoutChildren  : Double,
+                                    rate                : Double,
+                                    irppMax             : Double,
+                                    irppWithChildren    : Double,
+                                    irppWithoutChildren : Double)]
     
     public struct Model: BundleCodable, Versionable, RateGridable {
         public static var defaultFileName : String = "IncomeTaxesModel.json"
@@ -116,9 +116,9 @@ public struct IncomeTaxesModel: Codable {
     ///   - taxableIncome: revenu imposable
     ///   - nbAdults: nb d'adulte dans la famille
     ///   - nbChildren: nb d'enfant dans la famille
-    func slicedIrpp(taxableIncome : Double,
-                    nbAdults      : Int,
-                    nbChildren    : Int) throws -> SlicedIRPP {
+    public func slicedIrpp(taxableIncome : Double,
+                           nbAdults      : Int,
+                           nbChildren    : Int) throws -> SlicedIRPP {
         
         func buildSlice(index                        : Int,
                         sliceWithChildrent           : Int,

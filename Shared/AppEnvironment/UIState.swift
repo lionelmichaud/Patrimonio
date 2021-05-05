@@ -55,7 +55,7 @@ class UIState: ObservableObject {
     
     // MARK: - Etat de la vue Simulation
     struct SimulationViewState {
-//        var selectedItem: SimulationView.PushedItem? = .computationView
+        var selectedItem: SimulationView.PushedItem? = .computationView
     }
     
     // MARK: - Etat de la vue Compute
@@ -67,13 +67,13 @@ class UIState: ObservableObject {
     // MARK: - Etat des filtres graphes Bilan
     struct BalanceSheetChartState {
         var nameSelection : String = AppSettings.shared.allPersonsLabel
-//        var combination       : SocialAccounts.AssetLiabilitiesCombination = .both
+        var combination       : SocialAccounts.AssetLiabilitiesCombination = .both
         var itemSelection : ItemSelectionList = []
     }
     
     // MARK: - Etat des filtres graphes Cash Flow
     struct CashFlowChartState {
-//        var combination            : SocialAccounts.CashCombination = .both
+        var combination            : SocialAccounts.CashCombination = .both
         var itemSelection          : ItemSelectionList = []
         var onlyOneCategorySeleted : Bool {
             let count = itemSelection.reduce(.zero, { result, element in result + (element.selected ? 1 : 0) })
@@ -103,6 +103,6 @@ class UIState: ObservableObject {
     }
     
     func resetSimulation() {
-//        simulationViewState.selectedItem = .computationView
+        simulationViewState.selectedItem = .computationView
     }
 }

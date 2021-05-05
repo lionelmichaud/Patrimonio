@@ -10,8 +10,8 @@ import Foundation
 import Numerics
 
 public struct PointReal<Number: Real> : Codable where Number: Codable {
-    var x: Number
-    var y: Number
+    public var x: Number
+    public var y: Number
 }
 
 enum RandomizingMethod {

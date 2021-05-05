@@ -13,7 +13,7 @@ public enum SortingOrder {
     case ascending
     case descending
     
-    var imageSystemName: String {
+    public var imageSystemName: String {
         switch self {
             case .ascending:
                 return "arrow.up.circle"
@@ -21,7 +21,7 @@ public enum SortingOrder {
                 return "arrow.down.circle"
         }
     }
-    mutating func toggle() {
+    public mutating func toggle() {
         switch self {
             case .ascending:
                 self = .descending

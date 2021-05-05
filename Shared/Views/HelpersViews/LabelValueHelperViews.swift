@@ -59,7 +59,6 @@ struct LabeledValueRowView: View {
                             bottom: 0,
                             trailing: 0))
         .listRowBackground(ListTheme.rowsBaseColor.opacity(header ? ListTheme[indentLevel].opacity:0.0))
-        
     }
 }
 
@@ -417,10 +416,13 @@ struct TextView_Previews: View {
     var body: some View {
         Group {
             LabeledText(label: "Label", text: "Text", comment: "Comment")
+                .previewLayout(PreviewLayout.sizeThatFits)
                 .previewDisplayName("LabeledText")
             LabeledTextField(label: "Label", labelWidth: 70, defaultText: "Obligatoire", text: .constant("text"))
+                .previewLayout(PreviewLayout.sizeThatFits)
                 .previewDisplayName("LabeledTextField")
             LabeledTextEditor(label: "Label", labelWidth: 70, text: .constant("text"))
+                .previewLayout(PreviewLayout.sizeThatFits)
                 .previewDisplayName("LabeledTextEditor")
         }
     }
@@ -466,6 +468,7 @@ struct LabelValueHelpersView_Previews: PreviewProvider {
                 .previewDisplayName("DateRangeEditView")
             TextView_Previews()
         }
+        .previewDevice("iPhone 12")
     }
 }
 

@@ -60,6 +60,18 @@ public struct BetaRandomGenerator: RandomGenerator, Distribution, Codable {
     let alpha : Double
     let beta  : Double
     
+    // MARK: - Initializer
+
+    public init(minX  : Number?  = nil,
+                maxX  : Number?  = nil,
+                alpha : Double,
+                beta  : Double) {
+        self.minX = minX
+        self.maxX = maxX
+        self.alpha = alpha
+        self.beta = beta
+    }
+
     // MARK: - Methods
     
     public func pdf(_ x: Double) -> Double {
@@ -98,7 +110,15 @@ public struct UniformRandomGenerator: RandomGenerator, Codable {
     
     var minX     : Number? // valeur minimale de X
     var maxX     : Number? // valeur minimale de X
-    
+
+    // MARK: - Initializer
+
+    public init(minX: Number? = nil,
+                maxX: Number? = nil) {
+        self.minX = minX
+        self.maxX = maxX
+    }
+
     // MARK: - Methods
     
     mutating public func next() -> Double {
@@ -143,6 +163,12 @@ public struct DiscreteRandomGenerator: RandomGenerator, Codable {
             curve.append(PointReal<Double>(x: pdf[idx].x, y: cdf![idx]))
         }
         return curve
+    }
+
+    // MARK: - Initializer
+
+    public init(pdf: [Point]) {
+        self.pdf = pdf
     }
 
     // MARK: - Methods

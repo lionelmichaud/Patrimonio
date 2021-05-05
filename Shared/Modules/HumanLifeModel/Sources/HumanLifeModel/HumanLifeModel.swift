@@ -44,7 +44,7 @@ public struct HumanLife {
         }
         
         /// Vide l'ihistorique des tirages de chaque variable aléatoire du modèle
-        mutating func resetRandomHistory() {
+        public mutating func resetRandomHistory() {
             menLifeExpectation.resetRandomHistory()
             womenLifeExpectation.resetRandomHistory()
             nbOfYearsOfdependency.resetRandomHistory()

@@ -9,7 +9,7 @@
 import Foundation
 
 // let appVersion = Bundle.mainAppVersion
-extension Bundle {
+public extension Bundle {
     var appVersion: String? {
         self.infoDictionary?["CFBundleShortVersionString"] as? String
     }

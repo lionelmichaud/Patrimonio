@@ -9,9 +9,16 @@
 import Foundation
 
 /// https://stackoverflow.com/questions/57021722/swiftui-optional-textfield
-/// Usage: TextField($test.bound)
-extension Optional where Wrapped == String {
-    var _bound: String? {
+/// Usage:
+///     struct SOTestView : View {
+///         @State var test: String? = "Test"
+///
+///         var body: some View {
+///             TextField($test.bound)
+///         }
+///     }
+public extension Optional where Wrapped == String {
+    private var _bound: String? {
         get {
             return self
         }
@@ -19,7 +26,7 @@ extension Optional where Wrapped == String {
             self = newValue
         }
     }
-    public var bound: String {
+    var bound: String {
         get {
             return _bound ?? ""
         }

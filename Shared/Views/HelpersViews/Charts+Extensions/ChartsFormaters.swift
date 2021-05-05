@@ -325,12 +325,12 @@ public class NamedValueFormatter: NSObject, IAxisValueFormatter, IValueFormatter
     }
 }
 
-//public class IrppValueFormatter: NSObject, IAxisValueFormatter {
-//    
-//    // libélés de l'axe X
-//    var names = SocialAccounts.IrppEnum.allCases.map { $0.displayString }
-//    
-//    public func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-//        return names[Int(value)]
-//    }
-//}
+public class IrppValueFormatter: NSObject, IAxisValueFormatter {
+    
+    // libélés de l'axe X
+    var names = SocialAccounts.IrppEnum.allCases.map { $0.displayString }
+    
+    public func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+        return names[Int(value)]
+    }
+}

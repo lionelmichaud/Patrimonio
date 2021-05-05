@@ -14,7 +14,7 @@ struct ContentView: View {
 
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var simulation : Simulation
-    //@SceneStorage("selectedTab") var selection = UIState.Tab.family
+    @SceneStorage("selectedTab") var selection = UIState.Tab.family
 
     // MARK: - Properties
 
@@ -64,9 +64,8 @@ struct ContentView: View {
                 .tag(UIState.Tab.scenario)
 
                 /// calcul et présentation des résultats de simulation
-                //            SimulationView()
                 NavigationLink(
-                    destination: AppVersionView(),
+                    destination: SimulationView(),
                     tag: UIState.Tab.simulation,
                     selection: $uiState.selectedSideBarItem
                 ) {

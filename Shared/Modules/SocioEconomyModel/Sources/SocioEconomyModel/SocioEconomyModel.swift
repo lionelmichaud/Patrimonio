@@ -44,7 +44,7 @@ public struct SocioEconomy {
         }
     }
     
-    typealias DictionaryOfRandomVariable = [RandomVariable: Double]
+    public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
     public struct Model: BundleCodable, SocioEconomyModelProvider {
         public static var defaultFileName : String = "SocioEconomyModelConfig.json"
@@ -62,14 +62,14 @@ public struct SocioEconomy {
         }
         
         /// Vide l'ihistorique des tirages de chaque variable aléatoire du modèle
-        mutating func resetRandomHistory() {
+        public mutating func resetRandomHistory() {
             pensionDevaluationRate.resetRandomHistory()
             nbTrimTauxPlein.resetRandomHistory()
             expensesUnderEvaluationRate.resetRandomHistory()
         }
         
         /// Générer les nombres aléatoires suivants et retourner leur valeur pour historisation
-        mutating func next() -> DictionaryOfRandomVariable {
+        public mutating func next() -> DictionaryOfRandomVariable {
             var dicoOfRandomVariable = DictionaryOfRandomVariable()
             dicoOfRandomVariable[.pensionDevaluationRate]      = pensionDevaluationRate.next()
             dicoOfRandomVariable[.nbTrimTauxPlein]             = nbTrimTauxPlein.next()
@@ -79,7 +79,7 @@ public struct SocioEconomy {
         
         /// Définir une valeur pour la variable aléaoitre avant un rejeu
         /// - Parameter value: nouvelle valeure à rejouer
-        mutating func setRandomValue(to values: DictionaryOfRandomVariable) {
+        public mutating func setRandomValue(to values: DictionaryOfRandomVariable) {
             pensionDevaluationRate.setRandomValue(to: values[.pensionDevaluationRate]!)
             nbTrimTauxPlein.setRandomValue(to: values[.nbTrimTauxPlein]!)
             expensesUnderEvaluationRate.setRandomValue(to: values[.expensesUnderEvaluationRate]!)
