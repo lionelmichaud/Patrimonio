@@ -180,7 +180,7 @@ extension SocialAccounts {
             ChartThemes.taxRateColor(rate: $0.rate)
         }
         set.stackLabels = slicedIrpp.map { // pour chaque tranche
-            ($0.rate * 100.0).percentStringRounded
+            ($0.rate).percentStringRounded
         }
         return set
     }

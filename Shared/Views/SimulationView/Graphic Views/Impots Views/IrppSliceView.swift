@@ -70,24 +70,25 @@ struct IrppSliceView: View {
     }
 }
 
-/// Wrapper de BarChartView
+// MARK: - Wrappers de UIView
+
 struct IrppSlicesStackedBarChartView: UIViewRepresentable {
     
-    // type properties
-    
+    // MARK: - Type Properties
+
     static var titleStatic      : String = "image"
     static var uiView           : BarChartView?
     static var snapshotNb       : Int = 0
     
-    // properties
-    
+    // MARK: - Properties
+
     @Binding var socialAccounts : SocialAccounts
     var family                  : Family
     var title                   : String
     var evalYear                : Double
     
-    // initializers
-    
+    // MARK: - Initializer
+
     internal init(family         : Family,
                   socialAccounts : Binding<SocialAccounts>,
                   evalYear       : Double,
@@ -99,8 +100,8 @@ struct IrppSlicesStackedBarChartView: UIViewRepresentable {
         self._socialAccounts                      = socialAccounts
     }
     
-    // type methods
-    
+    // MARK: - Type methods
+
     /// Sauvegarde de l'image en fichier  et dans l'album photo au format .PNG
     static func saveImage() {
         guard IrppSlicesStackedBarChartView.uiView != nil else {
@@ -140,8 +141,38 @@ struct IrppSlicesStackedBarChartView: UIViewRepresentable {
         IrppSlicesStackedBarChartView.snapshotNb += 1
     }
     
-    // methods
-    
+    // MARK: - Methods
+
+    func format(_ chartView: BarChartView) {
+        chartView.leftAxis.axisMinimum     = 0
+        chartView.leftAxis.axisMaximum     = 100_000
+        chartView.xAxis.labelRotationAngle = 0
+        chartView.xAxis.valueFormatter     = IrppValueFormatter()
+        chartView.xAxis.labelFont          = ChartThemes.ChartDefaults.largeLegendFont
+    }
+
+    func updateData(of chartView: BarChartView) {
+        // créer le DataSet: BarChartDataSet
+        let year = Int(evalYear)
+        var maxCumulatedSlices: Double = 0.0
+        let dataSet = socialAccounts.getSlicedIrppBarChartDataSets(for                : year,
+                                                                   maxCumulatedSlices : &maxCumulatedSlices,
+                                                                   nbAdults           : family.nbOfAdultAlive(atEndOf: year),
+                                                                   nbChildren         : family.nbOfFiscalChildren(during: year))
+
+        // ajouter les DataSet au Chartdata
+        let data = BarChartData(dataSet: dataSet)
+        data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
+        data.setValueFont(UIFont(name:"HelveticaNeue-Light", size:12)!)
+        data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
+
+        // ajouter le dataset au graphique
+        chartView.data = data
+        chartView.leftAxis.axisMaximum = 100_000
+
+        chartView.data?.notifyDataChanged()
+    }
+
     /// Création de la vue du Graphique
     /// - Parameter context:
     /// - Returns: Graphique View
@@ -151,31 +182,11 @@ struct IrppSlicesStackedBarChartView: UIViewRepresentable {
                                      smallLegend         : false,
                                      axisFormatterChoice : .largeValue(appendix: "€", min3Digit: true))
         
-        // créer le DataSet: BarChartDataSet
-        let year = Int(evalYear)
-        var maxCumulatedSlices: Double = 0.0
-        let dataSet = socialAccounts.getSlicedIrppBarChartDataSets(for                : year,
-                                                                   maxCumulatedSlices : &maxCumulatedSlices,
-                                                                   nbAdults           : family.nbOfAdultAlive(atEndOf: year),
-                                                                   nbChildren         : family.nbOfFiscalChildren(during: year))
-        
-        // ajouter les DataSet au Chartdata
-        let data = BarChartData(dataSet: dataSet)
-        data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        data.setValueFont(UIFont(name:"HelveticaNeue-Light", size:12)!)
-        data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
-        
-        // ajouter le Chartdata au ChartView
-        chartView.data = data
-        chartView.leftAxis.axisMinimum     = 0
-        chartView.leftAxis.axisMaximum     = maxCumulatedSlices * 2
-        chartView.xAxis.labelRotationAngle = 0
-        chartView.xAxis.valueFormatter     = IrppValueFormatter()
-        chartView.xAxis.labelFont          = ChartThemes.ChartDefaults.largeLegendFont
+        format(chartView)
 
         // animer la transition
         chartView.animate(yAxisDuration: 0.5, easingOption: .linear)
-        
+
         // mémoriser la référence de la vue pour sauvegarde d'image ultérieure
         IrppSlicesStackedBarChartView.uiView = chartView
         return chartView
@@ -187,26 +198,9 @@ struct IrppSlicesStackedBarChartView: UIViewRepresentable {
     ///   - context:
     func updateUIView(_ uiView: BarChartView, context: Context) {
         uiView.clear()
+        //uiView.data?.clearValues()
+        updateData(of: uiView)
 
-        // créer le DataSet: BarChartDataSet
-        let year = Int(evalYear)
-        var maxCumulatedSlices: Double = 0.0
-        let dataSet = socialAccounts.getSlicedIrppBarChartDataSets(for                : year,
-                                                                   maxCumulatedSlices : &maxCumulatedSlices,
-                                                                   nbAdults           : family.nbOfAdultAlive(atEndOf: year),
-                                                                   nbChildren         : family.nbOfFiscalChildren(during: year))
-        
-        // ajouter les DataSet au Chartdata
-        let data = BarChartData(dataSet: dataSet)
-        data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        data.setValueFont(UIFont(name:"HelveticaNeue-Light", size:12)!)
-        data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
-        
-        // ajouter le dataset au graphique
-        uiView.data = data
-        uiView.leftAxis.axisMaximum = maxCumulatedSlices * 2
-
-        uiView.data?.notifyDataChanged()
         uiView.notifyDataSetChanged()
     }
 }

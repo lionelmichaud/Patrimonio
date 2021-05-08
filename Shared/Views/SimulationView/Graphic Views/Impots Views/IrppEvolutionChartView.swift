@@ -64,20 +64,31 @@ struct IrppEvolutionChartView: View {
     }
 }
 
+// MARK: - Wrappers de UIView
+
 /// Wrapper de CombinedChartView: EVOLUTION dans le temps des Taux d'imposition et du Quotient familial
 struct IrppEvolutionLineChartView: UIViewRepresentable {
-    @Binding var socialAccounts : SocialAccounts
-    var title                   : String
+    // MARK: - Type Properties
+
     static var titleStatic      : String = "image"
     static var uiView           : CombinedChartView?
     static var snapshotNb       : Int = 0
-    
+
+    // MARK: - Properties
+
+    @Binding var socialAccounts : SocialAccounts
+    var title                   : String
+
+    // MARK: - Initializer
+
     internal init(socialAccounts : Binding<SocialAccounts>, title: String) {
         IrppEvolutionLineChartView.titleStatic = title
         self.title                         = title
         self._socialAccounts               = socialAccounts
     }
     
+    // MARK: - Type methods
+
     /// Sauvegarde de l'image en fichier  et dans l'album photo au format .PNG
     static func saveImage() {
         guard IrppEvolutionLineChartView.uiView != nil else {
@@ -117,12 +128,9 @@ struct IrppEvolutionLineChartView: UIViewRepresentable {
         IrppEvolutionLineChartView.snapshotNb += 1
     }
     
-    func makeUIView(context: Context) -> CombinedChartView {
-        // créer et configurer un nouveau graphique
-        let chartView = CombinedChartView(title                   : "Paramètres Imposition",
-                                          smallLegend             : false,
-                                          leftAxisFormatterChoice : .percent)
-        
+    // MARK: - Methods
+
+    func updateData(of chartView: CombinedChartView) {
         // LIGNES
         // créer les DataSet : LineChartDataSets
         let lineDataSets = socialAccounts.getIrppRatesfLineChartDataSets()
@@ -131,7 +139,7 @@ struct IrppEvolutionLineChartView: UIViewRepresentable {
         lineChartData.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
         lineChartData.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
         lineChartData.setValueFormatter(DefaultValueFormatter(formatter: decimalX100IntegerFormatter))
-        
+
         // BARRES
         // créer les DataSet : BarChartDataSets
         let barDataSets = socialAccounts.getfamilyQotientBarChartDataSets()
@@ -140,44 +148,73 @@ struct IrppEvolutionLineChartView: UIViewRepresentable {
         barChartData.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
         barChartData.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
         barChartData.setValueFormatter(DefaultValueFormatter(formatter: decimalFormatter))
-        
+
         // combiner les ChartData
         let data = CombinedChartData()
         data.lineData = lineChartData
         data.barData  = barChartData
-//        data.bubbleData = generateBubbleData()
-//        data.scatterData = generateScatterData()
-//        data.candleData = generateCandleData()
-        
+        //        data.bubbleData = generateBubbleData()
+        //        data.scatterData = generateScatterData()
+        //        data.candleData = generateCandleData()
+
         // ajouter le Chartdata au ChartView
         chartView.data = data
-        
+
+        chartView.data?.notifyDataChanged()
+   }
+
+    /// Création de la vue du Graphique
+    /// - Parameter context:
+    /// - Returns: Graphique View
+    func makeUIView(context: Context) -> CombinedChartView {
+        // créer et configurer un nouveau graphique
+        let chartView = CombinedChartView(title                   : "Paramètres Imposition",
+                                          smallLegend             : false,
+                                          leftAxisFormatterChoice : .percent)
+
         // animer la transition
         chartView.animate(yAxisDuration: 0.5, easingOption: .linear)
-        
         // mémoriser la référence de la vue pour sauvegarde d'image ultérieure
         IrppEvolutionLineChartView.uiView = chartView
         return chartView
     }
     
+    /// Mise à jour de la vue du Graphique
+    /// - Parameters:
+    ///   - uiView: Graphique View
+    ///   - context:
     func updateUIView(_ uiView: CombinedChartView, context: Context) {
+        uiView.clear()
+        updateData(of: uiView)
+
+        uiView.notifyDataSetChanged()
     }
 }
 
 /// Wrapper de LineChartView: EVOLUTION dans le temps de l'IRPP
 struct IrppTranchesLineChartView: UIViewRepresentable {
-    @Binding var socialAccounts : SocialAccounts
-    var title                   : String
+
+    // MARK: - Type Properties
+
     static var titleStatic      : String = "image"
     static var uiView           : LineChartView?
     static var snapshotNb       : Int = 0
-    
+
+    // MARK: - Properties
+
+    @Binding var socialAccounts : SocialAccounts
+    var title                   : String
+
+    // MARK: - Initializer
+
     internal init(socialAccounts : Binding<SocialAccounts>, title: String) {
         IrppTranchesLineChartView.titleStatic = title
         self.title                    = title
         self._socialAccounts          = socialAccounts
     }
     
+    // MARK: - Type methods
+
     /// Sauvegarde de l'image en fichier  et dans l'album photo au format .PNG
     static func saveImage() {
         guard IrppTranchesLineChartView.uiView != nil else {
@@ -217,33 +254,49 @@ struct IrppTranchesLineChartView: UIViewRepresentable {
         IrppTranchesLineChartView.snapshotNb += 1
     }
     
+    // MARK: - Methods
+
+    func updateData(of chartView: LineChartView) {
+        // créer les DataSet: LineChartDataSets
+        let dataSets = socialAccounts.getIrppLineChartDataSets()
+
+        // ajouter les DataSet au Chartdata
+        let data = LineChartData(dataSets: dataSets)
+        data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
+        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
+        data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
+
+        // ajouter le Chartdata au ChartView
+        chartView.data = data
+
+        chartView.data?.notifyDataChanged()
+    }
+
+    /// Création de la vue du Graphique
+    /// - Parameter context:
+    /// - Returns: Graphique View
     func makeUIView(context: Context) -> LineChartView {
         // créer et configurer un nouveau graphique
         let chartView = LineChartView(title               : "Imposition",
                                       smallLegend         : false,
                                       axisFormatterChoice : .largeValue(appendix: "€", min3Digit: true))
         
-        // créer les DataSet: LineChartDataSets
-        let dataSets = socialAccounts.getIrppLineChartDataSets()
-        
-        // ajouter les DataSet au Chartdata
-        let data = LineChartData(dataSets: dataSets)
-        data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
-        data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
-        
-        // ajouter le Chartdata au ChartView
-        chartView.data = data
-        
         // animer la transition
         chartView.animate(yAxisDuration: 0.5, easingOption: .linear)
-        
         // mémoriser la référence de la vue pour sauvegarde d'image ultérieure
         IrppTranchesLineChartView.uiView = chartView
         return chartView
     }
     
+    /// Mise à jour de la vue du Graphique
+    /// - Parameters:
+    ///   - uiView: Graphique View
+    ///   - context:
     func updateUIView(_ uiView: LineChartView, context: Context) {
+        uiView.clear()
+        updateData(of: uiView)
+
+        uiView.notifyDataSetChanged()
     }
 }
 

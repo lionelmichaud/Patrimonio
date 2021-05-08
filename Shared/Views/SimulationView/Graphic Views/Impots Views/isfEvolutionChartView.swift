@@ -54,20 +54,32 @@ struct IsfEvolutionChartView: View {
     }
 }
 
+// MARK: - Wrappers de UIView
+
 /// Wrapper de LineChartView: EVOLUTION dans le temps de l'ISF
 struct IsfLineChartView: UIViewRepresentable {
-    @Binding var socialAccounts : SocialAccounts
-    var title                   : String
+
+    // MARK: - Type Properties
+
     static var titleStatic      : String = "image"
     static var uiView           : LineChartView?
     static var snapshotNb       : Int = 0
     
+    // MARK: - Properties
+
+    @Binding var socialAccounts : SocialAccounts
+    var title                   : String
+
+    // MARK: - Initializer
+
     internal init(socialAccounts : Binding<SocialAccounts>, title: String) {
         IsfLineChartView.titleStatic = title
         self.title                   = title
         self._socialAccounts         = socialAccounts
     }
     
+    // MARK: - Type methods
+
     /// Sauvegarde de l'image en fichier  et dans l'album photo au format .PNG
     static func saveImage() {
         guard IsfLineChartView.uiView != nil else {
@@ -107,35 +119,57 @@ struct IsfLineChartView: UIViewRepresentable {
         IsfLineChartView.snapshotNb += 1
     }
     
-    func makeUIView(context: Context) -> LineChartView {
-        // créer et configurer un nouveau graphique
-        let chartView = LineChartView(title               : "Imposition sur la Fortune",
-                                      smallLegend         : false,
-                                      axisFormatterChoice : .largeValue(appendix: "€", min3Digit: true))
-        
+    // MARK: - Methods
+
+    func format(_ chartView: LineChartView) {
+        chartView.rightAxis.axisMinimum = 0.0
+        chartView.rightAxis.enabled = true
+    }
+
+    func updateData(of chartView: LineChartView) {
         // créer les DataSet: LineChartDataSets
         let dataSets = socialAccounts.getIsfLineChartDataSets()
-        
+
         // ajouter les DataSet au Chartdata
         let data = LineChartData(dataSets: dataSets)
         data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
         data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
         data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
-        
+
         // ajouter le Chartdata au ChartView
         chartView.data = data
-        chartView.rightAxis.axisMinimum = 0.0
-        chartView.rightAxis.enabled = true
 
-        // animer la transition
-        chartView.animate(yAxisDuration: 0.5, easingOption: .linear)
-        
+        chartView.data?.notifyDataChanged()
+    }
+
+    /// Création de la vue du Graphique
+    /// - Parameter context:
+    /// - Returns: Graphique View
+    func makeUIView(context: Context) -> LineChartView {
+        // créer et configurer un nouveau graphique
+        let chartView = LineChartView(title               : "Imposition sur la Fortune",
+                                      smallLegend         : false,
+                                      axisFormatterChoice : .largeValue(appendix: "€", min3Digit: true))
+
+        format(chartView)
+
         // mémoriser la référence de la vue pour sauvegarde d'image ultérieure
         IsfLineChartView.uiView = chartView
         return chartView
     }
     
+    /// Mise à jour de la vue du Graphique
+    /// - Parameters:
+    ///   - uiView: Graphique View
+    ///   - context:
     func updateUIView(_ uiView: LineChartView, context: Context) {
+        uiView.clear()
+        //uiView.data?.clearValues()
+        updateData(of: uiView)
+
+        // animer la transition
+        uiView.animate(yAxisDuration: 0.5, easingOption: .linear)
+        uiView.notifyDataSetChanged()
     }
 }
 

@@ -236,7 +236,6 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
         // ajouter le dataset au graphique
         chartView.data = data
 
-        // animer la transition
         chartView.data?.notifyDataChanged()
     }
 
@@ -263,6 +262,7 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
         //uiView.data?.clearValues()
         updateData(of: uiView)
 
+        // animer la transition
         uiView.animate(yAxisDuration: 0.5, easingOption: .linear)
         uiView.notifyDataSetChanged()
     }
