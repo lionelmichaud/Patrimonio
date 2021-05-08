@@ -15,6 +15,7 @@ import Charts // https://github.com/danielgindi/Charts.git
 struct FamilyLifeEventChartView: UIViewRepresentable {
     @EnvironmentObject var family : Family
     let endDate: Int
+    let smallLegend: Bool = false
 
     static let shape: [LifeEvent:ScatterChartDataSet.Shape] =
         [.debutEtude         :.chevronUp,
@@ -74,30 +75,19 @@ struct FamilyLifeEventChartView: UIViewRepresentable {
         return dataSets
     }
     
-    func drawExpenseDataChart() -> ScatterChartView {
+    func format() -> ScatterChartView {
         let chartView = ScatterChartView(title               : "Evénements",
-                                         smallLegend         : true,
+                                         smallLegend         : smallLegend,
                                          axisFormatterChoice : .name(names: family.membersName))
 
         chartView.leftAxis.axisMinimum = -0.5
         chartView.leftAxis.axisMaximum = family.members.count.double() - 0.5
 
-        //: ### BarChartData
-        let dataSets = getFamilyLifeEventDataSet()
-        
-        // ajouter le dataset au graphique
-        let data = ScatterChartData(dataSets: dataSets)
-        data.setValueTextColor(ChartThemes.LightChartColors.valueColor)
-        data.setValueFont(ChartThemes.ChartDefaults.valueFont)
-
-        // ajouter le dataset au graphique
-        chartView.data = data
-        
         return chartView
     }
     
     func makeUIView(context: Context) -> ScatterChartView {
-        drawExpenseDataChart()
+        format()
     }
     
     func updateUIView(_ uiView: ScatterChartView, context: Context) {
@@ -118,13 +108,14 @@ struct FamilyLifeEventChartView: UIViewRepresentable {
     }
 }
 
-//struct FamilyLifeEventChartView_Previews: PreviewProvider {
-//    static var family     = Family()
-//    static var uiState    = UIState()
-//
-//    static var previews: some View {
-//        FamilyLifeEventChartView()
-//            .environmentObject(family)
-//            .environmentObject(uiState)
-//    }
-//}
+struct FamilyLifeEventChartView_Previews: PreviewProvider {
+    static var family     = Family()
+    static var uiState    = UIState()
+
+    static var previews: some View {
+        FamilyLifeEventChartView(endDate: 2054)
+            .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealWidth: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealHeight: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxHeight: 500, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            .environmentObject(family)
+            .environmentObject(uiState)
+    }
+}

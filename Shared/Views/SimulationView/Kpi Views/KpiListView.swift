@@ -91,6 +91,7 @@ struct KpiListView_Previews: PreviewProvider {
     static func kpiRandom() -> KPI {
         simulation.mode = .random
         var kpi = KPI(name: "KPI test",
+                      note: "description",
                       objective: 1000.0,
                       withProbability: 0.95)
         kpi.record(500.0, withMode: simulation.mode)

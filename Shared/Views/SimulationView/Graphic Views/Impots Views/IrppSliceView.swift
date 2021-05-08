@@ -210,3 +210,29 @@ struct IrppSlicesStackedBarChartView: UIViewRepresentable {
         uiView.notifyDataSetChanged()
     }
 }
+
+struct IrppSliceView_Previews: PreviewProvider {
+    static var uiState    = UIState()
+    static var family     = Family()
+    static var patrimoine = Patrimoin()
+    static var simulation = Simulation()
+
+    static var previews: some View {
+        simulation.compute(nbOfYears: 40, nbOfRuns: 1,
+                           withFamily: family, withPatrimoine: patrimoine)
+        return NavigationView {
+            List {
+                // calcul de simulation
+                NavigationLink(destination : IrppSliceView()
+                                .environmentObject(uiState)
+                                .environmentObject(family)
+                                .environmentObject(patrimoine)
+                                .environmentObject(simulation)
+                ) {
+                    Text("IRPP Tranches")
+                }
+                .isDetailLink(true)
+            }
+        }
+    }
+}

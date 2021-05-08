@@ -26,8 +26,8 @@ struct GraphicUserSettings: View {
                               perform: { newValue in
                                 UserSettings.shared.ownershipSelection = newValue
                                 // remettre à zéro la simulation et sa vue
-                                simulation.reset(withPatrimoine: patrimoine)
-                                uiState.resetSimulation()
+                                simulation.reset()
+                                uiState.reset()
                               })
             }
             
@@ -38,8 +38,8 @@ struct GraphicUserSettings: View {
                               perform: { newValue in
                                 UserSettings.shared.assetEvaluationMethod = newValue
                                 // remettre à zéro la simulation et sa vue
-                                simulation.reset(withPatrimoine: patrimoine)
-                                uiState.resetSimulation()
+                                simulation.reset()
+                                uiState.reset()
                               })
             }
         }
@@ -56,8 +56,12 @@ struct GraphicUserSettings_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        GraphicUserSettings(ownership        : .constant(.all),
-                            evaluationMethod : .constant(.totalValue))
-            .environmentObject(patrimoine)
+        NavigationView {
+            NavigationLink(destination: GraphicUserSettings(ownership        : .constant(.all),
+                                                            evaluationMethod : .constant(.totalValue))
+                            .environmentObject(patrimoine)) {
+                Label("Graphiques", systemImage: "chart.bar.xaxis")
+            }
+        }
     }
 }

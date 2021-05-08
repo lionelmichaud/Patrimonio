@@ -80,8 +80,8 @@ struct MemberAddView: View {
     /// Création du nouveau membre et ajout à la famille
     func addMember() {
         // remettre à zéro la simulation et sa vue
-        simulation.reset(withPatrimoine: patrimoine)
-        uiState.resetSimulation()
+        simulation.reset()
+        uiState.reset()
         
         switch personViewModel.seniority {
             case .adult  :

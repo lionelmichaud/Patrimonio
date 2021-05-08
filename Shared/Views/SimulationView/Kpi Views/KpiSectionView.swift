@@ -64,9 +64,13 @@ struct KpiView_Previews: PreviewProvider {
     static var previews: some View {
         simulation.compute(nbOfYears: 40, nbOfRuns: 1,
                            withFamily: family, withPatrimoine: patrimoine)
-        return List {KpiSectionView()
-            .environmentObject(simulation)
-            .environmentObject(uiState)}
-            .previewDevice("iPhone 12")
+        return
+            NavigationView {
+                List {KpiSectionView()
+                    .environmentObject(uiState)
+                    .environmentObject(family)
+                    .environmentObject(patrimoine)
+                    .environmentObject(simulation)}
+            }
     }
 }

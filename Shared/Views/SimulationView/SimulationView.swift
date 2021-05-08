@@ -57,13 +57,15 @@ struct SimulationView_Previews: PreviewProvider {
     static var family     = Family()
     static var patrimoine = Patrimoin()
     static var simulation = Simulation()
-    
+
     static var previews: some View {
-        SimulationView()
+        simulation.compute(nbOfYears: 40, nbOfRuns: 1,
+                           withFamily: family, withPatrimoine: patrimoine)
+        return
+            SimulationView()
             .environmentObject(uiState)
             .environmentObject(family)
             .environmentObject(patrimoine)
             .environmentObject(simulation)
-            .colorScheme(.dark)
     }
 }

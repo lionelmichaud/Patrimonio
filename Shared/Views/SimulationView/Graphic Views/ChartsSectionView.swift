@@ -99,7 +99,22 @@ struct ChartsSectionView: View {
 }
 
 struct ChartsView_Previews: PreviewProvider {
+    static var uiState    = UIState()
+    static var family     = Family()
+    static var patrimoine = Patrimoin()
+    static var simulation = Simulation()
+
     static var previews: some View {
-        ChartsSectionView()
+        simulation.compute(nbOfYears: 40, nbOfRuns: 1,
+                           withFamily: family, withPatrimoine: patrimoine)
+        return NavigationView {
+            List {
+                ChartsSectionView()
+                    .environmentObject(uiState)
+                    .environmentObject(family)
+                    .environmentObject(patrimoine)
+                    .environmentObject(simulation)
+            }
+        }
     }
 }

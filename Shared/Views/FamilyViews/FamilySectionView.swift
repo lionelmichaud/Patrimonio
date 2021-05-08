@@ -46,8 +46,8 @@ struct FamilySectionView : View {
     
     func deleteMembers(at offsets: IndexSet) {
         // remettre à zéro la simulation et sa vue
-        simulation.reset(withPatrimoine: patrimoine)
-        uiState.resetSimulation()
+        simulation.reset()
+        uiState.reset()
         // supprimer le membre de la famille
         family.deleteMembers(at: offsets)
     }

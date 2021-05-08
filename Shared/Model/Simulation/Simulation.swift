@@ -13,11 +13,11 @@ import EconomyModel
 import SocioEconomyModel
 import HumanLifeModel
 
-protocol SimulationReseter {
-    func reset(withPatrimoine: Patrimoin)
+protocol CanResetSimulation {
+    func reset()
 }
 
-class Simulation: ObservableObject, SimulationReseter {
+class Simulation: ObservableObject, CanResetSimulation {
 
     //#if DEBUG
     /// URL du fichier de stockage du résultat de calcul au format CSV
@@ -95,23 +95,19 @@ class Simulation: ObservableObject, SimulationReseter {
     ///   - patrimoine: le patrimoine
     ///   - includingKPIs: réinitialiser les KPI (seulement sur le premier run)
     ///
-    func reset(withPatrimoine patrimoine : Patrimoin) {
+    func reset() {
         // réinitialiser les comptes sociaux du patrimoine de la famille
         socialAccounts = SocialAccounts()
-
-        // réinitialiser le patrimoine pour repartir d'une situation initiale
-        // sans aucune altération par des simulation passées éventuelles
-        //patrimoine.resetFreeInvestementCurrentValue()
-
-        //        firstYear    = nil
-        //        lastYear     = nil
-        isComputed   = false
-        isSaved      = false
+        isComputed     = false
+        isSaved        = false
     }
 
+    /// remettre à zéro l'historique des KPI (Histogramme)
+    /// - au début d'un MontéCarlo seulement
+    /// - mais pas à chaque Run
     private func reset(includingKPIs: Bool = true) {
         // réinitialiser les comptes sociaux du patrimoine de la famille
-        socialAccounts = SocialAccounts()
+        reset()
 
         // remettre à zéro l'historique des KPI (Histogramme)
         //  - au début d'un MontéCarlo seulement
@@ -119,12 +115,9 @@ class Simulation: ObservableObject, SimulationReseter {
         if includingKPIs {
             KpiArray.reset(theseKPIs: &kpis, withMode: mode)
         }
-
-        isComputed   = false
-        isSaved      = false
     }
 
-    /// remettre à zéro les historiques des tirages aléatoires
+    /// remettre à zéro les historiques des tirages aléatoires avant le lancement d'un MontéCarlo
     private func resetAllRandomHistories() {
         HumanLife.model.resetRandomHistory()
         Economy.model.resetRandomHistory()

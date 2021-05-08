@@ -246,3 +246,29 @@ struct IrppTranchesLineChartView: UIViewRepresentable {
     func updateUIView(_ uiView: LineChartView, context: Context) {
     }
 }
+
+struct IrppView_Previews: PreviewProvider {
+    static var uiState    = UIState()
+    static var family     = Family()
+    static var patrimoine = Patrimoin()
+    static var simulation = Simulation()
+
+    static var previews: some View {
+        simulation.compute(nbOfYears: 40, nbOfRuns: 1,
+                           withFamily: family, withPatrimoine: patrimoine)
+        return NavigationView {
+            List {
+                // calcul de simulation
+                NavigationLink(destination : IrppEvolutionChartView()
+                                .environmentObject(uiState)
+                                .environmentObject(family)
+                                .environmentObject(patrimoine)
+                                .environmentObject(simulation)
+                ) {
+                    Text("IRPP Synthèse de l'évolution")
+                }
+                .isDetailLink(true)
+            }
+        }
+    }
+}

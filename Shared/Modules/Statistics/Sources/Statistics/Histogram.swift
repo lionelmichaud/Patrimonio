@@ -107,7 +107,7 @@ extension BucketsArray {
 ///     histogram.record(sequence)
 ///
 ///     // trier les échantillons dans les cases:
-///     // Note: on eut le faire plusieurs fois de suite avec les mêmes échantillons
+///     // Note: on peut le faire plusieurs fois de suite avec les mêmes échantillons
 ///     histogram.sort(distributionType : .continuous,
 ///                     openEnds         : false,
 ///                     Xmin             : minX,
@@ -253,11 +253,11 @@ public struct Histogram: Codable {
     } // computed
     
     // MARK: - Initializer
-    
+
+    /// Les échantillons seront mémorisés mais pas rangés
+    /// car les cases ne seront pas initialisées.
+    /// Il faudra utiliser la fonction "sort" pour pour ranger les échantillons après les avoir ajoutés.
     public init(name: String = "") {
-        // Les échantillons seront mémorisés mais pas rangés
-        // car les cases ne seront pas initialisées.
-        // Il faudra utiliser la fonction "set" pour pour ranger les échantillons après les avoir ajoutés.
         self.name = name
     }
     

@@ -209,14 +209,21 @@ struct ComputationView_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationView {
-            ComputationView()
-                .environmentObject(uiState)
-                .environmentObject(family)
-                .environmentObject(patrimoine)
-                .environmentObject(simulation)
+            List {
+                // calcul de simulation
+                NavigationLink(destination : ComputationView()
+                                .environmentObject(uiState)
+                                .environmentObject(family)
+                                .environmentObject(patrimoine)
+                                .environmentObject(simulation)
+                ) {
+                    Text("Calculs")
+                }
+                .isDetailLink(true)
+            }
+            //.colorScheme(.dark)
+            //.padding()
+            //.previewLayout(PreviewLayout.sizeThatFits)
         }
-        //.colorScheme(.dark)
-        //.padding()
-        //.previewLayout(PreviewLayout.sizeThatFits)
     }
 }

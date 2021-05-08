@@ -207,8 +207,8 @@ struct RealEstateDetailedView: View {
     
     private func resetSimulation() {
         // remettre à zéro la simulation et sa vue
-        simulation.reset(withPatrimoine: patrimoine)
-        uiState.resetSimulation()
+        simulation.reset()
+        uiState.reset()
     }
     
     private func duplicate() {

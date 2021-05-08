@@ -67,7 +67,7 @@ class UIState: ObservableObject {
     // MARK: - Etat des filtres graphes Bilan
     struct BalanceSheetChartState {
         var nameSelection : String = AppSettings.shared.allPersonsLabel
-        var combination       : SocialAccounts.AssetLiabilitiesCombination = .both
+        var combination   : SocialAccounts.AssetLiabilitiesCombination = .both
         var itemSelection : ItemSelectionList = []
     }
     
@@ -102,7 +102,16 @@ class UIState: ObservableObject {
         expenseViewState.colapseCategories = Array(repeating: true, count: LifeExpenseCategory.allCases.count)
     }
     
-    func resetSimulation() {
+    subscript(category: LifeExpenseCategory) -> Bool {
+        get {
+            self.expenseViewState.colapseCategories[category.rawValue]
+        }
+        set {
+            self.expenseViewState.colapseCategories[category.rawValue] = newValue
+        }
+    }
+
+    func reset() {
         simulationViewState.selectedItem = .computationView
     }
 }

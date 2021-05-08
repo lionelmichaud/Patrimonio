@@ -65,7 +65,7 @@ struct ExpenseDetailedView: View {
     @EnvironmentObject var patrimoine : Patrimoin
     @EnvironmentObject var uiState    : UIState
     @Environment(\.presentationMode) var presentationMode
-    private let simulationReseter      : SimulationReseter
+    private let simulationReseter      : CanResetSimulation
     private var originalItem           : LifeExpense?
     private let category               : LifeExpenseCategory
     @StateObject private var expenseVM : LifeExpenseViewModel
@@ -121,7 +121,7 @@ struct ExpenseDetailedView: View {
     init(category          : LifeExpenseCategory,
          item              : LifeExpense?,
          family            : Family,
-         simulationReseter : SimulationReseter) {
+         simulationReseter : CanResetSimulation) {
         self.originalItem = item
         self.category     = category
         self.simulationReseter = simulationReseter
@@ -140,8 +140,8 @@ struct ExpenseDetailedView: View {
     
     private func resetSimulation() {
         // remettre à zéro la simulation et sa vue
-        simulationReseter.reset(withPatrimoine: patrimoine)
-        uiState.resetSimulation()
+        simulationReseter.reset()
+        uiState.reset()
     }
     
     private func duplicate() {
@@ -221,8 +221,8 @@ struct ExpenseDetailedView: View {
 }
 
 struct ExpenseDetailedView_Previews: PreviewProvider {
-    struct FakeSimulationReseter: SimulationReseter {
-        func reset(withPatrimoine: Patrimoin) {
+    struct FakeSimulationReseter: CanResetSimulation {
+        func reset() {
             print("simluation.reset")
         }
     }
