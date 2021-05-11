@@ -20,3 +20,10 @@ struct ValuedLiabilities: DictionaryOfNamedValueTable {
     
     init() { }
 }
+
+
+extension ValuedLiabilities: CsvVisitable {
+    func accept(_ visitor: BalanceSheetVisitor) {
+        visitor.visit(element: self)
+    }
+}

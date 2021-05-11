@@ -53,8 +53,8 @@ public protocol HasNamedValuedTable {
     var total       : Double { get }
     var namesArray  : [String] { get }
     var valuesArray : [Double] { get }
-    var headerCSV   : String { get }
-    var valuesCSV   : String { get }
+//    var headerCSV   : String { get }
+//    var valuesCSV   : String { get }
     
     // MARK: - Methods
     
@@ -88,17 +88,17 @@ extension HasNamedValuedTable {
         namedValues
             .map(\.value)
     }
-    /// liste des noms au format CSV
-    public var headerCSV: String {
-        namesArray
-            .joined(separator: "; ") + "; " + tableName.uppercased() + " TOTAL"
-    }
-    /// liste des valeurs au format CSV
-    public var valuesCSV: String {
-        namedValues
-            .map { (namedValue: NamedValue) -> String in namedValue.value.roundedString }
-            .joined(separator: "; ") + "; " + total.roundedString
-    }
+//    /// liste des noms au format CSV
+//    public var headerCSV: String {
+//        namesArray
+//            .joined(separator: "; ") + "; " + tableName.uppercased() + " TOTAL"
+//    }
+//    /// liste des valeurs au format CSV
+//    public var valuesCSV: String {
+//        namedValues
+//            .map { (namedValue: NamedValue) -> String in namedValue.value.roundedString }
+//            .joined(separator: "; ") + "; " + total.roundedString
+//    }
     
     // MARK: - Methods
     

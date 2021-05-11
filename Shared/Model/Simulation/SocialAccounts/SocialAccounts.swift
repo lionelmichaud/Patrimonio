@@ -288,6 +288,13 @@ struct SocialAccounts {
     /// - Parameter simulationTitle: Titre de la simulation utilisé pour générer les nom de répertoire
     func save(simulationTitle: String,
               withMode mode  : SimulationModeEnum) {
+        let balanceSheetCSV = CsvBuilder.balanceSheetCSV(from     : balanceArray,
+                                                         withMode : mode)
+        print(balanceSheetCSV)
+        let cashFlowCSV = CsvBuilder.cashFlowCSV(from     : cashFlowArray,
+                                                 withMode : mode)
+        print(cashFlowCSV)
+
         balanceArray.storeTableCSV(simulationTitle: simulationTitle,
                                    withMode: mode)
         cashFlowArray.storeTableCSV(simulationTitle: simulationTitle)
