@@ -31,3 +31,9 @@ struct ValuedTaxes: DictionaryOfNamedValueTable {
                     marginalRate : 0)
     }
 }
+
+extension ValuedTaxes: CashFlowVisitable {
+    func accept(_ visitor: CashFlowVisitor) {
+        visitor.visit(element: self)
+    }
+}

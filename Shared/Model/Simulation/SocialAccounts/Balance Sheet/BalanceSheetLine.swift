@@ -145,13 +145,8 @@ struct BalanceSheetLine {
     }
 }
 
-extension BalanceSheetLine: CsvVisitable {
+extension BalanceSheetLine: BalanceSheetVisitable {
     func accept(_ visitor: BalanceSheetVisitor) {
         visitor.visit(element: self)
-    }
-}
-extension BalanceSheetLine: CustomCsvConvertible {
-    var csv: String {
-        "BalanceSheetLine\n"
     }
 }

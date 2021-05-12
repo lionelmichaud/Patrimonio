@@ -258,3 +258,9 @@ struct CashFlowLine {
         }
     }
 }
+
+extension CashFlowLine: CashFlowVisitable {
+    func accept(_ visitor: CashFlowVisitor) {
+        visitor.visit(element: self)
+    }
+}

@@ -11,17 +11,7 @@ import NamedValue
 import EconomyModel
 import Statistics
 
-private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CsvBuilder")
-
-/// The Visitor Interface declares a set of visiting methods that correspond to
-/// component classes. The signature of a visiting method allows the visitor to
-/// identify the exact class of the component that it's dealing with.
-protocol BalanceSheetVisitor {
-    func visit(element: BalanceSheetLine)
-    func visit(element: BalanceSheetArray)
-    func visit(element: ValuedAssets)
-    func visit(element: ValuedLiabilities)
-}
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CsvBalanceSheetTableVisitor")
 
 // MARK: - VISITOR: constructeur de table de BILAN
 
@@ -32,7 +22,7 @@ protocol BalanceSheetVisitor {
 /// with a complex object structure, such as a Composite tree. In this case, it
 /// might be helpful to store some intermediate state of the algorithm while
 /// executing visitor's methods over various objects of the structure.
-class CsvTableBuilderVisitor: BalanceSheetVisitor {
+class CsvBalanceSheetTableVisitor: BalanceSheetVisitor {
 
     private var table  = ""
     private let mode: SimulationModeEnum
@@ -90,8 +80,15 @@ class CsvTableBuilderVisitor: BalanceSheetVisitor {
         table.append("\(Economy.model.randomizers.inflation.value(withMode: mode).percentString(digit: 1)); ")
         table.append("\(Economy.model.rates(in: element.year, withMode: mode, simulateVolatility: UserSettings.shared.simulateVolatility).securedRate.percentString(digit: 1)); ")
         table.append("\(Economy.model.rates(in: element.year, withMode: mode, simulateVolatility: UserSettings.shared.simulateVolatility).stockRate.percentString(digit: 1)); ")
+
+        // actifs
         visitAssets()
+
+        // passifs
         visitLiabilities()
+
+        // net
+        table.append("\(element.netAssets.roundedString)")
     }
 
     func visit(element: BalanceSheetArray) {
@@ -111,14 +108,15 @@ class CsvTableBuilderVisitor: BalanceSheetVisitor {
 
 // MARK: - VISITOR: constructeur d'entête de table de BILAN
 
-extension CsvTableBuilderVisitor: CustomStringConvertible {
+extension CsvBalanceSheetTableVisitor: CustomStringConvertible {
     public var description: String {
         return table
     }
 }
 
-class CsvHeaderBuilderVisitor: BalanceSheetVisitor {
+class CsvBalanceSheetHeaderVisitor: BalanceSheetVisitor {
 
+    private var header0  = ""
     private var header1  = ""
     private var header2  = ""
 
@@ -128,15 +126,19 @@ class CsvHeaderBuilderVisitor: BalanceSheetVisitor {
             guard let namedValueTable = element[category] else { return }
 
             let namedValues = namedValueTable.namedValues
-            header1.append(namedValues
+            header0.append(namedValues
                             .map { _ in "ACTIF" }
+                            .joined(separator: "; "))
+            header1.append(namedValues
+                            .map { _ in namedValueTable.tableName.uppercased() }
                             .joined(separator: "; "))
             header2.append(namedValues
                             .map { $0.name }
                             .joined(separator: "; "))
             // valeure cumulée de la catégorie
-            header1.append("ACTIF; ")
-            header2.append("TOTAL" + category.displayString + "; ")
+            header0.append("; ACTIF; ")
+            header1.append("; ; ")
+            header2.append("; \(namedValueTable.tableName.uppercased()) TOTAL; ")
         }
     }
 
@@ -146,15 +148,19 @@ class CsvHeaderBuilderVisitor: BalanceSheetVisitor {
             guard let namedValueTable = element[category] else { return }
 
             let namedValues = namedValueTable.namedValues
-            header1.append(namedValues
+            header0.append(namedValues
                             .map { _ in "PASSIF" }
+                            .joined(separator: "; "))
+            header1.append(namedValues
+                            .map { _ in namedValueTable.tableName.uppercased() }
                             .joined(separator: "; "))
             header2.append(namedValues
                             .map { $0.name }
                             .joined(separator: "; "))
             // valeure cumulée de la catégorie
-            header1.append("PASSIF; ")
-            header2.append("TOTAL" + category.displayString + "; ")
+            header0.append("; PASSIF; ")
+            header1.append("; ; ")
+            header2.append("; \(namedValueTable.tableName.uppercased()) TOTAL; ")
         }
     }
 
@@ -164,7 +170,8 @@ class CsvHeaderBuilderVisitor: BalanceSheetVisitor {
             guard let valuedAssets = element.assets[AppSettings.shared.allPersonsLabel] else { return }
             valuedAssets.accept(self)
             // total des ACTIFS
-            header1.append("ACTIF; ")
+            header0.append("ACTIF; ")
+            header1.append("; ")
             header2.append("ACTIF TOTAL; ")
         }
 
@@ -173,19 +180,27 @@ class CsvHeaderBuilderVisitor: BalanceSheetVisitor {
             guard let valuedLiabilities = element.liabilities[AppSettings.shared.allPersonsLabel] else { return }
             valuedLiabilities.accept(self)
             // total des PASSIFS
-            header1.append("PASSIF; ")
+            header0.append("PASSIF; ")
+            header1.append("; ")
             header2.append("PASSIF TOTAL; ")
         }
 
+        header0.append("; ; ; ; ")
         header1.append("; ; ; ; ")
-
         header2.append("YEAR; ")
         header2.append("Inflation; ")
         header2.append("Taux Oblig; ")
         header2.append("Taux Action; ")
 
+        // actifs
         visitAssets()
+
+        // passifs
         visitLiabilities()
+
+        // net
+        header0.append("BILAN")
+        header2.append("NET")
     }
 
     func visit(element: BalanceSheetArray) {
@@ -200,8 +215,8 @@ class CsvHeaderBuilderVisitor: BalanceSheetVisitor {
     }
 }
 
-extension CsvHeaderBuilderVisitor: CustomStringConvertible {
+extension CsvBalanceSheetHeaderVisitor: CustomStringConvertible {
     public var description: String {
-        header1 + "\n" + header2 + "\n"
+        header0 + "\n" + header1 + "\n" + header2
     }
 }

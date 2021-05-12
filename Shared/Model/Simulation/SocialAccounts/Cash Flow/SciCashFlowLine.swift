@@ -43,10 +43,8 @@ struct SciCashFlowLine {
         var valuesFlatArray: [Double] {
             sciDividends.valuesArray + scpiSale.valuesArray
         }
-        
-        // MARK: - Methods
-}
-    
+    }
+
     // MARK: - Properties
     
     let year        : Int
@@ -141,5 +139,17 @@ struct SciCashFlowLine {
     
     func summaryFiltredValues(with itemSelectionList: ItemSelectionList) -> [Double] {
         summary.filtredValues(with : itemSelectionList)
+    }
+}
+
+extension SciCashFlowLine: CashFlowVisitable {
+    func accept(_ visitor: CashFlowVisitor) {
+        visitor.visit(element: self)
+    }
+}
+
+extension SciCashFlowLine.Revenues: CashFlowVisitable {
+    func accept(_ visitor: CashFlowVisitor) {
+        visitor.visit(element: self)
     }
 }

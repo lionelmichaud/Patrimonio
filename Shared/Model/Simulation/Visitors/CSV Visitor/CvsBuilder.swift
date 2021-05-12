@@ -15,17 +15,7 @@ import Statistics
 /// the appropriate operation in the visitor object.
 class CsvBuilder {
     // MARK: - Constructeur de fichier d'export CSV pour le BILAN
-    static func visit(components   : BalanceSheetArray,
-                      with visitor : BalanceSheetVisitor) {
-        components.accept(visitor)
-        print(visitor)
-    }
-    static func visit(components   : BalanceSheetArray,
-                      with visitor : CsvHeaderBuilderVisitor) {
-        components.accept(visitor)
-        print(visitor)
-    }
-
+    
     /// Créer un fichier au format CSV contenant l'évolution du bilan annuel généré par la dernière simulation
     /// - Parameters:
     ///   - balanceSheetArray: évolution du bilan annuel généré par la dernière simulation
@@ -34,29 +24,17 @@ class CsvBuilder {
     static func balanceSheetCSV(from balanceSheetArray : BalanceSheetArray,
                                 withMode mode          : SimulationModeEnum) -> String {
         // construction de l'entête
-        let csvHeaderBuilderVisitor = CsvHeaderBuilderVisitor()
-        visit(components : balanceSheetArray,
-              with       : csvHeaderBuilderVisitor)
+        let csvHeaderBuilderVisitor = CsvBalanceSheetHeaderVisitor()
+        balanceSheetArray.accept(csvHeaderBuilderVisitor)
 
         // construction de la table
-        let csvTableBuilderVisitor = CsvTableBuilderVisitor(withMode: mode)
-        visit(components : balanceSheetArray,
-              with       : csvTableBuilderVisitor)
+        let csvTableBuilderVisitor = CsvBalanceSheetTableVisitor(withMode: mode)
+        balanceSheetArray.accept(csvTableBuilderVisitor)
 
-        return String(describing: csvHeaderBuilderVisitor) + "\n" + String(describing: csvTableBuilderVisitor)
+        return String(describing: csvHeaderBuilderVisitor) + "\n" + String(describing: csvTableBuilderVisitor) + "\n"
     }
 
     // MARK: - Constructeur de fichier d'export CSV pour le CASH FLOW
-    static func visit(components   : CashFlowArray,
-                      with visitor : BalanceSheetVisitor) {
-        components.accept(visitor)
-        print(visitor)
-    }
-    static func visit(components   : CashFlowArray,
-                      with visitor : CsvHeaderBuilderVisitor) {
-        components.accept(visitor)
-        print(visitor)
-    }
 
     /// Créer un fichier au format CSV contenant l'évolution du cash flow annuel généré par la dernière simulation
     /// - Parameters:
@@ -66,13 +44,13 @@ class CsvBuilder {
     static func cashFlowCSV(from cashFlowArray : CashFlowArray,
                             withMode mode      : SimulationModeEnum) -> String {
         // construction de l'entête
-        let csvHeaderBuilderVisitor = CsvHeaderBuilderVisitor()
-        visit(components: cashFlowArray, with: csvHeaderBuilderVisitor)
+        let csvHeaderBuilderVisitor = CsvCashFlowHeaderVisitor()
+        cashFlowArray.accept(csvHeaderBuilderVisitor)
 
         // construction de la table
-        let csvTableBuilderVisitor = CsvTableBuilderVisitor(withMode: mode)
-        visit(components: cashFlowArray, with: csvTableBuilderVisitor)
+        let csvTableBuilderVisitor = CsvCashFlowTableVisitor(withMode: mode)
+        cashFlowArray.accept(csvTableBuilderVisitor)
 
-        return String(describing: csvHeaderBuilderVisitor) + "\n" + String(describing: csvTableBuilderVisitor)
+        return String(describing: csvHeaderBuilderVisitor) + "\n" + String(describing: csvTableBuilderVisitor) + "\n"
     }
 }

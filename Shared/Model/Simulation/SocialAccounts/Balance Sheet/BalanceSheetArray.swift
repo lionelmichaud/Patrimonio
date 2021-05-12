@@ -13,7 +13,7 @@ typealias BalanceSheetArray = [BalanceSheetLine]
 
 // MARK: - BalanceSheetArray extension for CSV export
 
-extension BalanceSheetArray: CsvVisitable {
+extension BalanceSheetArray: BalanceSheetVisitable {
      func accept(_ visitor: BalanceSheetVisitor) {
         visitor.visit(element: self)
     }

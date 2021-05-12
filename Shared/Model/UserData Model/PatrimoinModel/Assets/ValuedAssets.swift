@@ -21,7 +21,7 @@ struct ValuedAssets: DictionaryOfNamedValueTable {
     init() { }
 }
 
-extension ValuedAssets: CsvVisitable {
+extension ValuedAssets: BalanceSheetVisitable {
     func accept(_ visitor: BalanceSheetVisitor) {
         visitor.visit(element: self)
     }
