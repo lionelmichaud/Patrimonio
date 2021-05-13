@@ -203,26 +203,26 @@ class CsvCashFlowHeaderVisitor: CashFlowVisitor {
         let sciDividends = element.sciDividends
         // For every element , extract the values as a comma-separated string.
         header1.append(sciDividends.namedValues
-                        .map { _ in "DIVIDENDES SCI" }
+                        .map { _ in sciDividends.tableName.uppercased() }
                         .joined(separator: "; "))
         header2.append(sciDividends.namedValues
                         .map { $0.name }
                         .joined(separator: "; "))
         // total des DIVIDENDES
         header1.append("; ; ")
-        header2.append("; DIVIDENDES SCI TOTAL; ")
+        header2.append("; \(sciDividends.tableName.uppercased()) TOTAL; ")
 
         let sciSales = element.scpiSale
         // For every element , extract the values as a comma-separated string.
-        header1.append(sciDividends.namedValues
-                        .map { _ in "VENTES SCI" }
+        header1.append(sciSales.namedValues
+                        .map { _ in sciSales.tableName.uppercased() }
                         .joined(separator: "; "))
         header2.append(sciSales.namedValues
                         .map { $0.name }
                         .joined(separator: "; "))
         // total des VENTES
         header1.append("; ; ")
-        header2.append("; VENTES SCI TOTAL; ")
+        header2.append("; \(sciSales.tableName.uppercased()) TOTAL; ")
     }
 
     func visit(element: SciCashFlowLine) {
@@ -243,7 +243,7 @@ class CsvCashFlowHeaderVisitor: CashFlowVisitor {
 
             let namedValues = revenuesInCategory.credits.namedValues
             header1.append(namedValues
-                            .map { _ in "REVENU" }
+                            .map { _ in category.rawValue.uppercased() }
                             .joined(separator: "; "))
             header2.append(namedValues
                             .map { $0.name }
@@ -268,7 +268,7 @@ class CsvCashFlowHeaderVisitor: CashFlowVisitor {
 
             let namedValues = taxesInCategory.namedValues
             header1.append(namedValues
-                            .map({ _ in "DÉPENSE" })
+                            .map({ _ in category.rawValue.uppercased() })
                             .joined(separator: "; "))
             header2.append(namedValues
                             .map { $0.name }
@@ -296,7 +296,7 @@ class CsvCashFlowHeaderVisitor: CashFlowVisitor {
             let lifeExpenses = element.lifeExpenses
             // For every element , extract the values as a comma-separated string.
             header1.append(lifeExpenses.namedValues
-                            .map({ _ in "DÉPENSE " })
+                            .map({ _ in lifeExpenses.tableName.uppercased() })
                             .joined(separator: "; "))
             header2.append(lifeExpenses.namedValues
                             .map { $0.name }
@@ -318,7 +318,7 @@ class CsvCashFlowHeaderVisitor: CashFlowVisitor {
             let debts = element.debtPayements
             // For every element , extract the values as a comma-separated string.
             header1.append(debts.namedValues
-                            .map { _ in "DÉPENSE " }
+                            .map { _ in debts.tableName.uppercased() }
                             .joined(separator: "; "))
             header2.append(debts.namedValues
                             .map { $0.name }
@@ -332,7 +332,7 @@ class CsvCashFlowHeaderVisitor: CashFlowVisitor {
             let investPayements = element.investPayements
             // For every element , extract the values as a comma-separated string.
             header1.append(investPayements.namedValues
-                            .map { _ in "DÉPENSE " }
+                            .map { _ in investPayements.tableName.uppercased() }
                             .joined(separator: "; "))
             header2.append(investPayements.namedValues
                             .map { $0.name }

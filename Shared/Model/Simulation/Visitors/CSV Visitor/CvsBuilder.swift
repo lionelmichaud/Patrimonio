@@ -14,6 +14,7 @@ import Statistics
 /// figuring out their concrete classes. The accept operation directs a call to
 /// the appropriate operation in the visitor object.
 class CsvBuilder {
+
     // MARK: - Constructeur de fichier d'export CSV pour le BILAN
     
     /// Créer un fichier au format CSV contenant l'évolution du bilan annuel généré par la dernière simulation
@@ -53,6 +54,8 @@ class CsvBuilder {
 
         return String(describing: csvHeaderBuilderVisitor) + "\n" + String(describing: csvTableBuilderVisitor) + "\n"
     }
+
+    // MARK: - Constructeur de fichier d'export CSV pour le MONTE-CARLO
 
     static func monteCarloCSV(from simulationResultTable: SimulationResultTable) -> String {
         // construction de la table
