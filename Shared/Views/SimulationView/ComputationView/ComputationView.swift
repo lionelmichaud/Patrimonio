@@ -112,7 +112,6 @@ struct ComputationView: View {
     var body: some View {
         ComputationForm()
             .navigationTitle("Calcul")
-            //.navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .automatic) {
                     // bouton sauvegarder
@@ -180,7 +179,6 @@ struct ComputationView: View {
 //        busyCompWheelAnimate.toggle()
         self.alertItem = AlertItem(title         : Text("Les calculs sont terminés. Vous pouvez visualiser les résultats."),
                                    dismissButton : .default(Text("OK")))
-        
         self.presentationMode.wrappedValue.dismiss()
         #if DEBUG
         // self.simulation.socialAccounts.printBalanceSheetTable()
@@ -191,7 +189,18 @@ struct ComputationView: View {
         busySaveWheelAnimate.toggle()
         // executer l'enregistrement en tâche de fond
         DispatchQueue.global(qos: .userInitiated).async {
-            self.simulation.save()
+            do {
+                try self.simulation.save()
+            } catch {
+                // mettre à jour les variables d'état dans le thread principal
+                DispatchQueue.main.async {
+                    self.busySaveWheelAnimate.toggle()
+                    self.simulation.isSaved = true
+                    self.alertItem = AlertItem(title         : Text((error as? FileError)?.rawValue ?? "La sauvegarde a échoué"),
+                                               dismissButton : .default(Text("OK")))
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+            }
             // mettre à jour les variables d'état dans le thread principal
             DispatchQueue.main.async {
                 self.busySaveWheelAnimate.toggle()

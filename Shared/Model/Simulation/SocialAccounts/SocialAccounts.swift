@@ -10,19 +10,6 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 /// Comptes sociaux: Table de Compte de résultat annuels + Bilans annuels
 struct SocialAccounts {
     
-    // MARK: - Static Properties
-    
-    // #if DEBUG
-    /// URL du fichier de stockage du résultat de calcul au format CSV
-    // en mode DEBUG sauvegarder le fichier .CSV dans le répertoire Bundle/csv
-    // en plus du répertoire Data/Documents/csv
-    static let balanceSheetFileUrl = Bundle.main.url(forResource: "BalanceSheet.csv", withExtension: nil)
-    /// URL du fichier de stockage du résultat de calcul au format CSV
-    // en mode DEBUG sauvegarder le fichier .CSV dans le répertoire Bundle/csv
-    // en plus du répertoire Data/Documents/csv
-    static let cashFlowFileUrl = Bundle.main.url(forResource: "CashFlow.csv", withExtension: nil)
-    // #endif
-    
     // MARK: - Properties
     
     var cashFlowArray = CashFlowArray()
@@ -287,9 +274,29 @@ struct SocialAccounts {
     ///
     /// - Parameter simulationTitle: Titre de la simulation utilisé pour générer les nom de répertoire
     func save(simulationTitle: String,
-              withMode mode  : SimulationModeEnum) {
-        balanceArray.storeTableCSV(simulationTitle: simulationTitle,
-                                   withMode: mode)
-        cashFlowArray.storeTableCSV(simulationTitle: simulationTitle)
+              withMode mode  : SimulationModeEnum) throws {
+        // construction du tableau de bilans annnuels au format CSV
+        let balanceSheetCSV = CsvBuilder.balanceSheetCSV(from     : balanceArray,
+                                                         withMode : mode)
+
+        // construction du tableau de cash flow annnuels au format CSV
+        let cashFlowCSV = CsvBuilder.cashFlowCSV(from     : cashFlowArray,
+                                                 withMode : mode)
+        print(cashFlowCSV)
+
+        do {
+            try Persistence.saveToCsvPath(simulationTitle : simulationTitle,
+                                          fileName        : FileNameCst.kBalanceSheetCSVFileName,
+                                          csvString       : balanceSheetCSV)
+        } catch {
+            throw FileError.failedToSaveBalanceSheetCsv
+        }
+        do {
+            try Persistence.saveToCsvPath(simulationTitle : simulationTitle,
+                                          fileName        : FileNameCst.kCashFlowCSVFileName,
+                                          csvString       : cashFlowCSV)
+        } catch {
+            throw FileError.failedToSaveCashFlowCsv
+        }
     }
 }

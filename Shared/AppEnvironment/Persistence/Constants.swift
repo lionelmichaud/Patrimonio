@@ -8,5 +8,8 @@
 import Foundation
 
 struct FileNameCst {
-    static let familyMembersFileName = "persons.json"
+    static let kFamilyMembersFileName   = "persons.json"
+    static let kBalanceSheetCSVFileName = "BalanceSheet.csv"
+    static let kCashFlowCSVFileName     = "CashFlow.csv"
+    static let kMonteCarloCSVFileName   = "MonteCarlo.csv"
 }

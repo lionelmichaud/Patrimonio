@@ -50,10 +50,10 @@ public protocol DictionaryOfNamedValueTable {
     /// - Parameter inCategory: la catégorie sélectionnée
     func valuesArray(_ inCategory: Category) -> [Double]?
     
-    func headersCSV(_ inCategory: Category) -> String?
-    
-    func valuesCSV(_ inCategory: Category) -> String?
-        
+//    func headersCSV(_ inCategory: Category) -> String?
+//
+//    func valuesCSV(_ inCategory: Category) -> String?
+//
     /// Noms des catégories sélectionnées dans le menu
     /// - Parameter itemSelectionList: menu
     func summaryFiltredNames(with itemSelectionList: ItemSelectionList) -> [String]
@@ -124,14 +124,14 @@ public extension DictionaryOfNamedValueTable {
     
     // MARK: - Methods
     
-    func headersCSV(_ inCategory: Category) -> String? {
-        perCategory[inCategory]?.headerCSV
-    }
-    
-    func valuesCSV(_ inCategory: Category) -> String? {
-        perCategory[inCategory]?.valuesCSV
-    }
-    
+//    func headersCSV(_ inCategory: Category) -> String? {
+//        perCategory[inCategory]?.headerCSV
+//    }
+//    
+//    func valuesCSV(_ inCategory: Category) -> String? {
+//        perCategory[inCategory]?.valuesCSV
+//    }
+//    
     func namesArray(_ inCategory: Category) -> [String]? {
         perCategory[inCategory]?.namesArray
     }

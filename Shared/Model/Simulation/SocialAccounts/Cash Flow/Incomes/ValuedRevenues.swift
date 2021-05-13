@@ -90,12 +90,13 @@ struct ValuedRevenues {
     
     // MARK: - Methods
 
-    func headersCSV(_ inCategory: RevenueCategory) -> String? {
-        perCategory[inCategory]?.credits.headerCSV
-    }
-    
-    func valuesCSV(_ inCategory: RevenueCategory) -> String? {
-        perCategory[inCategory]?.credits.valuesCSV
+    subscript(category : RevenueCategory) -> RevenuesInCategory? {
+        get {
+            return perCategory[category]
+        }
+        set(newValue) {
+            perCategory[category] = newValue
+        }
     }
     
     func namesArray(_ inCategory: RevenueCategory) -> [String]? {
@@ -146,5 +147,11 @@ extension RevenuesInCategory: CustomStringConvertible {
         desc += taxablesIrpp.description.withPrefixedSplittedLines("  ") + "\n"
 
         return desc
+    }
+}
+
+extension ValuedRevenues: CashFlowVisitable {
+    func accept(_ visitor: CashFlowVisitor) {
+        visitor.visit(element: self)
     }
 }

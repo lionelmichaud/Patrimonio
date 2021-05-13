@@ -232,7 +232,7 @@ final class Family: ObservableObject {
         // encoder
         if let encoded = try? Person.coder.encoder.encode(members.map { Wrap(wrapped: $0) }) {
             // find file's URL
-            let fileName = FileNameCst.familyMembersFileName
+            let fileName = FileNameCst.kFamilyMembersFileName
             guard let url = Bundle.main.url(forResource: fileName, withExtension: nil) else {
                 fatalError("Failed to locate \(fileName) in bundle.")
             }
@@ -267,7 +267,7 @@ final class Family: ObservableObject {
         //                                           dateDecodingStrategy: .iso8601)
         
         // find file's URL
-        let fileName = FileNameCst.familyMembersFileName
+        let fileName = FileNameCst.kFamilyMembersFileName
         // let url = getDocumentsDirectory().appendingPathComponent(fileName, isDirectory: false)
         guard let url = Bundle.main.url(forResource: fileName, withExtension: nil) else {
             fatalError("Failed to locate \(fileName) in bundle.")
