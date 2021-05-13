@@ -289,13 +289,13 @@ class Simulation: ObservableObject, CanResetSimulation {
     }
 
     /// Sauvegarder les résultats de simulation dans des fchier CSV
-    func save() {
+    func save() throws {
         /// - un fichier pour le Cash Flow
         /// - un fichier pour le Bilan
-        socialAccounts.save(simulationTitle: title,
+        try socialAccounts.save(simulationTitle: title,
                             withMode       : mode)
 
         /// - un fichier pour le tableau de résultat de Monté-Carlo
-        resultTable.save(simulationTitle: title)
+        try resultTable.save(simulationTitle: title)
     }
 }

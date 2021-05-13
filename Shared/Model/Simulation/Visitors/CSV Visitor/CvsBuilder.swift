@@ -53,4 +53,12 @@ class CsvBuilder {
 
         return String(describing: csvHeaderBuilderVisitor) + "\n" + String(describing: csvTableBuilderVisitor) + "\n"
     }
+
+    static func monteCarloCSV(from simulationResultTable: SimulationResultTable) -> String {
+        // construction de la table
+        let csvMonteCarloTableVisitor = CsvMonteCarloTableVisitor()
+        simulationResultTable.accept(csvMonteCarloTableVisitor)
+
+        return String(describing: csvMonteCarloTableVisitor)
+    }
 }

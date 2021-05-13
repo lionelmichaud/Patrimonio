@@ -121,8 +121,8 @@ struct MemberEditView: View {
 struct AdultEditView : View {
     @ObservedObject var personViewModel        : PersonViewModel
     @ObservedObject var adultViewModel         : AdultViewModel
-    @State private var compenstationSupraLegal : Bool = false
-    @State private var alertItem               : AlertItem?
+//    @State private var compenstationSupraLegal : Bool = false
+//    @State private var alertItem               : AlertItem?
     
     var body: some View {
         Group {

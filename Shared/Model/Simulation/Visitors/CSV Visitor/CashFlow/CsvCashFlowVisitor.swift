@@ -185,13 +185,13 @@ class CsvCashFlowTableVisitor: CashFlowVisitor {
     }
 }
 
-// MARK: - VISITOR: constructeur d'entête de table de CASH FLOW
-
 extension CsvCashFlowTableVisitor: CustomStringConvertible {
     public var description: String {
         return table
     }
 }
+
+// MARK: - VISITOR: constructeur d'entête de table de CASH FLOW
 
 class CsvCashFlowHeaderVisitor: CashFlowVisitor {
 

@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		79058371262C79050061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058370262C79050061F296 /* SocioEconomyModel */; };
 		79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058372262C790F0061F296 /* SocioEconomyModel */; };
-		790631A3262C735800359F9F /* Test Modules Wiring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790631A2262C735800359F9F /* Test Modules Wiring.swift */; };
-		790631A4262C735800359F9F /* Test Modules Wiring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790631A2262C735800359F9F /* Test Modules Wiring.swift */; };
 		7906AB6F2641BCF100A398E9 /* SocialAccounts+BsCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6A2641BCF000A398E9 /* SocialAccounts+BsCharts.swift */; };
 		7906AB702641BCF100A398E9 /* SocialAccounts+BsCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6A2641BCF000A398E9 /* SocialAccounts+BsCharts.swift */; };
 		7906AB712641BCF100A398E9 /* SocialAccounts+CfCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6B2641BCF000A398E9 /* SocialAccounts+CfCharts.swift */; };
@@ -101,6 +99,8 @@
 		7920DC94262C721400536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC93262C721400536B03 /* AppFoundation */; };
 		79281A09262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */; };
 		79281A0A262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */; };
+		792DE958264C8DBF004DA53D /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DE957264C8DBF004DA53D /* Persistence.swift */; };
+		792DE959264C8DBF004DA53D /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DE957264C8DBF004DA53D /* Persistence.swift */; };
 		794346452641D3F700374F99 /* CashFlowArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794346442641D3F700374F99 /* CashFlowArray.swift */; };
 		794346462641D3F700374F99 /* CashFlowArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794346442641D3F700374F99 /* CashFlowArray.swift */; };
 		79569929262F7C940015AF34 /* Owners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79569928262F7C940015AF34 /* Owners.swift */; };
@@ -324,6 +324,8 @@
 		79B272942634E16800298E5D /* TimeSpanEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B272922634E16800298E5D /* TimeSpanEditView.swift */; };
 		79B2729B2634E80C00298E5D /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2729A2634E80C00298E5D /* Charts */; };
 		79B272A12634E82700298E5D /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 79B272A02634E82700298E5D /* Charts */; };
+		79B2DB80264CA51800EFCAF9 /* MonteCarlo.csv in Resources */ = {isa = PBXBuildFile; fileRef = 79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */; };
+		79B2DB81264CA51800EFCAF9 /* MonteCarlo.csv in Resources */ = {isa = PBXBuildFile; fileRef = 79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */; };
 		79B2FE2C262C7DF900EBFF56 /* RetirementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2FE2B262C7DF900EBFF56 /* RetirementModel */; };
 		79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2FE2D262C7E0000EBFF56 /* RetirementModel */; };
 		79BBE8E62646E9170045E524 /* BS Detailed ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BBE8E52646E9170045E524 /* BS Detailed ChartView.swift */; };
@@ -344,6 +346,10 @@
 		79C838352641E04C008B29BF /* PopOverContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C838332641E04C008B29BF /* PopOverContentView.swift */; };
 		79C838372641E092008B29BF /* CheckBoxStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C838362641E092008B29BF /* CheckBoxStyles.swift */; };
 		79C838382641E092008B29BF /* CheckBoxStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C838362641E092008B29BF /* CheckBoxStyles.swift */; };
+		79CB2C85264D720000B3E493 /* MonteCarloVisitable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CB2C84264D720000B3E493 /* MonteCarloVisitable.swift */; };
+		79CB2C87264D723100B3E493 /* MonteCarloVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CB2C86264D723100B3E493 /* MonteCarloVisitor.swift */; };
+		79CB2C89264D731900B3E493 /* CsvMonteCarloVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CB2C88264D731900B3E493 /* CsvMonteCarloVisitor.swift */; };
+		79CB2C8A264D731900B3E493 /* CsvMonteCarloVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CB2C88264D731900B3E493 /* CsvMonteCarloVisitor.swift */; };
 		79E713EC262C9886000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713EB262C9886000FD625 /* EconomyModel */; };
 		79E713EE262C9891000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713ED262C9891000FD625 /* EconomyModel */; };
 		79EC47922630753D0006EE44 /* ArrayOfNameableValuable+Ownable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC47912630753D0006EE44 /* ArrayOfNameableValuable+Ownable.swift */; };
@@ -465,7 +471,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		790631A2262C735800359F9F /* Test Modules Wiring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test Modules Wiring.swift"; sourceTree = "<group>"; };
 		7906AB6A2641BCF000A398E9 /* SocialAccounts+BsCharts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SocialAccounts+BsCharts.swift"; sourceTree = "<group>"; };
 		7906AB6B2641BCF000A398E9 /* SocialAccounts+CfCharts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SocialAccounts+CfCharts.swift"; sourceTree = "<group>"; };
 		7906AB6C2641BCF100A398E9 /* SocialAccounts+IsfCharts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SocialAccounts+IsfCharts.swift"; sourceTree = "<group>"; };
@@ -517,6 +522,7 @@
 		7920DC70262C700500536B03 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		7920DC72262C700500536B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeInsuranceClause.swift; sourceTree = "<group>"; };
+		792DE957264C8DBF004DA53D /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		794346442641D3F700374F99 /* CashFlowArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CashFlowArray.swift; sourceTree = "<group>"; };
 		79569928262F7C940015AF34 /* Owners.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Owners.swift; sourceTree = "<group>"; };
 		7956992F262F83170015AF34 /* Ownership.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ownership.swift; sourceTree = "<group>"; };
@@ -621,6 +627,7 @@
 		79B272802634D77D00298E5D /* LabelValueHelperViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelValueHelperViews.swift; sourceTree = "<group>"; };
 		79B2728B2634DBEB00298E5D /* Themes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
 		79B272922634E16800298E5D /* TimeSpanEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeSpanEditView.swift; sourceTree = "<group>"; };
+		79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = MonteCarlo.csv; sourceTree = "<group>"; };
 		79BBE8E52646E9170045E524 /* BS Detailed ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BS Detailed ChartView.swift"; sourceTree = "<group>"; };
 		79BBE8E82646FEE70045E524 /* CF Detailed ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CF Detailed ChartView.swift"; sourceTree = "<group>"; };
 		79C838232641DA3F008B29BF /* ChartView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChartView+Extensions.swift"; sourceTree = "<group>"; };
@@ -630,6 +637,9 @@
 		79C838302641E02B008B29BF /* MenuCollapsable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuCollapsable.swift; sourceTree = "<group>"; };
 		79C838332641E04C008B29BF /* PopOverContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopOverContentView.swift; sourceTree = "<group>"; };
 		79C838362641E092008B29BF /* CheckBoxStyles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckBoxStyles.swift; sourceTree = "<group>"; };
+		79CB2C84264D720000B3E493 /* MonteCarloVisitable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonteCarloVisitable.swift; sourceTree = "<group>"; };
+		79CB2C86264D723100B3E493 /* MonteCarloVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonteCarloVisitor.swift; sourceTree = "<group>"; };
+		79CB2C88264D731900B3E493 /* CsvMonteCarloVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvMonteCarloVisitor.swift; sourceTree = "<group>"; };
 		79EC47912630753D0006EE44 /* ArrayOfNameableValuable+Ownable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArrayOfNameableValuable+Ownable.swift"; sourceTree = "<group>"; };
 		79EC479826307B260006EE44 /* UserSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		79EC47B126307C910006EE44 /* Debt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debt.swift; sourceTree = "<group>"; };
@@ -764,6 +774,7 @@
 			children = (
 				791D3B922649679C0024A2D8 /* CustomCsvConvertible.swift */,
 				790FF34726485BDE001B2653 /* CvsBuilder.swift */,
+				79CB2C83264D716000B3E493 /* MonteCarloResuslt */,
 				79A9AA74264AF9940036732F /* CashFlow */,
 				79A9AA73264AF9840036732F /* BalanceSheet */,
 			);
@@ -866,16 +877,16 @@
 			children = (
 				7912E2032645E0B300120731 /* BalanceSheet.csv */,
 				7912E2042645E0B300120731 /* CashFlow.csv */,
+				79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */,
 				79735EE8263242FA00CD952F /* AppMain.swift */,
-				798E7838264209AD0094534F /* Resources */,
 				79FC728B26333A27004F3BD2 /* MainScene.swift */,
+				798E7838264209AD0094534F /* Resources */,
 				79AB53F0263241CF00FADBA7 /* ConfigurationFiles */,
 				7998E13B262D6A0000DA4A12 /* AppEnvironment */,
 				7998E13A262D6A0000DA4A12 /* Model */,
 				79FC723C26331C0E004F3BD2 /* Views */,
 				7920DC4C262C700500536B03 /* Assets.xcassets */,
 				791ED0D12639F59B00701202 /* Colors.xcassets */,
-				790631A2262C735800359F9F /* Test Modules Wiring.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -966,6 +977,7 @@
 			isa = PBXGroup;
 			children = (
 				7977FE61262E3375005A1CB1 /* Constants.swift */,
+				792DE957264C8DBF004DA53D /* Persistence.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -1319,6 +1331,16 @@
 			path = "Charts+Extensions";
 			sourceTree = "<group>";
 		};
+		79CB2C83264D716000B3E493 /* MonteCarloResuslt */ = {
+			isa = PBXGroup;
+			children = (
+				79CB2C84264D720000B3E493 /* MonteCarloVisitable.swift */,
+				79CB2C86264D723100B3E493 /* MonteCarloVisitor.swift */,
+				79CB2C88264D731900B3E493 /* CsvMonteCarloVisitor.swift */,
+			);
+			path = MonteCarloResuslt;
+			sourceTree = "<group>";
+		};
 		79EC47B026307C910006EE44 /* Liabilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -1634,6 +1656,7 @@
 				791ED0D22639F59B00701202 /* Colors.xcassets in Resources */,
 				79AB541B263241CF00FADBA7 /* Voyage Transport_LifeExpense.json in Resources */,
 				79AB5419263241CF00FADBA7 /* Education Famille_LifeExpense.json in Resources */,
+				79B2DB80264CA51800EFCAF9 /* MonteCarlo.csv in Resources */,
 				79AB5427263241CF00FADBA7 /* Services_LifeExpense.json in Resources */,
 				79AB5423263241CF00FADBA7 /* Santé_LifeExpense.json in Resources */,
 				79AB5433263241CF00FADBA7 /* PeriodicInvestement.json in Resources */,
@@ -1675,6 +1698,7 @@
 				791ED0D32639F59B00701202 /* Colors.xcassets in Resources */,
 				79AB541C263241CF00FADBA7 /* Voyage Transport_LifeExpense.json in Resources */,
 				79AB541A263241CF00FADBA7 /* Education Famille_LifeExpense.json in Resources */,
+				79B2DB81264CA51800EFCAF9 /* MonteCarlo.csv in Resources */,
 				79AB5428263241CF00FADBA7 /* Services_LifeExpense.json in Resources */,
 				79AB5424263241CF00FADBA7 /* Santé_LifeExpense.json in Resources */,
 				79AB5434263241CF00FADBA7 /* PeriodicInvestement.json in Resources */,
@@ -1768,6 +1792,7 @@
 				796506CD2640866F0036E466 /* TypeInvestEditView.swift in Sources */,
 				79C8382A2641DC02008B29BF /* LineChartDataSet+Extension.swift in Sources */,
 				79B2726E2634CC0000298E5D /* PersonPickerView.swift in Sources */,
+				79CB2C85264D720000B3E493 /* MonteCarloVisitable.swift in Sources */,
 				797901242640AEB600104C1A /* PatrimoineView.swift in Sources */,
 				79FA8CE12630684F009FEA00 /* PeriodicInvestment.swift in Sources */,
 				799025A72641F60300ED53D4 /* KpiSectionView.swift in Sources */,
@@ -1788,6 +1813,7 @@
 				79FA8CED2630684F009FEA00 /* InvestmentKind.swift in Sources */,
 				79EF934E2637636D00C1BE5B /* ChartsFormaters.swift in Sources */,
 				790FF33D264850E6001B2653 /* CsvBalanceSheetVisitor.swift in Sources */,
+				792DE958264C8DBF004DA53D /* Persistence.swift in Sources */,
 				79EC47F7263095C20006EE44 /* NetCashFlowManager.swift in Sources */,
 				798DE8C02635CD3C00C0C3B5 /* AlertView.swift in Sources */,
 				79EC5EAA26406FD900FF8263 /* OwnerGroupBox.swift in Sources */,
@@ -1839,6 +1865,7 @@
 				79EC47D7263084280006EE44 /* SimulationLogger.swift in Sources */,
 				791ED0FB263A1EB700701202 /* PersonDetailView.swift in Sources */,
 				79A9AA7E264AFFC20036732F /* CashFlowVisitor.swift in Sources */,
+				79CB2C89264D731900B3E493 /* CsvMonteCarloVisitor.swift in Sources */,
 				791D3BA02649C0200024A2D8 /* BalanceSheetVisitable.swift in Sources */,
 				791ED11E263A2D2E00701202 /* CashFlowLine+manageSCPI.swift in Sources */,
 				7906AB752641BCF100A398E9 /* SocialAccounts.swift in Sources */,
@@ -1887,6 +1914,7 @@
 				79EF934C2637636D00C1BE5B /* ChartsMarkerView.swift in Sources */,
 				79EC5E8F26406AAD00FF8263 /* DebtDetailedView.swift in Sources */,
 				79EC5E9826406ADA00FF8263 /* OwnershipView.swift in Sources */,
+				79CB2C87264D723100B3E493 /* MonteCarloVisitor.swift in Sources */,
 				79FA8CEF2630684F009FEA00 /* SCI.swift in Sources */,
 				79EC47D0263081FD0006EE44 /* Patrimoin.swift in Sources */,
 				791ED0E3263A04EE00701202 /* AdultViewModel.swift in Sources */,
@@ -1898,7 +1926,6 @@
 				796506CB2640866F0036E466 /* PeriodicInvestDetailedView.swift in Sources */,
 				79A9AA7A264AFB440036732F /* BalanceSheetVisitor.swift in Sources */,
 				79BBE8E62646E9170045E524 /* BS Detailed ChartView.swift in Sources */,
-				790631A3262C735800359F9F /* Test Modules Wiring.swift in Sources */,
 				791ED0E0263A049900701202 /* PersonViewModel.swift in Sources */,
 				799025A32641F60300ED53D4 /* HistogramView.swift in Sources */,
 				799025BB2641F60300ED53D4 /* CF Global ChartView.swift in Sources */,
@@ -2022,6 +2049,7 @@
 				791ED0D72639FBFD00701202 /* UnemployementDetailView.swift in Sources */,
 				79569938262F86C60015AF34 /* Ownership+TransferBareOwnership.swift in Sources */,
 				799025B02641F60300ED53D4 /* IrppSliceView.swift in Sources */,
+				792DE959264C8DBF004DA53D /* Persistence.swift in Sources */,
 				79EC480A263098340006EE44 /* OwnershipManager.swift in Sources */,
 				79C8382B2641DC02008B29BF /* LineChartDataSet+Extension.swift in Sources */,
 				79FA8CE82630684F009FEA00 /* FreeInvestment.swift in Sources */,
@@ -2070,7 +2098,6 @@
 				79C8382E2641DCBC008B29BF /* ChartLimitLine+Extension.swift in Sources */,
 				7977FE7B262E4FA3005A1CB1 /* TimeSpan.swift in Sources */,
 				79A9AA83264B10F80036732F /* CsvCashFlowVisitor.swift in Sources */,
-				790631A4262C735800359F9F /* Test Modules Wiring.swift in Sources */,
 				791ED108263A271A00701202 /* FamilySummaryView.swift in Sources */,
 				796506CC2640866F0036E466 /* PeriodicInvestDetailedView.swift in Sources */,
 				7998E1A1262DBE3E00DA4A12 /* Adult+Pension.swift in Sources */,
@@ -2082,6 +2109,7 @@
 				790FF3512648AA07001B2653 /* BalanceSheetLine.swift in Sources */,
 				799025B62641F60300ED53D4 /* ChartsSectionView.swift in Sources */,
 				79C838282641DB80008B29BF /* Charts+AxisFormatter.swift in Sources */,
+				79CB2C8A264D731900B3E493 /* CsvMonteCarloVisitor.swift in Sources */,
 				796506C3264085830036E466 /* LiabilityView.swift in Sources */,
 				7977FE8D262E5282005A1CB1 /* LifeExpense.swift in Sources */,
 				7998E192262DB8E800DA4A12 /* DateBoundary.swift in Sources */,

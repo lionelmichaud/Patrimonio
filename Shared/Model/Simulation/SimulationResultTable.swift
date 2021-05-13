@@ -66,6 +66,11 @@ struct AdultRandomProperties: Hashable, Codable {
     var nbOfYearOfDependency : Int
 }
 typealias DictionaryOfAdultRandomProperties = [String: AdultRandomProperties]
+extension DictionaryOfAdultRandomProperties: MonteCarloVisitable {
+    func accept(_ visitor: MonteCarloVisitor) {
+        visitor.visit(element: self)
+    }
+}
 
 // MARK: - Synthèse d'un Run de Simulation
 
@@ -75,41 +80,21 @@ struct SimulationResultLine: Hashable {
     var dicoOfEconomyRandomVariables      : Economy.DictionaryOfRandomVariable
     var dicoOfSocioEconomyRandomVariables : SocioEconomy.DictionaryOfRandomVariable
     var dicoOfKpiResults                  : DictionaryOfKpiResults
-    var valuesCSV: String {
-        let separator = "; "
-        var line = String(runNumber) + separator
-        // propriétés aléatoires des adultes
-        for name in dicoOfAdultsRandomProperties.keys.sorted() {
-            line += String(dicoOfAdultsRandomProperties[name]!.ageOfDeath) + separator
-            line += String(dicoOfAdultsRandomProperties[name]!.nbOfYearOfDependency) + separator
-        }
-        // valeurs aléatoires de conditions économiques
-        for variableEnum in Economy.RandomVariable.allCases {
-            line += (dicoOfEconomyRandomVariables[variableEnum]?.percentString(digit: 1) ?? "") + separator
-        }
-        // valeurs aléatoires de conditions socio-économiques
-        for variableEnum in SocioEconomy.RandomVariable.allCases {
-            switch variableEnum {
-                case .nbTrimTauxPlein:
-                    line += dicoOfSocioEconomyRandomVariables[variableEnum]!.roundedString + separator
-                    
-                default:
-                    line += dicoOfSocioEconomyRandomVariables[variableEnum]!.percentString(digit: 1) + separator
-            }
-        }
-        // valeurs résultantes des KPIs
-        for kpiEnum in SimulationKPIEnum.allCases {
-            if let kpiResult = dicoOfKpiResults[kpiEnum] {
-                line += kpiResult.value.roundedString + separator
-            } else {
-                line += "indéfini" + separator
-            }
-        }
-        return line
+}
+extension SimulationResultLine: MonteCarloVisitable {
+    func accept(_ visitor: MonteCarloVisitor) {
+        visitor.visit(element: self)
     }
 }
 
+// MARK: - Tableau de Synthèse d'un Run de Simulation
+
 typealias SimulationResultTable = [SimulationResultLine]
+extension SimulationResultTable: MonteCarloVisitable {
+    func accept(_ visitor: MonteCarloVisitor) {
+        visitor.visit(element: self)
+    }
+}
 extension SimulationResultTable {
     func filtered(with filter: RunFilterEnum = .all) -> SimulationResultTable {
         switch filter {
@@ -164,65 +149,14 @@ extension SimulationResultTable {
         }
     }
     
-    func save(simulationTitle: String) {
-        let separator = "; "
-        let lineBreak = "\n"
-        
-        func header() -> String {
-            var header = "Run" + separator
-            // propriétés aléatoires des adultes
-            for name in self.first!.dicoOfAdultsRandomProperties.keys.sorted() {
-                header += "Durée de Vie " + name + separator
-                header += "Dépendance " + name + separator
-            }
-            // valeurs aléatoires de conditions économiques
-            for variableEnum in Economy.RandomVariable.allCases {
-                header += variableEnum.pickerString + separator
-            }
-            // valeurs aléatoires de conditions socio-économiques
-            for variableEnum in SocioEconomy.RandomVariable.allCases {
-                header += variableEnum.pickerString + separator
-            }
-            // valeurs résultantes des KPIs
-            for variableEnum in SimulationKPIEnum.allCases {
-                header += variableEnum.pickerString + separator
-            }
-            return header
-        }
-        
-        guard !self.isEmpty else { return }
-        
-        let csvString = self.reduce(header() + lineBreak, { result, element in result + element.valuesCSV + lineBreak })
-//        print(csvString)
-
-        #if DEBUG
-        // sauvegarder le fichier dans le répertoire Bundle/csv
+    func save(simulationTitle: String) throws {
+        let csvString = CsvBuilder.monteCarloCSV(from: self)
         do {
-            try csvString.write(to: SocialAccounts.cashFlowFileUrl!,
-                                atomically: true ,
-                                encoding: .utf8)
+            try Persistence.saveToCsvPath(simulationTitle : simulationTitle,
+                                          fileName        : FileNameCst.kMonteCarloCSVFileName,
+                                          csvString       : csvString)
         } catch {
-            print("error creating file: \(error)")
-        }
-        #endif
-        
-        // sauvegarder le fichier dans le répertoire documents/csv
-        let fileName = "Monté-Carlo Kpi.csv"
-        do {
-            try Disk.save(Data(csvString.utf8),
-                          to: .documents,
-                          as: AppSettings.csvPath(simulationTitle) + fileName)
-            #if DEBUG
-            Swift.print("saving 'Monté-Carlo Kpi.csv' to file: ", AppSettings.csvPath(simulationTitle) + fileName)
-            #endif
-        } catch let error as NSError {
-            fatalError("""
-                Domain         : \(error.domain)
-                Code           : \(error.code)
-                Description    : \(error.localizedDescription)
-                Failure Reason : \(error.localizedFailureReason ?? "")
-                Suggestions    : \(error.localizedRecoverySuggestion ?? "")
-                """)
+            throw FileError.failedToSaveMonteCarloCsv
         }
     }
 }
