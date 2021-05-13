@@ -19,8 +19,9 @@ struct GraphicUserSettings: View {
     
     var body: some View {
         Form {
-            Section(footer: Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu ne prendra en compte que les biens satisfaisant à ce critère")) {
-                CasePicker(pickedCase: $ownership, label: "Filtrage du Bilan individuel")
+            Section(header: Text("Graphique Bilan".uppercased()),
+                footer: Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu ne prendra en compte que les biens satisfaisant à ce critère")) {
+                CasePicker(pickedCase: $ownership, label: "Filtrage des actifs et passifs du Bilan individuel")
                     .pickerStyle(DefaultPickerStyle())
                     .onChange(of     : ownership,
                               perform: { newValue in
@@ -32,7 +33,7 @@ struct GraphicUserSettings: View {
             }
             
             Section(footer: Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu prendra en compte cette valeur")) {
-                CasePicker(pickedCase: $evaluationMethod, label: "Valeure prise en compte")
+                CasePicker(pickedCase: $evaluationMethod, label: "Valeure prise en compte dans le bilan")
                     .pickerStyle(DefaultPickerStyle())
                     .onChange(of     : evaluationMethod,
                               perform: { newValue in

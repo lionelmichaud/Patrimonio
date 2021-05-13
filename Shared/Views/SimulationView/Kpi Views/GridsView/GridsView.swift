@@ -38,6 +38,17 @@ struct ShortGridView: View {
     @State private var sortOrder      : SortingOrder        = .ascending
     @Environment(\.presentationMode) var presentationMode
     @State private var alertItem      : AlertItem?
+    @State private var showInfoPopover = false
+    let popOverTitle   = "Contenu du tableau:"
+    let popOverMessage =
+        """
+        Pour chaque run on trouve les paramètre de simulation et
+        les indicateurs de performance en résultants.
+
+        Les valeures vertes signifient que l'objectif est atteint.
+        Les valeures rouges signifient que l'objectif n'est pas atteint.
+        Les ? signifient que l'indicateur de performance n'a pas pu être calculé.
+        """
 
     var body: some View {
         let columns = [GridItem()]
@@ -74,7 +85,7 @@ struct ShortGridView: View {
                         Picker(selection: $filter, label: Text("Filtering options")) {
                             Label("Tous les résultats", systemImage: "checkmark.circle.fill").tag(RunFilterEnum.all)
                             Label("Résultats négatifs", systemImage: "xmark.octagon.fill").tag(RunFilterEnum.someBad)
-                            Label("Résultats indéterminés", systemImage: "exclamationmark.triangle.fill").tag(RunFilterEnum.somUnknown)
+                            Label("Résultats indéterminés", systemImage: "questionmark.circle").tag(RunFilterEnum.somUnknown)
                         }
                     }
                     label: {
@@ -112,6 +123,17 @@ struct ShortGridView: View {
                         Label("Enregistrer", systemImage: "square.and.arrow.up")
                     }
                 }
+                // afficher info-bulle
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { self.showInfoPopover = true },
+                           label : {
+                            Image(systemName: "info.circle")
+                           })
+                }
+            }
+            .popover(isPresented: $showInfoPopover) {
+                PopOverContentView(title       : popOverTitle,
+                                   description : popOverMessage)
             }
             .alert(item: $alertItem, content: myAlert)
     }
@@ -251,7 +273,7 @@ struct ShortGridLineView : View {
                             .frame(width: 70)
                             .foregroundColor(kpiResult.objectiveIsReached ? .green : .red)
                     } else {
-                        Image(systemName: "exclamationmark.triangle.fill")
+                        Image(systemName: "questionmark.circle")
                             .frame(width: 70)
                     }
                     Divider()
