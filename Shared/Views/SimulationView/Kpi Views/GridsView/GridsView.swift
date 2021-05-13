@@ -36,6 +36,8 @@ struct ShortGridView: View {
     @State private var filter         : RunFilterEnum       = .all
     @State private var sortCriteria   : KpiSortCriteriaEnum = .byRunNumber
     @State private var sortOrder      : SortingOrder        = .ascending
+    @Environment(\.presentationMode) var presentationMode
+    @State private var alertItem      : AlertItem?
 
     var body: some View {
         let columns = [GridItem()]
@@ -111,10 +113,24 @@ struct ShortGridView: View {
                     }
                 }
             }
+            .alert(item: $alertItem, content: myAlert)
     }
     
     func saveGrid() {
-        // TODO: - implémenter la sauvegarde du tableau des KPIs de résultat de simulation
+        // executer l'enregistrement en tâche de fond
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                /// - un fichier pour le tableau de résultat de Monté-Carlo
+                try simulation.resultTable.save(simulationTitle: simulation.title)
+            } catch {
+                // mettre à jour les variables d'état dans le thread principal
+                DispatchQueue.main.async {
+                    self.alertItem = AlertItem(title         : Text((error as? FileError)?.rawValue ?? "La sauvegarde a échoué"),
+                                               dismissButton : .default(Text("OK")))
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+            }
+        }
     }
     
     func replay(thisRun: SimulationResultLine) {

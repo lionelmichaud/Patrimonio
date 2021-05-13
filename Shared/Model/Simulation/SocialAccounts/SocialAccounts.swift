@@ -48,11 +48,11 @@ struct SocialAccounts {
                                                  withMode simulationMode : SimulationModeEnum,
                                                  kpiResults              : inout DictionaryOfKpiResults) {
         let minBalanceSheetLine = balanceArray.min { a, b in
-            a.financialAssets < b.financialAssets
+            a.netFinancialAssets < b.netFinancialAssets
         }
         // KPI 3: mémoriser le minimum d'actif financier net au cours du temps
         setKpiValue(kpiEnum        : .minimumAsset,
-                    value          : minBalanceSheetLine!.financialAssets,
+                    value          : minBalanceSheetLine!.netFinancialAssets,
                     kpiDefinitions : &kpiDefinitions,
                     kpiResults     : &kpiResults,
                     simulationMode : simulationMode)
@@ -264,6 +264,9 @@ struct SocialAccounts {
         computeMinimumAssetKpiValue(withKPIs   : &kpis,
                                     withMode   : simulationMode,
                                     kpiResults : &kpiResults)
+        SimulationLogger.shared.log(run      : run,
+                                    logTopic : LogTopic.simulationEvent,
+                                    message  : "Fin du run: date de fin de run atteinte en \(lastYear)")
         return kpiResults
     }
     
