@@ -142,14 +142,34 @@ struct SciCashFlowLine {
     }
 }
 
-extension SciCashFlowLine: CashFlowVisitable {
-    func accept(_ visitor: CashFlowVisitor) {
-        visitor.visit(element: self)
+// MARK: - Extensions for VISITORS
+
+extension SciCashFlowLine: CashFlowVisitableP {
+    func accept(_ visitor: CashFlowVisitorP) {
+        visitor.buildCsv(element: self)
     }
 }
 
-extension SciCashFlowLine.Revenues: CashFlowVisitable {
-    func accept(_ visitor: CashFlowVisitor) {
-        visitor.visit(element: self)
+extension SciCashFlowLine: CashFlowStackedBarChartVisitableP {
+    func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
+        visitor.buildStackedBarChart(element: self)
+    }
+}
+
+extension SciCashFlowLine: CashFlowCategoryStackedBarChartVisitableP {
+    func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
+        visitor.buildCategoryStackedBarChart(element: self)
+    }
+}
+
+extension SciCashFlowLine.Revenues: CashFlowVisitableP {
+    func accept(_ visitor: CashFlowVisitorP) {
+        visitor.buildCsv(element: self)
+    }
+}
+
+extension SciCashFlowLine.Revenues: CashFlowCategoryStackedBarChartVisitableP {
+    func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
+        visitor.buildCategoryStackedBarChart(element: self)
     }
 }

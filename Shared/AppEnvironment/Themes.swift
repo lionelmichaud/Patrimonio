@@ -76,7 +76,7 @@ struct ChartThemes {
         return colorTable
     }
     
-    static func positiveNegativeColors (numberPositive: Int, numberNegative: Int) -> [NSUIColor] {
+    static func colors (numberPositive: Int = 0, numberNegative: Int = 0) -> [NSUIColor] {
         var colorTable = [NSUIColor]()
         if numberPositive == 0 && numberNegative == 0 {
             return [positiveColorsTable[0]]

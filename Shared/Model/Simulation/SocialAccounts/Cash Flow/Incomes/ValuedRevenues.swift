@@ -150,8 +150,22 @@ extension RevenuesInCategory: CustomStringConvertible {
     }
 }
 
-extension ValuedRevenues: CashFlowVisitable {
-    func accept(_ visitor: CashFlowVisitor) {
-        visitor.visit(element: self)
+// MARK: - Extensions for VISITORS
+
+extension ValuedRevenues: CashFlowVisitableP {
+    func accept(_ visitor: CashFlowVisitorP) {
+        visitor.buildCsv(element: self)
+    }
+}
+
+extension ValuedRevenues: CashFlowStackedBarChartVisitableP {
+    func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
+        visitor.buildStackedBarChart(element: self)
+    }
+}
+
+extension ValuedRevenues: CashFlowCategoryStackedBarChartVisitableP {
+    func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
+        visitor.buildCategoryStackedBarChart(element: self)
     }
 }

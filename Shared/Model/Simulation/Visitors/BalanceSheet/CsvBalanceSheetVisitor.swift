@@ -22,7 +22,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 /// with a complex object structure, such as a Composite tree. In this case, it
 /// might be helpful to store some intermediate state of the algorithm while
 /// executing visitor's methods over various objects of the structure.
-class CsvBalanceSheetTableVisitor: BalanceSheetVisitor {
+class CsvBalanceSheetTableVisitor: BalanceSheetVisitorP {
 
     private var table  = ""
     private let mode: SimulationModeEnum
@@ -31,7 +31,7 @@ class CsvBalanceSheetTableVisitor: BalanceSheetVisitor {
         self.mode = mode
     }
 
-    func visit(element: ValuedLiabilities) {
+    func buildCsv(element: ValuedLiabilities) {
         LiabilitiesCategory.allCases.forEach { category in
             // seulement ceux de la catégorie
             guard let namedValueTable = element[category] else { return }
@@ -45,7 +45,7 @@ class CsvBalanceSheetTableVisitor: BalanceSheetVisitor {
         }
     }
 
-    func visit(element: ValuedAssets) {
+    func buildCsv(element: ValuedAssets) {
         AssetsCategory.allCases.forEach { category in
             // seulement ceux de la catégorie
             guard let namedValueTable = element[category] else { return }
@@ -59,7 +59,7 @@ class CsvBalanceSheetTableVisitor: BalanceSheetVisitor {
         }
     }
 
-    func visit(element: BalanceSheetLine) {
+    func buildCsv(element: BalanceSheetLine) {
         func visitAssets() {
             // visiter l'ensembles des actifs de la famille
             guard let valuedAssets = element.assets[AppSettings.shared.allPersonsLabel] else { return }
@@ -91,7 +91,7 @@ class CsvBalanceSheetTableVisitor: BalanceSheetVisitor {
         table.append("\(element.netAssets.roundedString)")
     }
 
-    func visit(element: BalanceSheetArray) {
+    func buildCsv(element: BalanceSheetArray) {
         // si la table est vide alors quitter
         guard element.isNotEmpty else {
             customLog.log(level: .info, "Pas de bilan à exporter au format CSV \(Self.self, privacy: .public)")
@@ -114,13 +114,13 @@ extension CsvBalanceSheetTableVisitor: CustomStringConvertible {
     }
 }
 
-class CsvBalanceSheetHeaderVisitor: BalanceSheetVisitor {
+class CsvBalanceSheetHeaderVisitor: BalanceSheetVisitorP {
 
     private var header0  = ""
     private var header1  = ""
     private var header2  = ""
 
-    func visit(element: ValuedAssets) {
+    func buildCsv(element: ValuedAssets) {
         AssetsCategory.allCases.forEach { category in
             // seulement ceux de la catégorie
             guard let namedValueTable = element[category] else { return }
@@ -142,7 +142,7 @@ class CsvBalanceSheetHeaderVisitor: BalanceSheetVisitor {
         }
     }
 
-    func visit(element: ValuedLiabilities) {
+    func buildCsv(element: ValuedLiabilities) {
         LiabilitiesCategory.allCases.forEach { category in
             // seulement ceux de la catégorie
             guard let namedValueTable = element[category] else { return }
@@ -164,7 +164,7 @@ class CsvBalanceSheetHeaderVisitor: BalanceSheetVisitor {
         }
     }
 
-    func visit(element: BalanceSheetLine) {
+    func buildCsv(element: BalanceSheetLine) {
         func visitAssets() {
             // visiter l'ensembles des actifs de la famille
             guard let valuedAssets = element.assets[AppSettings.shared.allPersonsLabel] else { return }
@@ -203,7 +203,7 @@ class CsvBalanceSheetHeaderVisitor: BalanceSheetVisitor {
         header2.append("NET")
     }
 
-    func visit(element: BalanceSheetArray) {
+    func buildCsv(element: BalanceSheetArray) {
         // si la table est vide alors quitter
         guard element.isNotEmpty else {
             customLog.log(level: .info, "Pas de bilan à exporter au format CSV \(Self.self, privacy: .public)")

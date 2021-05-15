@@ -21,8 +21,28 @@ struct ValuedAssets: DictionaryOfNamedValueTable {
     init() { }
 }
 
-extension ValuedAssets: BalanceSheetVisitable {
-    func accept(_ visitor: BalanceSheetVisitor) {
-        visitor.visit(element: self)
+// MARK: - Extensions for VISITORS
+
+extension ValuedAssets: BalanceSheetVisitableP {
+    func accept(_ visitor: BalanceSheetVisitorP) {
+        visitor.buildCsv(element: self)
+    }
+}
+
+extension ValuedAssets: BalanceSheetLineChartVisitableP {
+    func accept(_ visitor: BalanceSheetLineChartVisitorP) {
+        visitor.buildLineChart(element: self)
+    }
+}
+
+extension ValuedAssets: BalanceSheetStackedBarChartVisitableP {
+    func accept(_ visitor: BalanceSheetStackedBarChartVisitorP) {
+        visitor.buildStackedBarChart(element: self)
+    }
+}
+
+extension ValuedAssets: BalanceSheetCategoryStackedBarChartVisitableP {
+    func accept(_ visitor: BalanceSheetCategoryStackedBarChartVisitorP) {
+        visitor.buildCategoryStackedBarChart(element: self)
     }
 }

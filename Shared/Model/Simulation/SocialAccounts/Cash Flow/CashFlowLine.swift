@@ -119,6 +119,7 @@ struct CashFlowLine {
             
             /// ISF: calcule de l'impot sur la fortune
             computeISF(with : patrimoine)
+
             /// EXPENSES: compute and populate family expenses
             lifeExpenses.namedValues = family.expenses.namedValueTable(atEndOf: year)
             
@@ -259,8 +260,28 @@ struct CashFlowLine {
     }
 }
 
-extension CashFlowLine: CashFlowVisitable {
-    func accept(_ visitor: CashFlowVisitor) {
-        visitor.visit(element: self)
+// MARK: - CashFlowLine extensions for VISITORS
+
+extension CashFlowLine: CashFlowVisitableP {
+    func accept(_ visitor: CashFlowVisitorP) {
+        visitor.buildCsv(element: self)
+    }
+}
+
+extension CashFlowLine: CashFlowLineChartVisitableP {
+    func accept(_ visitor: CashFlowLineChartVisitorP) {
+        visitor.buildLineChart(element: self)
+    }
+}
+
+extension CashFlowLine: CashFlowStackedBarChartVisitableP {
+    func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
+        visitor.buildStackedBarChart(element: self)
+    }
+}
+
+extension CashFlowLine: CashFlowCategoryStackedBarChartVisitableP {
+    func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
+        visitor.buildCategoryStackedBarChart(element: self)
     }
 }

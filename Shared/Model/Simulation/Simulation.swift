@@ -173,7 +173,6 @@ class Simulation: ObservableObject, CanResetSimulation {
     ///   - nbOfRuns: nombre de run à calculer (> 1: mode aléatoire)
     ///   - family: la famille
     ///   - patrimoine: le patrimoine
-    ///
     func compute(nbOfYears                 : Int,
                  nbOfRuns                  : Int,
                  withFamily family         : Family,
@@ -243,6 +242,9 @@ class Simulation: ObservableObject, CanResetSimulation {
         isSaved     = false
     }
 
+    /// Rejouer un run
+    /// - Parameters:
+    ///   - thisRun: paramètres du run à rejouer
     func replay(thisRun                   : SimulationResultLine,
                 withFamily family         : Family,
                 withPatrimoine patrimoine : Patrimoin) {

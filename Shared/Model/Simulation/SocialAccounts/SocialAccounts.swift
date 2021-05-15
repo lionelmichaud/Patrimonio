@@ -5,6 +5,28 @@ import Statistics
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.SocialAccounts")
 
+/// Combinaisons possibles de séries sur le graphique de Bilan
+enum BalanceCombination: String, PickableEnum {
+    case assets      = "Actif"
+    case liabilities = "Passif"
+    case both        = "Tout"
+
+    var pickerString: String {
+        return self.rawValue
+    }
+}
+
+/// Combinaisons possibles de séries sur le graphique de CashFlow
+enum CashCombination: String, PickableEnum {
+    case revenues = "Revenu"
+    case expenses = "Dépense"
+    case both     = "Tout"
+
+    var pickerString: String {
+        return self.rawValue
+    }
+}
+
 // MARK: - Comptes sociaux
 
 /// Comptes sociaux: Table de Compte de résultat annuels + Bilans annuels

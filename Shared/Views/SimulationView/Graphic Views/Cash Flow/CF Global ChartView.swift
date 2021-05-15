@@ -144,7 +144,9 @@ struct CashFlowLineChartView: UIViewRepresentable {
     func updateData(of chartView: LineChartView) {
         // créer les DataSet: LineChartDataSets
         // créer les DataSet: LineChartDataSets
-        let dataSets = socialAccounts.getCashFlowLineChartDataSets()
+        let dataSets =
+            LineChartCashFlowVisitor(element: socialAccounts.cashFlowArray)
+            .dataSets
 
         // ajouter les DataSet au Chartdata
         let data = LineChartData(dataSets: dataSets)

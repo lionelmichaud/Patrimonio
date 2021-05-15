@@ -59,14 +59,14 @@ struct Persistence {
                           to: .documents,
                           as: AppSettings.csvPath(simulationTitle) + fileName)
             customLog.log(level: .info,
-                          "Saving \(fileName, privacy: .public) to: \(AppSettings.csvPath(simulationTitle) + fileName, privacy: .public)")
+                          "Saving \(fileName, privacy: .public) to: \(Disk.Directory.documents.pathDescription + "/" + AppSettings.csvPath(simulationTitle) + fileName, privacy: .public)")
             #if DEBUG
             print(csvString)
             #endif
 
         } catch let error as NSError {
             customLog.log(level: .fault,
-                          "Fault saving \(fileName, privacy: .public) to: \(AppSettings.csvPath(simulationTitle) + fileName, privacy: .public)")
+                          "Fault saving \(fileName, privacy: .public) to: \(Disk.Directory.documents.pathDescription + "/" + AppSettings.csvPath(simulationTitle) + fileName, privacy: .public)")
             print("""
                 Domain         : \(error.domain)
                 Code           : \(error.code)

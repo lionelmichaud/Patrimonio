@@ -171,8 +171,8 @@ struct ComputationView: View {
 //        }
         // mettre à jour les variables d'état dans le thread principal
         //DispatchQueue.main.async {
-        uiState.bsChartState.itemSelection = simulation.socialAccounts.getBalanceSheetLegend(.both)
-        uiState.cfChartState.itemSelection = simulation.socialAccounts.getCashFlowLegend(.both)
+        uiState.bsChartState.itemSelection = simulation.socialAccounts.balanceArray.getBalanceSheetLegend(.both)
+        uiState.cfChartState.itemSelection = simulation.socialAccounts.cashFlowArray.getCashFlowLegend(.both)
         // positionner le curseur de la vue PatrimoinSummaryView sur la bonne date
         uiState.patrimoineViewState.evalDate = simulation.lastYear!.double()
         //}

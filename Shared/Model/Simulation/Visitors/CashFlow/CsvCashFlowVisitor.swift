@@ -22,7 +22,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 /// with a complex object structure, such as a Composite tree. In this case, it
 /// might be helpful to store some intermediate state of the algorithm while
 /// executing visitor's methods over various objects of the structure.
-class CsvCashFlowTableVisitor: CashFlowVisitor {
+class CsvCashFlowTableVisitor: CashFlowVisitorP {
 
     private var table  = ""
     private let mode: SimulationModeEnum
@@ -31,7 +31,7 @@ class CsvCashFlowTableVisitor: CashFlowVisitor {
         self.mode = mode
     }
 
-    func visit(element: SciCashFlowLine.Revenues) {
+    func buildCsv(element: SciCashFlowLine.Revenues) {
         // For every element , extract the values as a comma-separated string.
         let sciDividends = element.sciDividends
         // For every element , extract the values as a comma-separated string.
@@ -50,13 +50,13 @@ class CsvCashFlowTableVisitor: CashFlowVisitor {
         table.append("; \(sciSales.total.roundedString); ")
     }
 
-    func visit(element: SciCashFlowLine) {
+    func buildCsv(element: SciCashFlowLine) {
         element.revenues.accept(self)
         table.append("\((-element.IS).roundedString); ")
         table.append("\(element.netRevenues.roundedString); ")
     }
 
-    func visit(element: ValuedRevenues) {
+    func buildCsv(element: ValuedRevenues) {
         // pour chaque catégorie
         RevenueCategory.allCases.forEach { category in
             // seulement ceux de la catégorie
@@ -71,7 +71,7 @@ class CsvCashFlowTableVisitor: CashFlowVisitor {
         }
     }
 
-    func visit(element: ValuedTaxes) {
+    func buildCsv(element: ValuedTaxes) {
         // For every element , extract the values as a comma-separated string.
         TaxeCategory.allCases.forEach { category in
             // seulement ceux de la catégorie
@@ -87,7 +87,7 @@ class CsvCashFlowTableVisitor: CashFlowVisitor {
         table.append("\(element.total.roundedString); ")
     }
 
-    func visit(element: CashFlowLine) {
+    func buildCsv(element: CashFlowLine) {
         func visitRevenues() {
             // visiter l'ensembles des revenus de la famille
             let valuedRevenues = element.revenues
@@ -170,7 +170,7 @@ class CsvCashFlowTableVisitor: CashFlowVisitor {
         table.append("\(element.netCashFlow.roundedString)" )
     }
 
-    func visit(element: CashFlowArray) {
+    func buildCsv(element: CashFlowArray) {
         // si la table est vide alors quitter
         guard element.isNotEmpty else {
             customLog.log(level: .info, "Pas de cash flow à exporter au format CSV \(Self.self, privacy: .public)")
@@ -193,12 +193,12 @@ extension CsvCashFlowTableVisitor: CustomStringConvertible {
 
 // MARK: - VISITOR: constructeur d'entête de table de CASH FLOW
 
-class CsvCashFlowHeaderVisitor: CashFlowVisitor {
+class CsvCashFlowHeaderVisitor: CashFlowVisitorP {
 
     private var header1  = ""
     private var header2  = ""
 
-    func visit(element: SciCashFlowLine.Revenues) {
+    func buildCsv(element: SciCashFlowLine.Revenues) {
         // For every element , extract the values as a comma-separated string.
         let sciDividends = element.sciDividends
         // For every element , extract the values as a comma-separated string.
@@ -225,7 +225,7 @@ class CsvCashFlowHeaderVisitor: CashFlowVisitor {
         header2.append("; \(sciSales.tableName.uppercased()) TOTAL; ")
     }
 
-    func visit(element: SciCashFlowLine) {
+    func buildCsv(element: SciCashFlowLine) {
         element.revenues.accept(self)
 
         header1.append("REVENU SCI; ")
@@ -235,7 +235,7 @@ class CsvCashFlowHeaderVisitor: CashFlowVisitor {
         header2.append("NET; ")
     }
 
-    func visit(element: ValuedRevenues) {
+    func buildCsv(element: ValuedRevenues) {
         // pour chaque catégorie
         RevenueCategory.allCases.forEach { category in
             // seulement ceux de la catégorie
@@ -260,7 +260,7 @@ class CsvCashFlowHeaderVisitor: CashFlowVisitor {
         header2.append("\(element.taxableIrppRevenueDelayedFromLastYear.name); ")
     }
 
-    func visit(element: ValuedTaxes) {
+    func buildCsv(element: ValuedTaxes) {
         // For every element , extract the values as a comma-separated string.
         TaxeCategory.allCases.forEach { category in
             // seulement ceux de la catégorie
@@ -282,7 +282,7 @@ class CsvCashFlowHeaderVisitor: CashFlowVisitor {
         header2.append("IMPOTS & TAXES TOTAL; ")
     }
 
-    func visit(element: CashFlowLine) {
+    func buildCsv(element: CashFlowLine) {
         func visitRevenues() {
             // visiter l'ensembles des revenus de la famille
             element.revenues.accept(self)
@@ -378,7 +378,7 @@ class CsvCashFlowHeaderVisitor: CashFlowVisitor {
         header2.append("NET CASHFLOW")
     }
 
-    func visit(element: CashFlowArray) {
+    func buildCsv(element: CashFlowArray) {
         // si la table est vide alors quitter
         guard element.isNotEmpty else {
             customLog.log(level: .info, "Pas de cash flow à exporter au format CSV \(Self.self, privacy: .public)")

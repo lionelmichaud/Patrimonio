@@ -145,8 +145,28 @@ struct BalanceSheetLine {
     }
 }
 
-extension BalanceSheetLine: BalanceSheetVisitable {
-    func accept(_ visitor: BalanceSheetVisitor) {
-        visitor.visit(element: self)
+// MARK: - BalanceSheetLine extensions for VISITORS
+
+extension BalanceSheetLine: BalanceSheetVisitableP {
+    func accept(_ visitor: BalanceSheetVisitorP) {
+        visitor.buildCsv(element: self)
+    }
+}
+
+extension BalanceSheetLine: BalanceSheetLineChartVisitableP {
+    func accept(_ visitor: BalanceSheetLineChartVisitorP) {
+        visitor.buildLineChart(element: self)
+    }
+}
+
+extension BalanceSheetLine: BalanceSheetStackedBarChartVisitableP {
+    func accept(_ visitor: BalanceSheetStackedBarChartVisitorP) {
+        visitor.buildStackedBarChart(element: self)
+    }
+}
+
+extension BalanceSheetLine: BalanceSheetCategoryStackedBarChartVisitableP {
+    func accept(_ visitor: BalanceSheetCategoryStackedBarChartVisitorP) {
+        visitor.buildCategoryStackedBarChart(element: self)
     }
 }

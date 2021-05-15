@@ -145,8 +145,7 @@ struct BalanceSheetLineChartView: NSUIViewRepresentable {
 
     func updateData(of chartView: LineChartView) {
         // créer les DataSet: LineChartDataSets
-        let dataSets = socialAccounts.getBalanceSheetLineChartDataSets()
-
+        let dataSets = LineChartBalanceSheetVisitor(element: socialAccounts.balanceArray).dataSets
         // ajouter les DataSet au Chartdata
         let data = LineChartData(dataSets: dataSets)
         data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)

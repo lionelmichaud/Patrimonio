@@ -239,12 +239,17 @@ struct NetCashFlowManager {
     // swiftlint:enable function_parameter_count
     
     // swiftlint:disable function_parameter_count
-    /// Retirer le montant d'un investissement libre: d'abord PEA ensuite Assurance vie puis autre
+    /// Retirer le cash du capital des personnes dans la liste seulement.
+    /// Retirer le cash du capital de la personne la plus riche d'abord.
+    /// Retirer le montant d'un investissement libre dont la personne est PP.
+    /// d'abord PEA ensuite Assurance vie puis autre
     /// - Parameters:
     ///   - patrimoine: du patrimoine
     ///   - amount: découvert en fin d'année à combler = montant à désinvestir
     ///   - lifeInsuranceRebate: franchise d'imposition sur les plus values
     ///   - year: année en cours
+    ///   - adultsName: personnes à qui l'on va retirer le cash demandé.
+    ///   - taxes: taxes à payer sur les retraits de cash
     /// - Throws: Si pas assez de capital -> CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)
     /// - Returns: taxable Interests
     func getCashFromInvestement(thisAmount amount   : Double,
@@ -260,12 +265,12 @@ struct NetCashFlowManager {
         var sortedNames = [String]()
         if adultsName.count > 1 {
             sortedNames = adultsName.sorted {
-                totalFreeInvestementsValue(ownedBy: $0,
-                                           in: patrimoine,
-                                           atEndOf: year) >
-                    totalFreeInvestementsValue(ownedBy: $1,
-                                               in: patrimoine,
-                                               atEndOf: year)
+                totalFreeInvestementsValue(ownedBy : $0,
+                                           in      : patrimoine,
+                                           atEndOf : year) >
+                    totalFreeInvestementsValue(ownedBy : $1,
+                                               in      : patrimoine,
+                                               atEndOf : year)
             }
         } else {
             sortedNames = adultsName

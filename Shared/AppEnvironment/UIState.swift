@@ -67,13 +67,13 @@ class UIState: ObservableObject {
     // MARK: - Etat des filtres graphes Bilan
     struct BalanceSheetChartState {
         var nameSelection : String = AppSettings.shared.allPersonsLabel
-        var combination   : SocialAccounts.AssetLiabilitiesCombination = .both
+        var combination   : BalanceCombination = .both
         var itemSelection : ItemSelectionList = []
     }
     
     // MARK: - Etat des filtres graphes Cash Flow
     struct CashFlowChartState {
-        var combination            : SocialAccounts.CashCombination = .both
+        var combination            : CashCombination = .both
         var itemSelection          : ItemSelectionList = []
         var onlyOneCategorySeleted : Bool {
             let count = itemSelection.reduce(.zero, { result, element in result + (element.selected ? 1 : 0) })

@@ -32,8 +32,22 @@ struct ValuedTaxes: DictionaryOfNamedValueTable {
     }
 }
 
-extension ValuedTaxes: CashFlowVisitable {
-    func accept(_ visitor: CashFlowVisitor) {
-        visitor.visit(element: self)
+// MARK: - Extensions for VISITORS
+
+extension ValuedTaxes: CashFlowVisitableP {
+    func accept(_ visitor: CashFlowVisitorP) {
+        visitor.buildCsv(element: self)
+    }
+}
+
+extension ValuedTaxes: CashFlowStackedBarChartVisitableP {
+    func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
+        visitor.buildStackedBarChart(element: self)
+    }
+}
+
+extension ValuedTaxes: CashFlowCategoryStackedBarChartVisitableP {
+    func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
+        visitor.buildCategoryStackedBarChart(element: self)
     }
 }

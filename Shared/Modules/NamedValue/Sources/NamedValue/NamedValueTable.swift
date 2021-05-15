@@ -53,9 +53,7 @@ public protocol HasNamedValuedTable {
     var total       : Double { get }
     var namesArray  : [String] { get }
     var valuesArray : [Double] { get }
-//    var headerCSV   : String { get }
-//    var valuesCSV   : String { get }
-    
+
     // MARK: - Methods
     
     func filtredNames(with itemSelectionList: ItemSelectionList) -> [String]
@@ -71,6 +69,8 @@ public protocol HasNamedValuedTable {
     /// - Parameter itemSelectionList: menu
     /// - Returns: valeur cumulée des éléments de la table si elle figure dans le menu
     func filtredTableValue(with itemSelectionList: ItemSelectionList) -> [Double]
+
+    func contains(name: String) -> Bool
 }
 
 extension HasNamedValuedTable {
@@ -88,17 +88,6 @@ extension HasNamedValuedTable {
         namedValues
             .map(\.value)
     }
-//    /// liste des noms au format CSV
-//    public var headerCSV: String {
-//        namesArray
-//            .joined(separator: "; ") + "; " + tableName.uppercased() + " TOTAL"
-//    }
-//    /// liste des valeurs au format CSV
-//    public var valuesCSV: String {
-//        namedValues
-//            .map { (namedValue: NamedValue) -> String in namedValue.value.roundedString }
-//            .joined(separator: "; ") + "; " + total.roundedString
-//    }
     
     // MARK: - Methods
     
@@ -131,4 +120,9 @@ extension HasNamedValuedTable {
             return [Double]()
         }
     }
+
+    public func contains(name: String) -> Bool {
+        namesArray.contains(name)
+    }
+
 }
