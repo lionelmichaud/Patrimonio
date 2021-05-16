@@ -39,8 +39,8 @@ extension BalanceSheetArray {
 
 // MARK: - Extensions for VISITORS
 
-extension BalanceSheetArray: BalanceSheetVisitableP {
-     func accept(_ visitor: BalanceSheetVisitorP) {
+extension BalanceSheetArray: BalanceSheetCsvVisitableP {
+     func accept(_ visitor: BalanceSheetCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }

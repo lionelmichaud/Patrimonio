@@ -36,7 +36,7 @@ public struct IsfModel: Codable {
         public static var defaultFileName : String = "IsfModel.json"
         public var version         : Version
         public var grid            : RateGrid // barême de l'ISF
-        let seuil           : Double // 1_300_000 // €
+        public let seuil           : Double // 1_300_000 // €
         var seuil2          : Double // 1_400_000 // €
         // Un système de décote a été mis en place pour les patrimoines nets taxables compris entre 1,3 million et 1,4 million d’euros.
         // Le montant de la décote est calculé selon la formule 17 500 – (1,25 % x montant du patrimoine net taxable).
@@ -73,7 +73,7 @@ public struct IsfModel: Codable {
         // seuil d'imposition
         guard taxableAsset > model.seuil else {
             return (amount       : 0,
-                    taxable      : 0,
+                    taxable      : taxableAsset,
                     marginalRate : 0)
         }
         

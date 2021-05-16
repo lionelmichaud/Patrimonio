@@ -10,7 +10,7 @@ import Foundation
 /// The Visitor Interface declares a set of visiting methods that correspond to
 /// component classes. The signature of a visiting method allows the visitor to
 /// identify the exact class of the component that it's dealing with.
-protocol CashFlowVisitorP {
+protocol CashFlowCsvVisitorP {
     // Elements de CASH FLOW
     func buildCsv(element: CashFlowArray)
     func buildCsv(element: CashFlowLine)
@@ -42,5 +42,30 @@ protocol CashFlowCategoryStackedBarChartVisitorP {
     func buildCategoryStackedBarChart(element: ValuedTaxes)
     func buildCategoryStackedBarChart(element: ValuedRevenues)
     func buildCategoryStackedBarChart(element: SciCashFlowLine)
-    func buildCategoryStackedBarChart(element: SciCashFlowLine.Revenues)
+}
+
+protocol CashFlowIrppVisitorP {
+    // Elements de Bilan
+    func buildIrppChart(element: CashFlowArray)
+    func buildIrppChart(element: CashFlowLine)
+    func buildIrppChart(element: ValuedTaxes)
+}
+
+protocol CashFlowIrppRateVisitorP {
+    // Elements de Bilan
+    func buildIrppRateChart(element: CashFlowArray)
+    func buildIrppRateChart(element: CashFlowLine)
+    func buildIrppRateChart(element: ValuedTaxes)
+}
+
+protocol CashFlowIrppSliceVisitorP {
+    // Elements de Bilan
+    func buildIrppSliceChart(element: CashFlowArray)
+}
+
+protocol CashFlowIsfVisitorP {
+    // Elements de Bilan
+    func buildIsfChart(element: CashFlowArray)
+    func buildIsfChart(element: CashFlowLine)
+    func buildIsfChart(element: ValuedTaxes)
 }

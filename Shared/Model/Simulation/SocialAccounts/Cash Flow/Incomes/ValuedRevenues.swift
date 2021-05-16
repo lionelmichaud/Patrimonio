@@ -152,8 +152,8 @@ extension RevenuesInCategory: CustomStringConvertible {
 
 // MARK: - Extensions for VISITORS
 
-extension ValuedRevenues: CashFlowVisitableP {
-    func accept(_ visitor: CashFlowVisitorP) {
+extension ValuedRevenues: CashFlowCsvVisitableP {
+    func accept(_ visitor: CashFlowCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }

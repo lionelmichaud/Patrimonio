@@ -101,7 +101,7 @@ final class Child: Person {
     /// True si l'enfant fait encore partie du foyer fiscal pendant l'année donnée
     func isFiscalyDependant(during year: Int) -> Bool {
         let isAlive     = self.isAlive(atEndOf: year)
-        let isDependant = self.isIndependant(during: year)
+        let isDependant = !self.isIndependant(during: year)
         let age         = self.age(atEndOf: year - 1) // au début de l'année d'imposition
         return isAlive && ((age <= 21) || (isDependant && age <= 25))
     }

@@ -262,8 +262,8 @@ struct CashFlowLine {
 
 // MARK: - CashFlowLine extensions for VISITORS
 
-extension CashFlowLine: CashFlowVisitableP {
-    func accept(_ visitor: CashFlowVisitorP) {
+extension CashFlowLine: CashFlowCsvVisitableP {
+    func accept(_ visitor: CashFlowCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
@@ -283,5 +283,23 @@ extension CashFlowLine: CashFlowStackedBarChartVisitableP {
 extension CashFlowLine: CashFlowCategoryStackedBarChartVisitableP {
     func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
         visitor.buildCategoryStackedBarChart(element: self)
+    }
+}
+
+extension CashFlowLine: CashFlowIrppVisitableP {
+    func accept(_ visitor: CashFlowIrppVisitorP) {
+        visitor.buildIrppChart(element: self)
+    }
+}
+
+extension CashFlowLine: CashFlowIrppRateVisitableP {
+    func accept(_ visitor: CashFlowIrppRateVisitorP) {
+        visitor.buildIrppRateChart(element: self)
+    }
+}
+
+extension CashFlowLine: CashFlowIsfVisitableP {
+    func accept(_ visitor: CashFlowIsfVisitorP) {
+        visitor.buildIsfChart(element: self)
     }
 }

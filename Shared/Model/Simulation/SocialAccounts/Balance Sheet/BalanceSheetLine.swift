@@ -147,8 +147,8 @@ struct BalanceSheetLine {
 
 // MARK: - BalanceSheetLine extensions for VISITORS
 
-extension BalanceSheetLine: BalanceSheetVisitableP {
-    func accept(_ visitor: BalanceSheetVisitorP) {
+extension BalanceSheetLine: BalanceSheetCsvVisitableP {
+    func accept(_ visitor: BalanceSheetCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }

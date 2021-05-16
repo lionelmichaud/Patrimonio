@@ -403,14 +403,14 @@ extension Family: MembersCountProvider {
 extension Family: FiscalHouseholdSumator {
     func sum(atEndOf year : Int,
              memberValue  : (String) -> Double) -> Double {
-        /// pour: adultes + enfants non indépendants
+        /// pour: adultes + enfants fiscalement dépendants
         var cumulatedvalue: Double = 0.0
 
         for member in members {
             var toBeConsidered : Bool
 
             if member is Adult {
-                toBeConsidered = true
+                toBeConsidered = member.isAlive(atEndOf: year)
 
             } else if member is Child {
                 let child = member as! Child

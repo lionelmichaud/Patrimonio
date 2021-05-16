@@ -65,8 +65,8 @@ extension CashFlowArray {
 
 // MARK: - Extensions for VISITORS
 
-extension CashFlowArray: CashFlowVisitableP {
-    func accept(_ visitor: CashFlowVisitorP) {
+extension CashFlowArray: CashFlowCsvVisitableP {
+    func accept(_ visitor: CashFlowCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
@@ -83,8 +83,26 @@ extension CashFlowArray: CashFlowStackedBarChartVisitableP {
     }
 }
 
-extension CashFlowArray: CashFlowCategoryStackedBarChartVisitableP {
-    func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
-        visitor.buildCategoryStackedBarChart(element: self)
+extension CashFlowArray: CashFlowIrppVisitableP {
+    func accept(_ visitor: CashFlowIrppVisitorP) {
+        visitor.buildIrppChart(element: self)
+    }
+}
+
+extension CashFlowArray: CashFlowIrppRateVisitableP {
+    func accept(_ visitor: CashFlowIrppRateVisitorP) {
+        visitor.buildIrppRateChart(element: self)
+    }
+}
+
+extension CashFlowArray: CashFlowIrppSliceVisitableP {
+    func accept(_ visitor: CashFlowIrppSliceVisitorP) {
+        visitor.buildIrppSliceChart(element: self)
+    }
+}
+
+extension CashFlowArray: CashFlowIsfVisitableP {
+    func accept(_ visitor: CashFlowIsfVisitorP) {
+        visitor.buildIsfChart(element: self)
     }
 }

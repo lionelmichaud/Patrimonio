@@ -31,12 +31,12 @@ struct IrppEvolutionChartView: View {
     var body: some View {
         VStack {
             IrppEvolutionLineChartView(socialAccounts : $simulation.socialAccounts,
-                                   title          : simulation.title)
+                                       title          : simulation.title)
             IrppTranchesLineChartView(socialAccounts : $simulation.socialAccounts,
-                              title          : simulation.title)
+                                      title          : simulation.title)
         }
         .padding(.trailing, 4)
-        .navigationTitle("Evolution de la Fiscalité")
+        .navigationTitle("Evolution de l'Impôt sur le Revenu")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             // sauvergarder l'image dans l'album photo
@@ -132,8 +132,8 @@ struct IrppEvolutionLineChartView: UIViewRepresentable {
 
     func updateData(of chartView: CombinedChartView) {
         // LIGNES
-        // créer les DataSet : LineChartDataSets
-        let lineDataSets = socialAccounts.getIrppRatesfLineChartDataSets()
+        let visitor = IrppRateChartCashFlowVisitor(element: socialAccounts.cashFlowArray)
+        let lineDataSets = visitor.lineDataSets
         // ajouter les DataSet au ChartData
         let lineChartData = LineChartData(dataSets: lineDataSets)
         lineChartData.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
@@ -142,7 +142,7 @@ struct IrppEvolutionLineChartView: UIViewRepresentable {
 
         // BARRES
         // créer les DataSet : BarChartDataSets
-        let barDataSets = socialAccounts.getfamilyQotientBarChartDataSets()
+        let barDataSets = visitor.barDataSets
         // ajouter les DataSet au ChartData
         let barChartData = BarChartData(dataSets: barDataSets)
         barChartData.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
@@ -258,7 +258,9 @@ struct IrppTranchesLineChartView: UIViewRepresentable {
 
     func updateData(of chartView: LineChartView) {
         // créer les DataSet: LineChartDataSets
-        let dataSets = socialAccounts.getIrppLineChartDataSets()
+        let dataSets =
+            IrppChartCashFlowVisitor(element: socialAccounts.cashFlowArray)
+            .dataSets
 
         // ajouter les DataSet au Chartdata
         let data = LineChartData(dataSets: dataSets)

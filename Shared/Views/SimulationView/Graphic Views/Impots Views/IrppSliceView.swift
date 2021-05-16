@@ -154,11 +154,12 @@ struct IrppSlicesStackedBarChartView: UIViewRepresentable {
     func updateData(of chartView: BarChartView) {
         // créer le DataSet: BarChartDataSet
         let year = Int(evalYear)
-        var maxCumulatedSlices: Double = 0.0
-        let dataSet = socialAccounts.getSlicedIrppBarChartDataSets(for                : year,
-                                                                   maxCumulatedSlices : &maxCumulatedSlices,
-                                                                   nbAdults           : family.nbOfAdultAlive(atEndOf: year),
-                                                                   nbChildren         : family.nbOfFiscalChildren(during: year))
+        let dataSet =
+            IrppSliceChartCashFlowVisitor(element    : socialAccounts.cashFlowArray,
+                                          for        : year,
+                                          nbAdults   : family.nbOfAdultAlive(atEndOf: year),
+                                          nbChildren : family.nbOfFiscalChildren(during: year))
+            .dataSets
 
         // ajouter les DataSet au Chartdata
         let data = BarChartData(dataSet: dataSet)

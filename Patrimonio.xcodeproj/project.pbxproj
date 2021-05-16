@@ -9,14 +9,8 @@
 /* Begin PBXBuildFile section */
 		79058371262C79050061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058370262C79050061F296 /* SocioEconomyModel */; };
 		79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058372262C790F0061F296 /* SocioEconomyModel */; };
-		7906AB712641BCF100A398E9 /* SocialAccounts+CfCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6B2641BCF000A398E9 /* SocialAccounts+CfCharts.swift */; };
-		7906AB722641BCF100A398E9 /* SocialAccounts+CfCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6B2641BCF000A398E9 /* SocialAccounts+CfCharts.swift */; };
-		7906AB732641BCF100A398E9 /* SocialAccounts+IsfCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6C2641BCF100A398E9 /* SocialAccounts+IsfCharts.swift */; };
-		7906AB742641BCF100A398E9 /* SocialAccounts+IsfCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6C2641BCF100A398E9 /* SocialAccounts+IsfCharts.swift */; };
 		7906AB752641BCF100A398E9 /* SocialAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */; };
 		7906AB762641BCF100A398E9 /* SocialAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */; };
-		7906AB772641BCF100A398E9 /* SocialAccounts+IrppCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6E2641BCF100A398E9 /* SocialAccounts+IrppCharts.swift */; };
-		7906AB782641BCF100A398E9 /* SocialAccounts+IrppCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6E2641BCF100A398E9 /* SocialAccounts+IrppCharts.swift */; };
 		790FF33D264850E6001B2653 /* CsvBalanceSheetVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790FF33C264850E6001B2653 /* CsvBalanceSheetVisitor.swift */; };
 		790FF33E264850E6001B2653 /* CsvBalanceSheetVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790FF33C264850E6001B2653 /* CsvBalanceSheetVisitor.swift */; };
 		790FF33F2648521B001B2653 /* CsvBalanceSheetVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790FF33C264850E6001B2653 /* CsvBalanceSheetVisitor.swift */; };
@@ -34,9 +28,9 @@
 		791D3B942649679C0024A2D8 /* CustomCsvConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791D3B922649679C0024A2D8 /* CustomCsvConvertible.swift */; };
 		791D3B952649679C0024A2D8 /* CustomCsvConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791D3B922649679C0024A2D8 /* CustomCsvConvertible.swift */; };
 		791D3B96264971600024A2D8 /* BalanceSheetArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931CB26417249000F8599 /* BalanceSheetArray.swift */; };
-		791D3BA02649C0200024A2D8 /* BalanceSheetVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791D3B9F2649C0200024A2D8 /* BalanceSheetVisitableP.swift */; };
-		791D3BA12649C0200024A2D8 /* BalanceSheetVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791D3B9F2649C0200024A2D8 /* BalanceSheetVisitableP.swift */; };
-		791D3BA22649C0200024A2D8 /* BalanceSheetVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791D3B9F2649C0200024A2D8 /* BalanceSheetVisitableP.swift */; };
+		791D3BA02649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791D3B9F2649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift */; };
+		791D3BA12649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791D3B9F2649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift */; };
+		791D3BA22649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791D3B9F2649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift */; };
 		791ED0D22639F59B00701202 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 791ED0D12639F59B00701202 /* Colors.xcassets */; };
 		791ED0D32639F59B00701202 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 791ED0D12639F59B00701202 /* Colors.xcassets */; };
 		791ED0D62639FBFD00701202 /* UnemployementDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0D52639FBFD00701202 /* UnemployementDetailView.swift */; };
@@ -260,18 +254,30 @@
 		7998E1AC262DBE4600DA4A12 /* Child.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E1AA262DBE4600DA4A12 /* Child.swift */; };
 		7998E1C7262DC5C500DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */; };
 		7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E1CC262DC66700DA4A12 /* TypePreservingCodingAdapter */; };
-		79A9AA76264AFA290036732F /* CashFlowVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA75264AFA290036732F /* CashFlowVisitableP.swift */; };
-		79A9AA77264AFA290036732F /* CashFlowVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA75264AFA290036732F /* CashFlowVisitableP.swift */; };
-		79A9AA78264AFA290036732F /* CashFlowVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA75264AFA290036732F /* CashFlowVisitableP.swift */; };
-		79A9AA7A264AFB440036732F /* BalanceSheetVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA79264AFB440036732F /* BalanceSheetVisitorP.swift */; };
-		79A9AA7B264AFB440036732F /* BalanceSheetVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA79264AFB440036732F /* BalanceSheetVisitorP.swift */; };
-		79A9AA7C264AFB440036732F /* BalanceSheetVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA79264AFB440036732F /* BalanceSheetVisitorP.swift */; };
-		79A9AA7E264AFFC20036732F /* CashFlowVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA7D264AFFC20036732F /* CashFlowVisitorP.swift */; };
-		79A9AA7F264AFFC20036732F /* CashFlowVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA7D264AFFC20036732F /* CashFlowVisitorP.swift */; };
-		79A9AA80264AFFC20036732F /* CashFlowVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA7D264AFFC20036732F /* CashFlowVisitorP.swift */; };
+		79A9AA76264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA75264AFA290036732F /* CashFlowCsvVisitableP.swift */; };
+		79A9AA77264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA75264AFA290036732F /* CashFlowCsvVisitableP.swift */; };
+		79A9AA78264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA75264AFA290036732F /* CashFlowCsvVisitableP.swift */; };
+		79A9AA7A264AFB440036732F /* BalanceSheetCsvVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA79264AFB440036732F /* BalanceSheetCsvVisitorP.swift */; };
+		79A9AA7B264AFB440036732F /* BalanceSheetCsvVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA79264AFB440036732F /* BalanceSheetCsvVisitorP.swift */; };
+		79A9AA7C264AFB440036732F /* BalanceSheetCsvVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA79264AFB440036732F /* BalanceSheetCsvVisitorP.swift */; };
+		79A9AA7E264AFFC20036732F /* CashFlowCsvVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA7D264AFFC20036732F /* CashFlowCsvVisitorP.swift */; };
+		79A9AA7F264AFFC20036732F /* CashFlowCsvVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA7D264AFFC20036732F /* CashFlowCsvVisitorP.swift */; };
+		79A9AA80264AFFC20036732F /* CashFlowCsvVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA7D264AFFC20036732F /* CashFlowCsvVisitorP.swift */; };
 		79A9AA82264B10F80036732F /* CsvCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA81264B10F80036732F /* CsvCashFlowVisitor.swift */; };
 		79A9AA83264B10F80036732F /* CsvCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA81264B10F80036732F /* CsvCashFlowVisitor.swift */; };
 		79A9AA84264B10F80036732F /* CsvCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA81264B10F80036732F /* CsvCashFlowVisitor.swift */; };
+		79AA5D6A26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AA5D6926505D5600B26D2C /* IsfChartCashFlowVisitor.swift */; };
+		79AA5D6B26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AA5D6926505D5600B26D2C /* IsfChartCashFlowVisitor.swift */; };
+		79AA5D6C26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AA5D6926505D5600B26D2C /* IsfChartCashFlowVisitor.swift */; };
+		79AA5D6E26507E9800B26D2C /* IrppChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AA5D6D26507E9800B26D2C /* IrppChartCashFlowVisitor.swift */; };
+		79AA5D6F26507E9800B26D2C /* IrppChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AA5D6D26507E9800B26D2C /* IrppChartCashFlowVisitor.swift */; };
+		79AA5D7026507E9800B26D2C /* IrppChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AA5D6D26507E9800B26D2C /* IrppChartCashFlowVisitor.swift */; };
+		79AA5D722650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AA5D712650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift */; };
+		79AA5D732650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AA5D712650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift */; };
+		79AA5D742650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AA5D712650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift */; };
+		79AA5D762650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AA5D752650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift */; };
+		79AA5D772650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AA5D752650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift */; };
+		79AA5D782650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AA5D752650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift */; };
 		79AB5411263241CF00FADBA7 /* FreeInvestement.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB53F2263241CF00FADBA7 /* FreeInvestement.json */; };
 		79AB5412263241CF00FADBA7 /* FreeInvestement.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB53F2263241CF00FADBA7 /* FreeInvestement.json */; };
 		79AB5413263241CF00FADBA7 /* persons.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB53F3263241CF00FADBA7 /* persons.json */; };
@@ -487,10 +493,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7906AB6B2641BCF000A398E9 /* SocialAccounts+CfCharts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SocialAccounts+CfCharts.swift"; sourceTree = "<group>"; };
-		7906AB6C2641BCF100A398E9 /* SocialAccounts+IsfCharts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SocialAccounts+IsfCharts.swift"; sourceTree = "<group>"; };
 		7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialAccounts.swift; sourceTree = "<group>"; };
-		7906AB6E2641BCF100A398E9 /* SocialAccounts+IrppCharts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SocialAccounts+IrppCharts.swift"; sourceTree = "<group>"; };
 		790FF33926484D59001B2653 /* Visitor Pattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Visitor Pattern.swift"; sourceTree = "<group>"; };
 		790FF33C264850E6001B2653 /* CsvBalanceSheetVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvBalanceSheetVisitor.swift; sourceTree = "<group>"; };
 		790FF34726485BDE001B2653 /* CvsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CvsBuilder.swift; sourceTree = "<group>"; };
@@ -498,7 +501,7 @@
 		7912E2032645E0B300120731 /* BalanceSheet.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BalanceSheet.csv; sourceTree = "<group>"; };
 		7912E2042645E0B300120731 /* CashFlow.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CashFlow.csv; sourceTree = "<group>"; };
 		791D3B922649679C0024A2D8 /* CustomCsvConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCsvConvertible.swift; sourceTree = "<group>"; };
-		791D3B9F2649C0200024A2D8 /* BalanceSheetVisitableP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceSheetVisitableP.swift; sourceTree = "<group>"; };
+		791D3B9F2649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceSheetCsvVisitableP.swift; sourceTree = "<group>"; };
 		791ED0D12639F59B00701202 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		791ED0D52639FBFD00701202 /* UnemployementDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnemployementDetailView.swift; sourceTree = "<group>"; };
 		791ED0D92639FE2700701202 /* RetirementDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetirementDetailView.swift; sourceTree = "<group>"; };
@@ -611,10 +614,14 @@
 		7998E19E262DBE3E00DA4A12 /* Adult+Unemployement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Adult+Unemployement.swift"; sourceTree = "<group>"; };
 		7998E19F262DBE3E00DA4A12 /* Adult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Adult.swift; sourceTree = "<group>"; };
 		7998E1AA262DBE4600DA4A12 /* Child.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Child.swift; sourceTree = "<group>"; };
-		79A9AA75264AFA290036732F /* CashFlowVisitableP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashFlowVisitableP.swift; sourceTree = "<group>"; };
-		79A9AA79264AFB440036732F /* BalanceSheetVisitorP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSheetVisitorP.swift; sourceTree = "<group>"; };
-		79A9AA7D264AFFC20036732F /* CashFlowVisitorP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashFlowVisitorP.swift; sourceTree = "<group>"; };
+		79A9AA75264AFA290036732F /* CashFlowCsvVisitableP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashFlowCsvVisitableP.swift; sourceTree = "<group>"; };
+		79A9AA79264AFB440036732F /* BalanceSheetCsvVisitorP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSheetCsvVisitorP.swift; sourceTree = "<group>"; };
+		79A9AA7D264AFFC20036732F /* CashFlowCsvVisitorP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashFlowCsvVisitorP.swift; sourceTree = "<group>"; };
 		79A9AA81264B10F80036732F /* CsvCashFlowVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvCashFlowVisitor.swift; sourceTree = "<group>"; };
+		79AA5D6926505D5600B26D2C /* IsfChartCashFlowVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsfChartCashFlowVisitor.swift; sourceTree = "<group>"; };
+		79AA5D6D26507E9800B26D2C /* IrppChartCashFlowVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrppChartCashFlowVisitor.swift; sourceTree = "<group>"; };
+		79AA5D712650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrppRateChartCashFlowVisitor.swift; sourceTree = "<group>"; };
+		79AA5D752650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrppSliceChartCashFlowVisitor.swift; sourceTree = "<group>"; };
 		79AB53F2263241CF00FADBA7 /* FreeInvestement.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = FreeInvestement.json; sourceTree = "<group>"; };
 		79AB53F3263241CF00FADBA7 /* persons.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = persons.json; sourceTree = "<group>"; };
 		79AB53F4263241CF00FADBA7 /* Debt.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Debt.json; sourceTree = "<group>"; };
@@ -789,6 +796,8 @@
 				79A9AA74264AF9940036732F /* CashFlow */,
 				79A9AA73264AF9840036732F /* BalanceSheet */,
 				790FF33826484D36001B2653 /* CSV Visitor */,
+				79AA5D6826505B7800B26D2C /* IRPP */,
+				79AA5D6726505B5900B26D2C /* ISF */,
 			);
 			path = Visitors;
 			sourceTree = "<group>";
@@ -844,9 +853,6 @@
 			isa = PBXGroup;
 			children = (
 				7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */,
-				7906AB6B2641BCF000A398E9 /* SocialAccounts+CfCharts.swift */,
-				7906AB6E2641BCF100A398E9 /* SocialAccounts+IrppCharts.swift */,
-				7906AB6C2641BCF100A398E9 /* SocialAccounts+IsfCharts.swift */,
 				7906AB7D2641BCF500A398E9 /* Balance Sheet */,
 				791ED110263A284200701202 /* Cash Flow */,
 			);
@@ -1202,8 +1208,8 @@
 		79A9AA73264AF9840036732F /* BalanceSheet */ = {
 			isa = PBXGroup;
 			children = (
-				791D3B9F2649C0200024A2D8 /* BalanceSheetVisitableP.swift */,
-				79A9AA79264AFB440036732F /* BalanceSheetVisitorP.swift */,
+				791D3B9F2649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift */,
+				79A9AA79264AFB440036732F /* BalanceSheetCsvVisitorP.swift */,
 				790FF33C264850E6001B2653 /* CsvBalanceSheetVisitor.swift */,
 				7990D8D0264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift */,
 				7990D8D4264EBDB700078CB6 /* BarChartBalanceSheetVisitor.swift */,
@@ -1215,14 +1221,32 @@
 		79A9AA74264AF9940036732F /* CashFlow */ = {
 			isa = PBXGroup;
 			children = (
-				79A9AA75264AFA290036732F /* CashFlowVisitableP.swift */,
-				79A9AA7D264AFFC20036732F /* CashFlowVisitorP.swift */,
+				79A9AA75264AFA290036732F /* CashFlowCsvVisitableP.swift */,
+				79A9AA7D264AFFC20036732F /* CashFlowCsvVisitorP.swift */,
 				79A9AA81264B10F80036732F /* CsvCashFlowVisitor.swift */,
 				7990D8DC264F0A6800078CB6 /* LineChartCashFlowVisitor.swift */,
 				7990D8E0264F1C4000078CB6 /* BarChartCashFlowVisitor.swift */,
 				7990D8E4264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift */,
+				79AA5D6926505D5600B26D2C /* IsfChartCashFlowVisitor.swift */,
+				79AA5D6D26507E9800B26D2C /* IrppChartCashFlowVisitor.swift */,
+				79AA5D712650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift */,
+				79AA5D752650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift */,
 			);
 			path = CashFlow;
+			sourceTree = "<group>";
+		};
+		79AA5D6726505B5900B26D2C /* ISF */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ISF;
+			sourceTree = "<group>";
+		};
+		79AA5D6826505B7800B26D2C /* IRPP */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = IRPP;
 			sourceTree = "<group>";
 		};
 		79AB53F0263241CF00FADBA7 /* ConfigurationFiles */ = {
@@ -1804,6 +1828,7 @@
 				798DE8B92635CC6000C0C3B5 /* ExpenseView.swift in Sources */,
 				79C838312641E02B008B29BF /* MenuCollapsable.swift in Sources */,
 				7998E158262DB2FD00DA4A12 /* Person.swift in Sources */,
+				79AA5D6E26507E9800B26D2C /* IrppChartCashFlowVisitor.swift in Sources */,
 				799025BD2641F60300ED53D4 /* SuccessionsView.swift in Sources */,
 				799025B52641F60300ED53D4 /* ChartsSectionView.swift in Sources */,
 				790FF3502648AA07001B2653 /* BalanceSheetLine.swift in Sources */,
@@ -1827,6 +1852,7 @@
 				79735EEA263242FA00CD952F /* AppMain.swift in Sources */,
 				79EC481F26309EFC0006EE44 /* LifeInsuranceSuccessionManager.swift in Sources */,
 				79C8382D2641DCBC008B29BF /* ChartLimitLine+Extension.swift in Sources */,
+				79AA5D762650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */,
 				7977FE62262E3375005A1CB1 /* Constants.swift in Sources */,
 				7998E15F262DB31400DA4A12 /* Sex.swift in Sources */,
 				791ED12E263A2DC300701202 /* RevenueCategory.swift in Sources */,
@@ -1848,7 +1874,7 @@
 				79EC4800263096200006EE44 /* ValuedTaxes.swift in Sources */,
 				79EC5E9F26406F5200FF8263 /* OwnersListView.swift in Sources */,
 				79FC722326330D2C004F3BD2 /* AppCommands.swift in Sources */,
-				79A9AA76264AFA290036732F /* CashFlowVisitableP.swift in Sources */,
+				79A9AA76264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */,
 				79EC5E712640037400FF8263 /* Coordinator.swift in Sources */,
 				79B2728C2634DBEB00298E5D /* Themes.swift in Sources */,
 				79C838272641DB80008B29BF /* Charts+AxisFormatter.swift in Sources */,
@@ -1857,7 +1883,6 @@
 				79FA8CEB2630684F009FEA00 /* SCPI.swift in Sources */,
 				79EC479926307B260006EE44 /* UserSettings.swift in Sources */,
 				79B2727A2634D68E00298E5D /* BoundaryEditView.swift in Sources */,
-				7906AB732641BCF100A398E9 /* SocialAccounts+IsfCharts.swift in Sources */,
 				799025BF2641F60300ED53D4 /* SuccessionsSectionView.swift in Sources */,
 				79FC723E26331C69004F3BD2 /* SimulationUserSettings.swift in Sources */,
 				791ED0EF263A173D00701202 /* MemberAddView.swift in Sources */,
@@ -1874,6 +1899,7 @@
 				79EC47C9263081D60006EE44 /* Succession.swift in Sources */,
 				79C838242641DA3F008B29BF /* ChartView+Extensions.swift in Sources */,
 				79B272932634E16800298E5D /* TimeSpanEditView.swift in Sources */,
+				79AA5D722650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift in Sources */,
 				791ED107263A271A00701202 /* FamilySummaryView.swift in Sources */,
 				796506C2264085830036E466 /* LiabilityView.swift in Sources */,
 				79FA8CE32630684F009FEA00 /* Assets.swift in Sources */,
@@ -1888,13 +1914,12 @@
 				79FC726026333350004F3BD2 /* SettingsView.swift in Sources */,
 				79FC728C26333A27004F3BD2 /* MainScene.swift in Sources */,
 				79FA8CF32630684F009FEA00 /* ValuedAssets.swift in Sources */,
-				7906AB772641BCF100A398E9 /* SocialAccounts+IrppCharts.swift in Sources */,
 				79FC7259263320BE004F3BD2 /* AppVersionView.swift in Sources */,
 				79EC47D7263084280006EE44 /* SimulationLogger.swift in Sources */,
 				791ED0FB263A1EB700701202 /* PersonDetailView.swift in Sources */,
-				79A9AA7E264AFFC20036732F /* CashFlowVisitorP.swift in Sources */,
+				79A9AA7E264AFFC20036732F /* CashFlowCsvVisitorP.swift in Sources */,
 				79CB2C89264D731900B3E493 /* CsvMonteCarloVisitor.swift in Sources */,
-				791D3BA02649C0200024A2D8 /* BalanceSheetVisitableP.swift in Sources */,
+				791D3BA02649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,
 				791ED11E263A2D2E00701202 /* CashFlowLine+manageSCPI.swift in Sources */,
 				7906AB752641BCF100A398E9 /* SocialAccounts.swift in Sources */,
 				79281A09262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */,
@@ -1905,7 +1930,6 @@
 				796506D32640866F0036E466 /* EstateDetailedView.swift in Sources */,
 				79EC4809263098340006EE44 /* OwnershipManager.swift in Sources */,
 				799025A52641F60300ED53D4 /* KpiListView.swift in Sources */,
-				7906AB712641BCF100A398E9 /* SocialAccounts+CfCharts.swift in Sources */,
 				799025AD2641F60300ED53D4 /* FamilyLifeEventChartView.swift in Sources */,
 				79A9AA82264B10F80036732F /* CsvCashFlowVisitor.swift in Sources */,
 				79C838342641E04C008B29BF /* PopOverContentView.swift in Sources */,
@@ -1955,11 +1979,12 @@
 				7990D8E1264F1C4000078CB6 /* BarChartCashFlowVisitor.swift in Sources */,
 				796506D12640866F0036E466 /* InterestRateTypeView.swift in Sources */,
 				796506CB2640866F0036E466 /* PeriodicInvestDetailedView.swift in Sources */,
-				79A9AA7A264AFB440036732F /* BalanceSheetVisitorP.swift in Sources */,
+				79A9AA7A264AFB440036732F /* BalanceSheetCsvVisitorP.swift in Sources */,
 				79BBE8E62646E9170045E524 /* BS Detailed ChartView.swift in Sources */,
 				791ED0E0263A049900701202 /* PersonViewModel.swift in Sources */,
 				799025A32641F60300ED53D4 /* HistogramView.swift in Sources */,
 				799025BB2641F60300ED53D4 /* CF Global ChartView.swift in Sources */,
+				79AA5D6A26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */,
 				7998E1A0262DBE3E00DA4A12 /* Adult+Pension.swift in Sources */,
 				79FA8CF12630684F009FEA00 /* AssetsCategory.swift in Sources */,
 				7998E1AB262DBE4600DA4A12 /* Child.swift in Sources */,
@@ -1990,7 +2015,7 @@
 				790FF33E264850E6001B2653 /* CsvBalanceSheetVisitor.swift in Sources */,
 				791D3B942649679C0024A2D8 /* CustomCsvConvertible.swift in Sources */,
 				794346462641D3F700374F99 /* CashFlowArray.swift in Sources */,
-				7906AB782641BCF100A398E9 /* SocialAccounts+IrppCharts.swift in Sources */,
+				79AA5D732650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift in Sources */,
 				79FA8CE62630684F009FEA00 /* InterestRateKind.swift in Sources */,
 				79FA8CE22630684F009FEA00 /* PeriodicInvestment.swift in Sources */,
 				79B2726F2634CC0000298E5D /* PersonPickerView.swift in Sources */,
@@ -2001,7 +2026,6 @@
 				799025BE2641F60300ED53D4 /* SuccessionsView.swift in Sources */,
 				7977FE63262E3375005A1CB1 /* Constants.swift in Sources */,
 				790FF34926485BDE001B2653 /* CvsBuilder.swift in Sources */,
-				7906AB722641BCF100A398E9 /* SocialAccounts+CfCharts.swift in Sources */,
 				7998E160262DB31400DA4A12 /* Sex.swift in Sources */,
 				791ED0E1263A049900701202 /* PersonViewModel.swift in Sources */,
 				79EC5E9026406AAD00FF8263 /* DebtDetailedView.swift in Sources */,
@@ -2039,6 +2063,7 @@
 				79B2727B2634D68E00298E5D /* BoundaryEditView.swift in Sources */,
 				79EC5E9926406ADA00FF8263 /* OwnershipView.swift in Sources */,
 				79FC724A26331CCD004F3BD2 /* GraphicUserSettings.swift in Sources */,
+				79AA5D772650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */,
 				79EC479A26307B260006EE44 /* UserSettings.swift in Sources */,
 				7990D8D6264EBDB700078CB6 /* BarChartBalanceSheetVisitor.swift in Sources */,
 				791ED105263A20F600701202 /* SuccessorListView.swift in Sources */,
@@ -2071,12 +2096,11 @@
 				791ED113263A285300701202 /* CashFlowLine.swift in Sources */,
 				7998E16E262DB38700DA4A12 /* Seniority.swift in Sources */,
 				7977FE86262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */,
-				7906AB742641BCF100A398E9 /* SocialAccounts+IsfCharts.swift in Sources */,
 				79FC728D26333A27004F3BD2 /* MainScene.swift in Sources */,
 				796506D62640866F0036E466 /* scpiDetailedView.swift in Sources */,
 				79FA8CF62630684F009FEA00 /* FinancialEnvelop.swift in Sources */,
 				799025A42641F60300ED53D4 /* HistogramView.swift in Sources */,
-				791D3BA12649C0200024A2D8 /* BalanceSheetVisitableP.swift in Sources */,
+				791D3BA12649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,
 				791ED116263A28BC00701202 /* SciCashFlowLine.swift in Sources */,
 				79FA8CF42630684F009FEA00 /* ValuedAssets.swift in Sources */,
 				79EC47D8263084280006EE44 /* SimulationLogger.swift in Sources */,
@@ -2107,7 +2131,7 @@
 				79FA8CEA2630684F009FEA00 /* RealEstate.swift in Sources */,
 				79EC47BB26307C910006EE44 /* ValuedLiabilities.swift in Sources */,
 				79C838322641E02B008B29BF /* MenuCollapsable.swift in Sources */,
-				79A9AA77264AFA290036732F /* CashFlowVisitableP.swift in Sources */,
+				79A9AA77264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */,
 				798DE8B32635CBC300C0C3B5 /* ExpenseSummaryView.swift in Sources */,
 				7977FE5C262E302F005A1CB1 /* Family.swift in Sources */,
 				791ED0DC2639FE2700701202 /* RetirementDetailView.swift in Sources */,
@@ -2126,7 +2150,7 @@
 				79EC47BF26307C910006EE44 /* LiabilitiesCategory.swift in Sources */,
 				79EC47B926307C910006EE44 /* Loan.swift in Sources */,
 				79FA8CF02630684F009FEA00 /* SCI.swift in Sources */,
-				79A9AA7F264AFFC20036732F /* CashFlowVisitorP.swift in Sources */,
+				79A9AA7F264AFFC20036732F /* CashFlowCsvVisitorP.swift in Sources */,
 				79EC47D1263081FD0006EE44 /* Patrimoin.swift in Sources */,
 				796506CE2640866F0036E466 /* TypeInvestEditView.swift in Sources */,
 				79EC5EA026406F5200FF8263 /* OwnersListView.swift in Sources */,
@@ -2137,7 +2161,7 @@
 				791ED108263A271A00701202 /* FamilySummaryView.swift in Sources */,
 				796506CC2640866F0036E466 /* PeriodicInvestDetailedView.swift in Sources */,
 				7998E1A1262DBE3E00DA4A12 /* Adult+Pension.swift in Sources */,
-				79A9AA7B264AFB440036732F /* BalanceSheetVisitorP.swift in Sources */,
+				79A9AA7B264AFB440036732F /* BalanceSheetCsvVisitorP.swift in Sources */,
 				797931A326416E8C000F8599 /* KPI.swift in Sources */,
 				79FA8CF22630684F009FEA00 /* AssetsCategory.swift in Sources */,
 				7998E1AC262DBE4600DA4A12 /* Child.swift in Sources */,
@@ -2145,6 +2169,8 @@
 				790FF3512648AA07001B2653 /* BalanceSheetLine.swift in Sources */,
 				799025B62641F60300ED53D4 /* ChartsSectionView.swift in Sources */,
 				79C838282641DB80008B29BF /* Charts+AxisFormatter.swift in Sources */,
+				79AA5D6B26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */,
+				79AA5D6F26507E9800B26D2C /* IrppChartCashFlowVisitor.swift in Sources */,
 				79CB2C8A264D731900B3E493 /* CsvMonteCarloVisitor.swift in Sources */,
 				796506C3264085830036E466 /* LiabilityView.swift in Sources */,
 				7977FE8D262E5282005A1CB1 /* LifeExpense.swift in Sources */,
@@ -2162,19 +2188,23 @@
 				7990D8D7264EBDB700078CB6 /* BarChartBalanceSheetVisitor.swift in Sources */,
 				79EC5E822640647A00FF8263 /* ExampleTests.swift in Sources */,
 				791D3B952649679C0024A2D8 /* CustomCsvConvertible.swift in Sources */,
+				79AA5D782650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */,
 				7990D8E3264F1C4100078CB6 /* BarChartCashFlowVisitor.swift in Sources */,
 				79A9AA84264B10F80036732F /* CsvCashFlowVisitor.swift in Sources */,
 				790FF34A26485BDE001B2653 /* CvsBuilder.swift in Sources */,
 				790FF33F2648521B001B2653 /* CsvBalanceSheetVisitor.swift in Sources */,
 				791D3B96264971600024A2D8 /* BalanceSheetArray.swift in Sources */,
-				79A9AA80264AFFC20036732F /* CashFlowVisitorP.swift in Sources */,
-				79A9AA7C264AFB440036732F /* BalanceSheetVisitorP.swift in Sources */,
+				79A9AA80264AFFC20036732F /* CashFlowCsvVisitorP.swift in Sources */,
+				79A9AA7C264AFB440036732F /* BalanceSheetCsvVisitorP.swift in Sources */,
 				7990D8DF264F0A6800078CB6 /* LineChartCashFlowVisitor.swift in Sources */,
 				7990D8D3264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift in Sources */,
-				791D3BA22649C0200024A2D8 /* BalanceSheetVisitableP.swift in Sources */,
+				79AA5D742650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift in Sources */,
+				79AA5D7026507E9800B26D2C /* IrppChartCashFlowVisitor.swift in Sources */,
+				791D3BA22649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,
 				7990D8E7264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift in Sources */,
+				79AA5D6C26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */,
 				790FF3532648AD38001B2653 /* BalanceSheetLine.swift in Sources */,
-				79A9AA78264AFA290036732F /* CashFlowVisitableP.swift in Sources */,
+				79A9AA78264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */,
 				7920DC66262C700500536B03 /* Tests_iOS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

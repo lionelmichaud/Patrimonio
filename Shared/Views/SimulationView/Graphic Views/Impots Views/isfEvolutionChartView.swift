@@ -9,6 +9,7 @@
 import os
 import SwiftUI
 import AppFoundation
+import FiscalModel
 import Charts // https://github.com/danielgindi/Charts.git
 import Disk // https://github.com/saoudrizwan/Disk.git
 
@@ -31,7 +32,7 @@ struct IsfEvolutionChartView: View {
         IsfLineChartView(socialAccounts : $simulation.socialAccounts,
                          title          : simulation.title)
             .padding(.trailing, 4)
-            .navigationTitle("Evolution de la Fiscalité")
+            .navigationTitle("Evolution de l'Impôt sur la Fortune")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // sauvergarder l'image dans l'album photo
@@ -122,19 +123,34 @@ struct IsfLineChartView: UIViewRepresentable {
     // MARK: - Methods
 
     func format(_ chartView: LineChartView) {
+        chartView.leftAxis.axisMinimum = 0.0
+        chartView.leftAxis.enabled = true
+
         chartView.rightAxis.axisMinimum = 0.0
         chartView.rightAxis.enabled = true
     }
 
     func updateData(of chartView: LineChartView) {
         // créer les DataSet: LineChartDataSets
-        let dataSets = socialAccounts.getIsfLineChartDataSets()
+        let dataSets =
+            IsfChartCashFlowVisitor(element: socialAccounts.cashFlowArray)
+            .dataSets
 
         // ajouter les DataSet au Chartdata
         let data = LineChartData(dataSets: dataSets)
         data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
         data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
         data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
+
+        // seuil d'imposition à l'ISF
+        let ll1 = ChartLimitLine(limit: Fiscal.model.isf.model.seuil, label: "Seuil d'imposition")
+        ll1.lineWidth       = 2
+        ll1.lineDashLengths = [10, 10]
+        ll1.labelPosition   = .bottomLeft
+        ll1.valueFont       = .systemFont(ofSize : 14)
+        ll1.valueTextColor  = ChartThemes.DarkChartColors.labelTextColor
+        chartView.leftAxis.removeAllLimitLines()
+        chartView.leftAxis.addLimitLine(ll1)
 
         // ajouter le Chartdata au ChartView
         chartView.data = data

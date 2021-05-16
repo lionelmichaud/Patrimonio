@@ -207,10 +207,6 @@ struct CashFlowStackedBarChartView: UIViewRepresentable {
         if itemSelectionList.onlyOneCategorySelected() {
             // il y a un seule catégorie de sélectionnée, afficher le détail
             if let categoryName = itemSelectionList.firstCategorySelected() {
-//                aDataSet = socialAccounts.getCashFlowCategoryStackedBarChartDataSet(
-//                    categoryName           : categoryName,
-//                    expenses               : expenses,
-//                    selectedExpenseCategory: selectedExpenseCategory)
                 aDataSet = CategoryBarChartCashFlowVisitor(
                     element                : socialAccounts.cashFlowArray,
                     categoryName           : categoryName,

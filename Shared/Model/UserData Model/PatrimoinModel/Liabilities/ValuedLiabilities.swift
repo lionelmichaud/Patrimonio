@@ -23,8 +23,8 @@ struct ValuedLiabilities: DictionaryOfNamedValueTable {
 
 // MARK: - Extensions for VISITORS
 
-extension ValuedLiabilities: BalanceSheetVisitableP {
-    func accept(_ visitor: BalanceSheetVisitorP) {
+extension ValuedLiabilities: BalanceSheetCsvVisitableP {
+    func accept(_ visitor: BalanceSheetCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
