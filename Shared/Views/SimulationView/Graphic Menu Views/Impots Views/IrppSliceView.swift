@@ -149,23 +149,37 @@ struct IrppSlicesStackedBarChartView: UIViewRepresentable {
         chartView.xAxis.labelRotationAngle = 0
         chartView.xAxis.valueFormatter     = IrppValueFormatter()
         chartView.xAxis.labelFont          = ChartThemes.ChartDefaults.largeLegendFont
+        chartView.chartDescription?.font   = .systemFont(ofSize: 13)
     }
 
     func updateData(of chartView: BarChartView) {
         // créer le DataSet: BarChartDataSet
         let year = Int(evalYear)
-        let dataSet =
-            IrppSliceChartCashFlowVisitor(element    : socialAccounts.cashFlowArray,
-                                          for        : year,
-                                          nbAdults   : family.nbOfAdultAlive(atEndOf: year),
-                                          nbChildren : family.nbOfFiscalChildren(during: year))
-            .dataSets
+        let visitor = IrppSliceChartCashFlowVisitor(element    : socialAccounts.cashFlowArray,
+                                                    for        : year,
+                                                    nbAdults   : family.nbOfAdultAlive(atEndOf: year),
+                                                    nbChildren : family.nbOfFiscalChildren(during: year))
+        let dataSet = visitor.dataSets
 
         // ajouter les DataSet au Chartdata
         let data = BarChartData(dataSet: dataSet)
         data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
         data.setValueFont(UIFont(name:"HelveticaNeue-Light", size:12)!)
         data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
+
+        // Lignes Taux d'imposition à l'IRPP
+        chartView.leftAxis.removeAllLimitLines()
+        for idx in visitor.slicesLimit.startIndex..<visitor.slicesLimit.endIndex {
+            let lineLimit = ChartLimitLine(limit: visitor.slicesLimit[idx],
+                                           label: "< \(visitor.slicesLimit[idx].k€String): \(dataSet?.stackLabels[idx] ?? "")")
+            lineLimit.lineWidth       = 2
+            lineLimit.lineDashLengths = [10, 10]
+            lineLimit.labelPosition   = .bottomLeft
+            lineLimit.valueFont       = .systemFont(ofSize : 14)
+            lineLimit.valueTextColor  = ChartThemes.DarkChartColors.labelTextColor
+            chartView.leftAxis.addLimitLine(lineLimit)
+        }
+        chartView.chartDescription?.text = "Répartition du revenu imposable (\(Int(evalYear)))"
 
         // ajouter le dataset au graphique
         chartView.data = data
@@ -179,7 +193,7 @@ struct IrppSlicesStackedBarChartView: UIViewRepresentable {
     /// - Returns: Graphique View
     func makeUIView(context: Context) -> BarChartView {
         // créer et configurer un nouveau bar graphique
-        let chartView = BarChartView(title               : "Répartition de l'Impôt",
+        let chartView = BarChartView(title               : "Répartition du revenu imposable (\(Int(evalYear)))",
                                      smallLegend         : false,
                                      axisFormatterChoice : .largeValue(appendix: "€", min3Digit: true))
         

@@ -38,9 +38,11 @@ enum IrppEnum: Int, PickableEnum {
 class IrppSliceChartCashFlowVisitor: CashFlowIrppSliceVisitorP {
 
     var dataSets: BarChartDataSet?
-    private var _dataSets = BarChartDataSet()
-    private var yVals1    = [ChartDataEntry]()
-    private var yVals2    = [ChartDataEntry]()
+    var slicesLimit        = [Double]()
+    private var slicesSize = [Double]()
+    private var _dataSets  = BarChartDataSet()
+    private var yVals1     = [ChartDataEntry]()
+    private var yVals2     = [ChartDataEntry]()
     private var year       : Int
     private var nbAdults   : Int
     private var nbChildren : Int
@@ -69,7 +71,8 @@ class IrppSliceChartCashFlowVisitor: CashFlowIrppSliceVisitorP {
             switch xLabel {
                 case .bareme:
                     yVals = slicedIrpp.map { // pour chaque tranche = série
-                        $0.size
+                        slicesSize.append($0.size)
+                        return $0.size
                     }
                 case .withChildren:
                     yVals = slicedIrpp.map { // pour chaque tranche = série
@@ -77,7 +80,7 @@ class IrppSliceChartCashFlowVisitor: CashFlowIrppSliceVisitorP {
                     }
                 case .withoutChildren:
                     yVals = slicedIrpp.map { // pour chaque tranche = série
-                        return $0.sizeithoutChildren
+                        $0.sizeithoutChildren
                     }
             }
             return BarChartDataEntry(x       : Double(xLabel.id),
@@ -92,6 +95,8 @@ class IrppSliceChartCashFlowVisitor: CashFlowIrppSliceVisitorP {
             ($0.rate).percentStringRounded
         }
         dataSets = _dataSets
-
+        for idx in slicesSize.startIndex..<slicesSize.endIndex-1 {
+            slicesLimit.append(slicesSize[0...idx].sum(for: \.self))
+        }
     }
 }

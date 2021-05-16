@@ -33,22 +33,7 @@ struct HistogramView : UIViewRepresentable {
     var yLimitLine           : Double?
     var xAxisFormatterChoice : AxisFormatterChoice
 
-    func makeUIView(context: Context) -> LineChartView {
-        /// créer et configurer un nouveau graphique
-        let chartView = LineChartView(title               : histogram.name,
-                                      axisFormatterChoice : AxisFormatterChoice.percent)
-        
-        /// créer les DataSet: LineChartDataSets
-        let dataSets = histogram.getHistogramChartDataSets()
-        
-        /// ajouter les DataSet au Chartdata
-        let data = LineChartData(dataSets: dataSets)
-        data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(14.0))!)
-        
-        /// ajouter le Chartdata au ChartView
-        chartView.data = data
-        
+    func format(_ chartView: LineChartView) {
         let leftAxis = chartView.leftAxis
         leftAxis.axisMinimum                     = 0.0
         leftAxis.axisMaximum                     = 1.0
@@ -95,7 +80,7 @@ struct HistogramView : UIViewRepresentable {
                 xAxis.addLimitLine(objectiveLine)
             }
         }
-        
+
         /// ligne de limite X: valeure objectif (axe X)
         // x-axis limit line
         if let xLimitLine = xLimitLine {
@@ -105,17 +90,39 @@ struct HistogramView : UIViewRepresentable {
                                                lineColor     : .red)
             xAxis.addLimitLine(objectiveLine)
         }
-        
+
         /// ajouter un Marker
-        let marker = XYMarkerView(color                : ChartThemes.BallonColors.color,
-                                   font                : ChartThemes.ChartDefaults.baloonfont,
-                                   textColor           : ChartThemes.BallonColors.textColor,
-                                   insets              : UIEdgeInsets(top: 8, left: 8, bottom: 20, right: 8),
-                                   xAxisValueFormatter : xAxis.valueFormatter!,
-                                   yAxisValueFormatter : leftAxis.valueFormatter!)
+        let marker = XYMarkerView(color               : ChartThemes.BallonColors.color,
+                                  font                : ChartThemes.ChartDefaults.baloonfont,
+                                  textColor           : ChartThemes.BallonColors.textColor,
+                                  insets              : UIEdgeInsets(top: 8, left: 8, bottom: 20, right: 8),
+                                  xAxisValueFormatter : xAxis.valueFormatter!,
+                                  yAxisValueFormatter : leftAxis.valueFormatter!)
         marker.chartView = chartView
         marker.minimumSize = CGSize(width: 80, height: 40)
         chartView.marker = marker
+    }
+
+    func updateData(of chartView: LineChartView) {
+        // créer les DataSet: LineChartDataSets
+        let dataSets = LineChartHistogramVisitor(element: histogram).dataSets
+
+        // ajouter les DataSet au Chartdata
+        let data = LineChartData(dataSets: dataSets)
+        data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
+        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
+
+        // ajouter le Chartdata au ChartView
+        chartView.data = data
+
+        chartView.data?.notifyDataChanged()
+    }
+
+    func makeUIView(context: Context) -> LineChartView {
+        /// créer et configurer un nouveau graphique
+        let chartView = LineChartView(title               : histogram.name,
+                                      axisFormatterChoice : AxisFormatterChoice.percent)
+        format(chartView)
 
         /// animer la transition
         chartView.animate(yAxisDuration: 0.5, easingOption: .linear)
@@ -129,59 +136,9 @@ struct HistogramView : UIViewRepresentable {
         uiView.clear()
         //uiView.data?.clearValues()
         
-        // créer les DataSet: LineChartDataSets
-        let dataSets = histogram.getHistogramChartDataSets()
-        
-        // ajouter les DataSet au Chartdata
-        let data = LineChartData(dataSets: dataSets)
-        data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
-        
-        // ajouter le Chartdata au ChartView
-        uiView.data = data
-        
-        uiView.data?.notifyDataChanged()
-        uiView.notifyDataSetChanged()
-    }
-}
+        updateData(of: uiView)
 
-/// Création des DataSet d'un Historgramme contenant:
-///   une courbe de la densité de probabilité PDF
-///   une courbe de la densité de probabilité cumulée CDF
-/// - Parameter histogram: Histogramme
-/// - Returns: 2 x dataSet
-extension Histogram {
-    func getHistogramChartDataSets() -> [LineChartDataSet]? {
-        /// PDF des échantillons
-        var yVals1 = [ChartDataEntry]()
-        let maxCount = self.counts.max()!.double()
-        self.xCounts.forEach {
-            yVals1.append(ChartDataEntry(x: $0.x, y: $0.n.double() / maxCount))
-        }
-        
-        /// CDF des échantillons
-        var yVals2 = [ChartDataEntry]()
-        self.xCDF.forEach {
-            yVals2.append(ChartDataEntry(x: $0.x, y: $0.p))
-        }
-        
-        let set1 = LineChartDataSet(entries   : yVals1,
-                                    label     : "PDF " + self.name,
-                                    color     : #colorLiteral(red     : 0.6000000238, green     : 0.6000000238, blue     : 0.6000000238, alpha     : 1),
-                                    lineWidth : 0.5)
-        set1.axisDependency = .left
-        
-        let set2 = LineChartDataSet(entries : yVals2,
-                                    label   : "CDF " + self.name,
-                                    color   : #colorLiteral(red   : 0.721568644, green   : 0.8862745166, blue   : 0.5921568871, alpha   : 1))
-        set2.axisDependency = .left
-        
-        // ajouter les dataSet au dataSets
-        var dataSets = [LineChartDataSet]()
-        dataSets.append(set1)
-        dataSets.append(set2)
-        
-        return dataSets
+        uiView.notifyDataSetChanged()
     }
 }
 
