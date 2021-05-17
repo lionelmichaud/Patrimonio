@@ -9,7 +9,6 @@
 import SwiftUI
 
 /// Defines the main scene of the App
-// TODO: - décommenter les lignes
 struct MainScene: Scene {
     
     // MARK: - Environment Properties

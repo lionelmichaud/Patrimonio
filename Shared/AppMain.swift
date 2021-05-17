@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: - décommenter les lignes
 @main
 struct AppMain: App {
 

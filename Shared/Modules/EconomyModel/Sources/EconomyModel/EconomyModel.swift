@@ -65,8 +65,8 @@ public struct Economy {
         public var securedRate : ModelRandomizer<BetaRandomGenerator> // moyenne annuelle
         public var stockRate   : ModelRandomizer<BetaRandomGenerator> // moyenne annuelle
         //var simulateVolatility: Bool = false
-        var securedVolatility : Double // % [0, 100]
-        var stockVolatility   : Double // % [0, 100]
+        public var securedVolatility : Double // % [0, 100]
+        public var stockVolatility   : Double // % [0, 100]
         
         // MARK: - Initializers
         

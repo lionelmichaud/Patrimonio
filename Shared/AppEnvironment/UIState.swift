@@ -9,7 +9,6 @@
 import Foundation
 import NamedValue
 
-// TODO: - décommenter les lignes
 class UIState: ObservableObject {
     enum Tab: Int, Hashable {
         case userSettings, family, expense, asset, scenario, simulation
@@ -50,7 +49,7 @@ class UIState: ObservableObject {
     
     // MARK: - Etat de la vue Scenario
     struct ScenarioViewState {
-//        var selectedItem: ScenarioView.PushedItem?
+        var selectedItem: ModelsView.PushedItem?
     }
     
     // MARK: - Etat de la vue Simulation

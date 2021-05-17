@@ -12,8 +12,8 @@ import Foundation
 public struct Point: Codable, ExpressibleByArrayLiteral {
     public typealias ArrayLiteralElement = Double
     
-    var x: Double
-    var y: Double
+    public var x: Double
+    public var y: Double
     
     public init(arrayLiteral elements: Double...) {
         self.x = elements[0]

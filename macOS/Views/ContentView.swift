@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: - décommenter les lignes commentées
 struct ContentView: View {
 
     // MARK: - Environment Properties
@@ -22,7 +21,6 @@ struct ContentView: View {
         NavigationView {
             List(selection: $uiState.selectedSideBarItem) {
                 /// composition de la famille
-                //            FamilyView()
                 NavigationLink(
                     destination: FamilyView(),
                     tag: UIState.Tab.family,
@@ -53,13 +51,12 @@ struct ContentView: View {
                 .tag(UIState.Tab.asset)
 
                 /// scenario paramètrique de simulation
-                //            ScenarioView()
                 NavigationLink(
-                    destination: AppVersionView(),
+                    destination: ModelsView(),
                     tag: UIState.Tab.scenario,
                     selection: $uiState.selectedSideBarItem
                 ) {
-                    Label("Scénarios", systemImage: "slider.horizontal.3")
+                    Label("Modèles", systemImage: "slider.horizontal.3")
                 }
                 .tag(UIState.Tab.scenario)
 

@@ -57,8 +57,8 @@ public struct BetaRandomGenerator: RandomGenerator, Distribution, Codable {
     public var pdfMax   : Number? // valeur max mémorisée au premier appel de initialize()
     public var cdfCurve : Curve?  // courbe CDF mémorisée au premier appel de initialize()
 
-    let alpha : Double
-    let beta  : Double
+    public let alpha : Double
+    public let beta  : Double
     
     // MARK: - Initializer
 
@@ -143,11 +143,11 @@ public struct UniformRandomGenerator: RandomGenerator, Codable {
 ///
 public struct DiscreteRandomGenerator: RandomGenerator, Codable {
     public typealias Number = Double
-    typealias Curve  = [PointReal<Number>]
+    public typealias Curve  = [PointReal<Number>]
 
     // MARK: - Properties
     
-    var pdf  : [Point]
+    public var pdf  : [Point]
     var cdf  : [Double]? // probabilité cumulée d'occurence (dernier = 100%)
     var minX : Number? { // valeur minimale de X
         pdf.min(by: { return ($0.x < $1.x) })?.x
@@ -155,7 +155,7 @@ public struct DiscreteRandomGenerator: RandomGenerator, Codable {
     var maxX         : Number? { // valeur minimale de X
         pdf.max(by: { return ($0.x > $1.x) })?.x
     }
-    var cdfCurve : Curve? { // courbe CDF mémorisée au premier appel de initialize()
+    public var cdfCurve : Curve? { // courbe CDF mémorisée au premier appel de initialize()
         precondition(cdf != nil, "DiscreteRandomGenerator.cdfCurve: propriété cdf non initialisée")
         precondition(cdf?.count == pdf.count, "DiscreteRandomGenerator.cdfCurve: longeur de pdf <> longeur de cdf")
         var curve = Curve()

@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-// TODO: - décommenter les lignes commentées
 struct ContentView: View {
     
     // MARK: - Environment Properties
@@ -37,9 +36,8 @@ struct ContentView: View {
                 .tag(UIState.Tab.asset)
 
             /// scenario paramètrique de simulation
-//            ScenarioView()
-            AppVersionView()
-                .tabItem { Label("Scénarios", systemImage: "slider.horizontal.3") }
+            ModelsView()
+                .tabItem { Label("Modèles", systemImage: "slider.horizontal.3") }
                 .tag(UIState.Tab.scenario)
 
             /// calcul et présentation des résultats de simulation
