@@ -889,6 +889,7 @@
 			isa = PBXGroup;
 			children = (
 				7901CF7D26528399007DF85B /* ScenarioSectionView.swift */,
+				79B164812651DD7200D0603C /* ScenarioSummaryView.swift */,
 			);
 			path = "Scenario Menu Views";
 			sourceTree = "<group>";
@@ -1347,7 +1348,6 @@
 			children = (
 				79B164822651DD7200D0603C /* ModelsView.swift */,
 				79B164832651DD7200D0603C /* ModelSectionsView.swift */,
-				79B164812651DD7200D0603C /* ScenarioSummaryView.swift */,
 				7901CF7926527AF5007DF85B /* Determinitic Menu Views */,
 				7901CF7A26527B0D007DF85B /* Statistic Menu Views */,
 				7901CF7B26527B99007DF85B /* Assistants Menu Views */,

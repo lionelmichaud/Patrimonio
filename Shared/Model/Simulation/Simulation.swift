@@ -24,7 +24,17 @@ class Simulation: ObservableObject, CanResetSimulation {
     //    static let monteCarloFileUrl = Bundle.main.url(forResource: "Monté-Carlo Kpi.csv", withExtension: nil)
     //#endif
 
+    // MARK: - Static Properties
+
     static var player: AVPlayer { AVPlayer.sharedDingPlayer }
+
+    // MARK: - Static Methods
+
+    static func playSound() {
+        // jouer le son à la fin de la simulation
+        Simulation.player.seek(to: .zero)
+        Simulation.player.play()
+    }
 
     // MARK: - Properties
 
@@ -41,9 +51,9 @@ class Simulation: ObservableObject, CanResetSimulation {
     //    @Published var isComputing    = false
 
     // résultats de la simulation
-    @Published var socialAccounts = SocialAccounts()
-    @Published var kpis           = KpiArray()
-    @Published var resultTable    = SimulationResultTable()
+    @Published var socialAccounts        = SocialAccounts()
+    @Published var kpis                  = KpiArray()
+    @Published var monteCarloResultTable = SimulationResultTable()
 
     // MARK: - Computed Properties
 
@@ -158,7 +168,7 @@ class Simulation: ObservableObject, CanResetSimulation {
                                                      dicoOfEconomyRandomVariables      : dicoOfEconomyRandomVariables,
                                                      dicoOfSocioEconomyRandomVariables : dicoOfSocioEconomyRandomVariables,
                                                      dicoOfKpiResults                  : dicoOfKpiResults)
-        resultTable.append(currentRunResults)
+        monteCarloResultTable.append(currentRunResults)
 
         // Dernier run, créer les histogrammes et y ranger
         // les échantillons de KPIs si on est en mode Aléatoire
@@ -180,8 +190,7 @@ class Simulation: ObservableObject, CanResetSimulation {
 
         defer {
             // jouer le son à la fin de la simulation
-            Simulation.player.seek(to: .zero)
-            Simulation.player.play()
+            Simulation.playSound()
         }
 
         //propriétés indépendantes du nombre de run
@@ -196,7 +205,7 @@ class Simulation: ObservableObject, CanResetSimulation {
             // remettre à zéro les historiques des tirages aléatoires
             resetAllRandomHistories()
             // remettre à zéro la table de résultat
-            resultTable = SimulationResultTable()
+            monteCarloResultTable = SimulationResultTable()
         }
 
         // sauvegarder l'état initial du patrimoine pour y revenir à la fin de chaque run
@@ -248,6 +257,11 @@ class Simulation: ObservableObject, CanResetSimulation {
     func replay(thisRun                   : SimulationResultLine,
                 withFamily family         : Family,
                 withPatrimoine patrimoine : Patrimoin) {
+        defer {
+            // jouer le son à la fin de la simulation
+            Simulation.playSound()
+        }
+
         // propriétés indépendantes du nombre de run
         guard let nbOfYears = lastYear - firstYear + 1 else {
             fatalError()
@@ -278,7 +292,7 @@ class Simulation: ObservableObject, CanResetSimulation {
         self.reset(includingKPIs: false)
 
         // construire les comptes sociaux du patrimoine de la famille
-        _ = socialAccounts.build(run            : 0,
+        _ = socialAccounts.build(run            : currentRunNb,
                                  nbOfYears      : nbOfYears,
                                  withFamily     : family,
                                  withPatrimoine : patrimoine,
@@ -292,12 +306,16 @@ class Simulation: ObservableObject, CanResetSimulation {
 
     /// Sauvegarder les résultats de simulation dans des fchier CSV
     func save() throws {
+        defer {
+            // jouer le son à la fin de la sauvegarde
+            Simulation.playSound()
+        }
         /// - un fichier pour le Cash Flow
         /// - un fichier pour le Bilan
         try socialAccounts.save(simulationTitle: title,
                             withMode       : mode)
 
         /// - un fichier pour le tableau de résultat de Monté-Carlo
-        try resultTable.save(simulationTitle: title)
+        try monteCarloResultTable.save(simulationTitle: title)
     }
 }

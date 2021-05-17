@@ -24,7 +24,7 @@ struct ScenarioSummaryView: View {
                         if let adult = member as? Adult {
                             Text(adult.displayName)
                             VStack {
-                                LabeledText(label: "Age de décès considéré",
+                                LabeledText(label: "Age de décès",
                                             text : "\(adult.ageOfDeath) ans en \(String(adult.yearOfDeath))")
                                     .padding(.leading)
                                 LabeledText(label: "Nombre d'années de dépendance",

@@ -56,13 +56,13 @@ struct ShortGridView: View {
         return
             VStack {
                 /// entête
-                if simulation.resultTable.count != 0 {
-                    GridHeaderView(line: simulation.resultTable.first!)
+                if simulation.monteCarloResultTable.count != 0 {
+                    GridHeaderView(line: simulation.monteCarloResultTable.first!)
                 }
                 /// tableau
                 ScrollView([.vertical]) {
                     LazyVGrid(columns: columns) {
-                        ForEach(simulation.resultTable
+                        ForEach(simulation.monteCarloResultTable
                                     .filtered(with: filter)
                                     .sorted(by: sortCriteria, with: sortOrder), id: \.self) { line in
                             ShortGridLineView(line: line)
@@ -143,7 +143,7 @@ struct ShortGridView: View {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 /// - un fichier pour le tableau de résultat de Monté-Carlo
-                try simulation.resultTable.save(simulationTitle: simulation.title)
+                try simulation.monteCarloResultTable.save(simulationTitle: simulation.title)
             } catch {
                 // mettre à jour les variables d'état dans le thread principal
                 DispatchQueue.main.async {
