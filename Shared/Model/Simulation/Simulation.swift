@@ -54,6 +54,7 @@ class Simulation: ObservableObject, CanResetSimulation {
     @Published var socialAccounts        = SocialAccounts()
     @Published var kpis                  = KpiArray()
     @Published var monteCarloResultTable = SimulationResultTable()
+    @Published var currentRunResults     = SimulationResultLine()
 
     // MARK: - Computed Properties
 
@@ -134,47 +135,29 @@ class Simulation: ObservableObject, CanResetSimulation {
         SocioEconomy.model.resetRandomHistory()
     }
 
+    private func currentRandomProperties(_ family                            : Family,
+                                         _ dicoOfAdultsRandomProperties      : inout DictionaryOfAdultRandomProperties,
+                                         _ dicoOfEconomyRandomVariables      : inout Economy.DictionaryOfRandomVariable,
+                                         _ dicoOfSocioEconomyRandomVariables : inout SocioEconomy.DictionaryOfRandomVariable) {
+        dicoOfAdultsRandomProperties      = family.currentRandomProperties()
+        dicoOfEconomyRandomVariables      = Economy.model.currentRandomizersValues(withMode           : mode)
+        dicoOfSocioEconomyRandomVariables = SocioEconomy.model.currentRandomizersValues(withMode : mode)
+    }
+
     private func nextRandomProperties(_ family                            : Family,
+                                      _ dicoOfAdultsRandomProperties      : inout DictionaryOfAdultRandomProperties,
                                       _ dicoOfEconomyRandomVariables      : inout Economy.DictionaryOfRandomVariable,
                                       _ dicoOfSocioEconomyRandomVariables : inout SocioEconomy.DictionaryOfRandomVariable) {
         // re-générer les propriétés aléatoires de la famille
-        family.nextRandomProperties()
+        dicoOfAdultsRandomProperties = family.nextRun()
+
         // re-générer les propriétés aléatoires du modèle macro économique
         dicoOfEconomyRandomVariables = try! Economy.model.nextRun(withMode           : mode,
                                                                   simulateVolatility : UserSettings.shared.simulateVolatility,
                                                                   firstYear          : firstYear!,
                                                                   lastYear           : lastYear!)
         // re-générer les propriétés aléatoires du modèle socio économique
-        dicoOfSocioEconomyRandomVariables = SocioEconomy.model.next()
-    }
-
-    private func closeMonteCarloRun(_ family                            : Family, // swiftlint:disable:this function_parameter_count
-                                    _ run                               : Int,
-                                    _ dicoOfEconomyRandomVariables      : Economy.DictionaryOfRandomVariable,
-                                    _ dicoOfSocioEconomyRandomVariables : SocioEconomy.DictionaryOfRandomVariable,
-                                    _ dicoOfKpiResults                  : DictionaryOfKpiResults,
-                                    _ nbOfRuns                          : Int) {
-        // récupérer les propriétés aléatoires des adultes de la famille
-        var dicoOfAdultsRandomProperties = DictionaryOfAdultRandomProperties()
-        family.members.forEach { person in
-            if let adult = person as? Adult {
-                dicoOfAdultsRandomProperties[adult.displayName] = AdultRandomProperties(ageOfDeath          : adult.ageOfDeath,
-                                                                                        nbOfYearOfDependency: adult.nbOfYearOfDependency)
-            }
-        }
-        // Synthèse du Run de Simulation
-        let currentRunResults = SimulationResultLine(runNumber                         : run,
-                                                     dicoOfAdultsRandomProperties      : dicoOfAdultsRandomProperties,
-                                                     dicoOfEconomyRandomVariables      : dicoOfEconomyRandomVariables,
-                                                     dicoOfSocioEconomyRandomVariables : dicoOfSocioEconomyRandomVariables,
-                                                     dicoOfKpiResults                  : dicoOfKpiResults)
-        monteCarloResultTable.append(currentRunResults)
-
-        // Dernier run, créer les histogrammes et y ranger
-        // les échantillons de KPIs si on est en mode Aléatoire
-        if run == nbOfRuns {
-            KpiArray.generateHistograms(ofTheseKPIs: &self.kpis)
-        }
+        dicoOfSocioEconomyRandomVariables = SocioEconomy.model.nextRun()
     }
 
     /// Exécuter une simulation Déterministe ou Aléatoire
@@ -198,6 +181,7 @@ class Simulation: ObservableObject, CanResetSimulation {
         lastYear    = firstYear + nbOfYears - 1
 
         let monteCarlo = nbOfRuns > 1
+        var dicoOfAdultsRandomProperties      = DictionaryOfAdultRandomProperties()
         var dicoOfEconomyRandomVariables      = Economy.DictionaryOfRandomVariable()
         var dicoOfSocioEconomyRandomVariables = SocioEconomy.DictionaryOfRandomVariable()
 
@@ -221,8 +205,14 @@ class Simulation: ObservableObject, CanResetSimulation {
             // re-générer les propriétés aléatoires à chaque run si on est en mode Aléatoire
             if monteCarlo {
                 nextRandomProperties(family,
+                                     &dicoOfAdultsRandomProperties,
                                      &dicoOfEconomyRandomVariables,
                                      &dicoOfSocioEconomyRandomVariables)
+            } else {
+                currentRandomProperties(family,
+                                        &dicoOfAdultsRandomProperties,
+                                        &dicoOfEconomyRandomVariables,
+                                        &dicoOfSocioEconomyRandomVariables)
             }
 
             // Réinitialiser la simulation
@@ -235,13 +225,20 @@ class Simulation: ObservableObject, CanResetSimulation {
                                                         withPatrimoine : patrimoine,
                                                         withKPIs       : &kpis,
                                                         withMode       : mode)
+            // Synthèse du Run de Simulation
+            currentRunResults = SimulationResultLine(runNumber                         : run,
+                                                     dicoOfAdultsRandomProperties      : dicoOfAdultsRandomProperties,
+                                                     dicoOfEconomyRandomVariables      : dicoOfEconomyRandomVariables,
+                                                     dicoOfSocioEconomyRandomVariables : dicoOfSocioEconomyRandomVariables,
+                                                     dicoOfKpiResults                  : dicoOfKpiResults)
             if monteCarlo {
-                closeMonteCarloRun(family,
-                                   run,
-                                   dicoOfEconomyRandomVariables,
-                                   dicoOfSocioEconomyRandomVariables,
-                                   dicoOfKpiResults,
-                                   nbOfRuns)
+                monteCarloResultTable.append(currentRunResults)
+
+                // Dernier run, créer les histogrammes et y ranger
+                // les échantillons de KPIs si on est en mode Aléatoire
+                if run == nbOfRuns {
+                    KpiArray.generateHistograms(ofTheseKPIs: &self.kpis)
+                }
             }
 
             patrimoine.restore()
@@ -315,7 +312,13 @@ class Simulation: ObservableObject, CanResetSimulation {
         try socialAccounts.save(simulationTitle: title,
                             withMode       : mode)
 
-        /// - un fichier pour le tableau de résultat de Monté-Carlo
-        try monteCarloResultTable.save(simulationTitle: title)
+        if mode == .deterministic {
+            /// - un fichier pour le tableau de résultat de Monté-Carlo
+            try [currentRunResults].save(simulationTitle: title)
+        } else {
+            /// - un fichier pour le tableau de résultat de Monté-Carlo
+            try monteCarloResultTable.save(simulationTitle: title)
+
+        }
     }
 }

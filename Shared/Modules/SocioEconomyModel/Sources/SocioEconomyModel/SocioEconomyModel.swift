@@ -69,14 +69,22 @@ public struct SocioEconomy {
         }
         
         /// Générer les nombres aléatoires suivants et retourner leur valeur pour historisation
-        public mutating func next() -> DictionaryOfRandomVariable {
+        public mutating func nextRun() -> DictionaryOfRandomVariable {
             var dicoOfRandomVariable = DictionaryOfRandomVariable()
             dicoOfRandomVariable[.pensionDevaluationRate]      = pensionDevaluationRate.next()
             dicoOfRandomVariable[.nbTrimTauxPlein]             = nbTrimTauxPlein.next()
             dicoOfRandomVariable[.expensesUnderEvaluationRate] = expensesUnderEvaluationRate.next()
             return dicoOfRandomVariable
         }
-        
+
+        public func currentRandomizersValues(withMode: SimulationModeEnum) -> DictionaryOfRandomVariable {
+            var dicoOfRandomVariable = DictionaryOfRandomVariable()
+            dicoOfRandomVariable[.pensionDevaluationRate]      = pensionDevaluationRate.value(withMode: withMode)
+            dicoOfRandomVariable[.nbTrimTauxPlein]             = nbTrimTauxPlein.value(withMode: withMode)
+            dicoOfRandomVariable[.expensesUnderEvaluationRate] = expensesUnderEvaluationRate.value(withMode: withMode)
+            return dicoOfRandomVariable
+        }
+
         /// Définir une valeur pour la variable aléaoitre avant un rejeu
         /// - Parameter value: nouvelle valeure à rejouer
         public mutating func setRandomValue(to values: DictionaryOfRandomVariable) {

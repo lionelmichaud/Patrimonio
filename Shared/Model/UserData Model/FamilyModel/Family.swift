@@ -224,8 +224,26 @@ final class Family: ObservableObject {
         members.forEach {
             $0.nextRandomProperties()
         }
-        
-        // Réinitialiser les prioriété aléatoires des dépenses
+    }
+
+    func currentRandomProperties() -> DictionaryOfAdultRandomProperties {
+        var dicoOfAdultsRandomProperties = DictionaryOfAdultRandomProperties()
+        members.forEach {
+            if let adult = $0 as? Adult {
+                dicoOfAdultsRandomProperties[adult.displayName] = AdultRandomProperties(ageOfDeath          : adult.ageOfDeath,
+                                                                                        nbOfYearOfDependency: adult.nbOfYearOfDependency)
+            }
+        }
+        return dicoOfAdultsRandomProperties
+
+    }
+
+    func nextRun() -> DictionaryOfAdultRandomProperties {
+        // Réinitialiser les prioriété aléatoires des membres
+        members.forEach {
+            $0.nextRandomProperties()
+        }
+        return currentRandomProperties()
     }
     
     private func storeMembersToFile() {

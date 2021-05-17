@@ -96,6 +96,14 @@ public struct Economy {
             dicoOfRandomVariable[.stockRate]   = stockRate.next()
             return dicoOfRandomVariable
         }
+
+        fileprivate func current(withMode mode : SimulationModeEnum) -> DictionaryOfRandomVariable {
+            var dicoOfRandomVariable           = DictionaryOfRandomVariable()
+            dicoOfRandomVariable[.inflation]   = inflation.value(withMode: mode)
+            dicoOfRandomVariable[.securedRate] = securedRate.value(withMode: mode)
+            dicoOfRandomVariable[.stockRate]   = stockRate.value(withMode: mode)
+            return dicoOfRandomVariable
+        }
         
         /// Définir une valeur pour la variable aléatoire avant un rejeu
         /// - Parameter value: nouvelle valeure à rejouer
@@ -238,6 +246,10 @@ public struct Economy {
                                       firstYear          : firstYear,
                                       lastYear           : lastYear)
             return dico
+        }
+
+        public func currentRandomizersValues(withMode: SimulationModeEnum) -> DictionaryOfRandomVariable {
+            return randomizers.current(withMode: withMode)
         }
         
         /// Définir une valeur pour chaque variable aléatoire avant un rejeu

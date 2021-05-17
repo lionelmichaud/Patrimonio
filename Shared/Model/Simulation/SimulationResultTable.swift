@@ -75,11 +75,11 @@ extension DictionaryOfAdultRandomProperties: MonteCarloVisitable {
 // MARK: - Synthèse d'un Run de Simulation
 
 struct SimulationResultLine: Hashable {
-    var runNumber                         : Int
-    var dicoOfAdultsRandomProperties      : DictionaryOfAdultRandomProperties
-    var dicoOfEconomyRandomVariables      : Economy.DictionaryOfRandomVariable
-    var dicoOfSocioEconomyRandomVariables : SocioEconomy.DictionaryOfRandomVariable
-    var dicoOfKpiResults                  : DictionaryOfKpiResults
+    var runNumber                         : Int = 1
+    var dicoOfAdultsRandomProperties      = DictionaryOfAdultRandomProperties()
+    var dicoOfEconomyRandomVariables      = Economy.DictionaryOfRandomVariable()
+    var dicoOfSocioEconomyRandomVariables = SocioEconomy.DictionaryOfRandomVariable()
+    var dicoOfKpiResults                  = DictionaryOfKpiResults()
 }
 extension SimulationResultLine: MonteCarloVisitable {
     func accept(_ visitor: MonteCarloVisitor) {
