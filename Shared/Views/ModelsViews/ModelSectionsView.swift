@@ -17,7 +17,7 @@ struct ModelSectionsView: View {
         Section(header: Text("Modèles Déterministe")) {
             NavigationLink(destination: ModelDeterministicView(),
                            tag         : .deterministicModel,
-                           selection   : $uiState.scenarioViewState.selectedItem) {
+                           selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Tous les Modèles")
             }
             .isDetailLink(true)
@@ -25,21 +25,21 @@ struct ModelSectionsView: View {
         Section(header: Text("Modèles Statistiques")) {
             NavigationLink(destination: ModelHumanView(),
                            tag         : .humanModel,
-                           selection   : $uiState.scenarioViewState.selectedItem) {
+                           selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Modèle Humain")
             }
             .isDetailLink(true)
             
             NavigationLink(destination: ModelEconomyView(),
                            tag         : .economyModel,
-                           selection   : $uiState.scenarioViewState.selectedItem) {
+                           selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Modèle Economique")
             }
             .isDetailLink(true)
             
             NavigationLink(destination: ModelSociologyView(),
                            tag         : .sociologyModel,
-                           selection   : $uiState.scenarioViewState.selectedItem) {
+                           selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Modèle Sociologique")
             }
             .isDetailLink(true)
@@ -48,7 +48,7 @@ struct ModelSectionsView: View {
             // Vue assistant statistiques
             NavigationLink(destination : StatisticsChartsView(),
                            tag         : .statisticsAssistant,
-                           selection   : $uiState.scenarioViewState.selectedItem) {
+                           selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Assistant Distributions")
             }
             .isDetailLink(true)

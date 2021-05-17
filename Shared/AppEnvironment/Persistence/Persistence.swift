@@ -12,9 +12,11 @@ import Disk
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Persistence")
 
 enum FileError: String, Error {
-    case failedToSaveCashFlowCsv     = "La sauvegarde de l'historique des bilans a échoué"
-    case failedToSaveBalanceSheetCsv = "La sauvegarde de l'historique des cash-flow a échoué"
-    case failedToSaveMonteCarloCsv   = "La sauvegarde de l'historique des runs a échoué"
+    case failedToSaveCashFlowCsv           = "La sauvegarde de l'historique des bilans a échoué"
+    case failedToSaveBalanceSheetCsv       = "La sauvegarde de l'historique des cash-flow a échoué"
+    case failedToSaveMonteCarloCsv         = "La sauvegarde de l'historique des runs a échoué"
+    case failedToSaveSuccessionsCSV   = "La sauvegarde des successions légales a échoué"
+    case failedToSaveLifeInsSuccessionsCSV = "La sauvegarde des successions assurance vie a échoué"
 }
 
 struct Persistence {

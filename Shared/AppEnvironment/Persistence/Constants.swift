@@ -12,4 +12,5 @@ struct FileNameCst {
     static let kBalanceSheetCSVFileName = "BalanceSheet.csv"
     static let kCashFlowCSVFileName     = "CashFlow.csv"
     static let kMonteCarloCSVFileName   = "MonteCarlo.csv"
+    static let kSuccessionsCSVFileName  = "Successions.csv"
 }

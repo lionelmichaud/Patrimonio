@@ -13,6 +13,7 @@ struct SimulationView: View {
     @EnvironmentObject var uiState    : UIState
     
     enum PushedItem {
+        case lastScenarioUsed
         case computationView, bilanSynthese, bilanDetail, cfSynthese, cfDetail
         case kpiSummaryView, shortGridView
         case irppSynthesis, irppSlices, isfSynthesis, isfSlices
@@ -30,9 +31,12 @@ struct SimulationView: View {
                 }
                 .isDetailLink(true)
                 
+                // affichage du scénario utilisé pour la simulation
+                ScenarioSectionView()
+                
                 // affichage des résultats des KPIs
                 KpiSectionView()
-                
+
                 // affichage des résultats graphiques
                 ChartsSectionView()
                 

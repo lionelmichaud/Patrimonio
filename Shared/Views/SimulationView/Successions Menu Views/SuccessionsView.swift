@@ -21,7 +21,7 @@ struct SuccessionsView: View {
         } else {
             List {
                 // Cumul global des successions
-                GroupBox(label: Text("Cumulatif").font(.headline)) {
+                GroupBox(label: Text("Cumulatif des Successions").font(.headline)) {
                     Group {
                         Group {
                             AmountView(label : "Masse successorale",
@@ -58,7 +58,7 @@ struct SuccessionsView: View {
 
 struct CumulatedSuccessorsDisclosureGroup: View {
     var successions: [Succession]
-    
+
     var body: some View {
         DisclosureGroup(
             content: {
@@ -79,9 +79,12 @@ struct CumulatedSuccessorsDisclosureGroup: View {
 
 struct SuccessionGroupBox: View {
     var succession: Succession
-    
+    var nature: String {
+        succession.kind.rawValue
+    }
+
     var body: some View {
-        GroupBox(label: Text("Succession de \(succession.decedent.displayName) ") +
+        GroupBox(label: Text("Succession \(nature) de \(succession.decedent.displayName) ") +
                     Text("à l'âge de \(succession.decedent.age(atEndOf: succession.yearOfDeath)) ans ").fontWeight(.regular) +
                     Text("en \(String(succession.yearOfDeath))").fontWeight(.regular)) {
             Group {

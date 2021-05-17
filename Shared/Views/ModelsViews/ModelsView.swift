@@ -12,16 +12,13 @@ struct ModelsView: View {
     @EnvironmentObject var uiState: UIState
     
     enum PushedItem {
-        case summary, deterministicModel, humanModel, economyModel, sociologyModel, statisticsAssistant
+        case deterministicModel, humanModel, economyModel, sociologyModel, statisticsAssistant
     }
     
     var body: some View {
         NavigationView {
             /// Primary view
             List {
-                // entête
-                ModelsHeaderView()
-                
                 // liste des items de la side bar
                 ModelSectionsView()
             }
@@ -34,19 +31,6 @@ struct ModelsView: View {
             ScenarioSummaryView()
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
-    }
-}
-
-struct ModelsHeaderView: View {
-    @EnvironmentObject var uiState: UIState
-    
-    var body: some View {
-        NavigationLink(destination : ScenarioSummaryView(),
-                       tag         : .summary,
-                       selection   : $uiState.scenarioViewState.selectedItem) {
-            Text("Dernières Valeurs Utilisées")
-        }
-        .isDetailLink(true)
     }
 }
 

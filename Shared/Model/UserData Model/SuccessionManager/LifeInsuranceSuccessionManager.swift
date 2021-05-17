@@ -102,7 +102,8 @@ struct LifeInsuranceSuccessionManager {
         var massesSuccession : [String : Double] = [:]
         
         guard let family = Patrimoin.family else {
-            return Succession(yearOfDeath  : year,
+            return Succession(kind         : .lifeInsurance,
+                              yearOfDeath  : year,
                               decedent     : decedent,
                               taxableValue : 0,
                               inheritances : inheritances)
@@ -152,7 +153,8 @@ struct LifeInsuranceSuccessionManager {
         
         //        print("  Masse totale = ", inheritances.sum(for: \.brut).rounded())
         //        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
-        return Succession(yearOfDeath  : year,
+        return Succession(kind         : .lifeInsurance,
+                          yearOfDeath  : year,
                           decedent     : decedent,
                           taxableValue : totalTaxableInheritance,
                           inheritances : inheritances)

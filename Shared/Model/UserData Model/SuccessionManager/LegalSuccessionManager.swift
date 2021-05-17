@@ -42,7 +42,8 @@ struct LegalSuccessionManager {
         var inheritanceShares : (forChild: Double, forSpouse: Double) = (0, 0)
         
         guard let family = Patrimoin.family else {
-            return Succession(yearOfDeath  : year,
+            return Succession(kind         : .legal,
+                              yearOfDeath  : year,
                               decedent     : decedent,
                               taxableValue : 0,
                               inheritances : inheritances)
@@ -50,7 +51,7 @@ struct LegalSuccessionManager {
         
         // Calcul de la masse successorale taxable du défunt
         // WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
-        let totalTaxableInheritance = taxableInheritanceValue(in: patrimoine,
+        let totalTaxableInheritance = taxableInheritanceValue(in      : patrimoine,
                                                               of      : decedent,
                                                               atEndOf : year - 1)
         print("  Masse successorale légale = \(totalTaxableInheritance.rounded())")
@@ -89,7 +90,8 @@ struct LegalSuccessionManager {
                 inheritanceShares.forChild  = InheritanceDonation.childShare(nbChildren: family.nbOfChildrenAlive(atEndOf: year))
             } else {
                 // pas d'enfant survivant
-                return Succession(yearOfDeath  : year,
+                return Succession(kind         : .legal,
+                                  yearOfDeath  : year,
                                   decedent     : decedent,
                                   taxableValue : totalTaxableInheritance,
                                   inheritances : inheritances)
@@ -119,7 +121,8 @@ struct LegalSuccessionManager {
             }
         }
         //        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
-        return Succession(yearOfDeath  : year,
+        return Succession(kind         : .legal,
+                          yearOfDeath  : year,
                           decedent     : decedent,
                           taxableValue : totalTaxableInheritance,
                           inheritances : inheritances)

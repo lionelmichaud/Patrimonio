@@ -10,8 +10,15 @@ import Foundation
 
 // MARK: - Succession d'une personne
 
+enum SuccessionKindEnum: String {
+    case legal         = "Légale"
+    case lifeInsurance = "Assurance Vie"
+}
+
 struct Succession: Identifiable {
     let id           = UUID()
+    // nature
+    let kind: SuccessionKindEnum
     // année de la succession
     let yearOfDeath  : Int
     // personne dont on fait la succession
@@ -36,6 +43,11 @@ struct Succession: Identifiable {
     // somme des taxes payées par les héritiers dans une succession
     var tax: Double {
         inheritances.sum(for: \.tax)
+    }
+}
+extension Succession: SuccessionCsvVisitableP {
+    func accept(_ visitor: SuccessionCsvVisitorP) {
+        visitor.buildCsv(element: self)
     }
 }
 extension Array where Element == Succession {
@@ -65,4 +77,9 @@ struct Inheritance {
     var brut    : Double
     var net     : Double
     var tax     : Double
+}
+extension Inheritance: SuccessionCsvVisitableP {
+    func accept(_ visitor: SuccessionCsvVisitorP) {
+        visitor.buildCsv(element: self)
+    }
 }

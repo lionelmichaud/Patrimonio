@@ -48,7 +48,7 @@ class UIState: ObservableObject {
     }
     
     // MARK: - Etat de la vue Scenario
-    struct ScenarioViewState {
+    struct ModelViewState {
         var selectedItem: ModelsView.PushedItem?
     }
     
@@ -89,7 +89,7 @@ class UIState: ObservableObject {
     @Published var selectedTab         : Tab  = Tab.family
     @Published var selectedSideBarItem : Tab? = Tab.family
     @Published var patrimoineViewState = PatrimoineViewState()
-    @Published var scenarioViewState   = ScenarioViewState()
+    @Published var modelsViewState     = ModelViewState()
     @Published var simulationViewState = SimulationViewState()
     @Published var expenseViewState    = ExpenseViewState()
     @Published var computationState    = ComputationState()

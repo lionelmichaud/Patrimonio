@@ -303,12 +303,13 @@ struct SocialAccounts {
         // construction du tableau de bilans annnuels au format CSV
         let balanceSheetCSV = CsvBuilder.balanceSheetCSV(from     : balanceArray,
                                                          withMode : mode)
-
         // construction du tableau de cash flow annnuels au format CSV
         let cashFlowCSV = CsvBuilder.cashFlowCSV(from     : cashFlowArray,
                                                  withMode : mode)
-        print(cashFlowCSV)
+        // construction du tableau des successions
+        let successionsCSV   = String(describing: CsvSuccessionsVisitor(successions: legalSuccessions + lifeInsSuccessions))
 
+        // enregistrer les résultats dans le directory approprié
         do {
             try Persistence.saveToCsvPath(simulationTitle : simulationTitle,
                                           fileName        : FileNameCst.kBalanceSheetCSVFileName,
@@ -322,6 +323,13 @@ struct SocialAccounts {
                                           csvString       : cashFlowCSV)
         } catch {
             throw FileError.failedToSaveCashFlowCsv
+        }
+        do {
+            try Persistence.saveToCsvPath(simulationTitle : simulationTitle,
+                                          fileName        : FileNameCst.kSuccessionsCSVFileName,
+                                          csvString       : successionsCSV)
+        } catch {
+            throw FileError.failedToSaveSuccessionsCSV
         }
     }
 }

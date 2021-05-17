@@ -16,7 +16,7 @@ struct AdultDetailView: View {
     var body: some View {
         Group {
             /// Section: scénario
-            ScenarioSectionView()
+            LifeScenarioSectionView()
             
             /// Section: revenus
             RevenuSectionView()
@@ -29,7 +29,7 @@ struct AdultDetailView: View {
 
 // MARK: - MemberDetailView / AdultDetailView / ScenarioSectionView
 
-private struct ScenarioSectionView: View {
+private struct LifeScenarioSectionView: View {
     @EnvironmentObject var member : Person
     
     var body: some View {

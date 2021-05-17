@@ -7,6 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7901CF7E26528399007DF85B /* ScenarioSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901CF7D26528399007DF85B /* ScenarioSectionView.swift */; };
+		7901CF7F26528399007DF85B /* ScenarioSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901CF7D26528399007DF85B /* ScenarioSectionView.swift */; };
+		7901CF8026528399007DF85B /* ScenarioSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901CF7D26528399007DF85B /* ScenarioSectionView.swift */; };
+		7901CF832652953E007DF85B /* SuccessionCsvVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901CF822652953E007DF85B /* SuccessionCsvVisitableP.swift */; };
+		7901CF842652953E007DF85B /* SuccessionCsvVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901CF822652953E007DF85B /* SuccessionCsvVisitableP.swift */; };
+		7901CF852652953E007DF85B /* SuccessionCsvVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901CF822652953E007DF85B /* SuccessionCsvVisitableP.swift */; };
+		7901CF872652954E007DF85B /* SuccessionCsvVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901CF862652954E007DF85B /* SuccessionCsvVisitorP.swift */; };
+		7901CF882652954E007DF85B /* SuccessionCsvVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901CF862652954E007DF85B /* SuccessionCsvVisitorP.swift */; };
+		7901CF892652954E007DF85B /* SuccessionCsvVisitorP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901CF862652954E007DF85B /* SuccessionCsvVisitorP.swift */; };
+		7901CF8B2652956A007DF85B /* CsvSuccessionVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901CF8A2652956A007DF85B /* CsvSuccessionVisitor.swift */; };
+		7901CF8C2652956A007DF85B /* CsvSuccessionVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901CF8A2652956A007DF85B /* CsvSuccessionVisitor.swift */; };
+		7901CF8D2652956A007DF85B /* CsvSuccessionVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901CF8A2652956A007DF85B /* CsvSuccessionVisitor.swift */; };
+		7901CF8F2652A04D007DF85B /* Successions.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7901CF8E2652A04D007DF85B /* Successions.csv */; };
+		7901CF902652A04D007DF85B /* Successions.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7901CF8E2652A04D007DF85B /* Successions.csv */; };
+		7901CF912652A04D007DF85B /* Successions.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7901CF8E2652A04D007DF85B /* Successions.csv */; };
 		79058371262C79050061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058370262C79050061F296 /* SocioEconomyModel */; };
 		79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058372262C790F0061F296 /* SocioEconomyModel */; };
 		7906AB752641BCF100A398E9 /* SocialAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */; };
@@ -536,6 +551,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7901CF7D26528399007DF85B /* ScenarioSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioSectionView.swift; sourceTree = "<group>"; };
+		7901CF822652953E007DF85B /* SuccessionCsvVisitableP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessionCsvVisitableP.swift; sourceTree = "<group>"; };
+		7901CF862652954E007DF85B /* SuccessionCsvVisitorP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessionCsvVisitorP.swift; sourceTree = "<group>"; };
+		7901CF8A2652956A007DF85B /* CsvSuccessionVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvSuccessionVisitor.swift; sourceTree = "<group>"; };
+		7901CF8E2652A04D007DF85B /* Successions.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = Successions.csv; sourceTree = "<group>"; };
 		7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialAccounts.swift; sourceTree = "<group>"; };
 		790FF33926484D59001B2653 /* Visitor Pattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Visitor Pattern.swift"; sourceTree = "<group>"; };
 		790FF33C264850E6001B2653 /* CsvBalanceSheetVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvBalanceSheetVisitor.swift; sourceTree = "<group>"; };
@@ -865,6 +885,24 @@
 			path = "Assistants Menu Views";
 			sourceTree = "<group>";
 		};
+		7901CF7C2652835D007DF85B /* Scenario Menu Views */ = {
+			isa = PBXGroup;
+			children = (
+				7901CF7D26528399007DF85B /* ScenarioSectionView.swift */,
+			);
+			path = "Scenario Menu Views";
+			sourceTree = "<group>";
+		};
+		7901CF812652951C007DF85B /* Succession */ = {
+			isa = PBXGroup;
+			children = (
+				7901CF822652953E007DF85B /* SuccessionCsvVisitableP.swift */,
+				7901CF862652954E007DF85B /* SuccessionCsvVisitorP.swift */,
+				7901CF8A2652956A007DF85B /* CsvSuccessionVisitor.swift */,
+			);
+			path = Succession;
+			sourceTree = "<group>";
+		};
 		7906AB7D2641BCF500A398E9 /* Balance Sheet */ = {
 			isa = PBXGroup;
 			children = (
@@ -878,6 +916,7 @@
 			isa = PBXGroup;
 			children = (
 				790FF33926484D59001B2653 /* Visitor Pattern.swift */,
+				7901CF812652951C007DF85B /* Succession */,
 				79CB2C83264D716000B3E493 /* MonteCarloResuslt */,
 				79A9AA74264AF9940036732F /* CashFlow */,
 				79A9AA73264AF9840036732F /* BalanceSheet */,
@@ -988,6 +1027,7 @@
 				7912E2032645E0B300120731 /* BalanceSheet.csv */,
 				7912E2042645E0B300120731 /* CashFlow.csv */,
 				79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */,
+				7901CF8E2652A04D007DF85B /* Successions.csv */,
 				79735EE8263242FA00CD952F /* AppMain.swift */,
 				79FC728B26333A27004F3BD2 /* MainScene.swift */,
 				798E7838264209AD0094534F /* Resources */,
@@ -1158,6 +1198,7 @@
 			children = (
 				799025A02641F60300ED53D4 /* SimulationView.swift */,
 				799025922641F60300ED53D4 /* Computation Menu View */,
+				7901CF7C2652835D007DF85B /* Scenario Menu Views */,
 				7990258B2641F60300ED53D4 /* Performance Menu Views */,
 				79BBE8E32646E72C0045E524 /* Graphic Menu Views */,
 				7990259D2641F60300ED53D4 /* Successions Menu Views */,
@@ -1829,6 +1870,7 @@
 				79AB5419263241CF00FADBA7 /* Education Famille_LifeExpense.json in Resources */,
 				79B2DB80264CA51800EFCAF9 /* MonteCarlo.csv in Resources */,
 				79AB5427263241CF00FADBA7 /* Services_LifeExpense.json in Resources */,
+				7901CF8F2652A04D007DF85B /* Successions.csv in Resources */,
 				79AB5423263241CF00FADBA7 /* Santé_LifeExpense.json in Resources */,
 				79AB5433263241CF00FADBA7 /* PeriodicInvestement.json in Resources */,
 				7920DC77262C700500536B03 /* Assets.xcassets in Resources */,
@@ -1871,6 +1913,7 @@
 				79AB541A263241CF00FADBA7 /* Education Famille_LifeExpense.json in Resources */,
 				79B2DB81264CA51800EFCAF9 /* MonteCarlo.csv in Resources */,
 				79AB5428263241CF00FADBA7 /* Services_LifeExpense.json in Resources */,
+				7901CF902652A04D007DF85B /* Successions.csv in Resources */,
 				79AB5424263241CF00FADBA7 /* Santé_LifeExpense.json in Resources */,
 				79AB5434263241CF00FADBA7 /* PeriodicInvestement.json in Resources */,
 				7920DC78262C700500536B03 /* Assets.xcassets in Resources */,
@@ -1892,6 +1935,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7901CF912652A04D007DF85B /* Successions.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1950,6 +1994,7 @@
 				79C838312641E02B008B29BF /* MenuCollapsable.swift in Sources */,
 				7998E158262DB2FD00DA4A12 /* Person.swift in Sources */,
 				79BE4A802651CE7800BBF46C /* DiscreteRandomizerView.swift in Sources */,
+				7901CF7E26528399007DF85B /* ScenarioSectionView.swift in Sources */,
 				79AA5D6E26507E9800B26D2C /* IrppChartCashFlowVisitor.swift in Sources */,
 				799025BD2641F60300ED53D4 /* SuccessionsView.swift in Sources */,
 				799025B52641F60300ED53D4 /* ChartsSectionView.swift in Sources */,
@@ -2040,6 +2085,7 @@
 				791D3B932649679C0024A2D8 /* CustomCsvConvertible.swift in Sources */,
 				799025B92641F60300ED53D4 /* isfEvolutionChartView.swift in Sources */,
 				799025AB2641F60300ED53D4 /* ComputationView.swift in Sources */,
+				7901CF832652953E007DF85B /* SuccessionCsvVisitableP.swift in Sources */,
 				79FC726026333350004F3BD2 /* SettingsView.swift in Sources */,
 				79FC728C26333A27004F3BD2 /* MainScene.swift in Sources */,
 				79FA8CF32630684F009FEA00 /* ValuedAssets.swift in Sources */,
@@ -2051,6 +2097,7 @@
 				791D3BA02649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,
 				791ED11E263A2D2E00701202 /* CashFlowLine+manageSCPI.swift in Sources */,
 				7906AB752641BCF100A398E9 /* SocialAccounts.swift in Sources */,
+				7901CF8B2652956A007DF85B /* CsvSuccessionVisitor.swift in Sources */,
 				79281A09262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */,
 				799025C12641F60300ED53D4 /* SimulationView.swift in Sources */,
 				797931CC26417249000F8599 /* BalanceSheetArray.swift in Sources */,
@@ -2073,6 +2120,7 @@
 				7956993E262F884C0015AF34 /* Ownership+TransferFullOwnership.swift in Sources */,
 				79B164872651DD7200D0603C /* ModelsView.swift in Sources */,
 				79C838372641E092008B29BF /* CheckBoxStyles.swift in Sources */,
+				7901CF872652954E007DF85B /* SuccessionCsvVisitorP.swift in Sources */,
 				7971B9C62638CAF3009CF0F7 /* NSUIViewRepresentable.swift in Sources */,
 				79FC72092632F7A9004F3BD2 /* AppVersion.swift in Sources */,
 				7956994C262F8B5C0015AF34 /* Ownable.swift in Sources */,
@@ -2172,6 +2220,7 @@
 				799025B42641F60300ED53D4 /* StatisticsChartView.swift in Sources */,
 				7998E1A5262DBE3E00DA4A12 /* Adult.swift in Sources */,
 				798DE8A526357CF500C0C3B5 /* SwiftUIconditional.swift in Sources */,
+				7901CF7F26528399007DF85B /* ScenarioSectionView.swift in Sources */,
 				791ED11F263A2D2E00701202 /* CashFlowLine+manageSCPI.swift in Sources */,
 				79FA8CEE2630684F009FEA00 /* InvestmentKind.swift in Sources */,
 				79BE4A6F2651A2C100BBF46C /* HistogramVisitor.swift in Sources */,
@@ -2262,7 +2311,9 @@
 				791ED100263A1EF800701202 /* AdultDetailView.swift in Sources */,
 				79FC720A2632F7A9004F3BD2 /* AppVersion.swift in Sources */,
 				79BE4A812651CE7800BBF46C /* DiscreteRandomizerView.swift in Sources */,
+				7901CF882652954E007DF85B /* SuccessionCsvVisitorP.swift in Sources */,
 				791ED0DE2639FE2700701202 /* RetirementEditView.swift in Sources */,
+				7901CF842652953E007DF85B /* SuccessionCsvVisitableP.swift in Sources */,
 				797931C2264170FE000F8599 /* SimulationKPIEnum.swift in Sources */,
 				791ED102263A1EF800701202 /* ChildDetailView.swift in Sources */,
 				7956994D262F8B5C0015AF34 /* Ownable.swift in Sources */,
@@ -2315,6 +2366,7 @@
 				7998E1AC262DBE4600DA4A12 /* Child.swift in Sources */,
 				79BBE8EA2646FEE70045E524 /* CF Detailed ChartView.swift in Sources */,
 				790FF3512648AA07001B2653 /* BalanceSheetLine.swift in Sources */,
+				7901CF8C2652956A007DF85B /* CsvSuccessionVisitor.swift in Sources */,
 				799025B62641F60300ED53D4 /* ChartsSectionView.swift in Sources */,
 				79C838282641DB80008B29BF /* Charts+AxisFormatter.swift in Sources */,
 				79AA5D6B26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */,
@@ -2334,6 +2386,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7901CF8D2652956A007DF85B /* CsvSuccessionVisitor.swift in Sources */,
 				79BE4A822651CE7800BBF46C /* DiscreteRandomizerView.swift in Sources */,
 				7990D8DB264EDA0600078CB6 /* CategoryBarChartBalanceSheetVisitor.swift in Sources */,
 				7990D8D7264EBDB700078CB6 /* BarChartBalanceSheetVisitor.swift in Sources */,
@@ -2342,9 +2395,11 @@
 				791D3B952649679C0024A2D8 /* CustomCsvConvertible.swift in Sources */,
 				79A9BE9F265186EE00170A01 /* BetaDistributionView.swift in Sources */,
 				79AA5D782650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */,
+				7901CF852652953E007DF85B /* SuccessionCsvVisitableP.swift in Sources */,
 				79B164862651DD7200D0603C /* ScenarioSummaryView.swift in Sources */,
 				7990D8E3264F1C4100078CB6 /* BarChartCashFlowVisitor.swift in Sources */,
 				79A9AA84264B10F80036732F /* CsvCashFlowVisitor.swift in Sources */,
+				7901CF892652954E007DF85B /* SuccessionCsvVisitorP.swift in Sources */,
 				79BE4A6D2651A2BC00BBF46C /* HistogramVisitable.swift in Sources */,
 				790FF34A26485BDE001B2653 /* CvsBuilder.swift in Sources */,
 				79A9BE9B265186A700170A01 /* DiscreteDistributionView.swift in Sources */,
@@ -2364,6 +2419,7 @@
 				791D3BA22649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,
 				7990D8E7264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift in Sources */,
 				79AA5D6C26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */,
+				7901CF8026528399007DF85B /* ScenarioSectionView.swift in Sources */,
 				79B164892651DD7200D0603C /* ModelsView.swift in Sources */,
 				790FF3532648AD38001B2653 /* BalanceSheetLine.swift in Sources */,
 				79A9AA78264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */,
