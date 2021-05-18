@@ -28,11 +28,14 @@ struct ComputationView: View {
             Form {
                 // paramétrage de la simulation : cas général
                 Section(header: Text("Paramètres de Simulation").font(.headline)) {
-                    HStack {
-                        Text("Titre")
-                            .frame(width: 70, alignment: .leading)
-                        TextField("", text: $simulation.title)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    VStack {
+                        HStack {
+                            Text("Titre")
+                                .frame(width: 70, alignment: .leading)
+                            TextField("", text: $simulation.title)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        LabeledTextEditor(label: "Note", text: $simulation.note)
                     }
                     //.padding(.top)
                     HStack {

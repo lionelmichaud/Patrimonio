@@ -41,6 +41,7 @@ class Simulation: ObservableObject, CanResetSimulation {
     // paramètres de la simulation
     @Published var mode           : SimulationModeEnum = .deterministic
     @Published var title          = "Simulation"
+    @Published var note           = ""
     @Published var firstYear      : Int?
     @Published var lastYear       : Int?
 
