@@ -15,7 +15,7 @@ struct SettingsView: View {
         NavigationView {
             List {
                 NavigationLink(destination: AppVersionView()) {
-                    Label("Version", systemImage: "info.circle")
+                    Label("À propos ...", systemImage: "info.circle")
                 }
                     .isDetailLink(true)
                 

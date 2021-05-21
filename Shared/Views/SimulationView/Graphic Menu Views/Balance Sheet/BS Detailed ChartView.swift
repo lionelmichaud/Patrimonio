@@ -187,10 +187,10 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
         // sauvegarder l'image dans le répertoire documents/image
         let fileName = "Bilan-detailed-" + String(BalanceSheetStackedBarChartView.snapshotNb) + ".png"
         do {
-            try Disk.save(image, to: .documents, as: AppSettings.imagePath(titleStatic) + fileName)
+            try Disk.save(image, to: .documents, as: AppSettings.shared.imagePath(titleStatic) + fileName)
             // impression debug
             #if DEBUG
-            Swift.print("saving image to file: ", AppSettings.imagePath(titleStatic) + fileName)
+            Swift.print("saving image to file: ", AppSettings.shared.imagePath(titleStatic) + fileName)
             #endif
         } catch let error as NSError {
             fatalError("""

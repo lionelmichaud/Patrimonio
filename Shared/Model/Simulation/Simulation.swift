@@ -311,7 +311,7 @@ class Simulation: ObservableObject, CanResetSimulation {
         /// - un fichier pour le Cash Flow
         /// - un fichier pour le Bilan
         try socialAccounts.save(simulationTitle: title,
-                            withMode       : mode)
+                                withMode       : mode)
 
         if mode == .deterministic {
             /// - un fichier pour le tableau de résultat de Monté-Carlo
@@ -319,7 +319,6 @@ class Simulation: ObservableObject, CanResetSimulation {
         } else {
             /// - un fichier pour le tableau de résultat de Monté-Carlo
             try monteCarloResultTable.save(simulationTitle: title)
-
         }
     }
 }

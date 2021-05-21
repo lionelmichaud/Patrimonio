@@ -15,7 +15,7 @@ struct SimulationUserSettings: View {
     var body: some View {
         Form {
             Section(footer: Text("En mode Monté-Carlo seulement: simuler la volatilité du cours des actions et des obligations")) {
-                Toggle("Simuler la volatilité des marchés", isOn: $simulateVolatility)
+                Toggle("Simuler la volatilité des marchés financiers (actions et obligations)", isOn: $simulateVolatility)
                     .onChange(of     : simulateVolatility,
                               perform: { _ in
                                 // remettre à zéro la simulation et sa vue

@@ -152,7 +152,7 @@ extension SimulationResultTable {
     func save(simulationTitle: String) throws {
         let csvString = CsvBuilder.monteCarloCSV(from: self)
         do {
-            try Persistence.saveToCsvPath(simulationTitle : simulationTitle,
+            try PersistenceManager.saveToCsvPath(simulationTitle : simulationTitle,
                                           fileName        : FileNameCst.kMonteCarloCSVFileName,
                                           csvString       : csvString)
         } catch {

@@ -16,20 +16,20 @@ struct FamilySectionView : View {
     @Binding var showingSheet: Bool
 
     var body: some View {
-        Section(header: Text("Membres")) {
-            // bouton "ajouter"
-            Button(
-                action: {
-                    withAnimation {
-                        self.showingSheet = true
-                    }
-                },
-                label: {
-                    Label(title: { Text("Ajouter un élément...") },
-                          icon : { Image(systemName: "plus.circle.fill").imageScale(.large) })
-                        .foregroundColor(.accentColor)
-                })
-            
+        // bouton "ajouter"
+        Button(
+            action: {
+                withAnimation {
+                    self.showingSheet = true
+                }
+            },
+            label: {
+                Label(title: { Text("Ajouter une personne") },
+                      icon : { Image(systemName: "person.fill.badge.plus") })
+                    .foregroundColor(.accentColor)
+            })
+
+        Section(header: Text("Membres de la Famille")) {
             // liste des membres de la famille
             ForEach(family.members) { member in
                 NavigationLink(destination: PersonDetailView().environmentObject(member)) {

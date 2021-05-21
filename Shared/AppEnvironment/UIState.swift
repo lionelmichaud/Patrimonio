@@ -11,7 +11,7 @@ import NamedValue
 
 class UIState: ObservableObject {
     enum Tab: Int, Hashable {
-        case userSettings, family, expense, asset, scenario, simulation
+        case userSettings, dossier, family, expense, asset, scenario, simulation
     }
     
     // MARK: - Etat de la vue Patrimoine
@@ -86,7 +86,7 @@ class UIState: ObservableObject {
         var evalDate: Double = Date.now.year.double()
     }
 
-    @Published var selectedTab         : Tab  = Tab.family
+    @Published var selectedTab         : Tab  = Tab.dossier
     @Published var selectedSideBarItem : Tab? = Tab.family
     @Published var patrimoineViewState = PatrimoineViewState()
     @Published var modelsViewState     = ModelViewState()

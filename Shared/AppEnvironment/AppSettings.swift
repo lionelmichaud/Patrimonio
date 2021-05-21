@@ -15,19 +15,24 @@ struct AppSettings: Decodable {
     static let shared = AppSettings()
     
     // MARK: - Properties
-    
+
+    var templateDir     : String
     var imageDir        : String
     var tableDir        : String
     var allPersonsLabel : String
 
     // MARK: - Static Methods
     
-    static func csvPath(_ simulationTitle: String) -> String {
-        simulationTitle + "/" + AppSettings.shared.tableDir
+    func csvPath(_ simulationTitle: String) -> String {
+        simulationTitle + "/" + AppSettings.shared.tableDir + "/"
     }
     
-    static func imagePath(_ simulationTitle: String) -> String {
-        simulationTitle + "/" + AppSettings.shared.imageDir
+    func imagePath(_ simulationTitle: String) -> String {
+        simulationTitle + "/" + AppSettings.shared.imageDir + "/"
+    }
+
+    func templatePath() -> String {
+        "Application support/" + AppSettings.shared.templateDir + "/"
     }
 
     private init() {

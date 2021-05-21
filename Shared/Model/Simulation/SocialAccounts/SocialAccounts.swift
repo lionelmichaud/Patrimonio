@@ -311,21 +311,21 @@ struct SocialAccounts {
 
         // enregistrer les résultats dans le directory approprié
         do {
-            try Persistence.saveToCsvPath(simulationTitle : simulationTitle,
+            try PersistenceManager.saveToCsvPath(simulationTitle : simulationTitle,
                                           fileName        : FileNameCst.kBalanceSheetCSVFileName,
                                           csvString       : balanceSheetCSV)
         } catch {
             throw FileError.failedToSaveBalanceSheetCsv
         }
         do {
-            try Persistence.saveToCsvPath(simulationTitle : simulationTitle,
+            try PersistenceManager.saveToCsvPath(simulationTitle : simulationTitle,
                                           fileName        : FileNameCst.kCashFlowCSVFileName,
                                           csvString       : cashFlowCSV)
         } catch {
             throw FileError.failedToSaveCashFlowCsv
         }
         do {
-            try Persistence.saveToCsvPath(simulationTitle : simulationTitle,
+            try PersistenceManager.saveToCsvPath(simulationTitle : simulationTitle,
                                           fileName        : FileNameCst.kSuccessionsCSVFileName,
                                           csvString       : successionsCSV)
         } catch {

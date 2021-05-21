@@ -14,12 +14,17 @@ struct ContentView: View {
 
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var simulation : Simulation
-    @SceneStorage("selectedTab") var selection = UIState.Tab.family
+    @SceneStorage("selectedTab") var selection = UIState.Tab.dossier
     
     // MARK: - Properties
 
     var body: some View {
         TabView(selection: $uiState.selectedTab) {
+            /// gestion des dossiers
+            DossiersView()
+                .tabItem { Label("Dossiers", systemImage: "folder.fill.badge.person.crop") }
+                .tag(UIState.Tab.dossier)
+
             /// composition de la famille
             FamilyView()
                 .tabItem { Label("Famille", systemImage: "person.2.fill") }
