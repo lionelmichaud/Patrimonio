@@ -40,7 +40,7 @@ struct PersonDetailView: View {
             }
         }
         .sheet(isPresented: $showingSheet) {
-            MemberEditView(withInitialValueFrom: self.member)
+            PersonEditView(withInitialValueFrom: self.member)
         }
         .navigationTitle("Membre")
         .navigationBarTitleDisplayModeInline()

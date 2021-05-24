@@ -78,10 +78,18 @@ struct DossierRowView : View {
             Text(dossier.name)
                 .allowsTightening(true)
             HStack {
-                Text("Date")
+                Text("Date de création")
                     .font(.caption)
                 Spacer()
+                Text(dossier.dateCreationStr)
             }
+            .font(.caption)
+            HStack {
+                Text("Dernière modification")
+                Spacer()
+                Text(dossier.dateModificationStr)
+            }
+            .font(.caption)
         }
     }
 }

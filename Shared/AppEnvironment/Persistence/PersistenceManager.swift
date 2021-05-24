@@ -37,6 +37,7 @@ enum FileError: String, Error {
     case failedToResolveDocuments          = "Impossible de trouver le répertoire 'Documents' de l'utilisateur"
     case failedToResolveLibrary            = "Impossible de trouver le répertoire 'Library' de l'utilisateur"
     case failedToCreateTemplateDirectory   = "Impossible de créer le répertoire 'template' dans le répertoire 'Library' de l'utilisateur"
+    case directoryToDuplicateDoesNotExist  = "Le répertoire à dupliquer n'est pas défini"
     case failedToDuplicateTemplates        = "Echec de la copie des templates"
     case templatesDossierNotInitialized    = "Dossier 'templates' non initializé"
 }
@@ -105,7 +106,7 @@ struct PersistenceManager {
     ///     - FileError.failedToResolveDocuments
     ///     - FileError.templatesDossierNotInitialized
     /// - Returns: répertoire créé
-    static func newUserDirectory(withID: UUID) throws -> Folder {
+    static func newUserDirectory(withID id: UUID) throws -> Folder {
         /// rechercher le dossier 'Documents' de l'utilisateur
         guard let documentsFolder = Folder.documents else {
             customLog.log(level: .error,
@@ -115,7 +116,7 @@ struct PersistenceManager {
 
         // créer le directory USER pour le nouveau Dossier
         let targetFolder: Folder
-        targetFolder = try documentsFolder.createSubfolder(named: withID.uuidString)
+        targetFolder = try documentsFolder.createSubfolder(named: id.uuidString)
 
         // récupérer le dossier 'templates'
         guard let originFolder = Dossier.templates?.folder else {
@@ -124,7 +125,48 @@ struct PersistenceManager {
             throw FileError.templatesDossierNotInitialized
         }
 
-        // y dupliquer les fichiers du directory 'template'
+        // y dupliquer les fichiers du directory originFolder
+        do {
+            try duplicateTemplateFiles(from: originFolder, to: targetFolder)
+        } catch {
+            // détruire le directory créé
+            try targetFolder.delete()
+            throw error
+        }
+
+        return targetFolder
+    }
+
+    /// Créer un nouveau répertoire nommé 'withID' dans le répertoire 'Documents'
+    /// et y copier tous les fichiers présents dans le répertoire à dupliquer
+    /// - Parameters:
+    ///   - id: nom du répertoire à créer
+    ///   - originFolder: répertoire à dupliquer
+    /// - Throws:
+    ///   - FileError.failedToResolveDocuments
+    ///   - FileError.directoryToDuplicateDoesNotExist
+    /// - Returns: répertoire créé
+    static func newUserDirectory(withID id: UUID,
+                                 withContentDuplicatedFrom originFolder: Folder?) throws -> Folder {
+        /// rechercher le dossier 'Documents' de l'utilisateur
+        guard let documentsFolder = Folder.documents else {
+            customLog.log(level: .error,
+                          "\(FileError.failedToResolveDocuments.rawValue)")
+            throw FileError.failedToResolveDocuments
+        }
+
+        // créer le directory USER pour le nouveau Dossier
+        let targetFolder: Folder
+        targetFolder = try documentsFolder.createSubfolder(named: id.uuidString)
+
+        // récupérer le dossier à dupliquer
+        guard let originFolder = originFolder else {
+            customLog.log(level: .error,
+                          "\(FileError.directoryToDuplicateDoesNotExist.rawValue)")
+            throw FileError.directoryToDuplicateDoesNotExist
+        }
+
+        // y dupliquer les fichiers du directory originFolder
         do {
             try duplicateTemplateFiles(from: originFolder, to: targetFolder)
         } catch {
@@ -181,6 +223,32 @@ struct PersistenceManager {
             .pointingTo(templateFolder!)
             .namedAs(templateFolder!.name)
             .ownedByApp()
+    }
+
+    /// Calculer la date de dernière modification d'un dossier utilisateur comme étant celle
+    /// du fichier modifié le plus tardivement
+    /// - Parameter id: UUID du dossier du dossier utilisateur
+    /// - Returns: date de dernière modification d'un dossier utilisateur
+    static func getUserDirectoryLastModifiedDate(withID id: UUID) throws -> Date {
+        /// rechercher le dossier 'Documents' de l'utilisateur
+        guard let documentsFolder = Folder.documents else {
+            customLog.log(level: .error,
+                          "\(FileError.failedToResolveDocuments.rawValue)")
+            throw FileError.failedToResolveDocuments
+        }
+
+        // trouver le directory demandé
+        let targetFolder = try documentsFolder.subfolder(named: id.uuidString)
+
+        // calculer la date au plus tard
+        var date = 100.years.ago!
+        targetFolder.files.recursive.forEach { file in
+            if let modifDate = file.modificationDate {
+                date = max(date, modifDate)
+            }
+        }
+
+        return date
     }
 
     /// Sauvegarder le fichier dans un répertoire spécifique à la simulation + au fichiers au format CSV

@@ -11,7 +11,7 @@ import HumanLifeModel
 
 // MARK: - Saisie du nouveau membre de la famille
 
-struct MemberAddView: View {
+struct PersonAddView: View {
     //@Environment(\.managedObjectContext) var moc
     @EnvironmentObject var family     : Family
     @EnvironmentObject var simulation : Simulation
@@ -160,7 +160,7 @@ struct MemberAddView_Previews: PreviewProvider {
     static var uiState    = UIState()
     
     static var previews: some View {
-        MemberAddView()
+        PersonAddView()
             .environmentObject(family)
             .environmentObject(simulation)
             .environmentObject(patrimoine)

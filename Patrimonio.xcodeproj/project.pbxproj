@@ -62,10 +62,10 @@
 		791ED0E8263A098000701202 /* PersonLifeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0E6263A098000701202 /* PersonLifeLineView.swift */; };
 		791ED0EB263A0A1200701202 /* StepperView in Frameworks */ = {isa = PBXBuildFile; productRef = 791ED0EA263A0A1200701202 /* StepperView */; };
 		791ED0ED263A0A2800701202 /* StepperView in Frameworks */ = {isa = PBXBuildFile; productRef = 791ED0EC263A0A2800701202 /* StepperView */; };
-		791ED0EF263A173D00701202 /* MemberAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0EE263A173D00701202 /* MemberAddView.swift */; };
-		791ED0F0263A173D00701202 /* MemberAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0EE263A173D00701202 /* MemberAddView.swift */; };
-		791ED0F2263A188900701202 /* MemberEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0F1263A188900701202 /* MemberEditView.swift */; };
-		791ED0F3263A188900701202 /* MemberEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0F1263A188900701202 /* MemberEditView.swift */; };
+		791ED0EF263A173D00701202 /* PersonAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0EE263A173D00701202 /* PersonAddView.swift */; };
+		791ED0F0263A173D00701202 /* PersonAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0EE263A173D00701202 /* PersonAddView.swift */; };
+		791ED0F2263A188900701202 /* PersonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0F1263A188900701202 /* PersonEditView.swift */; };
+		791ED0F3263A188900701202 /* PersonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0F1263A188900701202 /* PersonEditView.swift */; };
 		791ED0F5263A1C5E00701202 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0F4263A1C5E00701202 /* ButtonStyles.swift */; };
 		791ED0F6263A1C5E00701202 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0F4263A1C5E00701202 /* ButtonStyles.swift */; };
 		791ED0F8263A1D8A00701202 /* FamilySectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791ED0F7263A1D8A00701202 /* FamilySectionView.swift */; };
@@ -501,6 +501,10 @@
 		79EF934F2637636D00C1BE5B /* ChartsFormaters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EF934B2637636D00C1BE5B /* ChartsFormaters.swift */; };
 		79EF935926376D1100C1BE5B /* Simulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EF935826376D1100C1BE5B /* Simulation.swift */; };
 		79EF935A26376D1100C1BE5B /* Simulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EF935826376D1100C1BE5B /* Simulation.swift */; };
+		79F222F2265ACC9F005EE0B9 /* DossierEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F222F1265ACC9F005EE0B9 /* DossierEditView.swift */; };
+		79F222F3265ACC9F005EE0B9 /* DossierEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F222F1265ACC9F005EE0B9 /* DossierEditView.swift */; };
+		79F222F5265AD0B9005EE0B9 /* DossierViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F222F4265AD0B9005EE0B9 /* DossierViewModel.swift */; };
+		79F222F6265AD0B9005EE0B9 /* DossierViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F222F4265AD0B9005EE0B9 /* DossierViewModel.swift */; };
 		79FA8CE12630684F009FEA00 /* PeriodicInvestment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD62630684F009FEA00 /* PeriodicInvestment.swift */; };
 		79FA8CE22630684F009FEA00 /* PeriodicInvestment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD62630684F009FEA00 /* PeriodicInvestment.swift */; };
 		79FA8CE32630684F009FEA00 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD72630684F009FEA00 /* Assets.swift */; };
@@ -587,8 +591,8 @@
 		791ED0DF263A049900701202 /* PersonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonViewModel.swift; sourceTree = "<group>"; };
 		791ED0E2263A04EE00701202 /* AdultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdultViewModel.swift; sourceTree = "<group>"; };
 		791ED0E6263A098000701202 /* PersonLifeLineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonLifeLineView.swift; sourceTree = "<group>"; };
-		791ED0EE263A173D00701202 /* MemberAddView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberAddView.swift; sourceTree = "<group>"; };
-		791ED0F1263A188900701202 /* MemberEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberEditView.swift; sourceTree = "<group>"; };
+		791ED0EE263A173D00701202 /* PersonAddView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonAddView.swift; sourceTree = "<group>"; };
+		791ED0F1263A188900701202 /* PersonEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonEditView.swift; sourceTree = "<group>"; };
 		791ED0F4263A1C5E00701202 /* ButtonStyles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		791ED0F7263A1D8A00701202 /* FamilySectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FamilySectionView.swift; sourceTree = "<group>"; };
 		791ED0FA263A1EB700701202 /* PersonDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonDetailView.swift; sourceTree = "<group>"; };
@@ -795,6 +799,8 @@
 		79EF934A2637636D00C1BE5B /* ChartsMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartsMarkerView.swift; sourceTree = "<group>"; };
 		79EF934B2637636D00C1BE5B /* ChartsFormaters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartsFormaters.swift; sourceTree = "<group>"; };
 		79EF935826376D1100C1BE5B /* Simulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Simulation.swift; sourceTree = "<group>"; };
+		79F222F1265ACC9F005EE0B9 /* DossierEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierEditView.swift; sourceTree = "<group>"; };
+		79F222F4265AD0B9005EE0B9 /* DossierViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierViewModel.swift; sourceTree = "<group>"; };
 		79FA8CD62630684F009FEA00 /* PeriodicInvestment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodicInvestment.swift; sourceTree = "<group>"; };
 		79FA8CD72630684F009FEA00 /* Assets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
 		79FA8CD82630684F009FEA00 /* InterestRateKind.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterestRateKind.swift; sourceTree = "<group>"; };
@@ -970,8 +976,8 @@
 				791ED0E2263A04EE00701202 /* AdultViewModel.swift */,
 				791ED0FD263A1EF800701202 /* AdultDetailView.swift */,
 				791ED0FE263A1EF800701202 /* ChildDetailView.swift */,
-				791ED0F1263A188900701202 /* MemberEditView.swift */,
-				791ED0EE263A173D00701202 /* MemberAddView.swift */,
+				791ED0F1263A188900701202 /* PersonEditView.swift */,
+				791ED0EE263A173D00701202 /* PersonAddView.swift */,
 				791ED103263A20F600701202 /* SuccessorListView.swift */,
 				791ED0E5263A098000701202 /* LifeLineViews */,
 				791ED0D82639FE2700701202 /* RetirementView */,
@@ -1192,8 +1198,8 @@
 			isa = PBXGroup;
 			children = (
 				796506D7264094B00036E466 /* AssetView.swift */,
-				796506C52640866F0036E466 /* PeriodicInvestDetailedView.swift */,
 				796506C62640866F0036E466 /* TypeInvestEditView.swift */,
+				796506C52640866F0036E466 /* PeriodicInvestDetailedView.swift */,
 				796506C72640866F0036E466 /* FreeInvestDetailedView.swift */,
 				796506C82640866F0036E466 /* InterestRateTypeView.swift */,
 				796506C92640866F0036E466 /* EstateDetailedView.swift */,
@@ -1388,6 +1394,8 @@
 				7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */,
 				796503CE265596E50093F10E /* DossierDetailView.swift */,
 				79A8A19426565DBC00B23AD7 /* DossierAddView.swift */,
+				79F222F1265ACC9F005EE0B9 /* DossierEditView.swift */,
+				79F222F4265AD0B9005EE0B9 /* DossierViewModel.swift */,
 			);
 			path = DossierViews;
 			sourceTree = "<group>";
@@ -2067,6 +2075,7 @@
 				799025B52641F60300ED53D4 /* ChartsSectionView.swift in Sources */,
 				790FF3502648AA07001B2653 /* BalanceSheetLine.swift in Sources */,
 				791ED118263A2CBD00701202 /* CashFlowLine+populateIncomes.swift in Sources */,
+				79F222F5265AD0B9005EE0B9 /* DossierViewModel.swift in Sources */,
 				79569930262F83170015AF34 /* Ownership.swift in Sources */,
 				79569929262F7C940015AF34 /* Owners.swift in Sources */,
 				79BBE8E92646FEE70045E524 /* CF Detailed ChartView.swift in Sources */,
@@ -2128,7 +2137,7 @@
 				79B2727A2634D68E00298E5D /* BoundaryEditView.swift in Sources */,
 				799025BF2641F60300ED53D4 /* SuccessionsSectionView.swift in Sources */,
 				79FC723E26331C69004F3BD2 /* SimulationUserSettings.swift in Sources */,
-				791ED0EF263A173D00701202 /* MemberAddView.swift in Sources */,
+				791ED0EF263A173D00701202 /* PersonAddView.swift in Sources */,
 				7990D8DD264F0A6800078CB6 /* LineChartCashFlowVisitor.swift in Sources */,
 				790FF34826485BDE001B2653 /* CvsBuilder.swift in Sources */,
 				796506CF2640866F0036E466 /* FreeInvestDetailedView.swift in Sources */,
@@ -2180,6 +2189,7 @@
 				799025AD2641F60300ED53D4 /* FamilyLifeEventChartView.swift in Sources */,
 				79A9AA82264B10F80036732F /* CsvCashFlowVisitor.swift in Sources */,
 				79BE4A7D2651CE7800BBF46C /* ModelHumanView.swift in Sources */,
+				79F222F2265ACC9F005EE0B9 /* DossierEditView.swift in Sources */,
 				79C838342641E04C008B29BF /* PopOverContentView.swift in Sources */,
 				79EF935926376D1100C1BE5B /* Simulation.swift in Sources */,
 				797931A226416E8C000F8599 /* KPI.swift in Sources */,
@@ -2202,7 +2212,7 @@
 				79EC4802263096200006EE44 /* TaxeCategory.swift in Sources */,
 				79EC482126309EFC0006EE44 /* LegalSuccessionManager.swift in Sources */,
 				79FA8CE92630684F009FEA00 /* RealEstate.swift in Sources */,
-				791ED0F2263A188900701202 /* MemberEditView.swift in Sources */,
+				791ED0F2263A188900701202 /* PersonEditView.swift in Sources */,
 				79EC47BA26307C910006EE44 /* ValuedLiabilities.swift in Sources */,
 				7990D8D1264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift in Sources */,
 				798DE8B22635CBC300C0C3B5 /* ExpenseSummaryView.swift in Sources */,
@@ -2310,17 +2320,18 @@
 				79EC4801263096200006EE44 /* ValuedTaxes.swift in Sources */,
 				798DE8C12635CD3C00C0C3B5 /* AlertView.swift in Sources */,
 				79735EED263242FA00CD952F /* ContentView.swift in Sources */,
+				79F222F3265ACC9F005EE0B9 /* DossierEditView.swift in Sources */,
 				79FC722426330D2C004F3BD2 /* AppCommands.swift in Sources */,
 				79B2728D2634DBEB00298E5D /* Themes.swift in Sources */,
 				791ED119263A2CBD00701202 /* CashFlowLine+populateIncomes.swift in Sources */,
 				799025B22641F60300ED53D4 /* IrppEvolutionChartView.swift in Sources */,
-				791ED0F3263A188900701202 /* MemberEditView.swift in Sources */,
+				791ED0F3263A188900701202 /* PersonEditView.swift in Sources */,
 				796503CD265581E40093F10E /* Store.swift in Sources */,
 				79EC5EAB26406FD900FF8263 /* OwnerGroupBox.swift in Sources */,
 				7990D8E2264F1C4000078CB6 /* BarChartCashFlowVisitor.swift in Sources */,
 				7998E1A3262DBE3E00DA4A12 /* Adult+Unemployement.swift in Sources */,
 				79FA8CEC2630684F009FEA00 /* SCPI.swift in Sources */,
-				791ED0F0263A173D00701202 /* MemberAddView.swift in Sources */,
+				791ED0F0263A173D00701202 /* PersonAddView.swift in Sources */,
 				7990D8DE264F0A6800078CB6 /* LineChartCashFlowVisitor.swift in Sources */,
 				799025AC2641F60300ED53D4 /* ComputationView.swift in Sources */,
 				79FC723726331A9D004F3BD2 /* SettingsView.swift in Sources */,
@@ -2365,6 +2376,7 @@
 				79FC728D26333A27004F3BD2 /* MainScene.swift in Sources */,
 				796506D62640866F0036E466 /* scpiDetailedView.swift in Sources */,
 				796503D0265596E50093F10E /* DossierDetailView.swift in Sources */,
+				79F222F6265AD0B9005EE0B9 /* DossierViewModel.swift in Sources */,
 				79FA8CF62630684F009FEA00 /* FinancialEnvelop.swift in Sources */,
 				799025A42641F60300ED53D4 /* HistogramView.swift in Sources */,
 				791D3BA12649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,

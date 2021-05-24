@@ -19,7 +19,7 @@ struct DossiersView: View {
                 // entête
                 DossierHeaderView()
 
-                // liste des membres de la famille
+                // liste des Dossiers
                 DossierBrowserView(showingSheet: $showingSheet)
             }
             //.defaultSideBarListStyle()

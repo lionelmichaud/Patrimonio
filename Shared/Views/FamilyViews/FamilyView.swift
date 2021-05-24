@@ -38,7 +38,7 @@ struct FamilyView: View {
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
         // Vue modale de saisie d'un nouveau membre de la famille
         .sheet(isPresented: $showingSheet) {
-            MemberAddView()
+            PersonAddView()
                 .environmentObject(self.family)
                 .environmentObject(self.simulation)
                 .environmentObject(self.patrimoine)

@@ -11,7 +11,7 @@ import FiscalModel
 import HumanLifeModel
 import UnemployementModel
 
-struct MemberEditView: View {
+struct PersonEditView: View {
     @EnvironmentObject var family     : Family
     @EnvironmentObject var patrimoine : Patrimoin
     @EnvironmentObject var simulation : Simulation
@@ -293,11 +293,11 @@ struct MemberEditView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             // adult
-            MemberEditView(withInitialValueFrom: anAdult)
+            PersonEditView(withInitialValueFrom: anAdult)
                 .environmentObject(family)
                 .environmentObject(anAdult)
             // child
-            MemberEditView(withInitialValueFrom: aChild)
+            PersonEditView(withInitialValueFrom: aChild)
                 .environmentObject(family)
                 .environmentObject(aChild)
             Form {

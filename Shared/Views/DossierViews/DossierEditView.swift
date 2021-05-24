@@ -1,18 +1,16 @@
 //
-//  DossierAddView.swift
+//  DossierModifyView.swift
 //  Patrimonio
 //
-//  Created by Lionel MICHAUD on 20/05/2021.
+//  Created by Lionel MICHAUD on 23/05/2021.
 //
 
 import SwiftUI
-import AppFoundation
 
-// MARK: - Création du nouveau DOSSIER
-
-struct DossierAddView: View {
+struct DossierEditView: View {
     @EnvironmentObject private var dataStore: Store
     @Environment(\.presentationMode) var presentationMode
+    var originalItem : Dossier
     @State private var dossierVM             = DossierViewModel()
     @State private var alertItem             : AlertItem?
     @State private var failedToCreateDossier : Bool   = false
@@ -25,7 +23,7 @@ struct DossierAddView: View {
                 .capsuleButtonStyle()
 
             Spacer()
-            Text("Créer...").font(.title).fontWeight(.bold)
+            Text("Modifier...").font(.title).fontWeight(.bold)
             Spacer()
 
             Button(action: createDossier,
@@ -59,6 +57,12 @@ struct DossierAddView: View {
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .alert(item: $alertItem, content: myAlert)
         }
+        .onAppear(perform: onAppear)
+    }
+
+    func onAppear() {
+        dossierVM.name = originalItem.name
+        dossierVM.note = originalItem.note
     }
 
     /// Création du nouveau Dossier et ajout à la liste
@@ -67,7 +71,7 @@ struct DossierAddView: View {
             try dataStore.createDossier(named       : dossierVM.name,
                                         annotatedBy : dossierVM.note)
         } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de la création du dossier"),
+            self.alertItem = AlertItem(title         : Text("Echec de la modification du dossier"),
                                        dismissButton : .default(Text("OK")))
             failedToCreateDossier = true
         }
@@ -82,8 +86,8 @@ struct DossierAddView: View {
     }
 }
 
-struct DossierAddView_Previews: PreviewProvider {
+struct DossierModifyView_Previews: PreviewProvider {
     static var previews: some View {
-        DossierAddView()
+        DossierEditView(originalItem: Dossier())
     }
 }

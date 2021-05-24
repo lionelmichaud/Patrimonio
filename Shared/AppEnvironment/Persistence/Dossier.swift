@@ -16,6 +16,11 @@ private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
 // MARK: - Liste de DOSSIERs contenant tous les fichiers d'entrée et de sortie
 
 typealias DossierArray = [Dossier]
+extension DossierArray {
+    static func load() throws -> DossierArray {
+        try PersistenceManager.loadUserDossiersFromDocumentsDirectory()
+    }
+}
 
 // MARK: - DOSSIER contenant tous les fichiers d'entrée et de sortie
 
@@ -39,7 +44,10 @@ struct Dossier: Identifiable {
 
     // MARK: - Static Properties
 
-    static var current   : Dossier?
+    // le dossier en cours d'utilisation
+    static var current : Dossier?
+
+    // le dossier contenant les template à utiilser pour créer un nouveau dossier
     static let templates : Dossier? =
         PersistenceManager
         .getTemplateDossier()?
@@ -52,24 +60,46 @@ struct Dossier: Identifiable {
     private var _name             : String?
     private var _note             : String?
     private var _dateCreation     : Date?
-    private var _dateModification : Date?
     private var _isUserDossier    = true
 
     // MARK: - Computed Properties
 
     var name: String {
-        get { _name ?? "No name" }
+        get { _name ?? "Pas de nom" }
         set { _name = newValue}
     }
     var note: String {
-        get { _note ?? "No comment" }
+        get { _note ?? "Pas de commentaire" }
         set { _note = newValue }
     }
-    var dateCreation: String {
+    var dateCreationStr: String {
         _dateCreation.stringShortDate
     }
-    var dateModification: String {
-        _dateModification.stringShortDate
+    private var dateModification: Date? {
+        do {
+            let dateModif = try PersistenceManager.getUserDirectoryLastModifiedDate(withID: self.id)
+            if let dateCreation = _dateCreation {
+                return max(dateCreation, dateModif)
+            } else {
+                return dateModif
+            }
+        } catch {
+            return nil
+        }
+    }
+    var dateModificationStr: String {
+        if let dateModif = self.dateModification {
+            return dateModif.stringShortDate
+        } else {
+            return "nil"
+        }
+    }
+    var hourModificationStr: String {
+        if let dateModif = self.dateModification {
+            return dateModif.stringTime
+        } else {
+            return "nil"
+        }
     }
     var folderName : String { folder?.name ?? "No folder" }
 
@@ -80,12 +110,10 @@ struct Dossier: Identifiable {
          with name                   : String?  = nil,
          annotatedBy note            : String?  = nil,
          createdOn dateCreation      : Date?    = nil,
-         modifiedOn dateModification : Date?    = nil,
          isUserDossier               : Bool     = true) {
         self.id                = id
         self.folder            = folder
         self._dateCreation     = dateCreation
-        self._dateModification = dateModification
         self._note             = note
         self._name             = name
         self._isUserDossier    = isUserDossier
@@ -93,8 +121,9 @@ struct Dossier: Identifiable {
 
     static func create(name : String,
                        note : String) throws -> Dossier {
-        // créer le directory associé
         let newDossier = Dossier()
+
+        // créer le directory associé
         let targetFolder = try PersistenceManager.newUserDirectory(withID: newDossier.id)
 
         // initialiser las propriétés
@@ -104,32 +133,8 @@ struct Dossier: Identifiable {
             .namedAs(name)
             .annotatedBy(note)
             .createdOn(Date.now)
-            .modifiedOn(Date.now)
             .ownedByUser()
     }
-
-//    init?(pointingTo folder : Folder,
-//          isUserDossier     : Bool = true) {
-//
-//        // a-t-on affaire à une Dossier utilisateur ?
-//        if isUserDossier, let folderUUID = UUID(uuidString: folder.name) {
-//            // le répertoire porte un nom de type UUID -> l'affecter au UUID du Dossier
-//            self.id = folderUUID
-//            self._name = folder.name
-//            self.folder = folder
-//
-//            // a-t-on affaire à une Dossier appli ?
-//        } else if !isUserDossier && folder.isUserFolder {
-//            self._name = folder.name
-//            self.folder = folder
-//
-//        } else {
-//            // le nom du directory est invalide
-//            customLog.log(level: .error,
-//                          "\(DossierError.inconsistencyOwnerFolderName.rawValue): \(isUserDossier ? "User" : "App")")
-//            return nil
-//        }
-//    }
 
     // MARK: - Builder methods
 
@@ -139,7 +144,7 @@ struct Dossier: Identifiable {
         return _dossier
     }
 
-   func pointingTo(_ folder: Folder) -> Dossier {
+    func pointingTo(_ folder: Folder) -> Dossier {
         var _dossier = self
         _dossier.folder = folder
         return _dossier
@@ -154,12 +159,6 @@ struct Dossier: Identifiable {
     func createdOn(_ date: Date = Date.now) -> Dossier {
         var _dossier = self
         _dossier._dateCreation = date
-        return _dossier
-    }
-
-    func modifiedOn(_ date: Date = Date.now) -> Dossier {
-        var _dossier = self
-        _dossier._dateModification = date
         return _dossier
     }
 
@@ -221,6 +220,23 @@ struct Dossier: Identifiable {
                           "\(DossierError.failedToDeleteDossier.rawValue) \(_name ?? "No name")")
             throw DossierError.failedToDeleteDossier
         }
+    }
+
+    func duplicate() throws -> Dossier {
+        let newDossier = Dossier()
+
+        // créer le directory associé
+        let targetFolder = try PersistenceManager.newUserDirectory(withID: newDossier.id,
+                                                                   withContentDuplicatedFrom: folder)
+
+        // initialiser las propriétés
+        return
+            newDossier
+            .pointingTo(targetFolder)
+            .namedAs(name + "-copie")
+            .annotatedBy(note)
+            .createdOn(Date.now)
+            .ownedByUser()
     }
 }
 
