@@ -54,15 +54,10 @@ struct DossiersView_Previews: PreviewProvider {
     static let uiState    = UIState()
     static let dataStore  = Store()
 
-    static func load() {
-        try! dataStore.load()
-    }
-
     static var previews: some View {
-        DossiersView_Previews.load()
-        return DossiersView()
-            .environmentObject(dataStore)
-            .environmentObject(uiState)
+        DossiersView()
+            .environmentObject(DossiersView_Previews.dataStore)
+            .environmentObject(DossiersView_Previews.uiState)
             .colorScheme(.dark)
     }
 }

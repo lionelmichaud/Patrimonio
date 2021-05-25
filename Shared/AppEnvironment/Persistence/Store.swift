@@ -16,24 +16,26 @@ class Store: ObservableObject {
     
     init() {
         do {
-            dossiers = try DossierArray.load()
-            failedToLoadDossiers = false
+            var loadedDossiers = DossierArray()
+            try loadedDossiers.load()
+            self.dossiers = loadedDossiers
+            self.failedToLoadDossiers = false
         } catch {
-            dossiers = []
-            failedToLoadDossiers = true
+            self.dossiers = []
+            self.failedToLoadDossiers = true
         }
     }
 
     /// Charger la liste des Dossiers
-    func load() throws {
-        do {
-            dossiers = try DossierArray.load()
-            failedToLoadDossiers = false
-        } catch {
-            failedToLoadDossiers = true
-            throw error
-        }
-    }
+//    func load() throws {
+//        do {
+//            try dossiers.load()
+//            failedToLoadDossiers = false
+//        } catch {
+//            failedToLoadDossiers = true
+//            throw error
+//        }
+//    }
 
     /// Créer un nouveau Dossier
     /// - Parameters:

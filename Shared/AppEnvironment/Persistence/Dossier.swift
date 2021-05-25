@@ -17,9 +17,8 @@ private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
 
 typealias DossierArray = [Dossier]
 extension DossierArray {
-    static func load() throws -> DossierArray {
-        let dossiers = try PersistenceManager.loadUserDossiers()
-        return dossiers
+    mutating func load() throws {
+        self = try PersistenceManager.loadUserDossiers()
     }
 }
 

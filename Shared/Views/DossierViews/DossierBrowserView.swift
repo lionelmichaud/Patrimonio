@@ -82,13 +82,12 @@ struct DossierRowView : View {
 struct DossierBrowserView_Previews: PreviewProvider {
     static let dataStore  = Store()
 
-    static func load() {
-        try! dataStore.load()
-    }
-
     static var previews: some View {
-        DossiersView_Previews.load()
-        return DossierBrowserView(showingSheet: .constant(false))
+        NavigationView {
+        List {
+        DossierBrowserView(showingSheet: .constant(false))
             .environmentObject(dataStore)
+        }
+        }
     }
 }
