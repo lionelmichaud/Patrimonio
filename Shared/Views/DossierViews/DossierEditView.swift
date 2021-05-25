@@ -69,29 +69,34 @@ struct DossierEditView: View {
             // on a modifié un item existant
             let modifiedItem = dossierVM.copyFromViewModel(original: originalItem)
             if modifiedItem != originalItem {
-                updateDossier()
+                updateItem(with: modifiedItem)
             }
         } else {
             // on créé un nouvel item
-            createDossier()
+            createItem()
         }
     }
 
     /// Création du nouveau Dossier et ajout à la liste
-    func createDossier() {
+    func createItem() {
         do {
             try dataStore.createDossier(named       : dossierVM.name,
                                         annotatedBy : dossierVM.note)
         } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de la modification du dossier"),
+            self.alertItem = AlertItem(title         : Text("Echec de la création du dossier"),
                                        dismissButton : .default(Text("OK")))
         }
 
         self.presentationMode.wrappedValue.dismiss()
     }
     
-    func updateDossier() {
-        
+    func updateItem(with modifiedItem: Dossier) {
+        if let idx = dataStore.dossiers.firstIndex(where: {$0 == originalItem}) {
+            dataStore.dossiers[idx] = modifiedItem
+        } else {
+            self.alertItem = AlertItem(title         : Text("Echec de la modification du dossier"),
+                                       dismissButton : .default(Text("OK")))
+        }
         self.presentationMode.wrappedValue.dismiss()
     }
 }

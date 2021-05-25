@@ -41,7 +41,7 @@ enum DossierCreationActionEnum: String, PickableEnum {
     }
 }
 
-struct Dossier: Identifiable {
+struct Dossier: Identifiable, Equatable {
 
     // MARK: - Static Properties
 
@@ -239,9 +239,6 @@ struct Dossier: Identifiable {
             .createdOn(Date.now)
             .ownedByUser()
     }
-}
-
-extension Dossier: Equatable {
 }
 
 extension Dossier: CustomStringConvertible {
