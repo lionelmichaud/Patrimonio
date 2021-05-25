@@ -22,19 +22,19 @@ struct LifeExpenseArray: NameableValuableArray {
     // MARK: - Initializers
     
     init(fileNamePrefix: String = "") {
-        self = Bundle.main.decode(LifeExpenseArray.self,
-                                  from                 : fileNamePrefix + String(describing: Item.self) + ".json",
-                                  dateDecodingStrategy : .iso8601,
-                                  keyDecodingStrategy  : .useDefaultKeys)
+        self = Bundle.main.loadFromJSON(LifeExpenseArray.self,
+                                        from                 : fileNamePrefix + String(describing: Item.self) + ".json",
+                                        dateDecodingStrategy : .iso8601,
+                                        keyDecodingStrategy  : .useDefaultKeys)
     }
-
+    
     init(for aClass     : AnyClass,
          fileNamePrefix : String = "") {
         let testBundle = Bundle(for: aClass)
-        self = testBundle.decode(LifeExpenseArray.self,
-                                 from                 : fileNamePrefix + String(describing: Item.self) + ".json",
-                                 dateDecodingStrategy : .iso8601,
-                                 keyDecodingStrategy  : .useDefaultKeys)
+        self = testBundle.loadFromJSON(LifeExpenseArray.self,
+                                       from                 : fileNamePrefix + String(describing: Item.self) + ".json",
+                                       dateDecodingStrategy : .iso8601,
+                                       keyDecodingStrategy  : .useDefaultKeys)
     }
 }
 

@@ -27,19 +27,19 @@ public extension BundleDecodable {
          fromBundle bundle    : Bundle                           = Bundle.main,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy = .iso8601,
          keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) {
-        self = bundle.decode(Self.self,
-                             from                 : file ?? Self.defaultFileName,
-                             dateDecodingStrategy : dateDecodingStrategy,
-                             keyDecodingStrategy  : keyDecodingStrategy)
+        self = bundle.loadFromJSON(Self.self,
+                                   from                 : file ?? Self.defaultFileName,
+                                   dateDecodingStrategy : dateDecodingStrategy,
+                                   keyDecodingStrategy  : keyDecodingStrategy)
     }
 }
 
 // MARK: - Protocol apportant Encodable JSON à partir d'un fichier d'un Bundle de l'application
 
 public protocol BundleEncodable: Encodable {
-
+    
     static var defaultFileName : String { get set }
-
+    
     /// Encode l'objet dans un fichier stocké dans le Bundle Main de l'Application
     func saveToBundle(toFile file          : String?,
                       toBundle bundle      : Bundle,
@@ -53,10 +53,10 @@ public extension BundleEncodable {
                       toBundle bundle      : Bundle                           = Bundle.main,
                       dateEncodingStrategy : JSONEncoder.DateEncodingStrategy = .iso8601,
                       keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) {
-        bundle.encode(self,
-                           to                   : file ?? Self.defaultFileName,
-                           dateEncodingStrategy : dateEncodingStrategy,
-                           keyEncodingStrategy  : keyEncodingStrategy)
+        bundle.saveAsJSON(self,
+                          to                   : file ?? Self.defaultFileName,
+                          dateEncodingStrategy : dateEncodingStrategy,
+                          keyEncodingStrategy  : keyEncodingStrategy)
     }
 }
 

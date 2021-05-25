@@ -22,10 +22,10 @@ struct AppVersion: Decodable, Versionable {
     // MARK: - Static Methods
     
     private init() {
-        self = Bundle.main.decode(AppVersion.self,
-                                  from                 : "AppVersion.json",
-                                  dateDecodingStrategy : .iso8601,
-                                  keyDecodingStrategy  : .useDefaultKeys)
+        self = Bundle.main.loadFromJSON(AppVersion.self,
+                                        from                 : "AppVersion.json",
+                                        dateDecodingStrategy : .iso8601,
+                                        keyDecodingStrategy  : .useDefaultKeys)
         version.initializeWithBundleValues()
     }
     

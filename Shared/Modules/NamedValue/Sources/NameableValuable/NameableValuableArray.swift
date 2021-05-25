@@ -28,7 +28,6 @@ public extension Array where Element: NameableValuable {
     func sumOfValues (atEndOf year: Int) -> Double {
         return reduce(.zero, {result, element in
             result + element.value(atEndOf: year)
-            
         })
     }
 }
@@ -99,10 +98,10 @@ public extension NameableValuableArray {
     // TODO: - Generaliser au Bundle de Test avec "for aClass: AnyClass" ou supprimer la méthode si non utilisée
     func storeItemsToFile(fileNamePrefix: String = "") {
         // encode to JSON file
-        Bundle.main.encode(self,
-                           to                   : fileNamePrefix + String(describing: Item.self) + ".json",
-                           dateEncodingStrategy : .iso8601,
-                           keyEncodingStrategy  : .useDefaultKeys)
+        Bundle.main.saveAsJSON(self,
+                               to                   : fileNamePrefix + String(describing: Item.self) + ".json",
+                               dateEncodingStrategy : .iso8601,
+                               keyEncodingStrategy  : .useDefaultKeys)
     }
     
     mutating func move(from indexes   : IndexSet,

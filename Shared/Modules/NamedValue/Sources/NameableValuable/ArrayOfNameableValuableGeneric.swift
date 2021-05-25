@@ -38,22 +38,22 @@ public struct ArrayOfNameableValuable<E>: Codable, Versionable where
     }
 
     // MARK: - Initializers
-
+    
     public init(fileNamePrefix: String = "") {
-        self = Bundle.main.decode(ArrayOfNameableValuable.self,
-                                  from                 : fileNamePrefix + String(describing: E.self) + ".json",
-                                  dateDecodingStrategy : .iso8601,
-                                  keyDecodingStrategy  : .useDefaultKeys)
+        self = Bundle.main.loadFromJSON(ArrayOfNameableValuable.self,
+                                        from                 : fileNamePrefix + String(describing: E.self) + ".json",
+                                        dateDecodingStrategy : .iso8601,
+                                        keyDecodingStrategy  : .useDefaultKeys)
         self.fileNamePrefix = fileNamePrefix
     }
-
+    
     public init(for aClass     : AnyClass,
                 fileNamePrefix : String = "") {
         let bundle = Bundle(for: aClass)
-        self = bundle.decode(ArrayOfNameableValuable.self,
-                                 from                 : fileNamePrefix + String(describing: E.self) + ".json",
-                                 dateDecodingStrategy : .iso8601,
-                                 keyDecodingStrategy  : .useDefaultKeys)
+        self = bundle.loadFromJSON(ArrayOfNameableValuable.self,
+                                   from                 : fileNamePrefix + String(describing: E.self) + ".json",
+                                   dateDecodingStrategy : .iso8601,
+                                   keyDecodingStrategy  : .useDefaultKeys)
         self.fileNamePrefix = fileNamePrefix
     }
     
@@ -61,20 +61,20 @@ public struct ArrayOfNameableValuable<E>: Codable, Versionable where
     
     func storeItemsToFile(fileNamePrefix: String = "") {
         // encode to JSON file
-        Bundle.main.encode(self,
-                           to                   : fileNamePrefix + self.fileNamePrefix! + String(describing: E.self) + ".json",
-                           dateEncodingStrategy : .iso8601,
-                           keyEncodingStrategy  : .useDefaultKeys)
+        Bundle.main.saveAsJSON(self,
+                               to                   : fileNamePrefix + self.fileNamePrefix! + String(describing: E.self) + ".json",
+                               dateEncodingStrategy : .iso8601,
+                               keyEncodingStrategy  : .useDefaultKeys)
     }
     
     func storeItemsToFile(for aClass     : AnyClass,
                           fileNamePrefix : String = "") {
         let bundle = Bundle(for: aClass)
         // encode to JSON file
-        bundle.encode(self,
-                      to                   : fileNamePrefix + self.fileNamePrefix! + String(describing: E.self) + ".json",
-                      dateEncodingStrategy : .iso8601,
-                      keyEncodingStrategy  : .useDefaultKeys)
+        bundle.saveAsJSON(self,
+                          to                   : fileNamePrefix + self.fileNamePrefix! + String(describing: E.self) + ".json",
+                          dateEncodingStrategy : .iso8601,
+                          keyEncodingStrategy  : .useDefaultKeys)
     }
     
     public mutating func move(from indexes   : IndexSet,

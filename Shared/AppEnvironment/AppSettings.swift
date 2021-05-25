@@ -36,9 +36,9 @@ struct AppSettings: Decodable {
     }
 
     private init() {
-        self = Bundle.main.decode(AppSettings.self,
-                                  from                 : "AppSettings.json",
-                                  dateDecodingStrategy : .iso8601,
-                                  keyDecodingStrategy  : .useDefaultKeys)
+        self = Bundle.main.loadFromJSON(AppSettings.self,
+                                        from                 : "AppSettings.json",
+                                        dateDecodingStrategy : .iso8601,
+                                        keyDecodingStrategy  : .useDefaultKeys)
     }
 }

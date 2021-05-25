@@ -12,10 +12,10 @@ import os
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "Extensions.Bundle-Codable")
 
 public extension Bundle {
-    func encode <T: Encodable> (_ object: T,
-                                to file: String,
-                                dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate,
-                                keyEncodingStrategy : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) {
+    func saveAsJSON <T: Encodable> (_ object: T,
+                                    to file: String,
+                                    dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate,
+                                    keyEncodingStrategy : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         encoder.dateEncodingStrategy = dateEncodingStrategy
@@ -86,10 +86,10 @@ public extension Bundle {
 }
 
 public extension Bundle {
-    func decode <T: Decodable> (_ type: T.Type,
-                                from file: String,
-                                dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
-                                keyDecodingStrategy : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) -> T {
+    func loadFromJSON <T: Decodable> (_ type: T.Type,
+                                      from file: String,
+                                      dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
+                                      keyDecodingStrategy : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) -> T {
         // find file's URL
         guard let url = self.url(forResource: file, withExtension: nil) else {
             customLog.log(level: .fault, "Failed to locate file '\(file)' in bundle.")
