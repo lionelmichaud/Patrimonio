@@ -239,6 +239,10 @@ struct Dossier: Identifiable, Equatable {
         
         return newDossier
     }
+    
+    func update() throws {
+        try PersistenceManager.saveDescriptor(of: self)
+    }
 
     /// Supprimer le contenu du directory et le dossier associé
     /// - Throws: DossierError.failedToDeleteDossier

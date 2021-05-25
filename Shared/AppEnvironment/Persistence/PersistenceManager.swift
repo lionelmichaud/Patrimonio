@@ -90,13 +90,14 @@ struct PersistenceManager {
         
         // itérer sur tous les directory présents dans le directory 'Documents'
         var dossiers = DossierArray()
-        documentsFolder.subfolders.forEach { folder in
+        try documentsFolder.subfolders.forEach { folder in
             if folder.isUserFolder {
-                let dossier = Dossier()
+                let descriptorFile = try folder.file(named: "AppDescriptor.json")
+                let decodedDossier = descriptorFile.loadFromJSON(Dossier.self,
+                                                                 dateDecodingStrategy: .iso8601)
+                let dossier = decodedDossier
                     .identifiedBy(UUID(uuidString: folder.name)!)
                     .pointingTo(folder)
-                    // TODO: - compléter: récupérer le nom du Dossier dans un des fichiers du directory
-                    .namedAs(folder.name.uppercased())
                     .ownedByUser()
                 dossiers.append(dossier)
             }

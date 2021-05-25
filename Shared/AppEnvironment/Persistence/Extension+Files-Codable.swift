@@ -45,3 +45,50 @@ public extension File {
         }
     }
 }
+
+public extension File {
+    func loadFromJSON <T: Decodable> (_ type: T.Type,
+                                      dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
+                                      keyDecodingStrategy : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) -> T {
+        // MARK: - DEBUG - A supprimer
+        #if DEBUG
+        print("decoding file: ", self.name)
+        #endif
+        
+        // load data from URL
+        guard let data = try? Data(contentsOf: url) else {
+            customLog.log(level: .fault, "Failed to load file '\(self.name)' from bundle.")
+            fatalError("Failed to load file '\(self.name)' from bundle.")
+        }
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = dateDecodingStrategy
+        decoder.keyDecodingStrategy = keyDecodingStrategy
+        
+        // decode JSON data
+        let failureString = "Failed to decode object of type '\(String(describing: T.self))' from file '\(self.name)' "
+        do {
+            return try decoder.decode(T.self, from: data)
+        } catch DecodingError.keyNotFound(let key, let context) {
+            customLog.log(level: .fault,
+                          "\(failureString)from bundle due to missing key '\(key.stringValue)' not found – \(context.debugDescription).")
+            fatalError("\(failureString)from bundle due to missing key '\(key.stringValue)' not found – \(context.debugDescription)")
+        } catch DecodingError.typeMismatch(_, let context) {
+            customLog.log(level: .fault,
+                          "\(failureString)from bundle due to type mismatch – \(context.debugDescription)")
+            fatalError("\(failureString)from bundle due to type mismatch – \(context.debugDescription)")
+        } catch DecodingError.valueNotFound(let type, let context) {
+            customLog.log(level: .fault,
+                          "\(failureString)from bundle due to missing \(type) value – \(context.debugDescription).")
+            fatalError("\(failureString)from bundle due to missing \(type) value – \(context.debugDescription)")
+        } catch DecodingError.dataCorrupted(let context) {
+            customLog.log(level: .fault,
+                          "\(failureString)from bundle because it appears to be invalid JSON \n \(context.codingPath) \n \(context.debugDescription).")
+            fatalError("\(failureString)from bundle because it appears to be invalid JSON \n \(context.codingPath) \n \(context.debugDescription)")
+        } catch {
+            customLog.log(level: .fault,
+                          "\(failureString)from bundle: \(error.localizedDescription).")
+            fatalError("\(failureString)from bundle: \(error.localizedDescription)")
+        }
+    }
+}

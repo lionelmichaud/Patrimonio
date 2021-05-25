@@ -92,6 +92,12 @@ struct DossierEditView: View {
     
     func updateItem(with modifiedItem: Dossier) {
         if let idx = dataStore.dossiers.firstIndex(where: {$0 == originalItem}) {
+            do {
+                try modifiedItem.update()
+            } catch {
+                self.alertItem = AlertItem(title         : Text("Echec de la modification du dossier"),
+                                           dismissButton : .default(Text("OK")))
+            }
             dataStore.dossiers[idx] = modifiedItem
         } else {
             self.alertItem = AlertItem(title         : Text("Echec de la modification du dossier"),

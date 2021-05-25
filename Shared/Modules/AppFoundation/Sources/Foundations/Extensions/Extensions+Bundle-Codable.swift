@@ -89,7 +89,7 @@ public extension Bundle {
     func decode <T: Decodable> (_ type: T.Type,
                                 from file: String,
                                 dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
-                                keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys) -> T {
+                                keyDecodingStrategy : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) -> T {
         // find file's URL
         guard let url = self.url(forResource: file, withExtension: nil) else {
             customLog.log(level: .fault, "Failed to locate file '\(file)' in bundle.")
