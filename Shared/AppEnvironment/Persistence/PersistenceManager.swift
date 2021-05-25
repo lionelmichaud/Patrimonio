@@ -21,7 +21,7 @@ extension Folder {
         }
         return try? Folder(path: resourcePath)
     }
-
+    
     // Le directory est-il un directory User ?
     var isUserFolder: Bool {
         UUID(uuidString: self.name) != nil
@@ -40,6 +40,7 @@ enum FileError: String, Error {
     case directoryToDuplicateDoesNotExist  = "Le répertoire à dupliquer n'est pas défini"
     case failedToDuplicateTemplates        = "Echec de la copie des templates"
     case templatesDossierNotInitialized    = "Dossier 'templates' non initializé"
+    case failedToImportTemplates           = "Echec de l'importation des templates depuis Bundle.Main vers 'Library'"
 }
 
 struct PersistenceManager {
@@ -47,10 +48,10 @@ struct PersistenceManager {
     // MARK: - Static Methods
     
     static func saveDescriptor(of dossier: Dossier) throws {
-        let dossierDescriptorFile = try dossier.folder?.createFileIfNeeded(withName: "descriptor.json")
+        let dossierDescriptorFile = try dossier.folder?.createFileIfNeeded(withName: "AppDescriptor.json")
         dossierDescriptorFile?.saveAsJSON(dossier, dateEncodingStrategy: .iso8601)
     }
-
+    
     /// Dupliquer tous les fichiers JSON ne commencant pas par 'App'
     /// et présents dans le répertoire "originFolder'
     /// vers le répertoire 'targetFolder'
@@ -58,8 +59,8 @@ struct PersistenceManager {
     ///   - originFolder: répertoire source
     ///   - targetFolder: répertoire destination
     /// - Throws:
-    static func duplicateTemplateFiles(from originFolder : Folder,
-                                       to targetFolder   : Folder) throws {
+    fileprivate static func duplicateTemplateFiles(from originFolder : Folder,
+                                                   to targetFolder   : Folder) throws {
         do {
             try originFolder.files.forEach { file in
                 if let ext = file.extension {
@@ -75,7 +76,7 @@ struct PersistenceManager {
                           "\(FileError.failedToDuplicateTemplates.rawValue) de \(originFolder.name) vers \(targetFolder.name)")
         }
     }
-
+    
     /// Construire la liste des dossiers en parcourant le directory "Documents"
     /// - Throws: FileError.failedToResolveDocuments
     /// - Returns: Tableau de dossier
@@ -86,7 +87,7 @@ struct PersistenceManager {
                           "\(FileError.failedToResolveDocuments.rawValue)")
             throw FileError.failedToResolveDocuments
         }
-
+        
         // itérer sur tous les directory présents dans le directory 'Documents'
         var dossiers = DossierArray()
         documentsFolder.subfolders.forEach { folder in
@@ -100,10 +101,10 @@ struct PersistenceManager {
                 dossiers.append(dossier)
             }
         }
-
+        
         return dossiers
     }
-
+    
     /// Créer un nouveau répertoire nommé 'withID' dans le répertoire 'Documents'
     /// et y copier tous les templates présents dans le répertoire 'Library/template'
     /// - Parameter withID: nom du répertoire à créer
@@ -118,18 +119,18 @@ struct PersistenceManager {
                           "\(FileError.failedToResolveDocuments.rawValue)")
             throw FileError.failedToResolveDocuments
         }
-
+        
         // créer le directory USER pour le nouveau Dossier
         let targetFolder: Folder
         targetFolder = try documentsFolder.createSubfolder(named: id.uuidString)
-
+        
         // récupérer le dossier 'templates'
         guard let originFolder = Dossier.templates?.folder else {
             customLog.log(level: .error,
                           "\(FileError.templatesDossierNotInitialized.rawValue)")
             throw FileError.templatesDossierNotInitialized
         }
-
+        
         // y dupliquer les fichiers du directory originFolder
         do {
             try duplicateTemplateFiles(from: originFolder, to: targetFolder)
@@ -138,10 +139,10 @@ struct PersistenceManager {
             try targetFolder.delete()
             throw error
         }
-
+        
         return targetFolder
     }
-
+    
     /// Créer un nouveau répertoire nommé 'withID' dans le répertoire 'Documents'
     /// et y copier tous les fichiers présents dans le répertoire à dupliquer
     /// - Parameters:
@@ -159,18 +160,18 @@ struct PersistenceManager {
                           "\(FileError.failedToResolveDocuments.rawValue)")
             throw FileError.failedToResolveDocuments
         }
-
+        
         // créer le directory USER pour le nouveau Dossier
         let targetFolder: Folder
         targetFolder = try documentsFolder.createSubfolder(named: id.uuidString)
-
+        
         // récupérer le dossier à dupliquer
         guard let originFolder = originFolder else {
             customLog.log(level: .error,
                           "\(FileError.directoryToDuplicateDoesNotExist.rawValue)")
             throw FileError.directoryToDuplicateDoesNotExist
         }
-
+        
         // y dupliquer les fichiers du directory originFolder
         do {
             try duplicateTemplateFiles(from: originFolder, to: targetFolder)
@@ -179,10 +180,10 @@ struct PersistenceManager {
             try targetFolder.delete()
             throw error
         }
-
+        
         return targetFolder
     }
-
+    
     /// Détruire le répertoire portant le nom 'folderName'
     /// et situé dans le répertoire 'Documents'
     /// - Parameter folderName: nom du répertoire à détruire
@@ -194,25 +195,25 @@ struct PersistenceManager {
                           "\(FileError.failedToResolveDocuments.rawValue)")
             throw FileError.failedToResolveDocuments
         }
-
+        
         // trouver le directory à détruire
         let targetFolder = try documentsFolder.subfolder(named: folderName)
-
+        
         // détruire le directory
         try targetFolder.delete()
     }
-
+    
     /// Retourne un Dossier pointant sur le directory contenant les templates
     /// Créer le directorty au besoin
     /// - Returns: Dossier pointant sur le directory contenant les templates ou 'nil' si le dossier n'est pas trouvé
-    static func getTemplateDossier() -> Dossier? {
+    fileprivate static func getTemplateDossier() -> Folder? {
         /// rechercher le dossier 'Library' de l'utilisateur
         guard let libraryFolder = Folder.library else {
             customLog.log(level: .fault,
                           "\(FileError.failedToResolveLibrary.rawValue)")
             return nil
         }
-
+        
         /// vérifier l'existence du directory 'templates' dans le directory 'Library' et le créer sinon
         let templateDirPath = AppSettings.shared.templatePath()
         let templateFolder = try? libraryFolder.createSubfolderIfNeeded(at: templateDirPath)
@@ -222,14 +223,38 @@ struct PersistenceManager {
                           "\(FileError.failedToCreateTemplateDirectory.rawValue)")
             return nil
         }
-
+        
+        return templateFolder
+    }
+    
+    /// Importer les fichiers vierges depuis le Bundle Main de l'Application
+    /// - Returns: le dossier inchangé si l'import a réussi, 'nil' sinon
+    static func importTemplatesFromApp() -> Dossier? {
+        guard let originFolder = Folder.application else {
+            customLog.log(level: .fault,
+                          "\(DossierError.failedToResolveAppBundle.rawValue))")
+            return nil
+        }
+        
+        guard let templateFolder = PersistenceManager.getTemplateDossier() else {
+            return nil
+        }
+        
+        do {
+            try PersistenceManager.duplicateTemplateFiles(from: originFolder, to: templateFolder)
+        } catch {
+            customLog.log(level: .fault,
+                          "\(FileError.failedToImportTemplates.rawValue))")
+            return nil
+        }
+        
         return
             Dossier()
-            .pointingTo(templateFolder!)
-            .namedAs(templateFolder!.name)
+            .pointingTo(templateFolder)
+            .namedAs(templateFolder.name)
             .ownedByApp()
     }
-
+    
     /// Calculer la date de dernière modification d'un dossier utilisateur comme étant celle
     /// du fichier modifié le plus tardivement
     /// - Parameter id: UUID du dossier utilisateur
@@ -241,10 +266,10 @@ struct PersistenceManager {
                           "\(FileError.failedToResolveDocuments.rawValue)")
             throw FileError.failedToResolveDocuments
         }
-
+        
         // trouver le directory demandé
         let targetFolder = try documentsFolder.subfolder(named: id.uuidString)
-
+        
         // calculer la date au plus tard
         var date = 100.years.ago!
         targetFolder.files.recursive.forEach { file in
@@ -252,10 +277,10 @@ struct PersistenceManager {
                 date = max(date, modifDate)
             }
         }
-
+        
         return date
     }
-
+    
     /// Sauvegarder le fichier dans un répertoire spécifique à la simulation + au fichiers au format CSV
     /// - Parameters:
     ///   - simulationTitle: nom de ls simulation utilisé pour générer le nom du répertoire
@@ -290,7 +315,7 @@ struct PersistenceManager {
                           "Fault saving \(fileName, privacy: .public) : file not found")
         }
         #endif
-
+        
         /// sauvegarder le fichier dans le répertoire: data/Containers/Data/Application/xxx/Documents/simulationTitle/csv/
         do {
             try Disk.save(Data(csvString.utf8),

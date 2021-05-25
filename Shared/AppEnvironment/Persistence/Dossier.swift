@@ -26,10 +26,8 @@ extension DossierArray {
 // MARK: - DOSSIER contenant tous les fichiers d'entrée et de sortie
 
 enum DossierError: String, Error {
-    case failedToImportTemplates      = "Echec de l'importation des templates depuis Bundle.Main vers 'Library'"
     case failedToResolveAppBundle     = "Failed to resolve App Bundle"
     case failedToDeleteDossier        = "Failed to delete Dossier"
-    case noTargetFolder               = "Pas de dossier de destination"
     case inconsistencyOwnerFolderName = "Incohérence entre le nom du directory et le type de propriétaire du Dossier"
 }
 
@@ -41,10 +39,7 @@ struct Dossier: Identifiable, Equatable {
     static var current : Dossier?
     
     // le dossier contenant les template à utiilser pour créer un nouveau dossier
-    static let templates : Dossier? =
-        PersistenceManager
-        .getTemplateDossier()?
-        .importTemplatesFromApp()
+    static let templates : Dossier? = PersistenceManager.importTemplatesFromApp()
     
     // MARK: - Properties
     
@@ -185,51 +180,11 @@ struct Dossier: Identifiable, Equatable {
     
     // MARK: - Methods
     
-    /// Importer les fichiers vierges depuis le Bundle Main de l'Application
-    /// - Returns: le dossier inchangé si l'import a réussi, 'nil' sinon
-    func importTemplatesFromApp() -> Dossier? {
-        guard let originFolder = Folder.application else {
-            customLog.log(level: .fault,
-                          "\(DossierError.failedToResolveAppBundle.rawValue))")
-            return nil
-        }
-        
-        guard let targetFolder = self.folder else {
-            customLog.log(level: .fault,
-                          "\(DossierError.noTargetFolder.rawValue))")
-            return nil
-        }
-        
-        do {
-            try PersistenceManager.duplicateTemplateFiles(from: originFolder, to: targetFolder)
-        } catch {
-            customLog.log(level: .fault,
-                          "\(DossierError.failedToImportTemplates.rawValue))")
-            return nil
-        }
-        
-        return self
-    }
-    
-    /// Supprimer le contenu du directory et le dossier associé
-    /// - Throws: DossierError.failedToDeleteDossier
-    func delete() throws {
-        do {
-            if let folder = self.folder {
-                try PersistenceManager.deleteUserFolder(folderName: folder.name)
-            }
-        } catch {
-            customLog.log(level: .error,
-                          "\(DossierError.failedToDeleteDossier.rawValue) \(_name ?? "No name")")
-            throw DossierError.failedToDeleteDossier
-        }
-    }
-    
     /// Clone un Dossier et retourne le clone
     /// - Returns: le clone du Dossier dupliqué
     func duplicate() throws -> Dossier {
         let newID = UUID()
-
+        
         // créer le directory associé
         let targetFolder = try PersistenceManager.newUserFolder(withID: newID,
                                                                 withContentDuplicatedFrom: folder)
@@ -252,6 +207,20 @@ struct Dossier: Identifiable, Equatable {
         }
         
         return newDossier
+    }
+
+    /// Supprimer le contenu du directory et le dossier associé
+    /// - Throws: DossierError.failedToDeleteDossier
+    func delete() throws {
+        do {
+            if let folder = self.folder {
+                try PersistenceManager.deleteUserFolder(folderName: folder.name)
+            }
+        } catch {
+            customLog.log(level: .error,
+                          "\(DossierError.failedToDeleteDossier.rawValue) \(_name ?? "No name")")
+            throw DossierError.failedToDeleteDossier
+        }
     }
 }
 
