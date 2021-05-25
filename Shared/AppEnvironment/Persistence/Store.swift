@@ -41,8 +41,8 @@ class Store: ObservableObject {
     ///   - note: note décrivant le dossier
     func createDossier(named name       : String,
                        annotatedBy note : String) throws {
-        let newDossier = try Dossier.create(name: name,
-                                            note: note)
+        let newDossier = try Dossier(name: name,
+                                     note: note)
         dossiers.append(newDossier)
     }
 

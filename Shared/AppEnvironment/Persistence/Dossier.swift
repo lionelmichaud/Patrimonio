@@ -107,8 +107,8 @@ struct Dossier: Identifiable, Equatable {
         self._isUserDossier    = isUserDossier
     }
     
-    static func create(name : String,
-                       note : String) throws -> Dossier {
+    init(name : String,
+         note : String) throws {
         let newID = UUID()
         
         // créer le directory associé
@@ -131,8 +131,40 @@ struct Dossier: Identifiable, Equatable {
             throw error
         }
         
-        return newDossier
+        self.init(id            : newID,
+                  pointingTo    : targetFolder,
+                  with          : name,
+                  annotatedBy   : note,
+                  createdOn     : Date.now,
+                  isUserDossier : true)
     }
+    
+//    static func create(name : String,
+//                       note : String) throws -> Dossier {
+//        let newID = UUID()
+//        
+//        // créer le directory associé
+//        let targetFolder = try PersistenceManager.newUserFolder(withID: newID)
+//        
+//        // initialiser les propriétés
+//        let newDossier = Dossier()
+//            .identifiedBy(newID)
+//            .pointingTo(targetFolder)
+//            .namedAs(name)
+//            .annotatedBy(note)
+//            .createdOn(Date.now)
+//            .ownedByUser()
+//        
+//        // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier
+//        do {
+//            try PersistenceManager.saveDescriptor(of: newDossier)
+//        } catch {
+//            try targetFolder.delete()
+//            throw error
+//        }
+//        
+//        return newDossier
+//    }
     
     // MARK: - Builder methods
     
