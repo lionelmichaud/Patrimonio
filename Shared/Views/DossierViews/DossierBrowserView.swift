@@ -8,11 +8,9 @@
 import SwiftUI
 
 struct DossierBrowserView: View {
-    @EnvironmentObject var dataStore         : Store
-    @Binding var showingSheet                : Bool
-    @State private var failedToDeleteDossier : Bool = false
-    @State private var failedToLoadStore     : Bool = false
-    @State private var alertItem             : AlertItem?
+    @EnvironmentObject var dataStore : Store
+    @Binding var showingSheet        : Bool
+    @State private var alertItem     : AlertItem?
 
     var body: some View {
         // bouton "ajouter"
@@ -41,18 +39,6 @@ struct DossierBrowserView: View {
             .onMove(perform: moveDossier)
             .listStyle(SidebarListStyle())
         }
-        // charger la liste de dossier depuis le directory 'Documents'
-        .onAppear(perform: onAppear)
-    }
-
-    func onAppear() {
-        do {
-            try dataStore.load()
-        } catch {
-            self.alertItem = AlertItem(title         : Text("Echec du chargement des dossiers depuis votre espace personnel"),
-                                       dismissButton : .default(Text("OK")))
-            failedToLoadStore = true
-        }
     }
 
     func deleteDossier(at offsets: IndexSet) {
@@ -61,7 +47,6 @@ struct DossierBrowserView: View {
         } catch {
             self.alertItem = AlertItem(title         : Text("Echec de la suppression du dossier"),
                                        dismissButton : .default(Text("OK")))
-            failedToDeleteDossier = true
         }
     }
 

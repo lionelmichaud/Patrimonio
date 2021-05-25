@@ -18,7 +18,8 @@ private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
 typealias DossierArray = [Dossier]
 extension DossierArray {
     static func load() throws -> DossierArray {
-        try PersistenceManager.loadUserDossiersFromDocumentsDirectory()
+        let dossiers = try PersistenceManager.loadUserDossiersFromDocumentsDirectory()
+        return dossiers
     }
 }
 
@@ -241,9 +242,6 @@ struct Dossier: Identifiable {
 }
 
 extension Dossier: Equatable {
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.folder == rhs.folder
-    }
 }
 
 extension Dossier: CustomStringConvertible {

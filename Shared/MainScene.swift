@@ -17,7 +17,7 @@ struct MainScene: Scene {
     
     // MARK: - Properties
 
-    @ObservedObject var dataStore  = Store()
+    @ObservedObject var dataStore  : Store
     @ObservedObject var family     : Family
     @ObservedObject var patrimoine : Patrimoin
     @ObservedObject var simulation : Simulation

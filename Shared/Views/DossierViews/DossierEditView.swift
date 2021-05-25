@@ -10,10 +10,10 @@ import SwiftUI
 struct DossierEditView: View {
     @EnvironmentObject private var dataStore: Store
     @Environment(\.presentationMode) var presentationMode
+    var title        : String
     var originalItem : Dossier?
-    @State private var dossierVM             = DossierViewModel()
-    @State private var alertItem             : AlertItem?
-    @State private var failedToCreateDossier : Bool   = false
+    @State private var dossierVM = DossierViewModel()
+    @State private var alertItem : AlertItem?
 
     var toolBar: some View {
         /// Barre de titre
@@ -23,7 +23,7 @@ struct DossierEditView: View {
                 .capsuleButtonStyle()
 
             Spacer()
-            Text("Modifier...").font(.title).fontWeight(.bold)
+            Text(title).font(.title).fontWeight(.bold)
             Spacer()
 
             Button(action: commit,
@@ -68,9 +68,9 @@ struct DossierEditView: View {
         if let originalItem = originalItem {
             // on a modifié un item existant
             let modifiedItem = dossierVM.copyFromViewModel(original: originalItem)
-//            if modifiedItem != originalItem {
-//                updateDossier()
-//            }
+            if modifiedItem != originalItem {
+                updateDossier()
+            }
         } else {
             // on créé un nouvel item
             createDossier()
@@ -85,7 +85,6 @@ struct DossierEditView: View {
         } catch {
             self.alertItem = AlertItem(title         : Text("Echec de la modification du dossier"),
                                        dismissButton : .default(Text("OK")))
-            failedToCreateDossier = true
         }
 
         self.presentationMode.wrappedValue.dismiss()
@@ -98,7 +97,16 @@ struct DossierEditView: View {
 }
 
 struct DossierModifyView_Previews: PreviewProvider {
+    static var dossier = Dossier()
+        .namedAs("Dossier test")
+        .annotatedBy("Note test")
+        .createdOn()
+        .ownedByUser()
+    
     static var previews: some View {
-        DossierEditView(originalItem: Dossier())
+        Group {
+            DossierEditView(title: "Test Modifier", originalItem: dossier)
+            DossierEditView(title: "Test Créer")
+        }
     }
 }

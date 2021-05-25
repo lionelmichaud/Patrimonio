@@ -11,11 +11,28 @@ import os
 // MARK: - STORE
 
 class Store: ObservableObject {
-    @Published var dossiers: DossierArray = []
+    @Published var dossiers             : DossierArray
+    @Published var failedToLoadDossiers : Bool
+    
+    init() {
+        do {
+            dossiers = try DossierArray.load()
+            failedToLoadDossiers = false
+        } catch {
+            dossiers = []
+            failedToLoadDossiers = true
+        }
+    }
 
     /// Charger la liste des Dossiers
     func load() throws {
-        dossiers = try DossierArray.load()
+        do {
+            dossiers = try DossierArray.load()
+            failedToLoadDossiers = false
+        } catch {
+            failedToLoadDossiers = true
+            throw error
+        }
     }
 
     /// Créer un nouveau Dossier

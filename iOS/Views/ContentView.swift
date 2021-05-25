@@ -13,9 +13,11 @@ struct ContentView: View {
     // MARK: - Environment Properties
 
     @EnvironmentObject private var uiState    : UIState
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var simulation : Simulation
     @SceneStorage("selectedTab") var selection = UIState.Tab.dossier
-    
+    @State private var alertItem              : AlertItem?
+
     // MARK: - Properties
 
     var body: some View {
@@ -54,6 +56,14 @@ struct ContentView: View {
                 .tabItem { Label("Préférences", systemImage: "gear") }
                 .tag(UIState.Tab.userSettings)
             
+        }
+        .onAppear(perform: onAppear)
+    }
+    
+    func onAppear() {
+        if dataStore.failedToLoadDossiers {
+            self.alertItem = AlertItem(title         : Text("Echec du chargement des dossiers"),
+                                       dismissButton : .default(Text("OK")))
         }
     }
 }

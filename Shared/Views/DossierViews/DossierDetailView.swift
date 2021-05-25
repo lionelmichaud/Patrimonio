@@ -29,7 +29,8 @@ struct DossierDetailView: View {
         .navigationBarTitleDisplayModeInline()
         .alert(item: $alertItem, content: myAlert)
         .sheet(isPresented: $showingSheet) {
-            DossierEditView(originalItem: dossier)
+            DossierEditView(title        : "Modifier le Dossier",
+                            originalItem : dossier)
                 .environmentObject(self.dataStore)
         }
         .toolbar {

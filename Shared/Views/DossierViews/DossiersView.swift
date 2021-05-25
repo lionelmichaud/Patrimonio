@@ -35,7 +35,7 @@ struct DossiersView: View {
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
         // Vue modale de saisie d'un nouveau membre de la famille
         .sheet(isPresented: $showingSheet) {
-            DossierAddView()
+            DossierEditView(title: "Créer un nouveau dossier")
                 .environmentObject(self.dataStore)
         }
     }

@@ -21,7 +21,8 @@ struct AppMain: App {
     @StateObject private var simulation = Simulation()
 
     var body: some Scene {
-        MainScene(family     : family,
+        MainScene(dataStore  : dataStore,
+                  family     : family,
                   patrimoine : patrimoine,
                   simulation : simulation)
         .commands { AppCommands() }
