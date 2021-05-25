@@ -34,9 +34,6 @@ struct Dossier: Identifiable, Equatable {
     
     // MARK: - Static Properties
     
-    // le dossier en cours d'utilisation
-    static var current : Dossier?
-    
     // le dossier contenant les template à utiilser pour créer un nouveau dossier
     static let templates : Dossier? = PersistenceManager.importTemplatesFromApp()
     
@@ -44,11 +41,12 @@ struct Dossier: Identifiable, Equatable {
     
     var id                        = UUID()
     var folder                    : Folder?
+    var isActive                  = false
     private var _name             : String?
     private var _note             : String?
     private var _dateCreation     : Date?
     private var _isUserDossier    = true
-    
+
     // MARK: - Computed Properties
     
     var name: String {
@@ -206,6 +204,18 @@ struct Dossier: Identifiable, Equatable {
     func ownedByApp() -> Dossier {
         var _dossier = self
         _dossier._isUserDossier = false
+        return _dossier
+    }
+    
+    func activated() -> Dossier {
+        var _dossier = self
+        _dossier.isActive = true
+        return _dossier
+    }
+    
+    func deActivated() -> Dossier {
+        var _dossier = self
+        _dossier.isActive = false
         return _dossier
     }
     

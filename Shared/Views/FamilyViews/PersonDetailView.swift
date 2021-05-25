@@ -48,7 +48,7 @@ struct PersonDetailView: View {
             ToolbarItem(placement: .automatic) {
                 Button(
                     action: { withAnimation { self.showingSheet = true } },
-                    label : { Text("Modifier") }
+                    label : { Image(systemName: "square.and.pencil") }
                 )
             }
         }

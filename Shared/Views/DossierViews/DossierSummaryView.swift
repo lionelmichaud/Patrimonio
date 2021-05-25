@@ -9,18 +9,23 @@ import SwiftUI
 import Files
 
 struct DossierSummaryView: View {
+    @EnvironmentObject var dataStore : Store
+    
     var body: some View {
-        VStack(alignment: .leading) {
-            //Text(Dossier.templates?.name ?? "Dossier \(AppSettings.shared.templateDir) introuvable!")
-            Text("resourcePath:" + Bundle.main.resourcePath!)
-            Text("Application:" + Folder.application!.name)
-            Text("tempates:" + Dossier.templates!.folder!.name)
-            Text("Home:" + Folder.home.name)
-            Text("Documents:" + Folder.documents!.name)
-            Text("Library:" + Folder.library!.name)
-            Text("temporary:" + Folder.temporary.name)
-            Text("current:" + Folder.current.name)
-            Text("root:" + Folder.root.name)
+        Form {
+            if let activeDossier = dataStore.activeDossier {
+                DossierPropertiesView(dossier: activeDossier,
+                                      sectionHeader: "Dossier chargé")
+            }
+            Text("resourcePath: \n" + Bundle.main.resourcePath!)
+            Text("Application: \n" + Folder.application!.path)
+            Text("Home: \n" +        Folder.home.path)
+            Text("Tempates: \n" +  (Dossier.templates?.folder?.path ?? "introuvable"))
+            Text("Documents: \n" + (Folder.documents?.path ?? "introuvable"))
+            Text("Library: \n" +   (Folder.library?.path ?? "introuvable"))
+            Text("temporary: \n" + Folder.temporary.path)
+            Text("current: \n" + Folder.current.path)
+            Text("root: \n" +    Folder.root.path)
         }
     }
 }

@@ -205,6 +205,8 @@
 		798E783C264209AD0094534F /* bell.wav in Resources */ = {isa = PBXBuildFile; fileRef = 798E7839264209AD0094534F /* bell.wav */; };
 		798E783D264209AD0094534F /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = 798E783A264209AD0094534F /* ding.wav */; };
 		798E783E264209AD0094534F /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = 798E783A264209AD0094534F /* ding.wav */; };
+		798FBA00265D622200A34892 /* DossierPropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798FB9FF265D622200A34892 /* DossierPropertiesView.swift */; };
+		798FBA01265D622200A34892 /* DossierPropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798FB9FF265D622200A34892 /* DossierPropertiesView.swift */; };
 		799025A12641F60300ED53D4 /* GridsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990258D2641F60300ED53D4 /* GridsView.swift */; };
 		799025A22641F60300ED53D4 /* GridsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990258D2641F60300ED53D4 /* GridsView.swift */; };
 		799025A32641F60300ED53D4 /* HistogramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990258E2641F60300ED53D4 /* HistogramView.swift */; };
@@ -670,6 +672,7 @@
 		798DE8BF2635CD3C00C0C3B5 /* AlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		798E7839264209AD0094534F /* bell.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bell.wav; sourceTree = "<group>"; };
 		798E783A264209AD0094534F /* ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ding.wav; sourceTree = "<group>"; };
+		798FB9FF265D622200A34892 /* DossierPropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierPropertiesView.swift; sourceTree = "<group>"; };
 		7990258D2641F60300ED53D4 /* GridsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridsView.swift; sourceTree = "<group>"; };
 		7990258E2641F60300ED53D4 /* HistogramView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistogramView.swift; sourceTree = "<group>"; };
 		7990258F2641F60300ED53D4 /* KpiListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KpiListView.swift; sourceTree = "<group>"; };
@@ -1397,6 +1400,7 @@
 				7935FFD82654204200AC1715 /* DossierSummaryView.swift */,
 				7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */,
 				796503CE265596E50093F10E /* DossierDetailView.swift */,
+				798FB9FF265D622200A34892 /* DossierPropertiesView.swift */,
 				79A8A19426565DBC00B23AD7 /* DossierAddView.swift */,
 				79F222F1265ACC9F005EE0B9 /* DossierEditView.swift */,
 				79F222F4265AD0B9005EE0B9 /* DossierViewModel.swift */,
@@ -2068,6 +2072,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				798FBA00265D622200A34892 /* DossierPropertiesView.swift in Sources */,
 				798DE8B92635CC6000C0C3B5 /* ExpenseView.swift in Sources */,
 				796503CF265596E50093F10E /* DossierDetailView.swift in Sources */,
 				79C838312641E02B008B29BF /* MenuCollapsable.swift in Sources */,
@@ -2450,6 +2455,7 @@
 				79C8382E2641DCBC008B29BF /* ChartLimitLine+Extension.swift in Sources */,
 				7977FE7B262E4FA3005A1CB1 /* TimeSpan.swift in Sources */,
 				79A9AA83264B10F80036732F /* CsvCashFlowVisitor.swift in Sources */,
+				798FBA01265D622200A34892 /* DossierPropertiesView.swift in Sources */,
 				791ED108263A271A00701202 /* FamilySummaryView.swift in Sources */,
 				796506CC2640866F0036E466 /* PeriodicInvestDetailedView.swift in Sources */,
 				7998E1A1262DBE3E00DA4A12 /* Adult+Pension.swift in Sources */,

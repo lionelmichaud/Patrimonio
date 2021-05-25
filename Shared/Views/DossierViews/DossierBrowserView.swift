@@ -31,7 +31,10 @@ struct DossierBrowserView: View {
             ForEach(dataStore.dossiers) { dossier in
                 NavigationLink(destination: DossierDetailView(dossier: dossier)) {
                     Label(title: { DossierRowView(dossier: dossier) },
-                          icon : { Image(systemName: "folder.fill.badge.person.crop") })
+                          icon : {
+                            Image(systemName: "folder.fill.badge.person.crop")
+                                .if(dossier.isActive) { $0.accentColor(.red) }
+                    })
                 }
                 .isDetailLink(true)
             }
@@ -39,6 +42,10 @@ struct DossierBrowserView: View {
             .onMove(perform: moveDossier)
             .listStyle(SidebarListStyle())
         }
+    }
+    
+    func activate(dossierIndex: Int) {
+        dataStore.activate(dossierAtIndex: dossierIndex)
     }
 
     func deleteDossier(at offsets: IndexSet) {
@@ -64,13 +71,14 @@ struct DossierRowView : View {
                 .allowsTightening(true)
             HStack {
                 Text("Date de création")
-                    .font(.caption)
+                    .foregroundColor(.secondary)
                 Spacer()
                 Text(dossier.dateCreationStr)
             }
             .font(.caption)
             HStack {
                 Text("Dernière modification")
+                    .foregroundColor(.secondary)
                 Spacer()
                 Text(dossier.dateModificationStr)
             }
