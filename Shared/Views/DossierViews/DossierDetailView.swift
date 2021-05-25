@@ -54,6 +54,7 @@ struct DossierDetailView: View {
     }
 
     private func changeOccured() -> Bool {
+        // TODO: - A compléter
         return false
     }
 

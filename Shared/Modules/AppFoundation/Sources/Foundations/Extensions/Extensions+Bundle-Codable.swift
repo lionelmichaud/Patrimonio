@@ -9,13 +9,13 @@
 import Foundation
 import os
 
-private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Extensions.Bundle")
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "Extensions.Bundle-Codable")
 
 public extension Bundle {
     func encode <T: Encodable> (_ object: T,
                                 to file: String,
                                 dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate,
-                                keyEncodingStrategy: JSONEncoder.KeyEncodingStrategy = .useDefaultKeys) {
+                                keyEncodingStrategy : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         encoder.dateEncodingStrategy = dateEncodingStrategy
@@ -43,10 +43,10 @@ public extension Bundle {
                 try encoded.write(to: url, options: [.atomicWrite])
             } catch {
                 customLog.log(level: .fault, "Failed to save data to file '\(file)' in bundle.")
-                fatalError("Failed to encode \(String(describing: T.self)) object to JSON format.")
+                fatalError("Failed to save data to file '\(file)' in bundle")
             }
         } else {
-            customLog.log(level: .fault, "Failed to save data to file '\(file)' in bundle.")
+            customLog.log(level: .fault, "Failed to encode \(String(describing: T.self)) object to JSON format.")
             fatalError("Failed to encode \(String(describing: T.self)) object to JSON format.")
         }
     }

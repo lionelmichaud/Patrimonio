@@ -189,6 +189,8 @@
 		797931C2264170FE000F8599 /* SimulationKPIEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931C0264170FE000F8599 /* SimulationKPIEnum.swift */; };
 		797931CC26417249000F8599 /* BalanceSheetArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931CB26417249000F8599 /* BalanceSheetArray.swift */; };
 		797931CD26417249000F8599 /* BalanceSheetArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931CB26417249000F8599 /* BalanceSheetArray.swift */; };
+		798553CC265D16420066FFD1 /* Extension+Files-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798553CB265D16410066FFD1 /* Extension+Files-Codable.swift */; };
+		798553CD265D16420066FFD1 /* Extension+Files-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798553CB265D16410066FFD1 /* Extension+Files-Codable.swift */; };
 		798DE8A426357CF500C0C3B5 /* SwiftUIconditional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */; };
 		798DE8A526357CF500C0C3B5 /* SwiftUIconditional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */; };
 		798DE8AB2635CA7100C0C3B5 /* ExpenseDetailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DE8AA2635CA7100C0C3B5 /* ExpenseDetailedView.swift */; };
@@ -660,6 +662,7 @@
 		797931A826416EA1000F8599 /* SimulationResultTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimulationResultTable.swift; sourceTree = "<group>"; };
 		797931C0264170FE000F8599 /* SimulationKPIEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationKPIEnum.swift; sourceTree = "<group>"; };
 		797931CB26417249000F8599 /* BalanceSheetArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceSheetArray.swift; sourceTree = "<group>"; };
+		798553CB265D16410066FFD1 /* Extension+Files-Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Files-Codable.swift"; sourceTree = "<group>"; };
 		798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIconditional.swift; sourceTree = "<group>"; };
 		798DE8AA2635CA7100C0C3B5 /* ExpenseDetailedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseDetailedView.swift; sourceTree = "<group>"; };
 		798DE8B12635CBC300C0C3B5 /* ExpenseSummaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseSummaryView.swift; sourceTree = "<group>"; };
@@ -1190,6 +1193,7 @@
 				792DE957264C8DBF004DA53D /* PersistenceManager.swift */,
 				796503C52655682A0093F10E /* Dossier.swift */,
 				796503CB265581E40093F10E /* Store.swift */,
+				798553CB265D16410066FFD1 /* Extension+Files-Codable.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -2159,6 +2163,7 @@
 				7977FE85262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */,
 				796506D52640866F0036E466 /* scpiDetailedView.swift in Sources */,
 				79BE4A832651CE7800BBF46C /* BetaRandomizerView.swift in Sources */,
+				798553CC265D16420066FFD1 /* Extension+Files-Codable.swift in Sources */,
 				79FA8CF52630684F009FEA00 /* FinancialEnvelop.swift in Sources */,
 				791ED0D62639FBFD00701202 /* UnemployementDetailView.swift in Sources */,
 				791D3B932649679C0024A2D8 /* CustomCsvConvertible.swift in Sources */,
@@ -2389,6 +2394,7 @@
 				799025B02641F60300ED53D4 /* IrppSliceView.swift in Sources */,
 				792DE959264C8DBF004DA53D /* PersistenceManager.swift in Sources */,
 				79A9BE9A265186A700170A01 /* DiscreteDistributionView.swift in Sources */,
+				798553CD265D16420066FFD1 /* Extension+Files-Codable.swift in Sources */,
 				79EC480A263098340006EE44 /* OwnershipManager.swift in Sources */,
 				79C8382B2641DC02008B29BF /* LineChartDataSet+Extension.swift in Sources */,
 				79A9BE9E265186EE00170A01 /* BetaDistributionView.swift in Sources */,

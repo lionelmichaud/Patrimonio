@@ -18,7 +18,7 @@ private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
 typealias DossierArray = [Dossier]
 extension DossierArray {
     static func load() throws -> DossierArray {
-        let dossiers = try PersistenceManager.loadUserDossiersFromDocumentsDirectory()
+        let dossiers = try PersistenceManager.loadUserDossiers()
         return dossiers
     }
 }
@@ -33,38 +33,30 @@ enum DossierError: String, Error {
     case inconsistencyOwnerFolderName = "Incohérence entre le nom du directory et le type de propriétaire du Dossier"
 }
 
-enum DossierCreationActionEnum: String, PickableEnum {
-    case new = "Nouveau"
-    case copy = "Copie de..."
-    public var pickerString: String {
-        return self.rawValue
-    }
-}
-
 struct Dossier: Identifiable, Equatable {
-
+    
     // MARK: - Static Properties
-
+    
     // le dossier en cours d'utilisation
     static var current : Dossier?
-
+    
     // le dossier contenant les template à utiilser pour créer un nouveau dossier
     static let templates : Dossier? =
         PersistenceManager
         .getTemplateDossier()?
         .importTemplatesFromApp()
-
+    
     // MARK: - Properties
-
+    
     var id                        = UUID()
     var folder                    : Folder?
     private var _name             : String?
     private var _note             : String?
     private var _dateCreation     : Date?
     private var _isUserDossier    = true
-
+    
     // MARK: - Computed Properties
-
+    
     var name: String {
         get { _name ?? "nil" }
         set { _name = newValue}
@@ -78,7 +70,7 @@ struct Dossier: Identifiable, Equatable {
     }
     private var dateModification: Date? {
         do {
-            let dateModif = try PersistenceManager.getUserDirectoryLastModifiedDate(withID: self.id)
+            let dateModif = try PersistenceManager.userFolderLastModifiedDate(withID: self.id)
             if let dateCreation = _dateCreation {
                 return max(dateCreation, dateModif)
             } else {
@@ -103,9 +95,9 @@ struct Dossier: Identifiable, Equatable {
         }
     }
     var folderName : String { folder?.name ?? "No folder" }
-
+    
     // MARK: - Initializer
-
+    
     init(id                          : UUID     = UUID(),
          pointingTo folder           : Folder?  = nil,
          with name                   : String?  = nil,
@@ -119,32 +111,42 @@ struct Dossier: Identifiable, Equatable {
         self._name             = name
         self._isUserDossier    = isUserDossier
     }
-
+    
     static func create(name : String,
                        note : String) throws -> Dossier {
-        let newDossier = Dossier()
-
+        let newID = UUID()
+        
         // créer le directory associé
-        let targetFolder = try PersistenceManager.newUserDirectory(withID: newDossier.id)
-
-        // initialiser las propriétés
-        return
-            newDossier
+        let targetFolder = try PersistenceManager.newUserFolder(withID: newID)
+        
+        // initialiser les propriétés
+        let newDossier = Dossier()
+            .identifiedBy(newID)
             .pointingTo(targetFolder)
             .namedAs(name)
             .annotatedBy(note)
             .createdOn(Date.now)
             .ownedByUser()
+        
+        // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier
+        do {
+            try PersistenceManager.saveDescriptor(of: newDossier)
+        } catch {
+            try targetFolder.delete()
+            throw error
+        }
+        
+        return newDossier
     }
-
+    
     // MARK: - Builder methods
-
+    
     func identifiedBy(_ id: UUID) -> Dossier {
         var _dossier = self
         _dossier.id = id
         return _dossier
     }
-
+    
     func pointingTo(_ folder: Folder) -> Dossier {
         var _dossier = self
         _dossier.folder = folder
@@ -156,33 +158,33 @@ struct Dossier: Identifiable, Equatable {
         _dossier._name = name
         return _dossier
     }
-
+    
     func createdOn(_ date: Date = Date.now) -> Dossier {
         var _dossier = self
         _dossier._dateCreation = date
         return _dossier
     }
-
+    
     func annotatedBy(_ note: String) -> Dossier {
         var _dossier = self
         _dossier._note = note
         return _dossier
     }
-
+    
     func ownedByUser() -> Dossier {
         var _dossier = self
         _dossier._isUserDossier = true
         return _dossier
     }
-
+    
     func ownedByApp() -> Dossier {
         var _dossier = self
         _dossier._isUserDossier = false
         return _dossier
     }
-
+    
     // MARK: - Methods
-
+    
     /// Importer les fichiers vierges depuis le Bundle Main de l'Application
     /// - Returns: le dossier inchangé si l'import a réussi, 'nil' sinon
     func importTemplatesFromApp() -> Dossier? {
@@ -191,13 +193,13 @@ struct Dossier: Identifiable, Equatable {
                           "\(DossierError.failedToResolveAppBundle.rawValue))")
             return nil
         }
-
+        
         guard let targetFolder = self.folder else {
             customLog.log(level: .fault,
                           "\(DossierError.noTargetFolder.rawValue))")
             return nil
         }
-
+        
         do {
             try PersistenceManager.duplicateTemplateFiles(from: originFolder, to: targetFolder)
         } catch {
@@ -205,16 +207,16 @@ struct Dossier: Identifiable, Equatable {
                           "\(DossierError.failedToImportTemplates.rawValue))")
             return nil
         }
-
+        
         return self
     }
-
+    
     /// Supprimer le contenu du directory et le dossier associé
     /// - Throws: DossierError.failedToDeleteDossier
     func delete() throws {
         do {
             if let folder = self.folder {
-                try PersistenceManager.deleteUserDirectoryFromDocumentsDirectory(folderName: folder.name)
+                try PersistenceManager.deleteUserFolder(folderName: folder.name)
             }
         } catch {
             customLog.log(level: .error,
@@ -222,22 +224,34 @@ struct Dossier: Identifiable, Equatable {
             throw DossierError.failedToDeleteDossier
         }
     }
-
+    
+    /// Clone un Dossier et retourne le clone
+    /// - Returns: le clone du Dossier dupliqué
     func duplicate() throws -> Dossier {
-        let newDossier = Dossier()
+        let newID = UUID()
 
         // créer le directory associé
-        let targetFolder = try PersistenceManager.newUserDirectory(withID: newDossier.id,
-                                                                   withContentDuplicatedFrom: folder)
-
-        // initialiser las propriétés
-        return
-            newDossier
+        let targetFolder = try PersistenceManager.newUserFolder(withID: newID,
+                                                                withContentDuplicatedFrom: folder)
+        
+        // initialiser les propriétés
+        let newDossier = Dossier()
+            .identifiedBy(newID)
             .pointingTo(targetFolder)
             .namedAs(name + "-copie")
             .annotatedBy(note)
             .createdOn(Date.now)
             .ownedByUser()
+        
+        // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier clone
+        do {
+            try PersistenceManager.saveDescriptor(of: newDossier)
+        } catch {
+            try targetFolder.delete()
+            throw error
+        }
+        
+        return newDossier
     }
 }
 
@@ -251,4 +265,22 @@ extension Dossier: CustomStringConvertible {
 
             """
     }
+}
+
+extension Dossier: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case _name          = "name"
+        case _note          = "note"
+        case _dateCreation  = "date de création"
+        case _isUserDossier = "dossier utilisateur"
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self._name, forKey: ._name)
+        try container.encode(self._note, forKey: ._note)
+        try container.encode(self._dateCreation, forKey: ._dateCreation)
+        try container.encode(self._isUserDossier, forKey: ._isUserDossier)
+    }
+    
 }

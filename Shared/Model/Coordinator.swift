@@ -12,6 +12,9 @@ import RetirementModel
 import UnemployementModel
 import SocioEconomyModel
 
+/// - Warning: Attention on fait des copies des Singletons ce qui suppose que ceux-ci
+///   sont 'stateless' car les originaux et les copies ne seront PAS synchronisées.
+///   A moins que les Singleton soient des Class.
 struct Coordinator {
     static let shared = Coordinator()
     

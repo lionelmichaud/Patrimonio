@@ -45,6 +45,11 @@ enum FileError: String, Error {
 struct PersistenceManager {
     
     // MARK: - Static Methods
+    
+    static func saveDescriptor(of dossier: Dossier) throws {
+        let dossierDescriptorFile = try dossier.folder?.createFileIfNeeded(withName: "descriptor.json")
+        dossierDescriptorFile?.saveAsJSON(dossier, dateEncodingStrategy: .iso8601)
+    }
 
     /// Dupliquer tous les fichiers JSON ne commencant pas par 'App'
     /// et présents dans le répertoire "originFolder'
@@ -53,8 +58,8 @@ struct PersistenceManager {
     ///   - originFolder: répertoire source
     ///   - targetFolder: répertoire destination
     /// - Throws:
-    static func duplicateTemplateFiles (from originFolder : Folder,
-                                        to targetFolder   : Folder) throws {
+    static func duplicateTemplateFiles(from originFolder : Folder,
+                                       to targetFolder   : Folder) throws {
         do {
             try originFolder.files.forEach { file in
                 if let ext = file.extension {
@@ -74,7 +79,7 @@ struct PersistenceManager {
     /// Construire la liste des dossiers en parcourant le directory "Documents"
     /// - Throws: FileError.failedToResolveDocuments
     /// - Returns: Tableau de dossier
-    static func loadUserDossiersFromDocumentsDirectory() throws -> DossierArray {
+    static func loadUserDossiers() throws -> DossierArray {
         /// rechercher le dossier 'Documents' de l'utilisateur
         guard let documentsFolder = Folder.documents else {
             customLog.log(level: .error,
@@ -106,7 +111,7 @@ struct PersistenceManager {
     ///     - FileError.failedToResolveDocuments
     ///     - FileError.templatesDossierNotInitialized
     /// - Returns: répertoire créé
-    static func newUserDirectory(withID id: UUID) throws -> Folder {
+    static func newUserFolder(withID id: UUID) throws -> Folder {
         /// rechercher le dossier 'Documents' de l'utilisateur
         guard let documentsFolder = Folder.documents else {
             customLog.log(level: .error,
@@ -146,8 +151,8 @@ struct PersistenceManager {
     ///   - FileError.failedToResolveDocuments
     ///   - FileError.directoryToDuplicateDoesNotExist
     /// - Returns: répertoire créé
-    static func newUserDirectory(withID id: UUID,
-                                 withContentDuplicatedFrom originFolder: Folder?) throws -> Folder {
+    static func newUserFolder(withID id: UUID,
+                              withContentDuplicatedFrom originFolder: Folder?) throws -> Folder {
         /// rechercher le dossier 'Documents' de l'utilisateur
         guard let documentsFolder = Folder.documents else {
             customLog.log(level: .error,
@@ -182,7 +187,7 @@ struct PersistenceManager {
     /// et situé dans le répertoire 'Documents'
     /// - Parameter folderName: nom du répertoire à détruire
     /// - Throws: FileError.failedToResolveDocuments
-    static func deleteUserDirectoryFromDocumentsDirectory(folderName: String) throws {
+    static func deleteUserFolder(folderName: String) throws {
         /// rechercher le dossier 'Documents' de l'utilisateur
         guard let documentsFolder = Folder.documents else {
             customLog.log(level: .error,
@@ -227,9 +232,9 @@ struct PersistenceManager {
 
     /// Calculer la date de dernière modification d'un dossier utilisateur comme étant celle
     /// du fichier modifié le plus tardivement
-    /// - Parameter id: UUID du dossier du dossier utilisateur
+    /// - Parameter id: UUID du dossier utilisateur
     /// - Returns: date de dernière modification d'un dossier utilisateur
-    static func getUserDirectoryLastModifiedDate(withID id: UUID) throws -> Date {
+    static func userFolderLastModifiedDate(withID id: UUID) throws -> Date {
         /// rechercher le dossier 'Documents' de l'utilisateur
         guard let documentsFolder = Folder.documents else {
             customLog.log(level: .error,
