@@ -10,7 +10,7 @@ import SwiftUI
 struct DossierEditView: View {
     @EnvironmentObject private var dataStore: Store
     @Environment(\.presentationMode) var presentationMode
-    var originalItem : Dossier
+    var originalItem : Dossier?
     @State private var dossierVM             = DossierViewModel()
     @State private var alertItem             : AlertItem?
     @State private var failedToCreateDossier : Bool   = false
@@ -26,10 +26,10 @@ struct DossierEditView: View {
             Text("Modifier...").font(.title).fontWeight(.bold)
             Spacer()
 
-            Button(action: createDossier,
+            Button(action: commit,
                    label: { Text("OK") })
                 .capsuleButtonStyle()
-                .disabled(!formIsValid())
+                .disabled(!dossierVM.isValid())
         }
         .padding(.horizontal)
         .padding(.top)
@@ -61,8 +61,20 @@ struct DossierEditView: View {
     }
 
     func onAppear() {
-        dossierVM.name = originalItem.name
-        dossierVM.note = originalItem.note
+        dossierVM = DossierViewModel(from: originalItem)
+    }
+
+    func commit() {
+        if let originalItem = originalItem {
+            // on a modifié un item existant
+            let modifiedItem = dossierVM.copyFromViewModel(original: originalItem)
+//            if modifiedItem != originalItem {
+//                updateDossier()
+//            }
+        } else {
+            // on créé un nouvel item
+            createDossier()
+        }
     }
 
     /// Création du nouveau Dossier et ajout à la liste
@@ -78,11 +90,10 @@ struct DossierEditView: View {
 
         self.presentationMode.wrappedValue.dismiss()
     }
-
-    /// Vérifie que la formulaire est valide
-    /// - Returns: vrai si le formulaire est valide
-    func formIsValid() -> Bool {
-        dossierVM.name.isNotEmpty
+    
+    func updateDossier() {
+        
+        self.presentationMode.wrappedValue.dismiss()
     }
 }
 

@@ -65,11 +65,11 @@ struct Dossier: Identifiable {
     // MARK: - Computed Properties
 
     var name: String {
-        get { _name ?? "Pas de nom" }
+        get { _name ?? "nil" }
         set { _name = newValue}
     }
     var note: String {
-        get { _note ?? "Pas de commentaire" }
+        get { _note ?? "" }
         set { _note = newValue }
     }
     var dateCreationStr: String {
