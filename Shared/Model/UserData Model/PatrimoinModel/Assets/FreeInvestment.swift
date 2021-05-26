@@ -27,7 +27,7 @@ typealias FreeInvestmentArray = ArrayOfNameableValuable<FreeInvestement>
 /// Placement à versement et retrait libres et à taux fixe
 /// Les intérêts sont capitalisés lors de l'appel à capitalize()
 // conformité à BundleCodable nécessaire pour les TU; sinon Codable suffit
-struct FreeInvestement: Identifiable, BundleCodable, FinancialEnvelop {
+struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
     
     // nested types
     

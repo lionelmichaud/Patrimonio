@@ -14,7 +14,7 @@ public protocol BundleDecodable: Decodable {
     
     static var defaultFileName : String { get set }
     
-    /// Lit le modèle dans un fichier JSON du Bundle Main
+    /// Lit le modèle dans un fichier JSON du Bundle 
     init(fromFile file        : String?,
          fromBundle bundle    : Bundle,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy,

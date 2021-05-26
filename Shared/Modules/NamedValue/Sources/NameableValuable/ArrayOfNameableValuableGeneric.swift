@@ -20,7 +20,7 @@ public struct ArrayOfNameableValuable<E>: Codable, Versionable where
     // MARK: - Properties
 
     public var items          = [E]()
-    var fileNamePrefix : String?
+    var fileNamePrefix        : String?
     public var version        : Version
     public var currentValue   : Double {
         items.sumOfValues(atEndOf: Date.now.year)

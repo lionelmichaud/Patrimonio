@@ -19,23 +19,7 @@ struct LifeExpenseArray: NameableValuableArray {
     
     var items = [LifeExpense]()
     
-    // MARK: - Initializers
-    
-    init(fileNamePrefix: String = "") {
-        self = Bundle.main.loadFromJSON(LifeExpenseArray.self,
-                                        from                 : fileNamePrefix + String(describing: Item.self) + ".json",
-                                        dateDecodingStrategy : .iso8601,
-                                        keyDecodingStrategy  : .useDefaultKeys)
-    }
-    
-    init(for aClass     : AnyClass,
-         fileNamePrefix : String = "") {
-        let testBundle = Bundle(for: aClass)
-        self = testBundle.loadFromJSON(LifeExpenseArray.self,
-                                       from                 : fileNamePrefix + String(describing: Item.self) + ".json",
-                                       dateDecodingStrategy : .iso8601,
-                                       keyDecodingStrategy  : .useDefaultKeys)
-    }
+    // MARK: - Initializers: voir NameableValuableArray
 }
 
 extension LifeExpenseArray: CustomStringConvertible {
@@ -48,14 +32,16 @@ extension LifeExpenseArray: CustomStringConvertible {
     }
 }
 
-//typealias ExpenseArray = ItemArray<LifeExpense>
-
 // MARK: - Dépense de la famille
 
 struct LifeExpense: Identifiable, Codable, Hashable, NameableValuable {
     
     // MARK: - Static properties
     
+    static let prototype = LifeExpense(name     : "",
+                                       note     : "",
+                                       timeSpan : .permanent,
+                                       value    : 0.0)
     private static var membersCountProvider : MembersCountProvider!
     private static var simulationMode       : SimulationModeEnum = .deterministic
     
@@ -104,13 +90,6 @@ struct LifeExpense: Identifiable, Codable, Hashable, NameableValuable {
         self.note         = note
         self.proportional = proportional
         self.timeSpan     = timeSpan
-    }
-    
-    init() {
-        self = LifeExpense(name     : "",
-                           note     : "",
-                           timeSpan : .permanent,
-                           value    : 0.0)
     }
     
     // MARK: - Methods

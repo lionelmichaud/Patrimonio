@@ -131,7 +131,7 @@ struct ExpenseDetailedView: View {
             _index     = State(initialValue: family.expenses.perCategory[category]?.items.firstIndex(of: initialItemValue))
         } else {
             // création d'un nouvel élément
-            _expenseVM = StateObject(wrappedValue: LifeExpenseViewModel(from: LifeExpense()))
+            _expenseVM = StateObject(wrappedValue: LifeExpenseViewModel(from: LifeExpense.prototype))
             index = nil
         }
     }

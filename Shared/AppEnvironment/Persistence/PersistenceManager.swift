@@ -48,7 +48,7 @@ struct PersistenceManager {
     // MARK: - Static Methods
     
     static func saveDescriptor(of dossier: Dossier) throws {
-        let dossierDescriptorFile = try dossier.folder?.createFileIfNeeded(withName: "AppDescriptor.json")
+        let dossierDescriptorFile = try dossier.folder?.createFileIfNeeded(withName: FileNameCst.kDossierDescriptorFileName)
         dossierDescriptorFile?.saveAsJSON(dossier, dateEncodingStrategy: .iso8601)
     }
     
@@ -92,7 +92,7 @@ struct PersistenceManager {
         var dossiers = DossierArray()
         try documentsFolder.subfolders.forEach { folder in
             if folder.isUserFolder {
-                let descriptorFile = try folder.file(named: "AppDescriptor.json")
+                let descriptorFile = try folder.file(named: FileNameCst.kDossierDescriptorFileName)
                 let decodedDossier = descriptorFile.loadFromJSON(Dossier.self,
                                                                  dateDecodingStrategy: .iso8601)
                 let dossier = decodedDossier

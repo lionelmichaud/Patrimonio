@@ -34,6 +34,8 @@ public extension Array where Element: NameableValuable {
 
 // MARK: - Protocol Table d'Item Valuable and Nameable
 
+// utilisé uniquement par LifeExpense
+// les autres utilisent le generic ArrayOfNameableValuable
 public protocol NameableValuableArray: Codable {
     associatedtype Item: Codable, Identifiable, NameableValuable
     
@@ -82,6 +84,23 @@ public protocol NameableValuableArray: Codable {
 public extension NameableValuableArray {
     var currentValue      : Double {
         items.sumOfValues(atEndOf : Date.now.year)
+    }
+    
+    init(fileNamePrefix: String) {
+        self = Bundle.main.loadFromJSON(Self.self,
+                                        from                 : fileNamePrefix + String(describing: Item.self) + ".json",
+                                        dateDecodingStrategy : .iso8601,
+                                        keyDecodingStrategy  : .useDefaultKeys)
+    }
+    
+    // used for Unit Testing
+    init(for aClass     : AnyClass,
+         fileNamePrefix : String) {
+        let classBundle = Bundle(for: aClass)
+        self = classBundle.loadFromJSON(Self.self,
+                                       from                 : fileNamePrefix + String(describing: Item.self) + ".json",
+                                       dateDecodingStrategy : .iso8601,
+                                       keyDecodingStrategy  : .useDefaultKeys)
     }
     
     subscript(idx: Int) -> Item {
