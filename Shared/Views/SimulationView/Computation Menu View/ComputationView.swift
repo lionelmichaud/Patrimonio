@@ -25,76 +25,78 @@ struct ComputationView: View {
         @EnvironmentObject var uiState    : UIState
         @EnvironmentObject var simulation : Simulation
         
-        var body: some View {
-            Form {
-                // paramétrage de la simulation : cas général
-                Section(header: Text("Paramètres de Simulation").font(.headline)) {
-                    VStack {
-                        HStack {
-                            Text("Titre")
-                                .frame(width: 70, alignment: .leading)
-                            TextField("", text: $simulation.title)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                        }
-                        LabeledTextEditor(label: "Note", text: $simulation.note)
-                    }
-                    //.padding(.top)
+        var parameterSection: some View {
+            Section(header: Text("Paramètres de Simulation").font(.headline)) {
+                VStack {
                     HStack {
-                        Text("Nombre d'années à calculer: ") + Text(String(Int(uiState.computationState.nbYears)))
-                        Slider(value : $uiState.computationState.nbYears,
-                               in    : 5 ... 55,
-                               step  : 5,
-                               onEditingChanged: {_ in
-                               })
+                        Text("Titre")
+                            .frame(width: 70, alignment: .leading)
+                        TextField("", text: $simulation.title)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
-                    // choix du mode de simulation: cas spécifiques
-                    // sélecteur: Déterministe / Aléatoire
-                    CasePicker(pickedCase: $simulation.mode, label: "")
-                        .pickerStyle(SegmentedPickerStyle())
-                        .onChange(of: simulation.mode) { newMode in
-                            Patrimoin.setSimulationMode(to: newMode)
-                            Retirement.setSimulationMode(to: newMode)
-                            LifeExpense.setSimulationMode(to: newMode)
-                        }
-                    switch simulation.mode {
-                        case .deterministic:
-                            EmptyView()
-                            
-                        case .random:
-                            HStack {
-                                Text("Nombre de run: ") + Text(String(Int(uiState.computationState.nbRuns)))
-                                Slider(value : $uiState.computationState.nbRuns,
-                                       in    : 100 ... 1000,
-                                       step  : 100,
-                                       onEditingChanged: {_ in
-                                       })
-                            }
-                    }
+                    LabeledTextEditor(label: "Note", text: $simulation.note)
                 }
-                // affichage des résultats
-                Section(header: Text("Résultats").font(.headline)) {
-                    // affichage du statut de la simulation
-                    if simulation.isComputed {
-                        HStack {
-                            Text("Simulation disponible: de \(simulation.firstYear!) à \(simulation.lastYear!)")
-                                .font(.callout)
-                            if simulation.mode == .random {
-                                // affichage du nombre de run
-                                Spacer(minLength: 100)
-                                IntegerView(label   : "Nombre de run exécutés",
-                                            integer : simulation.mode == .deterministic ? 1  : simulation.currentRunNb)
-                            }
-                        }
+                HStack {
+                    Text("Nombre d'années à calculer: ") + Text(String(Int(uiState.computationState.nbYears)))
+                    Slider(value : $uiState.computationState.nbYears,
+                           in    : 5 ... 55,
+                           step  : 5,
+                           onEditingChanged: {_ in
+                           })
+                }
+                // choix du mode de simulation: cas spécifiques
+                // sélecteur: Déterministe / Aléatoire
+                CasePicker(pickedCase: $simulation.mode, label: "")
+                    .pickerStyle(SegmentedPickerStyle())
+                    .onChange(of: simulation.mode) { newMode in
+                        Patrimoin.setSimulationMode(to: newMode)
+                        Retirement.setSimulationMode(to: newMode)
+                        LifeExpense.setSimulationMode(to: newMode)
+                    }
+                switch simulation.mode {
+                    case .deterministic:
+                        EmptyView()
                         
-                    } else {
-                        // pas de données à afficher
-                        VStack(alignment: .leading) {
-                            Text("Aucune données à présenter")
-                            Text("Calculer une simulation au préalable").foregroundColor(.red)
+                    case .random:
+                        HStack {
+                            Text("Nombre de run: ") + Text(String(Int(uiState.computationState.nbRuns)))
+                            Slider(value : $uiState.computationState.nbRuns,
+                                   in    : 100 ... 1000,
+                                   step  : 100,
+                                   onEditingChanged: {_ in
+                                   })
+                        }
+                }
+            }
+        }
+        
+        var resultsSection: some View {
+            Section(header: Text("Résultats").font(.headline)) {
+                // affichage du statut de la simulation
+                if simulation.isComputed {
+                    HStack {
+                        Text("Simulation disponible: de \(simulation.firstYear!) à \(simulation.lastYear!)")
+                            .font(.callout)
+                        if simulation.mode == .random {
+                            // affichage du nombre de run
+                            Spacer(minLength: 100)
+                            IntegerView(label   : "Nombre de run exécutés",
+                                        integer : simulation.mode == .deterministic ? 1  : simulation.currentRunNb)
                         }
                     }
+                    
+                } else {
+                    // pas de données à afficher
+                    VStack(alignment: .leading) {
+                        Text("Aucune données à présenter")
+                        Text("Calculer une simulation au préalable").foregroundColor(.red)
+                    }
                 }
-                // affichage des valeurs des KPI
+            }
+        }
+        
+        var kpiView: some View {
+            Group {
                 if simulation.isComputed {
                     ForEach(simulation.kpis) { kpi in
                         Section(header: Text(kpi.name)) {
@@ -111,32 +113,44 @@ struct ComputationView: View {
                 }
             }
         }
+        
+        var body: some View {
+            Form {
+                // paramétrage de la simulation : cas général
+                parameterSection
+                
+                // affichage des résultats
+                resultsSection
+                
+                // affichage des valeurs des KPI
+                kpiView
+            }
+        }
     }
     
     var body: some View {
         ComputationForm()
             .navigationTitle("Calcul")
+            // barre de boutons
             .toolbar {
+                // bouton Exporter fichiers CSV
                 ToolbarItem(placement: .automatic) {
-                    // bouton sauvegarder
                     Button(action: saveSimulation,
                            label: {
                             HStack(alignment: .center) {
                                 if busySaveWheelAnimate {
                                     ProgressView()
                                 }
-                                Image(systemName: "pencil.and.ellipsis.rectangle")
-                                    .imageScale(.large)
-                                Text("Enregistrer")
+                                Label("Exporter fichiers CSV", systemImage: "square.and.arrow.up")
                             }
                            }
                     )
-                    .capsuleButtonStyle()
+//                    .capsuleButtonStyle()
+//                    .opacity(!savingIsPossible() ? 0.5 : 1.0)
                     .disabled(!savingIsPossible())
-                    .opacity(!savingIsPossible() ? 0.5 : 1.0)
                 }
+                // bouton Calculer
                 ToolbarItem(placement: .primaryAction) {
-                    // bouton calculer
                     Button(action: computeSimulation,
                            label: {
                             HStack(alignment: .center) {

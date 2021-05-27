@@ -10,14 +10,15 @@ import SwiftUI
 import AppFoundation
 import NamedValue
 import Charts // https://github.com/danielgindi/Charts.git
-import Disk // https://github.com/saoudrizwan/Disk.git
+import Files
 
-private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "UI.BalanceSheetDetailedChartView")
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.BalanceSheetDetailedChartView")
 
 // MARK: - Balance Sheet Detailed Charts Views
 
 /// Vue détaillée du bilan: Actif / Passif / Tout
 struct BalanceSheetDetailedChartView: View {
+    @EnvironmentObject var dataStore : Store
     @EnvironmentObject var family     : Family
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
@@ -41,7 +42,6 @@ struct BalanceSheetDetailedChartView: View {
 
         Lorsqu'un seul individu est sélectionné, les actifs sont évalués selon une méthode
         et selon un filtre définis dans les préférences ⚙️.
-
         """
 
     var body: some View {
@@ -112,8 +112,9 @@ struct BalanceSheetDetailedChartView: View {
             }
             // sauvergarder l'image dans l'album photo
             ToolbarItem(placement: .automatic) {
-                Button(action: BalanceSheetStackedBarChartView.saveImage,
+                Button(action: { BalanceSheetStackedBarChartView.saveImage(to: dataStore.activeDossier!.folder!) },
                        label : { Image(systemName: "camera.circle") })
+                    .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
             }
             // afficher info-bulle
             ToolbarItem(placement: .automatic) {
@@ -136,14 +137,13 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
 
     // MARK: - Type Properties
 
-    static var titleStatic      : String = "image"
-    static var uiView           : BarChartView?
-    static var snapshotNb       : Int = 0
+    static var titleStatic : String = "image"
+    static var uiView      : BarChartView?
+    static var snapshotNb  : Int    = 0
 
     // MARK: - Properties
 
     @Binding var socialAccounts : SocialAccounts
-    var title                   : String
     var combination             : BalanceCombination
     var personSelection         : String
     var itemSelectionList       : ItemSelectionList
@@ -156,7 +156,6 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
                   combination    : BalanceCombination,
                   itemSelection  : ItemSelectionList) {
         BalanceSheetStackedBarChartView.titleStatic = title
-        self.title             = title
         self.combination       = combination
         self.personSelection   = thisName
         self.itemSelectionList = itemSelection
@@ -166,7 +165,7 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
     // MARK: - Type methods
 
     /// Sauvegarde de l'image en fichier  et dans l'album photo au format .PNG
-    static func saveImage() {
+    static func saveImage(to folder: Folder) {
         guard let chartView = BalanceSheetStackedBarChartView.uiView else {
             #if DEBUG
             print("error: nothing to save")
@@ -187,19 +186,12 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
         // sauvegarder l'image dans le répertoire documents/image
         let fileName = "Bilan-detailed-" + String(BalanceSheetStackedBarChartView.snapshotNb) + ".png"
         do {
-            try Disk.save(image, to: .documents, as: AppSettings.shared.imagePath(titleStatic) + fileName)
-            // impression debug
-            #if DEBUG
-            Swift.print("saving image to file: ", AppSettings.shared.imagePath(titleStatic) + fileName)
-            #endif
-        } catch let error as NSError {
-            fatalError("""
-                Domain         : \(error.domain)
-                Code           : \(error.code)
-                Description    : \(error.localizedDescription)
-                Failure Reason : \(error.localizedFailureReason ?? "")
-                Suggestions    : \(error.localizedRecoverySuggestion ?? "")
-                """)
+            try PersistenceManager.saveToImagePath(to              : folder,
+                                                   fileName        : fileName,
+                                                   simulationTitle : titleStatic,
+                                                   image           : image)
+        } catch {
+            // do nothing
         }
         BalanceSheetStackedBarChartView.snapshotNb += 1
     }
@@ -277,6 +269,7 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
 
 struct BalanceSheetDetailedChartView_Previews: PreviewProvider {
     static var uiState    = UIState()
+    static var dataStore  = Store()
     static var family     = Family()
     static var patrimoine = Patrimoin()
     static var simulation = Simulation()
@@ -289,6 +282,7 @@ struct BalanceSheetDetailedChartView_Previews: PreviewProvider {
             List {
                 NavigationLink(destination :BalanceSheetDetailedChartView()
                                 .environmentObject(uiState)
+                                .environmentObject(dataStore)
                                 .environmentObject(family)
                                 .environmentObject(patrimoine)
                                 .environmentObject(simulation)

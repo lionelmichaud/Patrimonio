@@ -10,13 +10,14 @@ import os
 import SwiftUI
 import AppFoundation
 import Charts // https://github.com/danielgindi/Charts.git
-import Disk // https://github.com/saoudrizwan/Disk.git
+import Files
 
-private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "UI.IrppEvolutionChartView")
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.IrppEvolutionChartView")
 
 // MARK: - Evolution de la Fiscalité dans le temps Charts Views
 
 struct IrppEvolutionChartView: View {
+    @EnvironmentObject var dataStore : Store
     @EnvironmentObject var simulation: Simulation
     @State private var showInfoPopover = false
     let popOverTitle   = "Contenu du graphique:"
@@ -41,8 +42,9 @@ struct IrppEvolutionChartView: View {
         .toolbar {
             // sauvergarder l'image dans l'album photo
             ToolbarItem(placement: .automatic) {
-                Button(action: saveImages,
+                Button(action: { saveImages(to: dataStore.activeDossier!.folder!) },
                        label : { Image(systemName: "camera.circle") })
+                    .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
             }
             // afficher info-bulle
             ToolbarItem(placement: .automatic) {
@@ -58,9 +60,9 @@ struct IrppEvolutionChartView: View {
         }
     }
     
-    func saveImages() {
-        IrppEvolutionLineChartView.saveImage()
-        IrppTranchesLineChartView.saveImage()
+    func saveImages(to folder: Folder) {
+        IrppEvolutionLineChartView.saveImage(to: folder)
+        IrppTranchesLineChartView.saveImage(to: folder)
     }
 }
 
@@ -70,37 +72,35 @@ struct IrppEvolutionChartView: View {
 struct IrppEvolutionLineChartView: UIViewRepresentable {
     // MARK: - Type Properties
 
-    static var titleStatic      : String = "image"
-    static var uiView           : CombinedChartView?
-    static var snapshotNb       : Int = 0
+    static var titleStatic : String = "image"
+    static var uiView      : CombinedChartView?
+    static var snapshotNb  : Int    = 0
 
     // MARK: - Properties
 
     @Binding var socialAccounts : SocialAccounts
-    var title                   : String
 
     // MARK: - Initializer
 
     internal init(socialAccounts : Binding<SocialAccounts>, title: String) {
         IrppEvolutionLineChartView.titleStatic = title
-        self.title                         = title
         self._socialAccounts               = socialAccounts
     }
     
     // MARK: - Type methods
 
     /// Sauvegarde de l'image en fichier  et dans l'album photo au format .PNG
-    static func saveImage() {
+    static func saveImage(to folder: Folder) {
         guard IrppEvolutionLineChartView.uiView != nil else {
             #if DEBUG
-            print("error: nothing to save")
+            print("error: no chartView to save")
             #endif
             return
         }
         // construire l'image
         guard let image = IrppEvolutionLineChartView.uiView!.getChartImage(transparent: false) else {
             #if DEBUG
-            print("error: nothing to save")
+            print("error: no image to save")
             #endif
             return
         }
@@ -111,19 +111,12 @@ struct IrppEvolutionLineChartView: UIViewRepresentable {
         // sauvegarder l'image dans le répertoire documents/image
         let fileName = "IRPP-Taux-" + String(IrppEvolutionLineChartView.snapshotNb) + ".png"
         do {
-            try Disk.save(image, to: .documents, as: AppSettings.shared.imagePath(titleStatic) + fileName)
-            // impression debug
-            #if DEBUG
-            Swift.print("saving image to file: ", AppSettings.shared.imagePath(titleStatic) + fileName)
-            #endif
-        } catch let error as NSError {
-            fatalError("""
-                Domain         : \(error.domain)
-                Code           : \(error.code)
-                Description    : \(error.localizedDescription)
-                Failure Reason : \(error.localizedFailureReason ?? "")
-                Suggestions    : \(error.localizedRecoverySuggestion ?? "")
-                """)
+            try PersistenceManager.saveToImagePath(to              : folder,
+                                                   fileName        : fileName,
+                                                   simulationTitle : titleStatic,
+                                                   image           : image)
+        } catch {
+            // do nothing
         }
         IrppEvolutionLineChartView.snapshotNb += 1
     }
@@ -196,37 +189,35 @@ struct IrppTranchesLineChartView: UIViewRepresentable {
 
     // MARK: - Type Properties
 
-    static var titleStatic      : String = "image"
-    static var uiView           : LineChartView?
-    static var snapshotNb       : Int = 0
+    static var titleStatic : String = "image"
+    static var uiView      : LineChartView?
+    static var snapshotNb  : Int    = 0
 
     // MARK: - Properties
 
     @Binding var socialAccounts : SocialAccounts
-    var title                   : String
 
     // MARK: - Initializer
 
     internal init(socialAccounts : Binding<SocialAccounts>, title: String) {
         IrppTranchesLineChartView.titleStatic = title
-        self.title                    = title
         self._socialAccounts          = socialAccounts
     }
     
     // MARK: - Type methods
 
     /// Sauvegarde de l'image en fichier  et dans l'album photo au format .PNG
-    static func saveImage() {
+    static func saveImage(to folder: Folder) {
         guard IrppTranchesLineChartView.uiView != nil else {
             #if DEBUG
-            print("error: nothing to save")
+            print("error: no chartView to save")
             #endif
             return
         }
         // construire l'image
         guard let image = IrppTranchesLineChartView.uiView!.getChartImage(transparent: false) else {
             #if DEBUG
-            print("error: nothing to save")
+            print("error: no image to save")
             #endif
             return
         }
@@ -237,19 +228,12 @@ struct IrppTranchesLineChartView: UIViewRepresentable {
         // sauvegarder l'image dans le répertoire documents/image
         let fileName = "IRPP-Evolution-" + String(IrppTranchesLineChartView.snapshotNb) + ".png"
         do {
-            try Disk.save(image, to: .documents, as: AppSettings.shared.imagePath(titleStatic) + fileName)
-            // impression debug
-            #if DEBUG
-            Swift.print("saving image to file: ", AppSettings.shared.imagePath(titleStatic) + fileName)
-            #endif
-        } catch let error as NSError {
-            fatalError("""
-                Domain         : \(error.domain)
-                Code           : \(error.code)
-                Description    : \(error.localizedDescription)
-                Failure Reason : \(error.localizedFailureReason ?? "")
-                Suggestions    : \(error.localizedRecoverySuggestion ?? "")
-                """)
+            try PersistenceManager.saveToImagePath(to              : folder,
+                                                   fileName        : fileName,
+                                                   simulationTitle : titleStatic,
+                                                   image           : image)
+        } catch {
+            // do nothing
         }
         IrppTranchesLineChartView.snapshotNb += 1
     }
@@ -304,6 +288,7 @@ struct IrppTranchesLineChartView: UIViewRepresentable {
 
 struct IrppView_Previews: PreviewProvider {
     static var uiState    = UIState()
+    static var dataStore  = Store()
     static var family     = Family()
     static var patrimoine = Patrimoin()
     static var simulation = Simulation()
@@ -316,6 +301,7 @@ struct IrppView_Previews: PreviewProvider {
                 // calcul de simulation
                 NavigationLink(destination : IrppEvolutionChartView()
                                 .environmentObject(uiState)
+                                .environmentObject(dataStore)
                                 .environmentObject(family)
                                 .environmentObject(patrimoine)
                                 .environmentObject(simulation)

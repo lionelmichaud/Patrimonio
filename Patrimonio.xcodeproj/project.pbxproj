@@ -24,6 +24,8 @@
 		7901CF912652A04D007DF85B /* Successions.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7901CF8E2652A04D007DF85B /* Successions.csv */; };
 		790500A7265FBC9900FF58C3 /* JsonCodableToFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790500A6265FBC9900FF58C3 /* JsonCodableToFolder.swift */; };
 		790500A8265FBC9900FF58C3 /* JsonCodableToFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790500A6265FBC9900FF58C3 /* JsonCodableToFolder.swift */; };
+		790500B6265FFAE600FF58C3 /* Extension+File-Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790500B5265FFAE600FF58C3 /* Extension+File-Image.swift */; };
+		790500B7265FFAE600FF58C3 /* Extension+File-Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790500B5265FFAE600FF58C3 /* Extension+File-Image.swift */; };
 		79058371262C79050061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058370262C79050061F296 /* SocioEconomyModel */; };
 		79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058372262C790F0061F296 /* SocioEconomyModel */; };
 		7906AB752641BCF100A398E9 /* SocialAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */; };
@@ -584,6 +586,7 @@
 		7901CF8A2652956A007DF85B /* CsvSuccessionVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvSuccessionVisitor.swift; sourceTree = "<group>"; };
 		7901CF8E2652A04D007DF85B /* Successions.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = Successions.csv; sourceTree = "<group>"; };
 		790500A6265FBC9900FF58C3 /* JsonCodableToFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonCodableToFolder.swift; sourceTree = "<group>"; };
+		790500B5265FFAE600FF58C3 /* Extension+File-Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+File-Image.swift"; sourceTree = "<group>"; };
 		7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialAccounts.swift; sourceTree = "<group>"; };
 		790FF33926484D59001B2653 /* Visitor Pattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Visitor Pattern.swift"; sourceTree = "<group>"; };
 		790FF33C264850E6001B2653 /* CsvBalanceSheetVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvBalanceSheetVisitor.swift; sourceTree = "<group>"; };
@@ -1205,6 +1208,7 @@
 				798553CB265D16410066FFD1 /* Extension+File-Codable.swift */,
 				79240595265EBDBE0097AF0F /* Extension+Folder-Codable.swift */,
 				790500A6265FBC9900FF58C3 /* JsonCodableToFolder.swift */,
+				790500B5265FFAE600FF58C3 /* Extension+File-Image.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -2285,6 +2289,7 @@
 				799025A12641F60300ED53D4 /* GridsView.swift in Sources */,
 				791ED112263A285300701202 /* CashFlowLine.swift in Sources */,
 				799025C42642007300ED53D4 /* ProgressViews.swift in Sources */,
+				790500B6265FFAE600FF58C3 /* Extension+File-Image.swift in Sources */,
 				797931A926416EA1000F8599 /* SimulationResultTable.swift in Sources */,
 				79EC47922630753D0006EE44 /* ArrayOfNameableValuable+Ownable.swift in Sources */,
 			);
@@ -2403,6 +2408,7 @@
 				791D3BA12649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,
 				791ED116263A28BC00701202 /* SciCashFlowLine.swift in Sources */,
 				79FA8CF42630684F009FEA00 /* ValuedAssets.swift in Sources */,
+				790500B7265FFAE600FF58C3 /* Extension+File-Image.swift in Sources */,
 				79EC47D8263084280006EE44 /* SimulationLogger.swift in Sources */,
 				79281A0A262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */,
 				791ED0D72639FBFD00701202 /* UnemployementDetailView.swift in Sources */,

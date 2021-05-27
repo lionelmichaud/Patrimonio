@@ -7,7 +7,9 @@
 
 import Foundation
 import os
+import UIKit
 import Files
+import Charts // https://github.com/danielgindi/Charts.git
 
 private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
                                category  : "PersistenceManager")
@@ -48,19 +50,13 @@ struct PersistenceManager {
     
     // MARK: - Static Methods
     
-//    static func saveDescriptor(of dossier: Dossier) throws {
-//        try dossier.folder?.saveAsJSON(dossier,
-//                                       to: FileNameCst.kDossierDescriptorFileName,
-//                                       dateEncodingStrategy: .iso8601)
-//    }
-    
-    /// Dupliquer tous les fichiers JSON ne commencant pas par 'App'
-    /// et présents dans le répertoire "originFolder'
-    /// vers le répertoire 'targetFolder'
+    /// Dupliquer tous les fichiers JSON ne commencant pas par `App`
+    /// et présents dans le répertoire `originFolder`
+    /// vers le répertoire `targetFolder`
     /// - Parameters:
     ///   - originFolder: répertoire source
     ///   - targetFolder: répertoire destination
-    /// - Throws:
+    /// - Throws:`FileError.withContentDuplicatedFrom`
     fileprivate static func duplicateTemplateFiles(from originFolder : Folder,
                                                    to targetFolder   : Folder) throws {
         do {
@@ -79,9 +75,9 @@ struct PersistenceManager {
         }
     }
     
-    /// Itérer une action 'perform' sur tous les dossier utilisateur du directory "Documents"
+    /// Itérer une action `perform` sur tous les dossiers `utilisateur` du directory `Documents`
     /// - Parameter perform: action à réaliser sur chaque Folder
-    /// - Throws: FileError.failedToResolveDocuments
+    /// - Throws: `FileError.failedToResolveDocuments`
     static func forEachUserFolder(perform: (Folder) throws -> Void) throws {
         /// rechercher le dossier 'Documents' de l'utilisateur
         guard let documentsFolder = Folder.documents else {
@@ -98,12 +94,12 @@ struct PersistenceManager {
         }
     }
     
-    /// Créer un nouveau répertoire nommé 'withID' dans le répertoire 'Documents'
-    /// et y copier tous les templates présents dans le répertoire 'Library/template'
+    /// Créer un nouveau répertoire nommé `withID` dans le répertoire `Documents`
+    /// et y copier tous les templates présents dans le répertoire `Library/template`
     /// - Parameter withID: nom du répertoire à créer
     /// - Throws:
-    ///     - FileError.failedToResolveDocuments
-    ///     - FileError.templatesDossierNotInitialized
+    ///     - `FileError.failedToResolveDocuments`
+    ///     - `FileError.templatesDossierNotInitialized`
     /// - Returns: répertoire créé
     static func newUserFolder(withID id: UUID) throws -> Folder {
         /// rechercher le dossier 'Documents' de l'utilisateur
@@ -136,14 +132,14 @@ struct PersistenceManager {
         return targetFolder
     }
     
-    /// Créer un nouveau répertoire nommé 'withID' dans le répertoire 'Documents'
-    /// et y copier tous les fichiers présents dans le répertoire à dupliquer
+    /// Créer un nouveau répertoire nommé `withID` dans le répertoire `Documents`
+    /// et y copier tous les `templates` présents dans le répertoire `withContentDuplicatedFrom`
     /// - Parameters:
     ///   - id: nom du répertoire à créer
     ///   - originFolder: répertoire à dupliquer
     /// - Throws:
-    ///   - FileError.failedToResolveDocuments
-    ///   - FileError.directoryToDuplicateDoesNotExist
+    ///   - `FileError.failedToResolveDocuments`
+    ///   - `FileError.directoryToDuplicateDoesNotExist`
     /// - Returns: répertoire créé
     static func newUserFolder(withID id: UUID,
                               withContentDuplicatedFrom originFolder: Folder?) throws -> Folder {
@@ -177,10 +173,10 @@ struct PersistenceManager {
         return targetFolder
     }
     
-    /// Détruire le répertoire portant le nom 'folderName'
-    /// et situé dans le répertoire 'Documents'
+    /// Détruire le dossier `utilisateur` du directory `Documents`
+    /// portant le nom `folderName`
     /// - Parameter folderName: nom du répertoire à détruire
-    /// - Throws: FileError.failedToResolveDocuments
+    /// - Throws: `FileError.failedToResolveDocuments`
     static func deleteUserFolder(folderName: String) throws {
         /// rechercher le dossier 'Documents' de l'utilisateur
         guard let documentsFolder = Folder.documents else {
@@ -196,8 +192,8 @@ struct PersistenceManager {
         try targetFolder.delete()
     }
     
-    /// Retourne un Folder pointant sur le directory contenant les templates
-    /// Créer le directorty au besoin
+    /// Retourne le directory contenant les templates: dans le répertoire `Library/template`.
+    /// Créer le directorty au besoin.
     /// - Returns: Folder pointant sur le directory contenant les templates ou 'nil' si le dossier n'est pas trouvé
     fileprivate static func templateFolder() -> Folder? {
         /// rechercher le dossier 'Library' de l'utilisateur
@@ -221,6 +217,7 @@ struct PersistenceManager {
     }
     
     /// Importer les fichiers vierges depuis le Bundle Main de l'Application
+    /// vers le répertoire `Library/template`
     /// - Returns: le dossier 'template' si l'import a réussi, 'nil' sinon
     static func importTemplatesFromApp() throws -> Folder {
         guard let originFolder = Folder.application else {
@@ -246,7 +243,7 @@ struct PersistenceManager {
         return templateFolder
     }
     
-    /// Calculer la date de dernière modification d'un dossier utilisateur comme étant celle
+    /// Calculer la date de dernière modification d'un dossier utilisateur `withID` comme étant celle
     /// du fichier modifié le plus tardivement
     /// - Parameter id: UUID du dossier utilisateur
     /// - Returns: date de dernière modification d'un dossier utilisateur
@@ -307,14 +304,16 @@ struct PersistenceManager {
         }
         #endif
         
-        /// sauvegarder le fichier dans le répertoire: data/Containers/Data/Application/xxx/Documents/Dossier en cours/simulationTitle/csv/
+        /// sauvegarder le fichier dans le fichier: data/Containers/Data/Application/xxx/Documents/Dossier en cours/simulationTitle/csv/fileName
         do {
             // créer le fichier .csv dans le directory 'Documents/Dossier en cours/simulationTitle/csv/' de l'utilisateur
             let csvFile = try folder.createFileIfNeeded(at: AppSettings.shared.csvPath(simulationTitle) + fileName)
             // y écrire le tableau au format csv
             try csvFile.write(csvString, encoding: .utf8)
+            #if DEBUG
             customLog.log(level: .info,
                           "Saving \(fileName, privacy: .public) to: \(folder.path + AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
+            #endif
 
         } catch let error as NSError {
             // la création à échouée
@@ -329,24 +328,39 @@ struct PersistenceManager {
                 """)
             throw error
         }
-        
-//        do {
-//            try Disk.save(Data(csvString.utf8),
-//                          to: .documents,
-//                          as: AppSettings.shared.csvPath(simulationTitle) + fileName)
-//            customLog.log(level: .info,
-//                          "Saving \(fileName, privacy: .public) to: \(Disk.Directory.documents.pathDescription + "/" + AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
-//        } catch let error as NSError {
-//            customLog.log(level: .fault,
-//                          "Fault saving \(fileName, privacy: .public) to: \(Disk.Directory.documents.pathDescription + "/" + AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
-//            print("""
-//                Domain         : \(error.domain)
-//                Code           : \(error.code)
-//                Description    : \(error.localizedDescription)
-//                Failure Reason : \(error.localizedFailureReason ?? "")
-//                Suggestions    : \(error.localizedRecoverySuggestion ?? "")
-//                """)
-//            throw error
-//        }
+    }
+    
+    static func saveToImagePath(to folder       : Folder,
+                                fileName        : String,
+                                simulationTitle : String,
+                                image           : NSUIImage) throws {
+        /// sauvegarder le fichier dans le fichier: data/Containers/Data/Application/xxx/Documents/Dossier en cours/simulationTitle/iamge/fileName
+        do {
+            // créer le fichier .csv dans le directory 'Documents/Dossier en cours/simulationTitle/csv/' de l'utilisateur
+            let imageFile = try folder.createFileIfNeeded(at: AppSettings.shared.imagePath(simulationTitle) + fileName)
+            // y écrire le tableau au format csv
+            try imageFile.write(image)
+            #if DEBUG
+            customLog.log(level: .info,
+                          "Saving \(fileName, privacy: .public) to: \(folder.path + AppSettings.shared.imagePath(simulationTitle) + fileName, privacy: .public)")
+            #endif
+//            try Disk.save(image, to: .documents, as: AppSettings.shared.imagePath(simulationTitle) + fileName)
+//            // impression debug
+//            #if DEBUG
+//            Swift.print("saving image to file: ", AppSettings.shared.imagePath(simulationTitle) + fileName)
+//            #endif
+        } catch let error as NSError {
+            // la création à échouée
+            customLog.log(level: .fault,
+                          "Fault saving \(fileName, privacy: .public) to: \(AppSettings.shared.imagePath(simulationTitle) + fileName, privacy: .public)")
+            print("""
+                Domain         : \(error.domain)
+                Code           : \(error.code)
+                Description    : \(error.localizedDescription)
+                Failure Reason : \(error.localizedFailureReason ?? "")
+                Suggestions    : \(error.localizedRecoverySuggestion ?? "")
+                """)
+            throw error
+        }
     }
 }
