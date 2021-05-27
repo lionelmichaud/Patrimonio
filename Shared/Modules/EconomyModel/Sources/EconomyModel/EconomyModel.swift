@@ -56,7 +56,7 @@ public struct Economy {
     public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
     // MARK: - Modèles statistiques de générateurs aléatoires
-    public struct RandomizersModel: BundleCodable {
+    public struct RandomizersModel: JsonCodableToBundle {
         public static var defaultFileName : String = "EconomyModelConfig.json"
         
         // MARK: - Properties

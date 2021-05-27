@@ -59,7 +59,7 @@ public struct RegimeAgirc: Codable {
         var plafondMajoEnfantNe   : Double // €
     }
     
-    struct Model: BundleCodable, Versionable {
+    struct Model: JsonCodableToBundle, Versionable {
         public static var defaultFileName : String = "RegimeAgircModel.json"
 
         public var version       : Version

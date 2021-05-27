@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Protocol apportant Decodable JSON à partir d'un fichier d'un Bundle de l'application
 
-public protocol BundleDecodable: Decodable {
+public protocol JsonDecodableToBundle: Decodable {
     
     static var defaultFileName : String { get set }
     
@@ -22,7 +22,7 @@ public protocol BundleDecodable: Decodable {
 }
 
 // implémentation par défaut
-public extension BundleDecodable {
+public extension JsonDecodableToBundle {
     init(fromFile file        : String?                          = nil,
          fromBundle bundle    : Bundle                           = Bundle.main,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy = .iso8601,
@@ -36,7 +36,7 @@ public extension BundleDecodable {
 
 // MARK: - Protocol apportant Encodable JSON à partir d'un fichier d'un Bundle de l'application
 
-public protocol BundleEncodable: Encodable {
+public protocol JsonEncodableToBundle: Encodable {
     
     static var defaultFileName : String { get set }
     
@@ -48,7 +48,7 @@ public protocol BundleEncodable: Encodable {
 }
 
 // implémentation par défaut
-public extension BundleEncodable {
+public extension JsonEncodableToBundle {
     func saveToBundle(toFile file          : String?                          = nil,
                       toBundle bundle      : Bundle                           = Bundle.main,
                       dateEncodingStrategy : JSONEncoder.DateEncodingStrategy = .iso8601,
@@ -62,4 +62,4 @@ public extension BundleEncodable {
 
 // MARK: - Protocol apportant Codable JSON à partir d'un fichier d'un Bundle de l'application
 
-public typealias BundleCodable = BundleEncodable & BundleDecodable
+public typealias JsonCodableToBundle = JsonEncodableToBundle & JsonDecodableToBundle

@@ -46,7 +46,7 @@ public struct SocioEconomy {
     
     public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
-    public struct Model: BundleCodable, SocioEconomyModelProvider {
+    public struct Model: JsonCodableToBundle, SocioEconomyModelProvider {
         public static var defaultFileName     : String = "SocioEconomyModelConfig.json"
         public var pensionDevaluationRate     : ModelRandomizer<BetaRandomGenerator>
         public var nbTrimTauxPlein            : ModelRandomizer<DiscreteRandomGenerator>

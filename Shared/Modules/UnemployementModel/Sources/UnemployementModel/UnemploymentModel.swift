@@ -28,7 +28,7 @@ public struct Unemployment {
         }
     }
     
-    public struct Model: BundleCodable {
+    public struct Model: JsonCodableToBundle {
         public static var defaultFileName : String = "UnemploymentModelConfig.json"
         public var indemniteLicenciement  : LayoffCompensation
         public var allocationChomage      : UnemploymentCompensation

@@ -62,7 +62,7 @@ public struct RegimeGeneral: Codable {
         var nbTrimNonIndemnise : Int
     }
     
-    struct Model: BundleCodable, Versionable {
+    struct Model: JsonCodableToBundle, Versionable {
         static var defaultFileName : String = "RegimeGeneralModel.json"
 
         var version                : Version

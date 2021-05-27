@@ -15,7 +15,7 @@ public struct Fiscal {
     
     // MARK: - Nested types
 
-    public struct Model: BundleCodable {
+    public struct Model: JsonCodableToBundle {
         
         // MARK: - Static Properties
         
