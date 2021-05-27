@@ -48,8 +48,9 @@ struct PersistenceManager {
     // MARK: - Static Methods
     
     static func saveDescriptor(of dossier: Dossier) throws {
-        let dossierDescriptorFile = try dossier.folder?.createFileIfNeeded(withName: FileNameCst.kDossierDescriptorFileName)
-        dossierDescriptorFile?.saveAsJSON(dossier, dateEncodingStrategy: .iso8601)
+        try dossier.folder?.saveAsJSON(dossier,
+                                       to: FileNameCst.kDossierDescriptorFileName,
+                                       dateEncodingStrategy: .iso8601)
     }
     
     /// Dupliquer tous les fichiers JSON ne commencant pas par 'App'
@@ -92,9 +93,9 @@ struct PersistenceManager {
         var dossiers = DossierArray()
         try documentsFolder.subfolders.forEach { folder in
             if folder.isUserFolder {
-                let descriptorFile = try folder.file(named: FileNameCst.kDossierDescriptorFileName)
-                let decodedDossier = descriptorFile.loadFromJSON(Dossier.self,
-                                                                 dateDecodingStrategy: .iso8601)
+                let decodedDossier = try folder.loadFromJSON(Dossier.self,
+                                                             from: FileNameCst.kDossierDescriptorFileName,
+                                                             dateDecodingStrategy: .iso8601)
                 let dossier = decodedDossier
                     .identifiedBy(UUID(uuidString: folder.name)!)
                     .pointingTo(folder)
@@ -207,7 +208,7 @@ struct PersistenceManager {
     /// Retourne un Dossier pointant sur le directory contenant les templates
     /// Créer le directorty au besoin
     /// - Returns: Dossier pointant sur le directory contenant les templates ou 'nil' si le dossier n'est pas trouvé
-    fileprivate static func getTemplateDossier() -> Folder? {
+    fileprivate static func getTemplateFolder() -> Folder? {
         /// rechercher le dossier 'Library' de l'utilisateur
         guard let libraryFolder = Folder.library else {
             customLog.log(level: .fault,
@@ -229,7 +230,7 @@ struct PersistenceManager {
     }
     
     /// Importer les fichiers vierges depuis le Bundle Main de l'Application
-    /// - Returns: le dossier inchangé si l'import a réussi, 'nil' sinon
+    /// - Returns: le dossier 'template' si l'import a réussi, 'nil' sinon
     static func importTemplatesFromApp() -> Dossier? {
         guard let originFolder = Folder.application else {
             customLog.log(level: .fault,
@@ -237,7 +238,7 @@ struct PersistenceManager {
             return nil
         }
         
-        guard let templateFolder = PersistenceManager.getTemplateDossier() else {
+        guard let templateFolder = PersistenceManager.getTemplateFolder() else {
             return nil
         }
         

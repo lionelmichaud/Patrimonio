@@ -104,6 +104,8 @@
 		7920DC78262C700500536B03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7920DC4C262C700500536B03 /* Assets.xcassets */; };
 		7920DC92262C720D00536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC91262C720D00536B03 /* AppFoundation */; };
 		7920DC94262C721400536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC93262C721400536B03 /* AppFoundation */; };
+		79240596265EBDBE0097AF0F /* Extension+Folder-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79240595265EBDBE0097AF0F /* Extension+Folder-Codable.swift */; };
+		79240597265EBDBE0097AF0F /* Extension+Folder-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79240595265EBDBE0097AF0F /* Extension+Folder-Codable.swift */; };
 		79281A09262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */; };
 		79281A0A262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */; };
 		792DE958264C8DBF004DA53D /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DE957264C8DBF004DA53D /* PersistenceManager.swift */; };
@@ -189,8 +191,8 @@
 		797931C2264170FE000F8599 /* SimulationKPIEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931C0264170FE000F8599 /* SimulationKPIEnum.swift */; };
 		797931CC26417249000F8599 /* BalanceSheetArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931CB26417249000F8599 /* BalanceSheetArray.swift */; };
 		797931CD26417249000F8599 /* BalanceSheetArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931CB26417249000F8599 /* BalanceSheetArray.swift */; };
-		798553CC265D16420066FFD1 /* Extension+Files-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798553CB265D16410066FFD1 /* Extension+Files-Codable.swift */; };
-		798553CD265D16420066FFD1 /* Extension+Files-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798553CB265D16410066FFD1 /* Extension+Files-Codable.swift */; };
+		798553CC265D16420066FFD1 /* Extension+File-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798553CB265D16410066FFD1 /* Extension+File-Codable.swift */; };
+		798553CD265D16420066FFD1 /* Extension+File-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798553CB265D16410066FFD1 /* Extension+File-Codable.swift */; };
 		798DE8A426357CF500C0C3B5 /* SwiftUIconditional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */; };
 		798DE8A526357CF500C0C3B5 /* SwiftUIconditional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */; };
 		798DE8AB2635CA7100C0C3B5 /* ExpenseDetailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DE8AA2635CA7100C0C3B5 /* ExpenseDetailedView.swift */; };
@@ -625,6 +627,7 @@
 		7920DC6C262C700500536B03 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7920DC70262C700500536B03 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		7920DC72262C700500536B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		79240595265EBDBE0097AF0F /* Extension+Folder-Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Folder-Codable.swift"; sourceTree = "<group>"; };
 		79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeInsuranceClause.swift; sourceTree = "<group>"; };
 		792DE957264C8DBF004DA53D /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		7935FFD626541AAB00AC1715 /* DossiersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DossiersView.swift; sourceTree = "<group>"; };
@@ -664,7 +667,7 @@
 		797931A826416EA1000F8599 /* SimulationResultTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimulationResultTable.swift; sourceTree = "<group>"; };
 		797931C0264170FE000F8599 /* SimulationKPIEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationKPIEnum.swift; sourceTree = "<group>"; };
 		797931CB26417249000F8599 /* BalanceSheetArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceSheetArray.swift; sourceTree = "<group>"; };
-		798553CB265D16410066FFD1 /* Extension+Files-Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Files-Codable.swift"; sourceTree = "<group>"; };
+		798553CB265D16410066FFD1 /* Extension+File-Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+File-Codable.swift"; sourceTree = "<group>"; };
 		798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIconditional.swift; sourceTree = "<group>"; };
 		798DE8AA2635CA7100C0C3B5 /* ExpenseDetailedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseDetailedView.swift; sourceTree = "<group>"; };
 		798DE8B12635CBC300C0C3B5 /* ExpenseSummaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseSummaryView.swift; sourceTree = "<group>"; };
@@ -1196,7 +1199,8 @@
 				792DE957264C8DBF004DA53D /* PersistenceManager.swift */,
 				796503C52655682A0093F10E /* Dossier.swift */,
 				796503CB265581E40093F10E /* Store.swift */,
-				798553CB265D16410066FFD1 /* Extension+Files-Codable.swift */,
+				798553CB265D16410066FFD1 /* Extension+File-Codable.swift */,
+				79240595265EBDBE0097AF0F /* Extension+Folder-Codable.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -2168,7 +2172,7 @@
 				7977FE85262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */,
 				796506D52640866F0036E466 /* scpiDetailedView.swift in Sources */,
 				79BE4A832651CE7800BBF46C /* BetaRandomizerView.swift in Sources */,
-				798553CC265D16420066FFD1 /* Extension+Files-Codable.swift in Sources */,
+				798553CC265D16420066FFD1 /* Extension+File-Codable.swift in Sources */,
 				79FA8CF52630684F009FEA00 /* FinancialEnvelop.swift in Sources */,
 				791ED0D62639FBFD00701202 /* UnemployementDetailView.swift in Sources */,
 				791D3B932649679C0024A2D8 /* CustomCsvConvertible.swift in Sources */,
@@ -2184,6 +2188,7 @@
 				79A9AA7E264AFFC20036732F /* CashFlowCsvVisitorP.swift in Sources */,
 				7935FFD92654204200AC1715 /* DossierSummaryView.swift in Sources */,
 				79CB2C89264D731900B3E493 /* CsvMonteCarloVisitor.swift in Sources */,
+				79240596265EBDBE0097AF0F /* Extension+Folder-Codable.swift in Sources */,
 				791D3BA02649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,
 				791ED11E263A2D2E00701202 /* CashFlowLine+manageSCPI.swift in Sources */,
 				7906AB752641BCF100A398E9 /* SocialAccounts.swift in Sources */,
@@ -2399,7 +2404,7 @@
 				799025B02641F60300ED53D4 /* IrppSliceView.swift in Sources */,
 				792DE959264C8DBF004DA53D /* PersistenceManager.swift in Sources */,
 				79A9BE9A265186A700170A01 /* DiscreteDistributionView.swift in Sources */,
-				798553CD265D16420066FFD1 /* Extension+Files-Codable.swift in Sources */,
+				798553CD265D16420066FFD1 /* Extension+File-Codable.swift in Sources */,
 				79EC480A263098340006EE44 /* OwnershipManager.swift in Sources */,
 				79C8382B2641DC02008B29BF /* LineChartDataSet+Extension.swift in Sources */,
 				79A9BE9E265186EE00170A01 /* BetaDistributionView.swift in Sources */,
@@ -2426,6 +2431,7 @@
 				79EC482226309EFC0006EE44 /* LegalSuccessionManager.swift in Sources */,
 				79FA8CEA2630684F009FEA00 /* RealEstate.swift in Sources */,
 				79EC47BB26307C910006EE44 /* ValuedLiabilities.swift in Sources */,
+				79240597265EBDBE0097AF0F /* Extension+Folder-Codable.swift in Sources */,
 				79C838322641E02B008B29BF /* MenuCollapsable.swift in Sources */,
 				79A9AA77264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */,
 				798DE8B32635CBC300C0C3B5 /* ExpenseSummaryView.swift in Sources */,
