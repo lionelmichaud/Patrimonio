@@ -15,7 +15,7 @@ public protocol JsonDecodableToBundle: Decodable {
     static var defaultFileName : String { get set }
     
     /// Lit le modèle dans un fichier JSON du Bundle 
-    init(fromFile file        : String?,
+    init(fromFile file        : String,
          fromBundle bundle    : Bundle,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy,
          keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy)
@@ -23,12 +23,12 @@ public protocol JsonDecodableToBundle: Decodable {
 
 // implémentation par défaut
 public extension JsonDecodableToBundle {
-    init(fromFile file        : String?                          = nil,
+    init(fromFile file        : String                           = defaultFileName,
          fromBundle bundle    : Bundle                           = Bundle.main,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy = .iso8601,
          keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) {
         self = bundle.loadFromJSON(Self.self,
-                                   from                 : file ?? Self.defaultFileName,
+                                   from                 : file,
                                    dateDecodingStrategy : dateDecodingStrategy,
                                    keyDecodingStrategy  : keyDecodingStrategy)
     }
@@ -41,7 +41,7 @@ public protocol JsonEncodableToBundle: Encodable {
     static var defaultFileName : String { get set }
     
     /// Encode l'objet dans un fichier stocké dans le Bundle Main de l'Application
-    func saveToBundle(toFile file          : String?,
+    func saveToBundle(toFile file          : String,
                       toBundle bundle      : Bundle,
                       dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
                       keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy)
@@ -49,12 +49,12 @@ public protocol JsonEncodableToBundle: Encodable {
 
 // implémentation par défaut
 public extension JsonEncodableToBundle {
-    func saveToBundle(toFile file          : String?                          = nil,
+    func saveToBundle(toFile file          : String                           = defaultFileName,
                       toBundle bundle      : Bundle                           = Bundle.main,
                       dateEncodingStrategy : JSONEncoder.DateEncodingStrategy = .iso8601,
                       keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) {
         bundle.saveAsJSON(self,
-                          to                   : file ?? Self.defaultFileName,
+                          to                   : file,
                           dateEncodingStrategy : dateEncodingStrategy,
                           keyEncodingStrategy  : keyEncodingStrategy)
     }

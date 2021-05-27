@@ -147,15 +147,15 @@ public struct RegimeGeneral: Codable {
     // MARK: - Methods
 
     /// Encode l'objet dans un fichier stocké dans le Bundle de contenant la définition de la classe aClass
-    func saveToBundle(toFile file          : String? = nil,
+    func saveToBundle(toFile file          : String,
                       toBundle bundle      : Bundle,
                       dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
                       keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) {
 
-        model.saveToBundle(toFile: file,
-                           toBundle: bundle,
-                           dateEncodingStrategy: dateEncodingStrategy,
-                           keyEncodingStrategy:  keyEncodingStrategy)
+        model.saveToBundle(toFile               : file,
+                           toBundle             : bundle,
+                           dateEncodingStrategy : dateEncodingStrategy,
+                           keyEncodingStrategy  :  keyEncodingStrategy)
     }
     
     /// Calcul du taux de reversion en tenant compte d'une décote ou d'une surcote éventuelle

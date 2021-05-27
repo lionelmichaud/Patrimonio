@@ -2,6 +2,7 @@ import Foundation
 import os
 import AppFoundation
 import Statistics
+import Files
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.SocialAccounts")
 
@@ -298,8 +299,9 @@ struct SocialAccounts {
     /// - un fichier pour le Bilan
     ///
     /// - Parameter simulationTitle: Titre de la simulation utilisé pour générer les nom de répertoire
-    func save(simulationTitle: String,
-              withMode mode  : SimulationModeEnum) throws {
+    func save(to folder       : Folder,
+              simulationTitle : String,
+              withMode mode   : SimulationModeEnum) throws {
         // construction du tableau de bilans annnuels au format CSV
         let balanceSheetCSV = CsvBuilder.balanceSheetCSV(from     : balanceArray,
                                                          withMode : mode)
@@ -308,26 +310,29 @@ struct SocialAccounts {
                                                  withMode : mode)
         // construction du tableau des successions
         let successionsCSV   = String(describing: CsvSuccessionsVisitor(successions: legalSuccessions + lifeInsSuccessions))
-
+        
         // enregistrer les résultats dans le directory approprié
         do {
-            try PersistenceManager.saveToCsvPath(simulationTitle : simulationTitle,
-                                          fileName        : FileNameCst.kBalanceSheetCSVFileName,
-                                          csvString       : balanceSheetCSV)
+            try PersistenceManager.saveToCsvPath(to              : folder,
+                                                 fileName        : FileNameCst.kBalanceSheetCSVFileName,
+                                                 simulationTitle : simulationTitle,
+                                                 csvString       : balanceSheetCSV)
         } catch {
             throw FileError.failedToSaveBalanceSheetCsv
         }
         do {
-            try PersistenceManager.saveToCsvPath(simulationTitle : simulationTitle,
-                                          fileName        : FileNameCst.kCashFlowCSVFileName,
-                                          csvString       : cashFlowCSV)
+            try PersistenceManager.saveToCsvPath(to              : folder,
+                                                 fileName        : FileNameCst.kCashFlowCSVFileName,
+                                                 simulationTitle : simulationTitle,
+                                                 csvString       : cashFlowCSV)
         } catch {
             throw FileError.failedToSaveCashFlowCsv
         }
         do {
-            try PersistenceManager.saveToCsvPath(simulationTitle : simulationTitle,
-                                          fileName        : FileNameCst.kSuccessionsCSVFileName,
-                                          csvString       : successionsCSV)
+            try PersistenceManager.saveToCsvPath(to              : folder,
+                                                 fileName        : FileNameCst.kSuccessionsCSVFileName,
+                                                 simulationTitle : simulationTitle,
+                                                 csvString       : successionsCSV)
         } catch {
             throw FileError.failedToSaveSuccessionsCSV
         }

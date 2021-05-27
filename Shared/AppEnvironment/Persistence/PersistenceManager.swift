@@ -8,7 +8,6 @@
 import Foundation
 import os
 import Files
-import Disk
 
 private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
                                category  : "PersistenceManager")
@@ -278,12 +277,12 @@ struct PersistenceManager {
     ///   - simulationTitle: nom de ls simulation utilisé pour générer le nom du répertoire
     ///   - csvString: String au format CSV à enregistrer
     ///   - fileName: nom du fichier à créer
-    /// - Throws: <#description#>
-    static func saveToCsvPath(simulationTitle : String,
+    static func saveToCsvPath(to folder       : Folder,
                               fileName        : String,
+                              simulationTitle : String,
                               csvString       : String) throws {
         #if DEBUG
-        print(csvString)
+//        print(csvString)
         /// sauvegarder le fichier dans le répertoire Bundle.main
         if let fileUrl = Bundle.main.url(forResource   : fileName,
                                          withExtension : nil) {
@@ -308,16 +307,19 @@ struct PersistenceManager {
         }
         #endif
         
-        /// sauvegarder le fichier dans le répertoire: data/Containers/Data/Application/xxx/Documents/simulationTitle/csv/
+        /// sauvegarder le fichier dans le répertoire: data/Containers/Data/Application/xxx/Documents/Dossier en cours/simulationTitle/csv/
         do {
-            try Disk.save(Data(csvString.utf8),
-                          to: .documents,
-                          as: AppSettings.shared.csvPath(simulationTitle) + fileName)
+            // créer le fichier .csv dans le directory 'Documents/Dossier en cours/simulationTitle/csv/' de l'utilisateur
+            let csvFile = try folder.createFileIfNeeded(at: AppSettings.shared.csvPath(simulationTitle) + fileName)
+            // y écrire le tableau au format csv
+            try csvFile.write(csvString, encoding: .utf8)
             customLog.log(level: .info,
-                          "Saving \(fileName, privacy: .public) to: \(Disk.Directory.documents.pathDescription + "/" + AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
+                          "Saving \(fileName, privacy: .public) to: \(folder.path + AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
+
         } catch let error as NSError {
+            // la création à échouée
             customLog.log(level: .fault,
-                          "Fault saving \(fileName, privacy: .public) to: \(Disk.Directory.documents.pathDescription + "/" + AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
+                          "Fault saving \(fileName, privacy: .public) to: \(AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
             print("""
                 Domain         : \(error.domain)
                 Code           : \(error.code)
@@ -327,5 +329,24 @@ struct PersistenceManager {
                 """)
             throw error
         }
+        
+//        do {
+//            try Disk.save(Data(csvString.utf8),
+//                          to: .documents,
+//                          as: AppSettings.shared.csvPath(simulationTitle) + fileName)
+//            customLog.log(level: .info,
+//                          "Saving \(fileName, privacy: .public) to: \(Disk.Directory.documents.pathDescription + "/" + AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
+//        } catch let error as NSError {
+//            customLog.log(level: .fault,
+//                          "Fault saving \(fileName, privacy: .public) to: \(Disk.Directory.documents.pathDescription + "/" + AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
+//            print("""
+//                Domain         : \(error.domain)
+//                Code           : \(error.code)
+//                Description    : \(error.localizedDescription)
+//                Failure Reason : \(error.localizedFailureReason ?? "")
+//                Suggestions    : \(error.localizedRecoverySuggestion ?? "")
+//                """)
+//            throw error
+//        }
     }
 }

@@ -22,7 +22,7 @@ public protocol JsonDecodableToFolderP: Decodable {
 }
 // implémentation par défaut
 extension JsonDecodableToFolderP {
-    init(fromFile file        : String = defaultFileName,
+    init(fromFile file        : String                           = defaultFileName,
          fromFolder folder    : Folder,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy = .iso8601,
          keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) throws {
@@ -47,7 +47,7 @@ public protocol JsonEncodableToFolderP: Encodable {
 }
 // implémentation par défaut
 extension JsonEncodableToFolderP {
-    func saveAsJSON(toFile file          : String = defaultFileName,
+    func saveAsJSON(toFile file          : String                           = defaultFileName,
                     toFolder folder      : Folder,
                     dateEncodingStrategy : JSONEncoder.DateEncodingStrategy = .iso8601,
                     keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) throws {

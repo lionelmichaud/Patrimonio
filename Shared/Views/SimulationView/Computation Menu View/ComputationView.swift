@@ -12,12 +12,13 @@ import RetirementModel
 
 struct ComputationView: View {
     @EnvironmentObject var uiState          : UIState
+    @EnvironmentObject var dataStore        : Store
     @EnvironmentObject var family           : Family
     @EnvironmentObject var patrimoine       : Patrimoin
     @EnvironmentObject var simulation       : Simulation
     @State private var busySaveWheelAnimate : Bool = false
     //@State private var busyCompWheelAnimate : Bool = false
-    @Environment(\.presentationMode) var presentationMode
+//    @Environment(\.presentationMode) var presentationMode
     @State private var alertItem            : AlertItem?
 
     struct ComputationForm: View {
@@ -131,8 +132,8 @@ struct ComputationView: View {
                            }
                     )
                     .capsuleButtonStyle()
-                    .disabled(!(simulation.isComputed && !simulation.isSaved))
-                    .opacity(!(simulation.isComputed && !simulation.isSaved) ? 0.5 : 1.0)
+                    .disabled(!savingIsPossible())
+                    .opacity(!savingIsPossible() ? 0.5 : 1.0)
                 }
                 ToolbarItem(placement: .primaryAction) {
                     // bouton calculer
@@ -152,6 +153,10 @@ struct ComputationView: View {
                 }
             }
             .alert(item: $alertItem, content: myAlert)
+    }
+    
+    func savingIsPossible() -> Bool {
+        simulation.isComputed && !simulation.isSaved && (dataStore.activeDossier != nil)
     }
     
     func computeSimulation() {
@@ -182,32 +187,37 @@ struct ComputationView: View {
 //        busyCompWheelAnimate.toggle()
         self.alertItem = AlertItem(title         : Text("Les calculs sont terminés. Vous pouvez visualiser les résultats."),
                                    dismissButton : .default(Text("OK")))
-        self.presentationMode.wrappedValue.dismiss()
+//        self.presentationMode.wrappedValue.dismiss()
         #if DEBUG
         // self.simulation.socialAccounts.printBalanceSheetTable()
         #endif
     }
     
     func saveSimulation() {
-        busySaveWheelAnimate.toggle()
         // executer l'enregistrement en tâche de fond
+        guard let folder = dataStore.activeDossier?.folder else {
+            self.alertItem = AlertItem(title         : Text("La sauvegarde a échoué"),
+                                       dismissButton : .default(Text("OK")))
+            return
+        }
+        busySaveWheelAnimate.toggle()
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                try self.simulation.save()
-            } catch {
+                try self.simulation.save(to: folder)
                 // mettre à jour les variables d'état dans le thread principal
                 DispatchQueue.main.async {
                     self.busySaveWheelAnimate.toggle()
                     self.simulation.isSaved = true
+                }
+            } catch {
+                // mettre à jour les variables d'état dans le thread principal
+                DispatchQueue.main.async {
+                    self.busySaveWheelAnimate.toggle()
+                    self.simulation.isSaved = false
                     self.alertItem = AlertItem(title         : Text((error as? FileError)?.rawValue ?? "La sauvegarde a échoué"),
                                                dismissButton : .default(Text("OK")))
-                    self.presentationMode.wrappedValue.dismiss()
+//                    self.presentationMode.wrappedValue.dismiss()
                 }
-            }
-            // mettre à jour les variables d'état dans le thread principal
-            DispatchQueue.main.async {
-                self.busySaveWheelAnimate.toggle()
-                self.simulation.isSaved = true
             }
         }
     }
@@ -215,6 +225,7 @@ struct ComputationView: View {
 
 struct ComputationView_Previews: PreviewProvider {
     static var uiState    = UIState()
+    static var dataStore  = Store()
     static var family     = Family()
     static var patrimoine = Patrimoin()
     static var simulation = Simulation()
@@ -225,6 +236,7 @@ struct ComputationView_Previews: PreviewProvider {
                 // calcul de simulation
                 NavigationLink(destination : ComputationView()
                                 .environmentObject(uiState)
+                                .environmentObject(dataStore)
                                 .environmentObject(family)
                                 .environmentObject(patrimoine)
                                 .environmentObject(simulation)
