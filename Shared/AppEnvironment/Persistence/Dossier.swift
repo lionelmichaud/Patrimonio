@@ -18,7 +18,17 @@ private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
 typealias DossierArray = [Dossier]
 extension DossierArray {
     mutating func load() throws {
-        self = try PersistenceManager.loadUserDossiers()
+        self = DossierArray()
+        try PersistenceManager.forEachUserFolder { folder in
+            let decodedDossier = try Dossier(fromFile             : FileNameCst.kDossierDescriptorFileName,
+                                             fromFolder           : folder,
+                                             dateDecodingStrategy : .iso8601)
+            let dossier = decodedDossier
+                .identifiedBy(UUID(uuidString: folder.name)!)
+                .pointingTo(folder)
+                .ownedByUser()
+            self.append(dossier)
+        }
     }
 }
 
@@ -121,28 +131,22 @@ struct Dossier: Identifiable, Equatable {
         let targetFolder = try PersistenceManager.newUserFolder(withID: newID)
         
         // initialiser les propriétés
-        let newDossier = Dossier()
-            .identifiedBy(newID)
-            .pointingTo(targetFolder)
-            .namedAs(name)
-            .annotatedBy(note)
-            .createdOn(Date.now)
-            .ownedByUser()
-        
-        // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier
-        do {
-            try PersistenceManager.saveDescriptor(of: newDossier)
-        } catch {
-            try targetFolder.delete()
-            throw error
-        }
-        
         self.init(id            : newID,
                   pointingTo    : targetFolder,
                   with          : name,
                   annotatedBy   : note,
                   createdOn     : Date.now,
                   isUserDossier : true)
+
+        // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier
+        do {
+            try saveAsJSON(toFolder             : targetFolder,
+                           dateEncodingStrategy : .iso8601)
+                //PersistenceManager.saveDescriptor(of: newDossier)
+        } catch {
+            try targetFolder.delete()
+            throw error
+        }
     }
         
     // MARK: - Builder methods
@@ -223,17 +227,18 @@ struct Dossier: Identifiable, Equatable {
         
         // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier clone
         do {
-            try PersistenceManager.saveDescriptor(of: newDossier)
+            try saveAsJSON(toFolder             : newDossier.folder!,
+                           dateEncodingStrategy : .iso8601)
+            return newDossier
         } catch {
             try targetFolder.delete()
             throw error
         }
-        
-        return newDossier
     }
     
     func update() throws {
-        try PersistenceManager.saveDescriptor(of: self)
+        try saveAsJSON(toFolder             : self.folder!,
+                       dateEncodingStrategy : .iso8601)
     }
 
     /// Supprimer le contenu du directory et le dossier associé
@@ -278,5 +283,8 @@ extension Dossier: Codable {
         try container.encode(self._dateCreation, forKey: ._dateCreation)
         try container.encode(self._isUserDossier, forKey: ._isUserDossier)
     }
-    
+}
+
+extension Dossier: JsonCodableToFolderP {
+    static var defaultFileName: String = FileNameCst.kDossierDescriptorFileName
 }

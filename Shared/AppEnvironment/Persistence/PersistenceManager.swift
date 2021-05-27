@@ -49,11 +49,11 @@ struct PersistenceManager {
     
     // MARK: - Static Methods
     
-    static func saveDescriptor(of dossier: Dossier) throws {
-        try dossier.folder?.saveAsJSON(dossier,
-                                       to: FileNameCst.kDossierDescriptorFileName,
-                                       dateEncodingStrategy: .iso8601)
-    }
+//    static func saveDescriptor(of dossier: Dossier) throws {
+//        try dossier.folder?.saveAsJSON(dossier,
+//                                       to: FileNameCst.kDossierDescriptorFileName,
+//                                       dateEncodingStrategy: .iso8601)
+//    }
     
     /// Dupliquer tous les fichiers JSON ne commencant pas par 'App'
     /// et présents dans le répertoire "originFolder'
@@ -80,10 +80,10 @@ struct PersistenceManager {
         }
     }
     
-    /// Construire la liste des dossiers en parcourant le directory "Documents"
+    /// Itérer une action 'perform' sur tous les dossier utilisateur du directory "Documents"
+    /// - Parameter perform: action à réaliser sur chaque Folder
     /// - Throws: FileError.failedToResolveDocuments
-    /// - Returns: Tableau de dossier
-    static func loadUserDossiers() throws -> DossierArray {
+    static func forEachUserFolder(perform: (Folder) throws -> Void) throws {
         /// rechercher le dossier 'Documents' de l'utilisateur
         guard let documentsFolder = Folder.documents else {
             customLog.log(level: .error,
@@ -92,21 +92,11 @@ struct PersistenceManager {
         }
         
         // itérer sur tous les directory présents dans le directory 'Documents'
-        var dossiers = DossierArray()
         try documentsFolder.subfolders.forEach { folder in
             if folder.isUserFolder {
-                let decodedDossier = try folder.loadFromJSON(Dossier.self,
-                                                             from: FileNameCst.kDossierDescriptorFileName,
-                                                             dateDecodingStrategy: .iso8601)
-                let dossier = decodedDossier
-                    .identifiedBy(UUID(uuidString: folder.name)!)
-                    .pointingTo(folder)
-                    .ownedByUser()
-                dossiers.append(dossier)
+                try perform(folder)
             }
         }
-        
-        return dossiers
     }
     
     /// Créer un nouveau répertoire nommé 'withID' dans le répertoire 'Documents'
