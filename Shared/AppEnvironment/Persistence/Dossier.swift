@@ -25,7 +25,6 @@ extension DossierArray {
 // MARK: - DOSSIER contenant tous les fichiers d'entrée et de sortie
 
 enum DossierError: String, Error {
-    case failedToResolveAppBundle     = "Failed to resolve App Bundle"
     case failedToDeleteDossier        = "Failed to delete Dossier"
     case inconsistencyOwnerFolderName = "Incohérence entre le nom du directory et le type de propriétaire du Dossier"
 }
@@ -35,7 +34,17 @@ struct Dossier: Identifiable, Equatable {
     // MARK: - Static Properties
     
     // le dossier contenant les template à utiilser pour créer un nouveau dossier
-    static let templates : Dossier? = PersistenceManager.importTemplatesFromApp()
+    static let templates : Dossier? = {
+        do {
+            let templateFolder = try PersistenceManager.importTemplatesFromApp()
+            return Dossier()
+                .pointingTo(templateFolder)
+                .namedAs(templateFolder.name)
+                .ownedByApp()
+        } catch {
+            return nil
+        }
+    }()
     
     // MARK: - Properties
     
@@ -135,34 +144,7 @@ struct Dossier: Identifiable, Equatable {
                   createdOn     : Date.now,
                   isUserDossier : true)
     }
-    
-//    static func create(name : String,
-//                       note : String) throws -> Dossier {
-//        let newID = UUID()
-//        
-//        // créer le directory associé
-//        let targetFolder = try PersistenceManager.newUserFolder(withID: newID)
-//        
-//        // initialiser les propriétés
-//        let newDossier = Dossier()
-//            .identifiedBy(newID)
-//            .pointingTo(targetFolder)
-//            .namedAs(name)
-//            .annotatedBy(note)
-//            .createdOn(Date.now)
-//            .ownedByUser()
-//        
-//        // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier
-//        do {
-//            try PersistenceManager.saveDescriptor(of: newDossier)
-//        } catch {
-//            try targetFolder.delete()
-//            throw error
-//        }
-//        
-//        return newDossier
-//    }
-    
+        
     // MARK: - Builder methods
     
     func identifiedBy(_ id: UUID) -> Dossier {

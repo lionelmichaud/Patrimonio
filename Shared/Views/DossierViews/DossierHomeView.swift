@@ -10,11 +10,11 @@ import SwiftUI
 struct DossierHomeView: View {
     var body: some View {
         VStack {
-            Label("Sélectionner un dossier de travail dans le menu à gauche", systemImage: "folder.badge.person.crop")
+            Label("Sélectionner un dossier dans le menu à gauche et le charger", systemImage: "folder.badge.person.crop")
             Text("ou")
-            Label("Créer un nouveau dossier de travail dans le menu à gauche", systemImage: "folder.fill.badge.plus")
+            Label("Créer un nouveau dossier dans le menu à gaucheet le charger", systemImage: "folder.fill.badge.plus")
         }
-        .font(.title)
+        .font(.headline)
     }
 }
 

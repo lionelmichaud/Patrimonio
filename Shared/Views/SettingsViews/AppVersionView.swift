@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Files
 
 struct AppVersionView: View {
     var body: some View {
@@ -20,6 +21,15 @@ struct AppVersionView: View {
             }
             Text(AppVersion.shared.comment ?? "")
                 .multilineTextAlignment(.center)
+        }
+        Form {
+            Text("resourcePath: \n" + Bundle.main.resourcePath!)
+            Text("Application: \n" + Folder.application!.path)
+            Text("Home: \n" +        Folder.home.path)
+            Text("Tempates: \n" +  (Dossier.templates?.folder?.path ?? "introuvable"))
+            Text("Documents: \n" + (Folder.documents?.path ?? "introuvable"))
+            Text("Library: \n" +   (Folder.library?.path ?? "introuvable"))
+            Text("temporary: \n" + Folder.temporary.path)
         }
     }
 }

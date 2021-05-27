@@ -34,8 +34,10 @@ enum FileError: String, Error {
     case failedToSaveMonteCarloCsv         = "La sauvegarde de l'historique des runs a échoué"
     case failedToSaveSuccessionsCSV        = "La sauvegarde des successions légales a échoué"
     case failedToSaveLifeInsSuccessionsCSV = "La sauvegarde des successions assurance vie a échoué"
+    case failedToResolveAppBundle          = "Impossible de trouver le répertoire 'App Bundle'"
     case failedToResolveDocuments          = "Impossible de trouver le répertoire 'Documents' de l'utilisateur"
     case failedToResolveLibrary            = "Impossible de trouver le répertoire 'Library' de l'utilisateur"
+    case failedToFindTemplateDirectory     = "Impossible de trouver le répertoire 'template' dans le répertoire 'Library' de l'utilisateur"
     case failedToCreateTemplateDirectory   = "Impossible de créer le répertoire 'template' dans le répertoire 'Library' de l'utilisateur"
     case directoryToDuplicateDoesNotExist  = "Le répertoire à dupliquer n'est pas défini"
     case failedToDuplicateTemplates        = "Echec de la copie des templates"
@@ -127,7 +129,7 @@ struct PersistenceManager {
         targetFolder = try documentsFolder.createSubfolder(named: id.uuidString)
         
         // récupérer le dossier 'templates'
-        guard let originFolder = Dossier.templates?.folder else {
+        guard let originFolder = templateFolder() else {
             customLog.log(level: .error,
                           "\(FileError.templatesDossierNotInitialized.rawValue)")
             throw FileError.templatesDossierNotInitialized
@@ -205,10 +207,10 @@ struct PersistenceManager {
         try targetFolder.delete()
     }
     
-    /// Retourne un Dossier pointant sur le directory contenant les templates
+    /// Retourne un Folder pointant sur le directory contenant les templates
     /// Créer le directorty au besoin
-    /// - Returns: Dossier pointant sur le directory contenant les templates ou 'nil' si le dossier n'est pas trouvé
-    fileprivate static func getTemplateFolder() -> Folder? {
+    /// - Returns: Folder pointant sur le directory contenant les templates ou 'nil' si le dossier n'est pas trouvé
+    fileprivate static func templateFolder() -> Folder? {
         /// rechercher le dossier 'Library' de l'utilisateur
         guard let libraryFolder = Folder.library else {
             customLog.log(level: .fault,
@@ -231,15 +233,17 @@ struct PersistenceManager {
     
     /// Importer les fichiers vierges depuis le Bundle Main de l'Application
     /// - Returns: le dossier 'template' si l'import a réussi, 'nil' sinon
-    static func importTemplatesFromApp() -> Dossier? {
+    static func importTemplatesFromApp() throws -> Folder {
         guard let originFolder = Folder.application else {
             customLog.log(level: .fault,
-                          "\(DossierError.failedToResolveAppBundle.rawValue))")
-            return nil
+                          "\(FileError.failedToResolveAppBundle.rawValue))")
+            throw FileError.failedToResolveAppBundle
         }
         
-        guard let templateFolder = PersistenceManager.getTemplateFolder() else {
-            return nil
+        guard let templateFolder = PersistenceManager.templateFolder() else {
+            customLog.log(level: .fault,
+                          "\(FileError.failedToFindTemplateDirectory.rawValue))")
+            throw FileError.failedToFindTemplateDirectory
         }
         
         do {
@@ -247,14 +251,10 @@ struct PersistenceManager {
         } catch {
             customLog.log(level: .fault,
                           "\(FileError.failedToImportTemplates.rawValue))")
-            return nil
+            throw FileError.failedToImportTemplates
         }
         
-        return
-            Dossier()
-            .pointingTo(templateFolder)
-            .namedAs(templateFolder.name)
-            .ownedByApp()
+        return templateFolder
     }
     
     /// Calculer la date de dernière modification d'un dossier utilisateur comme étant celle

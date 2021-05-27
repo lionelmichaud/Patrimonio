@@ -12,20 +12,13 @@ struct DossierSummaryView: View {
     @EnvironmentObject var dataStore : Store
     
     var body: some View {
-        Form {
-            if let activeDossier = dataStore.activeDossier {
+        if let activeDossier = dataStore.activeDossier {
+            Form {
                 DossierPropertiesView(dossier: activeDossier,
-                                      sectionHeader: "Dossier chargé")
+                                      sectionHeader: "Dossier en cours")
             }
-            Text("resourcePath: \n" + Bundle.main.resourcePath!)
-            Text("Application: \n" + Folder.application!.path)
-            Text("Home: \n" +        Folder.home.path)
-            Text("Tempates: \n" +  (Dossier.templates?.folder?.path ?? "introuvable"))
-            Text("Documents: \n" + (Folder.documents?.path ?? "introuvable"))
-            Text("Library: \n" +   (Folder.library?.path ?? "introuvable"))
-            Text("temporary: \n" + Folder.temporary.path)
-            Text("current: \n" + Folder.current.path)
-            Text("root: \n" +    Folder.root.path)
+        } else {
+            DossierHomeView()
         }
     }
 }
