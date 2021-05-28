@@ -17,14 +17,21 @@ public protocol Versionable {
 // MARK: - Versioning
 
 ///  - Note: [Reference](https://en.wikipedia.org/wiki/Software_versioning)
+
 public struct Version: Codable {
     
     // MARK: - Properties
     
     public var name    : String?
-    public var version : String? // "Major.Minor.Patch"
-    public var date    : Date?
+    public var version : String?// "Major.Minor.Patch"
+    public var date    : Date?  
     public var comment : String?
+    
+    // MARK: - Initializers
+    
+    /// Initialiser à vide
+    public init() {
+    }
     
     // MARK: - Computed Properties
     

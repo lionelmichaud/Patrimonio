@@ -62,7 +62,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static let uiState    = UIState()
     static let family     = Family()
-    static let patrimoine = Patrimoin()
+    static let patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromApp())
     static let simulation = Simulation()
 
     static var previews: some View {

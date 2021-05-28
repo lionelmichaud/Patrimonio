@@ -10,6 +10,7 @@ import Foundation
 import os
 import AppFoundation
 import Statistics
+import Files
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Patrimoin")
 
@@ -53,17 +54,25 @@ final class Patrimoin: ObservableObject {
     
     // MARK: - Initializers
     
+    /// Initialiser à vide
     init() {
-        self.assets      = Assets(with      : Patrimoin.family)
-        self.liabilities = Liabilities(with : Patrimoin.family)
-        //self.save()
+        self.assets      = Assets()
+        self.liabilities = Liabilities()
+    }
+    
+    /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    init(fromFolder folder: Folder) throws {
+        try self.assets      = Assets(fromFolder : folder,      with: Patrimoin.family)
+        try self.liabilities = Liabilities(fromFolder : folder, with: Patrimoin.family)
+        self.memento         = nil
     }
     
     // MARK: - Methods
     
-    func reload() {
-        assets      = Assets(with      : Patrimoin.family)
-        liabilities = Liabilities(with : Patrimoin.family)
+    func loadFromJSON(fromFolder folder: Folder) throws {
+        assets      = try Assets(fromFolder : folder,      with : Patrimoin.family)
+        liabilities = try Liabilities(fromFolder : folder, with : Patrimoin.family)
         memento     = nil
     }
     
@@ -87,7 +96,7 @@ final class Patrimoin: ObservableObject {
                           liabilities : liabilities)
     }
     
-    /// Recharger les actifs et passifs à partir des de la dernière sauvegarde pour repartir d'une situation initiale sans aucune modification
+    /// Recharger les actifs et passifs à partir  de la dernière sauvegarde pour repartir d'une situation initiale sans aucune modification
     /// - Warning: Doit être appelée après toute simulation ayant affectée le Patrimoine (succession)
     func restore() {
         guard let memento = memento else {

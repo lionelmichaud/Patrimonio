@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct DossierDetailView: View {
-    @EnvironmentObject private var dataStore: Store
+    @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var patrimoine : Patrimoin
     var dossier: Dossier
     @State private var alertItem: AlertItem?
     @State private var showingSheet = false
@@ -97,19 +98,35 @@ struct DossierDetailView: View {
 
     private func activate(_ dossier: Dossier) {
         guard let dossierIndex = dataStore.dossiers.firstIndex(of: dossier) else {
-            self.alertItem = AlertItem(title         : Text("Echec du chargement du Dossier"),
+            self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
                                        dismissButton : .default(Text("OK")))
             return
 
         }
+        // rendre le Dossier actif
         dataStore.activate(dossierAtIndex: dossierIndex)
+        
+        // vérifier l'existence du Folder associé au Dossier
+        guard let folder = dossier.folder else {
+            self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
+                                       dismissButton : .default(Text("OK")))
+            return
+        }
+        
+        // charger les données utilisateur depuis le Dossier
+        do {
+            try patrimoine.loadFromJSON(fromFolder: folder)
+        } catch {
+            self.alertItem = AlertItem(title         : Text("Echec de chargement du contenu du dossier !"),
+                                       dismissButton : .default(Text("OK")))
+        }
     }
     
     private func duplicate() {
         do {
             try dataStore.duplicate(dossier)
         } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de la duplication du dossier"),
+            self.alertItem = AlertItem(title         : Text("Echec de la duplication du dossier !"),
                                        dismissButton : .default(Text("OK")))
         }
     }

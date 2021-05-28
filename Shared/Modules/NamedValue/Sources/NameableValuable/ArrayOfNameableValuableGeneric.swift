@@ -9,6 +9,7 @@
 import Foundation
 import AppFoundation
 import FileAndFolder
+import Files
 
 // MARK: - Table d'Item Generic Valuable and Nameable
 
@@ -18,14 +19,12 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
     E: CustomStringConvertible,
     E: NameableValuable {
     
-    //public static var defaultFileName: String = String(describing: E.self)
-    
     // MARK: - Properties
 
-    public var items          = [E]()
-    var fileNamePrefix        : String?
-    public var version        : Version
-    public var currentValue   : Double {
+    private var fileNamePrefix : String?
+    public var items           = [E]()
+    public var version         = Version()
+    public var currentValue    : Double {
         items.sumOfValues(atEndOf: Date.now.year)
     } // computed
 
@@ -42,11 +41,18 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
 
     // MARK: - Initializers
     
-    public init(fileNamePrefix: String = "") {
-        self = Bundle.main.loadFromJSON(ArrayOfNameableValuable.self,
-                                        from                 : fileNamePrefix + String(describing: E.self) + ".json",
-                                        dateDecodingStrategy : .iso8601,
-                                        keyDecodingStrategy  : .useDefaultKeys)
+    /// Initialiser à vide
+    public init() {
+    }
+    
+    /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    public init(fileNamePrefix    : String = "",
+                fromFolder folder : Folder) throws {
+        try self.init(fromFile             : fileNamePrefix + String(describing: E.self) + ".json",
+                      fromFolder           : folder,
+                      dateDecodingStrategy : .iso8601,
+                      keyDecodingStrategy  : .useDefaultKeys)
         self.fileNamePrefix = fileNamePrefix
     }
     
@@ -62,15 +68,15 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
     
     // MARK: - Methods
     
-    func storeItemsToFile() {
+    func saveAsJSON(toFolder folder: Folder) throws {
         // encode to JSON file
-        Bundle.main.saveAsJSON(self,
-                               to                   : self.fileNamePrefix! + String(describing: E.self) + ".json",
-                               dateEncodingStrategy : .iso8601,
-                               keyEncodingStrategy  : .useDefaultKeys)
+        try saveAsJSON(toFile               : self.fileNamePrefix! + String(describing: E.self) + ".json",
+                       toFolder             : folder,
+                       dateEncodingStrategy : .iso8601,
+                       keyEncodingStrategy  : .useDefaultKeys)
     }
     
-    func storeItemsToFile(for aClass: AnyClass) {
+    func storeItemsToBundleOf(aClass: AnyClass) {
         let bundle = Bundle(for: aClass)
         // encode to JSON file
         bundle.saveAsJSON(self,
@@ -82,23 +88,19 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
     public mutating func move(from indexes   : IndexSet,
                               to destination : Int) {
         items.move(fromOffsets: indexes, toOffset: destination)
-        self.storeItemsToFile()
     }
     
     public mutating func delete(at offsets: IndexSet) {
         items.remove(atOffsets: offsets)
-        self.storeItemsToFile()
     }
     
     public mutating func add(_ item: E) {
         items.append(item)
-        self.storeItemsToFile()
     }
     
     public mutating func update(with item : E,
                                 at index  : Int) {
         items[index] = item
-        self.storeItemsToFile()
     }
     
     public func value(atEndOf: Int) -> Double {

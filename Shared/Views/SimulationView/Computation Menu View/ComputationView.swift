@@ -210,7 +210,7 @@ struct ComputationView: View {
     func saveSimulation() {
         // executer l'enregistrement en tâche de fond
         guard let folder = dataStore.activeDossier?.folder else {
-            self.alertItem = AlertItem(title         : Text("La sauvegarde a échoué"),
+            self.alertItem = AlertItem(title         : Text("La sauvegarde a échouée"),
                                        dismissButton : .default(Text("OK")))
             return
         }
@@ -228,7 +228,7 @@ struct ComputationView: View {
                 DispatchQueue.main.async {
                     self.busySaveWheelAnimate.toggle()
                     self.simulation.isSaved = false
-                    self.alertItem = AlertItem(title         : Text((error as? FileError)?.rawValue ?? "La sauvegarde a échoué"),
+                    self.alertItem = AlertItem(title         : Text("La sauvegarde a échouée"),
                                                dismissButton : .default(Text("OK")))
 //                    self.presentationMode.wrappedValue.dismiss()
                 }

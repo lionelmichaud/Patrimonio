@@ -10,6 +10,7 @@ import Foundation
 import AppFoundation
 import Statistics
 import FiscalModel
+import Files
 
 // MARK: - Actifs de la famille
 
@@ -60,18 +61,30 @@ struct Assets {
     
     // MARK: - Initializers
     
-    /// Charger les actifs stockés en fichier JSON
+    /// Initialiser à vide
+    init() {
+        self.periodicInvests = PeriodicInvestementArray()
+        self.freeInvests     = FreeInvestmentArray()
+        self.realEstates     = RealEstateArray()
+        self.scpis           = ScpiArray()
+        try self.sci         = SCI()
+    }
+    
+    /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
     /// - Parameter personAgeProvider: famille à laquelle associer le patrimoine
     /// - Note: personAgeProvider est utilisée pour injecter dans chaque actif un délégué personAgeProvider.ageOf
     ///         permettant de calculer les valeurs respectives des Usufruits et Nu-Propriétés
-    internal init(with personAgeProvider: PersonAgeProvider?) {
-        self.periodicInvests = PeriodicInvestementArray(with: personAgeProvider)
-        self.freeInvests     = FreeInvestmentArray(with: personAgeProvider)
-        self.realEstates     = RealEstateArray(with: personAgeProvider)
-        self.scpis           = ScpiArray(with: personAgeProvider) // SCPI hors de la SCI
-        self.sci = SCI(name : "LVLA",
-                       note : "Crée en 2019",
-                       with : personAgeProvider)
+    internal init(fromFolder folder      : Folder,
+                  with personAgeProvider : PersonAgeProvider?) throws {
+        try self.periodicInvests = PeriodicInvestementArray(fromFolder: folder, with: personAgeProvider)
+        try self.freeInvests     = FreeInvestmentArray(fromFolder: folder, with: personAgeProvider)
+        try self.realEstates     = RealEstateArray(fromFolder: folder, with: personAgeProvider)
+        try self.scpis           = ScpiArray(fromFolder: folder, with: personAgeProvider) // SCPI hors de la SCI
+        try self.sci = SCI(fromFolder : folder,
+                           name       : "LVLA",
+                           note       : "Crée en 2019",
+                           with       : personAgeProvider)
         
         // initialiser le vetcuer d'état de chaque FreeInvestement à la date courante
         resetFreeInvestementCurrentValue()
