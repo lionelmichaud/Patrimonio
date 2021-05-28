@@ -32,7 +32,7 @@ public struct IsfModel: Codable {
                             irppWithChildren    : Double,
                             irppWithoutChildren : Double)]
     
-    public struct Model: JsonCodableToBundle, Versionable, RateGridable {
+    public struct Model: JsonCodableToBundleP, Versionable, RateGridable {
         public static var defaultFileName : String = "IsfModel.json"
         public var version         : Version
         public var grid            : RateGrid // barême de l'ISF

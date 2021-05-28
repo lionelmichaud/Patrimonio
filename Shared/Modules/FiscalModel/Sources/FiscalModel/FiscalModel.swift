@@ -15,7 +15,7 @@ public struct Fiscal {
     
     // MARK: - Nested types
 
-    public struct Model: JsonCodableToBundle {
+    public struct Model: JsonCodableToBundleP {
         
         // MARK: - Static Properties
         
@@ -71,8 +71,8 @@ public struct Fiscal {
     }
     
     // MARK: - Static Properties
-
-    public static var model: Model = Model().initialized()
+    
+    public static var model: Model = Model(fromFile: Model.defaultFileName).initialized()
 
     // MARK: - Initializer
     

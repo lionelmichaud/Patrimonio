@@ -10,9 +10,7 @@ import Files
 
 // MARK: - Protocol apportant Encodable JSON à partir d'un fichier d'un sous-Directory de 'Documents'
 
-public protocol JsonDecodableToFolderP: Decodable {
-    
-    static var defaultFileName : String { get set }
+public protocol JsonDecodableFromFolderP: Decodable {
     
     /// Lit le modèle dans un fichier JSON du Bundle
     init(fromFile file        : String,
@@ -21,8 +19,8 @@ public protocol JsonDecodableToFolderP: Decodable {
          keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy) throws
 }
 // implémentation par défaut
-public extension JsonDecodableToFolderP {
-    init(fromFile file        : String                           = defaultFileName,
+public extension JsonDecodableFromFolderP {
+    init(fromFile file        : String,
          fromFolder folder    : Folder,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy = .iso8601,
          keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) throws {
@@ -36,9 +34,7 @@ public extension JsonDecodableToFolderP {
 // MARK: - Protocol apportant Decodable JSON à partir d'un fichier d'un sous-Directory de 'Documents'
 
 public protocol JsonEncodableToFolderP: Encodable {
-    
-    static var defaultFileName : String { get set }
-    
+        
     /// Encode l'objet dans un fichier stocké dans le Bundle Main de l'Application
     func saveAsJSON(toFile file          : String,
                     toFolder folder      : Folder,
@@ -47,7 +43,7 @@ public protocol JsonEncodableToFolderP: Encodable {
 }
 // implémentation par défaut
 public extension JsonEncodableToFolderP {
-    func saveAsJSON(toFile file          : String                           = defaultFileName,
+    func saveAsJSON(toFile file          : String,
                     toFolder folder      : Folder,
                     dateEncodingStrategy : JSONEncoder.DateEncodingStrategy = .iso8601,
                     keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) throws {
@@ -60,4 +56,4 @@ public extension JsonEncodableToFolderP {
 
 // MARK: - Protocol apportant Codable JSON à partir d'un fichier d'un sous-Directory de 'Documents'
 
-public typealias JsonCodableToFolderP = JsonEncodableToFolderP & JsonDecodableToFolderP
+public typealias JsonCodableToFolderP = JsonEncodableToFolderP & JsonDecodableFromFolderP

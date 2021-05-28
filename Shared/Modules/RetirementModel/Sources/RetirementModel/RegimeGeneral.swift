@@ -62,7 +62,7 @@ public struct RegimeGeneral: Codable {
         var nbTrimNonIndemnise : Int
     }
     
-    struct Model: JsonCodableToBundle, Versionable {
+    struct Model: JsonCodableToBundleP, Versionable {
         static var defaultFileName : String = "RegimeGeneralModel.json"
 
         var version                : Version
@@ -152,7 +152,7 @@ public struct RegimeGeneral: Codable {
                       dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
                       keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) {
 
-        model.saveToBundle(toFile               : file,
+        model.saveAsJSON(toFile               : file,
                            toBundle             : bundle,
                            dateEncodingStrategy : dateEncodingStrategy,
                            keyEncodingStrategy  :  keyEncodingStrategy)

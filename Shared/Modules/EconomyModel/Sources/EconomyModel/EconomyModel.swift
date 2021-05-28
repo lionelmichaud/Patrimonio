@@ -56,7 +56,7 @@ public struct Economy {
     public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
     // MARK: - Modèles statistiques de générateurs aléatoires
-    public struct RandomizersModel: JsonCodableToBundle {
+    public struct RandomizersModel: JsonCodableToBundleP {
         public static var defaultFileName : String = "EconomyModelConfig.json"
         
         // MARK: - Properties
@@ -136,7 +136,7 @@ public struct Economy {
         
         // MARK: - Properties
         
-        public var randomizers        : RandomizersModel // les modèles de générateurs aléatoires
+        public var randomizers : RandomizersModel // les modèles de générateurs aléatoires
         var firstYearSampled   : Int = 0
         // utilisés uniqument si mode == .random && randomizers.simulateVolatility
         var securedRateSamples : [Double] = [ ] // les échatillons tirés aléatoirement à chaque simulation
@@ -145,13 +145,14 @@ public struct Economy {
         // MARK: - Methods
         
         init() {
-            self.randomizers = RandomizersModel().initialized()
+            self.randomizers = RandomizersModel(fromFile: RandomizersModel.defaultFileName).initialized()
         }
         
         /// A utiliser uniquement pour les Tests Unitaires
         /// - Parameter fromBundle: le Bundle dans lequel chercher le fichier de configuration JSON
         init(fromBundle: Bundle) {
-            self.randomizers = RandomizersModel(fromBundle: fromBundle).initialized()
+            self.randomizers = RandomizersModel(fromFile: RandomizersModel.defaultFileName,
+                                                fromBundle: fromBundle).initialized()
         }
 
         // MARK: - Methods

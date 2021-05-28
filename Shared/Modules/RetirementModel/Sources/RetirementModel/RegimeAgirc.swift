@@ -59,7 +59,7 @@ public struct RegimeAgirc: Codable {
         var plafondMajoEnfantNe   : Double // €
     }
     
-    struct Model: JsonCodableToBundle, Versionable {
+    struct Model: JsonCodableToBundleP, Versionable {
         public static var defaultFileName : String = "RegimeAgircModel.json"
 
         public var version       : Version
@@ -151,7 +151,7 @@ public struct RegimeAgirc: Codable {
                       dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
                       keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) {
         
-        model.saveToBundle(toFile               : file,
+        model.saveAsJSON(toFile               : file,
                            toBundle             : bundle,
                            dateEncodingStrategy : dateEncodingStrategy,
                            keyEncodingStrategy  :  keyEncodingStrategy)

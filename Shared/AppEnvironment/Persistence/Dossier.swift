@@ -40,9 +40,11 @@ enum DossierError: String, Error {
     case inconsistencyOwnerFolderName = "Incohérence entre le nom du directory et le type de propriétaire du Dossier"
 }
 
-struct Dossier: Identifiable, Equatable {
+struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
     
     // MARK: - Static Properties
+    
+    static let defaultFileName = FileNameCst.kDossierDescriptorFileName
     
     // le dossier contenant les template à utiilser pour créer un nouveau dossier
     static let templates : Dossier? = {
@@ -141,7 +143,8 @@ struct Dossier: Identifiable, Equatable {
 
         // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier
         do {
-            try saveAsJSON(toFolder             : targetFolder,
+            try saveAsJSON(toFile               : Dossier.defaultFileName,
+                           toFolder             : targetFolder,
                            dateEncodingStrategy : .iso8601)
                 //PersistenceManager.saveDescriptor(of: newDossier)
         } catch {
@@ -228,7 +231,8 @@ struct Dossier: Identifiable, Equatable {
         
         // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier clone
         do {
-            try saveAsJSON(toFolder             : newDossier.folder!,
+            try saveAsJSON(toFile               : Dossier.defaultFileName,
+                           toFolder             : newDossier.folder!,
                            dateEncodingStrategy : .iso8601)
             return newDossier
         } catch {
@@ -238,7 +242,8 @@ struct Dossier: Identifiable, Equatable {
     }
     
     func update() throws {
-        try saveAsJSON(toFolder             : self.folder!,
+        try saveAsJSON(toFile               : Dossier.defaultFileName,
+                       toFolder             : self.folder!,
                        dateEncodingStrategy : .iso8601)
     }
 
@@ -284,9 +289,4 @@ extension Dossier: Codable {
         try container.encode(self._dateCreation, forKey: ._dateCreation)
         try container.encode(self._isUserDossier, forKey: ._isUserDossier)
     }
-}
-
-extension Dossier: JsonCodableToFolderP {
-
-    static var defaultFileName: String = FileNameCst.kDossierDescriptorFileName
 }

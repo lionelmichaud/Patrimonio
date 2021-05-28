@@ -22,7 +22,7 @@ public struct RealEstateCapitalGainIrppModel: Codable {
         let prevDiscount : Double // % cumul des tranches précédentes
     }
     
-    struct Model: JsonCodableToBundle, Versionable {
+    struct Model: JsonCodableToBundleP, Versionable {
         static var defaultFileName : String = "RealEstateCapitalGainIrppModel.json"
         var version         : Version
         let exoGrid         : [ExonerationSlice]

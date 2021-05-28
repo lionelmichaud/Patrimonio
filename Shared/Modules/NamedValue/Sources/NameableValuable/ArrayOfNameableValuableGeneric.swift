@@ -8,15 +8,18 @@
 
 import Foundation
 import AppFoundation
+import FileAndFolder
 
 // MARK: - Table d'Item Generic Valuable and Nameable
 
-public struct ArrayOfNameableValuable<E>: Codable, Versionable where
+public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable where
     E: Codable,
     E: Identifiable,
     E: CustomStringConvertible,
     E: NameableValuable {
-
+    
+    //public static var defaultFileName: String = String(describing: E.self)
+    
     // MARK: - Properties
 
     public var items          = [E]()
@@ -59,48 +62,43 @@ public struct ArrayOfNameableValuable<E>: Codable, Versionable where
     
     // MARK: - Methods
     
-    func storeItemsToFile(fileNamePrefix: String = "") {
+    func storeItemsToFile() {
         // encode to JSON file
         Bundle.main.saveAsJSON(self,
-                               to                   : fileNamePrefix + self.fileNamePrefix! + String(describing: E.self) + ".json",
+                               to                   : self.fileNamePrefix! + String(describing: E.self) + ".json",
                                dateEncodingStrategy : .iso8601,
                                keyEncodingStrategy  : .useDefaultKeys)
     }
     
-    func storeItemsToFile(for aClass     : AnyClass,
-                          fileNamePrefix : String = "") {
+    func storeItemsToFile(for aClass: AnyClass) {
         let bundle = Bundle(for: aClass)
         // encode to JSON file
         bundle.saveAsJSON(self,
-                          to                   : fileNamePrefix + self.fileNamePrefix! + String(describing: E.self) + ".json",
+                          to                   : self.fileNamePrefix! + String(describing: E.self) + ".json",
                           dateEncodingStrategy : .iso8601,
                           keyEncodingStrategy  : .useDefaultKeys)
     }
     
     public mutating func move(from indexes   : IndexSet,
-                              to destination : Int,
-                              fileNamePrefix : String = "") {
+                              to destination : Int) {
         items.move(fromOffsets: indexes, toOffset: destination)
-        self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
+        self.storeItemsToFile()
     }
     
-    public mutating func delete(at offsets     : IndexSet,
-                                fileNamePrefix : String = "") {
+    public mutating func delete(at offsets: IndexSet) {
         items.remove(atOffsets: offsets)
-        self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
+        self.storeItemsToFile()
     }
     
-    public mutating func add(_ item         : E,
-                             fileNamePrefix : String = "") {
+    public mutating func add(_ item: E) {
         items.append(item)
-        self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
+        self.storeItemsToFile()
     }
     
-    public mutating func update(with item      : E,
-                                at index       : Int,
-                                fileNamePrefix : String = "") {
+    public mutating func update(with item : E,
+                                at index  : Int) {
         items[index] = item
-        self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
+        self.storeItemsToFile()
     }
     
     public func value(atEndOf: Int) -> Double {
