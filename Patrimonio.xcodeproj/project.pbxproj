@@ -22,10 +22,6 @@
 		7901CF8F2652A04D007DF85B /* Successions.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7901CF8E2652A04D007DF85B /* Successions.csv */; };
 		7901CF902652A04D007DF85B /* Successions.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7901CF8E2652A04D007DF85B /* Successions.csv */; };
 		7901CF912652A04D007DF85B /* Successions.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7901CF8E2652A04D007DF85B /* Successions.csv */; };
-		790500A7265FBC9900FF58C3 /* JsonCodableToFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790500A6265FBC9900FF58C3 /* JsonCodableToFolder.swift */; };
-		790500A8265FBC9900FF58C3 /* JsonCodableToFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790500A6265FBC9900FF58C3 /* JsonCodableToFolder.swift */; };
-		790500B6265FFAE600FF58C3 /* Extension+File-Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790500B5265FFAE600FF58C3 /* Extension+File-Image.swift */; };
-		790500B7265FFAE600FF58C3 /* Extension+File-Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790500B5265FFAE600FF58C3 /* Extension+File-Image.swift */; };
 		79058371262C79050061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058370262C79050061F296 /* SocioEconomyModel */; };
 		79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058372262C790F0061F296 /* SocioEconomyModel */; };
 		7906AB752641BCF100A398E9 /* SocialAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */; };
@@ -108,8 +104,6 @@
 		7920DC78262C700500536B03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7920DC4C262C700500536B03 /* Assets.xcassets */; };
 		7920DC92262C720D00536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC91262C720D00536B03 /* AppFoundation */; };
 		7920DC94262C721400536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC93262C721400536B03 /* AppFoundation */; };
-		79240596265EBDBE0097AF0F /* Extension+Folder-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79240595265EBDBE0097AF0F /* Extension+Folder-Codable.swift */; };
-		79240597265EBDBE0097AF0F /* Extension+Folder-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79240595265EBDBE0097AF0F /* Extension+Folder-Codable.swift */; };
 		79281A09262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */; };
 		79281A0A262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */; };
 		792DE958264C8DBF004DA53D /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DE957264C8DBF004DA53D /* PersistenceManager.swift */; };
@@ -195,8 +189,6 @@
 		797931C2264170FE000F8599 /* SimulationKPIEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931C0264170FE000F8599 /* SimulationKPIEnum.swift */; };
 		797931CC26417249000F8599 /* BalanceSheetArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931CB26417249000F8599 /* BalanceSheetArray.swift */; };
 		797931CD26417249000F8599 /* BalanceSheetArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931CB26417249000F8599 /* BalanceSheetArray.swift */; };
-		798553CC265D16420066FFD1 /* Extension+File-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798553CB265D16410066FFD1 /* Extension+File-Codable.swift */; };
-		798553CD265D16420066FFD1 /* Extension+File-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798553CB265D16410066FFD1 /* Extension+File-Codable.swift */; };
 		798DE8A426357CF500C0C3B5 /* SwiftUIconditional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */; };
 		798DE8A526357CF500C0C3B5 /* SwiftUIconditional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */; };
 		798DE8AB2635CA7100C0C3B5 /* ExpenseDetailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DE8AA2635CA7100C0C3B5 /* ExpenseDetailedView.swift */; };
@@ -249,6 +241,8 @@
 		799025C22641F60300ED53D4 /* SimulationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799025A02641F60300ED53D4 /* SimulationView.swift */; };
 		799025C42642007300ED53D4 /* ProgressViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799025C32642007300ED53D4 /* ProgressViews.swift */; };
 		799025C52642007300ED53D4 /* ProgressViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799025C32642007300ED53D4 /* ProgressViews.swift */; };
+		799074242660524200F224F7 /* FileAndFolder in Frameworks */ = {isa = PBXBuildFile; productRef = 799074232660524200F224F7 /* FileAndFolder */; };
+		799074262660524C00F224F7 /* FileAndFolder in Frameworks */ = {isa = PBXBuildFile; productRef = 799074252660524C00F224F7 /* FileAndFolder */; };
 		7990D8D1264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990D8D0264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift */; };
 		7990D8D2264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990D8D0264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift */; };
 		7990D8D3264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990D8D0264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift */; };
@@ -585,8 +579,6 @@
 		7901CF862652954E007DF85B /* SuccessionCsvVisitorP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessionCsvVisitorP.swift; sourceTree = "<group>"; };
 		7901CF8A2652956A007DF85B /* CsvSuccessionVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvSuccessionVisitor.swift; sourceTree = "<group>"; };
 		7901CF8E2652A04D007DF85B /* Successions.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = Successions.csv; sourceTree = "<group>"; };
-		790500A6265FBC9900FF58C3 /* JsonCodableToFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonCodableToFolder.swift; sourceTree = "<group>"; };
-		790500B5265FFAE600FF58C3 /* Extension+File-Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+File-Image.swift"; sourceTree = "<group>"; };
 		7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialAccounts.swift; sourceTree = "<group>"; };
 		790FF33926484D59001B2653 /* Visitor Pattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Visitor Pattern.swift"; sourceTree = "<group>"; };
 		790FF33C264850E6001B2653 /* CsvBalanceSheetVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvBalanceSheetVisitor.swift; sourceTree = "<group>"; };
@@ -633,7 +625,6 @@
 		7920DC6C262C700500536B03 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7920DC70262C700500536B03 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		7920DC72262C700500536B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		79240595265EBDBE0097AF0F /* Extension+Folder-Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Folder-Codable.swift"; sourceTree = "<group>"; };
 		79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeInsuranceClause.swift; sourceTree = "<group>"; };
 		792DE957264C8DBF004DA53D /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		7935FFD626541AAB00AC1715 /* DossiersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DossiersView.swift; sourceTree = "<group>"; };
@@ -673,7 +664,6 @@
 		797931A826416EA1000F8599 /* SimulationResultTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimulationResultTable.swift; sourceTree = "<group>"; };
 		797931C0264170FE000F8599 /* SimulationKPIEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationKPIEnum.swift; sourceTree = "<group>"; };
 		797931CB26417249000F8599 /* BalanceSheetArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceSheetArray.swift; sourceTree = "<group>"; };
-		798553CB265D16410066FFD1 /* Extension+File-Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+File-Codable.swift"; sourceTree = "<group>"; };
 		798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIconditional.swift; sourceTree = "<group>"; };
 		798DE8AA2635CA7100C0C3B5 /* ExpenseDetailedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseDetailedView.swift; sourceTree = "<group>"; };
 		798DE8B12635CBC300C0C3B5 /* ExpenseSummaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseSummaryView.swift; sourceTree = "<group>"; };
@@ -858,6 +848,7 @@
 				79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */,
 				791ED0EB263A0A1200701202 /* StepperView in Frameworks */,
 				7920DC92262C720D00536B03 /* AppFoundation in Frameworks */,
+				799074242660524200F224F7 /* FileAndFolder in Frameworks */,
 				7935FFE52654492500AC1715 /* Files in Frameworks */,
 				79FC3D3B262C760A00A6184B /* Statistics in Frameworks */,
 				79E713EE262C9891000FD625 /* EconomyModel in Frameworks */,
@@ -873,6 +864,7 @@
 				79EC47A126307B8C0006EE44 /* Foil in Frameworks */,
 				79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */,
 				79706281262C7B82009A18F0 /* UnemployementModel in Frameworks */,
+				799074262660524C00F224F7 /* FileAndFolder in Frameworks */,
 				797931BB26416F86000F8599 /* Disk in Frameworks */,
 				7956995E262F90310015AF34 /* NamedValue in Frameworks */,
 				7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
@@ -1202,13 +1194,9 @@
 			isa = PBXGroup;
 			children = (
 				7977FE61262E3375005A1CB1 /* Constants.swift */,
-				792DE957264C8DBF004DA53D /* PersistenceManager.swift */,
-				796503C52655682A0093F10E /* Dossier.swift */,
 				796503CB265581E40093F10E /* Store.swift */,
-				798553CB265D16410066FFD1 /* Extension+File-Codable.swift */,
-				79240595265EBDBE0097AF0F /* Extension+Folder-Codable.swift */,
-				790500A6265FBC9900FF58C3 /* JsonCodableToFolder.swift */,
-				790500B5265FFAE600FF58C3 /* Extension+File-Image.swift */,
+				796503C52655682A0093F10E /* Dossier.swift */,
+				792DE957264C8DBF004DA53D /* PersistenceManager.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -1808,6 +1796,7 @@
 				791ED0EA263A0A1200701202 /* StepperView */,
 				797931B426416F74000F8599 /* Disk */,
 				7935FFE42654492500AC1715 /* Files */,
+				799074232660524200F224F7 /* FileAndFolder */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -1842,6 +1831,7 @@
 				79B272A02634E82700298E5D /* Charts */,
 				791ED0EC263A0A2800701202 /* StepperView */,
 				797931BA26416F86000F8599 /* Disk */,
+				799074252660524C00F224F7 /* FileAndFolder */,
 			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
@@ -2087,7 +2077,6 @@
 				798FBA00265D622200A34892 /* DossierPropertiesView.swift in Sources */,
 				798DE8B92635CC6000C0C3B5 /* ExpenseView.swift in Sources */,
 				796503CF265596E50093F10E /* DossierDetailView.swift in Sources */,
-				790500A7265FBC9900FF58C3 /* JsonCodableToFolder.swift in Sources */,
 				79C838312641E02B008B29BF /* MenuCollapsable.swift in Sources */,
 				7998E158262DB2FD00DA4A12 /* Person.swift in Sources */,
 				79BE4A802651CE7800BBF46C /* DiscreteRandomizerView.swift in Sources */,
@@ -2181,7 +2170,6 @@
 				7977FE85262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */,
 				796506D52640866F0036E466 /* scpiDetailedView.swift in Sources */,
 				79BE4A832651CE7800BBF46C /* BetaRandomizerView.swift in Sources */,
-				798553CC265D16420066FFD1 /* Extension+File-Codable.swift in Sources */,
 				79FA8CF52630684F009FEA00 /* FinancialEnvelop.swift in Sources */,
 				791ED0D62639FBFD00701202 /* UnemployementDetailView.swift in Sources */,
 				791D3B932649679C0024A2D8 /* CustomCsvConvertible.swift in Sources */,
@@ -2197,7 +2185,6 @@
 				79A9AA7E264AFFC20036732F /* CashFlowCsvVisitorP.swift in Sources */,
 				7935FFD92654204200AC1715 /* DossierSummaryView.swift in Sources */,
 				79CB2C89264D731900B3E493 /* CsvMonteCarloVisitor.swift in Sources */,
-				79240596265EBDBE0097AF0F /* Extension+Folder-Codable.swift in Sources */,
 				791D3BA02649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,
 				791ED11E263A2D2E00701202 /* CashFlowLine+manageSCPI.swift in Sources */,
 				7906AB752641BCF100A398E9 /* SocialAccounts.swift in Sources */,
@@ -2289,7 +2276,6 @@
 				799025A12641F60300ED53D4 /* GridsView.swift in Sources */,
 				791ED112263A285300701202 /* CashFlowLine.swift in Sources */,
 				799025C42642007300ED53D4 /* ProgressViews.swift in Sources */,
-				790500B6265FFAE600FF58C3 /* Extension+File-Image.swift in Sources */,
 				797931A926416EA1000F8599 /* SimulationResultTable.swift in Sources */,
 				79EC47922630753D0006EE44 /* ArrayOfNameableValuable+Ownable.swift in Sources */,
 			);
@@ -2325,7 +2311,6 @@
 				791ED0E1263A049900701202 /* PersonViewModel.swift in Sources */,
 				79EC5E9026406AAD00FF8263 /* DebtDetailedView.swift in Sources */,
 				791ED10B263A275800701202 /* FamilyView.swift in Sources */,
-				790500A8265FBC9900FF58C3 /* JsonCodableToFolder.swift in Sources */,
 				7998E184262DB5D500DA4A12 /* LifeEvent.swift in Sources */,
 				799025C52642007300ED53D4 /* ProgressViews.swift in Sources */,
 				799025B42641F60300ED53D4 /* StatisticsChartView.swift in Sources */,
@@ -2408,7 +2393,6 @@
 				791D3BA12649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,
 				791ED116263A28BC00701202 /* SciCashFlowLine.swift in Sources */,
 				79FA8CF42630684F009FEA00 /* ValuedAssets.swift in Sources */,
-				790500B7265FFAE600FF58C3 /* Extension+File-Image.swift in Sources */,
 				79EC47D8263084280006EE44 /* SimulationLogger.swift in Sources */,
 				79281A0A262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */,
 				791ED0D72639FBFD00701202 /* UnemployementDetailView.swift in Sources */,
@@ -2416,7 +2400,6 @@
 				799025B02641F60300ED53D4 /* IrppSliceView.swift in Sources */,
 				792DE959264C8DBF004DA53D /* PersistenceManager.swift in Sources */,
 				79A9BE9A265186A700170A01 /* DiscreteDistributionView.swift in Sources */,
-				798553CD265D16420066FFD1 /* Extension+File-Codable.swift in Sources */,
 				79EC480A263098340006EE44 /* OwnershipManager.swift in Sources */,
 				79C8382B2641DC02008B29BF /* LineChartDataSet+Extension.swift in Sources */,
 				79A9BE9E265186EE00170A01 /* BetaDistributionView.swift in Sources */,
@@ -2443,7 +2426,6 @@
 				79EC482226309EFC0006EE44 /* LegalSuccessionManager.swift in Sources */,
 				79FA8CEA2630684F009FEA00 /* RealEstate.swift in Sources */,
 				79EC47BB26307C910006EE44 /* ValuedLiabilities.swift in Sources */,
-				79240597265EBDBE0097AF0F /* Extension+Folder-Codable.swift in Sources */,
 				79C838322641E02B008B29BF /* MenuCollapsable.swift in Sources */,
 				79A9AA77264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */,
 				798DE8B32635CBC300C0C3B5 /* ExpenseSummaryView.swift in Sources */,
@@ -3056,6 +3038,14 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 797931B326416F74000F8599 /* XCRemoteSwiftPackageReference "Disk" */;
 			productName = Disk;
+		};
+		799074232660524200F224F7 /* FileAndFolder */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FileAndFolder;
+		};
+		799074252660524C00F224F7 /* FileAndFolder */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FileAndFolder;
 		};
 		7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */ = {
 			isa = XCSwiftPackageProductDependency;

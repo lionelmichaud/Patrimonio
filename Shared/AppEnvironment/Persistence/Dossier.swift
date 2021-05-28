@@ -8,6 +8,7 @@
 import Foundation
 import os
 import AppFoundation
+import FileAndFolder
 import Files
 
 private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
@@ -286,5 +287,6 @@ extension Dossier: Codable {
 }
 
 extension Dossier: JsonCodableToFolderP {
+
     static var defaultFileName: String = FileNameCst.kDossierDescriptorFileName
 }
