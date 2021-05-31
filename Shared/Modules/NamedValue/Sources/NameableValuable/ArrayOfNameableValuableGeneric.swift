@@ -44,7 +44,7 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
 
     public subscript(idx: Int) -> E {
         get {
-            return  items[idx]
+            return items[idx]
         }
         set(newValue) {
             items[idx] = newValue
@@ -80,11 +80,11 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
     
     public init(for aClass     : AnyClass,
                 fileNamePrefix : String = "") {
-        let bundle = Bundle(for: aClass)
-        self = bundle.loadFromJSON(ArrayOfNameableValuable.self,
-                                   from                 : fileNamePrefix + String(describing: E.self) + ".json",
-                                   dateDecodingStrategy : .iso8601,
-                                   keyDecodingStrategy  : .useDefaultKeys)
+        let classBundle = Bundle(for: aClass)
+        self = classBundle.loadFromJSON(ArrayOfNameableValuable.self,
+                                        from                 : fileNamePrefix + String(describing: E.self) + ".json",
+                                        dateDecodingStrategy : .iso8601,
+                                        keyDecodingStrategy  : .useDefaultKeys)
         self.fileNamePrefix = fileNamePrefix
 
         // initialiser la StateMachine
@@ -96,6 +96,7 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
     
     // MARK: - Methods
 
+    /// Définir les transitions de la StateMachine de persistence
     private mutating func initializeStateMachine() {
         
         // initialiser la StateMachine
@@ -166,18 +167,17 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
     }
     
     public func namedValueTable(atEndOf: Int) -> NamedValueArray {
-        var table = NamedValueArray()
-        for item in items {
-            table.append((name: item.name, value: item.value(atEndOf: atEndOf)))
+        items.map {
+            (name  : $0.name,
+             value : $0.value(atEndOf : atEndOf))
         }
-        return table
     }
 }
 
 extension ArrayOfNameableValuable: CustomStringConvertible {
     public var description: String {
         items.reduce("") { r, item in
-            r + item.description + "\n\n"
+            r + String(describing: item) + "\n\n"
         }
     }
 }

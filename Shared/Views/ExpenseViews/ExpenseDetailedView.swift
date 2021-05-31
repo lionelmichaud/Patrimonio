@@ -150,8 +150,7 @@ struct ExpenseDetailedView: View {
         localItem.id = UUID()
         localItem.name += "-copie"
         // ajouter la copie créée
-        family.expenses.perCategory[self.category]?.add(localItem,
-                                                        fileNamePrefix : self.category.pickerString + "_")
+        family.expenses.perCategory[self.category]?.add(localItem)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
@@ -196,13 +195,11 @@ struct ExpenseDetailedView: View {
         // tous les tests sont OK
         if let index = index {
             // modifier un éléménet existant
-            family.expenses.perCategory[self.category]?.update(with           : expenseVM.lifeExpense,
-                                                               at             : index,
-                                                               fileNamePrefix : self.category.pickerString + "_")
+            family.expenses.perCategory[self.category]?.update(with : expenseVM.lifeExpense,
+                                                               at   : index)
         } else {
             // créer un nouvel élément
-            family.expenses.perCategory[self.category]?.add(expenseVM.lifeExpense,
-                                                            fileNamePrefix : self.category.pickerString + "_")
+            family.expenses.perCategory[self.category]?.add(expenseVM.lifeExpense)
         }
         
         // remettre à zéro la simulation et sa vue

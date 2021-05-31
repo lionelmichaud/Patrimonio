@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DossierDetailView: View {
     @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
     var dossier: Dossier
     @State private var alertItem: AlertItem?
@@ -122,6 +123,7 @@ struct DossierDetailView: View {
         // charger les données utilisateur depuis le Dossier
         do {
             try patrimoine.loadFromJSON(fromFolder: folder)
+            try family.loadFromJSON(fromFolder: folder)
         } catch {
             self.alertItem = AlertItem(title         : Text("Echec de chargement du contenu du dossier !"),
                                        dismissButton : .default(Text("OK")))

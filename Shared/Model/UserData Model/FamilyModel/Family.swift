@@ -1,5 +1,6 @@
 import Foundation
 import FiscalModel
+import Files
 import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
 
 // MARK: - Class Family: la Famille, ses membres, leurs actifs et leurs revenus
@@ -12,7 +13,7 @@ final class Family: ObservableObject {
     // structure de la famille
     @Published private(set) var members: [Person] 
     // dépenses
-    @Published var expenses: LifeExpensesDic
+    @Published var expenses = LifeExpensesDic()
     // revenus
     var workNetIncome    : Double { // computed
         var netIcome : Double = 0.0
@@ -55,13 +56,12 @@ final class Family: ObservableObject {
         members.filter {$0 is Child}
     }
 
-    // MARK: - Initialization
+    // MARK: - Initializers
 
+    /// Initialiser à vide
     init() {
         // initialiser les membres de la famille à partir du fichier JSON
         self.members  = Family.loadMembersFromFile()
-        // initialiser les catégories de dépenses à partir des fichiers JSON
-        self.expenses = LifeExpensesDic()
         // injection de family dans la propriété statique de DateBoundary pour lier les évenements à des personnes
         DateBoundary.setPersonEventYearProvider(self)
         // injection de family dans la propriété statique de Expense
@@ -71,9 +71,24 @@ final class Family: ObservableObject {
         // injection de family dans la propriété statique de Patrimoin
         Patrimoin.family = self
     }
-    
+
+    /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    convenience init(fromFolder folder: Folder) throws {
+        self.init()
+        try self.expenses = LifeExpensesDic(fromFolder: folder)
+    }
+
     // MARK: - Methodes
-    
+
+    func loadFromJSON(fromFolder folder: Folder) throws {
+        expenses = try LifeExpensesDic(fromFolder : folder)
+    }
+
+    func saveAsJSON(toFolder folder: Folder) throws {
+        try expenses.saveAsJSON(toFolder: folder)
+    }
+
     /// Rend la liste des enfants vivants
     /// - Parameter year: année
     /// - Warning: Vérifie que l'enfant est vivant

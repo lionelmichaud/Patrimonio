@@ -26,7 +26,7 @@ extension LifeExpenseArray: CustomStringConvertible {
     var description: String {
         var desc = ""
         items.sorted().forEach { expense in
-            desc += "\(expense.description.withPrefixedSplittedLines("  "))\n"
+            desc += "\(String(describing: expense).withPrefixedSplittedLines("  "))\n"
         }
         return desc
     }

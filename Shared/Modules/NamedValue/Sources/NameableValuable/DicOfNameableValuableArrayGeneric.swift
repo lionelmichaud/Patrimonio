@@ -8,49 +8,64 @@
 
 import Foundation
 import AppFoundation
+import Files
 
 // MARK: - Dictionnaire de [Category : Table d'Item Valuable and Namable]
 
-public struct DictionaryOfNameableValuableArray <ItemCategory, ArrayOfItems>: CustomStringConvertible
+public struct DictionaryOfNameableValuableArray <ItemCategory, ArrayOfItems>
 where ItemCategory: PickableEnum,
       ItemCategory: Codable,
       ArrayOfItems: NameableValuableArray,
       ArrayOfItems: CustomStringConvertible {
 
-    // properties
+    // MARK: - Properties
 
-    public var perCategory = [ItemCategory: ArrayOfItems]()
+    public var perCategory    = [ItemCategory: ArrayOfItems]()
+    private var persistenceSM = PersistenceStateMachine(initialState: .created)
 
-    public var description: String {
-        var desc = ""
-        perCategory.sorted(by: \.key.displayString).forEach { cat, items in
-            desc += "- \(cat.description.uppercased()):\n"
-            desc += items.description
-            desc += "\n"
-        }
-        return desc
+    // MARK: - Computed Properties
+    
+    public  var persistenceState: PersistenceState {
+        persistenceSM.currentState
     }
 
-    // initialization
+    // MARK: - Subscript
+    
+    public subscript(category: ItemCategory) -> ArrayOfItems? {
+        get {
+            return perCategory[category]
+        }
+        set(newValue) {
+            perCategory[category] = newValue
+        }
+    }
+    
+    // MARK: - Initializers
+
+    /// Initialiser à vide
+    public init() {
+    }
 
     /// Lire toutes les dépenses dans des fichiers au format JSON.
     /// Un fichier par catégorie de dépense.
     /// nom du fichier "Category_LifeExpense.json"
-    public init() {
+    public init(fromFolder folder: Folder) throws {
         for category in ItemCategory.allCases {
             // charger les Items de cette catégorie à partir du fichier JSON associé à cette catégorie
-            perCategory[category] = ArrayOfItems(fileNamePrefix: category.pickerString + "_")
+            perCategory[category] = try ArrayOfItems(fileNamePrefix : category.pickerString + "_",
+                                                     fromFolder     : folder)
         }
     }
 
-    // methods
+    // MARK: - Methods
 
     /// Enregistrer toutes les dépenses dans des fichiers au format JSON..
     /// Un fichier par catégorie de dépense.
-    public func storeToFile() {
+    public func saveAsJSON(toFolder folder: Folder) throws {
         for category in perCategory.keys {
             // encode to JSON file
-            perCategory[category]?.storeItemsToFile()
+            try perCategory[category]?.saveAsJSON(fileNamePrefix : category.pickerString + "_",
+                                                  toFolder       : folder)
         }
     }
 
@@ -100,5 +115,17 @@ where ItemCategory: PickableEnum,
         } else {
             return []
         }
+    }
+}
+
+extension DictionaryOfNameableValuableArray: CustomStringConvertible {
+    public var description: String {
+        var desc = ""
+        perCategory.sorted(by: \.key.displayString).forEach { cat, items in
+            desc += "- \(cat.displayString.uppercased()):\n"
+            desc += String(describing: items)
+            desc += "\n"
+        }
+        return desc
     }
 }

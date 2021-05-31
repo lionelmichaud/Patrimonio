@@ -10,6 +10,7 @@ import Files
 
 struct DossierSummaryView: View {
     @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
     @State private var alertItem: AlertItem?
 
@@ -63,6 +64,7 @@ struct DossierSummaryView: View {
         }
         // enregistrer les données utilisateur depuis le Dossier
         do {
+            try family.saveAsJSON(toFolder: folder)
             try patrimoine.saveAsJSON(toFolder: folder)
             Simulation.playSound()
         } catch {
