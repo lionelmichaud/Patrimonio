@@ -19,10 +19,15 @@ struct Liabilities {
     var allOwnableItems : [(ownable: Ownable, category: LiabilitiesCategory)] {
         debts.items.sorted(by:<)
             .map { ($0, LiabilitiesCategory.debts) } +
-        loans.items.sorted(by:<)
+            loans.items.sorted(by:<)
             .map { ($0, LiabilitiesCategory.loans) }
     }
-    
+    var isModified      : Bool {
+        return
+            debts.persistenceState == .modified ||
+            loans.persistenceState == .modified
+    }
+
     // MARK: - Initializers
     
     /// Initialiser à vide
@@ -43,6 +48,11 @@ struct Liabilities {
     }
     
     // MARK: - Methods
+
+    func saveAsJSON(toFolder folder: Folder) throws {
+        try debts.saveAsJSON(toFolder: folder)
+        try loans.saveAsJSON(toFolder: folder)
+    }
     
     func value(atEndOf year: Int) -> Double {
         loans.items.sumOfValues(atEndOf: year) +

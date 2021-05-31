@@ -23,7 +23,7 @@ public extension File {
         if let encoded = try? encoder.encode(object) {
             // impression debug
             #if DEBUG
-            print("encoding to file: ", self.name)
+            print("encoding to file: ", self.url)
             #endif
             if let jsonString = String(data: encoded, encoding: .utf8) {
                 #if DEBUG
@@ -52,13 +52,13 @@ public extension File {
                                       keyDecodingStrategy : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) -> T {
         // MARK: - DEBUG - A supprimer
         #if DEBUG
-        print("decoding file: ", self.name)
+        print("decoding file: ", self.url)
         #endif
         
         // load data from URL
-        guard let data = try? Data(contentsOf: url) else {
-            customLog.log(level: .fault, "Failed to load file '\(self.name)' from bundle.")
-            fatalError("Failed to load file '\(self.name)' from bundle.")
+        guard let data = try? self.read() else {
+            customLog.log(level: .fault, "Failed to load file '\(self.name)' from file '\(self.name)'.")
+            fatalError("Failed to load file '\(self.name)' from file '\(self.name)'.")
         }
         
         let decoder = JSONDecoder()
@@ -66,7 +66,7 @@ public extension File {
         decoder.keyDecodingStrategy = keyDecodingStrategy
         
         // decode JSON data
-        let failureString = "Failed to decode object of type '\(String(describing: T.self))' from file '\(self.name)' "
+        let failureString = "Failed to decode object of type '\(String(describing: T.self))' from file '\(self.name)'."
         do {
             return try decoder.decode(T.self, from: data)
         } catch DecodingError.keyNotFound(let key, let context) {

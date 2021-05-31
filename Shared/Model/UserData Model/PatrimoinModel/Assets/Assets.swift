@@ -58,7 +58,14 @@ struct Assets {
             .map { ($0, AssetsCategory.sci) }
         return ownables
     }
-    
+    var isModified      : Bool {
+        return
+            periodicInvests.persistenceState == .modified ||
+            freeInvests.persistenceState == .modified ||
+            realEstates.persistenceState == .modified ||
+            scpis.persistenceState == .modified ||
+            sci.isModified
+    }
     // MARK: - Initializers
     
     /// Initialiser à vide
@@ -67,7 +74,7 @@ struct Assets {
         self.freeInvests     = FreeInvestmentArray()
         self.realEstates     = RealEstateArray()
         self.scpis           = ScpiArray()
-        try self.sci         = SCI()
+        self.sci             = SCI()
     }
     
     /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
@@ -91,7 +98,15 @@ struct Assets {
     }
     
     // MARK: - Methods
-    
+
+    func saveAsJSON(toFolder folder: Folder) throws {
+        try periodicInvests.saveAsJSON(toFolder: folder)
+        try freeInvests.saveAsJSON(toFolder: folder)
+        try realEstates.saveAsJSON(toFolder: folder)
+        try scpis.saveAsJSON(toFolder: folder)
+        try sci.saveAsJSON(toFolder: folder)
+    }
+
     /// Réinitialiser les valeurs courantes des investissements libres
     /// - Warning:
     ///   - Doit être appelée après le chargement d'un objet FreeInvestement depuis le fichier JSON

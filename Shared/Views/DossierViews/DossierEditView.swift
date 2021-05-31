@@ -60,15 +60,17 @@ struct DossierEditView: View {
         .onAppear(perform: onAppear)
     }
 
-    func onAppear() {
+    private func onAppear() {
         dossierVM = DossierViewModel(from: originalItem)
     }
-
-    func commit() {
+    
+    /// L'utilisateur a cliqué sur OK
+    private func commit() {
         if let originalItem = originalItem {
-            // on a modifié un item existant
+            // on était en cours de modification et non de création de Dossier
             let modifiedItem = dossierVM.copyFromViewModel(original: originalItem)
             if modifiedItem != originalItem {
+                // on a modifié un item existant
                 updateItem(with: modifiedItem)
             }
         } else {
@@ -78,7 +80,7 @@ struct DossierEditView: View {
     }
 
     /// Création du nouveau Dossier et ajout à la liste
-    func createItem() {
+    private func createItem() {
         do {
             try dataStore.createDossier(named       : dossierVM.name,
                                         annotatedBy : dossierVM.note)
@@ -90,7 +92,9 @@ struct DossierEditView: View {
         self.presentationMode.wrappedValue.dismiss()
     }
     
-    func updateItem(with modifiedItem: Dossier) {
+    /// Modification d'un dossier existant. L'utilisateur a réellement modifié quelque chose.
+    /// - Parameter modifiedItem: nouvelle valeur du dosser
+    private func updateItem(with modifiedItem: Dossier) {
         if let idx = dataStore.dossiers.firstIndex(where: {$0 == originalItem}) {
             do {
                 try modifiedItem.update()

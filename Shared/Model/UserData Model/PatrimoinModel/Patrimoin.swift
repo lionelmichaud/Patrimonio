@@ -51,7 +51,12 @@ final class Patrimoin: ObservableObject {
     @Published var assets      : Assets
     @Published var liabilities : Liabilities
     var memento: Memento?
-    
+    var isModified      : Bool {
+        return
+            assets.isModified ||
+            liabilities.isModified
+    }
+
     // MARK: - Initializers
     
     /// Initialiser à vide
@@ -76,6 +81,11 @@ final class Patrimoin: ObservableObject {
         memento     = nil
     }
     
+    func saveAsJSON(toFolder folder: Folder) throws {
+        try assets.saveAsJSON(toFolder: folder)
+        try liabilities.saveAsJSON(toFolder: folder)
+    }
+    
     func value(atEndOf year: Int) -> Double {
         assets.value(atEndOf: year) +
             liabilities.value(atEndOf: year)
@@ -91,14 +101,14 @@ final class Patrimoin: ObservableObject {
     
     /// Sauvegarder l'état courant du Patrimoine
     /// - Warning: Doit être appelée avant toute simulation pouvant affecter le Patrimoine (succession)
-    func save() {
+    func saveState() {
         memento = Memento(assets      : assets,
                           liabilities : liabilities)
     }
     
     /// Recharger les actifs et passifs à partir  de la dernière sauvegarde pour repartir d'une situation initiale sans aucune modification
     /// - Warning: Doit être appelée après toute simulation ayant affectée le Patrimoine (succession)
-    func restore() {
+    func restoreState() {
         guard let memento = memento else {
             customLog.log(level: .fault, "patrimoine.restore: tentative de restauration d'un patrimoine non sauvegardé")
             fatalError("patrimoine.restore: tentative de restauration d'un patrimoine non sauvegardé")

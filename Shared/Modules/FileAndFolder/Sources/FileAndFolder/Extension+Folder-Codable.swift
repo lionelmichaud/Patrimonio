@@ -13,12 +13,12 @@ public extension Folder {
     /// dans le folder 'self'
     /// - Parameters:
     ///   - type: type de l'objet à lire
-    ///   - file: nom du fichier
+    ///   - fileName: nom du fichier
     func loadFromJSON <T: Decodable> (_ type: T.Type,
-                                      from file: String,
+                                      from fileName: String,
                                       dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
                                       keyDecodingStrategy : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) throws -> T {
-        let jsonFile = try self.createFileIfNeeded(withName: file)
+        let jsonFile = try self.file(named: fileName)
         return jsonFile.loadFromJSON(type,
                                      dateDecodingStrategy: dateDecodingStrategy,
                                      keyDecodingStrategy: keyDecodingStrategy)
@@ -30,10 +30,10 @@ public extension Folder {
     ///   - object: objet à enregistrer
     ///   - file: nom du fichier
     func saveAsJSON <T: Encodable> (_ object: T,
-                                    to file: String,
+                                    to fileName: String,
                                     dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate,
                                     keyEncodingStrategy : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) throws {
-        let jsonFile = try self.createFileIfNeeded(withName: file)
+        let jsonFile = try self.createFileIfNeeded(withName: fileName)
         jsonFile.saveAsJSON(object,
                             dateEncodingStrategy: dateEncodingStrategy,
                             keyEncodingStrategy: keyEncodingStrategy)

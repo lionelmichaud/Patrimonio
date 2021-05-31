@@ -449,6 +449,8 @@
 		79CB2C87264D723100B3E493 /* MonteCarloVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CB2C86264D723100B3E493 /* MonteCarloVisitor.swift */; };
 		79CB2C89264D731900B3E493 /* CsvMonteCarloVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CB2C88264D731900B3E493 /* CsvMonteCarloVisitor.swift */; };
 		79CB2C8A264D731900B3E493 /* CsvMonteCarloVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CB2C88264D731900B3E493 /* CsvMonteCarloVisitor.swift */; };
+		79D3E9ED2661A8E4006FAA3F /* Stateful in Frameworks */ = {isa = PBXBuildFile; productRef = 79D3E9EC2661A8E4006FAA3F /* Stateful */; };
+		79D3E9EF2661A8F1006FAA3F /* Stateful in Frameworks */ = {isa = PBXBuildFile; productRef = 79D3E9EE2661A8F1006FAA3F /* Stateful */; };
 		79E713EC262C9886000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713EB262C9886000FD625 /* EconomyModel */; };
 		79E713EE262C9891000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713ED262C9891000FD625 /* EconomyModel */; };
 		79EC47922630753D0006EE44 /* ArrayOfNameableValuable+Ownable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC47912630753D0006EE44 /* ArrayOfNameableValuable+Ownable.swift */; };
@@ -847,6 +849,7 @@
 				79B2729B2634E80C00298E5D /* Charts in Frameworks */,
 				79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */,
 				791ED0EB263A0A1200701202 /* StepperView in Frameworks */,
+				79D3E9ED2661A8E4006FAA3F /* Stateful in Frameworks */,
 				7920DC92262C720D00536B03 /* AppFoundation in Frameworks */,
 				799074242660524200F224F7 /* FileAndFolder in Frameworks */,
 				7935FFE52654492500AC1715 /* Files in Frameworks */,
@@ -859,6 +862,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79D3E9EF2661A8F1006FAA3F /* Stateful in Frameworks */,
 				796F2F90262C8553002D20D1 /* HumanLifeModel in Frameworks */,
 				79EF7E6A262C8A3D00E9C0FF /* FiscalModel in Frameworks */,
 				79EC47A126307B8C0006EE44 /* Foil in Frameworks */,
@@ -1161,13 +1165,6 @@
 			path = Ownership;
 			sourceTree = "<group>";
 		};
-		7935FFDE2654456B00AC1715 /* Dossier Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Dossier Model";
-			sourceTree = "<group>";
-		};
 		7935FFE6265461FA00AC1715 /* Patrimoine */ = {
 			isa = PBXGroup;
 			children = (
@@ -1316,7 +1313,6 @@
 		7998E13A262D6A0000DA4A12 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				7935FFDE2654456B00AC1715 /* Dossier Model */,
 				79EC5E702640037400FF8263 /* Coordinator.swift */,
 				7998E154262DB27500DA4A12 /* UserData Model */,
 				79FC7270263337CA004F3BD2 /* Simulation */,
@@ -1797,6 +1793,7 @@
 				797931B426416F74000F8599 /* Disk */,
 				7935FFE42654492500AC1715 /* Files */,
 				799074232660524200F224F7 /* FileAndFolder */,
+				79D3E9EC2661A8E4006FAA3F /* Stateful */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -1832,6 +1829,7 @@
 				791ED0EC263A0A2800701202 /* StepperView */,
 				797931BA26416F86000F8599 /* Disk */,
 				799074252660524C00F224F7 /* FileAndFolder */,
+				79D3E9EE2661A8F1006FAA3F /* Stateful */,
 			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
@@ -3074,6 +3072,14 @@
 		79B2FE2D262C7E0000EBFF56 /* RetirementModel */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RetirementModel;
+		};
+		79D3E9EC2661A8E4006FAA3F /* Stateful */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Stateful;
+		};
+		79D3E9EE2661A8F1006FAA3F /* Stateful */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Stateful;
 		};
 		79E713EB262C9886000FD625 /* EconomyModel */ = {
 			isa = XCSwiftPackageProductDependency;

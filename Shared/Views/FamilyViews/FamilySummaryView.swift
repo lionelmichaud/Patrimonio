@@ -16,14 +16,14 @@ struct FamilySummaryView: View {
     
     fileprivate func computeCurrentYearCashFlow() {
         // sauvegarder l'état initial du patrimoine pour y revenir à la fin de chaque run
-        patrimoine.save()
+        patrimoine.saveState()
         //simulation.reset(withPatrimoine: patrimoine)
         self.cashFlow = try? CashFlowLine(run           : 0,
                                           withYear      : Date.now.year,
                                           withFamily    : self.family,
                                           withPatrimoine: self.patrimoine,
                                           taxableIrppRevenueDelayedFromLastyear : 0)
-        patrimoine.restore()
+        patrimoine.restoreState()
     }
     
     var body: some View {

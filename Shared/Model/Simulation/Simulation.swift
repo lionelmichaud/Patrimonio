@@ -195,7 +195,7 @@ class Simulation: ObservableObject, CanResetSimulation {
         }
 
         // sauvegarder l'état initial du patrimoine pour y revenir à la fin de chaque run
-        patrimoine.save()
+        patrimoine.saveState()
 
         // calculer tous les runs
         for run in 1...nbOfRuns {
@@ -243,7 +243,7 @@ class Simulation: ObservableObject, CanResetSimulation {
                 }
             }
 
-            patrimoine.restore()
+            patrimoine.restoreState()
         }
 
         isComputed  = true
@@ -297,7 +297,7 @@ class Simulation: ObservableObject, CanResetSimulation {
                                  withPatrimoine : patrimoine,
                                  withKPIs       : &kpis,
                                  withMode       : mode)
-        patrimoine.restore()
+        patrimoine.restoreState()
 
         isComputed  = true
         isSaved     = false

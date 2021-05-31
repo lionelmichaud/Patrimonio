@@ -19,7 +19,9 @@ struct SCI {
     var note        : String
     var scpis       : ScpiArray
     var bankAccount : Double
-    
+    var isModified      : Bool {
+        return scpis.persistenceState == .modified
+    }
     // MARK: - Initializers
     
     /// Initialiser à vide
@@ -45,6 +47,10 @@ struct SCI {
     }
     
     // MARK: - Methods
+
+    func saveAsJSON(toFolder folder: Folder) throws {
+        try scpis.saveAsJSON(toFolder: folder)
+    }
     
     /// Calls the given closure on each element in the sequence in the same order as a for-in loop
     func forEachOwnable(_ body: (Ownable) throws -> Void) rethrows {

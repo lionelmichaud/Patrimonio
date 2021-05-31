@@ -202,18 +202,31 @@ struct PersistenceManager {
                           "\(FileError.failedToResolveLibrary.rawValue)")
             return nil
         }
-        
+
         /// vérifier l'existence du directory 'templates' dans le directory 'Library' et le créer sinon
         let templateDirPath = AppSettings.shared.templatePath()
-        let templateFolder = try? libraryFolder.createSubfolderIfNeeded(at: templateDirPath)
-        guard templateFolder != nil else {
-            // la création à échouée
-            customLog.log(level: .fault,
-                          "\(FileError.failedToCreateTemplateDirectory.rawValue)")
-            return nil
+        if let templateFolder = try? libraryFolder.subfolder(at: templateDirPath) {
+            return templateFolder
+
+        } else {
+            // le créer
+            do {
+                try libraryFolder.createSubfolder(at: templateDirPath)
+                do {
+                    let newTemplateFolder = try importTemplatesFromApp()
+                    return newTemplateFolder
+                } catch {
+                    // la création a échouée
+                    return nil
+                }
+
+            } catch {
+                // la création à échouée
+                customLog.log(level: .fault,
+                              "\(FileError.failedToCreateTemplateDirectory.rawValue)")
+                return nil
+            }
         }
-        
-        return templateFolder
     }
     
     /// Importer les fichiers vierges depuis le Bundle Main de l'Application

@@ -141,11 +141,13 @@ struct ComputationView: View {
                                 if busySaveWheelAnimate {
                                     ProgressView()
                                 }
-                                Label("Exporter fichiers CSV", systemImage: "square.and.arrow.up")
+                                Image(systemName: "square.and.arrow.up")
+                                    .imageScale(.large)
+                                Text("Exporter")
                             }
                            }
                     )
-//                    .capsuleButtonStyle()
+                    .capsuleButtonStyle()
 //                    .opacity(!savingIsPossible() ? 0.5 : 1.0)
                     .disabled(!savingIsPossible())
                 }
