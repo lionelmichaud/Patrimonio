@@ -61,13 +61,13 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
     
     // MARK: - Properties
     
-    var id                        = UUID()
-    var folder                    : Folder?
-    var isActive                  = false
-    private var _name             : String?
-    private var _note             : String?
-    private var _dateCreation     : Date?
-    private var _isUserDossier    = true
+    var id                      = UUID()
+    var folder                  : Folder?
+    var isActive                = false
+    private var _name           : String?
+    private var _note           : String?
+    private var _dateCreation   : Date?
+    private var _isUserDossier  = true
 
     // MARK: - Computed Properties
     
@@ -110,7 +110,7 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
     }
     var folderName : String { folder?.name ?? "No folder" }
     
-    // MARK: - Initializer
+    // MARK: - Initializers
     
     init(id                          : UUID     = UUID(),
          pointingTo folder           : Folder?  = nil,
@@ -125,7 +125,11 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
         self._name             = name
         self._isUserDossier    = isUserDossier
     }
-    
+        
+    /// Créer un nouveau Dossier et l'enregistrer dans le répertoire `Documents`
+    /// - Parameters:
+    ///   - name: nom du nouveau Dossier
+    ///   - note: note du nouveau Dossier
     init(name : String,
          note : String) throws {
         let newID = UUID()
@@ -146,7 +150,6 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
             try saveAsJSON(toFile               : Dossier.defaultFileName,
                            toFolder             : targetFolder,
                            dateEncodingStrategy : .iso8601)
-                //PersistenceManager.saveDescriptor(of: newDossier)
         } catch {
             try targetFolder.delete()
             throw error
@@ -220,7 +223,7 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
         let targetFolder = try PersistenceManager.newUserFolder(withID: newID,
                                                                 withContentDuplicatedFrom: folder)
         
-        // initialiser les propriétés
+        // initialiser les propriétés de la copie
         let newDossier = Dossier()
             .identifiedBy(newID)
             .pointingTo(targetFolder)
@@ -231,9 +234,7 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
         
         // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier clone
         do {
-            try saveAsJSON(toFile               : Dossier.defaultFileName,
-                           toFolder             : newDossier.folder!,
-                           dateEncodingStrategy : .iso8601)
+            try newDossier.saveAsJSON()
             return newDossier
         } catch {
             try targetFolder.delete()
@@ -241,7 +242,7 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
         }
     }
     
-    func update() throws {
+    func saveAsJSON() throws {
         try saveAsJSON(toFile               : Dossier.defaultFileName,
                        toFolder             : self.folder!,
                        dateEncodingStrategy : .iso8601)
@@ -267,7 +268,7 @@ extension Dossier: CustomStringConvertible {
         return
             """
             Dossier: \(name)
-            Note: \(note)
+            Note:    \(note)
             Folder : \(folder?.description ?? "No folder")
 
             """
@@ -280,13 +281,5 @@ extension Dossier: Codable {
         case _note          = "note"
         case _dateCreation  = "date de création"
         case _isUserDossier = "dossier utilisateur"
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self._name, forKey: ._name)
-        try container.encode(self._note, forKey: ._note)
-        try container.encode(self._dateCreation, forKey: ._dateCreation)
-        try container.encode(self._isUserDossier, forKey: ._isUserDossier)
     }
 }

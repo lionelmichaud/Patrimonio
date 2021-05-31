@@ -48,10 +48,16 @@ final class Patrimoin: ObservableObject {
     
     // MARK: - Properties
     
-    @Published var assets      : Assets
-    @Published var liabilities : Liabilities
+    @Published var assets      = Assets()
+    @Published var liabilities = Liabilities()
+//    @Published var isModified  = false
     var memento: Memento?
-    var isModified      : Bool {
+
+//    private var subscriptions = Set<AnyCancellable>()
+
+    // MARK: - Computed Properties
+
+    var isModified: Bool {
         return
             assets.isModified ||
             liabilities.isModified
@@ -61,16 +67,19 @@ final class Patrimoin: ObservableObject {
     
     /// Initialiser à vide
     init() {
-        self.assets      = Assets()
-        self.liabilities = Liabilities()
+        // mettre à jour la propriété comme si elle était calculée à l'aide de Combine
+//        let assetsIsModified: ((Assets) -> Bool) = { assets in
+//            return assets.isModified || self.liabilities.isModified
+//        }
+//        self.$assets.map(assetsIsModified).assign(to: \.isModified, on: self).store(in: &subscriptions)
     }
     
     /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
     /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
-    init(fromFolder folder: Folder) throws {
+    convenience init(fromFolder folder: Folder) throws {
+        self.init()
         try self.assets      = Assets(fromFolder : folder,      with: Patrimoin.family)
         try self.liabilities = Liabilities(fromFolder : folder, with: Patrimoin.family)
-        self.memento         = nil
     }
     
     // MARK: - Methods
@@ -159,7 +168,9 @@ final class Patrimoin: ObservableObject {
 extension Patrimoin: CustomStringConvertible {
     var description: String {
         """
+
         PATRIMOINE:
+        \(("Modifié:" + String(isModified)).withPrefixedSplittedLines("  "))
         \(assets.description.withPrefixedSplittedLines("  "))
         \(liabilities.description.withPrefixedSplittedLines("  "))
         """

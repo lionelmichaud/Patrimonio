@@ -76,3 +76,13 @@ class Store: ObservableObject {
         dossiers.remove(atOffsets: offsets)
     }
 }
+
+extension Store: CustomStringConvertible {
+    var description: String {
+        var str = ""
+        dossiers.forEach { dossier in
+            str += String(describing: dossier).withPrefixedSplittedLines("  ") + "\n"
+        }
+        return str
+    }
+}

@@ -8,11 +8,14 @@
 import Foundation
 import os
 import FileAndFolder
+import NamedValue
 import Files
 import Charts // https://github.com/danielgindi/Charts.git
 
 private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
                                category  : "PersistenceManager")
+
+// MARK: - Extension de Folder
 
 extension Folder {
     // The current Application folder

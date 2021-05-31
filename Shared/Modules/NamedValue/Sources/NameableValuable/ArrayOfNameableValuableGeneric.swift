@@ -12,23 +12,6 @@ import AppFoundation
 import FileAndFolder
 import Files
 
-// MARK: - Satet Machine de gestion de la persistence
-
-enum PersistenceEvent {
-    case load
-    case modify
-    case save
-}
-
-public enum PersistenceState: String {
-    case created  = "Créé"
-    case synced   = "Synchronisé"
-    case modified = "Modifié"
-}
-
-typealias PersistenceTransition   = Transition<PersistenceState, PersistenceEvent>
-typealias PersistenceStateMachine = StateMachine<PersistenceState, PersistenceEvent>
-
 // MARK: - Table d'Item Generic Valuable and Nameable
 
 public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable where
@@ -37,22 +20,25 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
     E: CustomStringConvertible,
     E: NameableValuable {
     
-    // MARK: - Properties
-
-    private var fileNamePrefix : String?
-    private var persistenceSM  = PersistenceStateMachine(initialState: .created)
-    public var items           = [E]()
-    public var version         = Version()
-    public var currentValue    : Double {
-        items.sumOfValues(atEndOf: Date.now.year)
-    } // computed
-    public var persistenceState: PersistenceState {
-        persistenceSM.currentState
-    }
-
     private enum CodingKeys: String, CodingKey {
         case version, items
     }
+    
+    // MARK: - Properties
+
+    public  var items           = [E]()
+    public  var version         = Version()
+    private var fileNamePrefix  : String?
+    private var persistenceSM   = PersistenceStateMachine(initialState: .created)
+    
+    // MARK: - Computed Properties
+    
+    public  var persistenceState: PersistenceState {
+        persistenceSM.currentState
+    }
+    public var currentValue    : Double {
+        items.sumOfValues(atEndOf: Date.now.year)
+    } // computed
 
     // MARK: - Subscript
 
@@ -110,13 +96,20 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
     
     // MARK: - Methods
 
-    private func initializeStateMachine() {
+    private mutating func initializeStateMachine() {
+        
         // initialiser la StateMachine
-        let transition1 = PersistenceTransition(with: .load, from: .created, to: .synced)
+        let transition1 = PersistenceTransition(with : .load,
+                                                from : .created,
+                                                to   : .synced)
         persistenceSM.add(transition: transition1)
-        let transition2 = PersistenceTransition(with: .modify, from: .synced, to: .modified)
+        let transition2 = PersistenceTransition(with : .modify,
+                                                from : .synced,
+                                                to   : .modified)
         persistenceSM.add(transition: transition2)
-        let transition3 = PersistenceTransition(with: .save, from: .modified, to: .synced)
+        let transition3 = PersistenceTransition(with : .save,
+                                                from : .modified,
+                                                to   : .synced)
         persistenceSM.add(transition: transition3)
         #if DEBUG
         persistenceSM.enableLogging = true

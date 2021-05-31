@@ -29,21 +29,6 @@ struct DossierDetailView: View {
         }
     }
     
-    var dossierSection: some View {
-        Section {
-            Text(dossier.name).font(.headline)
-            if dossier.note.isNotEmpty {
-                Text(dossier.note).multilineTextAlignment(.leading)
-            }
-            LabeledText(label: "Date de céation",
-                        text : dossier.dateCreationStr)
-            LabeledText(label: "Date de dernière modification",
-                        text : "\(dossier.dateModificationStr) à \(dossier.hourModificationStr)")
-            LabeledText(label: "Nom du directory associé",
-                        text : dossier.folderName)
-        }
-    }
-    
     var body: some View {
         Form {
             // indicateur de chargement du Dossier
@@ -52,7 +37,7 @@ struct DossierDetailView: View {
             }
             // affichage du Dossier
             DossierPropertiesView(dossier: dossier,
-                                  sectionHeader: "")
+                                  sectionHeader: "Descriptif du Dossier")
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
         .navigationTitle(Text("Dossier"))
@@ -64,7 +49,7 @@ struct DossierDetailView: View {
                 .environmentObject(self.dataStore)
         }
         .toolbar {
-            // Bouton: Charger
+            /// Bouton: Charger
             ToolbarItem(placement: .primaryAction) {
                 Button(
                     action : activate,
@@ -78,7 +63,7 @@ struct DossierDetailView: View {
                     .capsuleButtonStyle()
                     .disabled(dossier.isActive)
             }
-            // Bouton: Dupliquer
+            /// Bouton: Dupliquer
             ToolbarItem(placement: .automatic) {
                 Button(
                     action : duplicate,
@@ -90,9 +75,9 @@ struct DossierDetailView: View {
                         }
                     })
                     .capsuleButtonStyle()
-                    .disabled(patrimoine.isModified)
+                    //.disabled(patrimoine.isModified)
             }
-            // Bouton: Modifier
+            /// Bouton: Modifier
             ToolbarItem(placement: .automatic) {
                 Button(
                     action : {
@@ -108,21 +93,7 @@ struct DossierDetailView: View {
                         }
                     })
                     .capsuleButtonStyle()
-                    .disabled(changeOccured())
-            }
-            // Bouton: Sauvegarder
-            ToolbarItem(placement: .automatic) {
-                Button(
-                    action : save,
-                    label  : {
-                        HStack {
-                            Image(systemName: "externaldrive.fill")
-                                .imageScale(.large)
-                            Text("Enregistrer")
-                        }
-                    })
-                    .capsuleButtonStyle()
-                    .disabled(!(dossier.isActive && patrimoine.isModified))
+                    .disabled(!dossier.isActive)
             }
        }
     }
@@ -166,25 +137,6 @@ struct DossierDetailView: View {
             try dataStore.duplicate(dossier)
         } catch {
             self.alertItem = AlertItem(title         : Text("Echec de la duplication du dossier !"),
-                                       dismissButton : .default(Text("OK")))
-        }
-    }
-    
-    /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
-    private func save() {
-        // vérifier l'existence du Folder associé au Dossier
-        guard let folder = dossier.folder else {
-            self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
-                                       dismissButton : .default(Text("OK")))
-            return
-        }
-        
-        // enregistrer les données utilisateur depuis le Dossier
-        do {
-            try patrimoine.saveAsJSON(toFolder: folder)
-            Simulation.playSound()
-        } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de l'enregistrement du contenu du dossier !"),
                                        dismissButton : .default(Text("OK")))
         }
     }

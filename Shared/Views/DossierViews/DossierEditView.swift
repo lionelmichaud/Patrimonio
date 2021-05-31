@@ -72,6 +72,8 @@ struct DossierEditView: View {
             if modifiedItem != originalItem {
                 // on a modifié un item existant
                 updateItem(with: modifiedItem)
+            } else {
+                self.presentationMode.wrappedValue.dismiss()
             }
         } else {
             // on créé un nouvel item
@@ -97,7 +99,7 @@ struct DossierEditView: View {
     private func updateItem(with modifiedItem: Dossier) {
         if let idx = dataStore.dossiers.firstIndex(where: {$0 == originalItem}) {
             do {
-                try modifiedItem.update()
+                try modifiedItem.saveAsJSON()
             } catch {
                 self.alertItem = AlertItem(title         : Text("Echec de la modification du dossier"),
                                            dismissButton : .default(Text("OK")))
