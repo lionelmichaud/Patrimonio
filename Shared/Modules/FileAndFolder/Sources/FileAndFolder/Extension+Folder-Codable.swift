@@ -9,8 +9,16 @@ import Foundation
 import Files
 
 public extension Folder {
-    /// Lire l'objet de type 'type' au format JSON dans un fichier nommé 'file'
-    /// dans le folder 'self'
+    /// Lire les `Data` dans un fichier nommé `fileName`
+    /// dans le folder `self`
+    /// - Parameters:
+    ///   - fileName: nom du fichier
+    func load(from fileName: String) throws -> Data {
+        let jsonFile = try self.file(named: fileName)
+        return try jsonFile.read()
+    }
+    /// Lire l'objet de type `type` au format JSON dans un fichier nommé `fileName`
+    /// dans le folder `self`
     /// - Parameters:
     ///   - type: type de l'objet à lire
     ///   - fileName: nom du fichier
@@ -24,11 +32,22 @@ public extension Folder {
                                      keyDecodingStrategy: keyDecodingStrategy)
     }
     
-    /// Enregistrer l'objet 'object' au format JSON dans un fichier nommé 'file'
-    /// dans le folder 'self'
+    /// Enregistrer  `encodeData` dans un fichier nommé `fileName`
+    /// dans le folder `self`
+    /// - Parameters:
+    ///   - encodeData: data à enregistrer
+    ///   - fileName: nom du fichier
+    func save(_ encodeData: Data,
+              to fileName: String) throws {
+        let jsonFile = try self.createFileIfNeeded(withName: fileName)
+        jsonFile.save(encodeData)
+    }
+    
+    /// Enregistrer l'objet `object` au format JSON dans un fichier nommé `fileName`
+    /// dans le folder `self`
     /// - Parameters:
     ///   - object: objet à enregistrer
-    ///   - file: nom du fichier
+    ///   - fileName: nom du fichier
     func saveAsJSON <T: Encodable> (_ object: T,
                                     to fileName: String,
                                     dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate,

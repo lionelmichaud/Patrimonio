@@ -7,18 +7,21 @@
 
 import Foundation
 
-public protocol Persistable {
+public protocol PersistableP {
 
     // MARK: - Properties
 
     var persistenceSM    : PersistenceStateMachine { get set }
     var persistenceState : PersistenceState { get }
+    var isModified       : Bool { get }
 
 }
 
-public extension Persistable {
+public extension PersistableP {
     var persistenceState: PersistenceState {
         persistenceSM.currentState
     }
-
+    var isModified: Bool {
+        persistenceSM.currentState == .modified
+    }
 }

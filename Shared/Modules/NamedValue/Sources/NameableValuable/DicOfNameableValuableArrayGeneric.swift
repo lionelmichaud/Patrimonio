@@ -27,7 +27,7 @@ where ItemCategory: PickableEnum,
     public var isModified: Bool {
         var hasChanged = false
         for category in ItemCategory.allCases {
-            hasChanged = hasChanged || perCategory[category]?.persistenceState == .modified
+            hasChanged = hasChanged || (perCategory[category]?.isModified ?? false)
         }
         return hasChanged
     }

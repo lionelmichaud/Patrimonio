@@ -12,20 +12,37 @@ import Files
 
 public protocol JsonDecodableFromFolderP: Decodable {
     
-    /// Lit le modèle dans un fichier JSON du Bundle
-    init(fromFile file        : String,
-         fromFolder folder    : Folder,
-         dateDecodingStrategy : JSONDecoder.DateDecodingStrategy,
-         keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy) throws
+    /// Lire les `Data` dans un fichier nommé `fromFile`
+    /// dans le folder nommé `fromFolder` du répertoire `Documents`
+    /// - Parameters:
+    ///   - fromFile: nom du fichier
+    ///   - fromFolder: nom du dossier du répertoire `Documents`
+    func load(fromFile fileName     : String,
+              fromFolder folderName : Folder) throws -> Data
+
+    /// Lit l'objet dans un fichier au format JSON dans un fichier nommé `fromFile`
+    /// dans le folder nommé `fromFolder` du répertoire `Documents`
+    /// - Parameters:
+    ///   - fromFile: nom du fichier
+    ///   - fromFolder: nom du dossier du répertoire `Documents`
+    init(fromFile fileName     : String,
+         fromFolder folderName : Folder,
+         dateDecodingStrategy  : JSONDecoder.DateDecodingStrategy,
+         keyDecodingStrategy   : JSONDecoder.KeyDecodingStrategy) throws
 }
 // implémentation par défaut
 public extension JsonDecodableFromFolderP {
-    init(fromFile file        : String,
-         fromFolder folder    : Folder,
-         dateDecodingStrategy : JSONDecoder.DateDecodingStrategy = .iso8601,
-         keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) throws {
-        self = try folder.loadFromJSON(Self.self,
-                                       from                 : file,
+    func load(fromFile fileName     : String,
+              fromFolder folderName : Folder) throws -> Data {
+        return try folderName.load(from: fileName)
+    }
+
+    init(fromFile fileName     : String,
+         fromFolder folderName : Folder,
+         dateDecodingStrategy  : JSONDecoder.DateDecodingStrategy = .iso8601,
+         keyDecodingStrategy   : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) throws {
+        self = try folderName.loadFromJSON(Self.self,
+                                       from                 : fileName,
                                        dateDecodingStrategy : dateDecodingStrategy,
                                        keyDecodingStrategy  : keyDecodingStrategy)
     }
@@ -35,20 +52,40 @@ public extension JsonDecodableFromFolderP {
 
 public protocol JsonEncodableToFolderP: Encodable {
         
-    /// Encode l'objet dans un fichier stocké dans le Bundle Main de l'Application
-    func saveAsJSON(toFile file          : String,
-                    toFolder folder      : Folder,
+    /// Enregistrer  `encodeData` dans un fichier nommé `toFile`
+    /// dans le folder nommé `toFolder` du répertoire `Documents`
+    /// - Parameters:
+    ///   - encodeData: data à enregistrer
+    ///   - toFile: nom du fichier
+    ///   - toFolder: nom du dossier du répertoire `Documents`
+    func save(_ encodeData        : Data,
+              toFile fileName     : String,
+              toFolder folderName : Folder) throws
+
+    /// Enregistrer l'objet `object` au format JSON dans un fichier nommé `toFile`
+    /// dans le folder nommé `toFolder` du répertoire `Documents`
+    /// - Parameters:
+    ///   - toFile: nom du fichier
+    ///   - toFolder: nom du dossier du répertoire `Documents`
+    func saveAsJSON(toFile fileName      : String,
+                    toFolder folderName  : Folder,
                     dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
                     keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) throws
 }
 // implémentation par défaut
 public extension JsonEncodableToFolderP {
-    func saveAsJSON(toFile file          : String,
-                    toFolder folder      : Folder,
+    func save(_ encodeData        : Data,
+              toFile fileName     : String,
+              toFolder folderName : Folder) throws {
+        try folderName.save(encodeData, to: fileName)
+    }
+    
+    func saveAsJSON(toFile fileName      : String,
+                    toFolder folderName  : Folder,
                     dateEncodingStrategy : JSONEncoder.DateEncodingStrategy = .iso8601,
                     keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) throws {
-        try folder.saveAsJSON(self,
-                              to                   : file,
+        try folderName.saveAsJSON(self,
+                              to                   : fileName,
                               dateEncodingStrategy : dateEncodingStrategy,
                               keyEncodingStrategy  : keyEncodingStrategy)
     }

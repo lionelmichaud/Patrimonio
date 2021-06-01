@@ -38,7 +38,7 @@ public extension Array where Element: NameableValuable {
 
 // utilisé uniquement par LifeExpense
 // les autres utilisent le generic ArrayOfNameableValuable
-public protocol NameableValuableArray: JsonCodableToFolderP, Persistable {
+public protocol NameableValuableArray: JsonCodableToFolderP, PersistableP {
     associatedtype Item: Codable, Identifiable, NameableValuable
     
     // MARK: - Properties
@@ -54,8 +54,11 @@ public protocol NameableValuableArray: JsonCodableToFolderP, Persistable {
     
     // MARK: - Initializers
     
-    /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
-    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    /// Initialiser à partir d'un fichier JSON portant le nom de la Class `Item`
+    /// préfixé par `fileNamePrefix`
+    /// contenu dans le dossier `fromFolder` du répertoire `Documents`
+    /// - Parameter fromFolder: dossier où se trouve le fichier JSON à utiliser
+    /// - Parameter fileNamePrefix: préfixe du nom de fichier
     init(fileNamePrefix    : String,
          fromFolder folder : Folder) throws
 
@@ -65,6 +68,11 @@ public protocol NameableValuableArray: JsonCodableToFolderP, Persistable {
 
     // MARK: - Methods
     
+    /// Enregistrer au format JSON dans un fichier JSON portant le nom de la Class `Item`
+    /// préfixé par `self.fileNamePrefix`
+    /// dans le folder nommé `toFolder` du répertoire `Documents`
+    /// - Parameters:
+    ///   - toFolder: nom du dossier du répertoire `Documents`
     func saveAsJSON(fileNamePrefix  : String,
                     toFolder folder : Folder) throws
 

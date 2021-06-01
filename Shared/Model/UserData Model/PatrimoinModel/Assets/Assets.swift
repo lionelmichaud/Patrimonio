@@ -60,10 +60,10 @@ struct Assets {
     }
     var isModified      : Bool {
         return
-            periodicInvests.persistenceState == .modified ||
-            freeInvests.persistenceState == .modified ||
-            realEstates.persistenceState == .modified ||
-            scpis.persistenceState == .modified ||
+            periodicInvests.isModified ||
+            freeInvests.isModified ||
+            realEstates.isModified ||
+            scpis.isModified ||
             sci.isModified
     }
     // MARK: - Initializers

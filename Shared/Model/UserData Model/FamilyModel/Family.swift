@@ -11,7 +11,7 @@ final class Family: ObservableObject {
     // MARK: - Properties
     
     // structure de la famille
-    @Published private(set) var members: [Person] 
+    @Published private(set) var members: PersonArray
     // dépenses
     @Published var expenses = LifeExpensesDic()
     // revenus
@@ -87,6 +87,7 @@ final class Family: ObservableObject {
 
     func loadFromJSON(fromFolder folder: Folder) throws {
         expenses = try LifeExpensesDic(fromFolder : folder)
+        let arrayOfPerson = try? PersistableArrayOfPerson(from: folder)
     }
 
     func saveAsJSON(toFolder folder: Folder) throws {
@@ -267,7 +268,7 @@ final class Family: ObservableObject {
     
     private func storeMembersToFile() {
         // encoder
-        if let encoded = try? Person.coder.encoder.encode(members.map { Wrap(wrapped: $0) }) {
+        if let encoded: Data = try? Person.coder.encoder.encode(members.map { Wrap(wrapped: $0) }) {
             // find file's URL
             let fileName = FileNameCst.kFamilyMembersFileName
             guard let url = Bundle.main.url(forResource: fileName, withExtension: nil) else {
