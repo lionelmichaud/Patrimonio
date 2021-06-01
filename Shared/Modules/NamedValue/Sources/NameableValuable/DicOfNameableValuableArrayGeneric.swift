@@ -20,15 +20,18 @@ where ItemCategory: PickableEnum,
 
     // MARK: - Properties
 
-    public var perCategory    = [ItemCategory: ArrayOfItems]()
-    private var persistenceSM = PersistenceStateMachine(initialState: .created)
+    public var perCategory = [ItemCategory: ArrayOfItems]()
 
     // MARK: - Computed Properties
     
-    public  var persistenceState: PersistenceState {
-        persistenceSM.currentState
+    public var isModified: Bool {
+        var hasChanged = false
+        for category in ItemCategory.allCases {
+            hasChanged = hasChanged || perCategory[category]?.persistenceState == .modified
+        }
+        return hasChanged
     }
-
+    
     // MARK: - Subscript
     
     public subscript(category: ItemCategory) -> ArrayOfItems? {

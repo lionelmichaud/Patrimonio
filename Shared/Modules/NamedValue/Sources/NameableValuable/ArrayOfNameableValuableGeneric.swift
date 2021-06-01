@@ -33,9 +33,10 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
     
     // MARK: - Computed Properties
     
-    public  var persistenceState: PersistenceState {
+    public var persistenceState: PersistenceState {
         persistenceSM.currentState
     }
+
     public var currentValue    : Double {
         items.sumOfValues(atEndOf: Date.now.year)
     } // computed

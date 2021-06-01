@@ -43,6 +43,7 @@ struct DossierSummaryView: View {
     }
     
     private func savable(_ activeDossier: Dossier) -> Bool {
+        family.isModified ||
         patrimoine.isModified
     }
 

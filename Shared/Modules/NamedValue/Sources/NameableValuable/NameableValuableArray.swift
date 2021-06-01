@@ -43,8 +43,10 @@ public protocol NameableValuableArray: JsonCodableToFolderP {
     
     // MARK: - Properties
     
-    var items        : [Item] { get set }
-    var currentValue : Double { get }
+    var items            : [Item] { get set }
+    var persistenceSM    : PersistenceStateMachine { get set }
+    var persistenceState : PersistenceState { get }
+    var currentValue     : Double { get }
 
     // MARK: - Subscript
     
@@ -65,8 +67,7 @@ public protocol NameableValuableArray: JsonCodableToFolderP {
     
     func saveAsJSON(fileNamePrefix  : String,
                     toFolder folder : Folder) throws
-//    func storeItemsToFile(fileNamePrefix: String)
-    
+
     mutating func move(from indexes   : IndexSet,
                        to destination : Int)
     
@@ -84,6 +85,11 @@ public protocol NameableValuableArray: JsonCodableToFolderP {
 
 // implémentation par défaut
 public extension NameableValuableArray {
+
+    var persistenceState: PersistenceState {
+        persistenceSM.currentState
+    }
+
     var currentValue      : Double {
         items.sumOfValues(atEndOf : Date.now.year)
     }
@@ -95,22 +101,14 @@ public extension NameableValuableArray {
                       fromFolder           : folder,
                       dateDecodingStrategy : .iso8601,
                       keyDecodingStrategy  : .useDefaultKeys)
-//        self.fileNamePrefix = fileNamePrefix
-//
-//        // initialiser la StateMachine
-//        initializeStateMachine()
-//
-//        // exécuter la transition
-//        persistenceSM.process(event: .load)
+
+        // initialiser la StateMachine
+        initializeStateMachine()
+
+        // exécuter la transition
+        persistenceSM.process(event: .load)
     }
-//
-//    init(fileNamePrefix: String) {
-//        self = Bundle.main.loadFromJSON(Self.self,
-//                                        from                 : fileNamePrefix + String(describing: Item.self) + ".json",
-//                                        dateDecodingStrategy : .iso8601,
-//                                        keyDecodingStrategy  : .useDefaultKeys)
-//    }
-    
+
     // used for Unit Testing
     init(for aClass     : AnyClass,
          fileNamePrefix : String) {
@@ -119,6 +117,12 @@ public extension NameableValuableArray {
                                        from                 : fileNamePrefix + String(describing: Item.self) + ".json",
                                        dateDecodingStrategy : .iso8601,
                                        keyDecodingStrategy  : .useDefaultKeys)
+
+        // initialiser la StateMachine
+        initializeStateMachine()
+
+        // exécuter la transition
+        persistenceSM.process(event: .load)
     }
     
     subscript(idx: Int) -> Item {
@@ -132,6 +136,28 @@ public extension NameableValuableArray {
         }
     }
     
+    /// Définir les transitions de la StateMachine de persistence
+    private mutating func initializeStateMachine() {
+        persistenceSM = PersistenceStateMachine(initialState: .created)
+
+        // initialiser la StateMachine
+        let transition1 = PersistenceTransition(with : .load,
+                                                from : .created,
+                                                to   : .synced)
+        persistenceSM.add(transition: transition1)
+        let transition2 = PersistenceTransition(with : .modify,
+                                                from : .synced,
+                                                to   : .modified)
+        persistenceSM.add(transition: transition2)
+        let transition3 = PersistenceTransition(with : .save,
+                                                from : .modified,
+                                                to   : .synced)
+        persistenceSM.add(transition: transition3)
+        #if DEBUG
+        persistenceSM.enableLogging = true
+        #endif
+    }
+
     func saveAsJSON(fileNamePrefix  : String,
                     toFolder folder : Folder) throws {
         // encode to JSON file
@@ -140,17 +166,9 @@ public extension NameableValuableArray {
                        dateEncodingStrategy : .iso8601,
                        keyEncodingStrategy  : .useDefaultKeys)
         // exécuter la transition
-        //persistenceSM.process(event: .save)
+        persistenceSM.process(event: .save)
     }
 
-//    func storeItemsToFile(fileNamePrefix: String = "") {
-//        // encode to JSON file
-//        Bundle.main.saveAsJSON(self,
-//                               to                   : fileNamePrefix + String(describing: Item.self) + ".json",
-//                               dateEncodingStrategy : .iso8601,
-//                               keyEncodingStrategy  : .useDefaultKeys)
-//    }
-    
     mutating func move(from indexes   : IndexSet,
                        to destination : Int) {
         items.move(fromOffsets: indexes, toOffset: destination)
@@ -158,15 +176,21 @@ public extension NameableValuableArray {
 
     mutating func delete(at offsets : IndexSet) {
         items.remove(atOffsets: offsets)
+        // exécuter la transition
+        persistenceSM.process(event: .modify)
     }
     
     mutating func add(_ item : Item) {
         items.append(item)
+        // exécuter la transition
+        persistenceSM.process(event: .modify)
     }
     
     mutating func update(with item : Item,
                          at index  : Int) {
         items[index] = item
+        // exécuter la transition
+        persistenceSM.process(event: .modify)
     }
     
     func value(atEndOf: Int) -> Double {

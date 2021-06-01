@@ -56,6 +56,10 @@ final class Family: ObservableObject {
         members.filter {$0 is Child}
     }
 
+    var isModified: Bool {
+        expenses.isModified
+    }
+
     // MARK: - Initializers
 
     /// Initialiser à vide

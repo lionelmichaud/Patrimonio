@@ -14,11 +14,16 @@ import NamedValue
 // MARK: - Tableau de Dépenses
 
 struct LifeExpenseArray: NameableValuableArray {
-    
+
+    private enum CodingKeys: String, CodingKey {
+        case items
+    }
+
     // MARK: - Properties
     
-    var items = [LifeExpense]()
-    
+    var items         = [LifeExpense]()
+    var persistenceSM = PersistenceStateMachine(initialState : .created)
+
     // MARK: - Initializers: voir NameableValuableArray
 }
 
