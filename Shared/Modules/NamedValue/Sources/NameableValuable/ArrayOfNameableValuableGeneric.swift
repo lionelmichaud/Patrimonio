@@ -14,7 +14,7 @@ import Files
 
 // MARK: - Table d'Item Generic Valuable and Nameable
 
-public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable where
+public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable, Persistable where
     E: Codable,
     E: Identifiable,
     E: CustomStringConvertible,
@@ -29,14 +29,10 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
     public  var items           = [E]()
     public  var version         = Version()
     private var fileNamePrefix  : String?
-    private var persistenceSM   = PersistenceStateMachine(initialState: .created)
+    public  var persistenceSM   = PersistenceStateMachine()
     
     // MARK: - Computed Properties
     
-    public var persistenceState: PersistenceState {
-        persistenceSM.currentState
-    }
-
     public var currentValue    : Double {
         items.sumOfValues(atEndOf: Date.now.year)
     } // computed
@@ -56,8 +52,6 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
     
     /// Initialiser à vide
     public init() {
-        // initialiser la StateMachine
-        initializeStateMachine()
     }
     
     /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
@@ -72,9 +66,6 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
                       keyDecodingStrategy  : .useDefaultKeys)
         self.fileNamePrefix = fileNamePrefix
 
-        // initialiser la StateMachine
-        initializeStateMachine()
-
         // exécuter la transition
         persistenceSM.process(event: .load)
    }
@@ -88,36 +79,12 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable wher
                                         keyDecodingStrategy  : .useDefaultKeys)
         self.fileNamePrefix = fileNamePrefix
 
-        // initialiser la StateMachine
-        initializeStateMachine()
-
         // exécuter la transition
         persistenceSM.process(event: .load)
     }
     
     // MARK: - Methods
 
-    /// Définir les transitions de la StateMachine de persistence
-    private mutating func initializeStateMachine() {
-        
-        // initialiser la StateMachine
-        let transition1 = PersistenceTransition(with : .load,
-                                                from : .created,
-                                                to   : .synced)
-        persistenceSM.add(transition: transition1)
-        let transition2 = PersistenceTransition(with : .modify,
-                                                from : .synced,
-                                                to   : .modified)
-        persistenceSM.add(transition: transition2)
-        let transition3 = PersistenceTransition(with : .save,
-                                                from : .modified,
-                                                to   : .synced)
-        persistenceSM.add(transition: transition3)
-        #if DEBUG
-        persistenceSM.enableLogging = true
-        #endif
-    }
-    
     public func saveAsJSON(toFolder folder: Folder) throws {
         // encode to JSON file
         try saveAsJSON(toFile               : self.fileNamePrefix! + String(describing: E.self) + ".json",

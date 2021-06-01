@@ -23,4 +23,27 @@ public enum PersistenceState: String {
 }
 
 public typealias PersistenceTransition   = Transition<PersistenceState, PersistenceEvent>
+
 public typealias PersistenceStateMachine = StateMachine<PersistenceState, PersistenceEvent>
+extension PersistenceStateMachine {
+    convenience init() {
+        self.init(initialState: .created)
+        
+        // initialiser la StateMachine
+        let transition1 = PersistenceTransition(with : .load,
+                                                from : .created,
+                                                to   : .synced)
+        self.add(transition: transition1)
+        let transition2 = PersistenceTransition(with : .modify,
+                                                from : .synced,
+                                                to   : .modified)
+        self.add(transition: transition2)
+        let transition3 = PersistenceTransition(with : .save,
+                                                from : .modified,
+                                                to   : .synced)
+        self.add(transition: transition3)
+        #if DEBUG
+        self.enableLogging = true
+        #endif
+    }
+}

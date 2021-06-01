@@ -38,7 +38,7 @@ public extension Array where Element: NameableValuable {
 
 // utilisé uniquement par LifeExpense
 // les autres utilisent le generic ArrayOfNameableValuable
-public protocol NameableValuableArray: JsonCodableToFolderP {
+public protocol NameableValuableArray: JsonCodableToFolderP, Persistable {
     associatedtype Item: Codable, Identifiable, NameableValuable
     
     // MARK: - Properties
@@ -86,10 +86,6 @@ public protocol NameableValuableArray: JsonCodableToFolderP {
 // implémentation par défaut
 public extension NameableValuableArray {
 
-    var persistenceState: PersistenceState {
-        persistenceSM.currentState
-    }
-
     var currentValue      : Double {
         items.sumOfValues(atEndOf : Date.now.year)
     }
@@ -103,7 +99,7 @@ public extension NameableValuableArray {
                       keyDecodingStrategy  : .useDefaultKeys)
 
         // initialiser la StateMachine
-        initializeStateMachine()
+        persistenceSM = PersistenceStateMachine()
 
         // exécuter la transition
         persistenceSM.process(event: .load)
@@ -119,7 +115,7 @@ public extension NameableValuableArray {
                                        keyDecodingStrategy  : .useDefaultKeys)
 
         // initialiser la StateMachine
-        initializeStateMachine()
+        persistenceSM = PersistenceStateMachine()
 
         // exécuter la transition
         persistenceSM.process(event: .load)
@@ -136,28 +132,6 @@ public extension NameableValuableArray {
         }
     }
     
-    /// Définir les transitions de la StateMachine de persistence
-    private mutating func initializeStateMachine() {
-        persistenceSM = PersistenceStateMachine(initialState: .created)
-
-        // initialiser la StateMachine
-        let transition1 = PersistenceTransition(with : .load,
-                                                from : .created,
-                                                to   : .synced)
-        persistenceSM.add(transition: transition1)
-        let transition2 = PersistenceTransition(with : .modify,
-                                                from : .synced,
-                                                to   : .modified)
-        persistenceSM.add(transition: transition2)
-        let transition3 = PersistenceTransition(with : .save,
-                                                from : .modified,
-                                                to   : .synced)
-        persistenceSM.add(transition: transition3)
-        #if DEBUG
-        persistenceSM.enableLogging = true
-        #endif
-    }
-
     func saveAsJSON(fileNamePrefix  : String,
                     toFolder folder : Folder) throws {
         // encode to JSON file

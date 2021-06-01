@@ -34,7 +34,7 @@ struct DossierSummaryView: View {
                             }
                         })
                         .capsuleButtonStyle()
-                        .disabled(!savable(activeDossier))
+                        .disabled(!savable())
                 }
             }
         } else {
@@ -42,7 +42,7 @@ struct DossierSummaryView: View {
         }
     }
     
-    private func savable(_ activeDossier: Dossier) -> Bool {
+    private func savable() -> Bool {
         family.isModified ||
         patrimoine.isModified
     }

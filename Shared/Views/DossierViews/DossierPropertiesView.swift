@@ -8,12 +8,19 @@
 import SwiftUI
 
 struct DossierPropertiesView: View {
+    @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var patrimoine : Patrimoin
     var dossier: Dossier
     var sectionHeader: String
-    
+
     var body: some View {
         Section(header: Text(sectionHeader)) {
             Text(dossier.name).font(.headline)
+            if dossier.isActive {
+                LabeledText(label: "Etat",
+                            text : savable() ? "Modifié" : "Synchronisé")
+            }
             if dossier.note.isNotEmpty {
                 Text(dossier.note).multilineTextAlignment(.leading)
             }
@@ -24,6 +31,11 @@ struct DossierPropertiesView: View {
             LabeledText(label: "Nom du directory associé",
                         text : dossier.folderName)
         }
+    }
+    
+    private func savable() -> Bool {
+        family.isModified ||
+            patrimoine.isModified
     }
 }
 

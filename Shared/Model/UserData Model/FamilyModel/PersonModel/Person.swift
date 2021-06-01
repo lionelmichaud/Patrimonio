@@ -9,6 +9,12 @@
 import Foundation
 import AppFoundation
 import HumanLifeModel
+import NamedValue
+
+// MARK: - Tableau de Person
+
+typealias PersonArray = [Person]
+
 
 // MARK: - Person
 class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible {
