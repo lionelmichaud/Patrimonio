@@ -14,7 +14,6 @@ import AppFoundation
 /// Catégories de dépenses
 enum LifeExpenseCategory: Int, PickableEnum, Codable {
     case abonnements
-    case vehicules
     case autres
     case cadeaux
     case educationFamille
@@ -22,6 +21,7 @@ enum LifeExpenseCategory: Int, PickableEnum, Codable {
     case loisirs
     case sante
     case services
+    case vehicules
     case vieQuotidienne
     case voyageTransport
     

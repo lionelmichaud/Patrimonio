@@ -75,7 +75,18 @@ struct DossierSummaryView: View {
 }
 
 struct DossierSummaryView_Previews: PreviewProvider {
+    static let dataStore  = Store()
+    static var uiState    = UIState()
+    static var family     = Family()
+    static var patrimoine = Patrimoin()
+    static var simulation = Simulation()
+
     static var previews: some View {
         DossierSummaryView()
+            .environmentObject(dataStore)
+            .environmentObject(uiState)
+            .environmentObject(family)
+            .environmentObject(patrimoine)
+            .environmentObject(simulation)
     }
 }

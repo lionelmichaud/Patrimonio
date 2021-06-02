@@ -9,8 +9,9 @@
 import SwiftUI
 
 struct SimulationView: View {
-    @EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var uiState    : UIState
+    @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var simulation : Simulation
+    @EnvironmentObject private var uiState    : UIState
     
     enum PushedItem {
         case lastScenarioUsed
@@ -22,41 +23,39 @@ struct SimulationView: View {
     
     var body: some View {
         NavigationView {
+            /// Primary view
             List {
                 // calcul de simulation
-                NavigationLink(destination : ComputationView(),
-                               tag         : .computationView,
-                               selection   : $uiState.simulationViewState.selectedItem) {
-                    Text("Calculs")
+                ComputationSectionView()
+                
+                if dataStore.activeDossier != nil {
+                    // affichage du scénario utilisé pour la simulation
+                    ScenarioSectionView()
+                    
+                    // affichage des résultats des KPIs
+                    KpiSectionView()
+                    
+                    // affichage des résultats graphiques
+                    ChartsSectionView()
+                    
+                    // affichage des autres résultats
+                    SuccessionsSectionView()
                 }
-                .isDetailLink(true)
-                
-                // affichage du scénario utilisé pour la simulation
-                ScenarioSectionView()
-                
-                // affichage des résultats des KPIs
-                KpiSectionView()
-
-                // affichage des résultats graphiques
-                ChartsSectionView()
-                
-                // affichage des autres résultats
-                SuccessionsSectionView()
-                
             }
             //.defaultSideBarListStyle()
             .listStyle(SidebarListStyle())
             .environment(\.horizontalSizeClass, .regular)
             .navigationTitle("Simulation")
             
-            // vue par défaut
-            //SimulationHeaderView()
+            /// vue par défaut
+            ComputationView()
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
 }
 
 struct SimulationView_Previews: PreviewProvider {
+    static let dataStore  = Store()
     static var uiState    = UIState()
     static var family     = Family()
     static var patrimoine = Patrimoin()
@@ -67,6 +66,7 @@ struct SimulationView_Previews: PreviewProvider {
                            withFamily: family, withPatrimoine: patrimoine)
         return
             SimulationView()
+            .environmentObject(dataStore)
             .environmentObject(uiState)
             .environmentObject(family)
             .environmentObject(patrimoine)

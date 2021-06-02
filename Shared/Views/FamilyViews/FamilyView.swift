@@ -9,10 +9,11 @@
 import SwiftUI
 
 struct FamilyView: View {
-    @EnvironmentObject var family     : Family
-    @EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var uiState    : UIState
+    @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var simulation : Simulation
+    @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var uiState    : UIState
     @State var showingSheet = false
     
     var body: some View {
@@ -22,8 +23,10 @@ struct FamilyView: View {
                 // entête
                 FamilyHeaderView()
                 
-                // liste des membres de la famille
-                FamilySectionView(showingSheet: $showingSheet)
+                if dataStore.activeDossier != nil {
+                    // liste des membres de la famille
+                    FamilySectionView(showingSheet: $showingSheet)
+                }
             }
             //.defaultSideBarListStyle()
             .listStyle(SidebarListStyle())
@@ -32,6 +35,7 @@ struct FamilyView: View {
             .toolbar {
                 EditButton()
             }
+            
             /// vue par défaut
             FamilySummaryView()
         }
@@ -57,6 +61,7 @@ struct FamilyHeaderView: View {
 }
 
 struct FamilyView_Previews: PreviewProvider {
+    static let dataStore  = Store()
     static let family     = Family()
     static let simulation = Simulation()
     static let patrimoine = Patrimoin()
@@ -64,6 +69,7 @@ struct FamilyView_Previews: PreviewProvider {
     
     static var previews: some View {
         FamilyView()
+            .environmentObject(dataStore)
             .environmentObject(family)
             .environmentObject(simulation)
             .environmentObject(patrimoine)

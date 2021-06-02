@@ -30,7 +30,7 @@ struct ModelEconomyView: View {
                     BetaRandomizerView(randomizer: Economy.model.randomizers.stockRate)
             }
         }
-        .navigationTitle("Fonctions de Distribution")
+        .navigationTitle("Modèle Economique: Fonctions de Distribution")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

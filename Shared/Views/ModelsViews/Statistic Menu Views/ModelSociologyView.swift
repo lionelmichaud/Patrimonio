@@ -32,7 +32,7 @@ struct ModelSociologyView: View {
                     BetaRandomizerView(randomizer: SocioEconomy.model.expensesUnderEvaluationRate)
             }
         }
-        .navigationTitle("Fonctions de Distribution")
+        .navigationTitle("Modèle Sociologique: Fonctions de Distribution")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

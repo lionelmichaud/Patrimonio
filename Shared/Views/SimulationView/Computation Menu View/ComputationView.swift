@@ -129,50 +129,54 @@ struct ComputationView: View {
     }
     
     var body: some View {
-        ComputationForm()
-            .navigationTitle("Calcul")
-            // barre de boutons
-            .toolbar {
-                // bouton Exporter fichiers CSV
-                ToolbarItem(placement: .automatic) {
-                    Button(action: saveSimulation,
-                           label: {
-                            HStack(alignment: .center) {
-                                if busySaveWheelAnimate {
-                                    ProgressView()
+        if dataStore.activeDossier != nil {
+            ComputationForm()
+                .navigationTitle("Calculs")
+                // barre de boutons
+                .toolbar {
+                    // bouton Exporter fichiers CSV
+                    ToolbarItem(placement: .automatic) {
+                        Button(action: saveSimulation,
+                               label: {
+                                HStack(alignment: .center) {
+                                    if busySaveWheelAnimate {
+                                        ProgressView()
+                                    }
+                                    Image(systemName: "square.and.arrow.up")
+                                        .imageScale(.large)
+                                    Text("Exporter")
                                 }
-                                Image(systemName: "square.and.arrow.up")
-                                    .imageScale(.large)
-                                Text("Exporter")
-                            }
-                           }
-                    )
-                    .capsuleButtonStyle()
-//                    .opacity(!savingIsPossible() ? 0.5 : 1.0)
-                    .disabled(!savingIsPossible())
+                               }
+                        )
+                        .capsuleButtonStyle()
+                        //                    .opacity(!savingIsPossible() ? 0.5 : 1.0)
+                        .disabled(!savingIsPossible())
+                    }
+                    // bouton Calculer
+                    ToolbarItem(placement: .primaryAction) {
+                        Button(action: computeSimulation,
+                               label: {
+                                HStack(alignment: .center) {
+                                    //                                if busyCompWheelAnimate {
+                                    //                                    ProgressView()
+                                    //                                }
+                                    Image(systemName: "function")
+                                        .imageScale(.large)
+                                    Text("Calculer")
+                                }
+                               }
+                        )
+                        .capsuleButtonStyle()
+                    }
                 }
-                // bouton Calculer
-                ToolbarItem(placement: .primaryAction) {
-                    Button(action: computeSimulation,
-                           label: {
-                            HStack(alignment: .center) {
-//                                if busyCompWheelAnimate {
-//                                    ProgressView()
-//                                }
-                                Image(systemName: "function")
-                                    .imageScale(.large)
-                                Text("Calculer")
-                            }
-                           }
-                    )
-                    .capsuleButtonStyle()
-                }
-            }
-            .alert(item: $alertItem, content: myAlert)
+                .alert(item: $alertItem, content: myAlert)
+        } else {
+            NoLoadedDossierView()
+        }
     }
     
     func savingIsPossible() -> Bool {
-        simulation.isComputed && !simulation.isSaved && (dataStore.activeDossier != nil)
+        simulation.isComputed && !simulation.isSaved
     }
     
     func computeSimulation() {

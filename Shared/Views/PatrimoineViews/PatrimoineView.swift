@@ -13,34 +13,38 @@ struct PatrimoineView: View {
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var dataStore  : Store
     @State private var alertItem              : AlertItem?
-
+    
     var body: some View {
         NavigationView {
-            Group {
-                Button("Réinitialiser",
-                       action: reinitialize)
-                    .capsuleButtonStyle()
-                    .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
-                List {
-                    // entête
-                    PatrimoineHeaderView()
+            /// Primary view
+            List {
+                // entête
+                PatrimoineHeaderView()
+                
+                if dataStore.activeDossier != nil {
+                    Button("Réinitialiser",
+                           action: reinitialize)
+                        //.capsuleButtonStyle()
+                        .disabled(dataStore.activeDossier!.folder == nil)
+                    
+                    PatrimoineTotalView()
                     
                     // actifs
                     AssetView()
-
+                    
                     // passifs
                     LiabilityView()
                 }
-                .defaultSideBarListStyle()
-                //.listStyle(GroupedListStyle())
-                .environment(\.horizontalSizeClass, .regular)
             }
+            .defaultSideBarListStyle()
+            //.listStyle(GroupedListStyle())
+            .environment(\.horizontalSizeClass, .regular)
             .navigationTitle("Patrimoine")
             .toolbar {
                 EditButton()
             }
 
-            // vue par défaut
+            /// vue par défaut
             PatrimoineSummaryView()
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
@@ -53,7 +57,27 @@ struct PatrimoineView: View {
         } catch {
             self.alertItem = AlertItem(title         : Text("Le chargement a échoué"),
                                        dismissButton : .default(Text("OK")))
+            
+        }
+    }
+}
 
+struct PatrimoineTotalView: View {
+    @EnvironmentObject private var patrimoine : Patrimoin
+
+    var body: some View {
+        Section {
+            HStack {
+                Text("Actif Net")
+                    .font(Font.system(size: 17,
+                                      design: Font.Design.default))
+                    .fontWeight(.bold)
+                Spacer()
+                Text(patrimoine.value(atEndOf: Date.now.year).€String)
+                    .font(Font.system(size: 17,
+                                      design: Font.Design.default))
+            }
+            .listRowBackground(ListTheme.rowsBaseColor)
         }
     }
 }
@@ -62,26 +86,11 @@ struct PatrimoineHeaderView: View {
     @EnvironmentObject var patrimoine: Patrimoin
     
     var body: some View {
-        Group {
-            Section {
-                NavigationLink(destination: PatrimoineSummaryView()) {
-                    Text("Résumé").fontWeight(.bold)
-                }.isDetailLink(true)
+        Section {
+            NavigationLink(destination: PatrimoineSummaryView()) {
+                Text("Résumé").fontWeight(.bold)
+            }.isDetailLink(true)
             }
-            Section {
-                HStack {
-                    Text("Actif Net")
-                        .font(Font.system(size: 17,
-                                          design: Font.Design.default))
-                        .fontWeight(.bold)
-                    Spacer()
-                    Text(patrimoine.value(atEndOf: Date.now.year).€String)
-                        .font(Font.system(size: 17,
-                                          design: Font.Design.default))
-                }
-                .listRowBackground(ListTheme.rowsBaseColor)
-            }
-        }
     }
 }
 

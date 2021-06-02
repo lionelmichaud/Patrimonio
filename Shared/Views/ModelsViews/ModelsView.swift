@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ModelsView: View {
-    @EnvironmentObject var uiState: UIState
+    @EnvironmentObject private var uiState: UIState
     
     enum PushedItem {
         case deterministicModel, humanModel, economyModel, sociologyModel, statisticsAssistant
@@ -19,8 +19,14 @@ struct ModelsView: View {
         NavigationView {
             /// Primary view
             List {
-                // liste des items de la side bar
-                ModelSectionsView()
+                // Modèle Déterministique
+                DeterministicSectionView()
+                
+                // Modèle Statistique
+                StatisticSectionView()
+                
+                // Assistant modèle statistique
+                RandomizerAssistantSectionView()
             }
             //.defaultSideBarListStyle()
             .listStyle(SidebarListStyle())
@@ -28,13 +34,14 @@ struct ModelsView: View {
             .navigationTitle("Modèles")
             
             /// vue par défaut
-            ScenarioSummaryView()
+            ModelDeterministicView()
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
 }
 
 struct ModelsView_Previews: PreviewProvider {
+    static let dataStore  = Store()
     static var uiState    = UIState()
     static var family     = Family()
     static var patrimoine = Patrimoin()
@@ -42,6 +49,7 @@ struct ModelsView_Previews: PreviewProvider {
     
     static var previews: some View {
         ModelsView()
+            .environmentObject(dataStore)
             .environmentObject(uiState)
             .environmentObject(family)
             .environmentObject(patrimoine)

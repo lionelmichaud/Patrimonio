@@ -42,8 +42,8 @@ struct ModelDeterministicView: View {
                                 percent : SocioEconomy.model.expensesUnderEvaluationRate.value(withMode: .deterministic)/100.0)
                 }
             }
-            .navigationTitle("Résumé")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Modèle Déterministe")
+            //.navigationBarTitleDisplayMode(.inline)
             .onAppear(perform: { })
             .onDisappear(perform: { })
         }

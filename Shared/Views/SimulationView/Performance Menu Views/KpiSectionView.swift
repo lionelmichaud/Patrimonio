@@ -14,15 +14,7 @@ struct KpiSectionView: View {
     @State private var isKpiExpanded  : Bool = false
 
     var body: some View {
-        if !simulation.isComputed {
-            // pas de données à afficher
-            VStack(alignment: .leading) {
-                Text("Aucune données à présenter")
-                Text("Calculer une simulation au préalable").foregroundColor(.red)
-                Spacer()
-            }
-            
-        } else {
+        if simulation.isComputed {
             Section(header: Text("Performance")) {
                 // synthèse des KPIs
                 DisclosureGroup(isExpanded: $isKpiExpanded,

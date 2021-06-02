@@ -49,7 +49,7 @@ class UIState: ObservableObject {
     
     // MARK: - Etat de la vue Scenario
     struct ModelViewState {
-        var selectedItem: ModelsView.PushedItem?
+        var selectedItem: ModelsView.PushedItem? = .deterministicModel
     }
     
     // MARK: - Etat de la vue Simulation

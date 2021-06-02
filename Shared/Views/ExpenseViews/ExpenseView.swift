@@ -9,7 +9,8 @@
 import SwiftUI
 
 struct ExpenseView: View {
-    @EnvironmentObject var family: Family
+    @EnvironmentObject private var dataStore : Store
+    @EnvironmentObject private var family    : Family
     let simulationReseter: CanResetSimulation
 
     private var categories: [(LifeExpenseCategory, LifeExpenseArray)] {
@@ -18,10 +19,13 @@ struct ExpenseView: View {
     
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading) {
-                List {
-                    // résumé
-                    ExpenseHeaderView()
+            /// Primary view
+            List {
+                // résumé
+                ExpenseHeaderView()
+                
+                if dataStore.activeDossier != nil {
+                    ExpenseTotalView()
                     
                     // pour chaque catégorie de dépense, afficher la liste des dépenses
                     ForEach(categories, id: \.0) { (category, expenses) in
@@ -30,11 +34,10 @@ struct ExpenseView: View {
                                               expenses          : expenses)
                     }
                 }
-                .defaultSideBarListStyle()
-                //.listStyle(GroupedListStyle())
-                //.environment(\.horizontalSizeClass, .regular)
-                
             }
+            .defaultSideBarListStyle()
+            //.listStyle(GroupedListStyle())
+            .environment(\.horizontalSizeClass, .regular)
             .navigationTitle("Dépenses")
             .toolbar {
                 ToolbarItem(placement: .automatic) {
@@ -43,38 +46,43 @@ struct ExpenseView: View {
                     #endif
                 }
             }
-
-            // vue par défaut
+            
+            /// vue par défaut
             ExpenseSummaryView()
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
 }
 
-struct ExpenseHeaderView: View {
-    @EnvironmentObject var family: Family
+struct ExpenseTotalView: View {
+    @EnvironmentObject private var family    : Family
 
     var body: some View {
-        Group {
-            Section {
-                NavigationLink(destination: ExpenseSummaryView()) {
-                    Text("Résumé").fontWeight(.bold)
-                }
-                .isiOSDetailLink(true)
+        Section {
+            HStack {
+                Text("Total")
+                    .font(Font.system(size: 21,
+                                      design: Font.Design.default))
+                    .fontWeight(.bold)
+                Spacer()
+                Text(family.expenses.value(atEndOf: Date.now.year).€String)
+                    .font(Font.system(size: 21,
+                                      design: Font.Design.default))
             }
-            Section {
-                HStack {
-                    Text("Total")
-                        .font(Font.system(size: 21,
-                                          design: Font.Design.default))
-                        .fontWeight(.bold)
-                    Spacer()
-                    Text(family.expenses.value(atEndOf: Date.now.year).€String)
-                        .font(Font.system(size: 21,
-                                          design: Font.Design.default))
-                }
-                .listRowBackground(ListTheme.rowsBaseColor)
+            .listRowBackground(ListTheme.rowsBaseColor)
+        }
+    }
+}
+
+struct ExpenseHeaderView: View {
+    @EnvironmentObject var family: Family
+    
+    var body: some View {
+        Section {
+            NavigationLink(destination: ExpenseSummaryView()) {
+                Text("Résumé").fontWeight(.bold)
             }
+            .isiOSDetailLink(true)
         }
     }
 }
@@ -148,6 +156,7 @@ struct ExpenseView_Previews: PreviewProvider {
         }
     }
     static var simulationReseter = FakeSimulationReseter()
+    static let dataStore  = Store()
     static var family     = Family()
     static var patrimoine = Patrimoin()
     static var uiState    = UIState()
@@ -155,6 +164,7 @@ struct ExpenseView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             ExpenseView(simulationReseter: simulationReseter)
+                .environmentObject(dataStore)
                 .environmentObject(family)
                 .environmentObject(patrimoine)
                 .environmentObject(uiState)
