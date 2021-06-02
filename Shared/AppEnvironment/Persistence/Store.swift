@@ -18,6 +18,7 @@ class Store: ObservableObject {
         dossiers.first(where: { $0.isActive })
     }
 
+    /// Charger la liste des Dossiers
     init() {
         do {
             var loadedDossiers = DossierArray()
@@ -30,17 +31,6 @@ class Store: ObservableObject {
         }
     }
 
-    /// Charger la liste des Dossiers
-//    func load() throws {
-//        do {
-//            try dossiers.load()
-//            failedToLoadDossiers = false
-//        } catch {
-//            failedToLoadDossiers = true
-//            throw error
-//        }
-//    }
-    
     /// Activer le dossier situé à l'index 'index'.
     /// Désativer tous les autres.
     func activate(dossierAtIndex index: Int) {

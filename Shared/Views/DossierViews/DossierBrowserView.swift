@@ -42,21 +42,29 @@ struct DossierBrowserView: View {
             .onMove(perform: moveDossier)
             .listStyle(SidebarListStyle())
         }
+        .alert(item: $alertItem, content: myAlert)
     }
     
     func activate(dossierIndex: Int) {
         dataStore.activate(dossierAtIndex: dossierIndex)
     }
-
+    
     func deleteDossier(at offsets: IndexSet) {
-        do {
-            try dataStore.deleteDossier(atOffsets: offsets)
-        } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de la suppression du dossier"),
-                                       dismissButton : .default(Text("OK")))
-        }
+        self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
+                                   message       : Text("La destruction du dossier est irréversible"),
+                                   primaryButton : .destructive(Text("Supprimer"),
+                                                            action: {
+                                                                /// insert alert 1 action here
+                                                                do {
+                                                                    try dataStore.deleteDossier(atOffsets: offsets)
+                                                                } catch {
+                                                                    self.alertItem = AlertItem(title         : Text("Echec de la suppression du dossier"),
+                                                                                                dismissButton : .default(Text("OK")))
+                                                                }
+                                                            }),
+                                   secondaryButton: .cancel())
     }
-
+    
     func moveDossier(from indexes: IndexSet, to destination: Int) {
         dataStore.dossiers.move(fromOffsets: indexes, toOffset: destination)
     }

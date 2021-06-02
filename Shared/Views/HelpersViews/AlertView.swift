@@ -43,16 +43,21 @@ struct ContentWithAlertView: View {
 
             /// button 1
             Button(action: {
-                self.alertItem = AlertItem(title: Text("I'm an alert"), message: Text("Are you sure about this?"), primaryButton: .default(Text("Yes"), action: {
-                    /// insert alert 1 action here
-                }), secondaryButton: .cancel())
+                self.alertItem = AlertItem(title         : Text("I'm an alert"),
+                                           message       : Text("Are you sure about this?"),
+                                           primaryButton : .default(Text("Yes"),
+                                                                   action: {
+                                                                    /// insert alert 1 action here
+                                                                   }),
+                                           secondaryButton: .cancel())
             }, label: {
                 Text("SHOW ALERT 1")
             })
-
+            
             /// button 2
             Button(action: {
-                self.alertItem = AlertItem(title: Text("I'm another alert"), dismissButton: .default(Text("OK")))
+                self.alertItem = AlertItem(title         : Text("I'm another alert"),
+                                           dismissButton : .default(Text("OK")))
             }, label: {
                 Text("SHOW ALERT 2")
             })

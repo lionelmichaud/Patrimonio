@@ -49,6 +49,28 @@ struct DossierDetailView: View {
                 .environmentObject(self.dataStore)
         }
         .toolbar {
+            /// Bouton: Charger
+            ToolbarItem(placement: .primaryAction) {
+                Button(
+                    action : activate,
+                    label  : {
+                        HStack {
+                            if dossier.isActive {
+                                Image(systemName: "arrowshape.turn.up.backward")
+                                    .imageScale(.large)
+                                Text("Revenir")
+
+                            } else {
+                                Image(systemName: "square.and.arrow.down")
+                                    .imageScale(.large)
+                                Text("Charger")
+
+                            }
+                        }
+                    })
+                    .capsuleButtonStyle()
+                    .disabled(!activable())
+            }
             /// Bouton: Sauvegarder
             ToolbarItem(placement: .automatic) {
                 Button(
@@ -63,20 +85,6 @@ struct DossierDetailView: View {
                     .capsuleButtonStyle()
                     .disabled(!savable())
             }
-            /// Bouton: Charger
-            ToolbarItem(placement: .primaryAction) {
-                Button(
-                    action : activate,
-                    label  : {
-                        HStack {
-                            Image(systemName: "square.and.arrow.down")
-                                .imageScale(.large)
-                            Text("Charger")
-                        }
-                    })
-                    .capsuleButtonStyle()
-                    .disabled(dossier.isActive)
-            }
             /// Bouton: Dupliquer
             ToolbarItem(placement: .automatic) {
                 Button(
@@ -89,7 +97,6 @@ struct DossierDetailView: View {
                         }
                     })
                     .capsuleButtonStyle()
-                    //.disabled(patrimoine.isModified)
             }
             /// Bouton: Modifier
             ToolbarItem(placement: .automatic) {
@@ -112,11 +119,12 @@ struct DossierDetailView: View {
        }
     }
 
-    private func changeOccured() -> Bool {
-        // TODO: - A compléter
-        return false
+    /// True si le dossier est inactif ou s'il est actif et à été modifié
+    private func activable() -> Bool {
+        !dossier.isActive || savable()
     }
     
+    /// True si le dossier est actif et à été modifié
     private func savable() -> Bool {
         dossier.isActive && (family.isModified || patrimoine.isModified)
     }
@@ -137,6 +145,7 @@ struct DossierDetailView: View {
             self.alertItem = AlertItem(title         : Text("Echec de l'enregistrement du dossier"),
                                        dismissButton : .default(Text("OK")))
         }
+
         // enregistrer les données utilisateur depuis le Dossier
         do {
             try family.saveAsJSON(toFolder: folder)
@@ -148,22 +157,34 @@ struct DossierDetailView: View {
         }
     }
 
-    /// Rendre le Dossier sélectionné actif et charger ses données dans le modèle
+    /// si le dossier est déjà actif et a été modifié alors prévenir que les modif vont être écrasées
     private func activate() {
+        if dossier.isActive {
+        self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
+                                   message       : Text("Toutes les modifications seront perdues"),
+                                   primaryButton : .destructive(Text("Revenir"),
+                                                                action: load),
+                                   secondaryButton: .cancel())
+        } else {
+            load()
+        }
+    }
+
+    /// Rendre le Dossier sélectionné actif et charger ses données dans le modèle
+    private func load() {
         guard let dossierIndex = dataStore.dossiers.firstIndex(of: dossier) else {
             self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
                                        dismissButton : .default(Text("OK")))
             return
-
         }
-        
+
         // vérifier l'existence du Folder associé au Dossier
         guard let folder = dossier.folder else {
             self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
                                        dismissButton : .default(Text("OK")))
             return
         }
-        
+
         // charger les données utilisateur depuis le Dossier
         do {
             try patrimoine.loadFromJSON(fromFolder: folder)
@@ -176,7 +197,7 @@ struct DossierDetailView: View {
         // rendre le Dossier actif seulement si tout c'est bien passé
         dataStore.activate(dossierAtIndex: dossierIndex)
     }
-    
+
     /// Dupliquer le Dossier sélectionné
     private func duplicate() {
         do {
