@@ -8,6 +8,7 @@
 
 import Foundation
 import FiscalModel
+import Files
 
 // MARK: - Société Civile Immobilière (SCI)
 struct SCI {
@@ -18,20 +19,38 @@ struct SCI {
     var note        : String
     var scpis       : ScpiArray
     var bankAccount : Double
-    
+    var isModified      : Bool {
+        return scpis.persistenceState == .modified
+    }
     // MARK: - Initializers
     
-    internal init(name                   : String,
+    /// Initialiser à vide
+    init() {
+        self.name        = ""
+        self.note        = ""
+        self.bankAccount = 0
+        self.scpis       = ScpiArray()
+    }
+    
+    /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    internal init(fromFolder folder      : Folder,
+                  name                   : String,
                   note                   : String,
-                  with personAgeProvider : PersonAgeProvider?) {
+                  with personAgeProvider : PersonAgeProvider?) throws {
         self.name  = name
         self.note  = note
-        self.scpis = ScpiArray(fileNamePrefix : "SCI_",
-                               with           : personAgeProvider)
+        try self.scpis = ScpiArray(fileNamePrefix : "SCI_",
+                                   fromFolder     : folder,
+                                   with           : personAgeProvider)
         self.bankAccount = 0
     }
     
     // MARK: - Methods
+
+    func saveAsJSON(toFolder folder: Folder) throws {
+        try scpis.saveAsJSON(toFolder: folder)
+    }
     
     /// Calls the given closure on each element in the sequence in the same order as a for-in loop
     func forEachOwnable(_ body: (Ownable) throws -> Void) rethrows {

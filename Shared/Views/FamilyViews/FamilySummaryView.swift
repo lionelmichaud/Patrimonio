@@ -16,14 +16,14 @@ struct FamilySummaryView: View {
     
     fileprivate func computeCurrentYearCashFlow() {
         // sauvegarder l'état initial du patrimoine pour y revenir à la fin de chaque run
-        patrimoine.save()
+        patrimoine.saveState()
         //simulation.reset(withPatrimoine: patrimoine)
         self.cashFlow = try? CashFlowLine(run           : 0,
                                           withYear      : Date.now.year,
                                           withFamily    : self.family,
                                           withPatrimoine: self.patrimoine,
                                           taxableIrppRevenueDelayedFromLastyear : 0)
-        patrimoine.restore()
+        patrimoine.restoreState()
     }
     
     var body: some View {
@@ -53,7 +53,7 @@ struct FamilySummarySection: View {
     var body: some View {
         Section(header: Text("MEMBRES")) {
             IntegerView(label   : "Nombre de membres",
-                        integer : family.members.count)
+                        integer : family.members.items.count)
             IntegerView(label   : "• Nombre d'adultes",
                         integer : family.nbOfAdults)
             IntegerView(label   : "• Nombre d'enfants",

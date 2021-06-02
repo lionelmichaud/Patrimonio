@@ -10,7 +10,8 @@ import SwiftUI
 struct DossiersView: View {
     @EnvironmentObject var uiState   : UIState
     @EnvironmentObject var dataStore : Store
-    @State var showingSheet = false
+    @State private var alertItem     : AlertItem?
+    @State private var showingSheet = false
 
     var body: some View {
         NavigationView {
@@ -34,9 +35,17 @@ struct DossiersView: View {
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
         // Vue modale de saisie d'un nouveau membre de la famille
+        .onAppear(perform: onAppear)
         .sheet(isPresented: $showingSheet) {
             DossierEditView(title: "Créer un nouveau dossier")
                 .environmentObject(self.dataStore)
+       }
+    }
+
+    func onAppear() {
+        if dataStore.failedToLoadDossiers {
+            self.alertItem = AlertItem(title         : Text("Echec du chargement des dossiers"),
+                                       dismissButton : .default(Text("OK")))
         }
     }
 }
@@ -44,7 +53,7 @@ struct DossiersView: View {
 struct DossierHeaderView: View {
     var body: some View {
         NavigationLink(destination: DossierSummaryView()) {
-            Text("Résumé").fontWeight(.bold)
+            Text("Dossier en cours d'utilisation")
         }
         .isDetailLink(true)
     }

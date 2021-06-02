@@ -43,13 +43,18 @@ struct PersonDetailView: View {
             PersonEditView(withInitialValueFrom: self.member)
         }
         .navigationTitle("Membre")
-        .navigationBarTitleDisplayModeInline()
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button(
                     action: { withAnimation { self.showingSheet = true } },
-                    label : { Image(systemName: "square.and.pencil") }
-                )
+                    label : {
+                        HStack {
+                            Image(systemName: "square.and.pencil")
+                                .imageScale(.large)
+                            Text("Modifier")
+                        }
+                    })
+                    .capsuleButtonStyle()
             }
         }
     }
@@ -60,8 +65,8 @@ struct PersonDetailView_Previews: PreviewProvider {
     static var patrimoin  = Patrimoin()
     static var simulation = Simulation()
     static var uiState    = UIState()
-    static var anAdult   = family.members.first!
-    static var aChild    = family.members.last!
+    static var anAdult   = family.members.items.first!
+    static var aChild    = family.members.items.last!
 
     static var previews: some View {
         Group {

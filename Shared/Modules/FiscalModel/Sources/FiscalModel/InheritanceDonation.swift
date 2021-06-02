@@ -95,7 +95,7 @@ public struct InheritanceDonation: Codable {
         case donationToSpouseSlicesIssue
     }
     
-    public struct Model: BundleCodable, Versionable {
+    public struct Model: JsonCodableToBundleP, Versionable {
         public static var defaultFileName: String = "InheritanceDonationModel.json"
         
         public var version              : Version
@@ -176,7 +176,7 @@ public struct LifeInsuranceInheritance: Codable {
         case heritageOfChildSlicesIssue
     }
     
-    struct Model: BundleCodable, Versionable, RateGridable {
+    struct Model: JsonCodableToBundleP, Versionable, RateGridable {
         static var defaultFileName: String = "LifeInsuranceInheritanceModel.json"
         
         var version : Version

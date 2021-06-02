@@ -12,6 +12,26 @@ import Files
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "Extensions.Files-Codable")
 
 public extension File {
+    func save(_ encodeData: Data) {
+        // impression debug
+        #if DEBUG
+        print("encoding to file: ", self.url)
+        #endif
+        if let jsonString = String(data: encodeData, encoding: .utf8) {
+            #if DEBUG
+            print(jsonString)
+            #endif
+        } else {
+            print("failed to convert encoded object to string")
+        }
+        do {
+            // sauvegader les données
+            try self.write(encodeData)
+        } catch {
+            customLog.log(level: .fault, "Failed to save data to file '\(self.name)'.")
+            fatalError("Failed to save data to file '\(self.name)' in bundle.")
+        }
+    }
     func saveAsJSON <T: Encodable> (_ object: T,
                                     dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate,
                                     keyEncodingStrategy : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) {
@@ -23,7 +43,7 @@ public extension File {
         if let encoded = try? encoder.encode(object) {
             // impression debug
             #if DEBUG
-            print("encoding to file: ", self.name)
+            print("encoding to file: ", self.url)
             #endif
             if let jsonString = String(data: encoded, encoding: .utf8) {
                 #if DEBUG
@@ -36,7 +56,7 @@ public extension File {
                 // sauvegader les données
                 try self.write(encoded)
             } catch {
-                customLog.log(level: .fault, "Failed to save data to file '\(self.name)' in bundle.")
+                customLog.log(level: .fault, "Failed to save data to file '\(self.name)'.")
                 fatalError("Failed to save data to file '\(self.name)' in bundle.")
             }
         } else {
@@ -52,13 +72,13 @@ public extension File {
                                       keyDecodingStrategy : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) -> T {
         // MARK: - DEBUG - A supprimer
         #if DEBUG
-        print("decoding file: ", self.name)
+        print("decoding file: ", self.url)
         #endif
         
         // load data from URL
-        guard let data = try? Data(contentsOf: url) else {
-            customLog.log(level: .fault, "Failed to load file '\(self.name)' from bundle.")
-            fatalError("Failed to load file '\(self.name)' from bundle.")
+        guard let data = try? self.read() else {
+            customLog.log(level: .fault, "Failed to load file '\(self.name)' from file '\(self.name)'.")
+            fatalError("Failed to load file '\(self.name)' from file '\(self.name)'.")
         }
         
         let decoder = JSONDecoder()
@@ -66,7 +86,7 @@ public extension File {
         decoder.keyDecodingStrategy = keyDecodingStrategy
         
         // decode JSON data
-        let failureString = "Failed to decode object of type '\(String(describing: T.self))' from file '\(self.name)' "
+        let failureString = "Failed to decode object of type '\(String(describing: T.self))' from file '\(self.name)'."
         do {
             return try decoder.decode(T.self, from: data)
         } catch DecodingError.keyNotFound(let key, let context) {

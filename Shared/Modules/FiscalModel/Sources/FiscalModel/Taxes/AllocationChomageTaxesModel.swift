@@ -18,7 +18,7 @@ public struct AllocationChomageTaxesModel: Codable {
         case outOfBounds
     }
     
-    struct Model: BundleCodable, Versionable {
+    struct Model: JsonCodableToBundleP, Versionable {
         static var defaultFileName : String = "AllocationChomageTaxesModel.json"
         var version       : Version
         let assiette      : Double // 98.5 // % du brut

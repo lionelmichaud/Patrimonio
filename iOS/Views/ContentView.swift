@@ -16,7 +16,6 @@ struct ContentView: View {
     @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var simulation : Simulation
     @SceneStorage("selectedTab") var selection = UIState.Tab.dossier
-    @State private var alertItem              : AlertItem?
 
     // MARK: - Properties
 
@@ -57,21 +56,13 @@ struct ContentView: View {
                 .tag(UIState.Tab.userSettings)
             
         }
-        .onAppear(perform: onAppear)
-    }
-    
-    func onAppear() {
-        if dataStore.failedToLoadDossiers {
-            self.alertItem = AlertItem(title         : Text("Echec du chargement des dossiers"),
-                                       dismissButton : .default(Text("OK")))
-        }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static let uiState    = UIState()
     static let family     = Family()
-    static let patrimoine = Patrimoin()
+    static let patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromApp())
     static let simulation = Simulation()
 
     static var previews: some View {

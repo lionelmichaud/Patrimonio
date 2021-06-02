@@ -287,8 +287,8 @@ struct ChildEditView : View {
 
 struct MemberEditView_Previews: PreviewProvider {
     static var family  = Family()
-    static var anAdult = family.members.first!
-    static var aChild  = family.members.last!
+    static var anAdult = family.members.items.first!
+    static var aChild  = family.members.items.last!
 
     static var previews: some View {
         Group {

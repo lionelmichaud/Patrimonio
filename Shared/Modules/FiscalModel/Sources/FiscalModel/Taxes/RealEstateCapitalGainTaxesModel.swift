@@ -21,7 +21,7 @@ public struct RealEstateCapitalGainTaxesModel: Codable {
         let prevDiscount : Double // 0.0 // % cumul des tranches précédentes
     }
     
-    struct Model: BundleCodable, Versionable {
+    struct Model: JsonCodableToBundleP, Versionable {
         static var defaultFileName : String = "RealEstateCapitalGainTaxesModel.json"
         var version         : Version
         let discountTravaux : Double // 15 // %

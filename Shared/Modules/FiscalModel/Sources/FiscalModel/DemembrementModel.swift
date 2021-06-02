@@ -28,7 +28,7 @@ public struct DemembrementModel: Codable {
         var nueProp  : Double // % [0, 1]
     }
     
-    struct Model: BundleCodable, Versionable {
+    struct Model: JsonCodableToBundleP, Versionable {
         static var defaultFileName : String = "DemembrementModel.json"
         var version : Version
         var grid    : [Slice]

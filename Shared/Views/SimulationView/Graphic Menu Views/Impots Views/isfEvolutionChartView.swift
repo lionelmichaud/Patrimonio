@@ -11,13 +11,14 @@ import SwiftUI
 import AppFoundation
 import FiscalModel
 import Charts // https://github.com/danielgindi/Charts.git
-import Disk // https://github.com/saoudrizwan/Disk.git
+import Files
 
-private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "UI.IsfEvolutionChartView")
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.IsfEvolutionChartView")
 
 // MARK: - Evolution de la Fiscalité dans le temps Charts Views
 
 struct IsfEvolutionChartView: View {
+    @EnvironmentObject var dataStore : Store
     @EnvironmentObject var simulation: Simulation
     @State private var showInfoPopover = false
     let popOverTitle   = "Contenu du graphique:"
@@ -37,8 +38,9 @@ struct IsfEvolutionChartView: View {
             .toolbar {
                 // sauvergarder l'image dans l'album photo
                 ToolbarItem(placement: .automatic) {
-                    Button(action: IsfLineChartView.saveImage,
+                    Button(action: { IsfLineChartView.saveImage(to: dataStore.activeDossier!.folder!) },
                            label : { Image(systemName: "camera.circle") })
+                        .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
                 }
                 // afficher info-bulle
                 ToolbarItem(placement: .automatic) {
@@ -62,37 +64,35 @@ struct IsfLineChartView: UIViewRepresentable {
 
     // MARK: - Type Properties
 
-    static var titleStatic      : String = "image"
-    static var uiView           : LineChartView?
-    static var snapshotNb       : Int = 0
+    static var titleStatic : String = "image"
+    static var uiView      : LineChartView?
+    static var snapshotNb  : Int    = 0
     
     // MARK: - Properties
 
     @Binding var socialAccounts : SocialAccounts
-    var title                   : String
 
     // MARK: - Initializer
 
     internal init(socialAccounts : Binding<SocialAccounts>, title: String) {
         IsfLineChartView.titleStatic = title
-        self.title                   = title
         self._socialAccounts         = socialAccounts
     }
     
     // MARK: - Type methods
 
     /// Sauvegarde de l'image en fichier  et dans l'album photo au format .PNG
-    static func saveImage() {
+    static func saveImage(to folder: Folder) {
         guard IsfLineChartView.uiView != nil else {
             #if DEBUG
-            print("error: nothing to save")
+            print("error: no chartView to save")
             #endif
             return
         }
         // construire l'image
         guard let image = IsfLineChartView.uiView!.getChartImage(transparent: false) else {
             #if DEBUG
-            print("error: nothing to save")
+            print("error: no image to save")
             #endif
             return
         }
@@ -101,21 +101,14 @@ struct IsfLineChartView: UIViewRepresentable {
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         
         // sauvegarder l'image dans le répertoire documents/image
-        let fileName = "IRPP-Evolution-" + String(IsfLineChartView.snapshotNb) + ".png"
+        let fileName = "ISF-Evolution-" + String(IsfLineChartView.snapshotNb) + ".png"
         do {
-            try Disk.save(image, to: .documents, as: AppSettings.shared.imagePath(titleStatic) + fileName)
-            // impression debug
-            #if DEBUG
-            Swift.print("saving image to file: ", AppSettings.shared.imagePath(titleStatic) + fileName)
-            #endif
-        } catch let error as NSError {
-            fatalError("""
-                Domain         : \(error.domain)
-                Code           : \(error.code)
-                Description    : \(error.localizedDescription)
-                Failure Reason : \(error.localizedFailureReason ?? "")
-                Suggestions    : \(error.localizedRecoverySuggestion ?? "")
-                """)
+            try PersistenceManager.saveToImagePath(to              : folder,
+                                                   fileName        : fileName,
+                                                   simulationTitle : titleStatic,
+                                                   image           : image)
+        } catch {
+            // do nothing
         }
         IsfLineChartView.snapshotNb += 1
     }
@@ -191,6 +184,7 @@ struct IsfLineChartView: UIViewRepresentable {
 
 struct IsfView_Previews: PreviewProvider {
     static var uiState    = UIState()
+    static var dataStore  = Store()
     static var family     = Family()
     static var patrimoine = Patrimoin()
     static var simulation = Simulation()
@@ -203,6 +197,7 @@ struct IsfView_Previews: PreviewProvider {
                 // calcul de simulation
                 NavigationLink(destination : IsfEvolutionChartView()
                                 .environmentObject(uiState)
+                                .environmentObject(dataStore)
                                 .environmentObject(family)
                                 .environmentObject(patrimoine)
                                 .environmentObject(simulation)

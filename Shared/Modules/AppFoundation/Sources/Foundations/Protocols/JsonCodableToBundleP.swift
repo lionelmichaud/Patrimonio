@@ -10,25 +10,23 @@ import Foundation
 
 // MARK: - Protocol apportant Decodable JSON à partir d'un fichier d'un Bundle de l'application
 
-public protocol BundleDecodable: Decodable {
+public protocol JsonDecodableFromBundleP: Decodable {
     
-    static var defaultFileName : String { get set }
-    
-    /// Lit le modèle dans un fichier JSON du Bundle Main
-    init(fromFile file        : String?,
+    /// Lit le modèle dans un fichier JSON du Bundle
+    init(fromFile file        : String,
          fromBundle bundle    : Bundle,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy,
          keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy)
 }
 
 // implémentation par défaut
-public extension BundleDecodable {
-    init(fromFile file        : String?                          = nil,
+public extension JsonDecodableFromBundleP {
+    init(fromFile file        : String,
          fromBundle bundle    : Bundle                           = Bundle.main,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy = .iso8601,
          keyDecodingStrategy  : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) {
         self = bundle.loadFromJSON(Self.self,
-                                   from                 : file ?? Self.defaultFileName,
+                                   from                 : file,
                                    dateDecodingStrategy : dateDecodingStrategy,
                                    keyDecodingStrategy  : keyDecodingStrategy)
     }
@@ -36,25 +34,23 @@ public extension BundleDecodable {
 
 // MARK: - Protocol apportant Encodable JSON à partir d'un fichier d'un Bundle de l'application
 
-public protocol BundleEncodable: Encodable {
-    
-    static var defaultFileName : String { get set }
+public protocol JsonEncodableToBundleP: Encodable {
     
     /// Encode l'objet dans un fichier stocké dans le Bundle Main de l'Application
-    func saveToBundle(toFile file          : String?,
-                      toBundle bundle      : Bundle,
-                      dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
-                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy)
+    func saveAsJSON(toFile file          : String,
+                    toBundle bundle      : Bundle,
+                    dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
+                    keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy)
 }
 
 // implémentation par défaut
-public extension BundleEncodable {
-    func saveToBundle(toFile file          : String?                          = nil,
-                      toBundle bundle      : Bundle                           = Bundle.main,
-                      dateEncodingStrategy : JSONEncoder.DateEncodingStrategy = .iso8601,
-                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) {
+public extension JsonEncodableToBundleP {
+    func saveAsJSON(toFile file          : String,
+                    toBundle bundle      : Bundle                           = Bundle.main,
+                    dateEncodingStrategy : JSONEncoder.DateEncodingStrategy = .iso8601,
+                    keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) {
         bundle.saveAsJSON(self,
-                          to                   : file ?? Self.defaultFileName,
+                          to                   : file,
                           dateEncodingStrategy : dateEncodingStrategy,
                           keyEncodingStrategy  : keyEncodingStrategy)
     }
@@ -62,4 +58,4 @@ public extension BundleEncodable {
 
 // MARK: - Protocol apportant Codable JSON à partir d'un fichier d'un Bundle de l'application
 
-public typealias BundleCodable = BundleEncodable & BundleDecodable
+public typealias JsonCodableToBundleP = JsonEncodableToBundleP & JsonDecodableFromBundleP

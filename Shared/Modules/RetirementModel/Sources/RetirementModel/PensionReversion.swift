@@ -14,7 +14,7 @@ public struct PensionReversion: Codable {
     // MARK: - Nested types
     
     // https://www.retraite.com/dossier-retraite/pension-de-reversion/evolution-de-la-pension-de-reversion-dans-la-reforme-des-retraites.html
-    public struct Model: BundleCodable, Versionable {
+    public struct Model: JsonCodableToBundleP, Versionable {
         public static var defaultFileName : String = "PensionReversionModel.json"
 
         public var version      : Version

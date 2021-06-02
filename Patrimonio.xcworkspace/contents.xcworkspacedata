@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Shared/Modules/Stateful">
+   </FileRef>
+   <FileRef
       location = "group:Shared/Modules/AppFoundation">
    </FileRef>
    <FileRef
@@ -24,6 +27,9 @@
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/RetirementModel">
+   </FileRef>
+   <FileRef
+      location = "group:Shared/Modules/FileAndFolder">
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/NamedValue">

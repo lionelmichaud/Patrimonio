@@ -8,6 +8,7 @@
 import Foundation
 import os
 import AppFoundation
+import FileAndFolder
 import Files
 
 private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
@@ -18,34 +19,55 @@ private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
 typealias DossierArray = [Dossier]
 extension DossierArray {
     mutating func load() throws {
-        self = try PersistenceManager.loadUserDossiers()
+        self = DossierArray()
+        try PersistenceManager.forEachUserFolder { folder in
+            let decodedDossier = try Dossier(fromFile             : FileNameCst.kDossierDescriptorFileName,
+                                             fromFolder           : folder,
+                                             dateDecodingStrategy : .iso8601)
+            let dossier = decodedDossier
+                .identifiedBy(UUID(uuidString: folder.name)!)
+                .pointingTo(folder)
+                .ownedByUser()
+            self.append(dossier)
+        }
     }
 }
 
 // MARK: - DOSSIER contenant tous les fichiers d'entrée et de sortie
 
 enum DossierError: String, Error {
-    case failedToResolveAppBundle     = "Failed to resolve App Bundle"
     case failedToDeleteDossier        = "Failed to delete Dossier"
     case inconsistencyOwnerFolderName = "Incohérence entre le nom du directory et le type de propriétaire du Dossier"
 }
 
-struct Dossier: Identifiable, Equatable {
+struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
     
     // MARK: - Static Properties
     
+    static let defaultFileName = FileNameCst.kDossierDescriptorFileName
+    
     // le dossier contenant les template à utiilser pour créer un nouveau dossier
-    static let templates : Dossier? = PersistenceManager.importTemplatesFromApp()
+    static let templates : Dossier? = {
+        do {
+            let templateFolder = try PersistenceManager.importTemplatesFromApp()
+            return Dossier()
+                .pointingTo(templateFolder)
+                .namedAs(templateFolder.name)
+                .ownedByApp()
+        } catch {
+            return nil
+        }
+    }()
     
     // MARK: - Properties
     
-    var id                        = UUID()
-    var folder                    : Folder?
-    var isActive                  = false
-    private var _name             : String?
-    private var _note             : String?
-    private var _dateCreation     : Date?
-    private var _isUserDossier    = true
+    var id                      = UUID()
+    var folder                  : Folder?
+    var isActive                = false
+    private var _name           : String?
+    private var _note           : String?
+    private var _dateCreation   : Date?
+    private var _isUserDossier  = true
 
     // MARK: - Computed Properties
     
@@ -88,7 +110,7 @@ struct Dossier: Identifiable, Equatable {
     }
     var folderName : String { folder?.name ?? "No folder" }
     
-    // MARK: - Initializer
+    // MARK: - Initializers
     
     init(id                          : UUID     = UUID(),
          pointingTo folder           : Folder?  = nil,
@@ -103,7 +125,11 @@ struct Dossier: Identifiable, Equatable {
         self._name             = name
         self._isUserDossier    = isUserDossier
     }
-    
+        
+    /// Créer un nouveau Dossier et l'enregistrer dans le répertoire `Documents`
+    /// - Parameters:
+    ///   - name: nom du nouveau Dossier
+    ///   - note: note du nouveau Dossier
     init(name : String,
          note : String) throws {
         let newID = UUID()
@@ -112,57 +138,24 @@ struct Dossier: Identifiable, Equatable {
         let targetFolder = try PersistenceManager.newUserFolder(withID: newID)
         
         // initialiser les propriétés
-        let newDossier = Dossier()
-            .identifiedBy(newID)
-            .pointingTo(targetFolder)
-            .namedAs(name)
-            .annotatedBy(note)
-            .createdOn(Date.now)
-            .ownedByUser()
-        
-        // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier
-        do {
-            try PersistenceManager.saveDescriptor(of: newDossier)
-        } catch {
-            try targetFolder.delete()
-            throw error
-        }
-        
         self.init(id            : newID,
                   pointingTo    : targetFolder,
                   with          : name,
                   annotatedBy   : note,
                   createdOn     : Date.now,
                   isUserDossier : true)
+
+        // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier
+        do {
+            try saveAsJSON(toFile               : Dossier.defaultFileName,
+                           toFolder             : targetFolder,
+                           dateEncodingStrategy : .iso8601)
+        } catch {
+            try targetFolder.delete()
+            throw error
+        }
     }
-    
-//    static func create(name : String,
-//                       note : String) throws -> Dossier {
-//        let newID = UUID()
-//        
-//        // créer le directory associé
-//        let targetFolder = try PersistenceManager.newUserFolder(withID: newID)
-//        
-//        // initialiser les propriétés
-//        let newDossier = Dossier()
-//            .identifiedBy(newID)
-//            .pointingTo(targetFolder)
-//            .namedAs(name)
-//            .annotatedBy(note)
-//            .createdOn(Date.now)
-//            .ownedByUser()
-//        
-//        // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier
-//        do {
-//            try PersistenceManager.saveDescriptor(of: newDossier)
-//        } catch {
-//            try targetFolder.delete()
-//            throw error
-//        }
-//        
-//        return newDossier
-//    }
-    
+        
     // MARK: - Builder methods
     
     func identifiedBy(_ id: UUID) -> Dossier {
@@ -230,7 +223,7 @@ struct Dossier: Identifiable, Equatable {
         let targetFolder = try PersistenceManager.newUserFolder(withID: newID,
                                                                 withContentDuplicatedFrom: folder)
         
-        // initialiser les propriétés
+        // initialiser les propriétés de la copie
         let newDossier = Dossier()
             .identifiedBy(newID)
             .pointingTo(targetFolder)
@@ -241,17 +234,18 @@ struct Dossier: Identifiable, Equatable {
         
         // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier clone
         do {
-            try PersistenceManager.saveDescriptor(of: newDossier)
+            try newDossier.saveAsJSON()
+            return newDossier
         } catch {
             try targetFolder.delete()
             throw error
         }
-        
-        return newDossier
     }
     
-    func update() throws {
-        try PersistenceManager.saveDescriptor(of: self)
+    func saveAsJSON() throws {
+        try saveAsJSON(toFile               : Dossier.defaultFileName,
+                       toFolder             : self.folder!,
+                       dateEncodingStrategy : .iso8601)
     }
 
     /// Supprimer le contenu du directory et le dossier associé
@@ -274,7 +268,7 @@ extension Dossier: CustomStringConvertible {
         return
             """
             Dossier: \(name)
-            Note: \(note)
+            Note:    \(note)
             Folder : \(folder?.description ?? "No folder")
 
             """
@@ -288,13 +282,4 @@ extension Dossier: Codable {
         case _dateCreation  = "date de création"
         case _isUserDossier = "dossier utilisateur"
     }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self._name, forKey: ._name)
-        try container.encode(self._note, forKey: ._note)
-        try container.encode(self._dateCreation, forKey: ._dateCreation)
-        try container.encode(self._isUserDossier, forKey: ._isUserDossier)
-    }
-    
 }

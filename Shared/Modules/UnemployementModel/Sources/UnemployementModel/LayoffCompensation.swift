@@ -45,7 +45,7 @@ public struct LayoffCompensation: Codable {
         var maxDiscount                        : Double = 246_816 // €
     }
     
-    public struct Model: BundleCodable, Versionable {
+    public struct Model: JsonCodableToBundleP, Versionable {
         public static var defaultFileName : String = "LayoffCompensationModel.json"
         
         public var version           : Version

@@ -12,9 +12,9 @@ import EconomyModel
 import SocioEconomyModel
 
 struct GridsView: View {
-    @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
-    
+    @EnvironmentObject var simulation : Simulation
+
     var body: some View {
         if simulation.mode == .random && simulation.isComputed {
             NavigationLink(destination : ShortGridView(),
@@ -30,15 +30,17 @@ struct GridsView: View {
 }
 
 struct ShortGridView: View {
+    @EnvironmentObject var dataStore  : Store
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var family     : Family
     @EnvironmentObject var patrimoine : Patrimoin
     @State private var filter         : RunFilterEnum       = .all
     @State private var sortCriteria   : KpiSortCriteriaEnum = .byRunNumber
     @State private var sortOrder      : SortingOrder        = .ascending
-    @Environment(\.presentationMode) var presentationMode
+//    @Environment(\.presentationMode) var presentationMode
     @State private var alertItem      : AlertItem?
     @State private var showInfoPopover = false
+    @State private var busySaveWheelAnimate : Bool = false
     let popOverTitle   = "Contenu du tableau:"
     let popOverMessage =
         """
@@ -120,8 +122,15 @@ struct ShortGridView: View {
                 // sauvegarde du tableau
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: saveGrid ) {
-                        Label("Enregistrer", systemImage: "square.and.arrow.up")
+                        HStack(alignment: .center) {
+                            if busySaveWheelAnimate {
+                                ProgressView()
+                            }
+                            Label("Enregistrer", systemImage: "square.and.arrow.up")
+                        }
                     }
+                    .disabled(dataStore.activeDossier == nil)
+
                 }
                 // afficher info-bulle
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -139,17 +148,33 @@ struct ShortGridView: View {
     }
     
     func saveGrid() {
+        defer {
+            // jouer le son à la fin de la sauvegarde
+            Simulation.playSound()
+        }
         // executer l'enregistrement en tâche de fond
+        guard let folder = dataStore.activeDossier?.folder else {
+            self.alertItem = AlertItem(title         : Text("La sauvegarde a échoué"),
+                                       dismissButton : .default(Text("OK")))
+            return
+        }
+        busySaveWheelAnimate.toggle()
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 /// - un fichier pour le tableau de résultat de Monté-Carlo
-                try simulation.monteCarloResultTable.save(simulationTitle: simulation.title)
+                try simulation.monteCarloResultTable.save(to              : folder,
+                                                          simulationTitle : simulation.title)
+                // mettre à jour les variables d'état dans le thread principal
+                DispatchQueue.main.async {
+                    self.busySaveWheelAnimate.toggle()
+                }
             } catch {
                 // mettre à jour les variables d'état dans le thread principal
                 DispatchQueue.main.async {
+                    self.busySaveWheelAnimate.toggle()
                     self.alertItem = AlertItem(title         : Text((error as? FileError)?.rawValue ?? "La sauvegarde a échoué"),
                                                dismissButton : .default(Text("OK")))
-                    self.presentationMode.wrappedValue.dismiss()
+//                    self.presentationMode.wrappedValue.dismiss()
                 }
             }
         }
@@ -300,6 +325,7 @@ struct ShortGridLineView : View {
 
 struct ShortGridView_Previews: PreviewProvider {
     static var uiState    = UIState()
+    static var dataStore  = Store()
     static var simulation = Simulation()
     static var family     = Family()
     static var patrimoine = Patrimoin()
@@ -312,9 +338,12 @@ struct ShortGridView_Previews: PreviewProvider {
         return
             NavigationView {
                 NavigationLink(destination: ShortGridView()
-                                .preferredColorScheme(.dark)
                                 .environmentObject(uiState)
-                                .environmentObject(simulation)) {
+                                .environmentObject(dataStore)
+                                .environmentObject(family)
+                                .environmentObject(patrimoine)
+                                .environmentObject(simulation)
+                ) {
                     Text("Synthèse")
                 }
                 .isDetailLink(true)

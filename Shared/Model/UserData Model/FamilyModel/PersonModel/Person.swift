@@ -9,6 +9,12 @@
 import Foundation
 import AppFoundation
 import HumanLifeModel
+import NamedValue
+import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
+
+// MARK: - Tableau de Person
+
+typealias PersonArray = [Person]
 
 // MARK: - Person
 class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible {
@@ -16,7 +22,7 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     // MARK: - Nested types
 
     private enum CodingKeys : String, CodingKey {
-        case sexe, name, birth_Date, age_Of_Death
+        case sexe, name, birth_Date
     }
     
     // MARK: - Type properties
@@ -54,15 +60,18 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     }
     var displayName           : String = ""
     var displayBirthDate      : String = ""
+
+    // MARK: - Conformance to CustomStringConvertible
+    
     var description: String {
         return """
         
         NAME: \(displayName)
         - seniority: \(String(describing: type(of: self)))
         - sexe:      \(sexe)
-        - birthdate: \(mediumDateFormatter.string(from: birthDate))
-        - age:       \(ageComponents.description)
-        - age of death:  \(ageOfDeath)
+        - birthdate: \(displayBirthDate)
+        - age:       \(String(describing: ageComponents))
+        - age of death:  \(ageOfDeath) ans
         - year of death: \(yearOfDeath)
 
         """
@@ -70,26 +79,6 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
 
     // MARK: - Initialization
 
-    // reads from JSON
-    required init(from decoder: Decoder) throws {
-        let container            = try decoder.container(keyedBy: CodingKeys.self)
-        self.name                = try container.decode(PersonNameComponents.self, forKey: .name)
-        displayName = personNameFormatter.string(from: name) // disSet not executed during init
-        self.sexe                = try container.decode(Sexe.self, forKey: .sexe)
-        self.birthDate           = try container.decode(Date.self, forKey: .birth_Date)
-        displayBirthDate = mediumDateFormatter.string(from: birthDate) // disSet not executed during init
-        self.birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate)
-        //        self.ageOfDeath          = try container.decode(Int.self, forKey: .age_Of_Death)
-        // initialiser avec la valeur moyenne déterministe
-        switch self.sexe {
-            case .male:
-                self.ageOfDeath = Int(HumanLife.model.menLifeExpectation.value(withMode: .deterministic))
-
-            case .female:
-                self.ageOfDeath = Int(HumanLife.model.womenLifeExpectation.value(withMode: .deterministic))
-        }
-    }
-        
     init(sexe       : Sexe,
          givenName  : String,
          familyName : String,
@@ -106,7 +95,28 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
         self.ageOfDeath          = ageOfDeath
     }
     
-    // MARK: - Methodes
+    // MARK: - Conformance to Decodable
+
+    // reads from JSON
+    required init(from decoder: Decoder) throws {
+        let container            = try decoder.container(keyedBy: CodingKeys.self)
+        self.name                = try container.decode(PersonNameComponents.self, forKey: .name)
+        displayName = personNameFormatter.string(from: name) // disSet not executed during init
+        self.sexe                = try container.decode(Sexe.self, forKey: .sexe)
+        self.birthDate           = try container.decode(Date.self, forKey: .birth_Date)
+        displayBirthDate = mediumDateFormatter.string(from: birthDate) // disSet not executed during init
+        self.birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate)
+        // initialiser avec la valeur moyenne déterministe
+        switch self.sexe {
+            case .male:
+                self.ageOfDeath = Int(HumanLife.model.menLifeExpectation.value(withMode: .deterministic))
+                
+            case .female:
+                self.ageOfDeath = Int(HumanLife.model.womenLifeExpectation.value(withMode: .deterministic))
+        }
+    }
+    
+    // MARK: - Conformance to Encodable
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -114,7 +124,9 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
         try container.encode(sexe, forKey: .sexe)
         try container.encode(birthDate, forKey: .birth_Date)
     }
-    
+
+    // MARK: - Methodes
+
     func age(atEndOf year: Int) -> Int {
         ageAtEndOfCurrentYear + (year - CalendarCst.thisYear)
     }

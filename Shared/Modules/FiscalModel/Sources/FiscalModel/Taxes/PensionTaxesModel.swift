@@ -20,7 +20,7 @@ public struct PensionTaxesModel: Codable {
         case outOfBounds
     }
     
-    public struct Model: BundleCodable, Versionable {
+    public struct Model: JsonCodableToBundleP, Versionable {
         public static var defaultFileName : String = "PensionTaxesModel.json"
         public var version           : Version
         let rebate            : Double // 10.0 // %

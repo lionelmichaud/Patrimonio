@@ -28,7 +28,7 @@ public struct Unemployment {
         }
     }
     
-    public struct Model: BundleCodable {
+    public struct Model: JsonCodableToBundleP {
         public static var defaultFileName : String = "UnemploymentModelConfig.json"
         public var indemniteLicenciement  : LayoffCompensation
         public var allocationChomage      : UnemploymentCompensation
@@ -36,7 +36,7 @@ public struct Unemployment {
     
     // MARK: - Static Properties
 
-    public static var model: Model = Model()
+    public static var model: Model = Model(fromFile: Model.defaultFileName)
     
     // MARK: - Static Methods
 

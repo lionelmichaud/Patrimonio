@@ -8,6 +8,7 @@
 
 import Foundation
 import FiscalModel
+import Files
 
 struct Liabilities {
     
@@ -18,22 +19,40 @@ struct Liabilities {
     var allOwnableItems : [(ownable: Ownable, category: LiabilitiesCategory)] {
         debts.items.sorted(by:<)
             .map { ($0, LiabilitiesCategory.debts) } +
-        loans.items.sorted(by:<)
+            loans.items.sorted(by:<)
             .map { ($0, LiabilitiesCategory.loans) }
     }
-    
+    var isModified      : Bool {
+        return
+            debts.persistenceState == .modified ||
+            loans.persistenceState == .modified
+    }
+
     // MARK: - Initializers
     
-    /// Charger les passifs stockés en fichier JSON
+    /// Initialiser à vide
+    init() {
+        self.debts = DebtArray()
+        self.loans = LoanArray()
+    }
+    
+    /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
     /// - Parameter family: famille à laquelle associer le patrimoine
     /// - Note: family est utilisée pour injecter dans chaque passif un délégué family.ageOf
     ///         permettant de calculer les valeurs respectives des Usufruits et Nu-Propriétés
-    internal init(with personAgeProvider: PersonAgeProvider?) {
-        self.debts = DebtArray(with: personAgeProvider)
-        self.loans = LoanArray(with: personAgeProvider)
+    internal init(fromFolder folder      : Folder,
+                  with personAgeProvider : PersonAgeProvider?) throws {
+        try self.debts = DebtArray(fromFolder: folder, with: personAgeProvider)
+        try self.loans = LoanArray(fromFolder: folder, with: personAgeProvider)
     }
     
     // MARK: - Methods
+
+    func saveAsJSON(toFolder folder: Folder) throws {
+        try debts.saveAsJSON(toFolder: folder)
+        try loans.saveAsJSON(toFolder: folder)
+    }
     
     func value(atEndOf year: Int) -> Double {
         loans.items.sumOfValues(atEndOf: year) +

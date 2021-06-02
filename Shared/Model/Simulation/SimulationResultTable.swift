@@ -10,7 +10,7 @@ import Foundation
 import AppFoundation
 import EconomyModel
 import SocioEconomyModel
-import Disk
+import Files
 
 // MARK: - KPI results
 
@@ -149,12 +149,14 @@ extension SimulationResultTable {
         }
     }
     
-    func save(simulationTitle: String) throws {
+    func save(to folder       : Folder,
+              simulationTitle : String) throws {
         let csvString = CsvBuilder.monteCarloCSV(from: self)
         do {
-            try PersistenceManager.saveToCsvPath(simulationTitle : simulationTitle,
-                                          fileName        : FileNameCst.kMonteCarloCSVFileName,
-                                          csvString       : csvString)
+            try PersistenceManager.saveToCsvPath(to              : folder,
+                                                 fileName        : FileNameCst.kMonteCarloCSVFileName,
+                                                 simulationTitle : simulationTitle,
+                                                 csvString       : csvString)
         } catch {
             throw FileError.failedToSaveMonteCarloCsv
         }

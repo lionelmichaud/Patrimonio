@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import FileAndFolder
+import Files
 
 // MARK: Protocol d'Item Valuable et Nameable
 
@@ -34,44 +36,55 @@ public extension Array where Element: NameableValuable {
 
 // MARK: - Protocol Table d'Item Valuable and Nameable
 
-public protocol NameableValuableArray: Codable {
+// utilisé uniquement par LifeExpense
+// les autres utilisent le generic ArrayOfNameableValuable
+public protocol NameableValuableArray: JsonCodableToFolderP, PersistableP {
     associatedtype Item: Codable, Identifiable, NameableValuable
     
     // MARK: - Properties
     
-    var items          : [Item] { get set }
-    var currentValue   : Double { get }
-    
+    var items            : [Item] { get set }
+    var persistenceSM    : PersistenceStateMachine { get set }
+    var persistenceState : PersistenceState { get }
+    var currentValue     : Double { get }
+
     // MARK: - Subscript
     
     subscript(idx: Int) -> Item { get set }
     
     // MARK: - Initializers
     
-    init(fileNamePrefix: String)
-    
+    /// Initialiser à partir d'un fichier JSON portant le nom de la Class `Item`
+    /// préfixé par `fileNamePrefix`
+    /// contenu dans le dossier `fromFolder` du répertoire `Documents`
+    /// - Parameter fromFolder: dossier où se trouve le fichier JSON à utiliser
+    /// - Parameter fileNamePrefix: préfixe du nom de fichier
+    init(fileNamePrefix    : String,
+         fromFolder folder : Folder) throws
+
     // used for Unit Testing
     init(for aClass     : AnyClass,
          fileNamePrefix : String)
 
     // MARK: - Methods
     
-    // TODO: - Generaliser au Bundle de Test avec "for aClass: AnyClass" ou supprimer la méthode si non utilisée
-    func storeItemsToFile(fileNamePrefix: String)
-    
+    /// Enregistrer au format JSON dans un fichier JSON portant le nom de la Class `Item`
+    /// préfixé par `self.fileNamePrefix`
+    /// dans le folder nommé `toFolder` du répertoire `Documents`
+    /// - Parameters:
+    ///   - toFolder: nom du dossier du répertoire `Documents`
+    func saveAsJSON(fileNamePrefix  : String,
+                    toFolder folder : Folder) throws
+
     mutating func move(from indexes   : IndexSet,
-                       to destination : Int,
-                       fileNamePrefix : String)
+                       to destination : Int)
     
-    mutating func delete(at offsets     : IndexSet,
-                         fileNamePrefix : String)
+    mutating func delete(at offsets     : IndexSet)
     
-    mutating func add(_ item         : Item,
-                      fileNamePrefix : String)
+    mutating func add(_ item         : Item)
     
     mutating func update(with item      : Item,
-                         at index       : Int,
-                         fileNamePrefix : String)
+                         at index       : Int)
     
     func value(atEndOf: Int) -> Double
     
@@ -80,53 +93,86 @@ public protocol NameableValuableArray: Codable {
 
 // implémentation par défaut
 public extension NameableValuableArray {
+
     var currentValue      : Double {
         items.sumOfValues(atEndOf : Date.now.year)
     }
     
+    init(fileNamePrefix    : String,
+         fromFolder folder : Folder) throws {
+        // charger les données JSON
+        try self.init(fromFile             : fileNamePrefix + String(describing: Item.self) + ".json",
+                      fromFolder           : folder,
+                      dateDecodingStrategy : .iso8601,
+                      keyDecodingStrategy  : .useDefaultKeys)
+
+        // initialiser la StateMachine
+        persistenceSM = PersistenceStateMachine()
+
+        // exécuter la transition
+        persistenceSM.process(event: .load)
+    }
+
+    // used for Unit Testing
+    init(for aClass     : AnyClass,
+         fileNamePrefix : String) {
+        let classBundle = Bundle(for: aClass)
+        self = classBundle.loadFromJSON(Self.self,
+                                       from                 : fileNamePrefix + String(describing: Item.self) + ".json",
+                                       dateDecodingStrategy : .iso8601,
+                                       keyDecodingStrategy  : .useDefaultKeys)
+
+        // initialiser la StateMachine
+        persistenceSM = PersistenceStateMachine()
+
+        // exécuter la transition
+        persistenceSM.process(event: .load)
+    }
+    
     subscript(idx: Int) -> Item {
         get {
-            precondition((0..<items.count).contains(idx), "NameableValuableArray[] : out of bounds")
+            precondition((items.startIndex..<items.endIndex).contains(idx), "NameableValuableArray[] : out of bounds")
             return items[idx]
         }
         set(newValue) {
-            precondition((0..<items.count).contains(idx), "NameableValuableArray[] : out of bounds")
+            precondition((items.startIndex..<items.endIndex).contains(idx), "NameableValuableArray[] : out of bounds")
             items[idx] = newValue
         }
     }
     
-    // TODO: - Generaliser au Bundle de Test avec "for aClass: AnyClass" ou supprimer la méthode si non utilisée
-    func storeItemsToFile(fileNamePrefix: String = "") {
+    func saveAsJSON(fileNamePrefix  : String,
+                    toFolder folder : Folder) throws {
         // encode to JSON file
-        Bundle.main.saveAsJSON(self,
-                               to                   : fileNamePrefix + String(describing: Item.self) + ".json",
-                               dateEncodingStrategy : .iso8601,
-                               keyEncodingStrategy  : .useDefaultKeys)
+        try saveAsJSON(toFile               : fileNamePrefix + String(describing: Item.self) + ".json",
+                       toFolder             : folder,
+                       dateEncodingStrategy : .iso8601,
+                       keyEncodingStrategy  : .useDefaultKeys)
+        // exécuter la transition
+        persistenceSM.process(event: .save)
     }
-    
+
     mutating func move(from indexes   : IndexSet,
-                       to destination : Int,
-                       fileNamePrefix : String = "") {
+                       to destination : Int) {
         items.move(fromOffsets: indexes, toOffset: destination)
-        self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
     }
-    mutating func delete(at offsets     : IndexSet,
-                         fileNamePrefix : String = "") {
+
+    mutating func delete(at offsets : IndexSet) {
         items.remove(atOffsets: offsets)
-        self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
+        // exécuter la transition
+        persistenceSM.process(event: .modify)
     }
     
-    mutating func add(_ item         : Item,
-                      fileNamePrefix : String = "") {
+    mutating func add(_ item : Item) {
         items.append(item)
-        self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
+        // exécuter la transition
+        persistenceSM.process(event: .modify)
     }
     
-    mutating func update(with item      : Item,
-                         at index       : Int,
-                         fileNamePrefix : String = "") {
+    mutating func update(with item : Item,
+                         at index  : Int) {
         items[index] = item
-        self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
+        // exécuter la transition
+        persistenceSM.process(event: .modify)
     }
     
     func value(atEndOf: Int) -> Double {
@@ -134,11 +180,9 @@ public extension NameableValuableArray {
     }
     
     func namedValueTable(atEndOf: Int) -> NamedValueArray {
-        var table = NamedValueArray()
-        for item in items {
-            table.append((name  : item.name,
-                          value : item.value(atEndOf : atEndOf)))
+        items.map {
+            (name  : $0.name,
+             value : $0.value(atEndOf : atEndOf))
         }
-        return table
     }    
 }

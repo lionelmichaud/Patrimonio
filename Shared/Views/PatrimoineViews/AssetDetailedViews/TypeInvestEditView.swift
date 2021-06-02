@@ -52,7 +52,7 @@ struct TypeInvestEditView : View {
                     // usufruitier
                     Picker(selection : $clause.usufructRecipient,
                            label     : Text("Bénéficiaire de l'usufruit").foregroundColor(clause.usufructRecipient.isNotEmpty ? .blue : .red)) {
-                        ForEach(family.members) { person in
+                        ForEach(family.members.items) { person in
                             PersonNameRow(member: person)
                         }
                     }
@@ -158,7 +158,7 @@ struct RecipientsListView : View {
     
     @ViewBuilder func menuAdd() -> some View {
         Picker(selection: $name, label: Text("Personne")) {
-            ForEach(family.members.filter { !isAnRecipient($0.displayName) }) { person in
+            ForEach(family.members.items.filter { !isAnRecipient($0.displayName) }) { person in
                 PersonNameRow(member: person)
             }
         }

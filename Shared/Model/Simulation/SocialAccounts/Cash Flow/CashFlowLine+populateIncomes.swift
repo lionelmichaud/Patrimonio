@@ -16,7 +16,7 @@ extension CashFlowLine {
         var totalPensionDiscount = 0.0
         
         // pour chaque membre de la famille
-        for person in family.members.sorted(by:>) {
+        for person in family.members.items.sorted(by:>) {
             // populate ages of family members
             let name = person.name.familyName! + " " + person.name.givenName!
             ages.persons.append((name: name, age: person.age(atEndOf: year)))

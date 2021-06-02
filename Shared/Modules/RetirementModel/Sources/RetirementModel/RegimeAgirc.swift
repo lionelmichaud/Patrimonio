@@ -59,7 +59,7 @@ public struct RegimeAgirc: Codable {
         var plafondMajoEnfantNe   : Double // €
     }
     
-    struct Model: BundleCodable, Versionable {
+    struct Model: JsonCodableToBundleP, Versionable {
         public static var defaultFileName : String = "RegimeAgircModel.json"
 
         public var version       : Version
@@ -146,15 +146,15 @@ public struct RegimeAgirc: Codable {
     }
     
     /// Encode l'objet dans un fichier stocké dans le Bundle de contenant la définition de la classe aClass
-    func saveToBundle(toFile file          : String? = nil,
+    func saveToBundle(toFile file          : String,
                       toBundle bundle      : Bundle,
                       dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
                       keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) {
         
-        model.saveToBundle(toFile: file,
-                           toBundle: bundle,
-                           dateEncodingStrategy: dateEncodingStrategy,
-                           keyEncodingStrategy:  keyEncodingStrategy)
+        model.saveAsJSON(toFile               : file,
+                           toBundle             : bundle,
+                           dateEncodingStrategy : dateEncodingStrategy,
+                           keyEncodingStrategy  :  keyEncodingStrategy)
     }
     
     /// Age minimum pour demander la liquidation de pension Agirc

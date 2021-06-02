@@ -10,6 +10,7 @@ import Foundation
 import AppFoundation
 import Statistics
 import FiscalModel
+import Files
 
 // MARK: - Actifs de la famille
 
@@ -57,28 +58,55 @@ struct Assets {
             .map { ($0, AssetsCategory.sci) }
         return ownables
     }
-    
+    var isModified      : Bool {
+        return
+            periodicInvests.isModified ||
+            freeInvests.isModified ||
+            realEstates.isModified ||
+            scpis.isModified ||
+            sci.isModified
+    }
     // MARK: - Initializers
     
-    /// Charger les actifs stockés en fichier JSON
+    /// Initialiser à vide
+    init() {
+        self.periodicInvests = PeriodicInvestementArray()
+        self.freeInvests     = FreeInvestmentArray()
+        self.realEstates     = RealEstateArray()
+        self.scpis           = ScpiArray()
+        self.sci             = SCI()
+    }
+    
+    /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
     /// - Parameter personAgeProvider: famille à laquelle associer le patrimoine
     /// - Note: personAgeProvider est utilisée pour injecter dans chaque actif un délégué personAgeProvider.ageOf
     ///         permettant de calculer les valeurs respectives des Usufruits et Nu-Propriétés
-    internal init(with personAgeProvider: PersonAgeProvider?) {
-        self.periodicInvests = PeriodicInvestementArray(with: personAgeProvider)
-        self.freeInvests     = FreeInvestmentArray(with: personAgeProvider)
-        self.realEstates     = RealEstateArray(with: personAgeProvider)
-        self.scpis           = ScpiArray(with: personAgeProvider) // SCPI hors de la SCI
-        self.sci = SCI(name : "LVLA",
-                       note : "Crée en 2019",
-                       with : personAgeProvider)
+    internal init(fromFolder folder      : Folder,
+                  with personAgeProvider : PersonAgeProvider?) throws {
+        try self.periodicInvests = PeriodicInvestementArray(fromFolder: folder, with: personAgeProvider)
+        try self.freeInvests     = FreeInvestmentArray(fromFolder: folder, with: personAgeProvider)
+        try self.realEstates     = RealEstateArray(fromFolder: folder, with: personAgeProvider)
+        try self.scpis           = ScpiArray(fromFolder: folder, with: personAgeProvider) // SCPI hors de la SCI
+        try self.sci = SCI(fromFolder : folder,
+                           name       : "LVLA",
+                           note       : "Crée en 2019",
+                           with       : personAgeProvider)
         
         // initialiser le vetcuer d'état de chaque FreeInvestement à la date courante
         resetFreeInvestementCurrentValue()
     }
     
     // MARK: - Methods
-    
+
+    func saveAsJSON(toFolder folder: Folder) throws {
+        try periodicInvests.saveAsJSON(toFolder: folder)
+        try freeInvests.saveAsJSON(toFolder: folder)
+        try realEstates.saveAsJSON(toFolder: folder)
+        try scpis.saveAsJSON(toFolder: folder)
+        try sci.saveAsJSON(toFolder: folder)
+    }
+
     /// Réinitialiser les valeurs courantes des investissements libres
     /// - Warning:
     ///   - Doit être appelée après le chargement d'un objet FreeInvestement depuis le fichier JSON

@@ -14,41 +14,28 @@ import NamedValue
 // MARK: - Tableau de Dépenses
 
 struct LifeExpenseArray: NameableValuableArray {
-    
+
+    private enum CodingKeys: String, CodingKey {
+        case items
+    }
+
     // MARK: - Properties
     
-    var items = [LifeExpense]()
-    
-    // MARK: - Initializers
-    
-    init(fileNamePrefix: String = "") {
-        self = Bundle.main.loadFromJSON(LifeExpenseArray.self,
-                                        from                 : fileNamePrefix + String(describing: Item.self) + ".json",
-                                        dateDecodingStrategy : .iso8601,
-                                        keyDecodingStrategy  : .useDefaultKeys)
-    }
-    
-    init(for aClass     : AnyClass,
-         fileNamePrefix : String = "") {
-        let testBundle = Bundle(for: aClass)
-        self = testBundle.loadFromJSON(LifeExpenseArray.self,
-                                       from                 : fileNamePrefix + String(describing: Item.self) + ".json",
-                                       dateDecodingStrategy : .iso8601,
-                                       keyDecodingStrategy  : .useDefaultKeys)
-    }
+    var items         = [LifeExpense]()
+    var persistenceSM = PersistenceStateMachine(initialState : .created)
+
+    // MARK: - Initializers: voir NameableValuableArray
 }
 
 extension LifeExpenseArray: CustomStringConvertible {
     var description: String {
         var desc = ""
         items.sorted().forEach { expense in
-            desc += "\(expense.description.withPrefixedSplittedLines("  "))\n"
+            desc += "\(String(describing: expense).withPrefixedSplittedLines("  "))\n"
         }
         return desc
     }
 }
-
-//typealias ExpenseArray = ItemArray<LifeExpense>
 
 // MARK: - Dépense de la famille
 
@@ -56,6 +43,10 @@ struct LifeExpense: Identifiable, Codable, Hashable, NameableValuable {
     
     // MARK: - Static properties
     
+    static let prototype = LifeExpense(name     : "",
+                                       note     : "",
+                                       timeSpan : .permanent,
+                                       value    : 0.0)
     private static var membersCountProvider : MembersCountProvider!
     private static var simulationMode       : SimulationModeEnum = .deterministic
     
@@ -104,13 +95,6 @@ struct LifeExpense: Identifiable, Codable, Hashable, NameableValuable {
         self.note         = note
         self.proportional = proportional
         self.timeSpan     = timeSpan
-    }
-    
-    init() {
-        self = LifeExpense(name     : "",
-                           note     : "",
-                           timeSpan : .permanent,
-                           value    : 0.0)
     }
     
     // MARK: - Methods

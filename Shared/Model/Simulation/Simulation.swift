@@ -12,6 +12,7 @@ import Statistics
 import EconomyModel
 import SocioEconomyModel
 import HumanLifeModel
+import Files
 
 protocol CanResetSimulation {
     func reset()
@@ -194,7 +195,7 @@ class Simulation: ObservableObject, CanResetSimulation {
         }
 
         // sauvegarder l'état initial du patrimoine pour y revenir à la fin de chaque run
-        patrimoine.save()
+        patrimoine.saveState()
 
         // calculer tous les runs
         for run in 1...nbOfRuns {
@@ -242,7 +243,7 @@ class Simulation: ObservableObject, CanResetSimulation {
                 }
             }
 
-            patrimoine.restore()
+            patrimoine.restoreState()
         }
 
         isComputed  = true
@@ -279,7 +280,7 @@ class Simulation: ObservableObject, CanResetSimulation {
                                           firstYear          : firstYear!,
                                           lastYear           : lastYear!)
         SocioEconomy.model.setRandomValue(to: thisRun.dicoOfSocioEconomyRandomVariables)
-        family.members.forEach { person in
+        family.members.items.forEach { person in
             if let adult = person as? Adult {
                 adult.ageOfDeath           = thisRun.dicoOfAdultsRandomProperties[adult.displayName]!.ageOfDeath
                 adult.nbOfYearOfDependency = thisRun.dicoOfAdultsRandomProperties[adult.displayName]!.nbOfYearOfDependency
@@ -296,29 +297,32 @@ class Simulation: ObservableObject, CanResetSimulation {
                                  withPatrimoine : patrimoine,
                                  withKPIs       : &kpis,
                                  withMode       : mode)
-        patrimoine.restore()
+        patrimoine.restoreState()
 
         isComputed  = true
         isSaved     = false
     }
 
     /// Sauvegarder les résultats de simulation dans des fchier CSV
-    func save() throws {
+    func save(to folder: Folder) throws {
         defer {
             // jouer le son à la fin de la sauvegarde
             Simulation.playSound()
         }
         /// - un fichier pour le Cash Flow
         /// - un fichier pour le Bilan
-        try socialAccounts.save(simulationTitle: title,
-                                withMode       : mode)
-
+        try socialAccounts.save(to              : folder,
+                                simulationTitle : title,
+                                withMode        : mode)
+        
         if mode == .deterministic {
             /// - un fichier pour le tableau de résultat de Monté-Carlo
-            try [currentRunResults].save(simulationTitle: title)
+            try [currentRunResults].save(to              : folder,
+                                         simulationTitle : title)
         } else {
             /// - un fichier pour le tableau de résultat de Monté-Carlo
-            try monteCarloResultTable.save(simulationTitle: title)
+            try monteCarloResultTable.save(to              : folder,
+                                           simulationTitle : title)
         }
     }
 }

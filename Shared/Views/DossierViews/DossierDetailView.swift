@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct DossierDetailView: View {
-    @EnvironmentObject private var dataStore: Store
+    @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var patrimoine : Patrimoin
     var dossier: Dossier
     @State private var alertItem: AlertItem?
     @State private var showingSheet = false
@@ -28,21 +30,6 @@ struct DossierDetailView: View {
         }
     }
     
-    var dossierSection: some View {
-        Section {
-            Text(dossier.name).font(.headline)
-            if dossier.note.isNotEmpty {
-                Text(dossier.note).multilineTextAlignment(.leading)
-            }
-            LabeledText(label: "Date de céation",
-                        text : dossier.dateCreationStr)
-            LabeledText(label: "Date de dernière modification",
-                        text : "\(dossier.dateModificationStr) à \(dossier.hourModificationStr)")
-            LabeledText(label: "Nom du directory associé",
-                        text : dossier.folderName)
-        }
-    }
-    
     var body: some View {
         Form {
             // indicateur de chargement du Dossier
@@ -51,11 +38,10 @@ struct DossierDetailView: View {
             }
             // affichage du Dossier
             DossierPropertiesView(dossier: dossier,
-                                  sectionHeader: "")
+                                  sectionHeader: "Descriptif du Dossier")
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
         .navigationTitle(Text("Dossier"))
-        .navigationBarTitleDisplayModeInline()
         .alert(item: $alertItem, content: myAlert)
         .sheet(isPresented: $showingSheet) {
             DossierEditView(title        : "Modifier le Dossier",
@@ -63,20 +49,49 @@ struct DossierDetailView: View {
                 .environmentObject(self.dataStore)
         }
         .toolbar {
-            // Bouton: Activer
+            /// Bouton: Sauvegarder
+            ToolbarItem(placement: .automatic) {
+                Button(
+                    action : { save(dossier) },
+                    label  : {
+                        HStack {
+                            Image(systemName: "externaldrive.fill")
+                                .imageScale(.large)
+                            Text("Enregistrer")
+                        }
+                    })
+                    .capsuleButtonStyle()
+                    .disabled(!savable())
+            }
+            /// Bouton: Charger
             ToolbarItem(placement: .primaryAction) {
                 Button(
-                    action : { activate(dossier) },
-                    label  : { Image(systemName: "square.and.arrow.down") })
+                    action : activate,
+                    label  : {
+                        HStack {
+                            Image(systemName: "square.and.arrow.down")
+                                .imageScale(.large)
+                            Text("Charger")
+                        }
+                    })
+                    .capsuleButtonStyle()
                     .disabled(dossier.isActive)
             }
-            // Bouton: Dupliquer
+            /// Bouton: Dupliquer
             ToolbarItem(placement: .automatic) {
                 Button(
                     action : duplicate,
-                    label  : { Image(systemName: "doc.on.doc.fill") })
+                    label  : {
+                        HStack {
+                            Image(systemName: "doc.on.doc.fill")
+                                .imageScale(.medium)
+                            Text("Dupliquer")
+                        }
+                    })
+                    .capsuleButtonStyle()
+                    //.disabled(patrimoine.isModified)
             }
-            // Bouton: Modifier
+            /// Bouton: Modifier
             ToolbarItem(placement: .automatic) {
                 Button(
                     action : {
@@ -84,8 +99,15 @@ struct DossierDetailView: View {
                             self.showingSheet = true
                         }
                     },
-                    label  : { Image(systemName: "square.and.pencil") })
-                    .disabled(changeOccured())
+                    label  : {
+                        HStack {
+                            Image(systemName: "square.and.pencil")
+                                .imageScale(.large)
+                            Text("Modifier")
+                        }
+                    })
+                    .capsuleButtonStyle()
+                    .disabled(!dossier.isActive)
             }
        }
     }
@@ -94,22 +116,73 @@ struct DossierDetailView: View {
         // TODO: - A compléter
         return false
     }
+    
+    private func savable() -> Bool {
+        dossier.isActive && (family.isModified || patrimoine.isModified)
+    }
 
-    private func activate(_ dossier: Dossier) {
+    /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
+    private func save(_ dossier: Dossier) {
+        // vérifier l'existence du Folder associé au Dossier
+        guard let folder = dossier.folder else {
+            self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
+                                       dismissButton : .default(Text("OK")))
+            return
+        }
+
+        // enregistrer le desscripteur du Dossier
+        do {
+            try dossier.saveAsJSON()
+        } catch {
+            self.alertItem = AlertItem(title         : Text("Echec de l'enregistrement du dossier"),
+                                       dismissButton : .default(Text("OK")))
+        }
+        // enregistrer les données utilisateur depuis le Dossier
+        do {
+            try family.saveAsJSON(toFolder: folder)
+            try patrimoine.saveAsJSON(toFolder: folder)
+            Simulation.playSound()
+        } catch {
+            self.alertItem = AlertItem(title         : Text("Echec de l'enregistrement du contenu du dossier !"),
+                                       dismissButton : .default(Text("OK")))
+        }
+    }
+
+    /// Rendre le Dossier sélectionné actif et charger ses données dans le modèle
+    private func activate() {
         guard let dossierIndex = dataStore.dossiers.firstIndex(of: dossier) else {
-            self.alertItem = AlertItem(title         : Text("Echec du chargement du Dossier"),
+            self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
                                        dismissButton : .default(Text("OK")))
             return
 
         }
+        
+        // vérifier l'existence du Folder associé au Dossier
+        guard let folder = dossier.folder else {
+            self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
+                                       dismissButton : .default(Text("OK")))
+            return
+        }
+        
+        // charger les données utilisateur depuis le Dossier
+        do {
+            try patrimoine.loadFromJSON(fromFolder: folder)
+            try family.loadFromJSON(fromFolder: folder)
+        } catch {
+            self.alertItem = AlertItem(title         : Text("Echec de chargement du contenu du dossier !"),
+                                       dismissButton : .default(Text("OK")))
+        }
+
+        // rendre le Dossier actif seulement si tout c'est bien passé
         dataStore.activate(dossierAtIndex: dossierIndex)
     }
     
+    /// Dupliquer le Dossier sélectionné
     private func duplicate() {
         do {
             try dataStore.duplicate(dossier)
         } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de la duplication du dossier"),
+            self.alertItem = AlertItem(title         : Text("Echec de la duplication du dossier !"),
                                        dismissButton : .default(Text("OK")))
         }
     }

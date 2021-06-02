@@ -96,20 +96,32 @@ struct ExpenseDetailedView: View {
             TimeSpanEditView(timeSpanVM: $expenseVM.timeSpanVM)
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
-        .navigationTitle(Text("Poste de Dépenses: " + category.displayString))
-        .navigationBarTitleDisplayModeInline()
+        .navigationTitle(Text("Poste: " + category.displayString))
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button(
                     action : duplicate,
-                    label  : { Image(systemName: "doc.on.doc.fill") })
-                    //.capsuleButtonStyle()
+                    label  : {
+                        HStack {
+                            Image(systemName: "doc.on.doc.fill")
+                                .imageScale(.medium)
+                            Text("Dupliquer")
+                        }
+                    })
+                    .capsuleButtonStyle()
                     .disabled((index == nil) || changeOccured())
             }
             ToolbarItem(placement: .automatic) {
                 Button(
                     action : applyChanges,
-                    label  : { Image(systemName: "externaldrive.fill") })
+                    label  : {
+                        HStack {
+                            Image(systemName: "externaldrive.fill")
+                                .imageScale(.large)
+                            Text("Enregistrer")
+                        }
+                    })
+                    .capsuleButtonStyle()
                     .disabled(!changeOccured())
             }
         }
@@ -131,7 +143,7 @@ struct ExpenseDetailedView: View {
             _index     = State(initialValue: family.expenses.perCategory[category]?.items.firstIndex(of: initialItemValue))
         } else {
             // création d'un nouvel élément
-            _expenseVM = StateObject(wrappedValue: LifeExpenseViewModel(from: LifeExpense()))
+            _expenseVM = StateObject(wrappedValue: LifeExpenseViewModel(from: LifeExpense.prototype))
             index = nil
         }
     }
@@ -150,8 +162,7 @@ struct ExpenseDetailedView: View {
         localItem.id = UUID()
         localItem.name += "-copie"
         // ajouter la copie créée
-        family.expenses.perCategory[self.category]?.add(localItem,
-                                                        fileNamePrefix : self.category.pickerString + "_")
+        family.expenses.perCategory[self.category]?.add(localItem)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
@@ -196,13 +207,11 @@ struct ExpenseDetailedView: View {
         // tous les tests sont OK
         if let index = index {
             // modifier un éléménet existant
-            family.expenses.perCategory[self.category]?.update(with           : expenseVM.lifeExpense,
-                                                               at             : index,
-                                                               fileNamePrefix : self.category.pickerString + "_")
+            family.expenses.perCategory[self.category]?.update(with : expenseVM.lifeExpense,
+                                                               at   : index)
         } else {
             // créer un nouvel élément
-            family.expenses.perCategory[self.category]?.add(expenseVM.lifeExpense,
-                                                            fileNamePrefix : self.category.pickerString + "_")
+            family.expenses.perCategory[self.category]?.add(expenseVM.lifeExpense)
         }
         
         // remettre à zéro la simulation et sa vue

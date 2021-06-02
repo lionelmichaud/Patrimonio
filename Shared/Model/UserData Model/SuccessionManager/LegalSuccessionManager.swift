@@ -57,7 +57,7 @@ struct LegalSuccessionManager {
         print("  Masse successorale légale = \(totalTaxableInheritance.rounded())")
         
         // Rechercher l'option fiscale du conjoint survivant et calculer sa part d'héritage
-        if let conjointSurvivant = family.members.first(where: { member in
+        if let conjointSurvivant = family.members.items.first(where: { member in
             member is Adult && member.isAlive(atEndOf: year) && member != decedent
         }) {
             // il y a un conjoint survivant
@@ -100,7 +100,7 @@ struct LegalSuccessionManager {
         
         if family.nbOfAdults > 0 {
             // Calcul de la part revenant à chaque enfant compte tenu de l'option fiscale du conjoint
-            for member in family.members {
+            for member in family.members.items {
                 if let child = member as? Child {
                     // un enfant
                     // calculer la part d'héritage d'un enfant

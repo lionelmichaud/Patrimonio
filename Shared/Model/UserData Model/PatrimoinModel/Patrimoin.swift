@@ -10,6 +10,7 @@ import Foundation
 import os
 import AppFoundation
 import Statistics
+import Files
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Patrimoin")
 
@@ -47,24 +48,51 @@ final class Patrimoin: ObservableObject {
     
     // MARK: - Properties
     
-    @Published var assets      : Assets
-    @Published var liabilities : Liabilities
+    @Published var assets      = Assets()
+    @Published var liabilities = Liabilities()
+//    @Published var isModified  = false
     var memento: Memento?
-    
+
+//    private var subscriptions = Set<AnyCancellable>()
+
+    // MARK: - Computed Properties
+
+    var isModified: Bool {
+        return
+            assets.isModified ||
+            liabilities.isModified
+    }
+
     // MARK: - Initializers
     
+    /// Initialiser à vide
     init() {
-        self.assets      = Assets(with      : Patrimoin.family)
-        self.liabilities = Liabilities(with : Patrimoin.family)
-        //self.save()
+        // mettre à jour la propriété comme si elle était calculée à l'aide de Combine
+//        let assetsIsModified: ((Assets) -> Bool) = { assets in
+//            return assets.isModified || self.liabilities.isModified
+//        }
+//        self.$assets.map(assetsIsModified).assign(to: \.isModified, on: self).store(in: &subscriptions)
+    }
+    
+    /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    convenience init(fromFolder folder: Folder) throws {
+        self.init()
+        try self.assets      = Assets(fromFolder : folder,      with: Patrimoin.family)
+        try self.liabilities = Liabilities(fromFolder : folder, with: Patrimoin.family)
     }
     
     // MARK: - Methods
     
-    func reload() {
-        assets      = Assets(with      : Patrimoin.family)
-        liabilities = Liabilities(with : Patrimoin.family)
+    func loadFromJSON(fromFolder folder: Folder) throws {
+        assets      = try Assets(fromFolder : folder,      with : Patrimoin.family)
+        liabilities = try Liabilities(fromFolder : folder, with : Patrimoin.family)
         memento     = nil
+    }
+    
+    func saveAsJSON(toFolder folder: Folder) throws {
+        try assets.saveAsJSON(toFolder: folder)
+        try liabilities.saveAsJSON(toFolder: folder)
     }
     
     func value(atEndOf year: Int) -> Double {
@@ -82,14 +110,14 @@ final class Patrimoin: ObservableObject {
     
     /// Sauvegarder l'état courant du Patrimoine
     /// - Warning: Doit être appelée avant toute simulation pouvant affecter le Patrimoine (succession)
-    func save() {
+    func saveState() {
         memento = Memento(assets      : assets,
                           liabilities : liabilities)
     }
     
-    /// Recharger les actifs et passifs à partir des de la dernière sauvegarde pour repartir d'une situation initiale sans aucune modification
+    /// Recharger les actifs et passifs à partir  de la dernière sauvegarde pour repartir d'une situation initiale sans aucune modification
     /// - Warning: Doit être appelée après toute simulation ayant affectée le Patrimoine (succession)
-    func restore() {
+    func restoreState() {
         guard let memento = memento else {
             customLog.log(level: .fault, "patrimoine.restore: tentative de restauration d'un patrimoine non sauvegardé")
             fatalError("patrimoine.restore: tentative de restauration d'un patrimoine non sauvegardé")
@@ -140,7 +168,9 @@ final class Patrimoin: ObservableObject {
 extension Patrimoin: CustomStringConvertible {
     var description: String {
         """
+
         PATRIMOINE:
+        \(("Modifié:" + String(isModified)).withPrefixedSplittedLines("  "))
         \(assets.description.withPrefixedSplittedLines("  "))
         \(liabilities.description.withPrefixedSplittedLines("  "))
         """

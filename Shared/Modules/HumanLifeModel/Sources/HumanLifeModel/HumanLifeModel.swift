@@ -26,7 +26,7 @@ public struct HumanLife {
         }
     }
     
-    public struct Model: BundleCodable {
+    public struct Model: JsonCodableToBundleP {
         public static var defaultFileName : String = "HumanLifeModelConfig.json"
         public var menLifeExpectation    : ModelRandomizer<DiscreteRandomGenerator>
         public var womenLifeExpectation  : ModelRandomizer<DiscreteRandomGenerator>
@@ -71,7 +71,7 @@ public struct HumanLife {
     
     // MARK: - Static Properties
     
-    public static var model: Model = Model().initialized()
+    public static var model: Model = Model(fromFile: Model.defaultFileName).initialized()
 
     // MARK: - Initializer
     

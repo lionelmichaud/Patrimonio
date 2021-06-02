@@ -33,7 +33,7 @@ public struct IncomeTaxesModel: Codable {
                                     irppWithChildren    : Double,
                                     irppWithoutChildren : Double)]
     
-    public struct Model: BundleCodable, Versionable, RateGridable {
+    public struct Model: JsonCodableToBundleP, Versionable, RateGridable {
         public static var defaultFileName : String = "IncomeTaxesModel.json"
         public var version           : Version
         public var grid              : RateGrid

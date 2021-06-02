@@ -18,7 +18,7 @@ public struct Retirement {
     
     // MARK: - Nested types
     
-    public struct Model: BundleCodable {
+    public struct Model: JsonCodableToBundleP {
         public static var defaultFileName : String = "RetirementModelConfig.json"
         public var regimeGeneral: RegimeGeneral
         public var regimeAgirc  : RegimeAgirc
@@ -45,7 +45,7 @@ public struct Retirement {
     
     // MARK: - Static properties
     
-    public static var model: Model = Model().initialized()
+    public static var model: Model = Model(fromFile: Model.defaultFileName).initialized()
     
     // MARK: - Initializer
     

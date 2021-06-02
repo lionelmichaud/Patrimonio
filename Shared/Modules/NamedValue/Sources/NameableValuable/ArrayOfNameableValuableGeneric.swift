@@ -8,21 +8,31 @@
 
 import Foundation
 import AppFoundation
+import FileAndFolder
+import Files
 
 // MARK: - Table d'Item Generic Valuable and Nameable
 
-public struct ArrayOfNameableValuable<E>: Codable, Versionable where
+public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable, PersistableP where
     E: Codable,
     E: Identifiable,
     E: CustomStringConvertible,
     E: NameableValuable {
-
+    
+    private enum CodingKeys: String, CodingKey {
+        case version, items
+    }
+    
     // MARK: - Properties
 
-    public var items          = [E]()
-    var fileNamePrefix : String?
-    public var version        : Version
-    public var currentValue   : Double {
+    public  var items           = [E]()
+    public  var version         = Version()
+    private var fileNamePrefix  : String?
+    public  var persistenceSM   = PersistenceStateMachine()
+    
+    // MARK: - Computed Properties
+    
+    public var currentValue    : Double {
         items.sumOfValues(atEndOf: Date.now.year)
     } // computed
 
@@ -30,7 +40,7 @@ public struct ArrayOfNameableValuable<E>: Codable, Versionable where
 
     public subscript(idx: Int) -> E {
         get {
-            return  items[idx]
+            return items[idx]
         }
         set(newValue) {
             items[idx] = newValue
@@ -39,68 +49,84 @@ public struct ArrayOfNameableValuable<E>: Codable, Versionable where
 
     // MARK: - Initializers
     
-    public init(fileNamePrefix: String = "") {
-        self = Bundle.main.loadFromJSON(ArrayOfNameableValuable.self,
+    /// Initialiser à vide
+    public init() {
+    }
+    
+    /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    public init(fileNamePrefix    : String = "",
+                fromFolder folder : Folder) throws {
+
+        // charger les données JSON
+        try self.init(fromFile             : fileNamePrefix + String(describing: E.self) + ".json",
+                      fromFolder           : folder,
+                      dateDecodingStrategy : .iso8601,
+                      keyDecodingStrategy  : .useDefaultKeys)
+        self.fileNamePrefix = fileNamePrefix
+
+        // exécuter la transition
+        persistenceSM.process(event: .load)
+   }
+    
+    public init(for aClass     : AnyClass,
+                fileNamePrefix : String = "") {
+        let classBundle = Bundle(for: aClass)
+        self = classBundle.loadFromJSON(ArrayOfNameableValuable.self,
                                         from                 : fileNamePrefix + String(describing: E.self) + ".json",
                                         dateDecodingStrategy : .iso8601,
                                         keyDecodingStrategy  : .useDefaultKeys)
         self.fileNamePrefix = fileNamePrefix
-    }
-    
-    public init(for aClass     : AnyClass,
-                fileNamePrefix : String = "") {
-        let bundle = Bundle(for: aClass)
-        self = bundle.loadFromJSON(ArrayOfNameableValuable.self,
-                                   from                 : fileNamePrefix + String(describing: E.self) + ".json",
-                                   dateDecodingStrategy : .iso8601,
-                                   keyDecodingStrategy  : .useDefaultKeys)
-        self.fileNamePrefix = fileNamePrefix
+
+        // exécuter la transition
+        persistenceSM.process(event: .load)
     }
     
     // MARK: - Methods
-    
-    func storeItemsToFile(fileNamePrefix: String = "") {
+
+    public func saveAsJSON(toFolder folder: Folder) throws {
         // encode to JSON file
-        Bundle.main.saveAsJSON(self,
-                               to                   : fileNamePrefix + self.fileNamePrefix! + String(describing: E.self) + ".json",
-                               dateEncodingStrategy : .iso8601,
-                               keyEncodingStrategy  : .useDefaultKeys)
+        try saveAsJSON(toFile               : self.fileNamePrefix! + String(describing: E.self) + ".json",
+                       toFolder             : folder,
+                       dateEncodingStrategy : .iso8601,
+                       keyEncodingStrategy  : .useDefaultKeys)
+        // exécuter la transition
+        persistenceSM.process(event: .save)
     }
     
-    func storeItemsToFile(for aClass     : AnyClass,
-                          fileNamePrefix : String = "") {
+    func storeItemsToBundleOf(aClass: AnyClass) {
         let bundle = Bundle(for: aClass)
         // encode to JSON file
         bundle.saveAsJSON(self,
-                          to                   : fileNamePrefix + self.fileNamePrefix! + String(describing: E.self) + ".json",
+                          to                   : self.fileNamePrefix! + String(describing: E.self) + ".json",
                           dateEncodingStrategy : .iso8601,
                           keyEncodingStrategy  : .useDefaultKeys)
+        // exécuter la transition
+        persistenceSM.process(event: .save)
     }
     
     public mutating func move(from indexes   : IndexSet,
-                              to destination : Int,
-                              fileNamePrefix : String = "") {
+                              to destination : Int) {
         items.move(fromOffsets: indexes, toOffset: destination)
-        self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
     }
     
-    public mutating func delete(at offsets     : IndexSet,
-                                fileNamePrefix : String = "") {
+    public mutating func delete(at offsets: IndexSet) {
         items.remove(atOffsets: offsets)
-        self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
+        // exécuter la transition
+        persistenceSM.process(event: .modify)
     }
     
-    public mutating func add(_ item         : E,
-                             fileNamePrefix : String = "") {
+    public mutating func add(_ item: E) {
         items.append(item)
-        self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
+        // exécuter la transition
+        persistenceSM.process(event: .modify)
     }
     
-    public mutating func update(with item      : E,
-                                at index       : Int,
-                                fileNamePrefix : String = "") {
+    public mutating func update(with item : E,
+                                at index  : Int) {
         items[index] = item
-        self.storeItemsToFile(fileNamePrefix: fileNamePrefix)
+        // exécuter la transition
+        persistenceSM.process(event: .modify)
     }
     
     public func value(atEndOf: Int) -> Double {
@@ -108,18 +134,17 @@ public struct ArrayOfNameableValuable<E>: Codable, Versionable where
     }
     
     public func namedValueTable(atEndOf: Int) -> NamedValueArray {
-        var table = NamedValueArray()
-        for item in items {
-            table.append((name: item.name, value: item.value(atEndOf: atEndOf)))
+        items.map {
+            (name  : $0.name,
+             value : $0.value(atEndOf : atEndOf))
         }
-        return table
     }
 }
 
 extension ArrayOfNameableValuable: CustomStringConvertible {
     public var description: String {
         items.reduce("") { r, item in
-            r + item.description + "\n\n"
+            r + String(describing: item) + "\n\n"
         }
     }
 }

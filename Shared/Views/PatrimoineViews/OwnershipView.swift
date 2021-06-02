@@ -85,7 +85,7 @@ struct OwnershipView_Previews: PreviewProvider {
                 Form {
                     OwnershipView(ownership: $ownership, totalValue: totalValue)
                         .environmentObject(family)
-                    ForEach(OwnershipView_Previews.family.members) { member in
+                    ForEach(OwnershipView_Previews.family.members.items) { member in
                         AmountView(label: member.displayName,
                                    amount: ownership.ownedValue(by     : member.displayName,
                                                                 ofValue: 100.0,

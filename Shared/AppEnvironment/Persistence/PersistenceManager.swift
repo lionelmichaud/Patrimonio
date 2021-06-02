@@ -7,11 +7,15 @@
 
 import Foundation
 import os
+import FileAndFolder
+import NamedValue
 import Files
-import Disk
+import Charts // https://github.com/danielgindi/Charts.git
 
 private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
                                category  : "PersistenceManager")
+
+// MARK: - Extension de Folder
 
 extension Folder {
     // The current Application folder
@@ -34,8 +38,10 @@ enum FileError: String, Error {
     case failedToSaveMonteCarloCsv         = "La sauvegarde de l'historique des runs a échoué"
     case failedToSaveSuccessionsCSV        = "La sauvegarde des successions légales a échoué"
     case failedToSaveLifeInsSuccessionsCSV = "La sauvegarde des successions assurance vie a échoué"
+    case failedToResolveAppBundle          = "Impossible de trouver le répertoire 'App Bundle'"
     case failedToResolveDocuments          = "Impossible de trouver le répertoire 'Documents' de l'utilisateur"
     case failedToResolveLibrary            = "Impossible de trouver le répertoire 'Library' de l'utilisateur"
+    case failedToFindTemplateDirectory     = "Impossible de trouver le répertoire 'template' dans le répertoire 'Library' de l'utilisateur"
     case failedToCreateTemplateDirectory   = "Impossible de créer le répertoire 'template' dans le répertoire 'Library' de l'utilisateur"
     case directoryToDuplicateDoesNotExist  = "Le répertoire à dupliquer n'est pas défini"
     case failedToDuplicateTemplates        = "Echec de la copie des templates"
@@ -47,18 +53,13 @@ struct PersistenceManager {
     
     // MARK: - Static Methods
     
-    static func saveDescriptor(of dossier: Dossier) throws {
-        let dossierDescriptorFile = try dossier.folder?.createFileIfNeeded(withName: "AppDescriptor.json")
-        dossierDescriptorFile?.saveAsJSON(dossier, dateEncodingStrategy: .iso8601)
-    }
-    
-    /// Dupliquer tous les fichiers JSON ne commencant pas par 'App'
-    /// et présents dans le répertoire "originFolder'
-    /// vers le répertoire 'targetFolder'
+    /// Dupliquer tous les fichiers JSON ne commencant pas par `App`
+    /// et présents dans le répertoire `originFolder`
+    /// vers le répertoire `targetFolder`
     /// - Parameters:
     ///   - originFolder: répertoire source
     ///   - targetFolder: répertoire destination
-    /// - Throws:
+    /// - Throws:`FileError.withContentDuplicatedFrom`
     fileprivate static func duplicateTemplateFiles(from originFolder : Folder,
                                                    to targetFolder   : Folder) throws {
         do {
@@ -77,10 +78,10 @@ struct PersistenceManager {
         }
     }
     
-    /// Construire la liste des dossiers en parcourant le directory "Documents"
-    /// - Throws: FileError.failedToResolveDocuments
-    /// - Returns: Tableau de dossier
-    static func loadUserDossiers() throws -> DossierArray {
+    /// Itérer une action `perform` sur tous les dossiers `utilisateur` du directory `Documents`
+    /// - Parameter perform: action à réaliser sur chaque Folder
+    /// - Throws: `FileError.failedToResolveDocuments`
+    static func forEachUserFolder(perform: (Folder) throws -> Void) throws {
         /// rechercher le dossier 'Documents' de l'utilisateur
         guard let documentsFolder = Folder.documents else {
             customLog.log(level: .error,
@@ -89,29 +90,19 @@ struct PersistenceManager {
         }
         
         // itérer sur tous les directory présents dans le directory 'Documents'
-        var dossiers = DossierArray()
         try documentsFolder.subfolders.forEach { folder in
             if folder.isUserFolder {
-                let descriptorFile = try folder.file(named: "AppDescriptor.json")
-                let decodedDossier = descriptorFile.loadFromJSON(Dossier.self,
-                                                                 dateDecodingStrategy: .iso8601)
-                let dossier = decodedDossier
-                    .identifiedBy(UUID(uuidString: folder.name)!)
-                    .pointingTo(folder)
-                    .ownedByUser()
-                dossiers.append(dossier)
+                try perform(folder)
             }
         }
-        
-        return dossiers
     }
     
-    /// Créer un nouveau répertoire nommé 'withID' dans le répertoire 'Documents'
-    /// et y copier tous les templates présents dans le répertoire 'Library/template'
+    /// Créer un nouveau répertoire nommé `withID` dans le répertoire `Documents`
+    /// et y copier tous les templates présents dans le répertoire `Library/template`
     /// - Parameter withID: nom du répertoire à créer
     /// - Throws:
-    ///     - FileError.failedToResolveDocuments
-    ///     - FileError.templatesDossierNotInitialized
+    ///     - `FileError.failedToResolveDocuments`
+    ///     - `FileError.templatesDossierNotInitialized`
     /// - Returns: répertoire créé
     static func newUserFolder(withID id: UUID) throws -> Folder {
         /// rechercher le dossier 'Documents' de l'utilisateur
@@ -126,7 +117,7 @@ struct PersistenceManager {
         targetFolder = try documentsFolder.createSubfolder(named: id.uuidString)
         
         // récupérer le dossier 'templates'
-        guard let originFolder = Dossier.templates?.folder else {
+        guard let originFolder = templateFolder() else {
             customLog.log(level: .error,
                           "\(FileError.templatesDossierNotInitialized.rawValue)")
             throw FileError.templatesDossierNotInitialized
@@ -144,14 +135,14 @@ struct PersistenceManager {
         return targetFolder
     }
     
-    /// Créer un nouveau répertoire nommé 'withID' dans le répertoire 'Documents'
-    /// et y copier tous les fichiers présents dans le répertoire à dupliquer
+    /// Créer un nouveau répertoire nommé `withID` dans le répertoire `Documents`
+    /// et y copier tous les `templates` présents dans le répertoire `withContentDuplicatedFrom`
     /// - Parameters:
     ///   - id: nom du répertoire à créer
     ///   - originFolder: répertoire à dupliquer
     /// - Throws:
-    ///   - FileError.failedToResolveDocuments
-    ///   - FileError.directoryToDuplicateDoesNotExist
+    ///   - `FileError.failedToResolveDocuments`
+    ///   - `FileError.directoryToDuplicateDoesNotExist`
     /// - Returns: répertoire créé
     static func newUserFolder(withID id: UUID,
                               withContentDuplicatedFrom originFolder: Folder?) throws -> Folder {
@@ -185,10 +176,10 @@ struct PersistenceManager {
         return targetFolder
     }
     
-    /// Détruire le répertoire portant le nom 'folderName'
-    /// et situé dans le répertoire 'Documents'
+    /// Détruire le dossier `utilisateur` du directory `Documents`
+    /// portant le nom `folderName`
     /// - Parameter folderName: nom du répertoire à détruire
-    /// - Throws: FileError.failedToResolveDocuments
+    /// - Throws: `FileError.failedToResolveDocuments`
     static func deleteUserFolder(folderName: String) throws {
         /// rechercher le dossier 'Documents' de l'utilisateur
         guard let documentsFolder = Folder.documents else {
@@ -204,41 +195,57 @@ struct PersistenceManager {
         try targetFolder.delete()
     }
     
-    /// Retourne un Dossier pointant sur le directory contenant les templates
-    /// Créer le directorty au besoin
-    /// - Returns: Dossier pointant sur le directory contenant les templates ou 'nil' si le dossier n'est pas trouvé
-    fileprivate static func getTemplateDossier() -> Folder? {
+    /// Retourne le directory contenant les templates: dans le répertoire `Library/template`.
+    /// Créer le directorty au besoin.
+    /// - Returns: Folder pointant sur le directory contenant les templates ou 'nil' si le dossier n'est pas trouvé
+    static func templateFolder() -> Folder? {
         /// rechercher le dossier 'Library' de l'utilisateur
         guard let libraryFolder = Folder.library else {
             customLog.log(level: .fault,
                           "\(FileError.failedToResolveLibrary.rawValue)")
             return nil
         }
-        
+
         /// vérifier l'existence du directory 'templates' dans le directory 'Library' et le créer sinon
         let templateDirPath = AppSettings.shared.templatePath()
-        let templateFolder = try? libraryFolder.createSubfolderIfNeeded(at: templateDirPath)
-        guard templateFolder != nil else {
-            // la création à échouée
-            customLog.log(level: .fault,
-                          "\(FileError.failedToCreateTemplateDirectory.rawValue)")
-            return nil
+        if let templateFolder = try? libraryFolder.subfolder(at: templateDirPath) {
+            return templateFolder
+
+        } else {
+            // le créer
+            do {
+                try libraryFolder.createSubfolder(at: templateDirPath)
+                do {
+                    let newTemplateFolder = try importTemplatesFromApp()
+                    return newTemplateFolder
+                } catch {
+                    // la création a échouée
+                    return nil
+                }
+
+            } catch {
+                // la création à échouée
+                customLog.log(level: .fault,
+                              "\(FileError.failedToCreateTemplateDirectory.rawValue)")
+                return nil
+            }
         }
-        
-        return templateFolder
     }
     
     /// Importer les fichiers vierges depuis le Bundle Main de l'Application
-    /// - Returns: le dossier inchangé si l'import a réussi, 'nil' sinon
-    static func importTemplatesFromApp() -> Dossier? {
+    /// vers le répertoire `Library/template`
+    /// - Returns: le dossier 'template' si l'import a réussi, 'nil' sinon
+    static func importTemplatesFromApp() throws -> Folder {
         guard let originFolder = Folder.application else {
             customLog.log(level: .fault,
-                          "\(DossierError.failedToResolveAppBundle.rawValue))")
-            return nil
+                          "\(FileError.failedToResolveAppBundle.rawValue))")
+            throw FileError.failedToResolveAppBundle
         }
         
-        guard let templateFolder = PersistenceManager.getTemplateDossier() else {
-            return nil
+        guard let templateFolder = PersistenceManager.templateFolder() else {
+            customLog.log(level: .fault,
+                          "\(FileError.failedToFindTemplateDirectory.rawValue))")
+            throw FileError.failedToFindTemplateDirectory
         }
         
         do {
@@ -246,17 +253,13 @@ struct PersistenceManager {
         } catch {
             customLog.log(level: .fault,
                           "\(FileError.failedToImportTemplates.rawValue))")
-            return nil
+            throw FileError.failedToImportTemplates
         }
         
-        return
-            Dossier()
-            .pointingTo(templateFolder)
-            .namedAs(templateFolder.name)
-            .ownedByApp()
+        return templateFolder
     }
     
-    /// Calculer la date de dernière modification d'un dossier utilisateur comme étant celle
+    /// Calculer la date de dernière modification d'un dossier utilisateur `withID` comme étant celle
     /// du fichier modifié le plus tardivement
     /// - Parameter id: UUID du dossier utilisateur
     /// - Returns: date de dernière modification d'un dossier utilisateur
@@ -287,12 +290,12 @@ struct PersistenceManager {
     ///   - simulationTitle: nom de ls simulation utilisé pour générer le nom du répertoire
     ///   - csvString: String au format CSV à enregistrer
     ///   - fileName: nom du fichier à créer
-    /// - Throws: <#description#>
-    static func saveToCsvPath(simulationTitle : String,
+    static func saveToCsvPath(to folder       : Folder,
                               fileName        : String,
+                              simulationTitle : String,
                               csvString       : String) throws {
         #if DEBUG
-        print(csvString)
+//        print(csvString)
         /// sauvegarder le fichier dans le répertoire Bundle.main
         if let fileUrl = Bundle.main.url(forResource   : fileName,
                                          withExtension : nil) {
@@ -317,16 +320,55 @@ struct PersistenceManager {
         }
         #endif
         
-        /// sauvegarder le fichier dans le répertoire: data/Containers/Data/Application/xxx/Documents/simulationTitle/csv/
+        /// sauvegarder le fichier dans le fichier: data/Containers/Data/Application/xxx/Documents/Dossier en cours/simulationTitle/csv/fileName
         do {
-            try Disk.save(Data(csvString.utf8),
-                          to: .documents,
-                          as: AppSettings.shared.csvPath(simulationTitle) + fileName)
+            // créer le fichier .csv dans le directory 'Documents/Dossier en cours/simulationTitle/csv/' de l'utilisateur
+            let csvFile = try folder.createFileIfNeeded(at: AppSettings.shared.csvPath(simulationTitle) + fileName)
+            // y écrire le tableau au format csv
+            try csvFile.write(csvString, encoding: .utf8)
+            #if DEBUG
             customLog.log(level: .info,
-                          "Saving \(fileName, privacy: .public) to: \(Disk.Directory.documents.pathDescription + "/" + AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
+                          "Saving \(fileName, privacy: .public) to: \(folder.path + AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
+            #endif
+
         } catch let error as NSError {
+            // la création à échouée
             customLog.log(level: .fault,
-                          "Fault saving \(fileName, privacy: .public) to: \(Disk.Directory.documents.pathDescription + "/" + AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
+                          "Fault saving \(fileName, privacy: .public) to: \(AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
+            print("""
+                Domain         : \(error.domain)
+                Code           : \(error.code)
+                Description    : \(error.localizedDescription)
+                Failure Reason : \(error.localizedFailureReason ?? "")
+                Suggestions    : \(error.localizedRecoverySuggestion ?? "")
+                """)
+            throw error
+        }
+    }
+    
+    static func saveToImagePath(to folder       : Folder,
+                                fileName        : String,
+                                simulationTitle : String,
+                                image           : NSUIImage) throws {
+        /// sauvegarder le fichier dans le fichier: data/Containers/Data/Application/xxx/Documents/Dossier en cours/simulationTitle/iamge/fileName
+        do {
+            // créer le fichier .csv dans le directory 'Documents/Dossier en cours/simulationTitle/csv/' de l'utilisateur
+            let imageFile = try folder.createFileIfNeeded(at: AppSettings.shared.imagePath(simulationTitle) + fileName)
+            // y écrire le tableau au format csv
+            try imageFile.write(image)
+            #if DEBUG
+            customLog.log(level: .info,
+                          "Saving \(fileName, privacy: .public) to: \(folder.path + AppSettings.shared.imagePath(simulationTitle) + fileName, privacy: .public)")
+            #endif
+//            try Disk.save(image, to: .documents, as: AppSettings.shared.imagePath(simulationTitle) + fileName)
+//            // impression debug
+//            #if DEBUG
+//            Swift.print("saving image to file: ", AppSettings.shared.imagePath(simulationTitle) + fileName)
+//            #endif
+        } catch let error as NSError {
+            // la création à échouée
+            customLog.log(level: .fault,
+                          "Fault saving \(fileName, privacy: .public) to: \(AppSettings.shared.imagePath(simulationTitle) + fileName, privacy: .public)")
             print("""
                 Domain         : \(error.domain)
                 Code           : \(error.code)

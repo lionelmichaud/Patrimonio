@@ -6,14 +6,18 @@
 //
 
 import Foundation
+import Stateful
+import Files
 import NamedValue
 
 extension ArrayOfNameableValuable where E: Ownable {
     // MARK: - Initializers
     
     init(fileNamePrefix         : String = "",
-         with personAgeProvider : PersonAgeProvider?) {
-        self.init(fileNamePrefix: fileNamePrefix)
+         fromFolder folder      : Folder,
+         with personAgeProvider : PersonAgeProvider?) throws {
+        try self.init(fileNamePrefix : fileNamePrefix,
+                      fromFolder     : folder)
         // injecter le délégué pour la méthode family.ageOf qui par défaut est nil à la création de l'objet
         for idx in 0..<items.count {
             if let personAgeProvider = personAgeProvider {

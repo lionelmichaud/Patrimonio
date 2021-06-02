@@ -50,42 +50,7 @@ public extension Bundle {
             fatalError("Failed to encode \(String(describing: T.self)) object to JSON format.")
         }
     }
-}
 
-public extension Bundle {
-    func decode <T: Decodable> (from file: String) -> T {
-        // find file's URL
-        guard let url = self.url(forResource: file, withExtension: nil) else {
-            customLog.log(level: .fault, "Failed to locate \(file) in bundle.")
-            fatalError("Failed to locate \(file) in bundle.")
-        }
-        // MARK: - DEBUG - A supprimer
-        #if DEBUG
-        print("decoding file: ", url)
-        #endif
-        
-        // load data from URL
-        guard let data = try? Data(contentsOf: url) else {
-            customLog.log(level: .fault, "Failed to load \(file) data from bundle.")
-            fatalError("Failed to load \(file) data from bundle.")
-        }
-        
-        // decode JSON data
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "y-MM-dd"
-        
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .formatted(dateFormatter)
-        guard let decoded = try? decoder.decode(T.self, from: data) else {
-            customLog.log(level: .fault, "Failed to decode \(file) data from bundle.")
-            fatalError("Failed to decode \(file) data from bundle.")
-        }
-        
-        return decoded
-    }
-}
-
-public extension Bundle {
     func loadFromJSON <T: Decodable> (_ type: T.Type,
                                       from file: String,
                                       dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
@@ -135,5 +100,38 @@ public extension Bundle {
                           "\(failureString)from bundle: \(error.localizedDescription).")
             fatalError("\(failureString)from bundle: \(error.localizedDescription)")
         }
+    }
+}
+
+public extension Bundle {
+    func decode <T: Decodable> (from file: String) -> T {
+        // find file's URL
+        guard let url = self.url(forResource: file, withExtension: nil) else {
+            customLog.log(level: .fault, "Failed to locate \(file) in bundle.")
+            fatalError("Failed to locate \(file) in bundle.")
+        }
+        // MARK: - DEBUG - A supprimer
+        #if DEBUG
+        print("decoding file: ", url)
+        #endif
+        
+        // load data from URL
+        guard let data = try? Data(contentsOf: url) else {
+            customLog.log(level: .fault, "Failed to load \(file) data from bundle.")
+            fatalError("Failed to load \(file) data from bundle.")
+        }
+        
+        // decode JSON data
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "y-MM-dd"
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        guard let decoded = try? decoder.decode(T.self, from: data) else {
+            customLog.log(level: .fault, "Failed to decode \(file) data from bundle.")
+            fatalError("Failed to decode \(file) data from bundle.")
+        }
+        
+        return decoded
     }
 }
