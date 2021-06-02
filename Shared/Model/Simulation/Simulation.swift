@@ -280,7 +280,7 @@ class Simulation: ObservableObject, CanResetSimulation {
                                           firstYear          : firstYear!,
                                           lastYear           : lastYear!)
         SocioEconomy.model.setRandomValue(to: thisRun.dicoOfSocioEconomyRandomVariables)
-        family.members.forEach { person in
+        family.members.items.forEach { person in
             if let adult = person as? Adult {
                 adult.ageOfDeath           = thisRun.dicoOfAdultsRandomProperties[adult.displayName]!.ageOfDeath
                 adult.nbOfYearOfDependency = thisRun.dicoOfAdultsRandomProperties[adult.displayName]!.nbOfYearOfDependency

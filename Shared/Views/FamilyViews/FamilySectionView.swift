@@ -31,7 +31,7 @@ struct FamilySectionView : View {
 
         Section(header: Text("Membres de la Famille")) {
             // liste des membres de la famille
-            ForEach(family.members) { member in
+            ForEach(family.members.items) { member in
                 NavigationLink(destination: PersonDetailView().environmentObject(member)) {
                     Label(title: { MemberRowView(member: member) },
                           icon : { Image(systemName: "person.fill") })

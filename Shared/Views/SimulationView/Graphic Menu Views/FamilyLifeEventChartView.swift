@@ -54,7 +54,7 @@ struct FamilyLifeEventChartView: UIViewRepresentable {
         LifeEvent.allCases.forEach { event in // pour chaque type d'événement
             // construire la série de points: rang(nom) = f(année)
             var dataEntries = [ChartDataEntry]()
-            let eventNamesYears = family.members.map {
+            let eventNamesYears = family.members.items.map {
                 ($0.displayName, $0.yearOf(event: event))
             }
             for year in Date.now.year ... endDate {
@@ -81,7 +81,7 @@ struct FamilyLifeEventChartView: UIViewRepresentable {
                                          axisFormatterChoice : .name(names: family.membersName))
 
         chartView.leftAxis.axisMinimum = -0.5
-        chartView.leftAxis.axisMaximum = family.members.count.double() - 0.5
+        chartView.leftAxis.axisMaximum = family.members.items.count.double() - 0.5
 
         return chartView
     }

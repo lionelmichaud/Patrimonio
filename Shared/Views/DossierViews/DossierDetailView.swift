@@ -42,7 +42,6 @@ struct DossierDetailView: View {
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
         .navigationTitle(Text("Dossier"))
-        //.navigationBarTitleDisplayModeInline()
         .alert(item: $alertItem, content: myAlert)
         .sheet(isPresented: $showingSheet) {
             DossierEditView(title        : "Modifier le Dossier",
@@ -50,6 +49,20 @@ struct DossierDetailView: View {
                 .environmentObject(self.dataStore)
         }
         .toolbar {
+            /// Bouton: Sauvegarder
+            ToolbarItem(placement: .automatic) {
+                Button(
+                    action : { save(dossier) },
+                    label  : {
+                        HStack {
+                            Image(systemName: "externaldrive.fill")
+                                .imageScale(.large)
+                            Text("Enregistrer")
+                        }
+                    })
+                    .capsuleButtonStyle()
+                    .disabled(!savable())
+            }
             /// Bouton: Charger
             ToolbarItem(placement: .primaryAction) {
                 Button(
@@ -104,6 +117,37 @@ struct DossierDetailView: View {
         return false
     }
     
+    private func savable() -> Bool {
+        dossier.isActive && (family.isModified || patrimoine.isModified)
+    }
+
+    /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
+    private func save(_ dossier: Dossier) {
+        // vérifier l'existence du Folder associé au Dossier
+        guard let folder = dossier.folder else {
+            self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
+                                       dismissButton : .default(Text("OK")))
+            return
+        }
+
+        // enregistrer le desscripteur du Dossier
+        do {
+            try dossier.saveAsJSON()
+        } catch {
+            self.alertItem = AlertItem(title         : Text("Echec de l'enregistrement du dossier"),
+                                       dismissButton : .default(Text("OK")))
+        }
+        // enregistrer les données utilisateur depuis le Dossier
+        do {
+            try family.saveAsJSON(toFolder: folder)
+            try patrimoine.saveAsJSON(toFolder: folder)
+            Simulation.playSound()
+        } catch {
+            self.alertItem = AlertItem(title         : Text("Echec de l'enregistrement du contenu du dossier !"),
+                                       dismissButton : .default(Text("OK")))
+        }
+    }
+
     /// Rendre le Dossier sélectionné actif et charger ses données dans le modèle
     private func activate() {
         guard let dossierIndex = dataStore.dossiers.firstIndex(of: dossier) else {

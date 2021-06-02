@@ -41,6 +41,9 @@ extension PersistableArrayOfPerson {
         } catch {
             fatalError("Failed to decode \(fileName) in documents directory: \(error.localizedDescription)")
         }
+
+        // exécuter la transition
+        persistenceSM.process(event: .load)
     }
     
     /// Enregistrer au format JSON dans un fichier portant le nom  `FileNameCst.kFamilyMembersFileName`

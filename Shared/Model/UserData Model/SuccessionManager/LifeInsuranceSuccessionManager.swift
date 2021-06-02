@@ -131,7 +131,7 @@ struct LifeInsuranceSuccessionManager {
         }
         
         // pour chaque membre de la famille autre que le défunt
-        for member in family.members where member != decedent {
+        for member in family.members.items where member != decedent {
             if let masse = massesSuccession[member.displayName] {
                 var heritage = (netAmount: 0.0, taxe: 0.0)
                 if member is Adult {

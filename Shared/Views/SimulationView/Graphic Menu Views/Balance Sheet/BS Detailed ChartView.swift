@@ -51,7 +51,7 @@ struct BalanceSheetDetailedChartView: View {
                 VStack {
                     // sélecteur: Membre de la famille / Tous
                     Picker(selection: self.$uiState.bsChartState.nameSelection, label: Text("Personne")) {
-                        ForEach(family.members.sorted(by: < )) { person in
+                        ForEach(family.members.items.sorted(by: < )) { person in
                             PersonNameRow(member: person)
                         }
                         Text(AppSettings.shared.allPersonsLabel)

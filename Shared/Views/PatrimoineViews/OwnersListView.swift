@@ -93,7 +93,7 @@ struct OwnersListView: View {
     
     @ViewBuilder func menuAdd() -> some View {
         Picker(selection: $name, label: Text("Personne")) {
-            ForEach(family.members.filter { !isAnOwner($0.displayName) }) { person in
+            ForEach(family.members.items.filter { !isAnOwner($0.displayName) }) { person in
                 PersonNameRow(member: person)
             }
         }

@@ -20,7 +20,7 @@ struct ScenarioSummaryView: View {
             Text("Derniers paramètres de simulation utilisés").bold()
             Form {
                 Section(header: Text("Modèle Humain")) {
-                    ForEach(family.members) { member in
+                    ForEach(family.members.items) { member in
                         if let adult = member as? Adult {
                             Text(adult.displayName)
                             VStack {

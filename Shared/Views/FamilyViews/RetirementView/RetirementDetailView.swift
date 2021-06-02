@@ -159,7 +159,7 @@ struct RetirementDetailView_Previews: PreviewProvider {
     static var family  = Family()
     
     static var previews: some View {
-        let aMember = family.members.first!
+        let aMember = family.members.items.first!
         
         return RetirementDetailView().environmentObject(aMember)
         

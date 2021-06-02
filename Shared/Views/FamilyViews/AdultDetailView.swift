@@ -286,8 +286,8 @@ private struct InheritanceSectionView: View {
 struct AdultDetailView_Previews: PreviewProvider {
     static var family    = Family()
     static var patrimoin = Patrimoin()
-    static var anAdult   = family.members.first!
-    static var aChild    = family.members.last!
+    static var anAdult   = family.members.items.first!
+    static var aChild    = family.members.items.last!
     
     static var previews: some View {
         // child

@@ -11,20 +11,20 @@ final class Family: ObservableObject {
     // MARK: - Properties
     
     // structure de la famille
-    @Published private(set) var members: PersonArray
+    @Published private(set) var members = PersistableArrayOfPerson()
     // dépenses
     @Published var expenses = LifeExpensesDic()
     // revenus
     var workNetIncome    : Double { // computed
         var netIcome : Double = 0.0
-        for person in members {
+        for person in members.items {
             if let adult = person as? Adult {netIcome += adult.workNetIncome}
         }
         return netIcome
     }
     var workTaxableIncome: Double { // computed
         var taxableIncome : Double = 0.0
-        for person in members {
+        for person in members.items {
             if let adult = person as? Adult {taxableIncome += adult.workTaxableIncome}
         }
         return taxableIncome
@@ -40,32 +40,30 @@ final class Family: ObservableObject {
 
     var nbOfChildren     : Int { // computed
         var nb = 0
-        for person in members where person is Child {nb += 1}
+        for person in members.items where person is Child {nb += 1}
         return nb
     }
     var nbOfAdults       : Int { // computed
         var nb = 0
-        for person in members where person is Adult {nb += 1}
+        for person in members.items where person is Adult {nb += 1}
         return nb
     }
     
     var adults  : [Person] {
-        members.filter {$0 is Adult}
+        members.items.filter {$0 is Adult}
     }
     var children: [Person] {
-        members.filter {$0 is Child}
+        members.items.filter {$0 is Child}
     }
 
     var isModified: Bool {
-        expenses.isModified
+        expenses.isModified || members.isModified
     }
 
     // MARK: - Initializers
 
     /// Initialiser à vide
     init() {
-        // initialiser les membres de la famille à partir du fichier JSON
-        self.members  = Family.loadMembersFromFile()
         // injection de family dans la propriété statique de DateBoundary pour lier les évenements à des personnes
         DateBoundary.setPersonEventYearProvider(self)
         // injection de family dans la propriété statique de Expense
@@ -87,18 +85,19 @@ final class Family: ObservableObject {
 
     func loadFromJSON(fromFolder folder: Folder) throws {
         expenses = try LifeExpensesDic(fromFolder : folder)
-        let arrayOfPerson = try? PersistableArrayOfPerson(from: folder)
+        members  = try PersistableArrayOfPerson(from: folder)
     }
 
     func saveAsJSON(toFolder folder: Folder) throws {
         try expenses.saveAsJSON(toFolder: folder)
+        try members.saveAsJSON(to: folder)
     }
 
     /// Rend la liste des enfants vivants
     /// - Parameter year: année
     /// - Warning: Vérifie que l'enfant est vivant
     func chidldrenAlive(atEndOf year: Int) -> [Child]? {
-        members
+        members.items
             .filter { person in
                 person is Child && person.isAlive(atEndOf: year)
             }
@@ -110,7 +109,7 @@ final class Family: ObservableObject {
     /// Nombre d'enfant vivant à la fin de l'année
     /// - Parameter year: année considérée
     func nbOfChildrenAlive(atEndOf year: Int) -> Int {
-        members
+        members.items
             .reduce(0) { (result, person) in
                 result + ((person is Child && person.isAlive(atEndOf: year)) ? 1 : 0)
             }
@@ -120,7 +119,7 @@ final class Family: ObservableObject {
     /// - Parameter year: année où l'on recherche des décès
     /// - Returns: liste des personnes décédées dans l'année
     func deceasedAdults(during year: Int) -> [Person] {
-        members.compactMap { member in
+        members.items.compactMap { member in
             if member is Adult && member.isDeceased(during: year) {
                 // un décès est survenu
                 return member
@@ -138,7 +137,7 @@ final class Family: ObservableObject {
     func income(during year: Int) -> (netIncome: Double, taxableIncome: Double) {
         var totalNetIncome     : Double = 0.0
         var totalTaxableIncome : Double = 0.0
-        for person in members {
+        for person in members.items {
             if let adult = person as? Adult {
                 let income = adult.workIncome(during: year)
                 totalNetIncome     += income.net
@@ -170,7 +169,7 @@ final class Family: ObservableObject {
     /// - Returns: Pensions de retraite cumulées brutes
     func pension(during year: Int, withReversion: Bool = true) -> Double {
         var pension = 0.0
-        for person in members {
+        for person in members.items {
             if let adult = person as? Adult {
                 pension += adult.pension(during        : year,
                                          withReversion : withReversion).brut
@@ -181,74 +180,61 @@ final class Family: ObservableObject {
     
     /// Mettre à jour le nombre d'enfant de chaque parent de la famille
     func updateChildrenNumber() {
-        for member in members { // pour chaque membre de la famille
+        for member in members.items { // pour chaque membre de la famille
             if let adult = member as? Adult { // si c'est un parent
                 adult.gaveBirthTo(children: nbOfChildren) // mettre à jour le nombre d'enfant
             }
         }
-
     }
     
     /// Trouver le membre de la famille avec le displayName recherché
     /// - Parameter name: displayName recherché
     /// - Returns: membre de la famille trouvé ou nil
     func member(withName name: String) -> Person? {
-        self.members.first(where: { $0.displayName == name })
+        self.members.items.first(where: { $0.displayName == name })
     }
     
     /// Ajouter un membre à la famille
     /// - Parameter person: personne à ajouter
     func addMember(_ person: Person) {
         // ajouter le nouveau membre
-        members.append(person)
+        members.add(person)
         
         // mettre à jour le nombre d'enfant de chaque parent de la famille
         updateChildrenNumber()
-        
-        // sauvegarder les membres de la famille dans le fichier
-        storeMembersToFile()
     }
     
     func deleteMembers(at offsets: IndexSet) {
         // retirer les membres
-        members.remove(atOffsets: offsets)
+        members.delete(at: offsets)
         
         // mettre à jour le nombre d'enfant de chaque parent de la famille
         updateChildrenNumber()
-        
-        // sauvegarder les membres de la famille dans le fichier
-        storeMembersToFile()
     }
     
     func moveMembers(from indexes: IndexSet, to destination: Int) {
-        self.members.move(fromOffsets: indexes, toOffset: destination)
-        
-        // mettre à jour le nombre d'enfant de chaque parent de la famille
-        self.updateChildrenNumber()
-        
-        self.storeMembersToFile()
+        self.members.items.move(fromOffsets: indexes, toOffset: destination)
     }
     
     func aMemberIsUpdated() {
+        // exécuter la transition
+        members.persistenceSM.process(event: .modify)
+        
         // mettre à jour le nombre d'enfant de chaque parent de la famille
         self.updateChildrenNumber()
-        
-        // sauvegarder les membres de la famille dans le fichier
-        self.storeMembersToFile()
-
     }
     
     /// Réinitialiser les prioriétés aléatoires des membres et des dépenses
     func nextRandomProperties() {
         // Réinitialiser les prioriété aléatoires des membres
-        members.forEach {
+        members.items.forEach {
             $0.nextRandomProperties()
         }
     }
 
     func currentRandomProperties() -> DictionaryOfAdultRandomProperties {
         var dicoOfAdultsRandomProperties = DictionaryOfAdultRandomProperties()
-        members.forEach {
+        members.items.forEach {
             if let adult = $0 as? Adult {
                 dicoOfAdultsRandomProperties[adult.displayName] = AdultRandomProperties(ageOfDeath          : adult.ageOfDeath,
                                                                                         nbOfYearOfDependency: adult.nbOfYearOfDependency)
@@ -260,85 +246,10 @@ final class Family: ObservableObject {
 
     func nextRun() -> DictionaryOfAdultRandomProperties {
         // Réinitialiser les prioriété aléatoires des membres
-        members.forEach {
+        members.items.forEach {
             $0.nextRandomProperties()
         }
         return currentRandomProperties()
-    }
-    
-    private func storeMembersToFile() {
-        // encoder
-        if let encoded: Data = try? Person.coder.encoder.encode(members.map { Wrap(wrapped: $0) }) {
-            // find file's URL
-            let fileName = FileNameCst.kFamilyMembersFileName
-            guard let url = Bundle.main.url(forResource: fileName, withExtension: nil) else {
-                fatalError("Failed to locate \(fileName) in bundle.")
-            }
-            // impression debug
-            #if DEBUG
-            Swift.print("saving members (Person) to file: ", url)
-            #endif
-            if let jsonString = String(data: encoded, encoding: .utf8) {
-                #if DEBUG
-                Swift.print(jsonString)
-                #endif
-            } else {
-                Swift.print("failed to convert 'family.members' encoded data to string.")
-            }
-            do {
-                // sauvegader les données
-                try encoded.write(to: url, options: [.atomicWrite])
-            } catch {
-                fatalError("Failed to save data to '\(fileName)' in documents directory.")
-            }
-        } else {
-            fatalError("Failed to encode 'family.members' to JSON format.")
-        }
-    }
-    
-    static func loadMembersFromFile() -> [Person] {
-        //        Bundle.main.decode([Person].self,
-        //                           from: FileNameCst.familyMembersFileName,
-        //                           dateDecodingStrategy: .iso8601)
-        //            return getDocumentsDirectory().decode([Person].self,
-        //                                           from: FileNameCst.familyMembersFileName,
-        //                                           dateDecodingStrategy: .iso8601)
-        
-        // find file's URL
-        let fileName = FileNameCst.kFamilyMembersFileName
-        // let url = getDocumentsDirectory().appendingPathComponent(fileName, isDirectory: false)
-        guard let url = Bundle.main.url(forResource: fileName, withExtension: nil) else {
-            fatalError("Failed to locate \(fileName) in bundle.")
-        }
-        #if DEBUG
-        Swift.print("loading members (Person) from file: ", url)
-        #endif
-                
-        // load data from URL
-        guard let data = try? Data(contentsOf: url) else {
-            fatalError("Failed to load \(url) in documents directory.")
-        }
-        
-        // decode object back and unwrap them force casting to a common ancestor type
-        do {
-            return try Person.coder.decoder
-                .decode([Wrap].self, from: data)
-                .map { $0.wrapped as! Person }
-            
-        } catch DecodingError.keyNotFound(let key, let context) {
-            fatalError("Failed to decode \(fileName) in documents directory due to missing key '\(key.stringValue)' not found – \(context.debugDescription)")
-        } catch DecodingError.typeMismatch(_, let context) {
-            fatalError("Failed to decode \(fileName) in documents directory due to type mismatch – \(context.debugDescription)")
-        } catch DecodingError.valueNotFound(let type, let context) {
-            fatalError("Failed to decode \(fileName) in documents directory due to missing \(type) value – \(context.debugDescription)")
-        } catch DecodingError.dataCorrupted(let context) {
-            fatalError("Failed to decode \(fileName) in documents directory because it appears to be invalid JSON – \(context.codingPath)–  \(context.debugDescription)")
-        } catch {
-            fatalError("Failed to decode \(fileName) in documents directory: \(error.localizedDescription)")
-        }
-    }
-    
-    func print() {
     }
 }
 
@@ -356,12 +267,12 @@ extension Family: CustomStringConvertible {
         - family income taxes: \(irpp.€String)
         - MEMBRES DE LA FAMILLE:
         """
-        members.forEach { member in
-            desc += member.description.withPrefixedSplittedLines("  ")
+        members.items.forEach { member in
+            desc += String(describing: member).withPrefixedSplittedLines("  ")
         }
         desc += "\n"
         desc += "- DEPENSES:\n"
-        desc += expenses.description.withPrefixedSplittedLines("  ")
+        desc += String(describing: expenses).withPrefixedSplittedLines("  ")
         
         return desc
     }
@@ -399,7 +310,7 @@ extension Family: PersonEventYearProvider {
                 persons = children
                 
             case .allPersons:
-                persons = members
+                persons = members.items
         }
         if let years = persons?.map({ $0.yearOf(event: lifeEvent)! }) {
             switch order {
@@ -418,7 +329,7 @@ extension Family: MembersCountProvider {
     /// Nombre d'adulte vivant à la fin de l'année
     /// - Parameter year: année
     func nbOfAdultAlive(atEndOf year: Int) -> Int {
-        members.reduce(0) { (result, person) in
+        members.items.reduce(0) { (result, person) in
             result + ((person is Adult && person.isAlive(atEndOf: year)) ? 1 : 0)
         }
     }
@@ -427,7 +338,7 @@ extension Family: MembersCountProvider {
     /// - Parameter year: année d'imposition
     /// - Note: [service-public.fr](https://www.service-public.fr/particuliers/vosdroits/F3085)
     func nbOfFiscalChildren(during year: Int) -> Int {
-        members
+        members.items
             .reduce(0) { (result, person) in
                 guard let child = person as? Child else {
                     return result
@@ -444,7 +355,7 @@ extension Family: FiscalHouseholdSumator {
         /// pour: adultes + enfants fiscalement dépendants
         var cumulatedvalue: Double = 0.0
 
-        for member in members {
+        for member in members.items {
             var toBeConsidered : Bool
 
             if member is Adult {
@@ -473,7 +384,7 @@ extension Family: AdultSpouseProvider {
     /// - Returns: époux  (s'il existe)
     /// - Warning: Ne vérifie pas que l'époux est vivant
     func spouseOf(_ member: Adult) -> Adult? {
-        for person in members {
+        for person in members.items {
             if let adult = person as? Adult {
                 if adult != member { return adult }
             }
@@ -484,7 +395,7 @@ extension Family: AdultSpouseProvider {
 
 extension Family: MembersNameProvider {
     var membersName: [String] {
-        members
+        members.items
             .sorted(by: \.birthDate)
             .map { $0.displayName }
     }

@@ -53,7 +53,7 @@ struct DossiersView: View {
 struct DossierHeaderView: View {
     var body: some View {
         NavigationLink(destination: DossierSummaryView()) {
-            Text("Dossier en cours d'utilisation").fontWeight(.bold)
+            Text("Dossier en cours d'utilisation")
         }
         .isDetailLink(true)
     }

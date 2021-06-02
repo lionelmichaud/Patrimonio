@@ -43,8 +43,7 @@ struct DossierSummaryView: View {
     }
     
     private func savable() -> Bool {
-        family.isModified ||
-        patrimoine.isModified
+        family.isModified || patrimoine.isModified
     }
 
     /// Enregistrer les données utilisateur dans le Dossier sélectionné actif

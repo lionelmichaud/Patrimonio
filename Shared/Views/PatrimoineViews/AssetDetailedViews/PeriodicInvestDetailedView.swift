@@ -82,19 +82,31 @@ struct PeriodicInvestDetailedView: View {
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
         .navigationTitle("Invest. Périodique")
-        .navigationBarTitleDisplayModeInline()
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button(
                     action : duplicate,
-                    label  : { Image(systemName: "doc.on.doc.fill") })
-                    //.capsuleButtonStyle()
+                    label  : {
+                        HStack {
+                            Image(systemName: "doc.on.doc.fill")
+                                .imageScale(.medium)
+                            Text("Dupliquer")
+                        }
+                    })
+                    .capsuleButtonStyle()
                     .disabled((index == nil) || changeOccured())
             }
             ToolbarItem(placement: .automatic) {
                 Button(
                     action : applyChanges,
-                    label  : { Image(systemName: "externaldrive.fill") })
+                    label  : {
+                        HStack {
+                            Image(systemName: "externaldrive.fill")
+                                .imageScale(.large)
+                            Text("Enregistrer")
+                        }
+                    })
+                    .capsuleButtonStyle()
                     .disabled(!changeOccured())
             }
         }

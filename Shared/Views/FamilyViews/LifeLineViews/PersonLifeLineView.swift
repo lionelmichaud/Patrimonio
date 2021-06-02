@@ -124,7 +124,7 @@ struct PersonLifeLineView: View {
 
 struct PersonLifeLineView_Previews: PreviewProvider {
     static var family  = Family()
-    static var aMember = family.members.first!
+    static var aMember = family.members.items.first!
     
     static var previews: some View {
         PersonLifeLineView(from: aMember)

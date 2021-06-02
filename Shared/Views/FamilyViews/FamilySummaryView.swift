@@ -53,7 +53,7 @@ struct FamilySummarySection: View {
     var body: some View {
         Section(header: Text("MEMBRES")) {
             IntegerView(label   : "Nombre de membres",
-                        integer : family.members.count)
+                        integer : family.members.items.count)
             IntegerView(label   : "• Nombre d'adultes",
                         integer : family.nbOfAdults)
             IntegerView(label   : "• Nombre d'enfants",
