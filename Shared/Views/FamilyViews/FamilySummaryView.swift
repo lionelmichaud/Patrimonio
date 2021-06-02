@@ -9,10 +9,11 @@
 import SwiftUI
 
 struct FamilySummaryView: View {
-    @EnvironmentObject var family     : Family
-    @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var simulation : Simulation
-    @State private var cashFlow       : CashFlowLine?
+    @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var simulation : Simulation
+    @State private var cashFlow : CashFlowLine?
     
     fileprivate func computeCurrentYearCashFlow() {
         // sauvegarder l'état initial du patrimoine pour y revenir à la fin de chaque run
@@ -27,16 +28,20 @@ struct FamilySummaryView: View {
     }
     
     var body: some View {
-        Form {
-            FamilySummarySection()
-            RevenuSummarySection(cashFlow: cashFlow)
-            FiscalSummarySection(cashFlow: cashFlow)
-            SciSummarySection(cashFlow: cashFlow)
+        if dataStore.activeDossier != nil {
+            Form {
+                FamilySummarySection()
+                RevenuSummarySection(cashFlow: cashFlow)
+                FiscalSummarySection(cashFlow: cashFlow)
+                SciSummarySection(cashFlow: cashFlow)
+            }
+            .navigationTitle("Résumé")
+            .navigationBarTitleDisplayMode(.inline)
+            .onAppear(perform: computeCurrentYearCashFlow)
+            .onDisappear(perform: self.patrimoine.resetFreeInvestementCurrentValue)
+        } else {
+            NoLoadedDossierView()
         }
-        .navigationTitle("Résumé")
-        .navigationBarTitleDisplayMode(.inline)
-        .onAppear(perform: computeCurrentYearCashFlow)
-        .onDisappear(perform: self.patrimoine.resetFreeInvestementCurrentValue)
     }
 }
 
@@ -93,7 +98,7 @@ struct RevenuSummarySection: View {
 struct FiscalSummarySection: View {
     var cashFlow : CashFlowLine?
     @EnvironmentObject var family: Family
-
+    
     var body: some View {
         if cashFlow == nil {
             Section(header: header("FISCALITE DES REVENUS DU TRAVAIL")) {
@@ -149,12 +154,16 @@ struct SciSummarySection: View {
 }
 
 struct FamilySummaryView_Previews: PreviewProvider {
+    static let dataStore  = Store()
     static var family     = Family()
     static var patrimoine = Patrimoin()
+    static var simulation = Simulation()
     
     static var previews: some View {
         FamilySummaryView()
+            .environmentObject(dataStore)
             .environmentObject(family)
             .environmentObject(patrimoine)
+            .environmentObject(simulation)
     }
 }

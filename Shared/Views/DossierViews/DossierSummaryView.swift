@@ -38,7 +38,7 @@ struct DossierSummaryView: View {
                 }
             }
         } else {
-            DossierHomeView()
+            NoLoadedDossierView()
         }
     }
     

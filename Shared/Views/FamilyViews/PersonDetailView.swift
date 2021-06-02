@@ -11,11 +11,11 @@ import SwiftUI
 // MARK: - Afficher les détails d'un membre de la famille
 
 struct PersonDetailView: View {
-    @EnvironmentObject var family     : Family
-    @EnvironmentObject var member     : Person
-    @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var uiState    : UIState
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var member     : Person
+    @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var simulation : Simulation
+    @EnvironmentObject private var uiState    : UIState
     @State var showingSheet = false
     
     var body: some View {
@@ -67,7 +67,7 @@ struct PersonDetailView_Previews: PreviewProvider {
     static var uiState    = UIState()
     static var anAdult   = family.members.items.first!
     static var aChild    = family.members.items.last!
-
+    
     static var previews: some View {
         Group {
             // adult

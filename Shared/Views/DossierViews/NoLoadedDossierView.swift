@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct DossierHomeView: View {
+struct NoLoadedDossierView: View {
     var body: some View {
         VStack {
-            Label("Sélectionner un dossier dans le menu à gauche et le charger", systemImage: "folder.badge.person.crop")
+            Label("Sélectionner un dossier dans l'onglet Dossiers et le charger", systemImage: "folder.badge.person.crop")
             Text("ou")
-            Label("Créer un nouveau dossier dans le menu à gaucheet le charger", systemImage: "folder.fill.badge.plus")
+            Label("Créer un nouveau dossier dans l'onglet Dossiers et le charger", systemImage: "folder.fill.badge.plus")
         }
         .font(.headline)
     }
@@ -20,6 +20,6 @@ struct DossierHomeView: View {
 
 struct DossierHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        DossierHomeView()
+        NoLoadedDossierView()
     }
 }

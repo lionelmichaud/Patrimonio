@@ -11,7 +11,7 @@ struct DossiersView: View {
     @EnvironmentObject var uiState   : UIState
     @EnvironmentObject var dataStore : Store
     @State private var alertItem     : AlertItem?
-    @State private var showingSheet = false
+    @State private var showingSheet  = false
 
     var body: some View {
         NavigationView {
@@ -31,7 +31,7 @@ struct DossiersView: View {
                 EditButton()
             }
             /// vue par défaut
-            DossierHomeView()
+            NoLoadedDossierView()
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
         // Vue modale de saisie d'un nouveau membre de la famille
@@ -65,8 +65,8 @@ struct DossiersView_Previews: PreviewProvider {
 
     static var previews: some View {
         DossiersView()
-            .environmentObject(DossiersView_Previews.dataStore)
-            .environmentObject(DossiersView_Previews.uiState)
+            .environmentObject(dataStore)
+            .environmentObject(uiState)
             .colorScheme(.dark)
     }
 }

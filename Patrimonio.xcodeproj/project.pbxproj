@@ -287,7 +287,7 @@
 		7998E1AC262DBE4600DA4A12 /* Child.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E1AA262DBE4600DA4A12 /* Child.swift */; };
 		7998E1C7262DC5C500DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */; };
 		7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E1CC262DC66700DA4A12 /* TypePreservingCodingAdapter */; };
-		799DE8402654199600E96CF6 /* DossierHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799DE83F2654199600E96CF6 /* DossierHomeView.swift */; };
+		799DE8402654199600E96CF6 /* NoLoadedDossierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799DE83F2654199600E96CF6 /* NoLoadedDossierView.swift */; };
 		79A8A19526565DBC00B23AD7 /* DossierAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A8A19426565DBC00B23AD7 /* DossierAddView.swift */; };
 		79A8A19626565DBC00B23AD7 /* DossierAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A8A19426565DBC00B23AD7 /* DossierAddView.swift */; };
 		79A9AA76264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A9AA75264AFA290036732F /* CashFlowCsvVisitableP.swift */; };
@@ -712,7 +712,7 @@
 		7998E19E262DBE3E00DA4A12 /* Adult+Unemployement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Adult+Unemployement.swift"; sourceTree = "<group>"; };
 		7998E19F262DBE3E00DA4A12 /* Adult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Adult.swift; sourceTree = "<group>"; };
 		7998E1AA262DBE4600DA4A12 /* Child.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Child.swift; sourceTree = "<group>"; };
-		799DE83F2654199600E96CF6 /* DossierHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierHomeView.swift; sourceTree = "<group>"; };
+		799DE83F2654199600E96CF6 /* NoLoadedDossierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoLoadedDossierView.swift; sourceTree = "<group>"; };
 		79A8A19426565DBC00B23AD7 /* DossierAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierAddView.swift; sourceTree = "<group>"; };
 		79A9AA75264AFA290036732F /* CashFlowCsvVisitableP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashFlowCsvVisitableP.swift; sourceTree = "<group>"; };
 		79A9AA79264AFB440036732F /* BalanceSheetCsvVisitorP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSheetCsvVisitorP.swift; sourceTree = "<group>"; };
@@ -1396,7 +1396,7 @@
 			isa = PBXGroup;
 			children = (
 				7935FFD626541AAB00AC1715 /* DossiersView.swift */,
-				799DE83F2654199600E96CF6 /* DossierHomeView.swift */,
+				799DE83F2654199600E96CF6 /* NoLoadedDossierView.swift */,
 				7935FFD82654204200AC1715 /* DossierSummaryView.swift */,
 				7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */,
 				796503CE265596E50093F10E /* DossierDetailView.swift */,
@@ -2139,7 +2139,7 @@
 				7935FFD726541AAB00AC1715 /* DossiersView.swift in Sources */,
 				79A9AA76264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */,
 				79EC5E712640037400FF8263 /* Coordinator.swift in Sources */,
-				799DE8402654199600E96CF6 /* DossierHomeView.swift in Sources */,
+				799DE8402654199600E96CF6 /* NoLoadedDossierView.swift in Sources */,
 				79B2728C2634DBEB00298E5D /* Themes.swift in Sources */,
 				79C838272641DB80008B29BF /* Charts+AxisFormatter.swift in Sources */,
 				79B164842651DD7200D0603C /* ScenarioSummaryView.swift in Sources */,
