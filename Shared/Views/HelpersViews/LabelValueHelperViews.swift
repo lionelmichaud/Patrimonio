@@ -88,10 +88,14 @@ struct AmountEditView: View {
                 .frame(maxWidth: 88)
                 .numbersAndPunctuationKeyboardType()
                 .multilineTextAlignment(.trailing)
-                .onReceive(Just(textAmount)) { newValue in
+                .onChange(of: textAmount) { newValue in
                     // FIXME: ne filtre pas correctement
                     // filtrer les caractères non numériques
-                    let filtered = newValue.filter { "-0123456789".contains($0) }
+                    var filtered = newValue.filter { "-0123456789".contains($0) }
+                    // filtrer `-` s'il n'est pas le premier caractère
+                    filtered = filtered.replacingOccurrences(of: "-",
+                                                             with: "",
+                                                             range: filtered.index(filtered.startIndex, offsetBy: 1)..<filtered.endIndex)
                     if filtered != newValue {
                         self.textAmount = filtered
                     }
@@ -160,10 +164,14 @@ struct IntegerEditView: View {
                 .frame(maxWidth: 88)
                 .numbersAndPunctuationKeyboardType()
                 .multilineTextAlignment(.trailing)
-                .onReceive(Just(textAmount)) { newValue in
+                .onChange(of: textAmount) { newValue in
                     // FIXME: ne filtre pas correctement
                     // filtrer les caractères non numériques
-                    let filtered = newValue.filter { "-0123456789".contains($0) }
+                    var filtered = newValue.filter { "-0123456789".contains($0) }
+                    // filtrer `-` s'il n'est pas le premier caractère
+                    filtered = filtered.replacingOccurrences(of: "-",
+                                                             with: "",
+                                                             range: filtered.index(filtered.startIndex, offsetBy: 1)..<filtered.endIndex)
                     if filtered != newValue {
                         self.textAmount = filtered
                     }
@@ -219,7 +227,7 @@ struct PercentEditView: View {
         }, set: {
             self.textPercent = $0
             // actualiser la valeur numérique
-            self.percent = Double($0) ?? 0
+            self.percent = Double($0.replacingOccurrences(of: ",", with: ".")) ?? 0
         })
         
         return HStack {
@@ -231,9 +239,13 @@ struct PercentEditView: View {
                 .frame(maxWidth: 88)
                 .decimalPadKeyboardType()
                 .multilineTextAlignment(.trailing)
-                .onReceive(Just(textPercent)) { newValue in
+                .onChange(of: textPercent) { newValue in
                     // filtrer les caractères non numériques
-                    let filtered = newValue.filter { "0123456789.,".contains($0) }
+                    var filtered = newValue.filter { ",-0123456789".contains($0) }
+                    // filtrer `-` s'il n'est pas le premier caractère
+                    filtered = filtered.replacingOccurrences(of: "-",
+                                                             with: "",
+                                                             range: filtered.index(filtered.startIndex, offsetBy: 1)..<filtered.endIndex)
                     if filtered != newValue {
                         self.textPercent = filtered
                     }

@@ -179,8 +179,11 @@ final class Simulation: ObservableObject, CanResetSimulation {
         }
 
         //propriétés indépendantes du nombre de run
-        firstYear   = Date.now.year
-        lastYear    = firstYear + nbOfYears - 1
+        // mettre à jour les variables d'état dans le thread principal
+//        DispatchQueue.main.async {
+        self.firstYear   = Date.now.year
+        self.lastYear    = self.firstYear + nbOfYears - 1
+//        } // DispatchQueue.main.async
 
         let monteCarlo = nbOfRuns > 1
         var dicoOfAdultsRandomProperties      = DictionaryOfAdultRandomProperties()
@@ -199,7 +202,9 @@ final class Simulation: ObservableObject, CanResetSimulation {
 
         // calculer tous les runs
         for run in 1...nbOfRuns {
+//            DispatchQueue.main.async { [self] in
             currentRunNb = run
+//            } // DispatchQueue.main.async
             SimulationLogger.shared.log(run      : currentRunNb,
                                         logTopic : LogTopic.simulationEvent,
                                         message  : "Début : \(firstYear!)")

@@ -17,7 +17,7 @@ struct ComputationView: View {
     @EnvironmentObject var patrimoine       : Patrimoin
     @EnvironmentObject var simulation       : Simulation
     @State private var busySaveWheelAnimate : Bool = false
-    //@State private var busyCompWheelAnimate : Bool = false
+    @State private var busyCompWheelAnimate : Bool = false
 //    @Environment(\.presentationMode) var presentationMode
     @State private var alertItem            : AlertItem?
 
@@ -180,34 +180,34 @@ struct ComputationView: View {
     }
     
     private func computeSimulation() {
-//        busyCompWheelAnimate.toggle()
+        //        busyCompWheelAnimate.toggle()
         // executer les calculs en tâche de fond
 //        DispatchQueue.global(qos: .userInitiated).async {
-        switch simulation.mode {
-            case .deterministic:
-                simulation.compute(nbOfYears      : Int(uiState.computationState.nbYears),
-                                   nbOfRuns       : 1,
-                                   withFamily     : family,
-                                   withPatrimoine : patrimoine)
-                
-            case .random:
-                simulation.compute(nbOfYears      : Int(uiState.computationState.nbYears),
-                                   nbOfRuns       : Int(uiState.computationState.nbRuns),
-                                   withFamily     : family,
-                                   withPatrimoine : patrimoine)
-        }
-//        }
-        // mettre à jour les variables d'état dans le thread principal
-        //DispatchQueue.main.async {
-        uiState.bsChartState.itemSelection = simulation.socialAccounts.balanceArray.getBalanceSheetLegend(.both)
-        uiState.cfChartState.itemSelection = simulation.socialAccounts.cashFlowArray.getCashFlowLegend(.both)
-        // positionner le curseur de la vue PatrimoinSummaryView sur la bonne date
-        uiState.patrimoineViewState.evalDate = simulation.lastYear!.double()
-        //}
-//        busyCompWheelAnimate.toggle()
-        self.alertItem = AlertItem(title         : Text("Les calculs sont terminés. Vous pouvez visualiser les résultats."),
-                                   dismissButton : .default(Text("OK")))
-//        self.presentationMode.wrappedValue.dismiss()
+            switch simulation.mode {
+                case .deterministic:
+                    simulation.compute(nbOfYears      : Int(uiState.computationState.nbYears),
+                                       nbOfRuns       : 1,
+                                       withFamily     : family,
+                                       withPatrimoine : patrimoine)
+                    
+                case .random:
+                    simulation.compute(nbOfYears      : Int(uiState.computationState.nbYears),
+                                       nbOfRuns       : Int(uiState.computationState.nbRuns),
+                                       withFamily     : family,
+                                       withPatrimoine : patrimoine)
+            }
+            // mettre à jour les variables d'état dans le thread principal
+            DispatchQueue.main.async {
+                uiState.bsChartState.itemSelection = simulation.socialAccounts.balanceArray.getBalanceSheetLegend(.both)
+                uiState.cfChartState.itemSelection = simulation.socialAccounts.cashFlowArray.getCashFlowLegend(.both)
+                // positionner le curseur de la vue PatrimoinSummaryView sur la bonne date
+                uiState.patrimoineViewState.evalDate = simulation.lastYear!.double()
+                //        busyCompWheelAnimate.toggle()
+                self.alertItem = AlertItem(title         : Text("Les calculs sont terminés. Vous pouvez visualiser les résultats."),
+                                           dismissButton : .default(Text("OK")))
+            }
+//        } // DispatchQueue.global
+        //        self.presentationMode.wrappedValue.dismiss()
         #if DEBUG
         // self.simulation.socialAccounts.printBalanceSheetTable()
         #endif
