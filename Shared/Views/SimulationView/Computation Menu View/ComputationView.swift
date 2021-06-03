@@ -20,11 +20,13 @@ struct ComputationView: View {
     @State private var busyCompWheelAnimate : Bool = false
 //    @Environment(\.presentationMode) var presentationMode
     @State private var alertItem            : AlertItem?
+    @State private var showSharePopover     : Bool = false
 
     struct ComputationForm: View {
         @EnvironmentObject var uiState    : UIState
         @EnvironmentObject var simulation : Simulation
-        
+        @Binding var showSharePopover     : Bool
+
         var parameterSection: some View {
             Section(header: Text("Paramètres de Simulation").font(.headline)) {
                 VStack {
@@ -118,7 +120,8 @@ struct ComputationView: View {
             Form {
                 // paramétrage de la simulation : cas général
                 parameterSection
-                
+                    .shareSheet(items: ["Hello world!"])
+
                 // affichage des résultats
                 resultsSection
                 
@@ -130,7 +133,7 @@ struct ComputationView: View {
     
     var body: some View {
         if dataStore.activeDossier != nil {
-            ComputationForm()
+            ComputationForm(showSharePopover: $showSharePopover)
                 .navigationTitle("Calculs")
                 // barre de boutons
                 .toolbar {
@@ -149,8 +152,11 @@ struct ComputationView: View {
                                }
                         )
                         .capsuleButtonStyle()
-                        //                    .opacity(!savingIsPossible() ? 0.5 : 1.0)
                         .disabled(!savingIsPossible())
+//                        .popover(isPresented: $showSharePopover, arrowEdge: .top) {
+//                            Text("Ceci est le Popover")
+//                            ShareActivityViewController(text: "Share", showing: $showSharePopover)
+//                        }
                     }
                     // bouton Calculer
                     ToolbarItem(placement: .primaryAction) {
@@ -214,6 +220,8 @@ struct ComputationView: View {
     }
     
     private func saveSimulation() {
+        self.showSharePopover = true
+        
         // executer l'enregistrement en tâche de fond
         guard let folder = dataStore.activeDossier?.folder else {
             self.alertItem = AlertItem(title         : Text("La sauvegarde a échouée"),
