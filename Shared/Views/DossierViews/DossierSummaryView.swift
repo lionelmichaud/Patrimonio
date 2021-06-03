@@ -49,27 +49,16 @@ struct DossierSummaryView: View {
 
     /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
     private func save(_ dossier: Dossier) {
-        // vérifier l'existence du Folder associé au Dossier
-        guard let folder = dossier.folder else {
-            self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
-                                       dismissButton : .default(Text("OK")))
-            return
-        }
-        
-        // enregistrer le desscripteur du Dossier
         do {
-            try dossier.saveAsJSON()
+            try dossier.saveDossierContentAsJSON { folder in
+                try family.saveAsJSON(toFolder: folder)
+                try patrimoine.saveAsJSON(toFolder: folder)
+                // forcer la vue à se rafraichir
+                dataStore.objectWillChange.send()
+                Simulation.playSound()
+            }
         } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de l'enregistrement du dossier"),
-                                       dismissButton : .default(Text("OK")))
-        }
-        // enregistrer les données utilisateur depuis le Dossier
-        do {
-            try family.saveAsJSON(toFolder: folder)
-            try patrimoine.saveAsJSON(toFolder: folder)
-            Simulation.playSound()
-        } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de l'enregistrement du contenu du dossier !"),
+            self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
                                        dismissButton : .default(Text("OK")))
         }
     }

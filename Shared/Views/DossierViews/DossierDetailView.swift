@@ -124,6 +124,19 @@ struct DossierDetailView: View {
         !dossier.isActive || savable()
     }
     
+    /// si le dossier est déjà actif et a été modifié alors prévenir que les modif vont être écrasées
+    private func activate() {
+        if dossier.isActive {
+            self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
+                                       message       : Text("Toutes les modifications seront perdues"),
+                                       primaryButton : .destructive(Text("Revenir"),
+                                                                    action: load),
+                                       secondaryButton: .cancel())
+        } else {
+            load()
+        }
+    }
+
     /// True si le dossier est actif et à été modifié
     private func savable() -> Bool {
         dossier.isActive && (family.isModified || patrimoine.isModified)
@@ -131,42 +144,17 @@ struct DossierDetailView: View {
 
     /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
     private func save(_ dossier: Dossier) {
-        // vérifier l'existence du Folder associé au Dossier
-        guard let folder = dossier.folder else {
-            self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
-                                       dismissButton : .default(Text("OK")))
-            return
-        }
-
-        // enregistrer le desscripteur du Dossier
         do {
-            try dossier.saveAsJSON()
+            try dossier.saveDossierContentAsJSON { folder in
+                try family.saveAsJSON(toFolder: folder)
+                try patrimoine.saveAsJSON(toFolder: folder)
+                // forcer la vue à se rafraichir
+                dataStore.objectWillChange.send()
+                Simulation.playSound()
+            }
         } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de l'enregistrement du dossier"),
+            self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
                                        dismissButton : .default(Text("OK")))
-        }
-
-        // enregistrer les données utilisateur depuis le Dossier
-        do {
-            try family.saveAsJSON(toFolder: folder)
-            try patrimoine.saveAsJSON(toFolder: folder)
-            Simulation.playSound()
-        } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de l'enregistrement du contenu du dossier !"),
-                                       dismissButton : .default(Text("OK")))
-        }
-    }
-
-    /// si le dossier est déjà actif et a été modifié alors prévenir que les modif vont être écrasées
-    private func activate() {
-        if dossier.isActive {
-        self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
-                                   message       : Text("Toutes les modifications seront perdues"),
-                                   primaryButton : .destructive(Text("Revenir"),
-                                                                action: load),
-                                   secondaryButton: .cancel())
-        } else {
-            load()
         }
     }
 
@@ -178,19 +166,13 @@ struct DossierDetailView: View {
             return
         }
 
-        // vérifier l'existence du Folder associé au Dossier
-        guard let folder = dossier.folder else {
-            self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
-                                       dismissButton : .default(Text("OK")))
-            return
-        }
-
-        // charger les données utilisateur depuis le Dossier
         do {
-            try patrimoine.loadFromJSON(fromFolder: folder)
-            try family.loadFromJSON(fromFolder: folder)
+            try dossier.loadDossierContentAsJSON { folder in
+                try patrimoine.loadFromJSON(fromFolder: folder)
+                try family.loadFromJSON(fromFolder: folder)
+            }
         } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de chargement du contenu du dossier !"),
+            self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
                                        dismissButton : .default(Text("OK")))
         }
 

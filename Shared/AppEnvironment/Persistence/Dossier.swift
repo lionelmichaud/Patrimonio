@@ -36,8 +36,12 @@ extension DossierArray {
 // MARK: - DOSSIER contenant tous les fichiers d'entrée et de sortie
 
 enum DossierError: String, Error {
-    case failedToDeleteDossier        = "Failed to delete Dossier"
-    case inconsistencyOwnerFolderName = "Incohérence entre le nom du directory et le type de propriétaire du Dossier"
+    case failedToDeleteDossier         = "Impossible de supprimer le Dossier"
+    case failedToFindFolder            = "Impossible de trouver le répertoire associé au Dossier"
+    case failedToSaveDossierDescriptor = "Echec de l'enregistrement du descripteur de dossier"
+    case failedToSaveDossierContent    = "Echec de l'enregistrement du contenu du dossier"
+    case failedToLoadDossierContent    = "Echec du chargement du contenu du dossier"
+    case inconsistencyOwnerFolderName  = "Incohérence entre le nom du directory et le type de propriétaire du Dossier"
 }
 
 struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
@@ -241,11 +245,61 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
             throw error
         }
     }
-    
+
+    /// Enregistrer le descripteur de Dossier
     func saveAsJSON() throws {
         try saveAsJSON(toFile               : Dossier.defaultFileName,
                        toFolder             : self.folder!,
                        dateEncodingStrategy : .iso8601)
+    }
+
+    /// Enregistrer le contenu du Dossier
+    /// - Parameter saveDossierContentTo: closure
+    func saveDossierContentAsJSON(saveDossierContentTo: (Folder) throws -> Void) throws {
+        // vérifier l'existence du Folder associé au Dossier
+        guard let folder = self.folder else {
+            customLog.log(level: .error,
+                          "\(DossierError.failedToFindFolder.rawValue)")
+            throw DossierError.failedToFindFolder
+        }
+
+        // enregistrer le desscripteur du Dossier
+        do {
+            try self.saveAsJSON()
+        } catch {
+            customLog.log(level: .error,
+                          "\(DossierError.failedToSaveDossierDescriptor.rawValue)")
+            throw DossierError.failedToSaveDossierDescriptor
+        }
+
+        // enregistrer les données utilisateur depuis le Dossier
+        do {
+            try saveDossierContentTo(folder)
+        } catch {
+            customLog.log(level: .error,
+                          "\(DossierError.failedToSaveDossierContent.rawValue)")
+            throw DossierError.failedToSaveDossierContent
+        }
+    }
+
+    /// Charger le contenu du Dossier
+    /// - Parameter loadDossierContentTo: closure
+    func loadDossierContentAsJSON(loadDossierContentFrom: (Folder) throws -> Void) throws {
+        // vérifier l'existence du Folder associé au Dossier
+        guard let folder = self.folder else {
+            customLog.log(level: .error,
+                          "\(DossierError.failedToFindFolder.rawValue)")
+            throw DossierError.failedToFindFolder
+        }
+
+        // charger les données utilisateur depuis le Dossier
+        do {
+            try loadDossierContentFrom(folder)
+        } catch {
+            customLog.log(level: .error,
+                          "\(DossierError.failedToLoadDossierContent.rawValue)")
+            throw DossierError.failedToLoadDossierContent
+        }
     }
 
     /// Supprimer le contenu du directory et le dossier associé

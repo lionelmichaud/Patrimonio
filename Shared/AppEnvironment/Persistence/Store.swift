@@ -59,8 +59,6 @@ class Store: ObservableObject {
     }
     
     /// Supprimer le contenu du dossier et le directory associé
-    /// - Parameter offsets: <#offsets description#>
-    /// - Throws: <#description#>
     func deleteDossier(atOffsets offsets: IndexSet) throws {
         try dossiers[offsets.first!].delete()
         dossiers.remove(atOffsets: offsets)
