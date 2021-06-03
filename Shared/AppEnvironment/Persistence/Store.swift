@@ -11,23 +11,36 @@ import os
 // MARK: - STORE
 
 class Store: ObservableObject {
-    @Published var dossiers             : DossierArray
-    @Published var failedToLoadDossiers : Bool
+    @Published var dossiers                     : DossierArray
+    @Published var failedToLoadDossiers         : Bool
+    @Published var failedToUpdateTemplateFolder : Bool
     // le dossier en cours d'utilisation
     var activeDossier : Dossier? {
         dossiers.first(where: { $0.isActive })
     }
 
-    /// Charger la liste des Dossiers
+    /// Charger la liste des Dossiers utilisateur et
+    /// mettre à jour le répertoire des templates à partir du Bundle App Main
     init() {
+        // charger tous les dossiers utilisateur
         do {
             var loadedDossiers = DossierArray()
             try loadedDossiers.load()
             self.dossiers = loadedDossiers
             self.failedToLoadDossiers = false
+            
         } catch {
             self.dossiers = []
             self.failedToLoadDossiers = true
+        }
+        
+        // mettre à jour le répertoire des templates à partir du Bundle App Main
+        // ceici permet prendre en compte toute évolution de l'app et de ses templates
+        do {
+            try PersistenceManager.importTemplatesFromApp()
+            self.failedToUpdateTemplateFolder = false
+        } catch {
+            self.failedToUpdateTemplateFolder = true
         }
     }
 

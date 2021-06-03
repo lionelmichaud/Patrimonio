@@ -175,11 +175,11 @@ struct ComputationView: View {
         }
     }
     
-    func savingIsPossible() -> Bool {
+    private func savingIsPossible() -> Bool {
         simulation.isComputed && !simulation.isSaved
     }
     
-    func computeSimulation() {
+    private func computeSimulation() {
 //        busyCompWheelAnimate.toggle()
         // executer les calculs en tâche de fond
 //        DispatchQueue.global(qos: .userInitiated).async {
@@ -213,7 +213,7 @@ struct ComputationView: View {
         #endif
     }
     
-    func saveSimulation() {
+    private func saveSimulation() {
         // executer l'enregistrement en tâche de fond
         guard let folder = dataStore.activeDossier?.folder else {
             self.alertItem = AlertItem(title         : Text("La sauvegarde a échouée"),

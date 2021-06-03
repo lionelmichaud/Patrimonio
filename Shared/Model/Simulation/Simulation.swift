@@ -18,7 +18,7 @@ protocol CanResetSimulation {
     func reset()
 }
 
-class Simulation: ObservableObject, CanResetSimulation {
+final class Simulation: ObservableObject, CanResetSimulation {
 
     //#if DEBUG
     /// URL du fichier de stockage du résultat de calcul au format CSV

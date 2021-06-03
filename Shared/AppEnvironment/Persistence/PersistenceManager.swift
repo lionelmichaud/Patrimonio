@@ -232,9 +232,10 @@ struct PersistenceManager {
         }
     }
     
-    /// Importer les fichiers vierges depuis le Bundle Main de l'Application
+    /// Importer les fichiers vierges depuis le `Bundle Main` de l'Application
     /// vers le répertoire `Library/template`
     /// - Returns: le dossier 'template' si l'import a réussi, 'nil' sinon
+    @discardableResult
     static func importTemplatesFromApp() throws -> Folder {
         guard let originFolder = Folder.application else {
             customLog.log(level: .fault,
