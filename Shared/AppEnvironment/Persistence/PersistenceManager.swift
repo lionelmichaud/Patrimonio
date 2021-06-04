@@ -39,6 +39,7 @@ enum FileError: String, Error {
     case failedToSaveSuccessionsCSV        = "La sauvegarde des successions légales a échoué"
     case failedToSaveLifeInsSuccessionsCSV = "La sauvegarde des successions assurance vie a échoué"
     case failedToResolveAppBundle          = "Impossible de trouver le répertoire 'App Bundle'"
+    case failedToResolveCsvFolder          = "Impossible de trouver le répertoire 'CSV'"
     case failedToResolveDocuments          = "Impossible de trouver le répertoire 'Documents' de l'utilisateur"
     case failedToResolveLibrary            = "Impossible de trouver le répertoire 'Library' de l'utilisateur"
     case failedToFindTemplateDirectory     = "Impossible de trouver le répertoire 'template' dans le répertoire 'Library' de l'utilisateur"
@@ -232,7 +233,29 @@ struct PersistenceManager {
         }
     }
     
-    /// Importer les fichiers vierges depuis le `Bundle Main` de l'Application
+    /// Retourne le Folder dans lequel sont enregistrés les fichier `CSV`
+    /// résultant d'une simulation nommée `forSimulationTitle`
+    /// - Parameters:
+    ///   - folder: Folder actif dans lequel se trouve le Folder `CSV`
+    ///   - forSimulationTitle: nom de la de la simulation
+    /// - Returns: Folder dans lequel sont enregistrés les fichier `CSV`résultant d'une simulation
+    static func csvFolder(in folder          : Folder,
+                          forSimulationTitle : String) throws -> Folder {
+        return try Folder(path: folder.path + AppSettings.shared.csvPath(forSimulationTitle))
+    }
+    
+    /// Retourne le Folder dans lequel sont enregistrés les fichier `image`
+    /// résultant d'une simulation nommée `forSimulationTitle`
+    /// - Parameters:
+    ///   - folder: Folder actif dans lequel se trouve le Folder `image`
+    ///   - forSimulationTitle: nom de la de la simulation
+    /// - Returns: Folder dans lequel sont enregistrés les fichier `image`résultant d'une simulation
+    static func imageFolder(in folder          : Folder,
+                            forSimulationTitle : String) throws -> Folder {
+        return try Folder(path: folder.path + AppSettings.shared.imagePath(forSimulationTitle))
+    }
+    
+   /// Importer les fichiers vierges depuis le `Bundle Main` de l'Application
     /// vers le répertoire `Library/template`
     /// - Returns: le dossier 'template' si l'import a réussi, 'nil' sinon
     @discardableResult

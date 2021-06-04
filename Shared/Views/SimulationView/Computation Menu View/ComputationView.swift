@@ -8,7 +8,7 @@
 
 import SwiftUI
 import RetirementModel
-//import ActivityIndicatorView
+import Files
 
 struct ComputationView: View {
     @EnvironmentObject var uiState          : UIState
@@ -226,49 +226,69 @@ struct ComputationView: View {
         shareSimulationResults(dicoOfCSV: dicoOfCsv)
     }
     
-    /// Partager les fichiers CSV
+    /// Partager les fichiers CSV et Image
     private func shareSimulationResults(dicoOfCSV: [String:String]) {
-        let csvStrings = dicoOfCSV.values.map { $0 }
-        Patrimonio.share(items: csvStrings)
+        guard let folder = dataStore.activeDossier?.folder else {
+            self.alertItem = AlertItem(title         : Text("Le partage a échoué"),
+                                       dismissButton : .default(Text("OK")))
+            return
+        }
+        
+        var urls = [URL]()
+        do {
+            let csvFolder = try PersistenceManager.csvFolder(in                 : folder,
+                                                             forSimulationTitle : simulation.title)
+            csvFolder.files.forEach { file in
+                urls.append(file.url)
+            }
+        } catch {
+            self.alertItem = AlertItem(title         : Text("Le partage des fichiers .csv échoué"),
+                                       dismissButton : .default(Text("OK")))
+        }
+        
+        let imageFolder = try? PersistenceManager.imageFolder(in                 : folder,
+                                                              forSimulationTitle : simulation.title)
+        imageFolder?.files.forEach { file in
+            urls.append(file.url)
+        }
+        
+        Patrimonio.share(items: urls)
     }
     
     /// Enregistrer les fichier CSV en tâche de fond
     private func saveSimulationToDocumentsDirectory(dicoOfCSV: [String:String]) {
+        // folder du dossier actif
         guard let folder = dataStore.activeDossier?.folder else {
             self.alertItem = AlertItem(title         : Text("La sauvegarde locale a échouée"),
                                        dismissButton : .default(Text("OK")))
             return
         }
         busySaveWheelAnimate.toggle()
-        DispatchQueue.global(qos: .userInitiated).async {
+//        DispatchQueue.global(qos: .userInitiated).async {
             do {
                 for (name, csv) in dicoOfCSV {
-                    do {
-                        try PersistenceManager.saveToCsvPath(to              : folder,
-                                                             fileName        : name,
-                                                             simulationTitle : simulation.title,
-                                                             csvString       : csv)
-                    } catch {
-                        throw FileError.failedToSaveBalanceSheetCsv
-                    }
+                    try PersistenceManager.saveToCsvPath(to              : folder,
+                                                         fileName        : name,
+                                                         simulationTitle : simulation.title,
+                                                         csvString       : csv)
                 }
                 // mettre à jour les variables d'état dans le thread principal
-                DispatchQueue.main.async {
+//                DispatchQueue.main.async {
                     self.busySaveWheelAnimate.toggle()
                     self.simulation.isSaved = true
                     Simulation.playSound()
-                }
+//                } // DispatchQueue
             } catch {
                 // mettre à jour les variables d'état dans le thread principal
-                DispatchQueue.main.async {
+//                DispatchQueue.main.async {
                     self.busySaveWheelAnimate.toggle()
                     self.simulation.isSaved = false
                     self.alertItem = AlertItem(title         : Text("La sauvegarde a échouée"),
                                                dismissButton : .default(Text("OK")))
                     //                    self.presentationMode.wrappedValue.dismiss()
-                }
+//                } // DispatchQueue
             }
-        }
+//        } // DispatchQueue
     }
 }
 
