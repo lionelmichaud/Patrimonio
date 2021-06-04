@@ -18,14 +18,12 @@ struct ComputationView: View {
     @EnvironmentObject var simulation       : Simulation
     @State private var busySaveWheelAnimate : Bool = false
     @State private var busyCompWheelAnimate : Bool = false
-//    @Environment(\.presentationMode) var presentationMode
     @State private var alertItem            : AlertItem?
-    @State private var showSharePopover     : Bool = false
+//    @Environment(\.presentationMode) var presentationMode
 
     struct ComputationForm: View {
         @EnvironmentObject var uiState    : UIState
         @EnvironmentObject var simulation : Simulation
-        @Binding var showSharePopover     : Bool
 
         var parameterSection: some View {
             Section(header: Text("Paramètres de Simulation").font(.headline)) {
@@ -120,7 +118,6 @@ struct ComputationView: View {
             Form {
                 // paramétrage de la simulation : cas général
                 parameterSection
-                    .shareSheet(items: ["Hello world!"])
 
                 // affichage des résultats
                 resultsSection
@@ -133,7 +130,7 @@ struct ComputationView: View {
     
     var body: some View {
         if dataStore.activeDossier != nil {
-            ComputationForm(showSharePopover: $showSharePopover)
+            ComputationForm()
                 .navigationTitle("Calculs")
                 // barre de boutons
                 .toolbar {
@@ -152,12 +149,10 @@ struct ComputationView: View {
                                }
                         )
                         .capsuleButtonStyle()
+                        .shareContextMenu(items: ["Hello world!", "coucou"])
                         .disabled(!savingIsPossible())
-//                        .popover(isPresented: $showSharePopover, arrowEdge: .top) {
-//                            Text("Ceci est le Popover")
-//                            ShareActivityViewController(text: "Share", showing: $showSharePopover)
-//                        }
                     }
+                    
                     // bouton Calculer
                     ToolbarItem(placement: .primaryAction) {
                         Button(action: computeSimulation,
@@ -182,37 +177,37 @@ struct ComputationView: View {
     }
     
     private func savingIsPossible() -> Bool {
-        simulation.isComputed && !simulation.isSaved
+        simulation.isComputed // && !simulation.isSaved
     }
     
     private func computeSimulation() {
-        //        busyCompWheelAnimate.toggle()
+        // busyCompWheelAnimate.toggle()
         // executer les calculs en tâche de fond
-//        DispatchQueue.global(qos: .userInitiated).async {
-            switch simulation.mode {
-                case .deterministic:
-                    simulation.compute(nbOfYears      : Int(uiState.computationState.nbYears),
-                                       nbOfRuns       : 1,
-                                       withFamily     : family,
-                                       withPatrimoine : patrimoine)
-                    
-                case .random:
-                    simulation.compute(nbOfYears      : Int(uiState.computationState.nbYears),
-                                       nbOfRuns       : Int(uiState.computationState.nbRuns),
-                                       withFamily     : family,
-                                       withPatrimoine : patrimoine)
-            }
-            // mettre à jour les variables d'état dans le thread principal
-            DispatchQueue.main.async {
-                uiState.bsChartState.itemSelection = simulation.socialAccounts.balanceArray.getBalanceSheetLegend(.both)
-                uiState.cfChartState.itemSelection = simulation.socialAccounts.cashFlowArray.getCashFlowLegend(.both)
-                // positionner le curseur de la vue PatrimoinSummaryView sur la bonne date
-                uiState.patrimoineViewState.evalDate = simulation.lastYear!.double()
-                //        busyCompWheelAnimate.toggle()
-                self.alertItem = AlertItem(title         : Text("Les calculs sont terminés. Vous pouvez visualiser les résultats."),
-                                           dismissButton : .default(Text("OK")))
-            }
-//        } // DispatchQueue.global
+        // DispatchQueue.global(qos: .userInitiated).async {
+        switch simulation.mode {
+            case .deterministic:
+                simulation.compute(nbOfYears      : Int(uiState.computationState.nbYears),
+                                   nbOfRuns       : 1,
+                                   withFamily     : family,
+                                   withPatrimoine : patrimoine)
+                
+            case .random:
+                simulation.compute(nbOfYears      : Int(uiState.computationState.nbYears),
+                                   nbOfRuns       : Int(uiState.computationState.nbRuns),
+                                   withFamily     : family,
+                                   withPatrimoine : patrimoine)
+        }
+        // mettre à jour les variables d'état dans le thread principal
+        // DispatchQueue.main.async {
+        uiState.bsChartState.itemSelection = simulation.socialAccounts.balanceArray.getBalanceSheetLegend(.both)
+        uiState.cfChartState.itemSelection = simulation.socialAccounts.cashFlowArray.getCashFlowLegend(.both)
+        // positionner le curseur de la vue PatrimoinSummaryView sur la bonne date
+        uiState.patrimoineViewState.evalDate = simulation.lastYear!.double()
+        //        busyCompWheelAnimate.toggle()
+        self.alertItem = AlertItem(title         : Text("Les calculs sont terminés. Vous pouvez visualiser les résultats."),
+                                   dismissButton : .default(Text("OK")))
+        // }
+        //        } // DispatchQueue.global
         //        self.presentationMode.wrappedValue.dismiss()
         #if DEBUG
         // self.simulation.socialAccounts.printBalanceSheetTable()
@@ -220,8 +215,6 @@ struct ComputationView: View {
     }
     
     private func saveSimulation() {
-        self.showSharePopover = true
-        
         // executer l'enregistrement en tâche de fond
         guard let folder = dataStore.activeDossier?.folder else {
             self.alertItem = AlertItem(title         : Text("La sauvegarde a échouée"),
@@ -244,7 +237,7 @@ struct ComputationView: View {
                     self.simulation.isSaved = false
                     self.alertItem = AlertItem(title         : Text("La sauvegarde a échouée"),
                                                dismissButton : .default(Text("OK")))
-//                    self.presentationMode.wrappedValue.dismiss()
+                    //                    self.presentationMode.wrappedValue.dismiss()
                 }
             }
         }
