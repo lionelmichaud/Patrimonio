@@ -308,26 +308,31 @@ final class Simulation: ObservableObject, CanResetSimulation {
         isSaved     = false
     }
 
-    /// Sauvegarder les résultats de simulation dans des fchier CSV
-    func save(to folder: Folder) throws {
-        defer {
-            // jouer le son à la fin de la sauvegarde
-            Simulation.playSound()
-        }
+    /// Générer les String au format CSV à partir des résultats
+    /// de la dernière simulation réalisée
+    ///
+    /// - un fichier pour le Cash Flow
+    /// - un fichier pour le Bilan
+    /// - un fichier pour les Successions
+    /// - un fichier pour le tableau de résultat de Monté-Carlo
+    ///
+    /// - Parameter mode: mode de simulation utilisé lors de la dernière simulation
+    /// - Returns: dictionnaire [Nom de fichier : CSV string]
+    func simulationResultsCSV() -> [String:String] {
         /// - un fichier pour le Cash Flow
         /// - un fichier pour le Bilan
-        try socialAccounts.save(to              : folder,
-                                simulationTitle : title,
-                                withMode        : mode)
+        /// - un fichier pour les Successions
+        var dicoOfCsv = socialAccounts.lastSimulationResultCsvStrings(withMode: mode)
         
+        /// - un fichier pour le tableau de résultat de Monté-Carlo
+        var runResultCsvString: String
         if mode == .deterministic {
-            /// - un fichier pour le tableau de résultat de Monté-Carlo
-            try [currentRunResults].save(to              : folder,
-                                         simulationTitle : title)
+            runResultCsvString = CsvBuilder.monteCarloCSV(from: [currentRunResults])
         } else {
-            /// - un fichier pour le tableau de résultat de Monté-Carlo
-            try monteCarloResultTable.save(to              : folder,
-                                           simulationTitle : title)
+            runResultCsvString = CsvBuilder.monteCarloCSV(from: monteCarloResultTable)
         }
+        dicoOfCsv[FileNameCst.kMonteCarloCSVFileName] = runResultCsvString
+        
+        return dicoOfCsv
     }
 }

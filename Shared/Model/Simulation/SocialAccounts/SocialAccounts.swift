@@ -293,48 +293,32 @@ struct SocialAccounts {
         return kpiResults
     }
     
-    /// Sauvegarder les résultats de simulation dans des fchier CSV
+    /// Générer les String au format CSV à partir des résultats
+    /// de la dernière simulation réalisée
     ///
     /// - un fichier pour le Cash Flow
     /// - un fichier pour le Bilan
+    /// - un fichier pour les Successions
     ///
-    /// - Parameter simulationTitle: Titre de la simulation utilisé pour générer les nom de répertoire
-    func save(to folder       : Folder,
-              simulationTitle : String,
-              withMode mode   : SimulationModeEnum) throws {
+    /// - Parameter mode: mode de simulation utilisé lors de la dernière simulation
+    /// - Returns: dictionnaire [Nom de fichier : CSV string]
+    func lastSimulationResultCsvStrings(withMode mode: SimulationModeEnum) -> [String:String] {
+        //    (balanceSheetCSV : String,
+        //     cashFlowCSV     : String,
+        //     successionsCSV  : String) {
+        var dico = [String:String]()
         // construction du tableau de bilans annnuels au format CSV
-        let balanceSheetCSV = CsvBuilder.balanceSheetCSV(from     : balanceArray,
-                                                         withMode : mode)
+        dico[FileNameCst.kBalanceSheetCSVFileName] =
+            CsvBuilder.balanceSheetCSV(from     : balanceArray,
+                                       withMode : mode)
         // construction du tableau de cash flow annnuels au format CSV
-        let cashFlowCSV = CsvBuilder.cashFlowCSV(from     : cashFlowArray,
-                                                 withMode : mode)
+        dico[FileNameCst.kCashFlowCSVFileName] =
+            CsvBuilder.cashFlowCSV(from     : cashFlowArray,
+                                   withMode : mode)
         // construction du tableau des successions
-        let successionsCSV   = String(describing: CsvSuccessionsVisitor(successions: legalSuccessions + lifeInsSuccessions))
+        dico[FileNameCst.kSuccessionsCSVFileName]  =
+            String(describing: CsvSuccessionsVisitor(successions: legalSuccessions + lifeInsSuccessions))
         
-        // enregistrer les résultats dans le directory approprié
-        do {
-            try PersistenceManager.saveToCsvPath(to              : folder,
-                                                 fileName        : FileNameCst.kBalanceSheetCSVFileName,
-                                                 simulationTitle : simulationTitle,
-                                                 csvString       : balanceSheetCSV)
-        } catch {
-            throw FileError.failedToSaveBalanceSheetCsv
-        }
-        do {
-            try PersistenceManager.saveToCsvPath(to              : folder,
-                                                 fileName        : FileNameCst.kCashFlowCSVFileName,
-                                                 simulationTitle : simulationTitle,
-                                                 csvString       : cashFlowCSV)
-        } catch {
-            throw FileError.failedToSaveCashFlowCsv
-        }
-        do {
-            try PersistenceManager.saveToCsvPath(to              : folder,
-                                                 fileName        : FileNameCst.kSuccessionsCSVFileName,
-                                                 simulationTitle : simulationTitle,
-                                                 csvString       : successionsCSV)
-        } catch {
-            throw FileError.failedToSaveSuccessionsCSV
-        }
+        return dico
     }
 }

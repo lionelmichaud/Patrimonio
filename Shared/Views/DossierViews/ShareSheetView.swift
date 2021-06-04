@@ -25,7 +25,7 @@ struct ActivityViewController: UIViewControllerRepresentable {
 
 // MARK: - View Modifiers
 
-struct ShareSheetContextMenuModifer: ViewModifier {
+struct SharePopoverContextMenuModifer: ViewModifier {
     @State private var showShareSheet: Bool = false
     @State var shareSheetItems: [Any] = []
     var excludedActivityTypes: [UIActivity.ActivityType]?
@@ -49,7 +49,7 @@ struct ShareSheetContextMenuModifer: ViewModifier {
     }
 }
 
-struct ShareSheetModifer: ViewModifier {
+struct SharePopoverModifer: ViewModifier {
     @Binding var showShareSheet : Bool
     @State var shareSheetItems  : [Any] = []
     var excludedActivityTypes: [UIActivity.ActivityType]?
@@ -69,17 +69,32 @@ struct ShareSheetModifer: ViewModifier {
 extension View {
     func shareContextMenu(items                 : [Any],
                           excludedActivityTypes : [UIActivity.ActivityType]?  = nil) -> some View {
-        self.modifier(ShareSheetContextMenuModifer(shareSheetItems: items,
+        self.modifier(SharePopoverContextMenuModifer(shareSheetItems: items,
                                                    excludedActivityTypes: excludedActivityTypes))
     }
 }
 
 extension View {
-    func shareSheet(showShareSheet        : Binding<Bool>,
-                    items                 : [Any],
-                    excludedActivityTypes : [UIActivity.ActivityType]?  = nil) -> some View {
-        self.modifier(ShareSheetModifer(showShareSheet: showShareSheet,
+    func sharePopover(showShareSheet        : Binding<Bool>,
+                      items                 : [Any],
+                      excludedActivityTypes : [UIActivity.ActivityType]?  = nil) -> some View {
+        self.modifier(SharePopoverModifer(showShareSheet: showShareSheet,
                                         shareSheetItems: items,
                                         excludedActivityTypes: excludedActivityTypes))
+    }
+}
+
+func share(items: [Any]) {
+    let activityView = UIActivityViewController(activityItems: items,
+                                                applicationActivities: nil)
+    UIApplication.shared.windows.first?.rootViewController?.present(activityView, animated: true, completion: nil)
+    
+    if UIDevice.current.userInterfaceIdiom == .pad {
+        activityView.popoverPresentationController?.sourceView = UIApplication.shared.windows.first
+        activityView.popoverPresentationController?.sourceRect = CGRect(
+            x: UIScreen.main.bounds.width / 2.1,
+            y: UIScreen.main.bounds.height / 2.3,
+            width: 200,
+            height: 200)
     }
 }

@@ -136,7 +136,7 @@ struct ComputationView: View {
                 .toolbar {
                     // bouton Exporter fichiers CSV
                     ToolbarItem(placement: .automatic) {
-                        Button(action: saveSimulation,
+                        Button(action: exportSimulationResults,
                                label: {
                                 HStack(alignment: .center) {
                                     if busySaveWheelAnimate {
@@ -180,6 +180,7 @@ struct ComputationView: View {
         simulation.isComputed // && !simulation.isSaved
     }
     
+    /// Exécuter la simulation
     private func computeSimulation() {
         // busyCompWheelAnimate.toggle()
         // executer les calculs en tâche de fond
@@ -214,21 +215,48 @@ struct ComputationView: View {
         #endif
     }
     
-    private func saveSimulation() {
+    /// Exporter les résultats de la simulation
+    private func exportSimulationResults() {
+        let dicoOfCsv = simulation.simulationResultsCSV()
+
         // executer l'enregistrement en tâche de fond
+        saveSimulationToDocumentsDirectory(dicoOfCSV: dicoOfCsv)
+        
+        // paratager les fichiers CSV
+        shareSimulationResults(dicoOfCSV: dicoOfCsv)
+    }
+    
+    /// Partager les fichiers CSV
+    private func shareSimulationResults(dicoOfCSV: [String:String]) {
+        let csvStrings = dicoOfCSV.values.map { $0 }
+        Patrimonio.share(items: csvStrings)
+    }
+    
+    /// Enregistrer les fichier CSV en tâche de fond
+    private func saveSimulationToDocumentsDirectory(dicoOfCSV: [String:String]) {
         guard let folder = dataStore.activeDossier?.folder else {
-            self.alertItem = AlertItem(title         : Text("La sauvegarde a échouée"),
+            self.alertItem = AlertItem(title         : Text("La sauvegarde locale a échouée"),
                                        dismissButton : .default(Text("OK")))
             return
         }
         busySaveWheelAnimate.toggle()
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                try self.simulation.save(to: folder)
+                for (name, csv) in dicoOfCSV {
+                    do {
+                        try PersistenceManager.saveToCsvPath(to              : folder,
+                                                             fileName        : name,
+                                                             simulationTitle : simulation.title,
+                                                             csvString       : csv)
+                    } catch {
+                        throw FileError.failedToSaveBalanceSheetCsv
+                    }
+                }
                 // mettre à jour les variables d'état dans le thread principal
                 DispatchQueue.main.async {
                     self.busySaveWheelAnimate.toggle()
                     self.simulation.isSaved = true
+                    Simulation.playSound()
                 }
             } catch {
                 // mettre à jour les variables d'état dans le thread principal
