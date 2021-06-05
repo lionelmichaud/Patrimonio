@@ -33,14 +33,25 @@ enum AssetEvaluationMethod: String, PickableEnum {
 
 struct UserSettings {
     static var shared = UserSettings()
-    static let simulateVolatility    = "simulateVolatility"
-    static let ownershipSelection    = "ownershipSelection"
-    static let assetEvaluationMethod = "assetEvaluationMethod"
+    
+    // (Key, Value) pairs
 
+    static let simulateVolatility    = "simulateVolatility"
     @WrappedDefault(keyName: UserSettings.simulateVolatility,
                     defaultValue: false)
     var simulateVolatility: Bool
     
+    static let shareCsvFiles         = "shareCsvFiles"
+    @WrappedDefault(keyName: UserSettings.shareCsvFiles,
+                    defaultValue: true)
+    var shareCsvFiles: Bool
+    
+    static let shareImageFiles       = "shareImageFiles"
+    @WrappedDefault(keyName: UserSettings.shareImageFiles,
+                    defaultValue: true)
+    var shareImageFiles: Bool
+    
+    static let ownershipSelection    = "ownershipSelection"
     @WrappedDefault(keyName: UserSettings.ownershipSelection,
                     defaultValue: OwnershipNature.all.rawValue)
     var ownershipSelectionString: String
@@ -53,6 +64,7 @@ struct UserSettings {
         }
     }
     
+    static let assetEvaluationMethod = "assetEvaluationMethod"
     @WrappedDefault(keyName: UserSettings.assetEvaluationMethod,
                     defaultValue: AssetEvaluationMethod.ownedValue.rawValue)
     var assetEvaluationMethodString: String

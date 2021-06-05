@@ -57,13 +57,15 @@ struct SimulationView: View {
 struct SimulationView_Previews: PreviewProvider {
     static let dataStore  = Store()
     static var uiState    = UIState()
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
+    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromApp())
     static var simulation = Simulation()
 
     static var previews: some View {
-        simulation.compute(nbOfYears: 40, nbOfRuns: 1,
-                           withFamily: family, withPatrimoine: patrimoine)
+        simulation.compute(nbOfYears      : 5,
+                           nbOfRuns       : 1,
+                           withFamily     : family,
+                           withPatrimoine : patrimoine)
         return
             SimulationView()
             .environmentObject(dataStore)

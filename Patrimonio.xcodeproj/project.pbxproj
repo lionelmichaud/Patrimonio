@@ -26,6 +26,9 @@
 		79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79058372262C790F0061F296 /* SocioEconomyModel */; };
 		7906AB752641BCF100A398E9 /* SocialAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */; };
 		7906AB762641BCF100A398E9 /* SocialAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */; };
+		790C616A266AA56B0032A35E /* SimulationUserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC723D26331C69004F3BD2 /* SimulationUserSettingsView.swift */; };
+		790C6170266AA5A80032A35E /* ExportSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790C616F266AA5A80032A35E /* ExportSettingsView.swift */; };
+		790C6171266AA5A80032A35E /* ExportSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790C616F266AA5A80032A35E /* ExportSettingsView.swift */; };
 		790FF33D264850E6001B2653 /* CsvBalanceSheetVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790FF33C264850E6001B2653 /* CsvBalanceSheetVisitor.swift */; };
 		790FF33E264850E6001B2653 /* CsvBalanceSheetVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790FF33C264850E6001B2653 /* CsvBalanceSheetVisitor.swift */; };
 		790FF33F2648521B001B2653 /* CsvBalanceSheetVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790FF33C264850E6001B2653 /* CsvBalanceSheetVisitor.swift */; };
@@ -549,8 +552,7 @@
 		79FC722326330D2C004F3BD2 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC722226330D2C004F3BD2 /* AppCommands.swift */; };
 		79FC722426330D2C004F3BD2 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC722226330D2C004F3BD2 /* AppCommands.swift */; };
 		79FC723726331A9D004F3BD2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC723526331A9D004F3BD2 /* SettingsView.swift */; };
-		79FC723E26331C69004F3BD2 /* SimulationUserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC723D26331C69004F3BD2 /* SimulationUserSettings.swift */; };
-		79FC723F26331C69004F3BD2 /* SimulationUserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC723D26331C69004F3BD2 /* SimulationUserSettings.swift */; };
+		79FC723F26331C69004F3BD2 /* SimulationUserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC723D26331C69004F3BD2 /* SimulationUserSettingsView.swift */; };
 		79FC724926331CCD004F3BD2 /* GraphicUserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC724826331CCD004F3BD2 /* GraphicUserSettings.swift */; };
 		79FC724A26331CCD004F3BD2 /* GraphicUserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC724826331CCD004F3BD2 /* GraphicUserSettings.swift */; };
 		79FC725226331E0A004F3BD2 /* PickerHelperViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC725126331E0A004F3BD2 /* PickerHelperViews.swift */; };
@@ -591,6 +593,7 @@
 		7901CF8A2652956A007DF85B /* CsvSuccessionVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvSuccessionVisitor.swift; sourceTree = "<group>"; };
 		7901CF8E2652A04D007DF85B /* Successions.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = Successions.csv; sourceTree = "<group>"; };
 		7906AB6D2641BCF100A398E9 /* SocialAccounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialAccounts.swift; sourceTree = "<group>"; };
+		790C616F266AA5A80032A35E /* ExportSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportSettingsView.swift; sourceTree = "<group>"; };
 		790FF33926484D59001B2653 /* Visitor Pattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Visitor Pattern.swift"; sourceTree = "<group>"; };
 		790FF33C264850E6001B2653 /* CsvBalanceSheetVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvBalanceSheetVisitor.swift; sourceTree = "<group>"; };
 		790FF34726485BDE001B2653 /* CvsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CvsBuilder.swift; sourceTree = "<group>"; };
@@ -836,7 +839,7 @@
 		79FC72082632F7A9004F3BD2 /* AppVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		79FC722226330D2C004F3BD2 /* AppCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
 		79FC723526331A9D004F3BD2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		79FC723D26331C69004F3BD2 /* SimulationUserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationUserSettings.swift; sourceTree = "<group>"; };
+		79FC723D26331C69004F3BD2 /* SimulationUserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationUserSettingsView.swift; sourceTree = "<group>"; };
 		79FC724826331CCD004F3BD2 /* GraphicUserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicUserSettings.swift; sourceTree = "<group>"; };
 		79FC725126331E0A004F3BD2 /* PickerHelperViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerHelperViews.swift; sourceTree = "<group>"; };
 		79FC7258263320BE004F3BD2 /* AppVersionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionView.swift; sourceTree = "<group>"; };
@@ -1739,8 +1742,9 @@
 			isa = PBXGroup;
 			children = (
 				79FC7258263320BE004F3BD2 /* AppVersionView.swift */,
-				79FC723D26331C69004F3BD2 /* SimulationUserSettings.swift */,
+				79FC723D26331C69004F3BD2 /* SimulationUserSettingsView.swift */,
 				79FC724826331CCD004F3BD2 /* GraphicUserSettings.swift */,
+				790C616F266AA5A80032A35E /* ExportSettingsView.swift */,
 			);
 			path = SettingsViews;
 			sourceTree = "<group>";
@@ -2165,7 +2169,6 @@
 				79EC479926307B260006EE44 /* UserSettings.swift in Sources */,
 				79B2727A2634D68E00298E5D /* BoundaryEditView.swift in Sources */,
 				799025BF2641F60300ED53D4 /* SuccessionsSectionView.swift in Sources */,
-				79FC723E26331C69004F3BD2 /* SimulationUserSettings.swift in Sources */,
 				791ED0EF263A173D00701202 /* PersonAddView.swift in Sources */,
 				7990D8DD264F0A6800078CB6 /* LineChartCashFlowVisitor.swift in Sources */,
 				790FF34826485BDE001B2653 /* CvsBuilder.swift in Sources */,
@@ -2207,6 +2210,7 @@
 				7935FFD92654204200AC1715 /* DossierSummaryView.swift in Sources */,
 				79CB2C89264D731900B3E493 /* CsvMonteCarloVisitor.swift in Sources */,
 				791D3BA02649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,
+				790C6170266AA5A80032A35E /* ExportSettingsView.swift in Sources */,
 				791ED11E263A2D2E00701202 /* CashFlowLine+manageSCPI.swift in Sources */,
 				7906AB752641BCF100A398E9 /* SocialAccounts.swift in Sources */,
 				7901CF8B2652956A007DF85B /* CsvSuccessionVisitor.swift in Sources */,
@@ -2272,6 +2276,7 @@
 				791ED0E3263A04EE00701202 /* AdultViewModel.swift in Sources */,
 				79EC5E9126406AAD00FF8263 /* LoanDetailedView.swift in Sources */,
 				7977FE7A262E4FA3005A1CB1 /* TimeSpan.swift in Sources */,
+				790C616A266AA56B0032A35E /* SimulationUserSettingsView.swift in Sources */,
 				796506D8264094B00036E466 /* AssetView.swift in Sources */,
 				79FC724926331CCD004F3BD2 /* GraphicUserSettings.swift in Sources */,
 				7990D8E1264F1C4000078CB6 /* BarChartCashFlowVisitor.swift in Sources */,
@@ -2359,6 +2364,7 @@
 				799025B22641F60300ED53D4 /* IrppEvolutionChartView.swift in Sources */,
 				791ED0F3263A188900701202 /* PersonEditView.swift in Sources */,
 				796503CD265581E40093F10E /* Store.swift in Sources */,
+				790C6171266AA5A80032A35E /* ExportSettingsView.swift in Sources */,
 				79EC5EAB26406FD900FF8263 /* OwnerGroupBox.swift in Sources */,
 				7990D8E2264F1C4000078CB6 /* BarChartCashFlowVisitor.swift in Sources */,
 				7998E1A3262DBE3E00DA4A12 /* Adult+Unemployement.swift in Sources */,
@@ -2377,7 +2383,7 @@
 				791ED0F9263A1D8A00701202 /* FamilySectionView.swift in Sources */,
 				795049FF26679347000AAEF0 /* StatisticSectionView.swift in Sources */,
 				795049F4266792C2000AAEF0 /* DeterministicSectionView.swift in Sources */,
-				79FC723F26331C69004F3BD2 /* SimulationUserSettings.swift in Sources */,
+				79FC723F26331C69004F3BD2 /* SimulationUserSettingsView.swift in Sources */,
 				791ED12F263A2DC300701202 /* RevenueCategory.swift in Sources */,
 				797901282640AF0400104C1A /* PatrimoineSummaryView.swift in Sources */,
 				799025BA2641F60300ED53D4 /* isfEvolutionChartView.swift in Sources */,

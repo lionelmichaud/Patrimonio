@@ -22,7 +22,7 @@ struct SettingsView: View {
                     Label("Version", systemImage: "info.circle")
                 }
                 .tag(Tabs.version)
-            SimulationUserSettings()
+            SimulationUserSettingsView()
                 .tabItem {
                     Label("Simulation", systemImage: "function")
                 }

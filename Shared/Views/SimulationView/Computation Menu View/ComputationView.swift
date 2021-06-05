@@ -223,33 +223,41 @@ struct ComputationView: View {
         saveSimulationToDocumentsDirectory(dicoOfCSV: dicoOfCsv)
         
         // paratager les fichiers CSV
-        shareSimulationResults(dicoOfCSV: dicoOfCsv)
+        if UserSettings.shared.shareCsvFiles || UserSettings.shared.shareImageFiles {
+            shareSimulationResults()
+        }
     }
     
     /// Partager les fichiers CSV et Image
-    private func shareSimulationResults(dicoOfCSV: [String:String]) {
+    private func shareSimulationResults() {
         guard let folder = dataStore.activeDossier?.folder else {
             self.alertItem = AlertItem(title         : Text("Le partage a échoué"),
                                        dismissButton : .default(Text("OK")))
             return
         }
-        
+
+        // partage des fichiers CSV
         var urls = [URL]()
-        do {
-            let csvFolder = try PersistenceManager.csvFolder(in                 : folder,
-                                                             forSimulationTitle : simulation.title)
-            csvFolder.files.forEach { file in
-                urls.append(file.url)
+        if UserSettings.shared.shareCsvFiles {
+            do {
+                let csvFolder = try PersistenceManager.csvFolder(in                 : folder,
+                                                                 forSimulationTitle : simulation.title)
+                csvFolder.files.forEach { file in
+                    urls.append(file.url)
+                }
+            } catch {
+                self.alertItem = AlertItem(title         : Text("Le partage des fichiers .csv échoué"),
+                                           dismissButton : .default(Text("OK")))
             }
-        } catch {
-            self.alertItem = AlertItem(title         : Text("Le partage des fichiers .csv échoué"),
-                                       dismissButton : .default(Text("OK")))
         }
         
-        let imageFolder = try? PersistenceManager.imageFolder(in                 : folder,
-                                                              forSimulationTitle : simulation.title)
-        imageFolder?.files.forEach { file in
-            urls.append(file.url)
+        // partage des fichiers PNG
+        if UserSettings.shared.shareImageFiles {
+            let imageFolder = try? PersistenceManager.imageFolder(in                 : folder,
+                                                                  forSimulationTitle : simulation.title)
+            imageFolder?.files.forEach { file in
+                urls.append(file.url)
+            }
         }
         
         Patrimonio.share(items: urls)

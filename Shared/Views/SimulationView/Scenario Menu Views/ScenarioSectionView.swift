@@ -26,7 +26,12 @@ struct ScenarioSectionView: View {
 }
 
 struct ScenarioSectionView_Previews: PreviewProvider {
+    static let uiState    = UIState()
+    static let simulation = Simulation()
+
     static var previews: some View {
         ScenarioSectionView()
+            .environmentObject(uiState)
+            .environmentObject(simulation)
     }
 }

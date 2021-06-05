@@ -79,13 +79,14 @@ final class Family: ObservableObject {
     convenience init(fromFolder folder: Folder) throws {
         self.init()
         try self.expenses = LifeExpensesDic(fromFolder: folder)
+        try self.members  = PersistableArrayOfPerson(fromFolder: folder)
     }
 
     // MARK: - Methodes
 
     func loadFromJSON(fromFolder folder: Folder) throws {
         expenses = try LifeExpensesDic(fromFolder : folder)
-        members  = try PersistableArrayOfPerson(from: folder)
+        members  = try PersistableArrayOfPerson(fromFolder: folder)
     }
 
     func saveAsJSON(toFolder folder: Folder) throws {

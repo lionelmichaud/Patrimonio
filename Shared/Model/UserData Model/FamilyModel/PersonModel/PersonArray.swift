@@ -15,7 +15,7 @@ extension PersistableArrayOfPerson {
     /// Initialiser à partir d'un fichier JSON portant le nom `FileNameCst.kFamilyMembersFileName`
     /// contenu dans le dossier `from` du répertoire `Documents`
     /// - Parameter from: dossier où se trouve le fichier JSON à utiliser
-    init(from folder : Folder) throws {
+    init(fromFolder folder : Folder) throws {
         
         self.init()
         

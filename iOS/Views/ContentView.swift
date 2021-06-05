@@ -13,7 +13,6 @@ struct ContentView: View {
     // MARK: - Environment Properties
 
     @EnvironmentObject private var uiState    : UIState
-    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var simulation : Simulation
     @SceneStorage("selectedTab") var selection = UIState.Tab.dossier
 
@@ -61,18 +60,18 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static let uiState    = UIState()
-    static let family     = Family()
-    static let patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+//    static let family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+//    static let patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromApp())
     static let simulation = Simulation()
 
     static var previews: some View {
         Group {
             ContentView().colorScheme(.dark)
                 .environmentObject(uiState)
-                .environmentObject(family)
-                .environmentObject(patrimoine)
+//                .environmentObject(family)
+//                .environmentObject(patrimoine)
                 .environmentObject(simulation)
-                .environment(\.locale, .init(identifier: "fr"))
+//                .environment(\.locale, .init(identifier: "fr"))
             //                .previewDevice(PreviewDevice(rawValue: "iPhone X"))
             //                .previewDisplayName("iPhone X")
             //            ContentView()
