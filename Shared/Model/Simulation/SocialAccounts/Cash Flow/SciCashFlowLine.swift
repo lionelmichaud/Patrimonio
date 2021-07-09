@@ -91,21 +91,20 @@ struct SciCashFlowLine {
         // pour chaque SCPI
         for scpi in patrimoine.assets.sci.scpis.items.sorted(by:<)
         where scpi.isPartOfPatrimoine(of: adultsName) {
-            let name = scpi.name
+            let ScpiName = scpi.name
             // FIXME: Ca ne marche pas comme ca. C'est toute la SCI dont il faut géréer les droit de propriété. Pas chaque SCPI individuellement.
             
             /// Revenus
             if scpi.providesRevenue(to: adultsName) {
-                // populate SCPI revenues de la SCI, nets de charges sociales et avant IS
                 let yearlyRevenue = scpi.yearlyRevenue(during: year)
-                // revenus inscrit en compte courant après prélèvements sociaux et avant IS
-                // car dans le cas d'une SCI, le revenu remboursable aux actionnaires c'est le net de charges sociales
+                // revenus inscrit en compte courant avant IS
+                // dans le cas d'une SCI, le revenu remboursable aux actionnaires c'est le net d'IS
                 revenues.sciDividends.namedValues
-                    .append((name : name,
+                    .append((name : ScpiName,
                              value: yearlyRevenue.taxableIrpp.rounded()))
             }
             
-            /// Vente
+            /// Ventes
             // le produit de la vente se répartit entre UF et NP si démembrement
             // les produits de la vente ne reviennent qu'aux PP ou NP
             // FIXME: Ca ne marche pas comme ca. C'est toute la SCI dont il faut géréer les droit de propriété. Pas chaque SCPI individuellement.
@@ -114,7 +113,7 @@ struct SciCashFlowLine {
             // le crédit se fait au début de l'année qui suit la vente
             let liquidatedValue = scpi.liquidatedValue(year - 1)
             revenues.scpiSale.namedValues
-                .append((name : name,
+                .append((name : ScpiName,
                          value: liquidatedValue.netRevenue.rounded()))
             // créditer le produit de la vente sur les comptes des personnes
             // en fonction de leur part de propriété respective

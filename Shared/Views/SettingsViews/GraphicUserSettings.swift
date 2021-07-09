@@ -26,20 +26,20 @@ struct GraphicUserSettings: View {
                               perform: { newValue in
                                 UserSettings.shared.ownershipSelection = newValue
                                 // remettre à zéro la simulation et sa vue
-                                simulation.reset()
-                                uiState.reset()
+                                //simulation.reset()
+                                //uiState.reset()
                               })
             }
             
-            Section(footer: Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu prendra en compte cette valeur")) {
-                CasePicker(pickedCase: $evaluationMethod, label: "Valeure prise en compte dans le bilan")
+            Section(footer: Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu prendra en compte cette valorisation")) {
+                CasePicker(pickedCase: $evaluationMethod, label: "Valorisation d'un bien dans un bilan individuel")
                     .pickerStyle(DefaultPickerStyle())
                     .onChange(of     : evaluationMethod,
                               perform: { newValue in
                                 UserSettings.shared.assetEvaluationMethod = newValue
                                 // remettre à zéro la simulation et sa vue
-                                simulation.reset()
-                                uiState.reset()
+                                //simulation.reset()
+                                //uiState.reset()
                               })
             }
         }

@@ -28,6 +28,7 @@ public struct Fiscal {
         public var incomeTaxes              : IncomeTaxesModel
         public var isf                      : IsfModel
         public var estateCapitalGainIrpp    : RealEstateCapitalGainIrppModel
+        public var companyProfitTaxes       : CompanyProfitTaxesModel
         // charges sociales
         public var estateCapitalGainTaxes   : RealEstateCapitalGainTaxesModel
         public var pensionTaxes             : PensionTaxesModel
@@ -36,7 +37,6 @@ public struct Fiscal {
         public var allocationChomageTaxes   : AllocationChomageTaxesModel
         public var layOffTaxes              : LayOffTaxes
         public var lifeInsuranceTaxes       : LifeInsuranceTaxes
-        public var companyProfitTaxes       : CompanyProfitTaxesModel
         // autres
         public var demembrement             : DemembrementModel
         public var inheritanceDonation      : InheritanceDonation

@@ -13,9 +13,9 @@ import Foil
 // MARK: - Enumération de nature d'une propriété
 
 enum OwnershipNature: String, PickableEnum {
-    case generatesRevenue = "Uniquement les biens génèrant revenu/dépense"
-    case sellable         = "Uniquement les biens cessibles"
-    case all              = "Tous les biens"
+    case generatesRevenue = "Uniquement les biens génèrant revenu/dépense (possédés en PP ou en UF au moins en partie)"
+    case sellable         = "Uniquement les biens cessibles (possédés en PP au moins en partie)"
+    case all              = "Tous les biens (possédés en UF, NP ou PP au moins en partie)"
     
     var pickerString: String {
         return self.rawValue
@@ -23,8 +23,8 @@ enum OwnershipNature: String, PickableEnum {
 }
 
 enum AssetEvaluationMethod: String, PickableEnum {
-    case totalValue = "Valeur totale"
-    case ownedValue = "Valeur possédée"
+    case totalValue = "Valeur totale du bien"
+    case ownedValue = "Valeur de la fraction possédée du bien"
     
     var pickerString: String {
         return self.rawValue

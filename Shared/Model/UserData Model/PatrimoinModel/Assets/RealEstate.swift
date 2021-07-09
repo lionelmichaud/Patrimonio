@@ -172,6 +172,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, Ownable {
                     evaluationMethod : EvaluationMethod) -> Double {
         var evaluatedValue : Double
         
+        // cas particuliers
         switch evaluationMethod {
             case .ifi, .isf:
                 // appliquer la décote IFI

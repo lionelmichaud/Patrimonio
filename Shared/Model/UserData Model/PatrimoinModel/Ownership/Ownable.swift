@@ -74,6 +74,7 @@ extension Ownable {
     func ownedValue(by ownerName     : String,
                     atEndOf year     : Int,
                     evaluationMethod : EvaluationMethod) -> Double {
+        // cas particuliers
         switch evaluationMethod {
             case .legalSuccession:
                 // cas particulier d'une succession:
@@ -92,9 +93,11 @@ extension Ownable {
             case .ifi, .isf, .patrimoine:
                 ()
         }
-        // prendre la valeur totale du bien sans aucune décote (par défaut)
+        
+        // cas général
+        // prendre la valeur totale du bien sans aucune décote
         let evaluatedValue = value(atEndOf: year)
-        // prendre la part de propriété
+        // prendre la fraction possédée par ownerName
         let value = evaluatedValue == 0 ? 0 : ownership.ownedValue(by               : ownerName,
                                                                    ofValue          : evaluatedValue,
                                                                    atEndOf          : year,

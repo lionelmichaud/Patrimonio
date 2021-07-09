@@ -178,6 +178,7 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
                     evaluationMethod : EvaluationMethod) -> Double {
         var evaluatedValue : Double
 
+        // cas particuliers
         switch evaluationMethod {
             case .legalSuccession:
                 // le bien est-il une assurance vie ?

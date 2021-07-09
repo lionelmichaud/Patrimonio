@@ -128,19 +128,18 @@ struct BalanceSheetLine {
     }
 
     fileprivate func graphicValueOf(ownable: Ownable, isSelected: Bool, name: String) -> Double {
+        guard isSelected else {
+            return 0
+        }
         switch UserSettings.shared.assetEvaluationMethod {
-
+            
             case .totalValue:
-                return isSelected ?
-                    ownable.value(atEndOf: year).rounded()
-                    : 0
-
+                return ownable.value(atEndOf: year).rounded()
+                
             case .ownedValue:
-                return isSelected ?
-                    ownable.ownedValue(by              : name,
-                                       atEndOf         : year,
-                                       evaluationMethod: .patrimoine).rounded()
-                    : 0
+                return ownable.ownedValue(by              : name,
+                                          atEndOf         : year,
+                                          evaluationMethod: .patrimoine).rounded()
         }
     }
 }

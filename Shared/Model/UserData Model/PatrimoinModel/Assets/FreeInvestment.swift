@@ -210,6 +210,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
     func ownedValue(by ownerName     : String,
                     atEndOf year     : Int,
                     evaluationMethod : EvaluationMethod) -> Double {
+        // cas particuliers
         switch evaluationMethod {
             case .legalSuccession:
                 // le bien est-il une assurance vie ?
@@ -246,7 +247,9 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
                 ()
                 
         }
-        // prendre la valeur totale du bien sans aucune décote (par défaut)
+
+        // cas général
+        // prendre la valeur totale du bien sans aucune décote
         let evaluatedValue = value(atEndOf: year)
 
         // calculer la part de propriété
