@@ -189,6 +189,9 @@ struct NetCashFlowManager {
                 if amountRemainingToRemove <= 0.0 { break }
             }
         }
+        guard amountRemainingToRemove > 0.0 else {
+            return
+        }
         
         // ASSURANCE VIE: si le solde des PEA n'était pas suffisant alors retirer de l'Assurances vie procurant le moins bon rendement
         for idx in 0..<patrimoine.assets.freeInvests.items.count {
@@ -196,8 +199,7 @@ struct NetCashFlowManager {
                 case .lifeInsurance:
                     // tant que l'on a pas retiré le montant souhaité
                     // retirer le montant de l'Assurances vie s'il y en avait assez à la fin de l'année dernière
-                    if amountRemainingToRemove > 0.0 &&
-                        patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0
+                    if patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0
                         && (name == "" || patrimoine.assets.freeInvests[idx].ownership.isAFullOwner(ownerName: name)) {
                         let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
                         amountRemainingToRemove -= removal.revenue
@@ -215,14 +217,17 @@ struct NetCashFlowManager {
                     ()
             }
         }
-        
+        guard amountRemainingToRemove > 0.0 else {
+            return
+        }
+
         // AUTRE: retirer le montant d'un investissement libre: d'abord celui procurant le moins bon rendement
         for idx in 0..<patrimoine.assets.freeInvests.items.count
         where patrimoine.assets.freeInvests[idx].type == .other
             && (name == "" || patrimoine.assets.freeInvests[idx].ownership.isAFullOwner(ownerName: name)) {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant s'il y en avait assez à la fin de l'année dernière
-            if amountRemainingToRemove > 0.0 && patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
+            if patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
                 let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
                 amountRemainingToRemove -= removal.revenue
                 // IRPP: les plus values sont imposables à l'IRPP
