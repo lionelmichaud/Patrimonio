@@ -50,6 +50,20 @@ extension Succession: SuccessionCsvVisitableP {
         visitor.buildCsv(element: self)
     }
 }
+extension Succession: CustomStringConvertible {
+    public var description: String {
+        """
+        Type de succession:  \(kind.rawValue)
+        Défunt:              \(decedent.displayName)
+        Année du décès:      \(yearOfDeath)
+        Masses successorale: \(taxableValue.k€String)
+        Héritiers:
+
+        """
+            + String(describing: inheritances)
+            .withPrefixedSplittedLines("  ")
+    }
+}
 extension Array where Element == Succession {
     // dictionnaire des héritages net reçu par chaque héritier sur un ensemble de successions
     var successorsInheritedNetValue: [String: Double] {
@@ -81,5 +95,17 @@ struct Inheritance {
 extension Inheritance: SuccessionCsvVisitableP {
     func accept(_ visitor: SuccessionCsvVisitorP) {
         visitor.buildCsv(element: self)
+    }
+}
+extension Inheritance: CustomStringConvertible {
+    public var description: String {
+        """
+        Héritier:      \(person.displayName)
+        Pourcentage:   \(percent) %
+        Héritage Brut: \(brut.k€String)
+        Héritage Net:  \(net.k€String)
+        Droits:        \(tax.k€String)
+
+        """.withPrefixedSplittedLines("  ")
     }
 }

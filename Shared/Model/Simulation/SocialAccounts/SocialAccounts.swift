@@ -190,14 +190,15 @@ struct SocialAccounts {
     
     // MARK: - Construction de la table des comptes sociaux = Bilan + CashFlow
     
-    /// construire la table de comptes sociaux au fil des années
+    /// Construire la table de comptes sociaux au fil des années
     /// - Parameters:
+    ///   - run: numéro du run en cours de calcul
     ///   - nbOfYears: nombre d'années à construire
     ///   - family: la famille dont il faut faire le bilan
-    ///   - patrimoine: le patrimoine
-    ///   - reportProgress: closure pour indiquer l'avancement de la simulation
-    ///   - kpis: les KPI
+    ///   - patrimoine: le patrimoine de la famille
+    ///   - kpis: les KPI à utiliser et à dont il faut mettre à jour l'histogramme pendant le run
     ///   - simulationMode: mode de simluation en cours
+    /// - Returns: Résultats obtenus pour les KPI
     mutating func build(run                       : Int, // swiftlint:disable:this function_parameter_count
                         nbOfYears                 : Int,
                         withFamily family         : Family,

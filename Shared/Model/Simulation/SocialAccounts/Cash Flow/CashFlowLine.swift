@@ -69,11 +69,12 @@ struct CashFlowLine {
     
     /// Création et peuplement d'un année de Cash Flow
     /// - Parameters:
+    ///   - run: numéro du run en cours de calcul
     ///   - year: année
-    ///   - family: famille à utiliser
-    ///   - patrimoine: patrmoine à utiliser
+    ///   - family: la famille dont il faut faire le bilan
+    ///   - patrimoine: le patrimoine de la famille
     ///   - taxableIrppRevenueDelayedFromLastyear: revenus taxable à l'IRPP en report d'imposition de l'année précédente
-    /// - Throws: Si pas assez de capital -> CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)
+    /// - Throws: Si pas assez de capital -> `CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)`
     init(run                                   : Int,
          withYear       year                   : Int,
          withFamily     family                 : Family,
@@ -112,7 +113,7 @@ struct CashFlowLine {
                                              lifeInsuranceRebate : &lifeInsuranceRebate)
             
             // Note: les intérêts des investissements financiers libres sont capitalisés
-            // => ne génèrent des charges sociales et de l'IRPP qu'au moment de leur liquidation
+            // => ne génèrent des charges sociales et de l'IRPP qu'au moment des retraits ou de leur liquidation
             
             /// IRPP: calcule de l'impot sur l'ensemble des revenus
             computeIrpp(of: family)
@@ -127,8 +128,8 @@ struct CashFlowLine {
             manageLoanCashFlow(for : adultsNames,
                                of  : patrimoine)
             
-            /// SUCCESSIONS: calcule des droits de successions y.c. assurances vies + peuple les successions de l'année
-            /// SUCCESSIONS: Transférer les biens des personnes décédées dans l'année vers ses héritiers
+            /// SUCCESSIONS: Calcul des droits de successions légales et assurances vies + peuple les successions de l'année
+            ///              Transférer les biens des personnes décédées dans l'année vers ses héritiers
             manageSuccession(run  : run,
                              of   : family,
                              with : patrimoine)
