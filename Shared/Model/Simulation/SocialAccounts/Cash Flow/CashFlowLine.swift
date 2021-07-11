@@ -221,17 +221,24 @@ struct CashFlowLine {
     }
     
     /// Gérer l'excédent ou le déficit de trésorierie (commune) en fin d'année
+    ///
+    /// - Warning:
+    ///   On ne gère pas ici le ré-investissement des biens vendus dans l'année et détenus en propre.
+    ///
+    ///   Les produits de ventes de biens sont réinvestis au moment de la vente dans le patrimoine de ceux qui possèdente le bien (voir `investCapital`).
+    ///
     /// - Parameters:
     ///   - patrimoine: patrimoine
     ///   - adultsName: des adultes
     ///   - lifeInsuranceRebate: franchise d'imposition sur les plus values
     /// - Throws: Si pas assez de capital -> CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)
-    /// - Warning: On ne gère pas ici le ré-investssement des biens vednus dans l'année et détenus en propre
     fileprivate mutating func manageYearlyNetCashFlow(of patrimoine       : Patrimoin,
                                                       for adultsName      : [String],
                                                       lifeInsuranceRebate : inout Double) throws {
-        let netCashFlowManager = NetCashFlowManager()
+        let netCashFlowManager       = NetCashFlowManager()
+        let netCashFlowSalesExcluded = self.netCashFlowSalesExcluded
         
+        // On ne gère pas ici le ré-investissement des biens vendus dans l'année et détenus en propre
         if netCashFlowSalesExcluded > 0.0 {
             // capitaliser les intérêts des investissements libres
             netCashFlowManager.capitalizeFreeInvestments(in      : patrimoine,

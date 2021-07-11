@@ -20,39 +20,39 @@ struct SciCashFlowLine {
         
         // MARK: - Properties
         
-        // dividendes des SCPI de la SCI : nets de charges sociales et avant IS
-        var sciDividends = NamedValueTable(tableName: "SCI-REVENUS DE SCPI")
+        // revenus perçus des SCPI de la SCI : avant IS (pas de charge sociales si SCI imposée à l'IS)
+        var scpiDividends = NamedValueTable(tableName: "SCI-REVENUS DE SCPI")
         // ventes des SCPI de la SCI: produit net de charges sociales et d'impôt sur la plus-value
-        var scpiSale     = NamedValueTable(tableName: "SCI-VENTES SCPI")
+        var scpiSale      = NamedValueTable(tableName: "SCI-VENTES SCPI")
         // total de tous les revenus nets de l'année: loyers + ventes de la SCI
-        var total: Double { sciDividends.total + scpiSale.total }
+        var total: Double { scpiDividends.total + scpiSale.total }
         // total de tous les revenus imposables à l'IS de l'année: loyers + plus-values de la SCI
         // tableau résumé des noms
         var namesArray: [String] {
-            ["SCI-" + sciDividends.tableName, "SCI-" + scpiSale.tableName]
+            ["SCI-" + scpiDividends.tableName, "SCI-" + scpiSale.tableName]
         }
         // tableau résumé des valeurs
         var valuesArray: [Double] {
-            [sciDividends.total, scpiSale.total]
+            [scpiDividends.total, scpiSale.total]
         }
         // tableau détaillé des noms
         var namesFlatArray: [String] {
-            sciDividends.namesArray.map {$0 + "(Revenu)"} + scpiSale.namesArray.map {$0 + "(Vente)"}
+            scpiDividends.namesArray.map {$0 + "(Revenu)"} + scpiSale.namesArray.map {$0 + "(Vente)"}
         }
         // tableau détaillé des valeurs
         var valuesFlatArray: [Double] {
-            sciDividends.valuesArray + scpiSale.valuesArray
+            scpiDividends.valuesArray + scpiSale.valuesArray
         }
     }
 
     // MARK: - Properties
     
     let year        : Int
-    var revenues    = Revenues() // revenus des SCPI de la SCI
+    var revenues    = Revenues() // revenus des SCPI de la SCI (avant impôts)
     // TODO: Ajouter les dépenses de la SCI déductibles du revenu (comptable, gestion, banque...)
     let IS          : Double // impôts sur les société
     var netRevenues : Double { revenues.total - IS }
-    var netRevenuesSalesExcluded: Double { revenues.sciDividends.total - IS }
+    var netRevenuesSalesExcluded: Double { revenues.scpiDividends.total - IS }
 
     // tableau résumé des noms
     var namesArray: [String] {
@@ -99,9 +99,9 @@ struct SciCashFlowLine {
                 let yearlyRevenue = scpi.yearlyRevenue(during: year)
                 // revenus inscrit en compte courant avant IS
                 // dans le cas d'une SCI, le revenu remboursable aux actionnaires c'est le net d'IS
-                revenues.sciDividends.namedValues
+                revenues.scpiDividends.namedValues
                     .append((name : ScpiName,
-                             value: yearlyRevenue.taxableIrpp.rounded()))
+                             value: yearlyRevenue.revenue.rounded()))
             }
             
             /// Ventes
@@ -109,9 +109,8 @@ struct SciCashFlowLine {
             // les produits de la vente ne reviennent qu'aux PP ou NP
             // FIXME: Ca ne marche pas comme ca. C'est toute la SCI dont il faut géréer les droit de propriété. Pas chaque SCPI individuellement.
             // populate SCPI sale revenue: produit net de charges sociales et d'impôt sur la plus-value
-            // FIXME: vérifier si c'est net où brut dans le cas d'une SCI
             // le crédit se fait au début de l'année qui suit la vente
-            let liquidatedValue = scpi.liquidatedValue(year - 1)
+            let liquidatedValue = scpi.liquidatedValueIS(year - 1)
             revenues.scpiSale.namedValues
                 .append((name : ScpiName,
                          value: liquidatedValue.netRevenue.rounded()))

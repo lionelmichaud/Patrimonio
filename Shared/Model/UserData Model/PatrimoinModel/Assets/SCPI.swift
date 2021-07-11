@@ -72,12 +72,20 @@ struct SCPI: Identifiable, JsonCodableToBundleP, Ownable {
 
     // MARK: - Methods
 
-    /// Valeur capitalisée à la date spécifiée
+    /// Valeur du bien à la date spécifiée.
+    ///
+    /// Le bien est revalorisé annuellement de `revaluatRate` % depuis sa date d'acquisition mais il n'est pas déflaté en valeur.
+    ///
+    /// La valeur du bien est décrémentée de la commission de vente (frais d'agence) de 10%.
+    ///
+    /// Ce sont ses revenus qui sont déflatés de l'inflation.
+    ///
     /// - Parameter year: fin de l'année
+    /// - Returns: Valeur actualisé du bien, non déflatée de l'inflation, mais commission de vente (frais d'agence) de 10% déduite.
     func value(atEndOf year: Int) -> Double {
         if isOwned(during: year) {
             return try! futurValue(payement     : 0,
-                                   interestRate : (revaluatRate - SCPI.inflation) / 100.0,
+                                   interestRate : revaluatRate / 100.0,
                                    nbPeriod     : year - buyingDate.year,
                                    initialValue : buyingPrice) * (1.0 - SCPI.saleCommission / 100.0)
         } else {
@@ -133,16 +141,16 @@ struct SCPI: Identifiable, JsonCodableToBundleP, Ownable {
         }
     }
     
-    /// Produit de la vente l'année de la vente
+    /// Produit de la vente l'année de la vente selon le régime de l'IRPP
+    /// - Warning: applicable uniquement en régime de l'IRPP
     /// - Parameter year: année
     /// - Returns:
-    ///   - year: year description
-    ///   - revenue: produit de la vente net de frais d'agence
-    ///   - capitalGain: plus-value réalisée lors de la vente
-    ///   - netRevenue: produit de la vente net de charges sociales et d'impôt sur la plus-value
-    ///   - socialTaxes: charges sociales payées sur sur la plus-value
-    ///   - irpp: impôt sur le revenu payé sur sur la plus-value
-    func liquidatedValue (_ year: Int)
+    ///   - `revenue`: produit de la vente net de frais d'agence (commission de vente de 10%)
+    ///   - `capitalGain`: plus-value réalisée lors de la vente
+    ///   - `socialTaxes`: charges sociales payées sur sur la plus-value
+    ///   - `irpp`: impôt sur le revenu dû sur la plus-value
+    ///   - `netRevenue`: produit de la vente net de charges sociales `socialTaxes` et d'impôt sur la plus-value `irpp`
+    func liquidatedValueIRPP (_ year: Int)
     -> (revenue    : Double,
         capitalGain: Double,
         netRevenue : Double,
@@ -151,10 +159,10 @@ struct SCPI: Identifiable, JsonCodableToBundleP, Ownable {
         guard willBeSold && year == sellingDate.year else {
             return (0, 0, 0, 0, 0)
         }
-        let detentionDuration = sellingDate.year - buyingDate.year
-        let currentValue      = value(atEndOf: sellingDate.year)
-        let capitalGain       = currentValue - buyingPrice
-        let socialTaxes       =
+        let detentionDuration    = sellingDate.year - buyingDate.year
+        let projectedSaleRevenue = value(atEndOf: sellingDate.year)
+        let capitalGain          = projectedSaleRevenue - buyingPrice
+        let socialTaxes          =
             SCPI.fiscalModel.estateCapitalGainTaxes.socialTaxes(
                 capitalGain      : zeroOrPositive(capitalGain),
                 detentionDuration: detentionDuration)
@@ -162,11 +170,36 @@ struct SCPI: Identifiable, JsonCodableToBundleP, Ownable {
             SCPI.fiscalModel.estateCapitalGainIrpp.irpp(
                 capitalGain      : zeroOrPositive(capitalGain),
                 detentionDuration: detentionDuration)
-        return (revenue     : currentValue,
+        return (revenue     : projectedSaleRevenue,
                 capitalGain : capitalGain,
-                netRevenue  : currentValue - socialTaxes - irpp,
+                netRevenue  : projectedSaleRevenue - socialTaxes - irpp,
                 socialTaxes : socialTaxes,
                 irpp        : irpp)
+    }
+    
+    /// Produit de la vente l'année de la vente selon le régime de l'IS
+    /// - Warning: applicable uniquement en régime de l'IS
+    /// - Parameter year: année
+    /// - Returns:
+    ///   - `revenue`: produit de la vente net de frais d'agence (commission de vente de 10%)
+    ///   - `capitalGain`: plus-value réalisée lors de la vente
+    ///   - `IS`: IS dû sur sur la plus-value
+    ///   - `netRevenue`: produit de la vente net d'`IS` sur la plus-value
+    func liquidatedValueIS (_ year: Int)
+    -> (revenue    : Double,
+        capitalGain: Double,
+        netRevenue : Double,
+        IS         : Double) {
+        guard willBeSold && year == sellingDate.year else {
+            return (0, 0, 0, 0)
+        }
+        let projectedSaleRevenue = value(atEndOf: sellingDate.year)
+        let capitalGain          = projectedSaleRevenue - buyingPrice
+        let IS                   = Fiscal.model.companyProfitTaxes.IS(zeroOrPositive(capitalGain))
+        return (revenue     : projectedSaleRevenue,
+                capitalGain : capitalGain,
+                netRevenue  : projectedSaleRevenue - IS,
+                IS          : IS)
     }
 }
 
@@ -187,7 +220,7 @@ extension SCPI: CustomStringConvertible {
         \(ownership.description.withPrefixedSplittedLines("  "))
         - Acheté le \(buyingDate.stringShortDate) au prix d'achat de: \(buyingPrice) €
         - Rapporte \(interestRate - SCPI.inflation) % par an net d'inflation
-        - Sa valeur augmente de \(revaluatRate - SCPI.inflation) % par an net d'inflation
+        - Sa valeur augmente de \(revaluatRate) % par an
         - \(willBeSold ? "Sera vendue le \(sellingDate.stringShortDate) au prix de \(value(atEndOf: sellingDate.year)) €" : "Ne sera pas vendu")
         """
     }

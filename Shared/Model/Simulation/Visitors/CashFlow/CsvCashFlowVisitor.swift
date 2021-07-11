@@ -33,7 +33,7 @@ class CsvCashFlowTableVisitor: CashFlowCsvVisitorP {
 
     func buildCsv(element: SciCashFlowLine.Revenues) {
         // For every element , extract the values as a comma-separated string.
-        let sciDividends = element.sciDividends
+        let sciDividends = element.scpiDividends
         // For every element , extract the values as a comma-separated string.
         table.append(sciDividends.namedValues
                         .map { $0.value.roundedString }
@@ -200,7 +200,7 @@ class CsvCashFlowHeaderVisitor: CashFlowCsvVisitorP {
 
     func buildCsv(element: SciCashFlowLine.Revenues) {
         // For every element , extract the values as a comma-separated string.
-        let sciDividends = element.sciDividends
+        let sciDividends = element.scpiDividends
         // For every element , extract the values as a comma-separated string.
         header1.append(sciDividends.namedValues
                         .map { _ in sciDividends.tableName.uppercased() }

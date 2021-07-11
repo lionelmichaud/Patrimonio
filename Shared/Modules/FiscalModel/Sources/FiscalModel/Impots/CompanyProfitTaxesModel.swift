@@ -28,7 +28,7 @@ public struct CompanyProfitTaxesModel: Codable {
     
     /// bénéfice net
     /// - Parameter brut: bénéfice brut
-    func net(_ brut: Double) -> Double {
+    public func net(_ brut: Double) -> Double {
         guard brut >= 0.0 else {
             return 0.0
         }
