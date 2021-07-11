@@ -45,7 +45,7 @@ extension CashFlowLine {
             // le produit de la vente se répartit entre UF et NP si démembrement
             // populate SCPI sale revenue: produit de vente net de charges sociales et d'impôt sur la plus-value
             // le crédit se fait au début de l'année qui suit la vente
-            let liquidatedValue = scpi.liquidatedValue(year - 1)
+            let liquidatedValue = scpi.liquidatedValueIRPP(year - 1)
             revenues.perCategory[.scpiSale]?.credits.namedValues
                 .append((name: name,
                          value: liquidatedValue.netRevenue.rounded()))

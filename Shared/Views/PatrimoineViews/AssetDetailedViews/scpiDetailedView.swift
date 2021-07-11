@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import FiscalModel
 
 struct ScpiDetailedView: View {
     @EnvironmentObject var family     : Family
@@ -45,14 +46,17 @@ struct ScpiDetailedView: View {
             Section(header: Text("RENDEMENT")) {
                 PercentEditView(label: "Taux de rendement annuel brut",
                                 percent: $localItem.interestRate)
-                AmountView(label: "Revenu annuel brut (avant prélèvements sociaux et IRPP)",
+                AmountView(label: "Revenu annuel brut déflaté (avant prélèvements sociaux et IRPP)",
                            amount: localItem.yearlyRevenue(during: Date.now.year).revenue)
                     .foregroundColor(.secondary)
-                AmountView(label: "Charges sociales",
+                AmountView(label: "Charges sociales (si imposable à l'IRPP)",
                            amount: localItem.yearlyRevenue(during: Date.now.year).socialTaxes)
                     .foregroundColor(.secondary)
-                AmountView(label: "Revenu annuel net de charges sociales (remboursable par une SCI)",
+                AmountView(label: "Revenu annuel déflaté net de charges sociales (imposable à l'IRPP)",
                            amount: localItem.yearlyRevenue(during: Date.now.year).taxableIrpp)
+                    .foregroundColor(.secondary)
+                AmountView(label: "Revenu annuel déflaté net d'IS (si imposable à l'IS)",
+                           amount: Fiscal.model.companyProfitTaxes.net(localItem.yearlyRevenue(during: Date.now.year).revenue))
                     .foregroundColor(.secondary)
                 PercentEditView(label: "Taux de réévaluation annuel",
                                 percent: $localItem.revaluatRate)
@@ -67,11 +71,14 @@ struct ScpiDetailedView: View {
                                    in: localItem.buyingDate...100.years.fromNow!,
                                    displayedComponents: .date,
                                    label: { Text("Date de vente") })
-                        AmountView(label: "Valeur à la date de vente",
+                        AmountView(label: "Valeur à la date de vente (net de commission de vente)",
                                    amount: localItem.value(atEndOf: localItem.sellingDate.year))
                             .foregroundColor(.secondary)
-                        AmountView(label: "Produit net de charge et d'impôts",
-                                   amount: localItem.liquidatedValue(localItem.sellingDate.year).netRevenue)
+                        AmountView(label: "Produit net de commission, de charges sociales et d'IRPP sur les plus-value (régime IRPP)",
+                                   amount: localItem.liquidatedValueIRPP(localItem.sellingDate.year).netRevenue)
+                            .foregroundColor(.secondary)
+                        AmountView(label: "Produit net de commission et d'IS sur les plus-value (régime IS)",
+                                   amount: localItem.liquidatedValueIS(localItem.sellingDate.year).netRevenue)
                             .foregroundColor(.secondary)
                     }
                     .padding(.leading)

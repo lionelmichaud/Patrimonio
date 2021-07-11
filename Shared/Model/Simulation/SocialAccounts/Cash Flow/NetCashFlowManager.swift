@@ -239,10 +239,14 @@ struct NetCashFlowManager {
     // swiftlint:enable function_parameter_count
     
     // swiftlint:disable function_parameter_count
-    /// Retirer le cash du capital des personnes dans la liste seulement.
+    /// Retirer `amount` du capital des personnes dans la liste `adultsName` seulement.
+    ///
     /// Retirer le cash du capital de la personne la plus riche d'abord.
+    ///
     /// Retirer le montant d'un investissement libre dont la personne est PP.
-    /// d'abord PEA ensuite Assurance vie puis autre
+    ///
+    /// Ordre: d'abord PEA ensuite Assurance vie puis autre
+    ///
     /// - Parameters:
     ///   - patrimoine: du patrimoine
     ///   - amount: découvert en fin d'année à combler = montant à désinvestir
@@ -277,7 +281,7 @@ struct NetCashFlowManager {
         }
         sortedNames.forEach { name in
             print("nom: \(name)")
-            print("richesse: \(totalFreeInvestementsValue(ownedBy: name, in: patrimoine, atEndOf: year).rounded())")
+            print("richesse disponible (free): \(totalFreeInvestementsValue(ownedBy: name, in: patrimoine, atEndOf: year).rounded())")
         }
         
         patrimoine.assets.freeInvests.items.sort(by: {$0.averageInterestRate < $1.averageInterestRate})
