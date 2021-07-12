@@ -58,12 +58,12 @@ class ItemSelectionListTests: XCTestCase {
     }
 
     func test_firstCategorySelected() {
-        XCTAssertEqual("Item 1", ItemSelectionListTests.itemSelectionList.firstCategorySelected())
+        XCTAssertEqual("Item 1", ItemSelectionListTests.itemSelectionList.firstSelectedCategory())
         ItemSelectionListTests.itemSelectionList[0].selected = false
         ItemSelectionListTests.itemSelectionList[1].selected = false
         ItemSelectionListTests.itemSelectionList[2].selected = false
         ItemSelectionListTests.itemSelectionList[3].selected = false
-        XCTAssertEqual(nil, ItemSelectionListTests.itemSelectionList.firstCategorySelected())
+        XCTAssertEqual(nil, ItemSelectionListTests.itemSelectionList.firstSelectedCategory())
     }
     
 }

@@ -15,7 +15,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 
 // MARK: - Génération de graphiques - Détail d'une seule catégorie - CASH FLOW
 
-/// Créer le DataSet pour former un un graphe barre empilées : une seule catégorie
+/// Créer le DataSet pour former un graphe barre empilées : une seule catégorie
 /// - Parameters:
 ///   - categoryName: nom de la catégories
 /// - Returns: DataSet
@@ -30,11 +30,10 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
     private var revenueCategory         : RevenueCategory?
     private var taxCategory             : TaxeCategory?
     private var labelsInCategory        = [String]()
-    private var processingFirstLine = false
-    private var year = 0
-    private var y: [Double]?
-    private var nbPositiveLabels = 0
-    private var nbNegativeLabels = 0
+    private var year                    = 0
+    private var y                       : [Double]?
+    private var nbPositiveLabels        = 0
+    private var nbNegativeLabels        = 0
 
     init(element                 : CashFlowArray,
          categoryName            : String,
@@ -52,10 +51,7 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
         // si la table est vide alors quitter
         guard element.isNotEmpty else { return }
 
-        for idx in element.startIndex..<element.endIndex {
-            processingFirstLine = (idx == element.startIndex)
-            element[idx].accept(self)
-        }
+        element.forEach { $0.accept(self) }
 
         _dataSet = BarChartDataSet(entries : dataEntries,
                                    label   : (labelsInCategory.count == 1 ? labelsInCategory.first : nil))
@@ -70,7 +66,7 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
             if let expenseCategory = selectedExpenseCategory {
                 /// rechercher les valeurs de la seule catégorie de dépenses sélectionnée
                 let selectedExpensesNameArray = expenses.expensesNameArray(of: expenseCategory)
-                if processingFirstLine {
+                if labelsInCategory.count == 0 {
                     labelsInCategory = element.lifeExpenses.namesArray.filter { name in
                         selectedExpensesNameArray.contains(name)
                     }
@@ -87,7 +83,7 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
 
             } else {
                 /// rechercher les valeurs de toutes les dépenses
-                if processingFirstLine {
+                if labelsInCategory.count == 0 {
                     labelsInCategory = element.lifeExpenses.namesArray
                 }
                 // valeurs des dépenses
@@ -103,7 +99,7 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
             guard revenueCategory != nil else {
                 return
             }
-            if processingFirstLine {
+            if labelsInCategory.count == 0 {
                 guard let labels = element.revenues.perCategory[revenueCategory!]?.credits.namesArray else {
                     return
                 }
@@ -117,7 +113,7 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
 
         } else if element.sciCashFlowLine.summary.contains(name: categoryName) {
             /// rechercher la catégorie dans les revenus de la SCI
-            if processingFirstLine {
+            if labelsInCategory.count == 0 {
                 labelsInCategory = element.sciCashFlowLine.namesFlatArray
                 nbPositiveLabels = labelsInCategory.count
             }
@@ -133,7 +129,7 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
             guard taxCategory != nil else {
                 return
             }
-            if processingFirstLine {
+            if labelsInCategory.count == 0 {
                 guard let labels = element.taxes.perCategory[taxCategory!]?.namesArray else {
                     return
                 }
@@ -152,7 +148,7 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
 
         } else if categoryName == element.debtPayements.tableName {
             /// rechercher les valeurs des debtPayements
-            if processingFirstLine {
+            if labelsInCategory.count == 0 {
                 labelsInCategory = element.debtPayements.namesArray
                 nbNegativeLabels = labelsInCategory.count
             }
@@ -164,7 +160,7 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
         } else if categoryName == element.investPayements.tableName {
             /// rechercher les valeurs des investPayements
             // customLog.log(level: .info, "Catégorie trouvée dans investPayements : \(categoryName)")
-            if processingFirstLine {
+            if labelsInCategory.count == 0 {
                 labelsInCategory = element.investPayements.namesArray
                 nbNegativeLabels = labelsInCategory.count
             }

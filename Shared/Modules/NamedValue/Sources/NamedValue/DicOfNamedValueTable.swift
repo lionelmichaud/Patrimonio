@@ -18,6 +18,7 @@ public protocol DictionaryOfNamedValueTable {
     
     var name        : String { get set }
     var perCategory : [Category : NamedValueTable] { get set }
+    
     subscript(category : Category) -> NamedValueTable? { get set }
 
     /// Valeur totale de tous les items

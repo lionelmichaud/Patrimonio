@@ -49,7 +49,7 @@ public extension ItemSelectionList {
     
     /// Retourne le nom de la première catégorie sélectionnée dans la liste du menu
     /// - Returns: nom de la première catégorie sélectionnée dans la liste du menu
-    func firstCategorySelected () -> String? {
+    func firstSelectedCategory () -> String? {
         if let foundSelection = self.first(where: { $0.selected }) {
             return foundSelection.label
         } else {

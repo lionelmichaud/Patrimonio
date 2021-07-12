@@ -24,29 +24,38 @@ extension CashFlowLine {
             let name = realEstate.name
             
             /// Revenus
+            var revenue          : Double = 0
+            var taxableIrpp      : Double = 0
+            var socialTaxes      : Double = 0
+            var yearlyLocaltaxes : Double = 0
             // les revenus ne reviennent qu'aux UF ou PP, idem pour les impôts locaux
             if realEstate.providesRevenue(to: adultsName) {
                 // populate real estate rent revenues and social taxes
                 let yearlyRent = realEstate.yearlyRent(during: year)
                 // loyers inscrit en compte courant avant prélèvements sociaux et IRPP
-                revenues.perCategory[.realEstateRents]?.credits.namedValues
-                    .append((name: name,
-                             value: yearlyRent.revenue.rounded()))
+                revenue = yearlyRent.revenue
                 // part des loyers inscrit en compte courant imposable à l'IRPP - idem ci-dessus car même base
-                revenues.perCategory[.realEstateRents]?.taxablesIrpp.namedValues
-                    .append((name: name,
-                             value: yearlyRent.taxableIrpp.rounded()))
+                taxableIrpp = yearlyRent.taxableIrpp
                 // prélèvements sociaux payés sur le loyer
-                taxes.perCategory[.socialTaxes]?.namedValues
-                    .append((name : name,
-                             value: yearlyRent.socialTaxes.rounded()))
-                
+                socialTaxes = yearlyRent.socialTaxes
                 // impôts locaux
-                let yearlyLocaltaxes = realEstate.yearlyLocalTaxes(during: year)
-                taxes.perCategory[.localTaxes]?.namedValues
-                    .append((name: name,
-                             value: yearlyLocaltaxes.rounded()))
+                yearlyLocaltaxes = realEstate.yearlyLocalTaxes(during: year)
             }
+            revenues.perCategory[.realEstateRents]?.credits.namedValues
+                .append((name: name,
+                         value: revenue.rounded()))
+            // part des loyers inscrit en compte courant imposable à l'IRPP - idem ci-dessus car même base
+            revenues.perCategory[.realEstateRents]?.taxablesIrpp.namedValues
+                .append((name: name,
+                         value: taxableIrpp.rounded()))
+            // prélèvements sociaux payés sur le loyer
+            taxes.perCategory[.socialTaxes]?.namedValues
+                .append((name : name,
+                         value: socialTaxes.rounded()))
+            // impôts locaux
+            taxes.perCategory[.localTaxes]?.namedValues
+                .append((name: name,
+                         value: yearlyLocaltaxes.rounded()))
             
             /// Vente
             // le produit de la vente se répartit entre UF et NP si démembrement
@@ -67,6 +76,11 @@ extension CashFlowLine {
                 netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
                                                  in            : patrimoine,
                                                  atEndOf       : year)
+            } else {
+                // pour garder le nombre de séries graphiques constant au cours du temps
+                revenues.perCategory[.realEstateSale]?.credits.namedValues
+                    .append((name: name,
+                             value: 0))
             }
         }
     }

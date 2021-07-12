@@ -51,7 +51,7 @@ struct CashFlowLine {
             investPayements.total
     }
     // les successions légales survenues dans l'année
-    var successions     : [Succession] = []
+    var successions        : [Succession] = []
     // les transmissions d'assurances vie survenues dans l'année
     var lifeInsSuccessions : [Succession] = []
     
@@ -69,11 +69,12 @@ struct CashFlowLine {
     
     /// Création et peuplement d'un année de Cash Flow
     /// - Parameters:
+    ///   - run: numéro du run en cours de calcul
     ///   - year: année
-    ///   - family: famille à utiliser
-    ///   - patrimoine: patrmoine à utiliser
+    ///   - family: la famille dont il faut faire le bilan
+    ///   - patrimoine: le patrimoine de la famille
     ///   - taxableIrppRevenueDelayedFromLastyear: revenus taxable à l'IRPP en report d'imposition de l'année précédente
-    /// - Throws: Si pas assez de capital -> CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)
+    /// - Throws: Si pas assez de capital -> `CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)`
     init(run                                   : Int,
          withYear       year                   : Int,
          withFamily     family                 : Family,
@@ -112,7 +113,7 @@ struct CashFlowLine {
                                              lifeInsuranceRebate : &lifeInsuranceRebate)
             
             // Note: les intérêts des investissements financiers libres sont capitalisés
-            // => ne génèrent des charges sociales et de l'IRPP qu'au moment de leur liquidation
+            // => ne génèrent des charges sociales et de l'IRPP qu'au moment des retraits ou de leur liquidation
             
             /// IRPP: calcule de l'impot sur l'ensemble des revenus
             computeIrpp(of: family)
@@ -127,8 +128,8 @@ struct CashFlowLine {
             manageLoanCashFlow(for : adultsNames,
                                of  : patrimoine)
             
-            /// SUCCESSIONS: calcule des droits de successions y.c. assurances vies + peuple les successions de l'année
-            /// SUCCESSIONS: Transférer les biens des personnes décédées dans l'année vers ses héritiers
+            /// SUCCESSIONS: Calcul des droits de successions légales et assurances vies + peuple les successions de l'année
+            ///              Transférer les biens des personnes décédées dans l'année vers ses héritiers
             manageSuccession(run  : run,
                              of   : family,
                              with : patrimoine)
@@ -144,52 +145,6 @@ struct CashFlowLine {
     }
     
     // MARK: - methods
-    
-    /// Définir toutes les successions de l'année et Calculer les droits de succession des personnes décédées dans l'année
-    fileprivate mutating func manageSuccession(run             : Int,
-                                               of family       : Family,
-                                               with patrimoine : Patrimoin) {
-        // FIXME: - en fait il faudrait traiter les sucessions en séquences: calcul taxe => transmission puis calcul tax => transmission
-        // identification des personnes décédées dans l'année
-        let decedents = family.deceasedAdults(during: year)
-        
-        // ajouter les droits de succession (légales et assurances vie) aux taxes
-        var totalSuccessionTax   = 0.0
-        var totalLiSuccessionTax = 0.0
-        // pour chaque défunt
-        decedents.forEach { decedent in
-            SimulationLogger.shared.log(run: run,
-                                        logTopic: .lifeEvent,
-                                        message: "Décès de \(decedent.displayName) en \(year)")
-            // calculer les droits de successions légales
-            let legalSuccessionManager = LegalSuccessionManager()
-            let succession = legalSuccessionManager.legalSuccession(in      : patrimoine,
-                                                                    of      : decedent,
-                                                                    atEndOf : year)
-            successions.append(succession)
-            totalSuccessionTax += succession.tax
-            
-            // calculer les droits de transmission assurances vies
-            let lifeInsuranceSuccessionManager = LifeInsuranceSuccessionManager()
-            let liSuccession = lifeInsuranceSuccessionManager.lifeInsuraceSuccession(in : patrimoine,
-                                                                                     of : decedent,
-                                                                 atEndOf                : year)
-            lifeInsSuccessions.append(liSuccession)
-            totalLiSuccessionTax += liSuccession.tax
-            
-            // transférer les biens d'un défunt vers ses héritiers
-            let ownershipManager = OwnershipManager()
-            ownershipManager.transferOwnershipOf(of       : patrimoine,
-                                                 decedent : decedent,
-                                                 atEndOf  : year)
-        }
-        taxes.perCategory[.succession]?.namedValues
-            .append((name  : TaxeCategory.succession.rawValue,
-                     value : totalSuccessionTax.rounded()))
-        taxes.perCategory[.liSuccession]?.namedValues
-            .append((name  : TaxeCategory.liSuccession.rawValue,
-                     value : totalLiSuccessionTax.rounded()))
-    }
     
     fileprivate mutating func computeIrpp(of family: Family) {
         taxes.irpp = try! Fiscal.model.incomeTaxes.irpp(taxableIncome : revenues.totalTaxableIrpp,
@@ -207,16 +162,23 @@ struct CashFlowLine {
                                                      value : taxes.isf.amount.rounded()))
     }
     
-    /// Populate remboursement d'emprunts
-    /// - Parameter patrimoine: du patrimoine
+    /// Populate remboursement d'emprunts des adultes de la famille
+    /// - Parameters:
+    ///   - patrimoine: du patrimoine
+    ///   -  adultsName: les adultes dela famille
     fileprivate mutating func manageLoanCashFlow(for adultsName : [String],
                                                  of patrimoine  : Patrimoin) {
-        for loan in patrimoine.liabilities.loans.items.sorted(by:<)
-        where loan.isPartOfPatrimoine(of: adultsName) {
-            let yearlyPayement = -loan.yearlyPayement(year)
-            let name           = loan.name
-            debtPayements.namedValues.append((name : name,
-                                              value: yearlyPayement.rounded()))
+        for loan in patrimoine.liabilities.loans.items.sorted(by:<) {
+            let name = loan.name
+            if loan.isPartOfPatrimoine(of: adultsName) {
+                let yearlyPayement = -loan.yearlyPayement(year)
+                debtPayements.namedValues.append((name : name,
+                                                  value: yearlyPayement.rounded()))
+            } else {
+                // pour garder le nombre de séries graphiques constant au cours du temps
+                debtPayements.namedValues.append((name : name,
+                                                  value: 0))
+            }
         }
     }
     

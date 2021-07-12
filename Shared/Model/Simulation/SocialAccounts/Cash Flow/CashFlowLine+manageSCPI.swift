@@ -19,8 +19,7 @@ extension CashFlowLine {
     ///   - adultsName: des adultes
     mutating func manageScpiRevenues(of patrimoine  : Patrimoin,
                                      for adultsName : [String]) {
-        for scpi in patrimoine.assets.scpis.items.sorted(by:<)
-        where scpi.isPartOfPatrimoine(of: adultsName) {
+        for scpi in patrimoine.assets.scpis.items.sorted(by:<) {
             let name = scpi.name
             
             /// Revenus
@@ -39,26 +38,44 @@ extension CashFlowLine {
                 taxes.perCategory[.socialTaxes]?.namedValues
                     .append((name: name,
                              value: yearlyRevenue.socialTaxes.rounded()))
+            } else {
+                // pour garder le nombre de séries graphiques constant au cours du temps
+                revenues.perCategory[.scpis]?.credits.namedValues
+                    .append((name: name,
+                             value: 0))
+                revenues.perCategory[.scpis]?.taxablesIrpp.namedValues
+                    .append((name: name,
+                             value: 0))
+                taxes.perCategory[.socialTaxes]?.namedValues
+                    .append((name: name,
+                             value: 0))
             }
             
             /// Vente
             // le produit de la vente se répartit entre UF et NP si démembrement
             // populate SCPI sale revenue: produit de vente net de charges sociales et d'impôt sur la plus-value
             // le crédit se fait au début de l'année qui suit la vente
-            let liquidatedValue = scpi.liquidatedValueIRPP(year - 1)
-            revenues.perCategory[.scpiSale]?.credits.namedValues
-                .append((name: name,
-                         value: liquidatedValue.netRevenue.rounded()))
-            // créditer le produit de la vente sur les comptes des personnes
-            // en fonction de leur part de propriété respective
-            let ownedSaleValues = scpi.ownedValues(ofValue          : liquidatedValue.netRevenue,
-                                                   atEndOf          : year,
-                                                   evaluationMethod : .patrimoine)
-            
-            let netCashFlowManager = NetCashFlowManager()
-            netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
-                                             in            : patrimoine,
-                                             atEndOf       : year)
+            if scpi.isPartOfPatrimoine(of: adultsName) {
+                let liquidatedValue = scpi.liquidatedValueIRPP(year - 1)
+                revenues.perCategory[.scpiSale]?.credits.namedValues
+                    .append((name: name,
+                             value: liquidatedValue.netRevenue.rounded()))
+                // créditer le produit de la vente sur les comptes des personnes
+                // en fonction de leur part de propriété respective
+                let ownedSaleValues = scpi.ownedValues(ofValue          : liquidatedValue.netRevenue,
+                                                       atEndOf          : year,
+                                                       evaluationMethod : .patrimoine)
+                
+                let netCashFlowManager = NetCashFlowManager()
+                netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
+                                                 in            : patrimoine,
+                                                 atEndOf       : year)
+            } else {
+                // pour garder le nombre de séries graphiques constant au cours du temps
+                revenues.perCategory[.scpiSale]?.credits.namedValues
+                    .append((name: name,
+                             value: 0))
+            }
         }
     }
 }
