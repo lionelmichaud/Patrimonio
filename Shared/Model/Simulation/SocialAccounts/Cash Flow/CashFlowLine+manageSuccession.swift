@@ -19,9 +19,14 @@ extension CashFlowLine {
                     }
                 }
             }
-            taxes.perCategory[.succession]?.namedValues
-                .append((name  : member.displayName,
-                         value : taxe))
+            // on ne prend en compte que les droits de succession des adultes dans leur CashFlow commun
+            if member is Adult {
+                taxes.perCategory[.succession]?.namedValues
+                    .append((name  : member.displayName,
+                             value : taxe))
+            } else {
+                // TODO: - créer un CashFlow pour chaque enfant
+            }
             
             // succession assurances vies
             taxe = 0
@@ -32,9 +37,14 @@ extension CashFlowLine {
                     }
                 }
             }
-            taxes.perCategory[.liSuccession]?.namedValues
-                .append((name  : member.displayName,
-                         value : taxe))
+            // on ne prend en compte que les droits de succession des adultes dans leur CashFlow commun
+            if member is Adult {
+                taxes.perCategory[.liSuccession]?.namedValues
+                    .append((name  : member.displayName,
+                             value : taxe))
+            } else {
+                // TODO: - créer un CashFlow pour chaque enfant
+            }
         }
     }
     
