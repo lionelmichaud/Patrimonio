@@ -203,7 +203,7 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
         let aDataSet : BarChartDataSet?
         if itemSelectionList.onlyOneCategorySelected() {
             // il y a un seule catégorie de sélectionnée, afficher le détail
-            if let categoryName = itemSelectionList.firstCategorySelected() {
+            if let categoryName = itemSelectionList.firstSelectedCategory() {
                 aDataSet = CategoryBarChartBalanceSheetVisitor(
                     element         : socialAccounts.balanceArray,
                     personSelection : personSelection,

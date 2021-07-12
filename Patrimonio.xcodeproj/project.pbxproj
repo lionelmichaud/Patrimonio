@@ -567,6 +567,8 @@
 		79FC727E2633387F004F3BD2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC727D2633387F004F3BD2 /* ContentView.swift */; };
 		79FC728C26333A27004F3BD2 /* MainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC728B26333A27004F3BD2 /* MainScene.swift */; };
 		79FC728D26333A27004F3BD2 /* MainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC728B26333A27004F3BD2 /* MainScene.swift */; };
+		79FDC1A7269C4C520092452D /* CashFlowLine+manageSuccession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FDC1A6269C4C520092452D /* CashFlowLine+manageSuccession.swift */; };
+		79FDC1A8269C4C520092452D /* CashFlowLine+manageSuccession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FDC1A6269C4C520092452D /* CashFlowLine+manageSuccession.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -848,6 +850,7 @@
 		79FC727626333858004F3BD2 /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		79FC727D2633387F004F3BD2 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		79FC728B26333A27004F3BD2 /* MainScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScene.swift; sourceTree = "<group>"; };
+		79FDC1A6269C4C520092452D /* CashFlowLine+manageSuccession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CashFlowLine+manageSuccession.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1052,6 +1055,7 @@
 				791ED11A263A2CE900701202 /* CashFlowLine+manageRealEstate.swift */,
 				791ED11D263A2D2E00701202 /* CashFlowLine+manageSCPI.swift */,
 				791ED120263A2D3B00701202 /* CashFlowLine+managePeriodicInvest.swift */,
+				79FDC1A6269C4C520092452D /* CashFlowLine+manageSuccession.swift */,
 				791ED114263A28BC00701202 /* SciCashFlowLine.swift */,
 				79EC47F6263095C20006EE44 /* NetCashFlowManager.swift */,
 				791ED123263A2DC300701202 /* Incomes */,
@@ -2233,6 +2237,7 @@
 				791ED0F8263A1D8A00701202 /* FamilySectionView.swift in Sources */,
 				799025B12641F60300ED53D4 /* IrppEvolutionChartView.swift in Sources */,
 				791ED121263A2D3B00701202 /* CashFlowLine+managePeriodicInvest.swift in Sources */,
+				79FDC1A7269C4C520092452D /* CashFlowLine+manageSuccession.swift in Sources */,
 				79FA8CE72630684F009FEA00 /* FreeInvestment.swift in Sources */,
 				7956993E262F884C0015AF34 /* Ownership+TransferFullOwnership.swift in Sources */,
 				796503C62655682A0093F10E /* Dossier.swift in Sources */,
@@ -2476,6 +2481,7 @@
 				799025C02641F60300ED53D4 /* SuccessionsSectionView.swift in Sources */,
 				7990D8D2264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift in Sources */,
 				79FC726B263336C3004F3BD2 /* UIState.swift in Sources */,
+				79FDC1A8269C4C520092452D /* CashFlowLine+manageSuccession.swift in Sources */,
 				79EC47BF26307C910006EE44 /* LiabilitiesCategory.swift in Sources */,
 				79EC47B926307C910006EE44 /* Loan.swift in Sources */,
 				79FA8CF02630684F009FEA00 /* SCI.swift in Sources */,

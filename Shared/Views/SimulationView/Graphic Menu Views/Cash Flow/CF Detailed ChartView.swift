@@ -49,7 +49,7 @@ struct CashFlowDetailedChartView: View {
                         .padding(.horizontal)
                         .pickerStyle(SegmentedPickerStyle())
                     if self.uiState.cfChartState.itemSelection.onlyOneCategorySelected() {
-                        if let categoryName = self.uiState.cfChartState.itemSelection.firstCategorySelected() {
+                        if let categoryName = self.uiState.cfChartState.itemSelection.firstSelectedCategory() {
                             if categoryName == "Dépenses de vie" {
                                 CasePicker(pickedCase: $uiState.cfChartState.selectedExpenseCategory, label: "Catégories de dépenses")
                                     .pickerStyle(SegmentedPickerStyle())
@@ -198,8 +198,8 @@ struct CashFlowStackedBarChartView: UIViewRepresentable {
         //: ### BarChartData
         let aDataSet : BarChartDataSet?
         if itemSelectionList.onlyOneCategorySelected() {
-            // il y a un seule catégorie de sélectionnée, afficher le détail
-            if let categoryName = itemSelectionList.firstCategorySelected() {
+            // il y a un seule catégorie de sélectionnée, afficher le détail des items de la catégorie
+            if let categoryName = itemSelectionList.firstSelectedCategory() {
                 aDataSet = CategoryBarChartCashFlowVisitor(
                     element                : socialAccounts.cashFlowArray,
                     categoryName           : categoryName,
