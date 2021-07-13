@@ -8,6 +8,11 @@
 import Foundation
 
 extension CashFlowLine {
+
+    /// Ajoute les droits de succession  aux taxes de l'année de succession.
+    ///
+    /// On traite séparément les droits de succession dûs par les parents et par les enfants.
+    ///
     mutating func updateSuccessionsTaxes(of family: Family) {
         family.members.items.forEach { member in
             // successions légales
@@ -28,7 +33,7 @@ extension CashFlowLine {
                 // TODO: - créer un CashFlow pour chaque enfant
             }
             
-            // succession assurances vies
+            // succession des assurances vies
             taxe = 0
             lifeInsSuccessions.forEach { succession in
                 succession.inheritances.forEach { inheritance in

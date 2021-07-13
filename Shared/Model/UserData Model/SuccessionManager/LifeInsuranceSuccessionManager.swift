@@ -10,17 +10,21 @@ import Foundation
 import FiscalModel
 
 struct LifeInsuranceSuccessionManager {
-    /// Calcule la masse totale d'assurance vie taxable à la succession d'une personne
+    /// Calcule la masse totale d'assurance vie de la succession d'une personne.
+    ///
+    /// Inclue toutes les AV y.c. celles qui sont démembrées et détenues en UF donc non taxables.
+    ///
+    /// - WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
     /// - Note: [Reference]()
     /// - Parameters:
-    ///   - year: année du décès - 1
+    ///   - patrimoine: le patrimoine de la famille
     ///   - decedent: défunt
-    /// - Returns: masse totale d'assurance vie taxable à la succession du défunt
-    /// - WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
-    fileprivate func taxableLifeInsuraceInheritanceValue(in patrimoine : Patrimoin,
-                                                         of decedent   : Person,
-                                                         atEndOf year  : Int) -> Double {
-        var taxable: Double = 0
+    ///   - year: année du décès - 1
+    /// - Returns: masse totale d'assurance vie de la succession d'une personne
+    fileprivate func lifeInsuraceInheritanceValue(in patrimoine : Patrimoin,
+                                                  of decedent   : Person,
+                                                  atEndOf year  : Int) -> Double {
+        var taxable                                             : Double = 0
         patrimoine.forEachOwnable { ownable in
             taxable += ownable.ownedValue(by               : decedent.displayName,
                                           atEndOf          : year,
@@ -29,6 +33,15 @@ struct LifeInsuranceSuccessionManager {
         return taxable
     }
     
+    /// Calcule, pour chaque héritier, la base taxable d'une assurance vie
+    ///
+    /// L'usufruit rejoint la nue-propriété en franchise d'impôt et est donc exclue de la base taxable.
+    ///
+    /// - Parameters:
+    ///   - decedent: défunt
+    ///   - year: année du décès - 1
+    ///   - invest: l'investissemment à analyser
+    ///   - massesSuccession: (héritier, base taxable)
     fileprivate func lifeInsuranceSuccessionMasses(of decedent      : Person,
                                                    for invest       : FinancialEnvelop,
                                                    atEndOf year     : Int,
@@ -37,9 +50,9 @@ struct LifeInsuranceSuccessionManager {
         if let clause = invest.clause {
             // on a affaire à une assurance vie
             // masse successorale pour cet investissement
-            let masseDecedent = invest.ownedValue(by      : decedent.displayName,
-                                                  atEndOf : year - 1,
-                                                  evaluationMethod: .lifeInsuranceSuccession)
+            let masseDecedent = invest.ownedValue(by               : decedent.displayName,
+                                                  atEndOf          : year + 1,
+                                                  evaluationMethod : .lifeInsuranceSuccession)
             guard masseDecedent != 0 else { return }
             
             if invest.ownership.isDismembered {
@@ -71,7 +84,7 @@ struct LifeInsuranceSuccessionManager {
                             // simuler localement le transfert de propriété pour connaître les masses héritées
                             _invest.ownership.transferLifeInsuranceFullOwnership(clause: clause)
                         }
-                        let ownedValues = _invest.ownedValues(atEndOf: year - 1, evaluationMethod: .lifeInsuranceSuccession)
+                        let ownedValues = _invest.ownedValues(atEndOf: year, evaluationMethod: .lifeInsuranceSuccession)
                         ownedValues.forEach { (name, value) in
                             if massesSuccession[name] != nil {
                                 // incrémenter
@@ -109,24 +122,24 @@ struct LifeInsuranceSuccessionManager {
                               inheritances : inheritances)
         }
         
-        // calculer la masse taxable au titre de l'assurance vie
+        // calculer la masse d'assurance vie de la succession
         // WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
-        let totalTaxableInheritance = taxableLifeInsuraceInheritanceValue(in      : patrimoine,
+        let totalTaxableInheritance = lifeInsuraceInheritanceValue(in      : patrimoine,
                                                                           of      : decedent,
                                                                           atEndOf : year - 1)
-        //        print("  Masse successorale d'assurance vie = \(totalTaxableInheritance.rounded())")
+        print("\n  Masse successorale d'assurance vie = \(totalTaxableInheritance.rounded())")
         
         // pour chaque assurance vie
         patrimoine.assets.freeInvests.items.forEach { invest in
             lifeInsuranceSuccessionMasses(of               : decedent,
                                           for              : invest,
-                                          atEndOf          : year,
+                                          atEndOf          : year - 1,
                                           massesSuccession : &massesSuccession)
         }
         patrimoine.assets.periodicInvests.items.forEach { invest in
             lifeInsuranceSuccessionMasses(of               : decedent,
                                           for              : invest,
-                                          atEndOf          : year,
+                                          atEndOf          : year - 1,
                                           massesSuccession : &massesSuccession)
         }
         
@@ -141,8 +154,8 @@ struct LifeInsuranceSuccessionManager {
                     // les enfants
                     heritage = try! Fiscal.model.lifeInsuranceInheritance.heritageOfChild(partSuccession: masse)
                 }
-                //                print("  Part d'héritage de \(member.displayName) = \(masse.rounded())")
-                //                print("    Taxe = \(heritage.taxe.rounded())")
+                print("  Part d'héritage de \(member.displayName) = \(masse.rounded())")
+                print("    Taxe = \(heritage.taxe.rounded())")
                 inheritances.append(Inheritance(person  : member,
                                                 percent : masse / totalTaxableInheritance,
                                                 brut    : masse,
@@ -151,8 +164,8 @@ struct LifeInsuranceSuccessionManager {
             }
         }
         
-        //        print("  Masse totale = ", inheritances.sum(for: \.brut).rounded())
-        //        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
+        print("  Masse totale = ", inheritances.sum(for: \.brut).rounded())
+        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
         return Succession(kind         : .lifeInsurance,
                           yearOfDeath  : year,
                           decedent     : decedent,

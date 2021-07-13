@@ -103,7 +103,8 @@ struct NetCashFlowManager {
         for idx in 0..<patrimoine.assets.freeInvests.items.count {
             switch patrimoine.assets.freeInvests[idx].type {
                 case .lifeInsurance(let periodicSocialTaxes, _):
-                    if periodicSocialTaxes && amount != 0
+                    if periodicSocialTaxes
+                        && amount != 0
                         && patrimoine.assets.freeInvests[idx].isFullyOwned(partlyBy: adultsName) {
                         // investir la totalité du cash
                         patrimoine.assets.freeInvests[idx].add(amount)
@@ -115,7 +116,8 @@ struct NetCashFlowManager {
         for idx in 0..<patrimoine.assets.freeInvests.items.count {
             switch patrimoine.assets.freeInvests[idx].type {
                 case .lifeInsurance(let periodicSocialTaxes, _):
-                    if !periodicSocialTaxes && amount != 0
+                    if !periodicSocialTaxes
+                        && amount != 0
                         && patrimoine.assets.freeInvests[idx].isFullyOwned(partlyBy: adultsName) {
                         // investir la totalité du cash
                         patrimoine.assets.freeInvests[idx].add(amount)
@@ -169,14 +171,14 @@ struct NetCashFlowManager {
     // swiftlint:disable cyclomatic_complexity
     // swiftlint:disable function_parameter_count
     fileprivate func getCashFlowFromInvestement(in patrimoine             : Patrimoin,
-                                                _ name                    : String,
+                                                of name                   : String,
                                                 _ year                    : Int,
                                                 _ amountRemainingToRemove : inout Double,
                                                 _ totalTaxableInterests   : inout Double,
                                                 _ lifeInsuranceRebate     : inout Double,
                                                 _ taxes                   : inout [TaxeCategory: NamedValueTable]) {
         // PEA: retirer le montant d'un investissement libre: d'abord le PEA procurant le moins bon rendement
-        for idx in 0..<patrimoine.assets.freeInvests.items.count
+        for idx in patrimoine.assets.freeInvests.items.startIndex..<patrimoine.assets.freeInvests.items.endIndex
         where patrimoine.assets.freeInvests[idx].type == .pea
             && (name == "" || patrimoine.assets.freeInvests[idx].ownership.isAFullOwner(ownerName: name)) {
             // tant que l'on a pas retiré le montant souhaité
@@ -186,15 +188,14 @@ struct NetCashFlowManager {
                 amountRemainingToRemove -= removal.revenue
                 // IRPP: les plus values PEA ne sont pas imposables à l'IRPP
                 // Prélèvements sociaux: prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
-                if amountRemainingToRemove <= 0.0 { break }
+                if amountRemainingToRemove <= 0.0 {
+                    return
+                }
             }
         }
-        guard amountRemainingToRemove > 0.0 else {
-            return
-        }
-        
+
         // ASSURANCE VIE: si le solde des PEA n'était pas suffisant alors retirer de l'Assurances vie procurant le moins bon rendement
-        for idx in 0..<patrimoine.assets.freeInvests.items.count {
+        for idx in patrimoine.assets.freeInvests.items.startIndex..<patrimoine.assets.freeInvests.items.endIndex {
             switch patrimoine.assets.freeInvests[idx].type {
                 case .lifeInsurance:
                     // tant que l'on a pas retiré le montant souhaité
@@ -211,18 +212,17 @@ struct NetCashFlowManager {
                         // géré comme un revenu en report d'imposition (dette)
                         totalTaxableInterests += taxableInterests
                         // Prélèvements sociaux => prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
-                        if amountRemainingToRemove <= 0.0 { break }
+                        if amountRemainingToRemove <= 0.0 {
+                            return
+                        }
                     }
                 default:
                     ()
             }
         }
-        guard amountRemainingToRemove > 0.0 else {
-            return
-        }
 
         // AUTRE: retirer le montant d'un investissement libre: d'abord celui procurant le moins bon rendement
-        for idx in 0..<patrimoine.assets.freeInvests.items.count
+        for idx in patrimoine.assets.freeInvests.items.startIndex..<patrimoine.assets.freeInvests.items.endIndex
         where patrimoine.assets.freeInvests[idx].type == .other
             && (name == "" || patrimoine.assets.freeInvests[idx].ownership.isAFullOwner(ownerName: name)) {
             // tant que l'on a pas retiré le montant souhaité
@@ -231,12 +231,14 @@ struct NetCashFlowManager {
                 let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
                 amountRemainingToRemove -= removal.revenue
                 // IRPP: les plus values sont imposables à l'IRPP
+                // géré comme un revenu en report d'imposition (dette)
                 totalTaxableInterests += removal.taxableInterests
                 // Prélèvements sociaux
                 taxes[.socialTaxes]?.namedValues.append((name : patrimoine.assets.freeInvests[idx].name,
                                                          value: removal.socialTaxes))
-                
-                if amountRemainingToRemove <= 0.0 { break }
+                if amountRemainingToRemove <= 0.0 {
+                    return
+                }
             }
         }
     }
@@ -246,11 +248,11 @@ struct NetCashFlowManager {
     // swiftlint:disable function_parameter_count
     /// Retirer `amount` du capital des personnes dans la liste `adultsName` seulement.
     ///
-    /// Retirer le cash du capital de la personne la plus riche d'abord.
-    ///
-    /// Retirer le montant d'un investissement libre dont la personne est PP.
-    ///
-    /// Ordre: d'abord PEA ensuite Assurance vie puis autre
+    /// Ordre:
+    ///  - Retirer le cash du capital de la personne la plus riche d'abord.
+    ///  - Le taux de rendement le moins élevé d'abord
+    ///  - D'abord PEA ensuite Assurance vie puis autre; par taux de rendement décroissant
+    ///  - Retirer le montant d'un investissement libre dont la personne est PP.
     ///
     /// - Parameters:
     ///   - patrimoine: du patrimoine
@@ -271,9 +273,9 @@ struct NetCashFlowManager {
         var totalTaxableInterests   = 0.0
         
         // trier les adultes vivants par ordre de capital décroissant (en termes de FreeInvestement)
-        var sortedNames = [String]()
+        var sortedAdultNames = [String]()
         if adultsName.count > 1 {
-            sortedNames = adultsName.sorted {
+            sortedAdultNames = adultsName.sorted {
                 totalFreeInvestementsValue(ownedBy : $0,
                                            in      : patrimoine,
                                            atEndOf : year) >
@@ -282,32 +284,35 @@ struct NetCashFlowManager {
                                                atEndOf : year)
             }
         } else {
-            sortedNames = adultsName
+            sortedAdultNames = adultsName
         }
-        sortedNames.forEach { name in
+        sortedAdultNames.forEach { name in
             print("nom: \(name)")
             print("richesse disponible (free): \(totalFreeInvestementsValue(ownedBy: name, in: patrimoine, atEndOf: year).rounded())")
         }
-        
+
+        // trier par taux de rendement croissant
         patrimoine.assets.freeInvests.items.sort(by: {$0.averageInterestRate < $1.averageInterestRate})
         
         // retirer le cash du capital de la personne la plus riche d'abord
-        for name in sortedNames {
+        for adultName in sortedAdultNames {
             getCashFlowFromInvestement(in: patrimoine,
-                                       name,
+                                       of: adultName,
                                        year,
                                        &amountRemainingToRemove,
                                        &totalTaxableInterests,
                                        &lifeInsuranceRebate,
                                        &taxes)
-            if amountRemainingToRemove <= 0 { break }
+            if amountRemainingToRemove <= 0 {
+                return totalTaxableInterests
+            }
         }
         
         // Note: s'il n'y a plus d'adulte vivant on prend dans le premier actif qui vient
         // ce sont les héritiers qui payent
-        if amountRemainingToRemove > 0.0 && adultsName.count == 0 {
+        if adultsName.count == 0 {
             getCashFlowFromInvestement(in: patrimoine,
-                                       "",
+                                       of: "",
                                        year,
                                        &amountRemainingToRemove,
                                        &totalTaxableInterests,

@@ -76,8 +76,8 @@ struct LegalSuccessionManager {
             // TODO: le soritr d'une fonction du modèle fiscal
             let tax = 0.0
             
-            //            print("  Part d'héritage de \(conjointSurvivant.displayName) = \(brut.rounded())")
-            //            print("    Taxe = \(tax.rounded())")
+            print("  Part d'héritage de \(conjointSurvivant.displayName) = \(brut.rounded())")
+            print("    Taxe = \(tax.rounded())")
             inheritances.append(Inheritance(person  : conjointSurvivant,
                                             percent : share,
                                             brut    : brut,
@@ -110,8 +110,8 @@ struct LegalSuccessionManager {
                     // caluler les droits de succession du conjoint
                     let inheritance = try! Fiscal.model.inheritanceDonation.heritageOfChild(partSuccession: brut)
                     
-                    //                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded())")
-                    //                    print("    Taxe = \(inheritance.taxe.rounded())")
+                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded())")
+                    print("    Taxe = \(inheritance.taxe.rounded())")
                     inheritances.append(Inheritance(person  : child,
                                                     percent : share,
                                                     brut    : brut,
@@ -120,7 +120,7 @@ struct LegalSuccessionManager {
                 }
             }
         }
-        //        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
+        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
         return Succession(kind         : .legal,
                           yearOfDeath  : year,
                           decedent     : decedent,

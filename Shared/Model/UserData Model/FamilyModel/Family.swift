@@ -282,7 +282,7 @@ extension Family: CustomStringConvertible {
 extension Family: PersonAgeProvider {
     func ageOf(_ name: String, _ year: Int) -> Int {
         let person = member(withName: name)
-        return person?.age(atEndOf: Date.now.year) ?? -1
+        return person?.age(atEndOf: year) ?? -1
     }
 }
 

@@ -201,6 +201,7 @@ struct CashFlowLine {
         let netCashFlowSalesExcluded = self.netCashFlowSalesExcluded
         
         // On ne gère pas ici le ré-investissement des biens vendus dans l'année et détenus en propre
+        // c'est fait en amont
         if netCashFlowSalesExcluded > 0.0 {
             // capitaliser les intérêts des investissements libres
             netCashFlowManager.capitalizeFreeInvestments(in      : patrimoine,
@@ -211,8 +212,8 @@ struct CashFlowLine {
                                                  for    : adultsName)
             
         } else {
-            // retirer le solde net d'un investissement libre: d'abord PEA ensuite Assurance vie
-            // géré comme un revenu en report d'imposition (dette)
+            // Retirer le solde net d'un investissement libre: d'abord PEA ensuite Assurance vie.
+            // Les taxes dues au titre des retraits sont gérées comme un revenu en report d'imposition (dette).
             let totalTaxableInterests =
                 try netCashFlowManager.getCashFromInvestement(thisAmount          : -netCashFlowSalesExcluded,
                                                               in                  : patrimoine,
@@ -222,7 +223,7 @@ struct CashFlowLine {
                                                               lifeInsuranceRebate : &lifeInsuranceRebate)
             taxableIrppRevenueDelayedToNextYear.increase(by: totalTaxableInterests.rounded())
             
-            // capitaliser les intérêts des investissements libres
+            // capitaliser les intérêts des investissements libres après avoir effectué les retraits
             netCashFlowManager.capitalizeFreeInvestments(in      : patrimoine,
                                                          atEndOf : year)
         }
