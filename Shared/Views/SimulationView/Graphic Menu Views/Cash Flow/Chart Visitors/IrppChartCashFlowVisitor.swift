@@ -49,7 +49,7 @@ class IrppChartCashFlowVisitor: CashFlowIrppVisitorP {
     }
 
     func buildIrppChart(element: CashFlowLine) {
-        element.taxes.accept(self)
+        element.adultTaxes.accept(self)
         // patrimoine imposable
         yVals1.append(ChartDataEntry(x: element.year.double(),
                                      y: patrimoine))

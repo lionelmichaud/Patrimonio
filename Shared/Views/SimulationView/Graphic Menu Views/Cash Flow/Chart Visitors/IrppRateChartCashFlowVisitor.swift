@@ -67,7 +67,7 @@ class IrppRateChartCashFlowVisitor: CashFlowIrppRateVisitorP {
     }
 
     func buildIrppRateChart(element: CashFlowLine) {
-        element.taxes.accept(self)
+        element.adultTaxes.accept(self)
         // taux moyen
         yLineVals1.append(ChartDataEntry(x: element.year.double(),
                                          y: averageRate))

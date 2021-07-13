@@ -25,18 +25,18 @@ extension CashFlowLine {
                 /// revenus du travail
                 let workIncome = adult.workIncome(during: year)
                 // revenus du travail inscrit en compte avant IRPP (net charges sociales, de dépenses de mutuelle ou d'assurance perte d'emploi)
-                revenues.perCategory[.workIncomes]?.credits.namedValues
+                adultsRevenues.perCategory[.workIncomes]?.credits.namedValues
                     .append((name: name,
                              value: workIncome.net.rounded()))
                 // part des revenus du travail inscrite en compte qui est imposable à l'IRPP
-                revenues.perCategory[.workIncomes]?.taxablesIrpp.namedValues
+                adultsRevenues.perCategory[.workIncomes]?.taxablesIrpp.namedValues
                     .append((name: name,
                              value: workIncome.taxableIrpp.rounded()))
                 
                 /// pension de retraite
                 let pension  = adult.pension(during: year)
                 // pension inscrit en compte avant IRPP (net de charges sociales)
-                revenues.perCategory[.pensions]?.credits.namedValues
+                adultsRevenues.perCategory[.pensions]?.credits.namedValues
                     .append((name: name,
                              value: pension.net.rounded()))
                 // part de la pension inscrite en compte qui est imposable à l'IRPP
@@ -44,12 +44,12 @@ extension CashFlowLine {
                 var discount = pension.net - pension.taxable
                 if relicat >= discount {
                     // l'abattement est suffisant pour cette personne
-                    revenues.perCategory[.pensions]?.taxablesIrpp.namedValues
+                    adultsRevenues.perCategory[.pensions]?.taxablesIrpp.namedValues
                         .append((name: name,
                                  value: pension.taxable.rounded()))
                 } else {
                     discount = relicat
-                    revenues.perCategory[.pensions]?.taxablesIrpp.namedValues
+                    adultsRevenues.perCategory[.pensions]?.taxablesIrpp.namedValues
                         .append((name: name,
                                  value: (pension.net - discount).rounded()))
                 }
@@ -57,17 +57,17 @@ extension CashFlowLine {
                 
                 /// indemnité de licenciement
                 let compensation = adult.layoffCompensation(during: year)
-                revenues.perCategory[.layoffCompensation]?.credits.namedValues
+                adultsRevenues.perCategory[.layoffCompensation]?.credits.namedValues
                     .append((name: name,
                              value: compensation.net.rounded()))
-                revenues.perCategory[.layoffCompensation]?.taxablesIrpp.namedValues
+                adultsRevenues.perCategory[.layoffCompensation]?.taxablesIrpp.namedValues
                     .append((name: name,
                              value: compensation.taxable.rounded()))
                 /// allocation chomage
                 let alocation = adult.unemployementAllocation(during: year)
-                revenues.perCategory[.unemployAlloc]?.credits.namedValues
+                adultsRevenues.perCategory[.unemployAlloc]?.credits.namedValues
                     .append((name: name, value: alocation.net.rounded()))
-                revenues.perCategory[.unemployAlloc]?.taxablesIrpp.namedValues
+                adultsRevenues.perCategory[.unemployAlloc]?.taxablesIrpp.namedValues
                     .append((name: name,
                              value: alocation.taxable.rounded()))
             }

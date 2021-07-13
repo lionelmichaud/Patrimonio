@@ -26,7 +26,7 @@ extension CashFlowLine {
             }
             // on ne prend en compte que les droits de succession des adultes dans leur CashFlow commun
             if member is Adult {
-                taxes.perCategory[.succession]?.namedValues
+                adultTaxes.perCategory[.succession]?.namedValues
                     .append((name  : member.displayName,
                              value : taxe))
             } else {
@@ -44,7 +44,7 @@ extension CashFlowLine {
             }
             // on ne prend en compte que les droits de succession des adultes dans leur CashFlow commun
             if member is Adult {
-                taxes.perCategory[.liSuccession]?.namedValues
+                adultTaxes.perCategory[.liSuccession]?.namedValues
                     .append((name  : member.displayName,
                              value : taxe))
             } else {

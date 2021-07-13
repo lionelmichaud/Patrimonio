@@ -70,7 +70,7 @@ class BarChartCashFlowVisitor: CashFlowStackedBarChartVisitorP {
     func buildStackedBarChart(element: CashFlowLine) {
         switch combination {
             case .revenues:
-                element.revenues.accept(self)
+                element.adultsRevenues.accept(self)
                 element.sciCashFlowLine.accept(self)
                 if processingFirstLine {
                     positiveLabels = labelRevenues + labelSCI
@@ -79,7 +79,7 @@ class BarChartCashFlowVisitor: CashFlowStackedBarChartVisitorP {
                                                      yValues : yRevenues + ySCI))
 
             case .expenses:
-                element.taxes.accept(self)
+                element.adultTaxes.accept(self)
                 yExpenses = -element.lifeExpenses.filtredTableValue(with : itemSelectionList)
                 yDebt     = -element.debtPayements.filtredTableValue(with     : itemSelectionList)
                 yInvest   = -element.investPayements.filtredTableValue(with : itemSelectionList)
@@ -93,9 +93,9 @@ class BarChartCashFlowVisitor: CashFlowStackedBarChartVisitorP {
                                                      yValues : yExpenses + yTaxes + yDebt + yInvest))
 
             case .both:
-                element.revenues.accept(self)
+                element.adultsRevenues.accept(self)
                 element.sciCashFlowLine.accept(self)
-                element.taxes.accept(self)
+                element.adultTaxes.accept(self)
                 yExpenses = -element.lifeExpenses.filtredTableValue(with : itemSelectionList)
                 yDebt     = -element.debtPayements.filtredTableValue(with     : itemSelectionList)
                 yInvest   = -element.investPayements.filtredTableValue(with : itemSelectionList)

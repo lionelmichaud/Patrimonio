@@ -82,14 +82,14 @@ struct RevenuSummarySection: View {
         } else {
             Section(header: header("REVENUS")) {
                 AmountView(label : "Revenu familliale net de charges sociales et d'assurance (à vivre)",
-                           amount: cashFlow!.revenues.totalRevenue)
+                           amount: cashFlow!.adultsRevenues.totalRevenue)
                 AmountView(label : "Revenu de la SCI net de taxes et d'IS ",
                            amount: cashFlow!.sciCashFlowLine.netRevenues)
                 AmountView(label : "Revenu total net",
                            amount: cashFlow!.sumOfRevenues,
                            weight: .bold)
                 AmountView(label : "Revenu imposable à l'IRPP",
-                           amount: cashFlow!.revenues.totalTaxableIrpp)
+                           amount: cashFlow!.adultsRevenues.totalTaxableIrpp)
             }
         }
     }
@@ -111,31 +111,31 @@ struct FiscalSummarySection: View {
         } else {
             Section(header: header("FISCALITE FAMILLE")) {
                 AmountView(label : "Montant de l'IRPP",
-                           amount: cashFlow!.taxes.perCategory[.irpp]!.total)
+                           amount: cashFlow!.adultTaxes.perCategory[.irpp]!.total)
                 IntegerView(label   : "Quotient familial",
-                            integer : Int(cashFlow!.taxes.irpp.familyQuotient))
+                            integer : Int(cashFlow!.adultTaxes.irpp.familyQuotient))
                     .foregroundColor(.secondary)
                     .padding(.leading)
                 PercentView(label   : "Taux moyen d'imposition",
-                            percent : cashFlow!.taxes.irpp.averageRate)
+                            percent : cashFlow!.adultTaxes.irpp.averageRate)
                     .foregroundColor(.secondary)
                     .padding(.leading)
                 AmountView(label : "Montant de l'ISF",
-                           amount: cashFlow!.taxes.perCategory[.isf]!.total)
+                           amount: cashFlow!.adultTaxes.perCategory[.isf]!.total)
                 AmountView(label  : "Assiette ISF",
-                           amount : cashFlow!.taxes.isf.taxable)
+                           amount : cashFlow!.adultTaxes.isf.taxable)
                     .foregroundColor(.secondary)
                     .padding(.leading)
                 PercentView(label   : "Taux ISF",
-                            percent : cashFlow!.taxes.isf.marginalRate)
+                            percent : cashFlow!.adultTaxes.isf.marginalRate)
                     .foregroundColor(.secondary)
                     .padding(.leading)
                 AmountView(label : "Taxes locales",
-                           amount: cashFlow!.taxes.perCategory[.localTaxes]!.total)
+                           amount: cashFlow!.adultTaxes.perCategory[.localTaxes]!.total)
                 AmountView(label : "Prélevements Sociaux",
-                           amount: cashFlow!.taxes.perCategory[.socialTaxes]!.total)
+                           amount: cashFlow!.adultTaxes.perCategory[.socialTaxes]!.total)
                 AmountView(label : "Prélevements totaux",
-                           amount: cashFlow!.taxes.total,
+                           amount: cashFlow!.adultTaxes.total,
                            weight: .bold)
             }
         }

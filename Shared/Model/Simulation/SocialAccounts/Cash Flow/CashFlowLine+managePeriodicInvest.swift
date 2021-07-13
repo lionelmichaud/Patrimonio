@@ -31,7 +31,7 @@ extension CashFlowLine {
             var yearlyPayement : Double = 0
 
             if periodicInvestement.isPartOfPatrimoine(of: adultsName) {
-                /// Vente
+                /// Ventes de l'année
                 // le crédit se fait au début de l'année qui suit la vente
                 let liquidatedValue = periodicInvestement.liquidatedValue(atEndOf: year - 1)
                 // produit de la liquidation inscrit en compte courant avant prélèvements sociaux et IRPP
@@ -55,9 +55,11 @@ extension CashFlowLine {
                         lifeInsuranceRebate -= (liquidatedValue.taxableIrppInterests - taxableInterests)
                         // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
                         taxablesIrpp = taxableInterests
+                        
                     case .pea:
                         // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
                         taxablesIrpp = liquidatedValue.taxableIrppInterests
+                        
                     case .other:
                         // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
                         taxablesIrpp = liquidatedValue.taxableIrppInterests
@@ -65,18 +67,18 @@ extension CashFlowLine {
                 // populate prélèvements sociaux
                 socialTaxes = liquidatedValue.socialTaxes
                 
-                /// Versements
+                /// Versements annuels
                 // on compte quand même les versements de la dernière année
                 yearlyPayement = periodicInvestement.yearlyTotalPayement(atEndOf: year)
             }
             
-            revenues.perCategory[.financials]?.credits.namedValues
+            adultsRevenues.perCategory[.financials]?.credits.namedValues
                 .append((name: name,
                          value: revenue.rounded()))
-            revenues.perCategory[.financials]?.taxablesIrpp.namedValues
+            adultsRevenues.perCategory[.financials]?.taxablesIrpp.namedValues
                 .append((name: name,
                          value: taxablesIrpp.rounded()))
-            taxes.perCategory[.socialTaxes]?.namedValues
+            adultTaxes.perCategory[.socialTaxes]?.namedValues
                 .append((name: name,
                          value: socialTaxes.rounded()))
             investPayements.namedValues

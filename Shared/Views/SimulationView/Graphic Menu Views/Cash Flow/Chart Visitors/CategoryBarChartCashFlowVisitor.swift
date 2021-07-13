@@ -94,19 +94,19 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
             nbNegativeLabels = labelsInCategory.count
         }
 
-        if element.revenues.summary.contains(name: categoryName) {
+        if element.adultsRevenues.summary.contains(name: categoryName) {
             /// rechercher la catégorie dans les revenus
             guard revenueCategory != nil else {
                 return
             }
             if labelsInCategory.count == 0 {
-                guard let labels = element.revenues.perCategory[revenueCategory!]?.credits.namesArray else {
+                guard let labels = element.adultsRevenues.perCategory[revenueCategory!]?.credits.namesArray else {
                     return
                 }
                 labelsInCategory = labels
                 nbPositiveLabels = labelsInCategory.count
             }
-            element.revenues.accept(self)
+            element.adultsRevenues.accept(self)
             guard let y = y else { return }
             dataEntries.append(BarChartDataEntry(x       : element.year.double(),
                                                  yValues : y))
@@ -123,21 +123,21 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
             dataEntries.append(BarChartDataEntry(x       : element.year.double(),
                                                  yValues : y))
 
-        } else if element.taxes.summary.contains(name: categoryName) {
+        } else if element.adultTaxes.summary.contains(name: categoryName) {
             /// rechercher les valeurs des taxes
             // customLog.log(level: .info, "Catégorie trouvée dans taxes : \(found.name)")
             guard taxCategory != nil else {
                 return
             }
             if labelsInCategory.count == 0 {
-                guard let labels = element.taxes.perCategory[taxCategory!]?.namesArray else {
+                guard let labels = element.adultTaxes.perCategory[taxCategory!]?.namesArray else {
                     return
                 }
                 labelsInCategory = labels
                 nbNegativeLabels = labelsInCategory.count
             }
             // valeurs des revenus de la catégorie
-            element.taxes.accept(self)
+            element.adultTaxes.accept(self)
             guard let y = y else { return }
             dataEntries.append(BarChartDataEntry(x       : element.year.double(),
                                                  yValues : -y))

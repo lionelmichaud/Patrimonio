@@ -19,8 +19,7 @@ extension CashFlowLine {
     ///   - adultsName: des adultes
     mutating func manageRealEstateRevenues(of patrimoine  : Patrimoin,
                                            for adultsName : [String]) {
-        for realEstate in patrimoine.assets.realEstates.items .sorted(by:<)
-        where realEstate.isPartOfPatrimoine(of: adultsName) {
+        for realEstate in patrimoine.assets.realEstates.items .sorted(by:<) {
             let name = realEstate.name
             
             /// Revenus
@@ -41,32 +40,31 @@ extension CashFlowLine {
                 // impôts locaux
                 yearlyLocaltaxes = realEstate.yearlyLocalTaxes(during: year)
             }
-            revenues.perCategory[.realEstateRents]?.credits.namedValues
+            adultsRevenues.perCategory[.realEstateRents]?.credits.namedValues
                 .append((name: name,
                          value: revenue.rounded()))
             // part des loyers inscrit en compte courant imposable à l'IRPP - idem ci-dessus car même base
-            revenues.perCategory[.realEstateRents]?.taxablesIrpp.namedValues
+            adultsRevenues.perCategory[.realEstateRents]?.taxablesIrpp.namedValues
                 .append((name: name,
                          value: taxableIrpp.rounded()))
             // prélèvements sociaux payés sur le loyer
-            taxes.perCategory[.socialTaxes]?.namedValues
+            adultTaxes.perCategory[.socialTaxes]?.namedValues
                 .append((name : name,
                          value: socialTaxes.rounded()))
             // impôts locaux
-            taxes.perCategory[.localTaxes]?.namedValues
+            adultTaxes.perCategory[.localTaxes]?.namedValues
                 .append((name: name,
                          value: yearlyLocaltaxes.rounded()))
             
             /// Vente
             // le produit de la vente se répartit entre UF et NP si démembrement
+            var netRevenue: Double = 0
             if realEstate.isPartOfPatrimoine(of: adultsName) {
                 // produit de la vente inscrit en compte courant:
                 //    produit net de charges sociales et d'impôt sur la plus-value
                 // le crédit se fait au début de l'année qui suit la vente
                 let liquidatedValue = realEstate.liquidatedValue(year - 1)
-                revenues.perCategory[.realEstateSale]?.credits.namedValues
-                    .append((name: name,
-                             value: liquidatedValue.netRevenue.rounded()))
+                netRevenue = liquidatedValue.netRevenue
                 // créditer le produit de la vente sur les comptes des personnes
                 // en fonction de leur part de propriété respective
                 let ownedSaleValues = realEstate.ownedValues(ofValue          : liquidatedValue.netRevenue,
@@ -76,12 +74,10 @@ extension CashFlowLine {
                 netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
                                                  in            : patrimoine,
                                                  atEndOf       : year)
-            } else {
-                // pour garder le nombre de séries graphiques constant au cours du temps
-                revenues.perCategory[.realEstateSale]?.credits.namedValues
-                    .append((name: name,
-                             value: 0))
             }
+            adultsRevenues.perCategory[.realEstateSale]?.credits.namedValues
+                .append((name: name,
+                         value: netRevenue.rounded()))
         }
     }
 }

@@ -90,7 +90,7 @@ class CsvCashFlowTableVisitor: CashFlowCsvVisitorP {
     func buildCsv(element: CashFlowLine) {
         func visitRevenues() {
             // visiter l'ensembles des revenus de la famille
-            let valuedRevenues = element.revenues
+            let valuedRevenues = element.adultsRevenues
             valuedRevenues.accept(self)
             // total des REVENUS
             table.append("\(valuedRevenues.totalRevenue.roundedString); ")
@@ -113,7 +113,7 @@ class CsvCashFlowTableVisitor: CashFlowCsvVisitorP {
         }
 
         func visitTaxes() {
-            let valuedTaxes = element.taxes
+            let valuedTaxes = element.adultTaxes
             table.append("\(valuedTaxes.irpp.familyQuotient.roundedString); ")
 
             valuedTaxes.accept(self)
@@ -285,7 +285,7 @@ class CsvCashFlowHeaderVisitor: CashFlowCsvVisitorP {
     func buildCsv(element: CashFlowLine) {
         func visitRevenues() {
             // visiter l'ensembles des revenus de la famille
-            element.revenues.accept(self)
+            element.adultsRevenues.accept(self)
         }
 
         func visitSCI() {
@@ -311,7 +311,7 @@ class CsvCashFlowHeaderVisitor: CashFlowCsvVisitorP {
             header1.append("; ")
             header2.append("QUOT. FAMILIAL; ")
 
-            element.taxes.accept(self)
+            element.adultTaxes.accept(self)
         }
 
         func visitDebts() {
