@@ -8,6 +8,12 @@
 
 import Foundation
 
+public extension Array {
+    var range: Range<Index> {
+        return self.startIndex ..< self.endIndex
+    }
+}
+
 public extension Array where Element: AdditiveArithmetic {
     /// Somme de tous les éléméents d'un Array
     ///

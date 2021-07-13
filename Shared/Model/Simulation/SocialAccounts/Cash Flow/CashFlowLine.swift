@@ -14,12 +14,7 @@ struct CashFlowLine {
     
     // agrégat des ages des membres de la famille pendant l'année en cours
     struct AgeTable {
-        
-        // properties
-        
         var persons = [(name: String, age: Int)]()
-        
-        // methods
     }
     
     // MARK: - Properties
@@ -224,7 +219,7 @@ struct CashFlowLine {
         }
     }
     
-    /// Gérer l'excédent ou le déficit de trésorierie (commune) en fin d'année
+    /// Gérer l'excédent ou le déficit de trésorierie (commune des Parents) en fin d'année
     ///
     /// - Warning:
     ///   On ne gère pas ici le ré-investissement des biens vendus dans l'année et détenus en propre.

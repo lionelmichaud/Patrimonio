@@ -19,7 +19,7 @@ struct NetCashFlowManager {
     ///   - year: à la fin de cette année
     func capitalizeFreeInvestments(in patrimoine : Patrimoin,
                                    atEndOf year  : Int) {
-        for idx in 0..<patrimoine.assets.freeInvests.items.count {
+        for idx in patrimoine.assets.freeInvests.items.range {
             try! patrimoine.assets.freeInvests[idx].capitalize(atEndOf: year)
         }
     }
@@ -100,7 +100,7 @@ struct NetCashFlowManager {
         patrimoine.assets.freeInvests.items.sort(by: {$0.averageInterestRate > $1.averageInterestRate})
         
         // investir en priorité dans une assurance vie
-        for idx in 0..<patrimoine.assets.freeInvests.items.count {
+        for idx in patrimoine.assets.freeInvests.items.startIndex..<patrimoine.assets.freeInvests.items.endIndex {
             switch patrimoine.assets.freeInvests[idx].type {
                 case .lifeInsurance(let periodicSocialTaxes, _):
                     if periodicSocialTaxes
