@@ -423,7 +423,7 @@ struct Ownership {
         } else {
             // (B) le bien n'est pas démembré
             // est-ce que le défunt fait partie des co-propriétaires ?
-            if isAFullOwner(ownerName: decedentName) {
+            if hasAFullOwner(named: decedentName) {
                 // (1) le défunt fait partie des co-propriétaires
                 // on transfert sa part de propriété aux héritiers
                 if let spouseName = spouseName {
@@ -447,27 +447,34 @@ struct Ownership {
     }
     
     /// Retourne true si la personne est un des usufruitiers du bien
-    /// - Parameter ownerName: nom de la personne
-    func isAnUsufructOwner(ownerName: String) -> Bool {
-        return isDismembered && usufructOwners.contains(where: { $0.name == ownerName })
+    /// - Parameter name: nom de la personne
+    func hasAnUsufructOwner(named name: String) -> Bool {
+        isDismembered && usufructOwners.contains(where: { $0.name == name })
     }
     
     /// Retourne true si la personne est un des nupropriétaires du bien
-    /// - Parameter ownerName: nom de la personne
-    func isABareOwner(ownerName: String) -> Bool {
-        return isDismembered && bareOwners.contains(where: { $0.name == ownerName })
+    /// - Parameter name: nom de la personne
+    func hasABareOwner(named name: String) -> Bool {
+        isDismembered && bareOwners.contains(where: { $0.name == name })
     }
     
     /// Retourne true si la personne est un des détenteurs du bien en pleine propriété
-    /// - Parameter ownerName: nom de la personne
-    func isAFullOwner(ownerName: String) -> Bool {
-        return !isDismembered && fullOwners.contains(where: { $0.name == ownerName })
+    /// - Parameter name: nom de la personne
+    func hasAFullOwner(named name: String) -> Bool {
+        !isDismembered && fullOwners.contains(where: { $0.name == name })
+    }
+    
+    /// Retourne true si la personne est le seul détenteur du bien en pleine propriété
+    /// - Parameter name: nom de la personne
+    func hasAUniqueFullOwner(named name: String) -> Bool {
+        !isDismembered && fullOwners.contains(where: { $0.name == name })
+            && fullOwners.count == 1
     }
     
     /// Retourne true si la personne perçoit des revenus du bien
-    /// - Parameter ownerName: nom de la personne
-    func receivesRevenues(ownerName: String) -> Bool {
-        return isAFullOwner(ownerName: ownerName) || isAnUsufructOwner(ownerName: ownerName)
+    /// - Parameter name: nom de la personne
+    func providesRevenue(to name: String) -> Bool {
+        hasAFullOwner(named: name) || hasAnUsufructOwner(named: name)
     }
 }
 

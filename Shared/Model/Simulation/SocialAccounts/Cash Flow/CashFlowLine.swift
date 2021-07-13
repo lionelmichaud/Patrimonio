@@ -239,7 +239,7 @@ struct CashFlowLine {
         let netCashFlowSalesExcluded = self.netCashFlowSalesExcluded
         
         // On ne gère pas ici le ré-investissement des biens vendus dans l'année et détenus en propre
-        // c'est fait en amont
+        // c'est fait en amont au moment de la vente
         if netCashFlowSalesExcluded > 0.0 {
             // capitaliser les intérêts des investissements libres
             netCashFlowManager.capitalizeFreeInvestments(in      : patrimoine,

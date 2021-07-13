@@ -61,7 +61,7 @@ protocol Ownable: NameableValuable {
     
     /// True si une des personnes listées fait partie des PP de ce bien.
     /// - Parameter names: liste de noms de membres de la famille
-    func isFullyOwned(partlyBy names: [String]) -> Bool
+    func hasAFullOwner(in names: [String]) -> Bool
     
     /// True si le bien fait partie du patrimoine d'une des personnes listées.
     /// Cad si elle est une des UF ou une des PP ou une des NP
@@ -79,7 +79,7 @@ extension Ownable {
             case .legalSuccession:
                 // cas particulier d'une succession:
                 //   le défunt est-il usufruitier ?
-                if ownership.isAnUsufructOwner(ownerName: ownerName) {
+                if ownership.hasAnUsufructOwner(named: ownerName) {
                     // si oui alors l'usufruit rejoint la nu-propriété sans droit de succession
                     // l'usufruit n'est donc pas intégré à la masse successorale du défunt
                     return 0
@@ -164,19 +164,19 @@ extension Ownable {
     
     func providesRevenue(to names: [String]) -> Bool {
         (names.first(where: {
-            ownership.isAFullOwner(ownerName: $0) || ownership.isAnUsufructOwner(ownerName: $0)
+            ownership.providesRevenue(to: $0)
         }) != nil)
     }
     
-    func isFullyOwned(partlyBy names: [String]) -> Bool {
+    func hasAFullOwner(in names: [String]) -> Bool {
         (names.first(where: {
-            ownership.isAFullOwner(ownerName: $0)
+            ownership.hasAFullOwner(named: $0)
         }) != nil)
     }
     
     func isPartOfPatrimoine(of names: [String]) -> Bool {
         (names.first(where: {
-            ownership.isAFullOwner(ownerName: $0) || ownership.isAnUsufructOwner(ownerName: $0) || ownership.isABareOwner(ownerName: $0)
+            ownership.hasAFullOwner(named: $0) || ownership.hasAnUsufructOwner(named: $0) || ownership.hasABareOwner(named: $0)
         }) != nil)
     }
 }

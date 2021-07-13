@@ -120,7 +120,7 @@ struct BalanceSheetLine {
                 return ownable.providesRevenue(to: [name])
 
             case .sellable:
-                return ownable.isFullyOwned(partlyBy: [name])
+                return ownable.hasAFullOwner(in: [name])
 
             case .all:
                 return ownable.isPartOfPatrimoine(of: [name])

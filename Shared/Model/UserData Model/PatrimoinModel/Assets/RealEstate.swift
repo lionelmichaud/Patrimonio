@@ -180,7 +180,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, Ownable {
                 
             case .legalSuccession:
                 // le défunt est-il usufruitier ?
-                if ownership.isAnUsufructOwner(ownerName: ownerName) {
+                if ownership.hasAnUsufructOwner(named: ownerName) {
                     // si oui alors l'usufruit rejoint la nu-propriété sans droit de succession
                     // l'usufruit n'est donc pas intégré à la masse successorale du défunt
                     return 0

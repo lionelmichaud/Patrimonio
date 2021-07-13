@@ -61,39 +61,39 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
         dataSet = _dataSet
     }
 
-    func buildCategoryStackedBarChart(element: CashFlowLine) {
-        func getExpensesDataSet() {
-            if let expenseCategory = selectedExpenseCategory {
-                /// rechercher les valeurs de la seule catégorie de dépenses sélectionnée
-                let selectedExpensesNameArray = expenses.expensesNameArray(of: expenseCategory)
-                if labelsInCategory.count == 0 {
-                    labelsInCategory = element.lifeExpenses.namesArray.filter { name in
-                        selectedExpensesNameArray.contains(name)
-                    }
+    func getExpensesDataSet(element: CashFlowLine) {
+        if let expenseCategory = selectedExpenseCategory {
+            /// rechercher les valeurs de la seule catégorie de dépenses sélectionnée
+            let selectedExpensesNameArray = expenses.expensesNameArray(of: expenseCategory)
+            if labelsInCategory.count == 0 {
+                labelsInCategory = element.lifeExpenses.namesArray.filter { name in
+                    selectedExpensesNameArray.contains(name)
                 }
-
-                // valeurs des dépenses
-                let selectedNamedValues = element.lifeExpenses.namedValues
-                    .filter({ (name, _) in
-                        selectedExpensesNameArray.contains(name)
-                    })
-                let y = selectedNamedValues.map(\.value)
-                dataEntries.append(BarChartDataEntry(x       : element.year.double(),
-                                                     yValues : -y))
-
-            } else {
-                /// rechercher les valeurs de toutes les dépenses
-                if labelsInCategory.count == 0 {
-                    labelsInCategory = element.lifeExpenses.namesArray
-                }
-                // valeurs des dépenses
-                let y = element.lifeExpenses.valuesArray
-                dataEntries.append(BarChartDataEntry(x       : element.year.double(),
-                                                     yValues : -y))
             }
-            nbNegativeLabels = labelsInCategory.count
+            
+            // valeurs des dépenses
+            let selectedNamedValues = element.lifeExpenses.namedValues
+                .filter({ (name, _) in
+                    selectedExpensesNameArray.contains(name)
+                })
+            let y = selectedNamedValues.map(\.value)
+            dataEntries.append(BarChartDataEntry(x       : element.year.double(),
+                                                 yValues : -y))
+            
+        } else {
+            /// rechercher les valeurs de toutes les dépenses
+            if labelsInCategory.count == 0 {
+                labelsInCategory = element.lifeExpenses.namesArray
+            }
+            // valeurs des dépenses
+            let y = element.lifeExpenses.valuesArray
+            dataEntries.append(BarChartDataEntry(x       : element.year.double(),
+                                                 yValues : -y))
         }
+        nbNegativeLabels = labelsInCategory.count
+    }
 
+    func buildCategoryStackedBarChart(element: CashFlowLine) {
         if element.adultsRevenues.summary.contains(name: categoryName) {
             /// rechercher la catégorie dans les revenus
             guard revenueCategory != nil else {
@@ -144,7 +144,7 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
 
         } else if categoryName == element.lifeExpenses.tableName {
             /// rechercher les dépenses
-            getExpensesDataSet()
+            getExpensesDataSet(element: element)
 
         } else if categoryName == element.debtPayements.tableName {
             /// rechercher les valeurs des debtPayements
