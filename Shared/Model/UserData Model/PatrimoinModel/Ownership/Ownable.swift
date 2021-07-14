@@ -163,21 +163,21 @@ extension Ownable {
     }
     
     func providesRevenue(to names: [String]) -> Bool {
-        (names.first(where: {
+        names.first(where: {
             ownership.providesRevenue(to: $0)
-        }) != nil)
+        }) != nil
     }
     
     func hasAFullOwner(in names: [String]) -> Bool {
-        (names.first(where: {
+        names.first(where: {
             ownership.hasAFullOwner(named: $0)
-        }) != nil)
+        }) != nil
     }
     
     func isPartOfPatrimoine(of names: [String]) -> Bool {
-        (names.first(where: {
+        names.first(where: {
             ownership.hasAFullOwner(named: $0) || ownership.hasAnUsufructOwner(named: $0) || ownership.hasABareOwner(named: $0)
-        }) != nil)
+        }) != nil
     }
 }
 

@@ -149,7 +149,7 @@ struct NetCashFlowManager {
         print("Il n'y a plus de réceptacle pour receuillir les flux de trésorerie positifs")
     }
     
-    /// Calcule la valeur cumulée des FreeInvestments possédée par une personnne
+    /// Calcule la valeur cumulée des FreeInvestments possédée en partie en PP par une personnne
     /// - Parameters:
     ///   - name: nom de la pesonne
     ///   - year: année d'évaluation
@@ -209,15 +209,15 @@ struct NetCashFlowManager {
                 }
             }
         }
-
+        
         // ASSURANCE VIE: si le solde des PEA n'était pas suffisant alors retirer de l'Assurances vie procurant le moins bon rendement
         for idx in patrimoine.assets.freeInvests.items.startIndex..<patrimoine.assets.freeInvests.items.endIndex {
             switch patrimoine.assets.freeInvests[idx].type {
                 case .lifeInsurance:
                     // tant que l'on a pas retiré le montant souhaité
                     // retirer le montant de l'Assurances vie s'il y en avait assez à la fin de l'année dernière
-                    if patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0
-                        && (name == "" || patrimoine.assets.freeInvests[idx].ownership.hasAFullOwner(named: name)) {
+                    if (name == "" || patrimoine.assets.freeInvests[idx].ownership.hasAFullOwner(named: name))
+                        && patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
                         let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
                         amountRemainingToRemove -= removal.revenue
                         // IRPP: part des produit de la liquidation inscrit en compte courant imposable à l'IRPP après déduction de ce qu'il reste de franchise
@@ -288,7 +288,8 @@ struct NetCashFlowManager {
         var amountRemainingToRemove = amount
         var totalTaxableInterests   = 0.0
         
-        // trier les adultes vivants par ordre de capital décroissant (en termes de FreeInvestement)
+        // trier les adultes vivants par ordre de capital décroissant
+        // (en termes de FreeInvestement possédé en partie en PP)
         var sortedAdultNames = [String]()
         if adultsName.count > 1 {
             sortedAdultNames = adultsName.sorted {
@@ -304,7 +305,7 @@ struct NetCashFlowManager {
         }
         sortedAdultNames.forEach { name in
             print("nom: \(name)")
-            print("richesse disponible (free): \(totalFreeInvestementsValue(ownedBy: name, in: patrimoine, atEndOf: year).rounded())")
+            print("richesse disponible (freeInvest en partie en PP): \(totalFreeInvestementsValue(ownedBy: name, in: patrimoine, atEndOf: year).rounded())")
         }
 
         // trier par taux de rendement croissant

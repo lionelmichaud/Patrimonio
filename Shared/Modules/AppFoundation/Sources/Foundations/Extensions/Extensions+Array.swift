@@ -14,7 +14,7 @@ public extension Array {
     }
 }
 
-public extension Array where Element: AdditiveArithmetic {
+public extension Collection where Element: AdditiveArithmetic {
     /// Somme de tous les éléméents d'un Array
     ///
     /// Usage:

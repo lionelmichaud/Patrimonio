@@ -441,6 +441,8 @@
 		79BE4A892651CE7800BBF46C /* ModelEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A782651CE7800BBF46C /* ModelEconomyView.swift */; };
 		79BE4A8A2651CE7800BBF46C /* ModelEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A782651CE7800BBF46C /* ModelEconomyView.swift */; };
 		79BE4A8B2651CE7800BBF46C /* ModelEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A782651CE7800BBF46C /* ModelEconomyView.swift */; };
+		79C09D92269F38B0003213EA /* Ownership+TransferUsufruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C09D91269F38B0003213EA /* Ownership+TransferUsufruct.swift */; };
+		79C09D93269F38B0003213EA /* Ownership+TransferUsufruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C09D91269F38B0003213EA /* Ownership+TransferUsufruct.swift */; };
 		79C1D9D7266932310028A729 /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C1D9D6266932310028A729 /* ShareSheetView.swift */; };
 		79C1D9D8266932310028A729 /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C1D9D6266932310028A729 /* ShareSheetView.swift */; };
 		79C838242641DA3F008B29BF /* ChartView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C838232641DA3F008B29BF /* ChartView+Extensions.swift */; };
@@ -788,6 +790,7 @@
 		79BE4A762651CE7800BBF46C /* BetaRandomizerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BetaRandomizerView.swift; sourceTree = "<group>"; };
 		79BE4A772651CE7800BBF46C /* ModelSociologyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelSociologyView.swift; sourceTree = "<group>"; };
 		79BE4A782651CE7800BBF46C /* ModelEconomyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelEconomyView.swift; sourceTree = "<group>"; };
+		79C09D91269F38B0003213EA /* Ownership+TransferUsufruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ownership+TransferUsufruct.swift"; sourceTree = "<group>"; };
 		79C1D9D6266932310028A729 /* ShareSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetView.swift; sourceTree = "<group>"; };
 		79C838232641DA3F008B29BF /* ChartView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChartView+Extensions.swift"; sourceTree = "<group>"; };
 		79C838262641DB80008B29BF /* Charts+AxisFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Charts+AxisFormatter.swift"; sourceTree = "<group>"; };
@@ -1182,6 +1185,7 @@
 				7956993D262F884C0015AF34 /* Ownership+TransferFullOwnership.swift */,
 				79569936262F86C50015AF34 /* Ownership+TransferBareOwnership.swift */,
 				79569944262F885B0015AF34 /* Ownership+TransferLifeInsurance.swift */,
+				79C09D91269F38B0003213EA /* Ownership+TransferUsufruct.swift */,
 				7956994B262F8B5C0015AF34 /* Ownable.swift */,
 				79EC47912630753D0006EE44 /* ArrayOfNameableValuable+Ownable.swift */,
 			);
@@ -2265,6 +2269,7 @@
 				79569945262F885B0015AF34 /* Ownership+TransferLifeInsurance.swift in Sources */,
 				79B272812634D77D00298E5D /* LabelValueHelperViews.swift in Sources */,
 				7990D8D5264EBDB700078CB6 /* BarChartBalanceSheetVisitor.swift in Sources */,
+				79C09D92269F38B0003213EA /* Ownership+TransferUsufruct.swift in Sources */,
 				79EC47BE26307C910006EE44 /* LiabilitiesCategory.swift in Sources */,
 				79FC726A263336C3004F3BD2 /* UIState.swift in Sources */,
 				79A9BE9D265186EE00170A01 /* BetaDistributionView.swift in Sources */,
@@ -2444,6 +2449,7 @@
 				79EF935A26376D1100C1BE5B /* Simulation.swift in Sources */,
 				7956993F262F884C0015AF34 /* Ownership+TransferFullOwnership.swift in Sources */,
 				791ED122263A2D3B00701202 /* CashFlowLine+managePeriodicInvest.swift in Sources */,
+				79C09D93269F38B0003213EA /* Ownership+TransferUsufruct.swift in Sources */,
 				791ED100263A1EF800701202 /* AdultDetailView.swift in Sources */,
 				79FC720A2632F7A9004F3BD2 /* AppVersion.swift in Sources */,
 				79BE4A812651CE7800BBF46C /* DiscreteRandomizerView.swift in Sources */,

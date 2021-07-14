@@ -282,7 +282,8 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
         currentState.investment += amount
     }
     
-    /// Pour obtenir un retrait netAmount NET de charges sociales
+    /// Effectuer un retrait de `netAmount` NET de charges sociales
+    /// - Note: Ne tient aucun compte des droits de propriété. Autorise le retrait dans tous les cas.
     /// - Parameter netAmount: retrait net de charges sociales souhaité
     /// - Returns:
     /// revenue:             retrait net de charges sociales réellement obtenu (= netAmount si le capital est suffisant, moins sinon)

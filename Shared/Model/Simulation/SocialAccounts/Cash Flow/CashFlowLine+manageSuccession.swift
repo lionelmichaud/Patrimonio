@@ -72,9 +72,6 @@ extension CashFlowLine {
         // identification des personnes décédées dans l'année
         let decedents = family.deceasedAdults(during: year)
         
-        // ajouter les droits de succession (légales et assurances vie) aux taxes
-        var totalLegalSuccessionTax = 0.0
-        var totalLiSuccessionTax    = 0.0
         // pour chaque défunt
         decedents.forEach { decedent in
             SimulationLogger.shared.log(run: run,
@@ -87,7 +84,6 @@ extension CashFlowLine {
                                                        of      : decedent,
                                                        atEndOf : year)
             successions.append(succession)
-            totalLegalSuccessionTax += succession.tax
             
             // calculer les droits de transmission assurances vies
             let lifeInsuranceSuccessionManager = LifeInsuranceSuccessionManager()
@@ -96,7 +92,6 @@ extension CashFlowLine {
                                                                       of      : decedent,
                                                                       atEndOf : year)
             lifeInsSuccessions.append(liSuccession)
-            totalLiSuccessionTax += liSuccession.tax
             
             // transférer les biens d'un défunt vers ses héritiers
             let ownershipManager = OwnershipManager()
@@ -108,5 +103,4 @@ extension CashFlowLine {
         // mettre à jour les taxes de l'année avec les droits de successions de l'année
         updateSuccessionsTaxes(of: family)
     }
-    
 }
