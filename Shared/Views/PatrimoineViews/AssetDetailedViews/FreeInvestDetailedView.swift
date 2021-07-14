@@ -38,16 +38,16 @@ struct FreeInvestDetailedView: View {
             Section(header: Text("INITIALISATION")) {
                 YearPicker(title    : "Année d'actualisation",
                            inRange  : Date.now.year - 20...Date.now.year + 100,
-                           selection: $localItem.initialState.year)
+                           selection: $localItem.lastKnownState.year)
                 AmountEditView(label : "Valeure actualisée",
                                amount: $totalValue)
                     .onChange(of: totalValue) { newValue in
-                        localItem.initialState.investment = newValue - localItem.initialState.interest
+                        localItem.lastKnownState.investment = newValue - localItem.lastKnownState.interest
                     }
                 AmountEditView(label: "dont plus-values",
-                               amount: $localItem.initialState.interest)
-                    .onChange(of: localItem.initialState.interest) { newValue in
-                        localItem.initialState.investment = totalValue - newValue
+                               amount: $localItem.lastKnownState.interest)
+                    .onChange(of: localItem.lastKnownState.interest) { newValue in
+                        localItem.lastKnownState.investment = totalValue - newValue
                     }
             }
             
@@ -100,7 +100,7 @@ struct FreeInvestDetailedView: View {
             // modification d'un élément existant
             _localItem  = State(initialValue: initialItemValue)
             _index      = State(initialValue: patrimoine.assets.freeInvests.items.firstIndex(of: initialItemValue))
-            _totalValue = State(initialValue: initialItemValue.initialState.value)
+            _totalValue = State(initialValue: initialItemValue.lastKnownState.value)
             // specific
         } else {
             // création d'un nouvel élément

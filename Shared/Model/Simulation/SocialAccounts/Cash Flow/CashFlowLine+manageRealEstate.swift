@@ -31,14 +31,15 @@ extension CashFlowLine {
             if realEstate.providesRevenue(to: adultsName) {
                 // populate real estate rent revenues and social taxes
                 let yearlyRent = realEstate.yearlyRent(during: year)
+                let fraction   = realEstate.ownership.ownedRevenueFraction(by: adultsName)
                 // loyers inscrit en compte courant avant prélèvements sociaux et IRPP
-                revenue = yearlyRent.revenue
+                revenue          = fraction / 100.0 * yearlyRent.revenue
                 // part des loyers inscrit en compte courant imposable à l'IRPP - idem ci-dessus car même base
-                taxableIrpp = yearlyRent.taxableIrpp
+                taxableIrpp      = fraction / 100.0 * yearlyRent.taxableIrpp
                 // prélèvements sociaux payés sur le loyer
-                socialTaxes = yearlyRent.socialTaxes
+                socialTaxes      = fraction / 100.0 * yearlyRent.socialTaxes
                 // impôts locaux
-                yearlyLocaltaxes = realEstate.yearlyLocalTaxes(during: year)
+                yearlyLocaltaxes = fraction / 100.0 * realEstate.yearlyLocalTaxes(during: year)
             }
             adultsRevenues.perCategory[.realEstateRents]?.credits.namedValues
                 .append((name: name,

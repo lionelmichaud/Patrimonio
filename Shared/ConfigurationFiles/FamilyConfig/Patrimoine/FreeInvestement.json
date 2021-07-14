@@ -24,7 +24,7 @@
                 "nue_propriétaires"   : [ ],
                 "usufruitiers"        : [ ]
             },
-            "initialState" : {
+            "lastKnownState" : {
                 "year"       : 2020,
                 "interest"   : 2467,
                 "investment" : 32658
@@ -61,7 +61,7 @@
                 "usufruitiers"        :
                 [ ]
             },
-            "initialState" : {
+            "lastKnownState" : {
                 "year"       : 2020,
                 "interest"   : 13545,
                 "investment" : 32612
@@ -98,7 +98,7 @@
                 "usufruitiers"        :
                 [ ]
             },
-            "initialState" : {
+            "lastKnownState" : {
                 "year"       : 2020,
                 "interest"   : 23900,
                 "investment" : 149899
@@ -135,7 +135,7 @@
                 "usufruitiers"        :
                 [ ]
             },
-            "initialState" : {
+            "lastKnownState" : {
                 "year"       : 2020,
                 "interest"   : 2621,
                 "investment" : 104594
@@ -182,7 +182,7 @@
                 "usufruitiers"        :
                 [ ]
             },
-            "initialState" : {
+            "lastKnownState" : {
                 "year"       : 2020,
                 "interest"   : 14537,
                 "investment" : 28926
@@ -229,7 +229,7 @@
                 "usufruitiers"        :
                 [ ]
             },
-            "initialState" : {
+            "lastKnownState" : {
                 "year"       : 2020,
                 "interest"   : 106533,
                 "investment" : 96805
@@ -276,7 +276,7 @@
                 "usufruitiers"        :
                 [ ]
             },
-            "initialState" : {
+            "lastKnownState" : {
                 "year"       : 2020,
                 "interest"   : 47329,
                 "investment" : 120099
@@ -323,7 +323,7 @@
                 "usufruitiers"        :
                 [ ]
             },
-            "initialState" : {
+            "lastKnownState" : {
                 "year"       : 2020,
                 "interest"   : 29000,
                 "investment" : 31213
@@ -370,7 +370,7 @@
                 "usufruitiers"        :
                 [ ]
             },
-            "initialState" : {
+            "lastKnownState" : {
                 "year"       : 2020,
                 "interest"   : 3091,
                 "investment" : 6265
@@ -417,7 +417,7 @@
                 "usufruitiers"        :
                 [ ]
             },
-            "initialState" : {
+            "lastKnownState" : {
                 "year"       : 2020,
                 "interest"   : 0,
                 "investment" : 23063
@@ -454,7 +454,7 @@
                 "usufruitiers"        :
                 [ ]
             },
-            "initialState" : {
+            "lastKnownState" : {
                 "year"       : 2020,
                 "interest"   : 0,
                 "investment" : 10000

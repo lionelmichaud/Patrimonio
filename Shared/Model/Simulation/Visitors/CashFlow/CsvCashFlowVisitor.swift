@@ -178,7 +178,7 @@ class CsvCashFlowTableVisitor: CashFlowCsvVisitorP {
         }
 
         // construire le tableau de valeurs: une ligne par année
-        for idx in 0..<element.endIndex {
+        for idx in element.range {
             element[idx].accept(self)
             table.append("\n")
         }

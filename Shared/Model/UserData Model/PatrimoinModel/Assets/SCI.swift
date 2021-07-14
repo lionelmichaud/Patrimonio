@@ -68,7 +68,7 @@ struct SCI {
                                       chidrenNames       : [String]?,
                                       spouseName         : String?,
                                       spouseFiscalOption : InheritanceFiscalOption?) {
-        for idx in 0..<scpis.items.count {
+        for idx in scpis.items.range {
             try! scpis.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,

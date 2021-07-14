@@ -134,7 +134,49 @@ struct Ownership {
         return (usufructPercent : dem.usufructValue,
                 bareValuePercent: dem.bareValue)
     }
-    
+
+    /// Calcule la part d'un revenu qui revient à une personne donnée en fonction de ses droits de propriété sur le bien.
+    /// - Note:
+    ///     Pour une personne et un bien donné Part =
+    ///     * Bien non démembré = part de la valeur actuelle détenue en PP par la personne
+    ///     * Bien démembré        = part de la valeur actuelle détenue en UF par la personne
+    func ownedRevenue(by ownerName           : String,
+                      ofRevenue totalRevenue : Double) -> Double {
+        if isDismembered {
+            // part de la valeur actuelle détenue en UF par la personne
+            return usufructOwners[ownerName]?.ownedValue(from: totalRevenue) ?? 0
+        } else {
+            // pleine propriété => part de la valeur actuelle détenue en PP par la personne
+            return fullOwners[ownerName]?.ownedValue(from: totalRevenue) ?? 0
+        }
+    }
+    func ownedRevenue(by adultsName          : [String],
+                      ofRevenue totalRevenue : Double) -> Double {
+        adultsName.reduce(0.0) { result, name in
+            result + ownedRevenue(by: name, ofRevenue: totalRevenue)
+        }
+    }
+    func ownedRevenueFraction(by ownerName: String) -> Double {
+        if isDismembered {
+            // part de la valeur actuelle détenue en UF par la personne
+            return usufructOwners[ownerName]?.fraction ?? 0
+        } else {
+            // pleine propriété => part de la valeur actuelle détenue en PP par la personne
+            return fullOwners[ownerName]?.fraction ?? 0
+        }
+    }
+    func ownedRevenueFraction(by adultsName: [String]) -> Double {
+        adultsName.reduce(0.0) { result, name in
+            result + ownedRevenueFraction(by: name)
+        }
+    }
+    //            var fullyOwnedRevenue: Double = 0
+    //            if let usufructRevenue = usufructOwners[ownerName]?.ownedValue(from: totalRevenue),
+    //               let bareRevenue = bareOwners[ownerName]?.ownedValue(from: totalRevenue) {
+    //                // la personne est à la fois UF et NP
+    //                fullyOwnedRevenue = min(usufructRevenue, bareRevenue)
+    //            }
+
     /// Calcule la valeur d'un bien possédée par un personne donnée à une date donnée
     /// selon la régle générale ou selon la règle de l'IFI, de l'ISF, de la succession...
     /// - Parameters:
@@ -151,14 +193,8 @@ struct Ownership {
             switch evaluationMethod {
                 case .ifi, .isf :
                     // calcul de la part de pleine-propiété détenue
-                    if let owner = usufructOwners[ownerName] {
-                        // on l'a trouvé parmis les usufruitiers => on prend la valeur en PP
-                        return owner.ownedValue(from: totalValue)
-                    } else {
-                        // ne fait pas partie des usufruitiers
-                        return 0.0
-                    }
-                    
+                    return usufructOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
+
                 case .legalSuccession, .lifeInsuranceSuccession, .patrimoine:
                     // démembrement
                     var usufructValue : Double = 0.0
@@ -200,11 +236,7 @@ struct Ownership {
 
         } else {
             // pleine propriété
-            if let owner = fullOwners[ownerName] {
-                return owner.ownedValue(from: totalValue)
-            } else {
-                return 0.0
-            }
+            return fullOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
         }
     }
     

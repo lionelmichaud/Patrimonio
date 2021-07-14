@@ -92,10 +92,16 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
     // propriétaires
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
-    var ownership            : Ownership = Ownership()
-    var type                 : InvestementKind // type de l'investissement
-    var interestRateType     : InterestRateKind // type de taux de rendement
-    var averageInterestRate  : Double {// % avant charges sociales si prélevées à la source annuellement [0, 100%]
+    var ownership: Ownership = Ownership()
+
+    /// Type de l'investissement
+    var type: InvestementKind
+
+    /// Type de taux de rendement
+    var interestRateType: InterestRateKind
+
+    /// Rendement en % avant charges sociales si prélevées à la source annuellement [0, 100%]
+    var averageInterestRate  : Double {
         switch interestRateType {
             case .contractualRate(let fixedRate):
                 // taux contractuel fixe
@@ -105,11 +111,15 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
                 // taux de marché variable
                 let stock = stockRatio / 100.0
                 // taux d'intérêt composite fonction de la composition du portefeuille
-                let rate = stock * FreeInvestement.rates.averageStockRate + (1.0 - stock) * FreeInvestement.rates.averageSecuredRate
+                let rate =
+                    stock * FreeInvestement.rates.averageStockRate
+                    + (1.0 - stock) * FreeInvestement.rates.averageSecuredRate
                 return rate - FreeInvestement.inflation
         }
     }
-    var averageInterestRateNet: Double { // % après charges sociales si prélevées à la source annuellement [0, 100%]
+
+    /// Rendement en % après charges sociales si prélevées à la source annuellement [0, 100%]
+    var averageInterestRateNet: Double {
         switch type {
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
@@ -121,13 +131,19 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
                 return averageInterestRate
         }
     }
-    var initialState: State {// dernière constitution du capital connue
+
+    /// Dernière constitution du capital connue
+    var lastKnownState: State {
         didSet {
             resetCurrentState()
         }
     }
-    private var currentState       : State // constitution du capital à l'instant présent
-    private var cumulatedInterests : Double {// intérêts cumulés au cours du temps jusqu'à l'instant présent
+
+    /// Constitution du capital à l'instant présent
+    private var currentState: State
+
+    /// Intérêts cumulés au cours du temps jusqu'à l'instant présent
+    private var cumulatedInterests: Double {
         currentState.interest
     }
     
@@ -144,10 +160,10 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
         self.note             = note
         self.type             = type
         self.interestRateType = interestRateType
-        self.initialState     = State(year       : year,
-                                      interest   : initialInterest,
-                                      investment : initialValue - initialInterest)
-        self.currentState     = self.initialState
+        self.lastKnownState = State(year       : year,
+                                    interest   : initialInterest,
+                                    investment : initialValue - initialInterest)
+        self.currentState     = self.lastKnownState
     }
     
     // MARK: - Methods
@@ -192,8 +208,8 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
             // extrapoler la valeur à partir de la situation initiale avec un taux constant moyen
             return try! futurValue(payement     : 0,
                                    interestRate : averageInterestRateNet/100,
-                                   nbPeriod     : year - initialState.year,
-                                   initialValue : initialState.value)
+                                   nbPeriod     : year - lastKnownState.year,
+                                   initialValue : lastKnownState.value)
         }
         // valeur de la dernière année simulée
         return currentState.value
@@ -275,11 +291,11 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
     /// taxableInterests:    part des netInterests imposable à l'IRPP
     /// socialTaxes:         charges sociales sur les intérêts
     mutating func remove(netAmount: Double)
-    -> (revenue: Double,
-        interests: Double,
-        netInterests: Double,
-        taxableInterests: Double,
-        socialTaxes: Double) {
+    -> (revenue          : Double,
+        interests        : Double,
+        netInterests     : Double,
+        taxableInterests : Double,
+        socialTaxes      : Double) {
 
         guard currentState.value != 0.0 else {
             // le compte est vide: on ne retire rien
@@ -377,34 +393,33 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
         currentState.year = year
     }
     
-    /// Remettre la valeur courante à la valeur initiale
+    /// Remettre la valeur courante à la date de fin d'année passée
     mutating func resetCurrentState() {
         // calculer la valeur de currentState à la date de fin d'année passée
         let estimationYear = Date.now.year - 1
         
-        if estimationYear == initialState.year {
-            currentState = initialState
+        if estimationYear == lastKnownState.year {
+            currentState = lastKnownState
             
         } else {
             // extrapoler la valeure à partir de la situation initiale
             do {
                 let futurVal = try futurValue(payement     : 0,
                                               interestRate : averageInterestRateNet/100,
-                                              nbPeriod     : estimationYear - initialState.year,
-                                              initialValue : initialState.value)
-                currentState.year       = estimationYear
-                currentState.investment = initialState.investment
-                currentState.interest   = initialState.interest + (futurVal - initialState.value)
+                                              nbPeriod     : estimationYear - lastKnownState.year,
+                                              initialValue : lastKnownState.value)
+                currentState = State(year       : estimationYear,
+                                     interest   : lastKnownState.interest + (futurVal - lastKnownState.value),
+                                     investment : lastKnownState.investment)
             } catch FinancialMathError.negativeNbPeriod {
                 // on ne remonte pas le temps
                 customLog.log(level: .fault,
                               "estimationYear (\(estimationYear, privacy: .public)) < initialState.year")
-                fatalError("estimationYear (\(estimationYear)) < initialState.year (\(initialState.year))")
+                fatalError("estimationYear (\(estimationYear)) < initialState.year (\(lastKnownState.year))")
             } catch {
                 customLog.log(level: .fault, "FinancialMathError")
                 fatalError("FinancialMathError")
             }
-            
         }
     }
 }
@@ -426,7 +441,7 @@ extension FreeInvestement: CustomStringConvertible {
         - Droits de propriété:
         \(ownership.description.withPrefixedSplittedLines("  "))
         - Valeur (\(Date.now.year)): \(value(atEndOf: Date.now.year).€String)
-        - Etat initial: (year: \(initialState.year), interest: \(initialState.interest.€String), invest: \(initialState.investment.€String), Value: \(initialState.value.€String))
+        - Etat initial: (year: \(lastKnownState.year), interest: \(lastKnownState.interest.€String), invest: \(lastKnownState.investment.€String), Value: \(lastKnownState.value.€String))
         - Etat courant: (year: \(currentState.year), interest: \(currentState.interest.€String), invest: \(currentState.investment.€String), Value: \(currentState.value.€String))
         - \(interestRateType)
         - Taux d'intérêt net d'inflation avant prélèvements sociaux:   \(averageInterestRate) %

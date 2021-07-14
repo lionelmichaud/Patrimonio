@@ -29,12 +29,13 @@ extension CashFlowLine {
             if scpi.providesRevenue(to: adultsName) {
                 // populate SCPI revenues and social taxes
                 let yearlyRevenue = scpi.yearlyRevenue(during: year)
+                let fraction      = scpi.ownership.ownedRevenueFraction(by: adultsName)
                 // dividendes inscrit en compte courant avant prélèvements sociaux et IRPP
-                revenue = yearlyRevenue.revenue
+                revenue     = fraction / 100.0 * yearlyRevenue.revenue
                 // part des dividendes inscrit en compte courant imposable à l'IRPP
-                taxableIrpp = yearlyRevenue.taxableIrpp
+                taxableIrpp = fraction / 100.0 * yearlyRevenue.taxableIrpp
                 // prélèvements sociaux payés sur les dividendes de SCPI
-                socialTaxes = yearlyRevenue.socialTaxes
+                socialTaxes = fraction / 100.0 * yearlyRevenue.socialTaxes
             }
             adultsRevenues.perCategory[.scpis]?.credits.namedValues
                 .append((name: scpiName,

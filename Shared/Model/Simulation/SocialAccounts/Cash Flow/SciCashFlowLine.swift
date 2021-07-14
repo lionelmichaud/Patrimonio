@@ -120,10 +120,11 @@ struct SciCashFlowLine {
             var revenue : Double = 0
             if scpi.providesRevenue(to: adultsName) {
                 let yearlyRevenue = scpi.yearlyRevenue(during: year)
+                let fraction      = scpi.ownership.ownedRevenueFraction(by: adultsName)
                 // revenus inscrit en compte courant avant IS
                 // dans le cas d'une SCI, le revenu remboursable aux actionnaires c'est le net d'IS
                 // FIXME: Les revenus devraient être affectés en fonction des droits de propriété de chacun
-                revenue = yearlyRevenue.revenue
+                revenue = fraction / 100.0 * yearlyRevenue.revenue
             }
             revenues.scpiDividends.namedValues
                 .append((name : scpiName,

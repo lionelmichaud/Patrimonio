@@ -112,7 +112,7 @@ struct Assets {
     ///   - Doit être appelée après le chargement d'un objet FreeInvestement depuis le fichier JSON
     ///   - Doit être appelée après toute simulation ayant affectée le Patrimoine (succession)
     mutating func resetFreeInvestementCurrentValue() {
-        for idx in 0..<freeInvests.items.count {
+        for idx in freeInvests.items.range {
             freeInvests[idx].resetCurrentState()
         }
     }
@@ -146,7 +146,7 @@ struct Assets {
                                       chidrenNames       : [String]?,
                                       spouseName         : String?,
                                       spouseFiscalOption : InheritanceFiscalOption?) {
-        for idx in 0..<periodicInvests.items.count {
+        for idx in periodicInvests.items.range {
             switch periodicInvests[idx].type {
                 case .lifeInsurance(_, let clause):
                     // régles de transmission particulières pour l'Assurance Vie
@@ -163,7 +163,7 @@ struct Assets {
                         spouseFiscalOption : spouseFiscalOption)
             }
         }
-        for idx in 0..<freeInvests.items.count {
+        for idx in freeInvests.items.range {
             switch freeInvests[idx].type {
                 case .lifeInsurance(_, let clause):
                     // régles de transmission particulières pour l'Assurance Vie
@@ -180,14 +180,14 @@ struct Assets {
                         spouseFiscalOption : spouseFiscalOption)
             }
         }
-        for idx in 0..<realEstates.items.count {
+        for idx in realEstates.items.range {
             try! realEstates[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,
                 spouseName         : spouseName,
                 spouseFiscalOption : spouseFiscalOption)
         }
-        for idx in 0..<scpis.items.count {
+        for idx in scpis.items.range {
             try! scpis.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,

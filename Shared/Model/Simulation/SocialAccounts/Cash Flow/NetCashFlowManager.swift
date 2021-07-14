@@ -73,7 +73,7 @@ struct NetCashFlowManager {
                 }
                 
                 // si pas d'assurance vie ni de PEA alors investir dans un autre placement
-                for idx in 0..<patrimoine.assets.freeInvests.items.count
+                for idx in patrimoine.assets.freeInvests.items.range
                 where patrimoine.assets.freeInvests[idx].type == .other
                     && patrimoine.assets.freeInvests[idx].ownership.hasAUniqueFullOwner(named: name) {
                     // investir la totalité du cash
@@ -171,6 +171,17 @@ struct NetCashFlowManager {
     
     // swiftlint:disable cyclomatic_complexity
     // swiftlint:disable function_parameter_count
+    /// Retirer `amount` du capital des personnes dans la liste `adultsName` seulement.
+    ///
+    /// L'ordre de retrait est le suivant:
+    ///  * Le taux de rendement le moins élevé d'abord
+    ///  * D'abord PEA ensuite Assurance vie puis autre; par taux de rendement décroissant
+    ///  * Retirer le montant d'un investissement libre dont la personne est un des PP.
+    /// - Note:
+    ///     Pour une personne et un bien donné on peut retirer de ce bien un Montant =
+    ///     * Bien non démembré = part de la valeur actuelle détenue en PP par la personne
+    ///     * Bien démembré        = part de la valeur actuelle détenue en UF+NP par la même personne
+    ///     * Bien démembré        + part des revenus générés depuis son acquisition (si la personne est détentrice d'UF supplémentaire)
     fileprivate func getCashFlowFromInvestement(in patrimoine             : Patrimoin,
                                                 of name                   : String = "",
                                                 _ year                    : Int,
@@ -178,13 +189,17 @@ struct NetCashFlowManager {
                                                 _ totalTaxableInterests   : inout Double,
                                                 _ lifeInsuranceRebate     : inout Double,
                                                 _ taxes                   : inout [TaxeCategory: NamedValueTable]) {
+        guard amountRemainingToRemove > 0.0 else {
+            return
+        }
+        
         // PEA: retirer le montant d'un investissement libre: d'abord le PEA procurant le moins bon rendement
         for idx in patrimoine.assets.freeInvests.items.range
         where patrimoine.assets.freeInvests[idx].type == .pea
             && (name == "" || patrimoine.assets.freeInvests[idx].ownership.hasAFullOwner(named: name)) {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant du PEA s'il y en avait assez à la fin de l'année dernière
-            if amountRemainingToRemove > 0.0 && patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
+            if patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
                 let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
                 amountRemainingToRemove -= removal.revenue
                 // IRPP: les plus values PEA ne sont pas imposables à l'IRPP
@@ -250,10 +265,10 @@ struct NetCashFlowManager {
     /// Retirer `amount` du capital des personnes dans la liste `adultsName` seulement.
     ///
     /// Ordre:
-    ///  - Retirer le cash du capital de la personne la plus riche d'abord.
-    ///  - Le taux de rendement le moins élevé d'abord
-    ///  - D'abord PEA ensuite Assurance vie puis autre; par taux de rendement décroissant
-    ///  - Retirer le montant d'un investissement libre dont la personne est PP.
+    ///  * Retirer le cash du capital de la personne la plus riche d'abord.
+    ///  * Le taux de rendement le moins élevé d'abord
+    ///  * D'abord PEA ensuite Assurance vie puis autre; par taux de rendement décroissant
+    ///  * Retirer le montant d'un investissement libre dont la personne est un des PP.
     ///
     /// - Parameters:
     ///   - patrimoine: du patrimoine
