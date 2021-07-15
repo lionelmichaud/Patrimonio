@@ -33,14 +33,17 @@ struct BalanceSheetDetailedChartView: View {
         par l'ensemble des membres de la famille ou par un individu en particulier.
         Evolution du solde net.
 
-        Lorsque la Famille complète est sélectionnée, tous les biens sont incorporés pour leur valeur globale.
+        Lorsque la Famille est sélectionnée, tous les biens sont incorporés pour leur valeur globale.
+
+        Lorsque les Parents sont sélectionnés, les biens incorporés sont définis dans les préférences KPI ⚙️
+        et sont évalués à leur valeur possédée (patrimoniale).
 
         Lorsqu'un seul individu est sélectionné, les biens sont évalués selon une méthode
         et selon un filtre définis dans les préférences graphiques ⚙️.
-        La valorisation (NP, UF, PP) des biens prises en compte est définie dans les préférences.
 
         Utiliser la loupe 🔍 pour filtrer les catégories d'actif / passif.
-        Utiliser le bouton 🔳 pour faire apparaître un second grahique présentant l'ordre chronologique des événemnts de vie de chaque membre de la famille
+        Utiliser le bouton 🔳 pour faire apparaître un second grahique présentant l'ordre chronologique
+         des événemnts de vie de chaque membre de la famille
         Utiliser le bouton 📷 pour placer une copie d'écran dans votre album photo.
         """
 
@@ -67,7 +70,7 @@ struct BalanceSheetDetailedChartView: View {
                         .padding(.horizontal)
                         .pickerStyle(SegmentedPickerStyle())
 
-                    // graphique Blan
+                    // graphique Bilan
                     BalanceSheetStackedBarChartView(for           : uiState.bsChartState.nameSelection,
                                                     socialAccounts: $simulation.socialAccounts,
                                                     title         : simulation.title,
@@ -235,8 +238,6 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
 
         // ajouter le dataset au graphique
         chartView.data = data
-
-        chartView.data?.notifyDataChanged()
     }
 
     /// Création de la vue du Graphique
@@ -263,6 +264,8 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
 
         // animer la transition
         uiView.animate(yAxisDuration: 0.5, easingOption: .linear)
+
+        uiView.data?.notifyDataChanged()
         uiView.notifyDataSetChanged()
     }
 }
