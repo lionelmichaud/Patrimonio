@@ -17,11 +17,11 @@ enum RevenueCategory: String, PickableEnum, Codable, Hashable {
     case pensions           = "Pension"
     case layoffCompensation = "Indemnité de licenciement"
     case unemployAlloc      = "Allocation Chomage"
-    case financials         = "Revenu Financier"
+    case financials         = "Revenu Financier" // capitalisés
     case scpis              = "Revenu SCPI"
-    case scpiSale           = "Vente SCPI"
+    case scpiSale           = "Vente SCPI" // capitalisés
     case realEstateRents    = "Revenu Location"
-    case realEstateSale     = "Vente Immeuble"
+    case realEstateSale     = "Vente Immeuble" // capitalisés
     
     // properties
     
@@ -29,15 +29,16 @@ enum RevenueCategory: String, PickableEnum, Codable, Hashable {
         return self.rawValue
     }
 
-    // True si la catégorie de revenus est incorporée un NetCashFlow commun de fin d'année
-    // et donc ré-inveti dans un actif sans distinction de son propriétaire
+    /// True si la catégorie de revenus est incorporée au NetCashFlow commun de fin d'année
+    /// et donc ré-investi dans un actif sans distinction de son propriétaire
     var isPartOfCashFlow: Bool {
         switch self {
             case .workIncomes, .pensions,
                  .layoffCompensation, .unemployAlloc,
                  .scpis, .realEstateRents:
                 return true
-            default:
+                
+            case .financials, .scpiSale, .realEstateSale:
                 return false
         }
     }

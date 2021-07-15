@@ -46,7 +46,7 @@ struct LegalSuccessionManager {
                               yearOfDeath  : year,
                               decedent     : decedent,
                               taxableValue : 0,
-                              inheritances : inheritances)
+                              inheritances : [])
         }
         
         // Calcul de la masse successorale taxable du défunt
@@ -54,14 +54,15 @@ struct LegalSuccessionManager {
         let totalTaxableInheritance = taxableInheritanceValue(in      : patrimoine,
                                                               of      : decedent,
                                                               atEndOf : year - 1)
-        print("  Masse successorale légale = \(totalTaxableInheritance.rounded())")
+        //        print("  Masse successorale légale = \(totalTaxableInheritance.rounded())")
         
+        // Calculer la part d'héritage du conjoint
         // Rechercher l'option fiscale du conjoint survivant et calculer sa part d'héritage
         if let conjointSurvivant = family.members.items.first(where: { member in
             member is Adult && member.isAlive(atEndOf: year) && member != decedent
         }) {
             // il y a un conjoint survivant
-            // parts d'héritage résultant de l'option fiscale retenue par le conjoint
+            // % d'héritage résultants de l'option fiscale retenue par le conjoint pour chacun des héritiers
             inheritanceShares = (conjointSurvivant as! Adult)
                 .fiscalOption
                 .sharedValues(nbChildren        : family.nbOfChildrenAlive(atEndOf: year),
@@ -73,11 +74,11 @@ struct LegalSuccessionManager {
             let brut  = totalTaxableInheritance * share
             
             // calculer les droits de succession du conjoint
-            // TODO: le soritr d'une fonction du modèle fiscal
+            // TODO: le sortir d'une fonction du modèle fiscal
             let tax = 0.0
             
-            print("  Part d'héritage de \(conjointSurvivant.displayName) = \(brut.rounded())")
-            print("    Taxe = \(tax.rounded())")
+            //            print("  Part d'héritage de \(conjointSurvivant.displayName) = \(brut.rounded()) (\((share*100.0).rounded())%)")
+            //            print("    Taxe = \(tax.rounded())")
             inheritances.append(Inheritance(person  : conjointSurvivant,
                                             percent : share,
                                             brut    : brut,
@@ -94,7 +95,7 @@ struct LegalSuccessionManager {
                                   yearOfDeath  : year,
                                   decedent     : decedent,
                                   taxableValue : totalTaxableInheritance,
-                                  inheritances : inheritances)
+                                  inheritances : [ ])
             }
         }
         
@@ -110,8 +111,8 @@ struct LegalSuccessionManager {
                     // caluler les droits de succession du conjoint
                     let inheritance = try! Fiscal.model.inheritanceDonation.heritageOfChild(partSuccession: brut)
                     
-                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded())")
-                    print("    Taxe = \(inheritance.taxe.rounded())")
+//                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded()) (\(share.rounded())%)")
+//                    print("    Taxe = \(inheritance.taxe.rounded())")
                     inheritances.append(Inheritance(person  : child,
                                                     percent : share,
                                                     brut    : brut,
@@ -120,12 +121,12 @@ struct LegalSuccessionManager {
                 }
             }
         }
-        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
+        //        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
         return Succession(kind         : .legal,
                           yearOfDeath  : year,
                           decedent     : decedent,
                           taxableValue : totalTaxableInheritance,
                           inheritances : inheritances)
     }
-
+    
 }

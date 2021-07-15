@@ -180,7 +180,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, Ownable {
                 
             case .legalSuccession:
                 // le défunt est-il usufruitier ?
-                if ownership.isAnUsufructOwner(ownerName: ownerName) {
+                if ownership.hasAnUsufructOwner(named: ownerName) {
                     // si oui alors l'usufruit rejoint la nu-propriété sans droit de succession
                     // l'usufruit n'est donc pas intégré à la masse successorale du défunt
                     return 0
@@ -248,7 +248,10 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, Ownable {
     /// - Parameter revenue: loyer après charges déductibles (agence, assurance, taxe fonçière)
     /// - Parameter taxableIrpp: loyer imposable à l'IRPP
     /// - Parameter socialTaxes: charges sociales payées sur le loyer
-    func yearlyRent(during year: Int) -> (revenue: Double, taxableIrpp: Double, socialTaxes: Double) {
+    func yearlyRent(during year: Int)
+    -> (revenue     : Double,
+        taxableIrpp : Double,
+        socialTaxes : Double) {
         if isRented(during: year) {
             return (revenue:     self.yearlyRentAfterCharges,
                     taxableIrpp: self.yearlyRentTaxableIrpp,

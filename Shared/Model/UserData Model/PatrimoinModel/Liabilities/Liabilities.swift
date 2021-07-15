@@ -76,14 +76,14 @@ struct Liabilities {
                                       chidrenNames       : [String]?,
                                       spouseName         : String?,
                                       spouseFiscalOption : InheritanceFiscalOption?) {
-        for idx in 0..<loans.items.count {
+        for idx in loans.items.range {
             try! loans.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,
                 spouseName         : spouseName,
                 spouseFiscalOption : spouseFiscalOption)
         }
-        for idx in 0..<debts.items.count {
+        for idx in debts.items.range {
             try! debts.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,

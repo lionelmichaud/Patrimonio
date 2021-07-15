@@ -14,18 +14,22 @@ import Charts
 /// Dessiner un graphe à lignes : passif + actif + net
 /// - Returns: UIView
 class LineChartBalanceSheetVisitor: BalanceSheetLineChartVisitorP {
-    init(element: BalanceSheetArray) {
-        buildLineChart(element: element)
-    }
-
+    
     var dataSets = [LineChartDataSet]()
     //: ### ChartDataEntry
+    private var personSelection : String
     private var yVals1 = [ChartDataEntry]()
     private var yVals2 = [ChartDataEntry]()
     private var yVals3 = [ChartDataEntry]()
     private var totalAssetsValue      : Double = 0
     private var totalLiabilitiesValue : Double = 0
 
+    init(element         : BalanceSheetArray,
+         personSelection : String) {
+        self.personSelection = personSelection
+        buildLineChart(element: element)
+    }
+    
     func buildLineChart(element: BalanceSheetArray) {
         // si la table est vide alors quitter
         guard element.isNotEmpty else { return }
@@ -51,15 +55,15 @@ class LineChartBalanceSheetVisitor: BalanceSheetLineChartVisitorP {
     }
     
     func buildLineChart(element: BalanceSheetLine) {
-        element.assets[AppSettings.shared.allPersonsLabel]!.accept(self)
-        element.liabilities[AppSettings.shared.allPersonsLabel]!.accept(self)
+        element.assets[personSelection]!.accept(self)
+        element.liabilities[personSelection]!.accept(self)
 
         self.yVals1.append(ChartDataEntry(x: element.year.double(),
                                           y: totalAssetsValue))
         self.yVals2.append(ChartDataEntry(x: element.year.double(),
                                           y: totalLiabilitiesValue))
         self.yVals3.append(ChartDataEntry(x: element.year.double(),
-                                          y: element.netAssets))
+                                          y: totalAssetsValue + totalLiabilitiesValue))
     }
     
     func buildLineChart(element: ValuedAssets) {

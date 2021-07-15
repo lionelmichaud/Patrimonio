@@ -21,14 +21,14 @@ struct ValuedRevenues {
     /// revenus imposable de l'année précédente et reporté à l'année courante
     var taxableIrppRevenueDelayedFromLastYear = Debt(name: "REVENU IMPOSABLE REPORTE DE L'ANNEE PRECEDENTE", note: "", value: 0)
     
-    /// total de tous les revenus nets de l'année versé en compte courant avant taxes et impots
+    /// Total de tous les revenus nets de l'année versé en compte courant avant taxes et impots
     var totalRevenue: Double {
         perCategory.reduce(.zero, { result, element in
             result + element.value.credits.total
         })
     }
 
-    /// total de tous les revenus nets de l'année versé en compte courant avant taxes et impots
+    /// Total de tous les revenus nets de l'année versé en compte courant avant taxes et impots - exclus les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
     var totalRevenueSalesExcluded: Double {
         perCategory.reduce(.zero, { result, element in
             if element.key.isPartOfCashFlow {

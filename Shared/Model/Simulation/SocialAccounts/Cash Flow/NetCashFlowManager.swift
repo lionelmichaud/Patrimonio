@@ -19,17 +19,17 @@ struct NetCashFlowManager {
     ///   - year: à la fin de cette année
     func capitalizeFreeInvestments(in patrimoine : Patrimoin,
                                    atEndOf year  : Int) {
-        for idx in 0..<patrimoine.assets.freeInvests.items.count {
+        for idx in patrimoine.assets.freeInvests.items.range {
             try! patrimoine.assets.freeInvests[idx].capitalize(atEndOf: year)
         }
     }
     
     // swiftlint:disable cyclomatic_complexity
-    /// Investir les capitaux dans des actifs financiers détenus en PP par les récipiendaires des capitaux
+    /// Investir les capitaux dans des actifs financiers détenus en PP indivis par chaque Adulte récipiendaire des capitaux
     /// - Parameters:
     ///   - ownedCapitals: [nom du détenteur, du capital]
     ///   - year: année de l'investissement
-    func investCapital(ownedCapitals : [String  : Double],
+    func investCapital(ownedCapitals : [String : Double],
                        in patrimoine : Patrimoin,
                        atEndOf year  : Int) {
         ownedCapitals.forEach { (name, capital) in
@@ -38,11 +38,11 @@ struct NetCashFlowManager {
                adult.isAlive(atEndOf: year) {
                 
                 // investir en priorité dans une assurance vie
-                for idx in 0..<patrimoine.assets.freeInvests.items.count {
+                for idx in patrimoine.assets.freeInvests.items.range {
                     switch patrimoine.assets.freeInvests[idx].type {
                         case .lifeInsurance(let periodicSocialTaxes, _):
                             if periodicSocialTaxes &&
-                                patrimoine.assets.freeInvests[idx].ownership.isAFullOwner(ownerName: name) {
+                                patrimoine.assets.freeInvests[idx].ownership.hasAUniqueFullOwner(named: name) {
                                 // investir la totalité du cash
                                 patrimoine.assets.freeInvests[idx].add(capital)
                                 return
@@ -50,11 +50,11 @@ struct NetCashFlowManager {
                         default: ()
                     }
                 }
-                for idx in 0..<patrimoine.assets.freeInvests.items.count {
+                for idx in patrimoine.assets.freeInvests.items.range {
                     switch patrimoine.assets.freeInvests[idx].type {
                         case .lifeInsurance(let periodicSocialTaxes, _):
                             if !periodicSocialTaxes &&
-                                patrimoine.assets.freeInvests[idx].ownership.isAFullOwner(ownerName: name) {
+                                patrimoine.assets.freeInvests[idx].ownership.hasAUniqueFullOwner(named: name) {
                                 // investir la totalité du cash
                                 patrimoine.assets.freeInvests[idx].add(capital)
                                 return
@@ -64,18 +64,18 @@ struct NetCashFlowManager {
                 }
                 
                 // si pas d'assurance vie alors investir dans un PEA
-                for idx in 0..<patrimoine.assets.freeInvests.items.count
+                for idx in patrimoine.assets.freeInvests.items.range
                 where patrimoine.assets.freeInvests[idx].type == .pea
-                    && patrimoine.assets.freeInvests[idx].ownership.isAFullOwner(ownerName: name) {
+                    && patrimoine.assets.freeInvests[idx].ownership.hasAUniqueFullOwner(named: name) {
                     // investir la totalité du cash
                     patrimoine.assets.freeInvests[idx].add(capital)
                     return
                 }
                 
                 // si pas d'assurance vie ni de PEA alors investir dans un autre placement
-                for idx in 0..<patrimoine.assets.freeInvests.items.count
+                for idx in patrimoine.assets.freeInvests.items.range
                 where patrimoine.assets.freeInvests[idx].type == .other
-                    && patrimoine.assets.freeInvests[idx].ownership.isAFullOwner(ownerName: name) {
+                    && patrimoine.assets.freeInvests[idx].ownership.hasAUniqueFullOwner(named: name) {
                     // investir la totalité du cash
                     patrimoine.assets.freeInvests[idx].add(capital)
                     return
@@ -92,20 +92,21 @@ struct NetCashFlowManager {
     /// Ajouter la capacité d'épargne à l'investissement libre de type Assurance vie de meilleur rendement
     /// dont un des adultes est un des PP
     /// - Parameters:
-    ///   - patrimoine: du patrimoine
     ///   - amount: capacité d'épargne = montant à investir
+    ///   - adultsName: tableau de noms des adultes de la famille
     func investNetCashFlow(amount         : Double,
                            in patrimoine  : Patrimoin,
                            for adultsName : [String]) {
+        // trier par rendement décroissant
         patrimoine.assets.freeInvests.items.sort(by: {$0.averageInterestRate > $1.averageInterestRate})
         
         // investir en priorité dans une assurance vie
-        for idx in 0..<patrimoine.assets.freeInvests.items.count {
+        for idx in patrimoine.assets.freeInvests.items.range {
             switch patrimoine.assets.freeInvests[idx].type {
                 case .lifeInsurance(let periodicSocialTaxes, _):
                     if periodicSocialTaxes
                         && amount != 0
-                        && patrimoine.assets.freeInvests[idx].isFullyOwned(partlyBy: adultsName) {
+                        && patrimoine.assets.freeInvests[idx].hasAFullOwner(in: adultsName) {
                         // investir la totalité du cash
                         patrimoine.assets.freeInvests[idx].add(amount)
                         return
@@ -113,12 +114,12 @@ struct NetCashFlowManager {
                 default: ()
             }
         }
-        for idx in 0..<patrimoine.assets.freeInvests.items.count {
+        for idx in patrimoine.assets.freeInvests.items.range {
             switch patrimoine.assets.freeInvests[idx].type {
                 case .lifeInsurance(let periodicSocialTaxes, _):
                     if !periodicSocialTaxes
                         && amount != 0
-                        && patrimoine.assets.freeInvests[idx].isFullyOwned(partlyBy: adultsName) {
+                        && patrimoine.assets.freeInvests[idx].hasAFullOwner(in: adultsName) {
                         // investir la totalité du cash
                         patrimoine.assets.freeInvests[idx].add(amount)
                         return
@@ -128,17 +129,17 @@ struct NetCashFlowManager {
         }
         
         // si pas d'assurance vie alors investir dans un PEA
-        for idx in 0..<patrimoine.assets.freeInvests.items.count
+        for idx in patrimoine.assets.freeInvests.items.range
         where patrimoine.assets.freeInvests[idx].type == .pea
-            && patrimoine.assets.freeInvests[idx].isFullyOwned(partlyBy: adultsName) {
+            && patrimoine.assets.freeInvests[idx].hasAFullOwner(in: adultsName) {
             // investir la totalité du cash
             patrimoine.assets.freeInvests[idx].add(amount)
             return
         }
         // si pas d'assurance vie ni de PEA alors investir dans un autre placement
-        for idx in 0..<patrimoine.assets.freeInvests.items.count
+        for idx in patrimoine.assets.freeInvests.items.range
         where patrimoine.assets.freeInvests[idx].type == .other
-            && patrimoine.assets.freeInvests[idx].isFullyOwned(partlyBy: adultsName) {
+            && patrimoine.assets.freeInvests[idx].hasAFullOwner(in: adultsName) {
             // investir la totalité du cash
             patrimoine.assets.freeInvests[idx].add(amount)
             return
@@ -148,7 +149,7 @@ struct NetCashFlowManager {
         print("Il n'y a plus de réceptacle pour receuillir les flux de trésorerie positifs")
     }
     
-    /// Calcule la valeur cumulée des FreeInvestments possédée par une personnne
+    /// Calcule la valeur cumulée des FreeInvestments possédée en partie en PP par une personnne
     /// - Parameters:
     ///   - name: nom de la pesonne
     ///   - year: année d'évaluation
@@ -158,7 +159,7 @@ struct NetCashFlowManager {
                                                 in patrimoine : Patrimoin,
                                                 atEndOf year  : Int) -> Double {
         patrimoine.assets.freeInvests.items.reduce(0) { result, freeInvest in
-            if freeInvest.ownership.isAFullOwner(ownerName: name) {
+            if freeInvest.ownership.hasAFullOwner(named: name) {
                 return result + freeInvest.ownedValue(by               : name,
                                                       atEndOf          : year,
                                                       evaluationMethod : .patrimoine)
@@ -170,20 +171,35 @@ struct NetCashFlowManager {
     
     // swiftlint:disable cyclomatic_complexity
     // swiftlint:disable function_parameter_count
+    /// Retirer `amount` du capital des personnes dans la liste `adultsName` seulement.
+    ///
+    /// L'ordre de retrait est le suivant:
+    ///  * Le taux de rendement le moins élevé d'abord
+    ///  * D'abord PEA ensuite Assurance vie puis autre; par taux de rendement décroissant
+    ///  * Retirer le montant d'un investissement libre dont la personne est un des PP.
+    /// - Note:
+    ///     Pour une personne et un bien donné on peut retirer de ce bien un Montant =
+    ///     * Bien non démembré = part de la valeur actuelle détenue en PP par la personne
+    ///     * Bien démembré        = part de la valeur actuelle détenue en UF+NP par la même personne
+    ///     * Bien démembré        + part des revenus générés depuis son acquisition (si la personne est détentrice d'UF supplémentaire)
     fileprivate func getCashFlowFromInvestement(in patrimoine             : Patrimoin,
-                                                of name                   : String,
+                                                of name                   : String = "",
                                                 _ year                    : Int,
                                                 _ amountRemainingToRemove : inout Double,
                                                 _ totalTaxableInterests   : inout Double,
                                                 _ lifeInsuranceRebate     : inout Double,
                                                 _ taxes                   : inout [TaxeCategory: NamedValueTable]) {
+        guard amountRemainingToRemove > 0.0 else {
+            return
+        }
+        
         // PEA: retirer le montant d'un investissement libre: d'abord le PEA procurant le moins bon rendement
-        for idx in patrimoine.assets.freeInvests.items.startIndex..<patrimoine.assets.freeInvests.items.endIndex
+        for idx in patrimoine.assets.freeInvests.items.range
         where patrimoine.assets.freeInvests[idx].type == .pea
-            && (name == "" || patrimoine.assets.freeInvests[idx].ownership.isAFullOwner(ownerName: name)) {
+            && (name == "" || patrimoine.assets.freeInvests[idx].ownership.hasAFullOwner(named: name)) {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant du PEA s'il y en avait assez à la fin de l'année dernière
-            if amountRemainingToRemove > 0.0 && patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
+            if patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
                 let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
                 amountRemainingToRemove -= removal.revenue
                 // IRPP: les plus values PEA ne sont pas imposables à l'IRPP
@@ -193,15 +209,15 @@ struct NetCashFlowManager {
                 }
             }
         }
-
+        
         // ASSURANCE VIE: si le solde des PEA n'était pas suffisant alors retirer de l'Assurances vie procurant le moins bon rendement
         for idx in patrimoine.assets.freeInvests.items.startIndex..<patrimoine.assets.freeInvests.items.endIndex {
             switch patrimoine.assets.freeInvests[idx].type {
                 case .lifeInsurance:
                     // tant que l'on a pas retiré le montant souhaité
                     // retirer le montant de l'Assurances vie s'il y en avait assez à la fin de l'année dernière
-                    if patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0
-                        && (name == "" || patrimoine.assets.freeInvests[idx].ownership.isAFullOwner(ownerName: name)) {
+                    if (name == "" || patrimoine.assets.freeInvests[idx].ownership.hasAFullOwner(named: name))
+                        && patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
                         let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
                         amountRemainingToRemove -= removal.revenue
                         // IRPP: part des produit de la liquidation inscrit en compte courant imposable à l'IRPP après déduction de ce qu'il reste de franchise
@@ -224,7 +240,7 @@ struct NetCashFlowManager {
         // AUTRE: retirer le montant d'un investissement libre: d'abord celui procurant le moins bon rendement
         for idx in patrimoine.assets.freeInvests.items.startIndex..<patrimoine.assets.freeInvests.items.endIndex
         where patrimoine.assets.freeInvests[idx].type == .other
-            && (name == "" || patrimoine.assets.freeInvests[idx].ownership.isAFullOwner(ownerName: name)) {
+            && (name == "" || patrimoine.assets.freeInvests[idx].ownership.hasAFullOwner(named: name)) {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant s'il y en avait assez à la fin de l'année dernière
             if patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
@@ -249,10 +265,10 @@ struct NetCashFlowManager {
     /// Retirer `amount` du capital des personnes dans la liste `adultsName` seulement.
     ///
     /// Ordre:
-    ///  - Retirer le cash du capital de la personne la plus riche d'abord.
-    ///  - Le taux de rendement le moins élevé d'abord
-    ///  - D'abord PEA ensuite Assurance vie puis autre; par taux de rendement décroissant
-    ///  - Retirer le montant d'un investissement libre dont la personne est PP.
+    ///  * Retirer le cash du capital de la personne la plus riche d'abord.
+    ///  * Le taux de rendement le moins élevé d'abord
+    ///  * D'abord PEA ensuite Assurance vie puis autre; par taux de rendement décroissant
+    ///  * Retirer le montant d'un investissement libre dont la personne est un des PP.
     ///
     /// - Parameters:
     ///   - patrimoine: du patrimoine
@@ -272,7 +288,8 @@ struct NetCashFlowManager {
         var amountRemainingToRemove = amount
         var totalTaxableInterests   = 0.0
         
-        // trier les adultes vivants par ordre de capital décroissant (en termes de FreeInvestement)
+        // trier les adultes vivants par ordre de capital décroissant
+        // (en termes de FreeInvestement possédé en partie en PP)
         var sortedAdultNames = [String]()
         if adultsName.count > 1 {
             sortedAdultNames = adultsName.sorted {
@@ -288,36 +305,35 @@ struct NetCashFlowManager {
         }
         sortedAdultNames.forEach { name in
             print("nom: \(name)")
-            print("richesse disponible (free): \(totalFreeInvestementsValue(ownedBy: name, in: patrimoine, atEndOf: year).rounded())")
+            print("richesse disponible (freeInvest en partie en PP): \(totalFreeInvestementsValue(ownedBy: name, in: patrimoine, atEndOf: year).rounded())")
         }
 
         // trier par taux de rendement croissant
         patrimoine.assets.freeInvests.items.sort(by: {$0.averageInterestRate < $1.averageInterestRate})
-        
-        // retirer le cash du capital de la personne la plus riche d'abord
-        for adultName in sortedAdultNames {
-            getCashFlowFromInvestement(in: patrimoine,
-                                       of: adultName,
-                                       year,
-                                       &amountRemainingToRemove,
-                                       &totalTaxableInterests,
-                                       &lifeInsuranceRebate,
-                                       &taxes)
-            if amountRemainingToRemove <= 0 {
-                return totalTaxableInterests
-            }
-        }
-        
-        // Note: s'il n'y a plus d'adulte vivant on prend dans le premier actif qui vient
-        // ce sont les héritiers qui payent
+
         if adultsName.count == 0 {
+            // s'il n'y a plus d'adulte vivant on prend dans le premier actif qui vient
+            // ce sont les héritiers qui payent
             getCashFlowFromInvestement(in: patrimoine,
-                                       of: "",
                                        year,
                                        &amountRemainingToRemove,
                                        &totalTaxableInterests,
                                        &lifeInsuranceRebate,
                                        &taxes)
+        } else {
+            // retirer le cash du capital de la personne la plus riche d'abord
+            for adultName in sortedAdultNames {
+                getCashFlowFromInvestement(in: patrimoine,
+                                           of: adultName,
+                                           year,
+                                           &amountRemainingToRemove,
+                                           &totalTaxableInterests,
+                                           &lifeInsuranceRebate,
+                                           &taxes)
+                if amountRemainingToRemove <= 0 {
+                    return totalTaxableInterests
+                }
+            }
         }
         
         if amountRemainingToRemove > 0.0 {

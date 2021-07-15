@@ -134,7 +134,49 @@ struct Ownership {
         return (usufructPercent : dem.usufructValue,
                 bareValuePercent: dem.bareValue)
     }
-    
+
+    /// Calcule la part d'un revenu qui revient à une personne donnée en fonction de ses droits de propriété sur le bien.
+    /// - Note:
+    ///     Pour une personne et un bien donné Part =
+    ///     * Bien non démembré = part de la valeur actuelle détenue en PP par la personne
+    ///     * Bien démembré        = part de la valeur actuelle détenue en UF par la personne
+    func ownedRevenue(by ownerName           : String,
+                      ofRevenue totalRevenue : Double) -> Double {
+        if isDismembered {
+            // part de la valeur actuelle détenue en UF par la personne
+            return usufructOwners[ownerName]?.ownedValue(from: totalRevenue) ?? 0
+        } else {
+            // pleine propriété => part de la valeur actuelle détenue en PP par la personne
+            return fullOwners[ownerName]?.ownedValue(from: totalRevenue) ?? 0
+        }
+    }
+    func ownedRevenue(by adultsName          : [String],
+                      ofRevenue totalRevenue : Double) -> Double {
+        adultsName.reduce(0.0) { result, name in
+            result + ownedRevenue(by: name, ofRevenue: totalRevenue)
+        }
+    }
+    func ownedRevenueFraction(by ownerName: String) -> Double {
+        if isDismembered {
+            // part de la valeur actuelle détenue en UF par la personne
+            return usufructOwners[ownerName]?.fraction ?? 0
+        } else {
+            // pleine propriété => part de la valeur actuelle détenue en PP par la personne
+            return fullOwners[ownerName]?.fraction ?? 0
+        }
+    }
+    func ownedRevenueFraction(by adultsName: [String]) -> Double {
+        adultsName.reduce(0.0) { result, name in
+            result + ownedRevenueFraction(by: name)
+        }
+    }
+    //            var fullyOwnedRevenue: Double = 0
+    //            if let usufructRevenue = usufructOwners[ownerName]?.ownedValue(from: totalRevenue),
+    //               let bareRevenue = bareOwners[ownerName]?.ownedValue(from: totalRevenue) {
+    //                // la personne est à la fois UF et NP
+    //                fullyOwnedRevenue = min(usufructRevenue, bareRevenue)
+    //            }
+
     /// Calcule la valeur d'un bien possédée par un personne donnée à une date donnée
     /// selon la régle générale ou selon la règle de l'IFI, de l'ISF, de la succession...
     /// - Parameters:
@@ -151,14 +193,8 @@ struct Ownership {
             switch evaluationMethod {
                 case .ifi, .isf :
                     // calcul de la part de pleine-propiété détenue
-                    if let owner = usufructOwners[ownerName] {
-                        // on l'a trouvé parmis les usufruitiers => on prend la valeur en PP
-                        return owner.ownedValue(from: totalValue)
-                    } else {
-                        // ne fait pas partie des usufruitiers
-                        return 0.0
-                    }
-                    
+                    return usufructOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
+
                 case .legalSuccession, .lifeInsuranceSuccession, .patrimoine:
                     // démembrement
                     var usufructValue : Double = 0.0
@@ -200,11 +236,7 @@ struct Ownership {
 
         } else {
             // pleine propriété
-            if let owner = fullOwners[ownerName] {
-                return owner.ownedValue(from: totalValue)
-            } else {
-                return 0.0
-            }
+            return fullOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
         }
     }
     
@@ -238,93 +270,6 @@ struct Ownership {
         return dico
     }
 
-    /// Transférer l'usufruit du défunt aux nue-propriétaires
-    /// - Note:
-    ///   - le défunt était seulement usufruitier
-    ///   - le défunt avait donné sa nue-propriété avant son décès, alors l'usufruit rejoint la nue-propriété
-    ///   - cad que les nues-propriétaires deviennent PP
-    /// - Parameters:
-    ///   - decedentName: le nom du défunt
-    ///   - chidrenNames: les enfants héritiers survivants
-    /// - Warning: Ne donne pas le bon résultat pour un bien indivis.
-    private mutating func transferUsufruct(of decedentName         : String,
-                                           toChildren chidrenNames : [String]?) {
-        // TODO: - Gérer correctement les transferts de propriété des biens indivis et démembrés
-        if let chidrenNames = chidrenNames {
-            //if let decedent = usufructOwners.owner(ownerName: decedentName) {
-                // la part d'usufruit à transmettre
-                //let usufructShare = decedent.fraction
-                
-                // l'UF rejoint la nue-propriété (enfants seulement)
-                chidrenNames.forEach { childName in
-                    if let bareowner = bareOwners[childName] {
-                        usufructOwners.append(Owner(name: bareowner.name,
-                                                    fraction: bareowner.fraction))
-                    }
-                }
-                
-                // on supprime le défunt de la liste
-                usufructOwners.removeAll(where: { $0.name == decedentName })
-                
-                // factoriser les parts des usufuitiers et des nue-propriétaires si nécessaire
-                groupShares()
-            //}
-        }
-    }
-    
-    /// Transférer la NP et UF  d'un copropriétaire d'un bien démembré à ses héritiers selon l'option retenue par le conjoint survivant
-    /// - Note:
-    ///  - le défunt était usufruitier et nue-propriétaire
-    ///  - UF + NP sont transmis selon l'option du conjoint survivant comme une PP
-    ///
-    /// - Parameters:
-    ///   - decedentName: le nom du défunt
-    ///   - spouseName: le conjoint survivant
-    ///   - chidrenNames: les enfants héritiers survivants
-    ///   - spouseFiscalOption: option fiscale du conjoint survivant éventuel
-    private mutating func transferUsufructAndBareOwnership(of decedentName         : String,
-                                                           toSpouse spouseName     : String,
-                                                           toChildren chidrenNames : [String]?,
-                                                           spouseFiscalOption      : InheritanceFiscalOption?) {
-        if let chidrenNames = chidrenNames {
-            // il y a des enfants héritiers
-            // transmission NP + UF selon l'option fiscale du conjoint survivant
-            guard let spouseFiscalOption = spouseFiscalOption else {
-                fatalError("pas d'option fiscale passée en paramètre de transferOwnershipOf")
-            }
-            // l'UF du défunt rejoint la nue propriété des enfants qui la détiennent
-            transferUsufruct(of         : decedentName,
-                             toChildren : chidrenNames)
-            // la NP est transmise aux enfants nue-propriétaires
-            transferBareOwnership(of                 : decedentName,
-                                  toSpouse           : spouseName,
-                                  toChildren         : chidrenNames,
-                                  spouseFiscalOption : spouseFiscalOption)
-            
-        } else {
-            // il n'y pas d'enfant héritier mais un conjoint survivant
-            // tout revient au conjoint survivant en PP
-            // on transmet l'UF au conjoint survivant
-            if let ownerIdx = usufructOwners.firstIndex(where: { decedentName == $0.name }) {
-                // la part d'usufruit à transmettre
-                let ownerShare = usufructOwners[ownerIdx].fraction
-                usufructOwners.append(Owner(name: spouseName, fraction: ownerShare))
-                // on supprime le défunt de la liste
-                usufructOwners.remove(at: ownerIdx)
-            }
-            // on transmet la NP au conjoint survivant
-            if let ownerIdx = bareOwners.firstIndex(where: { decedentName == $0.name }) {
-                let ownerShare = bareOwners[ownerIdx].fraction
-                // la part de nue-propriété à transmettre
-                bareOwners.append(Owner(name: spouseName, fraction: ownerShare))
-                // on supprime le défunt de la liste
-                bareOwners.remove(at: ownerIdx)
-            }
-        }
-        // factoriser les parts des usufuitiers et des nue-propriétaires si nécessaire
-        groupShares()
-    }
-    
     /// Factoriser les parts des usufuitier et les nue-propriétaires si nécessaire
     mutating func groupShares() {
         if isDismembered {
@@ -423,7 +368,7 @@ struct Ownership {
         } else {
             // (B) le bien n'est pas démembré
             // est-ce que le défunt fait partie des co-propriétaires ?
-            if isAFullOwner(ownerName: decedentName) {
+            if hasAFullOwner(named: decedentName) {
                 // (1) le défunt fait partie des co-propriétaires
                 // on transfert sa part de propriété aux héritiers
                 if let spouseName = spouseName {
@@ -447,27 +392,34 @@ struct Ownership {
     }
     
     /// Retourne true si la personne est un des usufruitiers du bien
-    /// - Parameter ownerName: nom de la personne
-    func isAnUsufructOwner(ownerName: String) -> Bool {
-        return isDismembered && usufructOwners.contains(where: { $0.name == ownerName })
+    /// - Parameter name: nom de la personne
+    func hasAnUsufructOwner(named name: String) -> Bool {
+        isDismembered && usufructOwners.contains(where: { $0.name == name })
     }
     
     /// Retourne true si la personne est un des nupropriétaires du bien
-    /// - Parameter ownerName: nom de la personne
-    func isABareOwner(ownerName: String) -> Bool {
-        return isDismembered && bareOwners.contains(where: { $0.name == ownerName })
+    /// - Parameter name: nom de la personne
+    func hasABareOwner(named name: String) -> Bool {
+        isDismembered && bareOwners.contains(where: { $0.name == name })
     }
     
     /// Retourne true si la personne est un des détenteurs du bien en pleine propriété
-    /// - Parameter ownerName: nom de la personne
-    func isAFullOwner(ownerName: String) -> Bool {
-        return !isDismembered && fullOwners.contains(where: { $0.name == ownerName })
+    /// - Parameter name: nom de la personne
+    func hasAFullOwner(named name: String) -> Bool {
+        !isDismembered && fullOwners.contains(where: { $0.name == name })
+    }
+    
+    /// Retourne true si la personne est le seul détenteur du bien en pleine propriété
+    /// - Parameter name: nom de la personne
+    func hasAUniqueFullOwner(named name: String) -> Bool {
+        !isDismembered && fullOwners.contains(where: { $0.name == name })
+            && fullOwners.count == 1
     }
     
     /// Retourne true si la personne perçoit des revenus du bien
-    /// - Parameter ownerName: nom de la personne
-    func receivesRevenues(ownerName: String) -> Bool {
-        return isAFullOwner(ownerName: ownerName) || isAnUsufructOwner(ownerName: ownerName)
+    /// - Parameter name: nom de la personne
+    func providesRevenue(to name: String) -> Bool {
+        hasAFullOwner(named: name) || hasAnUsufructOwner(named: name)
     }
 }
 

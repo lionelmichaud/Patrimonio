@@ -63,7 +63,7 @@ class IrppSliceChartCashFlowVisitor: CashFlowIrppSliceVisitorP {
         // si l'année n'existe pas dans le tableau de cash flow
         guard let cfLine = element[year] else { return }
 
-        let slicedIrpp = try! Fiscal.model.incomeTaxes.slicedIrpp(taxableIncome : cfLine.taxes.irpp.amount / cfLine.taxes.irpp.averageRate,
+        let slicedIrpp = try! Fiscal.model.incomeTaxes.slicedIrpp(taxableIncome : cfLine.adultTaxes.irpp.amount / cfLine.adultTaxes.irpp.averageRate,
                                                                   nbAdults      : nbAdults,
                                                                   nbChildren    : nbChildren)
         let bars = IrppEnum.allCases.map { (xLabel) -> BarChartDataEntry in

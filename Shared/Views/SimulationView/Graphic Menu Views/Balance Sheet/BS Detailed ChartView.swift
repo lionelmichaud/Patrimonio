@@ -28,20 +28,23 @@ struct BalanceSheetDetailedChartView: View {
     var lastYear: Int? { simulation.socialAccounts.balanceArray.last?.year }
     @State private var showInfoPopover = false
     let popOverTitle   = "Contenu du graphique:"
-    let popOverMessage =
-        """
+    let popOverMessage = """
         Evolution dans le temps des valeurs de l'ensemble des biens (actif et passif) détenus
         par l'ensemble des membres de la famille ou par un individu en particulier.
-        La valeur (NP, UF, PP) des actifs/passifs prises en compte est défin ie dans les préférences.
         Evolution du solde net.
-        Détail par catégorie d'actif / passif.
+
+        Lorsque la Famille est sélectionnée, tous les biens sont incorporés pour leur valeur globale.
+
+        Lorsque les Parents sont sélectionnés, les biens incorporés sont définis dans les préférences KPI ⚙️
+        et sont évalués à leur valeur possédée (patrimoniale).
+
+        Lorsqu'un seul individu est sélectionné, les biens sont évalués selon une méthode
+        et selon un filtre définis dans les préférences graphiques ⚙️.
 
         Utiliser la loupe 🔍 pour filtrer les catégories d'actif / passif.
-        Utiliser le bouton 🔳 pour faire apparaître un second grahique présentant l'ordre chronologique des événemnts de vie de chaque membre de la famille
+        Utiliser le bouton 🔳 pour faire apparaître un second grahique présentant l'ordre chronologique
+         des événemnts de vie de chaque membre de la famille
         Utiliser le bouton 📷 pour placer une copie d'écran dans votre album photo.
-
-        Lorsqu'un seul individu est sélectionné, les actifs sont évalués selon une méthode
-        et selon un filtre définis dans les préférences ⚙️.
         """
 
     var body: some View {
@@ -54,6 +57,8 @@ struct BalanceSheetDetailedChartView: View {
                         ForEach(family.members.items.sorted(by: < )) { person in
                             PersonNameRow(member: person)
                         }
+                        Text(AppSettings.shared.adultsLabel)
+                            .tag(AppSettings.shared.adultsLabel)
                         Text(AppSettings.shared.allPersonsLabel)
                             .tag(AppSettings.shared.allPersonsLabel)
                     }
@@ -65,7 +70,7 @@ struct BalanceSheetDetailedChartView: View {
                         .padding(.horizontal)
                         .pickerStyle(SegmentedPickerStyle())
 
-                    // graphique Blan
+                    // graphique Bilan
                     BalanceSheetStackedBarChartView(for           : uiState.bsChartState.nameSelection,
                                                     socialAccounts: $simulation.socialAccounts,
                                                     title         : simulation.title,
@@ -233,8 +238,6 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
 
         // ajouter le dataset au graphique
         chartView.data = data
-
-        chartView.data?.notifyDataChanged()
     }
 
     /// Création de la vue du Graphique
@@ -261,6 +264,8 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
 
         // animer la transition
         uiView.animate(yAxisDuration: 0.5, easingOption: .linear)
+
+        uiView.data?.notifyDataChanged()
         uiView.notifyDataSetChanged()
     }
 }

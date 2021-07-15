@@ -34,7 +34,7 @@ extension CashFlowArray {
         switch combination {
             case .revenues:
                 // libellés des revenus famille + revenus SCI
-                let revenuesLegend = firstLine.revenues.summary.namedValues.map({(label    : $0.name,
+                let revenuesLegend = firstLine.adultsRevenues.summary.namedValues.map({(label    : $0.name,
                                                                                   selected : true)})
                 // Résumé seulement
                 let sciLegend = firstLine.sciCashFlowLine.summary.namedValues.map({(label    : $0.name,
@@ -43,7 +43,7 @@ extension CashFlowArray {
 
             case .expenses:
                 // à plat
-                let taxesLegend    = firstLine.taxes.summary.namedValues.map({(label: $0.name,
+                let taxesLegend    = firstLine.adultTaxes.summary.namedValues.map({(label: $0.name,
                                                                                selected: true)})
                 // Résumé seulement
                 let expenseLegend = (label    : firstLine.lifeExpenses.tableName,

@@ -88,7 +88,7 @@ class CsvBalanceSheetTableVisitor: BalanceSheetCsvVisitorP {
         visitLiabilities()
 
         // net
-        table.append("\(element.netAssets.roundedString)")
+        table.append("\(element.netFamilyAssets.roundedString)")
     }
 
     func buildCsv(element: BalanceSheetArray) {
@@ -99,7 +99,7 @@ class CsvBalanceSheetTableVisitor: BalanceSheetCsvVisitorP {
         }
 
         // construire le tableau de valeurs: une ligne par année
-        for idx in 0..<element.endIndex {
+        for idx in element.range {
             element[idx].accept(self)
             table.append("\n")
         }

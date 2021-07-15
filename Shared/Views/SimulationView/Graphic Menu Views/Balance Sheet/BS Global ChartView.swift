@@ -19,8 +19,10 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", catego
 
 /// Vue globale du bilan: Actif / Passif / Net
 struct BalanceSheetGlobalChartView: View {
-    @EnvironmentObject var dataStore : Store
-    @EnvironmentObject var simulation: Simulation
+    @EnvironmentObject var dataStore  : Store
+    @EnvironmentObject var family     : Family
+    @EnvironmentObject var simulation : Simulation
+    @EnvironmentObject var uiState    : UIState
     @State private var lifeEventChatIsPresented = false
     var lastYear: Int? { simulation.socialAccounts.balanceArray.last?.year }
     @State private var showInfoPopover = false
@@ -30,6 +32,14 @@ struct BalanceSheetGlobalChartView: View {
         Evolution dans le temps des valeurs de l'ensemble des biens (actif et passif).
         détenus par l'ensemble des membres de la famille.
         Evolution du solde net.
+        
+        Lorsque la Famille est sélectionnée, tous les biens sont incorporés pour leur valeur globale.
+
+        Lorsque les Parents sont sélectionnés, les biens incorporés sont définis dans les préférences KPI ⚙️
+        et sont évalués à leur valeur possédée (patrimoniale).
+
+        Lorsqu'un seul individu est sélectionné, les biens sont évalués selon une méthode
+        et selon un filtre définis dans les préférences graphiques ⚙️.
 
         Utiliser le bouton 📷 pour placer une copie d'écran dans votre album photo.
         """
@@ -37,8 +47,22 @@ struct BalanceSheetGlobalChartView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                // graphique Blan
-                BalanceSheetLineChartView(socialAccounts: $simulation.socialAccounts,
+                // sélecteur: Membre de la famille / Tous
+                Picker(selection: self.$uiState.bsChartState.nameSelection, label: Text("Personne")) {
+                    ForEach(family.members.items.sorted(by: < )) { person in
+                        PersonNameRow(member: person)
+                    }
+                    Text(AppSettings.shared.adultsLabel)
+                        .tag(AppSettings.shared.adultsLabel)
+                    Text(AppSettings.shared.allPersonsLabel)
+                        .tag(AppSettings.shared.allPersonsLabel)
+                }
+                .padding(.horizontal)
+                .pickerStyle(SegmentedPickerStyle())
+                
+                // graphique Bilan
+                BalanceSheetLineChartView(for           : uiState.bsChartState.nameSelection,
+                                          socialAccounts: $simulation.socialAccounts,
                                           title         : simulation.title)
                     .padding(.trailing, 4)
 
@@ -92,12 +116,16 @@ struct BalanceSheetLineChartView: NSUIViewRepresentable {
 
     // MARK: - Properties
 
-    @Binding var socialAccounts: SocialAccounts
+    @Binding var socialAccounts : SocialAccounts
+    var personSelection         : String
 
     // MARK: - Initializer
 
-    internal init(socialAccounts : Binding<SocialAccounts>, title: String) {
+    internal init(for thisName   : String,
+                  socialAccounts : Binding<SocialAccounts>,
+                  title          : String) {
         BalanceSheetLineChartView.titleStatic = title
+        self.personSelection  = thisName
         self._socialAccounts  = socialAccounts
     }
 
@@ -139,7 +167,11 @@ struct BalanceSheetLineChartView: NSUIViewRepresentable {
 
     func updateData(of chartView: LineChartView) {
         // créer les DataSet: LineChartDataSets
-        let dataSets = LineChartBalanceSheetVisitor(element: socialAccounts.balanceArray).dataSets
+        let dataSets = LineChartBalanceSheetVisitor(
+            element         : socialAccounts.balanceArray,
+            personSelection : personSelection)
+            .dataSets
+        
         // ajouter les DataSet au Chartdata
         let data = LineChartData(dataSets: dataSets)
         data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
@@ -148,11 +180,6 @@ struct BalanceSheetLineChartView: NSUIViewRepresentable {
 
         // ajouter le Chartdata au ChartView
         chartView.data = data
-        //chartView.data?.notifyDataChanged()
-        //chartView.notifyDataSetChanged()
-
-        // animer la transition
-        chartView.animate(yAxisDuration: 0.5, easingOption: .linear)
     }
 
     /// Création de la vue du Graphique
@@ -175,6 +202,12 @@ struct BalanceSheetLineChartView: NSUIViewRepresentable {
     ///   - context:
     func updateUIView(_ uiView: LineChartView, context: Context) {
         updateData(of: uiView)
+
+        // animer la transition
+        uiView.animate(yAxisDuration: 0.5, easingOption: .linear)
+        
+        uiView.data?.notifyDataChanged()
+        uiView.notifyDataSetChanged()
     }
 }
 

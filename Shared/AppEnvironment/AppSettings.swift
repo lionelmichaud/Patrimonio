@@ -20,6 +20,7 @@ struct AppSettings: Decodable {
     var imageDir        : String
     var tableDir        : String
     var allPersonsLabel : String
+    var adultsLabel     : String
 
     // MARK: - Static Methods
     

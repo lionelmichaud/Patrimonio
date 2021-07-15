@@ -76,6 +76,7 @@ extension Ownership {
         let nbOfRecipients = clause.fullRecipients.count
         let share          = 100.0 / nbOfRecipients.double()
         
+        self.isDismembered  = false
         self.fullOwners     = []
         self.bareOwners     = []
         self.usufructOwners = []

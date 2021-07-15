@@ -24,10 +24,7 @@ struct GraphicUserSettings: View {
                     .pickerStyle(DefaultPickerStyle())
                     .onChange(of     : ownership,
                               perform: { newValue in
-                                UserSettings.shared.ownershipSelection = newValue
-                                // remettre à zéro la simulation et sa vue
-                                //simulation.reset()
-                                //uiState.reset()
+                                UserSettings.shared.ownershipGraphicSelection = newValue
                               })
             }
             
@@ -36,10 +33,7 @@ struct GraphicUserSettings: View {
                     .pickerStyle(DefaultPickerStyle())
                     .onChange(of     : evaluationMethod,
                               perform: { newValue in
-                                UserSettings.shared.assetEvaluationMethod = newValue
-                                // remettre à zéro la simulation et sa vue
-                                //simulation.reset()
-                                //uiState.reset()
+                                UserSettings.shared.assetGraphicEvaluationMethod = newValue
                               })
             }
         }

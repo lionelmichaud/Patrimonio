@@ -10,62 +10,99 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 
 struct CashFlowLine {
     
-    // MARK: - nested types
+    // MARK: - Nested types
     
-    // agrégat des ages
+    // agrégat des ages des membres de la famille pendant l'année en cours
     struct AgeTable {
-        
-        // properties
-        
         var persons = [(name: String, age: Int)]()
-        
-        // methods
     }
     
-    // MARK: - properties
+    // MARK: - Properties
     
-    let year            : Int
-    var ages            = AgeTable()
-    // les comptes annuels de la SCI
+    let year : Int
+    var ages = AgeTable()
+    
+    /// les comptes annuels de la SCI
     let sciCashFlowLine : SciCashFlowLine
-    // revenus
+    
+    // Les comptes annuels des Parents
+    
+    // Revenus des Parents
+    
+    /// Profits des Parents en report d'imposition d'une année sur l'autre
     var taxableIrppRevenueDelayedToNextYear = Debt(name: "REVENU IMPOSABLE REPORTE A L'ANNEE SUIVANTE", note: "", value: 0)
-    var revenues        = ValuedRevenues(name: "REVENUS HORS SCI")
+
+    /// Agrégat des Revenus annuels des Parents (hors SCI)
+    var adultsRevenues = ValuedRevenues(name: "REVENUS PARENTS HORS SCI")
+
+    /// Total de tous les revenus nets de l'année des Parents, versé en compte courant
+    ///  - avant taxes et impots
+    ///  - inclus revenus de la SCI
+    ///  - EXCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
+    ///
+    /// Note: Utilisé pour calculer le Net Cash-Flow de fin d'année (à réinvestir en fin d'année)
     var sumOfRevenuesSalesExcluded: Double {
-        revenues.totalRevenueSalesExcluded +
+        adultsRevenues.totalRevenueSalesExcluded +
             sciCashFlowLine.netRevenuesSalesExcluded
     }
+
+    /// Total de tous les revenus nets de l'année des Parents, versé en compte courant.
+    /// - avant taxes et impots
+    /// - inclus revenus de la SCI
+    /// - INCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
     var sumOfRevenues: Double {
-        revenues.totalRevenue +
+        adultsRevenues.totalRevenue +
             sciCashFlowLine.netRevenues
     }
-    // dépenses
-    var taxes           = ValuedTaxes(name: "Taxes")
+    
+    // Dépenses des Parents
+    
+    /// Agrégat des Taxes annuelles payées par les Parents
+    var adultTaxes      = ValuedTaxes(name: "Taxes")
+    
+    /// Dépenses de vie des Parents
     var lifeExpenses    = NamedValueTable(tableName: "Dépenses de vie")
+    
+    /// remboursements d'emprunts ou de dettes des Parents
     var debtPayements   = NamedValueTable(tableName: "Remb. dette")
+    
+    /// Versements périodiques des Parents sur des plan d'investissement périodiques
     var investPayements = NamedValueTable(tableName: "Investissements")
+    
+    /// Total des dépenses annuelles des Parents
     var sumOfExpenses: Double {
-        taxes.total +
+        adultTaxes.total +
             lifeExpenses.total +
             debtPayements.total +
             investPayements.total
     }
-    // les successions légales survenues dans l'année
-    var successions        : [Succession] = []
-    // les transmissions d'assurances vie survenues dans l'année
-    var lifeInsSuccessions : [Succession] = []
     
-    // solde net des revenus courants communs - dépenses communes (hors ventes de bien en séparation de bien)
+    // Soldes nets annuels (Revenus - Dépenses) des Parents
+    
+    /// Solde net des revenus - dépenses courants des Parents - dépenses communes (hors ventes de bien en séparation de bien)
+    /// Solde net de tous les revenus - dépenses (y.c. ventes de bien en séparation de bien))
+    /// - inclus revenus/dépenses de la SCI
+    /// - EXCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
     var netCashFlowSalesExcluded: Double {
         sumOfRevenuesSalesExcluded - sumOfExpenses
     }
-
-    // solde net de tous les revenus - dépenses (y.c. ventes de bien en séparation de bien))
+    
+    /// Solde net de tous les revenus - dépenses (y.c. ventes de bien en séparation de bien))
+    /// - inclus revenus/dépenses de la SCI
+    /// - INCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
     var netCashFlow: Double {
         sumOfRevenues - sumOfExpenses
     }
-
-    // MARK: - initialization
+    
+    // Successions survenus dans l'année
+    
+    /// Les successions légales survenues dans l'année
+    var successions        : [Succession] = []
+    
+    /// Les transmissions d'assurances vie survenues dans l'année
+    var lifeInsSuccessions : [Succession] = []
+    
+    // MARK: - Initialization
     
     /// Création et peuplement d'un année de Cash Flow
     /// - Parameters:
@@ -84,7 +121,7 @@ struct CashFlowLine {
         let adultsNames = family.adults.compactMap {
             $0.isAlive(atEndOf: year) ? $0.displayName : nil
         }
-        revenues.taxableIrppRevenueDelayedFromLastYear.setValue(to: taxableIrppRevenueDelayedFromLastyear)
+        adultsRevenues.taxableIrppRevenueDelayedFromLastYear.setValue(to: taxableIrppRevenueDelayedFromLastyear)
         
         /// initialize life insurance yearly rebate on taxes
         // TODO: mettre à jour le model de défiscalisation Asurance Vie
@@ -144,22 +181,22 @@ struct CashFlowLine {
         #endif
     }
     
-    // MARK: - methods
+    // MARK: - Methods
     
     fileprivate mutating func computeIrpp(of family: Family) {
-        taxes.irpp = try! Fiscal.model.incomeTaxes.irpp(taxableIncome : revenues.totalTaxableIrpp,
+        adultTaxes.irpp = try! Fiscal.model.incomeTaxes.irpp(taxableIncome : adultsRevenues.totalTaxableIrpp,
                                                         nbAdults      : family.nbOfAdultAlive(atEndOf: year),
                                                         nbChildren    : family.nbOfFiscalChildren(during: year))
-        taxes.perCategory[.irpp]?.namedValues.append((name  : TaxeCategory.irpp.rawValue,
-                                                      value : taxes.irpp.amount.rounded()))
+        adultTaxes.perCategory[.irpp]?.namedValues.append((name  : TaxeCategory.irpp.rawValue,
+                                                      value : adultTaxes.irpp.amount.rounded()))
     }
     
     fileprivate mutating func computeISF(with patrimoine : Patrimoin) {
         let taxableAsset = patrimoine.realEstateValue(atEndOf          : year,
                                                       evaluationMethod : .ifi)
-        taxes.isf = try! Fiscal.model.isf.isf(taxableAsset: taxableAsset)
-        taxes.perCategory[.isf]?.namedValues.append((name  : TaxeCategory.isf.rawValue,
-                                                     value : taxes.isf.amount.rounded()))
+        adultTaxes.isf = try! Fiscal.model.isf.isf(taxableAsset: taxableAsset)
+        adultTaxes.perCategory[.isf]?.namedValues.append((name  : TaxeCategory.isf.rawValue,
+                                                     value : adultTaxes.isf.amount.rounded()))
     }
     
     /// Populate remboursement d'emprunts des adultes de la famille
@@ -182,12 +219,13 @@ struct CashFlowLine {
         }
     }
     
-    /// Gérer l'excédent ou le déficit de trésorierie (commune) en fin d'année
+    /// Gérer l'excédent ou le déficit de trésorierie (commune des Parents) en fin d'année
     ///
     /// - Warning:
     ///   On ne gère pas ici le ré-investissement des biens vendus dans l'année et détenus en propre.
     ///
-    ///   Les produits de ventes de biens sont réinvestis au moment de la vente dans le patrimoine de ceux qui possèdente le bien (voir `investCapital`).
+    ///   Les produits de ventes de biens sont réinvestis au moment de la vente dans le patrimoine
+    ///   de ceux qui possèdente le bien (voir `investCapital`).
     ///
     /// - Parameters:
     ///   - patrimoine: patrimoine
@@ -201,7 +239,7 @@ struct CashFlowLine {
         let netCashFlowSalesExcluded = self.netCashFlowSalesExcluded
         
         // On ne gère pas ici le ré-investissement des biens vendus dans l'année et détenus en propre
-        // c'est fait en amont
+        // c'est fait en amont au moment de la vente
         if netCashFlowSalesExcluded > 0.0 {
             // capitaliser les intérêts des investissements libres
             netCashFlowManager.capitalizeFreeInvestments(in      : patrimoine,
@@ -219,7 +257,7 @@ struct CashFlowLine {
                                                               in                  : patrimoine,
                                                               atEndOf             : year,
                                                               for                 : adultsName,
-                                                              taxes               : &taxes.perCategory,
+                                                              taxes               : &adultTaxes.perCategory,
                                                               lifeInsuranceRebate : &lifeInsuranceRebate)
             taxableIrppRevenueDelayedToNextYear.increase(by: totalTaxableInterests.rounded())
             
