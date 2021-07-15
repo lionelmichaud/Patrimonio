@@ -88,7 +88,7 @@ class CsvBalanceSheetTableVisitor: BalanceSheetCsvVisitorP {
         visitLiabilities()
 
         // net
-        table.append("\(element.netAssets.roundedString)")
+        table.append("\(element.netFamilyAssets.roundedString)")
     }
 
     func buildCsv(element: BalanceSheetArray) {

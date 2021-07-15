@@ -59,7 +59,7 @@ class LineChartBalanceSheetVisitor: BalanceSheetLineChartVisitorP {
         self.yVals2.append(ChartDataEntry(x: element.year.double(),
                                           y: totalLiabilitiesValue))
         self.yVals3.append(ChartDataEntry(x: element.year.double(),
-                                          y: element.netAssets))
+                                          y: element.netFamilyAssets))
     }
     
     func buildLineChart(element: ValuedAssets) {

@@ -24,7 +24,7 @@ enum OwnershipNature: String, PickableEnum {
 
 enum AssetEvaluationMethod: String, PickableEnum {
     case totalValue = "Valeur totale du bien"
-    case ownedValue = "Valeur de la fraction possédée du bien"
+    case ownedValue = "Valeur patrimoniale de la fraction possédée du bien"
     
     var pickerString: String {
         return self.rawValue
@@ -36,45 +36,74 @@ struct UserSettings {
     
     // (Key, Value) pairs
 
-    static let simulateVolatility    = "simulateVolatility"
+    // paramètres de simulation
+    static let simulateVolatility = "simulateVolatility"
     @WrappedDefault(keyName: UserSettings.simulateVolatility,
                     defaultValue: false)
     var simulateVolatility: Bool
     
-    static let shareCsvFiles         = "shareCsvFiles"
+    // paramètres de gestion de fichiers
+    static let shareCsvFiles = "shareCsvFiles"
     @WrappedDefault(keyName: UserSettings.shareCsvFiles,
                     defaultValue: true)
     var shareCsvFiles: Bool
     
-    static let shareImageFiles       = "shareImageFiles"
+    static let shareImageFiles = "shareImageFiles"
     @WrappedDefault(keyName: UserSettings.shareImageFiles,
                     defaultValue: true)
     var shareImageFiles: Bool
     
-    static let ownershipSelection    = "ownershipSelection"
-    @WrappedDefault(keyName: UserSettings.ownershipSelection,
-                    defaultValue: OwnershipNature.all.rawValue)
-    var ownershipSelectionString: String
-    var ownershipSelection: OwnershipNature {
+    // paramètres KPI
+    static let ownershipKpiSelection = "ownershipKpiSelection"
+    @WrappedDefault(keyName: UserSettings.ownershipKpiSelection,
+                    defaultValue: OwnershipNature.sellable.rawValue)
+    var ownershipKpiSelectionString: String
+    var ownershipKpiSelection: OwnershipNature {
         get {
-            OwnershipNature(rawValue: ownershipSelectionString) ?? OwnershipNature.all
+            OwnershipNature(rawValue: ownershipKpiSelectionString) ?? OwnershipNature.sellable
         }
         set {
-            ownershipSelectionString = newValue.rawValue
+            ownershipKpiSelectionString = newValue.rawValue
         }
     }
     
-    static let assetEvaluationMethod = "assetEvaluationMethod"
-    @WrappedDefault(keyName: UserSettings.assetEvaluationMethod,
+    static let assetKpiEvaluationMethod = "assetKpiEvaluationMethod"
+    @WrappedDefault(keyName: UserSettings.assetKpiEvaluationMethod,
                     defaultValue: AssetEvaluationMethod.ownedValue.rawValue)
-    var assetEvaluationMethodString: String
-    var assetEvaluationMethod: AssetEvaluationMethod {
+    var assetKpiEvaluationMethodString: String
+    var assetKpiEvaluationMethod: AssetEvaluationMethod {
         get {
-            AssetEvaluationMethod(rawValue: assetEvaluationMethodString) ?? AssetEvaluationMethod.ownedValue
+            AssetEvaluationMethod(rawValue: assetKpiEvaluationMethodString) ?? AssetEvaluationMethod.ownedValue
         }
         set {
-            assetEvaluationMethodString = newValue.rawValue
+            assetKpiEvaluationMethodString = newValue.rawValue
         }
     }
-
+    
+    // paramètres Graphiques
+    static let ownershipGraphicSelection = "ownershipGraphicSelection"
+    @WrappedDefault(keyName: UserSettings.ownershipGraphicSelection,
+                    defaultValue: OwnershipNature.sellable.rawValue)
+    var ownershipGraphicSelectionString: String
+    var ownershipGraphicSelection: OwnershipNature {
+        get {
+            OwnershipNature(rawValue: ownershipGraphicSelectionString) ?? OwnershipNature.sellable
+        }
+        set {
+            ownershipGraphicSelectionString = newValue.rawValue
+        }
+    }
+    
+    static let assetGraphicEvaluationMethod = "assetGraphicEvaluationMethod"
+    @WrappedDefault(keyName: UserSettings.assetGraphicEvaluationMethod,
+                    defaultValue: AssetEvaluationMethod.ownedValue.rawValue)
+    var assetGraphicEvaluationMethodString: String
+    var assetGraphicEvaluationMethod: AssetEvaluationMethod {
+        get {
+            AssetEvaluationMethod(rawValue: assetGraphicEvaluationMethodString) ?? AssetEvaluationMethod.ownedValue
+        }
+        set {
+            assetGraphicEvaluationMethodString = newValue.rawValue
+        }
+    }
 }

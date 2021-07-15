@@ -46,15 +46,20 @@ struct Assets {
     var allOwnableItems : [(ownable: Ownable, category: AssetsCategory)] {
         var ownables = [(ownable: Ownable, category: AssetsCategory)]()
         
-        ownables = periodicInvests.items.sorted(by:<)
+        ownables = periodicInvests.items
+            .sorted(by:<)
             .map { ($0, AssetsCategory.periodicInvests) }
-        ownables += freeInvests.items.sorted(by:<)
+        ownables += freeInvests.items
+            .sorted(by:<)
             .map { ($0, AssetsCategory.freeInvests) }
-        ownables += realEstates.items.sorted(by:<)
+        ownables += realEstates.items
+            .sorted(by:<)
             .map { ($0, AssetsCategory.realEstates) }
-        ownables += scpis.items.sorted(by:<)
+        ownables += scpis.items
+            .sorted(by:<)
             .map { ($0, AssetsCategory.scpis) }
-        ownables += sci.scpis.items.sorted(by:<)
+        ownables += sci.scpis.items
+            .sorted(by:<)
             .map { ($0, AssetsCategory.sci) }
         return ownables
     }

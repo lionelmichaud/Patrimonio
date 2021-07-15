@@ -28,20 +28,20 @@ struct BalanceSheetDetailedChartView: View {
     var lastYear: Int? { simulation.socialAccounts.balanceArray.last?.year }
     @State private var showInfoPopover = false
     let popOverTitle   = "Contenu du graphique:"
-    let popOverMessage =
-        """
+    let popOverMessage = """
         Evolution dans le temps des valeurs de l'ensemble des biens (actif et passif) détenus
         par l'ensemble des membres de la famille ou par un individu en particulier.
-        La valeur (NP, UF, PP) des actifs/passifs prises en compte est défin ie dans les préférences.
         Evolution du solde net.
-        Détail par catégorie d'actif / passif.
+
+        Lorsque la Famille complète est sélectionnée, tous les biens sont incorporés pour leur valeur globale.
+
+        Lorsqu'un seul individu est sélectionné, les biens sont évalués selon une méthode
+        et selon un filtre définis dans les préférences graphiques ⚙️.
+        La valorisation (NP, UF, PP) des biens prises en compte est définie dans les préférences.
 
         Utiliser la loupe 🔍 pour filtrer les catégories d'actif / passif.
         Utiliser le bouton 🔳 pour faire apparaître un second grahique présentant l'ordre chronologique des événemnts de vie de chaque membre de la famille
         Utiliser le bouton 📷 pour placer une copie d'écran dans votre album photo.
-
-        Lorsqu'un seul individu est sélectionné, les actifs sont évalués selon une méthode
-        et selon un filtre définis dans les préférences ⚙️.
         """
 
     var body: some View {
@@ -54,6 +54,8 @@ struct BalanceSheetDetailedChartView: View {
                         ForEach(family.members.items.sorted(by: < )) { person in
                             PersonNameRow(member: person)
                         }
+                        Text(AppSettings.shared.adultsLabel)
+                            .tag(AppSettings.shared.adultsLabel)
                         Text(AppSettings.shared.allPersonsLabel)
                             .tag(AppSettings.shared.allPersonsLabel)
                     }

@@ -64,6 +64,8 @@ struct SocialAccounts {
     }
     
     /// Mémorise le niveau le + bas atteint par les actifs financiers (hors immobilier physique) au cours du run
+    /// - Note:
+    ///   - Les biens sont sont évalués à leur valeur selon la méthode de calcul des préférences utilisateur
     /// - Parameters:
     ///   - kpis: les KPI à utiliser
     ///   - simulationMode: mode de simluation en cours
@@ -71,17 +73,19 @@ struct SocialAccounts {
                                                  withMode simulationMode : SimulationModeEnum,
                                                  kpiResults              : inout DictionaryOfKpiResults) {
         let minBalanceSheetLine = balanceArray.min { a, b in
-            a.netFinancialAssets < b.netFinancialAssets
+            a.netAdultsFinancialAssets < b.netAdultsFinancialAssets
         }
         // KPI 3: mémoriser le minimum d'actif financier net au cours du temps
         setKpiValue(kpiEnum        : .minimumAsset,
-                    value          : minBalanceSheetLine!.netFinancialAssets,
+                    value          : minBalanceSheetLine!.netAdultsFinancialAssets,
                     kpiDefinitions : &kpiDefinitions,
                     kpiResults     : &kpiResults,
                     simulationMode : simulationMode)
     }
 
     /// Gérer les KPI quand il n'y a plus de Cash => on arrête la simulation et on calcule la valeur des KPIs
+    /// - Note:
+    ///   - Les biens sont sont évalués à leur valeur selon la méthode de calcul des préférences utilisateur
     /// - Parameters:
     ///   - year: année du run courant
     ///   - withKPIs: les KPI à utiliser
@@ -96,7 +100,7 @@ struct SocialAccounts {
         customLog.log(level: .info, "Arrêt de la construction de la table en \(year) de Comptes sociaux: Actifs financiers = 0 dans \(Self.self, privacy: .public)")
 
         // Actif Net (hors immobilier physique)
-        let netFinancialAssets = withbalanceSheetLine?.netFinancialAssets ?? 0
+        let netFinancialAssets = withbalanceSheetLine?.netAdultsFinancialAssets ?? 0
         
         // mémoriser le montant de l'Actif financier Net (hors immobilier physique)
         switch family.nbOfAdultAlive(atEndOf: year) {
@@ -126,7 +130,7 @@ struct SocialAccounts {
         }
         /// KPI n°3 : on est arrivé à la fin de la simulation car il n'y a plus de cash dans les Free Investements
         /// mais il peut éventuellement rester d'autres actifs (immobilier de rendement...)
-        // TODO: - il faudrait définir un KPI spécifique
+        // TODO: - il faudrait définir un KPI spécifique "plus de cash pour survivre" au lieu de faire comme s'il ne restait plus d'actif net
         setKpiValue(kpiEnum        : .minimumAsset,
                     value          : 0,
                     kpiDefinitions : &kpiDefinitions,
@@ -135,25 +139,31 @@ struct SocialAccounts {
     }
     
     /// Gérer les KPI n°1, 2, 3 au décès de l'un ou des 2 conjoints
+    /// - Note:
+    ///   - Les biens sont sont évalués à leur valeur selon la méthode de calcul des préférences utilisateur
     /// - Parameters:
     ///   - year: année du run courant
     ///   - withKPIs: les KPI à utiliser
     ///   - kpiResults: valeur des KPIs pour le run courant
-    fileprivate func computeKpisAtDeath (year                    : Int, // swiftlint:disable:this function_parameter_count
-                                         withFamily family       : Family,
-                                         withKPIs kpiDefinitions : inout KpiArray,
-                                         kpiResults              : inout DictionaryOfKpiResults,
-                                         withMode simulationMode : SimulationModeEnum,
-                                         withbalanceSheetLine    : BalanceSheetLine) {
-        // Actif Net (hors immobilier physique)
-        let netFinancialAssets = withbalanceSheetLine.netFinancialAssets
+    fileprivate func computeKpisAtDeath (year                               : Int, // swiftlint:disable:this function_parameter_count
+                                         withFamily family                  : Family,
+                                         withKPIs kpiDefinitions            : inout KpiArray,
+                                         kpiResults                         : inout DictionaryOfKpiResults,
+                                         withMode simulationMode            : SimulationModeEnum,
+                                         balanceSheetLineBeforeTransmission : BalanceSheetLine?,
+                                         balanceSheetLineAfterTransmission  : BalanceSheetLine) {
+        // Dernier Actif Net (après transmission en cas de décès dans l'année) (hors immobilier physique)
+        let netFinancialAssetsAfterTransmission = balanceSheetLineAfterTransmission.netAdultsFinancialAssets
         
+        // Actif Net précédent (avant transmission en cas de décès dans l'année) (hors immobilier physique))
+        let netFinancialAssetsBeforeTransmission = balanceSheetLineBeforeTransmission?.netAdultsFinancialAssets ?? netFinancialAssetsAfterTransmission
+
         switch family.nbOfAdultAlive(atEndOf: year) {
             case 1:
                 /// KPI n°1: décès du premier conjoint et mémoriser la valeur du KPI
-                // mémoriser le montant de l'Actif Net (hors immobilier physique)
+                // mémoriser le montant de l'Actif Net (hors immobilier physique) du conjoint survivant après transmission
                 setKpiValue(kpiEnum        : .assetAt1stDeath,
-                            value          : netFinancialAssets,
+                            value          : netFinancialAssetsAfterTransmission,
                             kpiDefinitions : &kpiDefinitions,
                             kpiResults     : &kpiResults,
                             simulationMode : simulationMode)
@@ -161,17 +171,17 @@ struct SocialAccounts {
             case 0:
                 if family.nbOfAdultAlive(atEndOf: year-1) == 2 {
                     /// KPI n°1: décès du premier conjoint et mémoriser la valeur du KPI
-                    // mémoriser le montant de l'Actif Net (hors immobilier physique)
+                    // mémoriser le montant de l'Actif Net (hors immobilier physique) des parents avant transmission
                     setKpiValue(kpiEnum        : .assetAt1stDeath,
-                                value          : netFinancialAssets,
+                                value          : netFinancialAssetsBeforeTransmission,
                                 kpiDefinitions : &kpiDefinitions,
                                 kpiResults     : &kpiResults,
                                 simulationMode : simulationMode)
                 }
                 /// KPI n°2: décès du second conjoint et mémoriser la valeur du KPI
-                // mémoriser le montant de l'Actif Net (hors immobilier physique)
+                // mémoriser le montant de l'Actif Net (hors immobilier physique) des parents avant transmission
                 setKpiValue(kpiEnum        : .assetAt2ndtDeath,
-                            value          : netFinancialAssets,
+                            value          : netFinancialAssetsBeforeTransmission,
                             kpiDefinitions : &kpiDefinitions,
                             kpiResults     : &kpiResults,
                             simulationMode : simulationMode)
@@ -240,13 +250,13 @@ struct SocialAccounts {
             } catch {
                 /// il n'y a plus de Cash => on arrête la simulation
                 lastYear = year
+                // on calcule les KPI sur la base du dernier bilan connu (fin de l'année précédente)
                 computeKpisAtZeroCashAvailable(year                 : year,
                                                withFamily           : family,
                                                withKPIs             : &kpis,
                                                kpiResults           : &kpiResults,
                                                withMode             : simulationMode,
                                                withbalanceSheetLine : balanceArray.last)
-                //                withbalanceSheetLine : balanceArray[balanceArray.endIndex - 2])
                 SimulationLogger.shared.log(run      : run,
                                             logTopic : LogTopic.simulationEvent,
                                             message  : "Fin du run: à cours de cash en \(year)")
@@ -255,22 +265,26 @@ struct SocialAccounts {
 
             // construire la ligne annuelle de Bilan de fin d'année
             //-----------------------------------------------------
-            let newBalanceSheetLine = BalanceSheetLine(withYear        : year,
+            let newBalanceSheetLine = BalanceSheetLine(year            : year,
                                                        withMembersName : family.membersName,
+                                                       withAdultsName  : family.adultsName,
                                                        withAssets      : patrimoine.assets.allOwnableItems,
                                                        withLiabilities : patrimoine.liabilities.allOwnableItems)
-            balanceArray.append(newBalanceSheetLine)
-
+            
             if family.nbOfAdultAlive(atEndOf: year) < family.nbOfAdultAlive(atEndOf: year-1) {
-                // décès d'un adulte
+                // décès d'un adulte en cours d'année
                 // gérer les KPI n°1, 2, 3 au décès de l'un ou des 2 conjoints
-                computeKpisAtDeath(year                 : year,
-                                   withFamily           : family,
-                                   withKPIs             : &kpis,
-                                   kpiResults           : &kpiResults,
-                                   withMode             : simulationMode,
-                                   withbalanceSheetLine : newBalanceSheetLine)
+                // attention: à ce stade les transmissions de succession ont déjà été réalisées
+                computeKpisAtDeath(year                               : year,
+                                   withFamily                         : family,
+                                   withKPIs                           : &kpis,
+                                   kpiResults                         : &kpiResults,
+                                   withMode                           : simulationMode,
+                                   balanceSheetLineBeforeTransmission : balanceArray.last,
+                                   balanceSheetLineAfterTransmission  : newBalanceSheetLine)
             }
+            
+            balanceArray.append(newBalanceSheetLine)
             
             if family.nbOfAdultAlive(atEndOf: year) == 0 {
                 // il n'y a plus d'adulte vivant à la fin de l'année
@@ -279,7 +293,7 @@ struct SocialAccounts {
                 SimulationLogger.shared.log(run      : run,
                                             logTopic : LogTopic.simulationEvent,
                                             message  : "Fin du run: plus d'adulte en vie en \(year)")
-                return kpiResults
+                return kpiResults // arrêter la construction de la table
             }
         }
         

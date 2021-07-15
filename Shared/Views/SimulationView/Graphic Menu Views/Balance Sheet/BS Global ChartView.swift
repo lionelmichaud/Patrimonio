@@ -30,6 +30,8 @@ struct BalanceSheetGlobalChartView: View {
         Evolution dans le temps des valeurs de l'ensemble des biens (actif et passif).
         détenus par l'ensemble des membres de la famille.
         Evolution du solde net.
+        
+        Tous les biens sont incorporés pour leur valeur globale.
 
         Utiliser le bouton 📷 pour placer une copie d'écran dans votre album photo.
         """
