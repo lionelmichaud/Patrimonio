@@ -75,8 +75,9 @@ struct Liabilities {
     mutating func transferOwnershipOf(decedentName       : String,
                                       chidrenNames       : [String]?,
                                       spouseName         : String?,
-                                      spouseFiscalOption : InheritanceFiscalOption?) {
-        for idx in loans.items.range {
+                                      spouseFiscalOption : InheritanceFiscalOption?,
+                                      atEndOf year       : Int) {
+        for idx in loans.items.range where loans.items[idx].value(atEndOf: year) > 0 {
             try! loans.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,

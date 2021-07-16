@@ -20,15 +20,18 @@ struct OwnershipManager {
                              decedentName       : String,
                              chidrenNames       : [String]?,
                              spouseName         : String?,
-                             spouseFiscalOption : InheritanceFiscalOption?) {
+                             spouseFiscalOption : InheritanceFiscalOption?,
+                             atEndOf year       : Int) {
         patrimoine.assets.transferOwnershipOf(decedentName       : decedentName,
                                               chidrenNames       : chidrenNames,
                                               spouseName         : spouseName,
-                                              spouseFiscalOption : spouseFiscalOption)
-        patrimoine.liabilities.transferOwnershipOf(decedentName : decedentName,
-                                                   chidrenNames            : chidrenNames,
-                                                   spouseName              : spouseName,
-                                                   spouseFiscalOption      : spouseFiscalOption)
+                                              spouseFiscalOption : spouseFiscalOption,
+                                              atEndOf            : year)
+        patrimoine.liabilities.transferOwnershipOf(decedentName       : decedentName,
+                                                   chidrenNames       : chidrenNames,
+                                                   spouseName         : spouseName,
+                                                   spouseFiscalOption : spouseFiscalOption,
+                                                   atEndOf            : year)
     }
     
     /// Transférer les biens d'un défunt vers ses héritiers
@@ -56,6 +59,7 @@ struct OwnershipManager {
                             decedentName       : decedent.displayName,
                             chidrenNames       : chidrenNames,
                             spouseName         : spouseName,
-                            spouseFiscalOption : spouseFiscalOption)
+                            spouseFiscalOption : spouseFiscalOption,
+                            atEndOf            : year)
     }
 }

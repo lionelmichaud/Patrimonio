@@ -319,9 +319,9 @@ struct Ownership {
                 //     le défunt peut être usufruitier et/ou nue-propriétaire
                 
                 // USUFRUIT
-                if usufructOwners.contains(ownerName: decedentName) {
+                if hasAnUsufructOwner(named: decedentName) {
                     // (a) le défunt était usufruitier
-                    if bareOwners.contains(ownerName: decedentName) {
+                    if hasABareOwner(named: decedentName) {
                         // (1) le défunt était aussi nue-propriétaire
                         // le défunt possèdait encore la UF + NP et les deux sont transmis
                         // selon l'option du conjoint survivant comme une PP

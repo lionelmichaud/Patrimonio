@@ -282,26 +282,59 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
         currentState.investment += amount
     }
     
-    /// Effectuer un retrait de `netAmount` NET de charges sociales
-    /// - Note: Ne tient aucun compte des droits de propriété. Autorise le retrait dans tous les cas.
-    /// - Parameter netAmount: retrait net de charges sociales souhaité
+    /// Effectuer un retrait de `netAmount` NET de charges sociales pour le compte d'un débiteur nommé `name`.
+    /// - Note:
+    ///     Si `name` != nil :
+    ///     - Tient compte des droits de propriété du débiteur. Le retrait n'est alors autorisé que si le débiteur possède une part de la PP du bien.
+    ///     - Autorise le retrait dans la limite de la part de propriété du débiteur.
+    ///     - Met à jour la part de propriété du débiteur en conséquence.
     /// - Returns:
-    /// revenue:             retrait net de charges sociales réellement obtenu (= netAmount si le capital est suffisant, moins sinon)
-    /// interests:           intérêts bruts avant charges sociales
-    /// netInterests:        intérêts nets de charges sociales
-    /// taxableInterests:    part des netInterests imposable à l'IRPP
-    /// socialTaxes:         charges sociales sur les intérêts
-    mutating func remove(netAmount: Double)
+    ///     - revenue:             retrait net de charges sociales réellement obtenu (= netAmount si le capital est suffisant, moins sinon)
+    ///     - interests:           intérêts bruts avant charges sociales
+    ///     - netInterests:        intérêts nets de charges sociales
+    ///     - taxableInterests:    part des netInterests imposable à l'IRPP
+    ///     - socialTaxes:         charges sociales sur les intérêts
+    /// - Parameters:
+    ///   - netAmount: retrait net de charges sociales souhaité
+    ///   - name: nom du débiteur ou nil
+    mutating func remove(netAmount : Double,
+                         for name  : String = "")
     -> (revenue          : Double,
         interests        : Double,
         netInterests     : Double,
         taxableInterests : Double,
         socialTaxes      : Double) {
+        let zero = (revenue: 0.0, interests: 0.0, netInterests: 0.0, taxableInterests: 0.0, socialTaxes: 0.0)
 
-        guard currentState.value != 0.0 else {
+        guard currentState.value > 0.0 else {
             // le compte est vide: on ne retire rien
-            return (revenue: 0, interests: 0, netInterests: 0, taxableInterests: 0, socialTaxes: 0)
+            return zero
         }
+        
+        var updateOwnership = false
+        
+        var maxPermitedValue : Double
+        var ownedValueBefore : Double            = 0
+        var theOwnedValues   : [String : Double] = [:]
+        if name != "" {
+            guard ownership.hasAFullOwner(named: name) else {
+                // le débiteur n'est pas un PP: on ne retire rien
+                return zero
+            }
+            updateOwnership = ownership.fullOwners.count != 1
+            if updateOwnership {
+                theOwnedValues = ownedValues(atEndOf          : currentState.year,
+                                             evaluationMethod : .patrimoine)
+                ownedValueBefore = theOwnedValues[name]!
+                maxPermitedValue = min(currentState.value,
+                                       ownedValueBefore)
+            } else {
+                maxPermitedValue = currentState.value
+            }
+        } else {
+            maxPermitedValue = currentState.value
+        }
+        
         var revenue = netAmount
         var brutAmount       : Double
         var brutAmountSplit  : (investement  : Double, interest  : Double)
@@ -314,8 +347,8 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
                 // montant brut à retirer pour obtenir le montant net souhaité
                 brutAmount = (periodicSocialTaxes ? netAmount : FreeInvestement.fiscalModel.financialRevenuTaxes.brut(netAmount))
                 // on ne peut pas retirer plus que la capital présent
-                if brutAmount > currentState.value {
-                    brutAmount = currentState.value
+                if brutAmount > maxPermitedValue {
+                    brutAmount = maxPermitedValue
                     revenue    = (periodicSocialTaxes ? brutAmount : FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmount))
                 }
                 // parts d'intérêt et de capital contenues dans le brut retiré
@@ -335,8 +368,8 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
                 // montant brut à retirer pour obtenir le montant net souhaité
                 brutAmount = FreeInvestement.fiscalModel.financialRevenuTaxes.brut(netAmount)
                 // on ne peut pas retirer plus que la capital présent
-                if brutAmount > currentState.value {
-                    brutAmount = currentState.value
+                if brutAmount > maxPermitedValue {
+                    brutAmount = maxPermitedValue
                     revenue    = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmount)
                 }
                 // parts d'intérêt et de capital contenues dans le brut retiré
@@ -351,8 +384,8 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
                 // montant brut à retirer pour obtenir le montant net souhaité
                 brutAmount = FreeInvestement.fiscalModel.financialRevenuTaxes.brut(netAmount)
                 // on ne peut pas retirer plus que la capital présent
-                if brutAmount > currentState.value {
-                    brutAmount = currentState.value
+                if brutAmount > maxPermitedValue {
+                    brutAmount = maxPermitedValue
                     revenue    = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmount)
                 }
                 // parts d'intérêt et de capital contenues dans le brut retiré
@@ -363,10 +396,10 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
                 // autre cas: les plus values sont totalement imposables à l'IRPP
                 taxableInterests = netInterests
         }
-
+        
         // décrémenter les intérêts et le capital
         if brutAmount == currentState.value {
-            // On a vidé le compte: mettre précisémemnt le compte à 0.0 (attention à l'arrondi sinon)
+            // On a vidé le compte: mettre précisément le compte à 0.0 (attention à l'arrondi sinon)
             currentState.interest   = 0
             currentState.investment = 0
         } else {
@@ -375,6 +408,24 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
             currentState.investment -= brutAmountSplit.investement
         }
         
+        // actualiser les droits de propriété en tenant compte du retrait qui va être fait
+        if updateOwnership {
+            let ownedValueAfter = ownedValueBefore - brutAmount
+            print("Avant   = \(ownedValueBefore.k€String)")
+            print("Retrait = \(brutAmount.k€String)")
+            print("Après   = \(ownedValueAfter.k€String)")
+            print("Ownership avant = \n", String(describing: ownership))
+            if ownedValueAfter != 0 {
+                theOwnedValues[name] = ownedValueAfter
+                ownership.fullOwners = []
+                theOwnedValues.forEach { (name: String, value: Double) in
+                    ownership.fullOwners.append(Owner(name     : name,
+                                                      fraction : value / currentState.value * 100.0))
+                }
+            }
+            print("Ownership après = \n", String(describing: ownership))
+        }
+
         return (revenue          : revenue,
                 interests        : brutAmountSplit.interest,
                 netInterests     : netInterests,

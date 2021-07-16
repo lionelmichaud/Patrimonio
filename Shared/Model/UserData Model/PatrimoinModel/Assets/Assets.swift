@@ -150,8 +150,9 @@ struct Assets {
     mutating func transferOwnershipOf(decedentName       : String,
                                       chidrenNames       : [String]?,
                                       spouseName         : String?,
-                                      spouseFiscalOption : InheritanceFiscalOption?) {
-        for idx in periodicInvests.items.range {
+                                      spouseFiscalOption : InheritanceFiscalOption?,
+                                      atEndOf year       : Int) {
+        for idx in periodicInvests.items.range where periodicInvests.items[idx].value(atEndOf: year) > 0 {
             switch periodicInvests[idx].type {
                 case .lifeInsurance(_, let clause):
                     // régles de transmission particulières pour l'Assurance Vie
@@ -168,7 +169,7 @@ struct Assets {
                         spouseFiscalOption : spouseFiscalOption)
             }
         }
-        for idx in freeInvests.items.range {
+        for idx in freeInvests.items.range where freeInvests.items[idx].value(atEndOf: year) > 0 {
             switch freeInvests[idx].type {
                 case .lifeInsurance(_, let clause):
                     // régles de transmission particulières pour l'Assurance Vie
@@ -185,14 +186,14 @@ struct Assets {
                         spouseFiscalOption : spouseFiscalOption)
             }
         }
-        for idx in realEstates.items.range {
+        for idx in realEstates.items.range where realEstates.items[idx].value(atEndOf: year) > 0 {
             try! realEstates[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,
                 spouseName         : spouseName,
                 spouseFiscalOption : spouseFiscalOption)
         }
-        for idx in scpis.items.range {
+        for idx in scpis.items.range where scpis.items[idx].value(atEndOf: year) > 0 {
             try! scpis.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,
@@ -202,7 +203,8 @@ struct Assets {
         sci.transferOwnershipOf(decedentName       : decedentName,
                                 chidrenNames       : chidrenNames,
                                 spouseName         : spouseName,
-                                spouseFiscalOption : spouseFiscalOption)
+                                spouseFiscalOption : spouseFiscalOption,
+                                atEndOf            : year)
     }
     
     /// Calcule  la valeur nette taxable du patrimoine immobilier de la famille selon la méthode de calcul choisie

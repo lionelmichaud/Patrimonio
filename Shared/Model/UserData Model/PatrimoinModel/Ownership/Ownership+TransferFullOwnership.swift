@@ -128,7 +128,7 @@ extension Ownership {
                                         toSpouse spouseName     : String,
                                         toChildren chidrenNames : [String]?,
                                         spouseFiscalOption      : InheritanceFiscalOption?) {
-        // il y a un conoint survivant
+        // il y a un conjoint survivant
         if let chidrenNames = chidrenNames {
             // il y a des enfants héritiers
             // selon l'option fiscale du conjoint survivant

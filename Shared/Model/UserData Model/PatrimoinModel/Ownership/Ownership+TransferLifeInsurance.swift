@@ -112,12 +112,12 @@ extension Ownership {
         
         if isDismembered {
             // (A) le capital de l'assurane vie est démembré
-            if usufructOwners.contains(where: { decedentName == $0.name }) {
+            if hasAnUsufructOwner(named: decedentName) {
                 // (1) le défunt est usufruitier
                 // l'usufruit rejoint la nue-propriété
                 transfertLifeInsuranceUsufruct()
                 
-            } else if bareOwners.contains(where: { decedentName == $0.name }) {
+            } else if hasABareOwner(named: decedentName) {
                 // (2) le défunt est un nue-propriétaire
                 // TODO: - traiter le cas où le capital de l'assurance vie est démembré et le défunt est nue-propriétaire
                 fatalError("transferLifeInsuranceOfDecedent: cas non traité (capital démembré et le défunt est nue-propriétaire)")
@@ -126,7 +126,7 @@ extension Ownership {
         } else {
             // (B) le capital de l'assurance vie n'est pas démembré
             // le défunt est-il un des PP propriétaires du capital de l'assurance vie ?
-            if fullOwners.contains(where: { decedentName == $0.name }) {
+            if hasAFullOwner(named: decedentName) {
                 // (1) le défunt est un des PP propriétaires du capital de l'assurance vie
                 if fullOwners.count == 1 {
                     // (a) il n'y a qu'un seul PP de l'assurance vie

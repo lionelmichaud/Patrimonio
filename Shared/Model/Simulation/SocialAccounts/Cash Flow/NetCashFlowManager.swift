@@ -200,7 +200,8 @@ struct NetCashFlowManager {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant du PEA s'il y en avait assez à la fin de l'année dernière
             if patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
-                let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
+                let removal = patrimoine.assets.freeInvests[idx].remove(netAmount : amountRemainingToRemove,
+                                                                        for       : name)
                 amountRemainingToRemove -= removal.revenue
                 // IRPP: les plus values PEA ne sont pas imposables à l'IRPP
                 // Prélèvements sociaux: prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
@@ -211,7 +212,7 @@ struct NetCashFlowManager {
         }
         
         // ASSURANCE VIE: si le solde des PEA n'était pas suffisant alors retirer de l'Assurances vie procurant le moins bon rendement
-        for idx in patrimoine.assets.freeInvests.items.startIndex..<patrimoine.assets.freeInvests.items.endIndex {
+        for idx in patrimoine.assets.freeInvests.items.range {
             switch patrimoine.assets.freeInvests[idx].type {
                 case .lifeInsurance:
                     // tant que l'on a pas retiré le montant souhaité
@@ -238,7 +239,7 @@ struct NetCashFlowManager {
         }
 
         // AUTRE: retirer le montant d'un investissement libre: d'abord celui procurant le moins bon rendement
-        for idx in patrimoine.assets.freeInvests.items.startIndex..<patrimoine.assets.freeInvests.items.endIndex
+        for idx in patrimoine.assets.freeInvests.items.range
         where patrimoine.assets.freeInvests[idx].type == .other
             && (name == "" || patrimoine.assets.freeInvests[idx].ownership.hasAFullOwner(named: name)) {
             // tant que l'on a pas retiré le montant souhaité

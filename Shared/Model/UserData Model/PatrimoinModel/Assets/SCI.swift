@@ -67,8 +67,9 @@ struct SCI {
     mutating func transferOwnershipOf(decedentName       : String,
                                       chidrenNames       : [String]?,
                                       spouseName         : String?,
-                                      spouseFiscalOption : InheritanceFiscalOption?) {
-        for idx in scpis.items.range {
+                                      spouseFiscalOption : InheritanceFiscalOption?,
+                                      atEndOf year       : Int) {
+        for idx in scpis.items.range where scpis.items[idx].value(atEndOf: year) > 0 {
             try! scpis.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,
