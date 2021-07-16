@@ -9,6 +9,7 @@ import Foundation
 import FiscalModel
 
 struct OwnershipManager {
+    // swiftlint:disable function_parameter_count
     /// Transférer la propriété d'un bien d'un défunt vers ses héritiers en fonction de l'option
     ///  fiscale du conjoint survivant éventuel
     /// - Parameters:
@@ -33,7 +34,8 @@ struct OwnershipManager {
                                                    spouseFiscalOption : spouseFiscalOption,
                                                    atEndOf            : year)
     }
-    
+    // swiftlint:enable function_parameter_count
+
     /// Transférer les biens d'un défunt vers ses héritiers
     /// - Parameter year: décès dans l'année en cours
     func transferOwnershipOf(of patrimoine : Patrimoin,

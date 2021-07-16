@@ -312,7 +312,6 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
         }
         
         var updateOwnership = false
-        
         var maxPermitedValue : Double
         var ownedValueBefore : Double            = 0
         var theOwnedValues   : [String : Double] = [:]

@@ -169,7 +169,6 @@ struct NetCashFlowManager {
         }
     }
     
-    // swiftlint:disable cyclomatic_complexity
     // swiftlint:disable function_parameter_count
     /// Retirer `amount` du capital des personnes dans la liste `adultsName` seulement.
     ///
@@ -178,7 +177,7 @@ struct NetCashFlowManager {
     ///  * D'abord PEA ensuite Assurance vie puis autre; par taux de rendement décroissant
     ///  * Retirer le montant d'un investissement libre dont la personne est un des PP.
     /// - Note:
-    ///     Pour une personne et un bien donné on peut retirer de ce bien un Montant =
+    ///     Pour une personne et un bien donné on peut retirer de ce bien un Montant maximum de:
     ///     * Bien non démembré = part de la valeur actuelle détenue en PP par la personne
     ///     * Bien démembré        = part de la valeur actuelle détenue en UF+NP par la même personne
     ///     * Bien démembré        + part des revenus générés depuis son acquisition (si la personne est détentrice d'UF supplémentaire)
@@ -195,19 +194,16 @@ struct NetCashFlowManager {
         
         // PEA: retirer le montant d'un investissement libre: d'abord le PEA procurant le moins bon rendement
         for idx in patrimoine.assets.freeInvests.items.range
-        where patrimoine.assets.freeInvests[idx].type == .pea
-            && (name == "" || patrimoine.assets.freeInvests[idx].ownership.hasAFullOwner(named: name)) {
+        where patrimoine.assets.freeInvests[idx].type == .pea {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant du PEA s'il y en avait assez à la fin de l'année dernière
-            if patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
-                let removal = patrimoine.assets.freeInvests[idx].remove(netAmount : amountRemainingToRemove,
-                                                                        for       : name)
-                amountRemainingToRemove -= removal.revenue
-                // IRPP: les plus values PEA ne sont pas imposables à l'IRPP
-                // Prélèvements sociaux: prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
-                if amountRemainingToRemove <= 0.0 {
-                    return
-                }
+            let removal = patrimoine.assets.freeInvests[idx].remove(netAmount : amountRemainingToRemove,
+                                                                    for       : name)
+            amountRemainingToRemove -= removal.revenue
+            // IRPP: les plus values PEA ne sont pas imposables à l'IRPP
+            // Prélèvements sociaux: prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
+            if amountRemainingToRemove <= 0.0 {
+                return
             }
         }
         
@@ -217,49 +213,42 @@ struct NetCashFlowManager {
                 case .lifeInsurance:
                     // tant que l'on a pas retiré le montant souhaité
                     // retirer le montant de l'Assurances vie s'il y en avait assez à la fin de l'année dernière
-                    if (name == "" || patrimoine.assets.freeInvests[idx].ownership.hasAFullOwner(named: name))
-                        && patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
-                        let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
-                        amountRemainingToRemove -= removal.revenue
-                        // IRPP: part des produit de la liquidation inscrit en compte courant imposable à l'IRPP après déduction de ce qu'il reste de franchise
-                        var taxableInterests: Double
-                        // apply rebate if some is remaining
-                        taxableInterests = zeroOrPositive(removal.taxableInterests - lifeInsuranceRebate)
-                        lifeInsuranceRebate -= (removal.taxableInterests - taxableInterests)
-                        // géré comme un revenu en report d'imposition (dette)
-                        totalTaxableInterests += taxableInterests
-                        // Prélèvements sociaux => prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
-                        if amountRemainingToRemove <= 0.0 {
-                            return
-                        }
+                    let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
+                    amountRemainingToRemove -= removal.revenue
+                    // IRPP: part des produit de la liquidation inscrit en compte courant imposable à l'IRPP après déduction de ce qu'il reste de franchise
+                    var taxableInterests: Double
+                    // apply rebate if some is remaining
+                    taxableInterests = zeroOrPositive(removal.taxableInterests - lifeInsuranceRebate)
+                    lifeInsuranceRebate -= (removal.taxableInterests - taxableInterests)
+                    // géré comme un revenu en report d'imposition (dette)
+                    totalTaxableInterests += taxableInterests
+                    // Prélèvements sociaux => prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
+                    if amountRemainingToRemove <= 0.0 {
+                        return
                     }
                 default:
                     ()
             }
         }
-
+        
         // AUTRE: retirer le montant d'un investissement libre: d'abord celui procurant le moins bon rendement
         for idx in patrimoine.assets.freeInvests.items.range
-        where patrimoine.assets.freeInvests[idx].type == .other
-            && (name == "" || patrimoine.assets.freeInvests[idx].ownership.hasAFullOwner(named: name)) {
+        where patrimoine.assets.freeInvests[idx].type == .other {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant s'il y en avait assez à la fin de l'année dernière
-            if patrimoine.assets.freeInvests[idx].value(atEndOf: year-1) > 0.0 {
-                let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
-                amountRemainingToRemove -= removal.revenue
-                // IRPP: les plus values sont imposables à l'IRPP
-                // géré comme un revenu en report d'imposition (dette)
-                totalTaxableInterests += removal.taxableInterests
-                // Prélèvements sociaux
-                taxes[.socialTaxes]?.namedValues.append((name : patrimoine.assets.freeInvests[idx].name,
-                                                         value: removal.socialTaxes))
-                if amountRemainingToRemove <= 0.0 {
-                    return
-                }
+            let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
+            amountRemainingToRemove -= removal.revenue
+            // IRPP: les plus values sont imposables à l'IRPP
+            // géré comme un revenu en report d'imposition (dette)
+            totalTaxableInterests += removal.taxableInterests
+            // Prélèvements sociaux
+            taxes[.socialTaxes]?.namedValues.append((name : patrimoine.assets.freeInvests[idx].name,
+                                                     value: removal.socialTaxes))
+            if amountRemainingToRemove <= 0.0 {
+                return
             }
         }
     }
-    // swiftlint:enable cyclomatic_complexity
     // swiftlint:enable function_parameter_count
     
     // swiftlint:disable function_parameter_count

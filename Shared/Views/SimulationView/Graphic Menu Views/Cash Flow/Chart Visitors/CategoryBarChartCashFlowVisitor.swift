@@ -93,6 +93,7 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
         nbNegativeLabels = labelsInCategory.count
     }
 
+    // swiftlint:disable cyclomatic_complexity
     func buildCategoryStackedBarChart(element: CashFlowLine) {
         if element.adultsRevenues.summary.contains(name: categoryName) {
             /// rechercher la catégorie dans les revenus
@@ -176,6 +177,7 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
             return
         }
     }
+    // swiftlint:enable cyclomatic_complexity
 
     func buildCategoryStackedBarChart(element: ValuedTaxes) {
         y = element.perCategory[taxCategory!]?.valuesArray
