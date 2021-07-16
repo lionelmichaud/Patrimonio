@@ -261,7 +261,6 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
             case .ifi, .isf, .patrimoine:
                 // pas de décote
                 ()
-                
         }
 
         // cas général
@@ -284,16 +283,18 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
     
     /// Effectuer un retrait de `netAmount` NET de charges sociales pour le compte d'un débiteur nommé `name`.
     /// - Note:
-    ///     Si `name` != nil :
-    ///     - Tient compte des droits de propriété du débiteur. Le retrait n'est alors autorisé que si le débiteur possède une part de la PP du bien.
-    ///     - Autorise le retrait dans la limite de la part de propriété du débiteur.
-    ///     - Met à jour la part de propriété du débiteur en conséquence.
+    ///     Si `name` = nil : on retire le montant indépendament de tout droit de propriété
+    ///
+    ///     Si `name` != nil : on tient compte des droit de propriété de `name` sur le bien:
+    ///     - Le retrait n'est alors autorisé que si `name` possède une part de la PP du bien.
+    ///     - Autorise le retrait dans la limite de la part de propriété de `name`.
+    ///     - Met à jour la part de propriété de `name` en conséquence.
     /// - Returns:
-    ///     - revenue:             retrait net de charges sociales réellement obtenu (= netAmount si le capital est suffisant, moins sinon)
-    ///     - interests:           intérêts bruts avant charges sociales
-    ///     - netInterests:        intérêts nets de charges sociales
-    ///     - taxableInterests:    part des netInterests imposable à l'IRPP
-    ///     - socialTaxes:         charges sociales sur les intérêts
+    ///     - revenue: retrait net de charges sociales réellement obtenu (= netAmount si le capital est suffisant, moins sinon)
+    ///     - interests: intérêts bruts avant charges sociales
+    ///     - netInterests: intérêts nets de charges sociales
+    ///     - taxableInterests: part des netInterests imposable à l'IRPP
+    ///     - socialTaxes: charges sociales sur les intérêts
     /// - Parameters:
     ///   - netAmount: retrait net de charges sociales souhaité
     ///   - name: nom du débiteur ou nil
@@ -410,10 +411,10 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
         // actualiser les droits de propriété en tenant compte du retrait qui va être fait
         if updateOwnership {
             let ownedValueAfter = ownedValueBefore - brutAmount
-            print("Avant   = \(ownedValueBefore.k€String)")
-            print("Retrait = \(brutAmount.k€String)")
-            print("Après   = \(ownedValueAfter.k€String)")
-            print("Ownership avant = \n", String(describing: ownership))
+//            print("Avant   = \(ownedValueBefore.k€String)")
+//            print("Retrait = \(brutAmount.k€String)")
+//            print("Après   = \(ownedValueAfter.k€String)")
+//            print("Ownership avant = \n", String(describing: ownership))
             if ownedValueAfter != 0 {
                 theOwnedValues[name] = ownedValueAfter
                 ownership.fullOwners = []
@@ -422,7 +423,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
                                                       fraction : value / currentState.value * 100.0))
                 }
             }
-            print("Ownership après = \n", String(describing: ownership))
+//            print("Ownership après = \n", String(describing: ownership))
         }
 
         return (revenue          : revenue,
