@@ -97,11 +97,12 @@ struct SocialAccounts {
      kpiResults              : inout DictionaryOfKpiResults,
      withMode simulationMode : SimulationModeEnum,
      withbalanceSheetLine    : BalanceSheetLine?) {
-        customLog.log(level: .info, "Arrêt de la construction de la table en \(year) de Comptes sociaux: Actifs financiers = 0 dans \(Self.self, privacy: .public)")
+        customLog.log(level: .info, "Arrêt de la construction de la table en \(year, privacy: .public) de Comptes sociaux: à court de cash dans \(Self.self, privacy: .public)")
 
         // Actif Net (hors immobilier physique)
         let netFinancialAssets = withbalanceSheetLine?.netAdultsFinancialAssets ?? 0
-        
+        customLog.log(level: .info, "netFinancialAssets: \(netFinancialAssets.k€String, privacy: .public)")
+
         // mémoriser le montant de l'Actif financier Net (hors immobilier physique)
         switch family.nbOfAdultAlive(atEndOf: year) {
             case 2:

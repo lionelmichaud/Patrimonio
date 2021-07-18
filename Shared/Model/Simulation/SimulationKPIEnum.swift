@@ -37,20 +37,20 @@ enum SimulationKPIEnum: Int, PickableEnum, Codable, Hashable {
             case .minimumAsset:
                 return """
                     Valeur minimale atteinte dans le temps pour l'ACTIF NET (hors immobilier physique) :
-                     - Biens pris en compte: \(OwnershipNature.sellable.rawValue)
-                     - Méthode d'évaluation: \(AssetEvaluationMethod.ownedValue.rawValue)
+                     - Biens pris en compte: <<OwnershipNature>>
+                     - Méthode d'évaluation: <<AssetEvaluationMethod>>
                     """
             case .assetAt1stDeath:
                 return """
                     Valeur atteinte au 1er décès pour l'ACTIF NET (hors immobilier physique) :
-                     - Biens pris en compte: \(OwnershipNature.sellable.rawValue)
-                     - Méthode d'évaluation: \(AssetEvaluationMethod.ownedValue.rawValue)
+                     - Biens pris en compte: <<OwnershipNature>>
+                     - Méthode d'évaluation: <<AssetEvaluationMethod>>
                     """
             case .assetAt2ndtDeath:
                 return """
                     Valeur atteinte au 2nd décès pour l'ACTIF NET (hors immobilier physique) :
-                     - Biens pris en compte: \(OwnershipNature.sellable.rawValue)
-                     - Méthode d'évaluation: \(AssetEvaluationMethod.ownedValue.rawValue)
+                     - Biens pris en compte: <<OwnershipNature>>
+                     - Méthode d'évaluation: <<AssetEvaluationMethod>>
                     """
         }
     }
