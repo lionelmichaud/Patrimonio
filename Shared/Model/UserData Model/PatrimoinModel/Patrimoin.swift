@@ -105,7 +105,7 @@ final class Patrimoin: ObservableObject {
     ///   - Doit être appelée après le chargement d'un objet FreeInvestement depuis le fichier JSON
     ///   - Doit être appelée après toute simulation ayant affectée le Patrimoine (succession)
     func resetFreeInvestementCurrentValue() {
-        assets.resetFreeInvestementCurrentValue()
+        assets.initializeFreeInvestementCurrentValue()
     }
     
     /// Sauvegarder l'état courant du Patrimoine

@@ -129,9 +129,9 @@ struct SocialAccounts {
                 customLog.log(level: .fault, "Nombre d'adulte survivants inattendu: \(family.nbOfAdultAlive(atEndOf: year), privacy: .public) dans \(Self.self, privacy: .public)")
                 fatalError("Nombre d'adulte survivants inattendu: \(family.nbOfAdultAlive(atEndOf: year)) dans \(Self.self)")
         }
-        /// KPI n°3 : on est arrivé à la fin de la simulation car il n'y a plus de cash dans les Free Investements
+        /// KPI n°3 : on est arrivé à la fin de la simulation car il n'y a plus de revenu généré par les Free Investements
         /// mais il peut éventuellement rester d'autres actifs (immobilier de rendement...)
-        // TODO: - il faudrait définir un KPI spécifique "plus de cash pour survivre" au lieu de faire comme s'il ne restait plus d'actif net
+        // TODO: - il faudrait définir un KPI spécifique "plus assez de revenu pour survivre" au lieu de faire comme s'il ne restait plus d'actif net
         setKpiValue(kpiEnum        : .minimumAsset,
                     value          : 0,
                     kpiDefinitions : &kpiDefinitions,

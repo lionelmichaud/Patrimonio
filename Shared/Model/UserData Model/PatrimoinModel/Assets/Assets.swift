@@ -99,7 +99,7 @@ struct Assets {
                            with       : personAgeProvider)
         
         // initialiser le vetcuer d'état de chaque FreeInvestement à la date courante
-        resetFreeInvestementCurrentValue()
+        initializeFreeInvestementCurrentValue()
     }
     
     // MARK: - Methods
@@ -116,7 +116,7 @@ struct Assets {
     /// - Warning:
     ///   - Doit être appelée après le chargement d'un objet FreeInvestement depuis le fichier JSON
     ///   - Doit être appelée après toute simulation ayant affectée le Patrimoine (succession)
-    mutating func resetFreeInvestementCurrentValue() {
+    mutating func initializeFreeInvestementCurrentValue() {
         for idx in freeInvests.items.range {
             freeInvests[idx].resetCurrentState()
         }
@@ -170,6 +170,7 @@ struct Assets {
             }
         }
         for idx in freeInvests.items.range where freeInvests.items[idx].value(atEndOf: year) > 0 {
+            freeInvests[idx].initializeCurrentInterestsAfterTransmission(yearOfTransmission: year)
             switch freeInvests[idx].type {
                 case .lifeInsurance(_, let clause):
                     // régles de transmission particulières pour l'Assurance Vie

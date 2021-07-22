@@ -86,9 +86,9 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
 
     // MARK: - Properties
 
-    var id                   = UUID()
-    var name                 : String
-    var note                 : String
+    var id    = UUID()
+    var name  : String
+    var note  : String
     // propriétaires
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
@@ -132,7 +132,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
         }
     }
 
-    /// Dernière constitution du capital connue
+    /// Dernière constitution du capital connue (relevé bancaire)
     var lastKnownState: State {
         didSet {
             resetCurrentState()
@@ -142,7 +142,15 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
     /// Constitution du capital à l'instant présent
     private var currentState: State
 
-    /// Intérêts cumulés au cours du temps jusqu'à l'instant présent
+    /// Intérêts cumulés au cours du temps depuis la transmission de l'usufruit jusqu'à l'instant présent
+    private var currentInterestsAfterTransmission: State?
+
+    /// Intérêts cumulés au cours du temps depuis la transmission de l'usufruit jusqu'à l'instant présent
+    private var cumulatedInterestsAfterSuccession: Double? {
+        currentInterestsAfterTransmission?.interest
+    }
+
+    /// Intérêts cumulés au cours du temps depuis l'origine jusqu'à l'instant présent
     private var cumulatedInterests: Double {
         currentState.interest
     }
@@ -163,7 +171,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
         self.lastKnownState = State(year       : year,
                                     interest   : initialInterest,
                                     investment : initialValue - initialInterest)
-        self.currentState     = self.lastKnownState
+        self.currentState   = self.lastKnownState
     }
     
     // MARK: - Methods
@@ -391,29 +399,72 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
             return zero
         }
         
-        var updateOwnership = false
-        var maxPermitedValue : Double
+        let (checkOwnership, isAUsufructOwner, isAfullOwner, isTheUniqueFullOwner) =
+            (name != "",
+             ownership.hasAnUsufructOwner(named: name),
+             ownership.hasAFullOwner(named: name),
+             ownership.hasAUniqueFullOwner(named: name))
+        
+        let updateOwnership  : Bool
+        let updateInterests  : Bool
+        let maxPermitedValue : Double
         var ownedValueBefore : Double            = 0
         var theOwnedValues   : [String : Double] = [:]
-        if name != "" {
-            guard ownership.hasAFullOwner(named: name) else {
-                // le débiteur n'est pas un PP: on ne retire rien
-                return zero
-            }
-            updateOwnership = ownership.fullOwners.count != 1
-            if updateOwnership {
+        
+        switch (checkOwnership, isAUsufructOwner, isAfullOwner, isTheUniqueFullOwner) {
+            case (false, _, _, _):
+                // on ne tient pas compte des droits de propriété de `name` sur le bien
+                updateOwnership  = false
+                updateInterests  = false
+                maxPermitedValue = currentState.value
+                
+            case (true, true, _, _):
+                // on doit tenir compte des droits de propriété de `name` sur le bien
+                // Le bien est démembré et 'name' est un des UF
+                guard let interest = cumulatedInterestsAfterSuccession else {
+                    // il n'y pas d'intérêts à retirer de ce bien
+                    return zero
+                }
+                updateOwnership = false
+                updateInterests = true
+                // part d'intérêts qui revient à `name` compte tenu de sa part d'UF
+                maxPermitedValue = ownership.ownedRevenue(by        : name,
+                                                          ofRevenue : interest)
+
+            case (true, _, true, false):
+                // on doit tenir compte des droits de propriété de `name` sur le bien
+                // Le bien n'est PAS démembré et 'name' est un DES PP
+                updateOwnership = true
+                updateInterests = false
+                // 'name' n'est pas le seul PP du bien => il faudra actualiser sa part de propriété
                 theOwnedValues = ownedValues(atEndOf          : currentState.year,
                                              evaluationMethod : .patrimoine)
                 ownedValueBefore = theOwnedValues[name]!
                 maxPermitedValue = min(currentState.value,
                                        ownedValueBefore)
-            } else {
+
+            case (true, _, _, true):
+                // on doit tenir compte des droits de propriété de `name` sur le bien
+                // Le bien n'est PAS démembré et 'name' est un le SEUL PP
+                updateOwnership  = false
+                updateInterests  = false
                 maxPermitedValue = currentState.value
-            }
-        } else {
-            maxPermitedValue = currentState.value
+
+            case (true, false, false, _):
+                // on doit tenir compte des droits de propriété de `name` sur le bien
+                // 'name' n'est ni UF ni PP => on ne retire rien
+                return zero
+
+            default:
+                customLog.log(level: .error,
+                              "FreeInvestementError.remove: cas non prévu")
+                return zero
         }
         
+        guard maxPermitedValue > 0 else {
+            return zero
+        }
+
         let _removal = removal(netAmount: netAmount, maxPermitedValue: maxPermitedValue)
         
         // décrémenter les intérêts et le capital
@@ -427,22 +478,25 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
             currentState.investment -= _removal.brutAmountSplit.investement
         }
         
+        // actualiser les intérêts cumulés depuis la transmission compte tenu de ce qui vient d'être retiré
+        if updateInterests {
+            currentInterestsAfterTransmission?.interest -= _removal.brutAmount
+        }
+        
         // actualiser les droits de propriété en tenant compte du retrait qui va être fait
         if updateOwnership {
             let ownedValueAfter = ownedValueBefore - _removal.brutAmount
-//            print("Avant   = \(ownedValueBefore.k€String)")
-//            print("Retrait = \(brutAmount.k€String)")
-//            print("Après   = \(ownedValueAfter.k€String)")
-//            print("Ownership avant = \n", String(describing: ownership))
-            if ownedValueAfter != 0 {
-                theOwnedValues[name] = ownedValueAfter
-                ownership.fullOwners = []
-                theOwnedValues.forEach { (name: String, value: Double) in
-                    ownership.fullOwners.append(Owner(name     : name,
-                                                      fraction : value / currentState.value * 100.0))
-                }
+            print("Avant   = \(ownedValueBefore.k€String)")
+            print("Retrait = \(_removal.brutAmount.k€String)")
+            print("Après   = \(ownedValueAfter.k€String)")
+            print("Ownership avant = \n", String(describing: ownership))
+            theOwnedValues[name] = ownedValueAfter
+            ownership.fullOwners = []
+            theOwnedValues.forEach { (name: String, value: Double) in
+                ownership.fullOwners.append(Owner(name     : name,
+                                                  fraction : value / currentState.value * 100.0))
             }
-//            print("Ownership après = \n", String(describing: ownership))
+            print("Ownership après = \n", String(describing: ownership))
         }
 
         return (revenue          : _removal.revenue,
@@ -460,12 +514,18 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
                           "FreeInvestementError.capitalize: capitalisation sur un nombre d'année différent de 1")
             throw FreeInvestementError.IlegalOperation
         }
-        currentState.interest += yearlyInterest(in: year)
+        let interests = yearlyInterest(in: year)
+
+        currentState.interest += interests
         currentState.year = year
+
+        currentInterestsAfterTransmission?.interest += interests
     }
     
     /// Remettre la valeur courante à la date de fin d'année passée
     mutating func resetCurrentState() {
+        currentInterestsAfterTransmission = nil
+        
         // calculer la valeur de currentState à la date de fin d'année passée
         let estimationYear = Date.now.year - 1
         
@@ -493,6 +553,13 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
             }
         }
     }
+
+    mutating func initializeCurrentInterestsAfterTransmission(yearOfTransmission: Int) {
+        currentInterestsAfterTransmission =
+            State(year       : yearOfTransmission,
+                  interest   : 0,
+                  investment : 0)
+    }
 }
 
 // MARK: Extensions
@@ -505,6 +572,7 @@ extension FreeInvestement: Comparable {
 extension FreeInvestement: CustomStringConvertible {
     var description: String {
         """
+
         INVESTISSEMENT LIBRE: \(name)
         - Note:
         \(note.withPrefixedSplittedLines("    "))
@@ -514,6 +582,7 @@ extension FreeInvestement: CustomStringConvertible {
         - Valeur (\(Date.now.year)): \(value(atEndOf: Date.now.year).€String)
         - Etat initial: (year: \(lastKnownState.year), interest: \(lastKnownState.interest.€String), invest: \(lastKnownState.investment.€String), Value: \(lastKnownState.value.€String))
         - Etat courant: (year: \(currentState.year), interest: \(currentState.interest.€String), invest: \(currentState.investment.€String), Value: \(currentState.value.€String))
+        - Intérêt Cumulés depuis la transmission: (year: \(currentInterestsAfterTransmission?.year ?? 0), interest: \(currentInterestsAfterTransmission?.interest.€String ?? 0.€String))
         - \(interestRateType)
         - Taux d'intérêt net d'inflation avant prélèvements sociaux:   \(averageInterestRate) %
         - Taux d'intérêt net d'inflation, net de prélèvements sociaux: \(averageInterestRateNet) %

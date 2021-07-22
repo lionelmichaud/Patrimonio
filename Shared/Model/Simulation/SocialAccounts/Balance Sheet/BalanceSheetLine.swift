@@ -112,22 +112,22 @@ struct BalanceSheetLine {
             .append((name  : namePrefix + asset.name,
                      value : asset.value(atEndOf: year).rounded()))
         
-        //  adultes
+        //  somme des adultes (filtré et évalué selon préférences graphiques de l'utilisateur)
         var value: Double = 0
         adultsName.forEach { name in
             let selected = isSelected(ownable : asset,
                                       for     : name,
-                                      filter  : UserSettings.shared.ownershipKpiSelection)
+                                      filter  : UserSettings.shared.ownershipGraphicSelection)
             value += valueOf(ownable          : asset,
                              for              : name,
                              isSelected       : selected,
-                             evaluationMethod : UserSettings.shared.assetKpiEvaluationMethod)
+                             evaluationMethod : UserSettings.shared.assetGraphicEvaluationMethod)
         }
         assets[AppSettings.shared.adultsLabel]!.perCategory[category]?.namedValues
             .append((name  : namePrefix + asset.name,
                      value : value))
         
-        //  individus
+        //  individus  (filtré et évalué selon préférences graphiques de l'utilisateur)
         membersName.forEach { name in
             let selected = isSelected(ownable : asset,
                                       for     : name,
