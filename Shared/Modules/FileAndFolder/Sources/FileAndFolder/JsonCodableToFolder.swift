@@ -13,18 +13,18 @@ import Files
 public protocol JsonDecodableFromFolderP: Decodable {
     
     /// Lire les `Data` dans un fichier nommé `fromFile`
-    /// dans le folder `fromFolder` du répertoire `Documents`
+    /// dans le folder nommé `folder` du répertoire `Documents`
     /// - Parameters:
     ///   - fromFile: nom du fichier
     ///   - fromFolder: folder du répertoire `Documents`
     func load(fromFile fileName : String,
               fromFolder folder : Folder) throws -> Data
 
-    /// Lit l'objet dans un fichier au format JSON dans un fichier nommé `fromFile`
-    /// dans le folder `fromFolder` du répertoire `Documents`
+    /// Lit l'objet `self`dans un fichier au format JSON dans un fichier nommé `fileName`
+    /// dans le folder nommé `folder` du répertoire `Documents`
     /// - Parameters:
-    ///   - fromFile: nom du fichier
-    ///   - fromFolder: folder du répertoire `Documents`
+    ///   - fileName: nom du fichier
+    ///   - folder: folder du répertoire `Documents`
     init(fromFile fileName    : String,
          fromFolder folder    : Folder,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy,
@@ -48,25 +48,25 @@ public extension JsonDecodableFromFolderP {
     }
 }
 
-// MARK: - Protocol apportant Decodable JSON à partir d'un fichier d'un sous-Directory de 'Documents'
+// MARK: - Protocol apportant Encodable JSON à partir d'un fichier d'un sous-Directory de 'Documents'
 
 public protocol JsonEncodableToFolderP: Encodable {
         
-    /// Enregistrer  `encodeData` dans un fichier nommé `toFile`
-    /// dans le folder nommé `toFolder` du répertoire `Documents`
+    /// Enregistrer  `encodeData` dans un fichier nommé `fileName`
+    /// dans le folder nommé `folder` du répertoire `Documents`
     /// - Parameters:
     ///   - encodeData: data à enregistrer
-    ///   - toFile: nom du fichier
-    ///   - toFolder: folder du répertoire `Documents`
+    ///   - fileName: nom du fichier
+    ///   - folder: folder du répertoire `Documents`
     func save(_ encodeData    : Data,
               toFile fileName : String,
               toFolder folder : Folder) throws
 
-    /// Enregistrer l'objet `object` au format JSON dans un fichier nommé `toFile`
-    /// dans le folder nommé `toFolder` du répertoire `Documents`
+    /// Enregistrer l'objet `self` au format JSON dans un fichier nommé `fileName`
+    /// dans le folder nommé `folder` du répertoire `Documents`
     /// - Parameters:
-    ///   - toFile: nom du fichier
-    ///   - toFolder: folder du répertoire `Documents`
+    ///   - fileName: nom du fichier
+    ///   - folder: folder du répertoire `Documents`
     func saveAsJSON(toFile fileName      : String,
                     toFolder folder      : Folder,
                     dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
