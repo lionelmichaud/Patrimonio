@@ -38,10 +38,21 @@ struct KpiSummaryView: View {
     var withPadding : Bool
     var withDetails : Bool
     
+    func kpiNoteSubstituted(_ note: String) -> String {
+        var substituted: String = note
+        substituted = substituted.replacingOccurrences(of    : "<<OwnershipNature>>",
+                                                       with  : UserSettings.shared.ownershipKpiSelection.rawValue,
+                                                       count : 1)
+        substituted = substituted.replacingOccurrences(of    : "<<AssetEvaluationMethod>>",
+                                                       with  : UserSettings.shared.assetKpiEvaluationMethod.rawValue,
+                                                       count : 1)
+        return substituted
+    }
+    
     var body: some View {
         if kpi.hasValue(for: simulation.mode) {
             if withDetails {
-                Text(kpi.note)
+                Text(kpiNoteSubstituted(kpi.note))
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.secondary)

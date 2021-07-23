@@ -14,8 +14,8 @@ public extension Folder {
     /// - Parameters:
     ///   - fileName: nom du fichier
     func load(from fileName: String) throws -> Data {
-        let jsonFile = try self.file(named: fileName)
-        return try jsonFile.read()
+        let file = try self.file(named: fileName)
+        return try file.read()
     }
     /// Lire l'objet de type `type` au format JSON dans un fichier nommé `fileName`
     /// dans le folder `self`
@@ -39,8 +39,8 @@ public extension Folder {
     ///   - fileName: nom du fichier
     func save(_ encodeData: Data,
               to fileName: String) throws {
-        let jsonFile = try self.createFileIfNeeded(withName: fileName)
-        jsonFile.save(encodeData)
+        let file = try self.createFileIfNeeded(withName: fileName)
+        file.save(encodeData)
     }
     
     /// Enregistrer l'objet `object` au format JSON dans un fichier nommé `fileName`

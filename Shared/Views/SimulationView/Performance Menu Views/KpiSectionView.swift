@@ -12,7 +12,7 @@ struct KpiSectionView: View {
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
     @State private var isKpiExpanded  : Bool = false
-
+    
     var body: some View {
         if simulation.isComputed {
             Section(header: Text("Performance")) {

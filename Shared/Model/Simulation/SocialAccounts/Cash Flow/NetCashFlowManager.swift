@@ -2,6 +2,7 @@
 //  NetCashFlowManager.swift
 //  Patrimoine
 //
+
 //  Created by Lionel MICHAUD on 21/04/2021.
 //  Copyright © 2021 Lionel MICHAUD. All rights reserved.
 //
@@ -153,7 +154,7 @@ struct NetCashFlowManager {
     /// - Parameters:
     ///   - name: nom de la pesonne
     ///   - year: année d'évaluation
-    /// - Returns: valeur cumulée des FreeInvestments possédée
+    /// - Returns: valeur économique cumulée des FreeInvestments possédés en PP
     /// - On ne tient compte que des actifs détenus au moins en partie en PP
     fileprivate func totalFreeInvestementsValue(ownedBy name  : String,
                                                 in patrimoine : Patrimoin,
