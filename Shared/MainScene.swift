@@ -18,6 +18,7 @@ struct MainScene: Scene {
     // MARK: - Properties
 
     @ObservedObject var dataStore  : Store
+    @ObservedObject var model      : Model
     @ObservedObject var family     : Family
     @ObservedObject var patrimoine : Patrimoin
     @ObservedObject var simulation : Simulation
@@ -30,6 +31,7 @@ struct MainScene: Scene {
             /// defines the views hierachy of the scene
             ContentView()
                 .environmentObject(dataStore)
+                .environmentObject(model)
                 .environmentObject(uiState)
                 .environmentObject(family)
                 .environmentObject(patrimoine)

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistable
 import AppFoundation
 import FileAndFolder
 import Files
@@ -53,8 +54,10 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable, Per
     public init() {
     }
     
-    /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
-    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    /// Initiliser à partir d'un fichier JSON contenu dans le dossier `folder`
+    /// - Parameters:
+    ///   - folder: dossier où se trouve le fichier JSON à utiliser
+    ///   - fileNamePrefix: prefix du nom de fichier
     public init(fileNamePrefix    : String = "",
                 fromFolder folder : Folder) throws {
 

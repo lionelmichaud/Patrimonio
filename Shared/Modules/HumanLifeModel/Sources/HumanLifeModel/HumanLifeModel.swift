@@ -7,13 +7,18 @@
 //
 
 import Foundation
+import Persistable
 import AppFoundation
 import Statistics
+import Files
+import FileAndFolder
 
 // MARK: - SINGLETON: Human Life Model
 
-public struct HumanLife {
-    
+public struct HumanLife: PersistableP {
+ 
+    public static var defaultFileName : String = "HumanLifeModelConfig.json"
+
     // MARK: - Nested Types
     
     public enum RandomVariable: String, PickableEnum {
@@ -26,8 +31,7 @@ public struct HumanLife {
         }
     }
     
-    public struct Model: JsonCodableToBundleP {
-        public static var defaultFileName : String = "HumanLifeModelConfig.json"
+    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP {
         public var menLifeExpectation    : ModelRandomizer<DiscreteRandomGenerator>
         public var womenLifeExpectation  : ModelRandomizer<DiscreteRandomGenerator>
         public var nbOfYearsOfdependency : ModelRandomizer<DiscreteRandomGenerator>
@@ -71,10 +75,52 @@ public struct HumanLife {
     
     // MARK: - Static Properties
     
-    public static var model: Model = Model(fromFile: Model.defaultFileName).initialized()
+    public var model : Model
+    public var persistenceSM = PersistenceStateMachine()
 
     // MARK: - Initializer
     
-    private init() {
+    public init(fromFolder folder: Folder) throws {
+        self.model = try Model(fromFile    : HumanLife.defaultFileName,
+                               fromFolder           : folder,
+                               dateDecodingStrategy : .iso8601,
+                               keyDecodingStrategy  : .useDefaultKeys).initialized()
+
+        // exécuter la transition
+        persistenceSM.process(event: .load)
+    }
+
+    public init(for aClass: AnyClass) {
+        let classBundle = Bundle(for: aClass)
+        self.model = classBundle.loadFromJSON(Model.self,
+                                              from                 : HumanLife.defaultFileName,
+                                              dateDecodingStrategy : .iso8601,
+                                              keyDecodingStrategy  : .useDefaultKeys)
+
+        // exécuter la transition
+        persistenceSM.process(event: .load)
+    }
+
+    // MARK: - Methods
+
+    public func saveAsJSON(toFolder folder: Folder) throws {
+        // encode to JSON file
+        try model.saveAsJSON(toFile               : HumanLife.defaultFileName,
+                             toFolder             : folder,
+                             dateEncodingStrategy : .iso8601,
+                             keyEncodingStrategy  : .useDefaultKeys)
+        // exécuter la transition
+        persistenceSM.process(event: .save)
+    }
+
+    func saveAsJSONToBundleOf(aClass: AnyClass) {
+        let bundle = Bundle(for: aClass)
+        // encode to JSON file
+        bundle.saveAsJSON(model,
+                          to                   : HumanLife.defaultFileName,
+                          dateEncodingStrategy : .iso8601,
+                          keyEncodingStrategy  : .useDefaultKeys)
+        // exécuter la transition
+        persistenceSM.process(event: .save)
     }
 }

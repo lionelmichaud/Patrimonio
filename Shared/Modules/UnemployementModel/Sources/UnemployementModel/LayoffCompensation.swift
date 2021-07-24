@@ -48,7 +48,7 @@ public struct LayoffCompensation: Codable {
     public struct Model: JsonCodableToBundleP, Versionable {
         public static var defaultFileName : String = "LayoffCompensationModel.json"
         
-        public var version           : Version
+        public var version    : Version
         let legalGrid         : [SliceBase]
         let metallurgieGrid   : [SliceBase]
         let correctionAgeGrid : [SliceCorrection]

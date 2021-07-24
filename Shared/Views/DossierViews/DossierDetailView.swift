@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DossierDetailView: View {
     @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
     var dossier: Dossier
@@ -146,6 +147,7 @@ struct DossierDetailView: View {
     private func save(_ dossier: Dossier) {
         do {
             try dossier.saveDossierContentAsJSON { folder in
+                try model.saveAsJSON(toFolder: folder)
                 try family.saveAsJSON(toFolder: folder)
                 try patrimoine.saveAsJSON(toFolder: folder)
                 // forcer la vue à se rafraichir
@@ -168,6 +170,7 @@ struct DossierDetailView: View {
 
         do {
             try dossier.loadDossierContentAsJSON { folder in
+                try model.loadFromJSON(fromFolder: folder)
                 try patrimoine.loadFromJSON(fromFolder: folder)
                 try family.loadFromJSON(fromFolder: folder)
             }

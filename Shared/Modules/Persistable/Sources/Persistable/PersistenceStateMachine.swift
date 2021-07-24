@@ -26,7 +26,7 @@ public typealias PersistenceTransition   = Transition<PersistenceState, Persiste
 
 public typealias PersistenceStateMachine = StateMachine<PersistenceState, PersistenceEvent>
 extension PersistenceStateMachine {
-    convenience init() {
+    public convenience init() {
         self.init(initialState: .created)
         
         // initialiser la StateMachine

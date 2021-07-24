@@ -5,6 +5,9 @@
       location = "group:Shared/Modules/Stateful">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/Persistable">
+   </FileRef>
+   <FileRef
       location = "group:Shared/Modules/AppFoundation">
    </FileRef>
    <FileRef
