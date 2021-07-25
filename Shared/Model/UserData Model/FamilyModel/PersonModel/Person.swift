@@ -127,10 +127,10 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
         // initialiser l'age de décès avec la valeur moyenne déterministe
         switch self.sexe {
             case .male:
-                self.ageOfDeath = Int(model.humanLife!.model.menLifeExpectation.value(withMode: .deterministic))
+                self.ageOfDeath = Int(model.humanLifeModel.menLifeExpectation.value(withMode: .deterministic))
                 
             case .female:
-                self.ageOfDeath = Int(model.humanLife!.model.womenLifeExpectation.value(withMode: .deterministic))
+                self.ageOfDeath = Int(model.humanLifeModel.womenLifeExpectation.value(withMode: .deterministic))
         }
     }
 
@@ -178,10 +178,10 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     func nextRandomProperties(using model: Model) {
         switch self.sexe {
             case .male:
-                ageOfDeath = Int(model.humanLife!.model.menLifeExpectation.next())
+                ageOfDeath = Int(model.humanLife.model!.menLifeExpectation.next())
                 
             case .female:
-                ageOfDeath = Int(model.humanLife!.model.womenLifeExpectation.next())
+                ageOfDeath = Int(model.humanLife.model!.womenLifeExpectation.next())
         }
         // on ne peut mourire à un age < à celui que l'on a déjà
         ageOfDeath = max(ageOfDeath, age(atEndOf: Date.now.year))

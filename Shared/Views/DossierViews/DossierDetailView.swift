@@ -142,7 +142,8 @@ struct DossierDetailView: View {
 
     /// True si le dossier est actif et à été modifié
     private func savable() -> Bool {
-        dossier.isActive && (family.isModified || patrimoine.isModified)
+        dossier.isActive &&
+            (family.isModified || patrimoine.isModified)
     }
 
     /// Enregistrer les données utilisateur dans le Dossier sélectionné actif

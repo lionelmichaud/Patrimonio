@@ -29,8 +29,8 @@ struct PersonAddView: View {
     @StateObject var adultViewModel = AdultViewModel()
     
     init() {
-        _ageUniversity   = State(initialValue: model.humanLife!.model.minAgeUniversity)
-        _ageIndependance = State(initialValue: model.humanLife!.model.minAgeIndependance)
+        _ageUniversity   = State(initialValue: model.humanLifeModel.minAgeUniversity)
+        _ageIndependance = State(initialValue: model.humanLifeModel.minAgeIndependance)
     }
     
     var body: some View {

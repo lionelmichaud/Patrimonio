@@ -21,13 +21,13 @@ struct ModelHumanView: View {
                 .pickerStyle(SegmentedPickerStyle())
             switch modelChoice {
                 case .menLifeExpectation:
-                    DiscreteRandomizerView(randomizer: model.humanLife!.model.menLifeExpectation)
+                    DiscreteRandomizerView(randomizer: model.humanLifeModel.menLifeExpectation)
                 
                 case .womenLifeExpectation:
-                    DiscreteRandomizerView(randomizer: model.humanLife!.model.womenLifeExpectation)
+                    DiscreteRandomizerView(randomizer: model.humanLifeModel.womenLifeExpectation)
                 
                 case .nbOfYearsOfdependency:
-                    DiscreteRandomizerView(randomizer: model.humanLife!.model.nbOfYearsOfdependency)
+                    DiscreteRandomizerView(randomizer: model.humanLifeModel.nbOfYearsOfdependency)
             }
         }
         .navigationTitle("Modèle Humain: Fonctions de Distribution")

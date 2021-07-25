@@ -42,8 +42,8 @@ struct PersonEditView: View {
             _ageUniversity   = State(initialValue: child.ageOfUniversity)
             _ageIndependance = State(initialValue: child.ageOfIndependence)
         } else {
-            _ageUniversity   = State(initialValue: model.humanLife!.model.minAgeUniversity)
-            _ageIndependance = State(initialValue: model.humanLife!.model.minAgeIndependance)
+            _ageUniversity   = State(initialValue: model.humanLifeModel.minAgeUniversity)
+            _ageIndependance = State(initialValue: model.humanLifeModel.minAgeIndependance)
         }
         
         // Initialize Adult ViewModel
@@ -271,14 +271,14 @@ struct ChildEditView : View {
                         Text("\(deathAge) ans").foregroundColor(.secondary)
                     }
                 }
-                Stepper(value: $ageUniversity, in: model.humanLife!.model.minAgeUniversity ... model.humanLife!.model.minAgeIndependance) {
+                Stepper(value: $ageUniversity, in: model.humanLifeModel.minAgeUniversity ... model.humanLifeModel.minAgeIndependance) {
                     HStack {
                         Text("Age d'entrée à l'université")
                         Spacer()
                         Text("\(ageUniversity) ans").foregroundColor(.secondary)
                     }
                 }
-                Stepper(value: $ageIndependance, in: model.humanLife!.model.minAgeIndependance ... 50) {
+                Stepper(value: $ageIndependance, in: model.humanLifeModel.minAgeIndependance ... 50) {
                     HStack {
                         Text("Age d'indépendance financière")
                         Spacer()

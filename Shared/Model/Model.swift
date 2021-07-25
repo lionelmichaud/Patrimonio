@@ -14,11 +14,17 @@ final class Model: ObservableObject {
 
     // MARK: - Properties
 
-    var humanLife: HumanLife?
+    var humanLife      : HumanLife
+    var humanLifeModel : HumanLife.Model {
+        humanLife.model!
+    }
 
     // MARK: - Initialization
     
-    init() { }
+    /// Note: nécessaire pour une initialization dans App au lancement de l'application
+    init() {
+        humanLife = HumanLife()
+    }
     
     /// Charger tous les modèles à partir des fichiers JSON contenu de fichiers contenus dans le bundle `bundle`
     /// - Parameters:
@@ -38,6 +44,6 @@ final class Model: ObservableObject {
     /// Enregistrer tous les modèles dans des fichiers JSON contenu dans le `folder`
     /// - Parameter folder: dossier chargé par l'utilisateur
     func saveAsJSON(toFolder folder: Folder) throws {
-        try humanLife?.saveAsJSON(toFolder: folder)
+        try humanLife.saveAsJSON(toFolder: folder)
     }
 }

@@ -132,7 +132,7 @@ final class Simulation: ObservableObject, CanResetSimulation {
 
     /// remettre à zéro les historiques des tirages aléatoires avant le lancement d'un MontéCarlo
     private func resetAllRandomHistories(using model: Model) {
-        model.humanLife!.model.resetRandomHistory()
+        model.humanLife.model!.resetRandomHistory()
         Economy.model.resetRandomHistory()
         SocioEconomy.model.resetRandomHistory()
     }

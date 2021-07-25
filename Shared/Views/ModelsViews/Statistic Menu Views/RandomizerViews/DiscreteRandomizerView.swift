@@ -123,7 +123,7 @@ struct DiscreteRandomizerView_Previews: PreviewProvider {
     static var model = Model(fromBundle: Bundle.main)
 
     static var previews: some View {
-        DiscreteRandomizerView(randomizer: model.humanLife!.model.menLifeExpectation)
+        DiscreteRandomizerView(randomizer: model.humanLifeModel.menLifeExpectation)
             .environmentObject(model)
     }
 }

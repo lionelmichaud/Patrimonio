@@ -233,7 +233,7 @@ final class Adult: Person {
         // initialiser le nombre d'années de dépendence
         // initialiser avec la valeur moyenne déterministe
         self.nbOfYearOfDependency =
-            min(Int(model.humanLife!.model.nbOfYearsOfdependency.value(withMode: .deterministic)),
+            min(Int(model.humanLifeModel.nbOfYearsOfdependency.value(withMode: .deterministic)),
                 // pas de dépendance avant l'âge de 65 ans
                 zeroOrPositive(self.ageOfDeath - 65))
     }
@@ -324,7 +324,7 @@ final class Adult: Person {
         
         // générer une nouvelle valeure aléatoire
         // réinitialiser la durée de dépendance
-        nbOfYearOfDependency = Int(model.humanLife!.model.nbOfYearsOfdependency.next())
+        nbOfYearOfDependency = Int(model.humanLife.model!.nbOfYearsOfdependency.next())
         
         // pas de dépendance avant l'âge de 65 ans
         nbOfYearOfDependency = min(nbOfYearOfDependency, zeroOrPositive(ageOfDeath - 65))

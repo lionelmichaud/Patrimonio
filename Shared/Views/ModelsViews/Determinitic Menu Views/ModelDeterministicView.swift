@@ -21,11 +21,11 @@ struct ModelDeterministicView: View {
             Form {
                 Section(header: Text("Modèle Humain")) {
                     IntegerView(label   : "Espérance de vie d'un Homme",
-                                integer : Int(model.humanLife!.model.menLifeExpectation.value(withMode: .deterministic)))
+                                integer : Int(model.humanLifeModel.menLifeExpectation.value(withMode: .deterministic)))
                     IntegerView(label   : "Espérance de vie d'une Femme",
-                                integer : Int(model.humanLife!.model.womenLifeExpectation.value(withMode: .deterministic)))
+                                integer : Int(model.humanLifeModel.womenLifeExpectation.value(withMode: .deterministic)))
                     IntegerView(label   : "Nombre d'années de dépendance",
-                                integer : Int(model.humanLife!.model.nbOfYearsOfdependency.value(withMode: .deterministic)))
+                                integer : Int(model.humanLifeModel.nbOfYearsOfdependency.value(withMode: .deterministic)))
                 }
                 Section(header: Text("Modèle Economique")) {
                     PercentView(label   : "Inflation",

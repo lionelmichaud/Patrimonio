@@ -14,7 +14,8 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/JohnSundell/Files.git", .upToNextMajor(from: "4.2.0"))
+        .package(url: "https://github.com/JohnSundell/Files.git", .upToNextMajor(from: "4.2.0")),
+        .package(path: "../AppFoundation")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -23,10 +24,14 @@ let package = Package(
             name: "FileAndFolder",
             dependencies:
                 [
-                    .product(name: "Files", package: "Files")
+                    .product(name: "Files", package: "Files"),
+                    "AppFoundation"
                 ]),
         .testTarget(
             name: "FileAndFolderTests",
-            dependencies: ["FileAndFolder"])
+            dependencies: [
+                "FileAndFolder",
+                "AppFoundation"
+            ])
     ]
 )
