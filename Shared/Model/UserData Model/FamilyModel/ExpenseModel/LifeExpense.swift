@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Persistable
 import Statistics
 import SocioEconomyModel
 import NamedValue

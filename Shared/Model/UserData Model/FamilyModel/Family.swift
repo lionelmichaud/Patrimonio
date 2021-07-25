@@ -84,9 +84,13 @@ final class Family: ObservableObject {
 
     // MARK: - Methodes
 
-    func loadFromJSON(fromFolder folder: Folder) throws {
+    /// lire à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    func loadFromJSON(fromFolder folder : Folder,
+                      usingModel model  : Model) throws {
         expenses = try LifeExpensesDic(fromFolder : folder)
-        members  = try PersistableArrayOfPerson(fromFolder: folder)
+        members  = try PersistableArrayOfPerson(fromFolder: folder,
+                                                usingModel: model)
     }
 
     func saveAsJSON(toFolder folder: Folder) throws {
@@ -226,10 +230,10 @@ final class Family: ObservableObject {
     }
     
     /// Réinitialiser les prioriétés aléatoires des membres et des dépenses
-    func nextRandomProperties() {
+    func nextRandomProperties(using model: Model) {
         // Réinitialiser les prioriété aléatoires des membres
         members.items.forEach {
-            $0.nextRandomProperties()
+            $0.nextRandomProperties(using: model)
         }
     }
 
@@ -245,10 +249,10 @@ final class Family: ObservableObject {
 
     }
 
-    func nextRun() -> DictionaryOfAdultRandomProperties {
+    func nextRun(using model: Model) -> DictionaryOfAdultRandomProperties {
         // Réinitialiser les prioriété aléatoires des membres
         members.items.forEach {
-            $0.nextRandomProperties()
+            $0.nextRandomProperties(using: model)
         }
         return currentRandomProperties()
     }

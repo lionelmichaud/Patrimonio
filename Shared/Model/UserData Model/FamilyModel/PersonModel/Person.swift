@@ -106,14 +106,7 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
         self.birthDate           = try container.decode(Date.self, forKey: .birth_Date)
         displayBirthDate = mediumDateFormatter.string(from: birthDate) // disSet not executed during init
         self.birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate)
-        // initialiser avec la valeur moyenne déterministe
-        switch self.sexe {
-            case .male:
-                self.ageOfDeath = Int(HumanLife.model.menLifeExpectation.value(withMode: .deterministic))
-                
-            case .female:
-                self.ageOfDeath = Int(HumanLife.model.womenLifeExpectation.value(withMode: .deterministic))
-        }
+        self.ageOfDeath          = 81
     }
     
     // MARK: - Conformance to Encodable
@@ -168,13 +161,13 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     }
         
     /// Réinitialiser les prioriétés aléatoires des membres
-    func nextRandomProperties() {
+    func nextRandomProperties(using model: Model) {
         switch self.sexe {
             case .male:
-                ageOfDeath = Int(HumanLife.model.menLifeExpectation.next())
+                ageOfDeath = Int(model.humanLife!.model.menLifeExpectation.next())
                 
             case .female:
-                ageOfDeath = Int(HumanLife.model.womenLifeExpectation.next())
+                ageOfDeath = Int(model.humanLife!.model.womenLifeExpectation.next())
         }
         // on ne peut mourire à un age < à celui que l'on a déjà
         ageOfDeath = max(ageOfDeath, age(atEndOf: Date.now.year))

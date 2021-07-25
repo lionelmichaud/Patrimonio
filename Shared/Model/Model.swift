@@ -20,6 +20,13 @@ final class Model: ObservableObject {
     
     init() { }
     
+    /// Charger tous les modèles à partir des fichiers JSON contenu de fichiers contenus dans le bundle `bundle`
+    /// - Parameters:
+    ///   - bundle: le bundle dans lequel chercher les fichiers JSON
+    init(fromBundle bundle: Bundle) {
+        humanLife = HumanLife(fromBundle: Bundle.main)
+    }
+
     // MARK: - Methods
 
     /// Charger tous les modèles à partir des fichiers JSON contenu dans le `folder`

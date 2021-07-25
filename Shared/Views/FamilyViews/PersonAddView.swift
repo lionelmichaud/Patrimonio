@@ -13,19 +13,25 @@ import HumanLifeModel
 
 struct PersonAddView: View {
     //@Environment(\.managedObjectContext) var moc
-    @EnvironmentObject var family     : Family
-    @EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var uiState    : UIState
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var simulation : Simulation
+    @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var uiState    : UIState
     @Environment(\.presentationMode) var presentationMode
     @State private var alertItem : AlertItem?
     // Person
     @StateObject var personViewModel = PersonViewModel()
     // Child
-    @State private var ageUniversity   = HumanLife.model.minAgeUniversity
-    @State private var ageIndependance = HumanLife.model.minAgeIndependance
+    @State private var ageUniversity   : Int = 0
+    @State private var ageIndependance : Int = 0
     // Adult
     @StateObject var adultViewModel = AdultViewModel()
+    
+    init() {
+        _ageUniversity   = State(initialValue: model.humanLife!.model.minAgeUniversity)
+        _ageIndependance = State(initialValue: model.humanLife!.model.minAgeIndependance)
+    }
     
     var body: some View {
         VStack {

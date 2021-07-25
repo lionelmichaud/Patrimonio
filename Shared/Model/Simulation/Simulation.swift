@@ -131,8 +131,8 @@ final class Simulation: ObservableObject, CanResetSimulation {
     }
 
     /// remettre à zéro les historiques des tirages aléatoires avant le lancement d'un MontéCarlo
-    private func resetAllRandomHistories() {
-        HumanLife.model.resetRandomHistory()
+    private func resetAllRandomHistories(using model: Model) {
+        model.humanLife!.model.resetRandomHistory()
         Economy.model.resetRandomHistory()
         SocioEconomy.model.resetRandomHistory()
     }
@@ -146,12 +146,13 @@ final class Simulation: ObservableObject, CanResetSimulation {
         dicoOfSocioEconomyRandomVariables = SocioEconomy.model.currentRandomizersValues(withMode : mode)
     }
 
-    private func nextRandomProperties(_ family                            : Family,
+    private func nextRandomProperties(using model                         : Model,
+                                      _ family                            : Family,
                                       _ dicoOfAdultsRandomProperties      : inout DictionaryOfAdultRandomProperties,
                                       _ dicoOfEconomyRandomVariables      : inout Economy.DictionaryOfRandomVariable,
                                       _ dicoOfSocioEconomyRandomVariables : inout SocioEconomy.DictionaryOfRandomVariable) {
         // re-générer les propriétés aléatoires de la famille
-        dicoOfAdultsRandomProperties = family.nextRun()
+        dicoOfAdultsRandomProperties = family.nextRun(using: model)
 
         // re-générer les propriétés aléatoires du modèle macro économique
         dicoOfEconomyRandomVariables = try! Economy.model.nextRun(withMode           : mode,
@@ -168,7 +169,8 @@ final class Simulation: ObservableObject, CanResetSimulation {
     ///   - nbOfRuns: nombre de run à calculer (> 1: mode aléatoire)
     ///   - family: la famille
     ///   - patrimoine: le patrimoine
-    func compute(nbOfYears                 : Int,
+    func compute(using model               : Model,
+                 nbOfYears                 : Int,
                  nbOfRuns                  : Int,
                  withFamily family         : Family,
                  withPatrimoine patrimoine : Patrimoin) {
@@ -192,7 +194,7 @@ final class Simulation: ObservableObject, CanResetSimulation {
 
         if monteCarlo {
             // remettre à zéro les historiques des tirages aléatoires
-            resetAllRandomHistories()
+            resetAllRandomHistories(using: model)
             // remettre à zéro la table de résultat
             monteCarloResultTable = SimulationResultTable()
         }
@@ -211,7 +213,8 @@ final class Simulation: ObservableObject, CanResetSimulation {
 
             // re-générer les propriétés aléatoires à chaque run si on est en mode Aléatoire
             if monteCarlo {
-                nextRandomProperties(family,
+                nextRandomProperties(using : model,
+                                     family,
                                      &dicoOfAdultsRandomProperties,
                                      &dicoOfEconomyRandomVariables,
                                      &dicoOfSocioEconomyRandomVariables)

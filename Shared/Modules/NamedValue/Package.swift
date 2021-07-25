@@ -18,7 +18,7 @@ let package = Package(
         .package(path: "../AppFoundation"),
         .package(path: "../FileAndFolder"),
         .package(path: "../Stateful"),
-        .package(path: "../Persistable"),
+        .package(path: "../Persistable")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.

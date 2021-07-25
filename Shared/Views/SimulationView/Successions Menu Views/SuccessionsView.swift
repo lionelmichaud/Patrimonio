@@ -125,13 +125,15 @@ struct SuccessorsDisclosureGroup: View {
 }
 
 struct SuccessionsView_Previews: PreviewProvider {
+    static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var family     = Family()
     static var patrimoine = Patrimoin()
 
     static func initializedSimulation() -> Simulation {
         let simulation = Simulation()
-        simulation.compute(nbOfYears      : 55,
+        simulation.compute(using          : model,
+                           nbOfYears      : 55,
                            nbOfRuns       : 1,
                            withFamily     : family,
                            withPatrimoine : patrimoine)

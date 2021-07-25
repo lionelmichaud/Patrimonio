@@ -120,7 +120,10 @@ struct DiscreteRandomizerView: UIViewRepresentable {
 }
 
 struct DiscreteRandomizerView_Previews: PreviewProvider {
+    static var model = Model(fromBundle: Bundle.main)
+
     static var previews: some View {
-        DiscreteRandomizerView(randomizer: HumanLife.model.menLifeExpectation)
+        DiscreteRandomizerView(randomizer: model.humanLife!.model.menLifeExpectation)
+            .environmentObject(model)
     }
 }

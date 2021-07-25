@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppFoundation
 import Files
 import NamedValue
 import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
@@ -13,15 +14,17 @@ import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserv
 typealias PersistableArrayOfPerson = PersistableArray<Person>
 extension PersistableArrayOfPerson {
     /// Initialiser à partir d'un fichier JSON portant le nom `FileNameCst.kFamilyMembersFileName`
-    /// contenu dans le dossier `from` du répertoire `Documents`
-    /// - Parameter from: dossier où se trouve le fichier JSON à utiliser
-    init(fromFolder folder : Folder) throws {
+    /// contenu dans le dossier `folder` du répertoire `Documents`
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    init(fromFolder folder : Folder,
+         usingModel model  : Model) throws {
         
         self.init()
         
         #if DEBUG
         Swift.print("loading members (Person) from file: ", FileNameCst.kFamilyMembersFileName)
         #endif
+        // lire les person dans le fichier JSON du dossier `Folder`
         let fileName = FileNameCst.kFamilyMembersFileName
         let data = try self.load(fromFile   : fileName,
                                  fromFolder : folder)
@@ -41,15 +44,35 @@ extension PersistableArrayOfPerson {
         } catch {
             fatalError("Failed to decode \(fileName) in documents directory: \(error.localizedDescription)")
         }
-
+        
+        // initialiser les propriétés des Personnes qui ne peuvent pas être lues dans le fichier JSON
+        self.items.forEach { person in
+            // initialiser l'age de décès avec la valeur moyenne déterministe
+            switch person.sexe {
+                case .male:
+                    person.ageOfDeath = Int(model.humanLife!.model.menLifeExpectation.value(withMode: .deterministic))
+                    
+                case .female:
+                    person.ageOfDeath = Int(model.humanLife!.model.womenLifeExpectation.value(withMode: .deterministic))
+            }
+            // initialiser le nombre d'années de dépendence
+            if let adult = person as? Adult {
+                // initialiser avec la valeur moyenne déterministe
+                adult.nbOfYearOfDependency =
+                    min(Int(model.humanLife!.model.nbOfYearsOfdependency.value(withMode: .deterministic)),
+                        // pas de dépendance avant l'âge de 65 ans
+                        zeroOrPositive(adult.ageOfDeath - 65))
+            }
+        }
+        
         // exécuter la transition
         persistenceSM.process(event: .load)
     }
     
     /// Enregistrer au format JSON dans un fichier portant le nom  `FileNameCst.kFamilyMembersFileName`
-    /// dans le folder nommé `to` du répertoire `Documents`
+    /// dans le folder nommé `folder` du répertoire `Documents`
     /// - Parameters:
-    ///   - to: nom du dossier du répertoire `Documents`
+    ///   - folder: nom du dossier du répertoire `Documents`
     public func saveAsJSON(to folder: Folder) throws {
         // encode to JSON file
         if let encoded: Data = try? Person.coder.encoder.encode(items.map { Wrap(wrapped: $0) }) {

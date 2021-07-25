@@ -11,6 +11,7 @@ import RetirementModel
 import Files
 
 struct ComputationView: View {
+    @EnvironmentObject var model            : Model
     @EnvironmentObject var uiState          : UIState
     @EnvironmentObject var dataStore        : Store
     @EnvironmentObject var family           : Family
@@ -187,13 +188,15 @@ struct ComputationView: View {
         // DispatchQueue.global(qos: .userInitiated).async {
         switch simulation.mode {
             case .deterministic:
-                simulation.compute(nbOfYears      : Int(uiState.computationState.nbYears),
+                simulation.compute(using          : model,
+                                   nbOfYears      : Int(uiState.computationState.nbYears),
                                    nbOfRuns       : 1,
                                    withFamily     : family,
                                    withPatrimoine : patrimoine)
                 
             case .random:
-                simulation.compute(nbOfYears      : Int(uiState.computationState.nbYears),
+                simulation.compute(using          : model,
+                                   nbOfYears      : Int(uiState.computationState.nbYears),
                                    nbOfRuns       : Int(uiState.computationState.nbRuns),
                                    withFamily     : family,
                                    withPatrimoine : patrimoine)
@@ -301,6 +304,7 @@ struct ComputationView: View {
 }
 
 struct ComputationView_Previews: PreviewProvider {
+    static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var dataStore  = Store()
     static var family     = Family()
@@ -312,6 +316,7 @@ struct ComputationView_Previews: PreviewProvider {
             List {
                 // calcul de simulation
                 NavigationLink(destination : ComputationView()
+                                .environmentObject(model)
                                 .environmentObject(uiState)
                                 .environmentObject(dataStore)
                                 .environmentObject(family)

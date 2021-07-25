@@ -324,6 +324,7 @@ struct ShortGridLineView : View {
 }
 
 struct ShortGridView_Previews: PreviewProvider {
+    static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var dataStore  = Store()
     static var simulation = Simulation()
@@ -331,7 +332,8 @@ struct ShortGridView_Previews: PreviewProvider {
     static var patrimoine = Patrimoin()
     
     static var previews: some View {
-        simulation.compute(nbOfYears      : 25,
+        simulation.compute(using          : model,
+                           nbOfYears      : 25,
                            nbOfRuns       : 10,
                            withFamily     : family,
                            withPatrimoine : patrimoine)

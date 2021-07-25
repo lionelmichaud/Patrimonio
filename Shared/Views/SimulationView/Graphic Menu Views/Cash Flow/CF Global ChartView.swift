@@ -183,6 +183,7 @@ struct CashFlowLineChartView: UIViewRepresentable {
 // MARK: - Preview
 
 struct CashFlowGlobalChartView_Previews: PreviewProvider {
+    static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var dataStore  = Store()
     static var family     = Family()
@@ -191,8 +192,11 @@ struct CashFlowGlobalChartView_Previews: PreviewProvider {
 
     static var previews: some View {
         // calcul de simulation
-        simulation.compute(nbOfYears: 40, nbOfRuns: 1,
-                           withFamily: family, withPatrimoine: patrimoine)
+        simulation.compute(using          : model,
+                           nbOfYears      : 40,
+                           nbOfRuns       : 1,
+                           withFamily     : family,
+                           withPatrimoine : patrimoine)
         return NavigationView {
             List {
                 NavigationLink(destination : CashFlowGlobalChartView()

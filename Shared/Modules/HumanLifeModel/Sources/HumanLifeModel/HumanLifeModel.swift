@@ -80,29 +80,42 @@ public struct HumanLife: PersistableP {
 
     // MARK: - Initializer
     
+    /// Charger le modèle à partir d'un fichier JSON contenu dans le fichier `defaultFileName`
+    /// du dossier `folder` et l'initialiser
+    /// - Parameters:
+    ///   - folder: le dossier dans lequel chercher le fichier nommé `defaultFileName`
     public init(fromFolder folder: Folder) throws {
-        self.model = try Model(fromFile    : HumanLife.defaultFileName,
-                               fromFolder           : folder,
-                               dateDecodingStrategy : .iso8601,
-                               keyDecodingStrategy  : .useDefaultKeys).initialized()
-
+        self.model =
+            try Model(fromFile             : HumanLife.defaultFileName,
+                      fromFolder           : folder,
+                      dateDecodingStrategy : .iso8601,
+                      keyDecodingStrategy  : .useDefaultKeys)
+            .initialized()
         // exécuter la transition
         persistenceSM.process(event: .load)
     }
-
-    public init(for aClass: AnyClass) {
-        let classBundle = Bundle(for: aClass)
-        self.model = classBundle.loadFromJSON(Model.self,
-                                              from                 : HumanLife.defaultFileName,
-                                              dateDecodingStrategy : .iso8601,
-                                              keyDecodingStrategy  : .useDefaultKeys)
-
+    
+    /// Charger le modèle à partir d'un fichier JSON contenu dans le fichier `defaultFileName`
+    /// du `bundle` et l'initialiser
+    /// - Parameters:
+    ///   - bundle: le bundle dans lequel chercher le fichier nommé `defaultFileName`
+    public init(fromBundle bundle: Bundle) {
+        self.model =
+            bundle.loadFromJSON(Model.self,
+                                from                 : HumanLife.defaultFileName,
+                                dateDecodingStrategy : .iso8601,
+                                keyDecodingStrategy  : .useDefaultKeys)
+            .initialized()
         // exécuter la transition
         persistenceSM.process(event: .load)
     }
-
+    
     // MARK: - Methods
 
+    /// Enregistrer le modèle au format JSON dans un fichier nommé `defaultFileName`
+    /// dans le folder nommé `folder` du répertoire `Documents`
+    /// - Parameters:
+    ///   - folder: folder du répertoire `Documents`
     public func saveAsJSON(toFolder folder: Folder) throws {
         // encode to JSON file
         try model.saveAsJSON(toFile               : HumanLife.defaultFileName,
@@ -113,9 +126,11 @@ public struct HumanLife: PersistableP {
         persistenceSM.process(event: .save)
     }
 
-    func saveAsJSONToBundleOf(aClass: AnyClass) {
-        let bundle = Bundle(for: aClass)
-        // encode to JSON file
+    /// Enregistrer le modèle au format JSON dans un fichier nommé `defaultFileName`
+    /// du `bundle` et l'initialiser
+    /// - Parameters:
+    ///   - bundle: le bundle dans lequel stocker le fichier nommé `defaultFileName`
+    public func saveAsJSON(toBundle bundle: Bundle) {
         bundle.saveAsJSON(model,
                           to                   : HumanLife.defaultFileName,
                           dateEncodingStrategy : .iso8601,

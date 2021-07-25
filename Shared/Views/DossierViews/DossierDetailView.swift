@@ -172,7 +172,8 @@ struct DossierDetailView: View {
             try dossier.loadDossierContentAsJSON { folder in
                 try model.loadFromJSON(fromFolder: folder)
                 try patrimoine.loadFromJSON(fromFolder: folder)
-                try family.loadFromJSON(fromFolder: folder)
+                try family.loadFromJSON(fromFolder: folder,
+                                        usingModel: model)
             }
         } catch {
             self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),

@@ -12,6 +12,7 @@ import HumanLifeModel
 import UnemployementModel
 
 struct PersonEditView: View {
+    @EnvironmentObject var model      : Model
     @EnvironmentObject var family     : Family
     @EnvironmentObject var patrimoine : Patrimoin
     @EnvironmentObject var simulation : Simulation
@@ -24,10 +25,32 @@ struct PersonEditView: View {
     // Person
     @StateObject var personViewModel: PersonViewModel
     // Child
-    @State private var ageUniversity   = HumanLife.model.minAgeUniversity
-    @State private var ageIndependance = HumanLife.model.minAgeIndependance
+    @State private var ageUniversity   : Int = 0
+    @State private var ageIndependance : Int = 0
     // Adult
     @StateObject var adultViewModel = AdultViewModel()
+    
+    /// Initialise le ViewModel à partir des propriété d'un membre existant
+    /// - Parameter member: le membre de la famille
+    init(withInitialValueFrom member: Person) {
+        self.member = member
+        // Initialize Person ViewModel
+        _personViewModel = StateObject(wrappedValue: PersonViewModel(from: member))
+        
+        // Child
+        if let child = member as? Child {
+            _ageUniversity   = State(initialValue: child.ageOfUniversity)
+            _ageIndependance = State(initialValue: child.ageOfIndependence)
+        } else {
+            _ageUniversity   = State(initialValue: model.humanLife!.model.minAgeUniversity)
+            _ageIndependance = State(initialValue: model.humanLife!.model.minAgeIndependance)
+        }
+        
+        // Initialize Adult ViewModel
+        if let adult = member as? Adult {
+            _adultViewModel = StateObject(wrappedValue: AdultViewModel(from: adult))
+        }
+    }
     
     var body: some View {
         VStack {
@@ -68,25 +91,6 @@ struct PersonEditView: View {
                 }
             }
             .textFieldStyle(RoundedBorderTextFieldStyle())
-        }
-    }
-    
-    /// Initialise le ViweModel à partir des propriété d'un membre existant
-    /// - Parameter member: le membre de la famille
-    init(withInitialValueFrom member: Person) {
-        self.member = member
-        // Initialize Person ViewModel
-        _personViewModel = StateObject(wrappedValue: PersonViewModel(from: member))
-        
-        // Child
-        if let child = member as? Child {
-            _ageUniversity   = State(initialValue: child.ageOfUniversity)
-            _ageIndependance = State(initialValue: child.ageOfIndependence)
-        }
-        
-        // Initialize Adult ViewModel
-        if let adult = member as? Adult {
-            _adultViewModel = StateObject(wrappedValue: AdultViewModel(from: adult))
         }
     }
     
@@ -251,6 +255,7 @@ private struct EndOfWorkingPeriodEditView: View {
 
 // MARK: - Saisie enfant
 struct ChildEditView : View {
+    @EnvironmentObject private var model: Model
     let birthDate                : Date
     @Binding var deathAge        : Int
     @Binding var ageUniversity   : Int
@@ -266,14 +271,14 @@ struct ChildEditView : View {
                         Text("\(deathAge) ans").foregroundColor(.secondary)
                     }
                 }
-                Stepper(value: $ageUniversity, in: HumanLife.model.minAgeUniversity ... HumanLife.model.minAgeIndependance) {
+                Stepper(value: $ageUniversity, in: model.humanLife!.model.minAgeUniversity ... model.humanLife!.model.minAgeIndependance) {
                     HStack {
                         Text("Age d'entrée à l'université")
                         Spacer()
                         Text("\(ageUniversity) ans").foregroundColor(.secondary)
                     }
                 }
-                Stepper(value: $ageIndependance, in: HumanLife.model.minAgeIndependance ... 50) {
+                Stepper(value: $ageIndependance, in: model.humanLife!.model.minAgeIndependance ... 50) {
                     HStack {
                         Text("Age d'indépendance financière")
                         Spacer()
@@ -285,7 +290,8 @@ struct ChildEditView : View {
     }
 }
 
-struct MemberEditView_Previews: PreviewProvider {
+struct PersonEditView_Previews: PreviewProvider {
+    static var model   = Model(fromBundle: Bundle.main)
     static var family  = Family()
     static var anAdult = family.members.items.first!
     static var aChild  = family.members.items.last!
@@ -294,10 +300,12 @@ struct MemberEditView_Previews: PreviewProvider {
         Group {
             // adult
             PersonEditView(withInitialValueFrom: anAdult)
+                .environmentObject(model)
                 .environmentObject(family)
                 .environmentObject(anAdult)
             // child
             PersonEditView(withInitialValueFrom: aChild)
+                .environmentObject(model)
                 .environmentObject(family)
                 .environmentObject(aChild)
             Form {

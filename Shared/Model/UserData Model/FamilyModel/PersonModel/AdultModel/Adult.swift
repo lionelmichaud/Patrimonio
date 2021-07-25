@@ -139,6 +139,7 @@ final class Adult: Person {
     override var description: String {
         return super.description +
         """
+        - nombre d'années de dépendance: \(nbOfYearOfDependency)
         - age of retirement:  \(ageOfRetirementComp)
         - date of retirement: \(dateOfRetirement.stringMediumDate)
         - age of AGIRC pension liquidation:  \(ageOfAgircPensionLiquidComp)
@@ -154,6 +155,7 @@ final class Adult: Person {
     
     // MARK: - initialization
     
+    // reads from JSON
     required init(from decoder: Decoder) throws {
         // Get our container for this subclass' coding keys
         let container =
@@ -185,7 +187,6 @@ final class Adult: Person {
             try container.decode(RegimeAgircSituation.self,
                                  forKey: .regime_Agirc_Situation)
         // initialiser avec la valeur moyenne déterministe
-        nbOfYearOfDependency = Int(HumanLife.model.nbOfYearsOfdependency.value(withMode: .deterministic))
         workIncome =
             try container.decode(WorkIncomeType.self,
                                  forKey: .work_Income)
@@ -193,7 +194,7 @@ final class Adult: Person {
         try super.init(from: decoder)
 
         // pas de dépendance avant l'âge de 65 ans
-        nbOfYearOfDependency = min(nbOfYearOfDependency, zeroOrPositive(ageOfDeath - 65))
+        nbOfYearOfDependency = zeroOrPositive(ageOfDeath - 65)
     }
     
     override init(sexe       : Sexe,
@@ -304,12 +305,12 @@ final class Adult: Person {
     }
     
     /// Réinitialiser les prioriétés aléatoires des membres
-    override func nextRandomProperties() {
-        super.nextRandomProperties()
+    override func nextRandomProperties(using model: Model) {
+        super.nextRandomProperties(using: model)
         
         // générer une nouvelle valeure aléatoire
         // réinitialiser la durée de dépendance
-        nbOfYearOfDependency = Int(HumanLife.model.nbOfYearsOfdependency.next())
+        nbOfYearOfDependency = Int(model.humanLife!.model.nbOfYearsOfdependency.next())
         
         // pas de dépendance avant l'âge de 65 ans
         nbOfYearOfDependency = min(nbOfYearOfDependency, zeroOrPositive(ageOfDeath - 65))

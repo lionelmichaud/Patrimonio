@@ -14,16 +14,18 @@ import SocioEconomyModel
 
 /// Affiche les valeurs déterministes retenues pour les paramètres des modèles dans une simulation "déterministe"
 struct ModelDeterministicView: View {
+    @EnvironmentObject var model: Model
+
     var body: some View {
         VStack {
             Form {
                 Section(header: Text("Modèle Humain")) {
                     IntegerView(label   : "Espérance de vie d'un Homme",
-                                integer : Int(HumanLife.model.menLifeExpectation.value(withMode: .deterministic)))
+                                integer : Int(model.humanLife!.model.menLifeExpectation.value(withMode: .deterministic)))
                     IntegerView(label   : "Espérance de vie d'une Femme",
-                                integer : Int(HumanLife.model.womenLifeExpectation.value(withMode: .deterministic)))
+                                integer : Int(model.humanLife!.model.womenLifeExpectation.value(withMode: .deterministic)))
                     IntegerView(label   : "Nombre d'années de dépendance",
-                                integer : Int(HumanLife.model.nbOfYearsOfdependency.value(withMode: .deterministic)))
+                                integer : Int(model.humanLife!.model.nbOfYearsOfdependency.value(withMode: .deterministic)))
                 }
                 Section(header: Text("Modèle Economique")) {
                     PercentView(label   : "Inflation",
@@ -51,7 +53,10 @@ struct ModelDeterministicView: View {
 }
 
 struct ModelDeterministicView_Previews: PreviewProvider {
+    static var model = Model(fromBundle: Bundle.main)
+    
     static var previews: some View {
         ModelDeterministicView()
+            .environmentObject(model)
     }
 }
