@@ -48,21 +48,8 @@ extension PersistableArrayOfPerson {
         // initialiser les propriétés des Personnes qui ne peuvent pas être lues dans le fichier JSON
         self.items.forEach { person in
             // initialiser l'age de décès avec la valeur moyenne déterministe
-            switch person.sexe {
-                case .male:
-                    person.ageOfDeath = Int(model.humanLife!.model.menLifeExpectation.value(withMode: .deterministic))
-                    
-                case .female:
-                    person.ageOfDeath = Int(model.humanLife!.model.womenLifeExpectation.value(withMode: .deterministic))
-            }
             // initialiser le nombre d'années de dépendence
-            if let adult = person as? Adult {
-                // initialiser avec la valeur moyenne déterministe
-                adult.nbOfYearOfDependency =
-                    min(Int(model.humanLife!.model.nbOfYearsOfdependency.value(withMode: .deterministic)),
-                        // pas de dépendance avant l'âge de 65 ans
-                        zeroOrPositive(adult.ageOfDeath - 65))
-            }
+            person.initialize(usingModel: model)
         }
         
         // exécuter la transition

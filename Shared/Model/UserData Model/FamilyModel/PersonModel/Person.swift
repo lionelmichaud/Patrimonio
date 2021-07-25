@@ -119,6 +119,20 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     }
 
     // MARK: - Methodes
+    
+    /// Initialise les propriétés qui ne peuvent pas l'être à la création
+    /// quand le modèle n'est pas encore créé
+    /// - Parameter model: modèle à utiliser
+    func initialize(usingModel model: Model) {
+        // initialiser l'age de décès avec la valeur moyenne déterministe
+        switch self.sexe {
+            case .male:
+                self.ageOfDeath = Int(model.humanLife!.model.menLifeExpectation.value(withMode: .deterministic))
+                
+            case .female:
+                self.ageOfDeath = Int(model.humanLife!.model.womenLifeExpectation.value(withMode: .deterministic))
+        }
+    }
 
     func age(atEndOf year: Int) -> Int {
         ageAtEndOfCurrentYear + (year - CalendarCst.thisYear)

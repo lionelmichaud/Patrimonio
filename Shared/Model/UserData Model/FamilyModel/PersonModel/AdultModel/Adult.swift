@@ -224,6 +224,20 @@ final class Adult: Person {
         try container.encode(workIncome, forKey: .work_Income)
     }
     
+    /// Initialise les propriétés qui ne peuvent pas l'être à la création
+    /// quand le modèle n'est pas encore créé
+    /// - Parameter model: modèle à utiliser
+    override func initialize(usingModel model: Model) {
+        super.initialize(usingModel: model)
+        
+        // initialiser le nombre d'années de dépendence
+        // initialiser avec la valeur moyenne déterministe
+        self.nbOfYearOfDependency =
+            min(Int(model.humanLife!.model.nbOfYearsOfdependency.value(withMode: .deterministic)),
+                // pas de dépendance avant l'âge de 65 ans
+                zeroOrPositive(self.ageOfDeath - 65))
+    }
+    
     /// Année ou a lieu l'événement recherché
     /// - Parameter event: événement recherché
     /// - Returns: Année ou a lieu l'événement recherché, nil si l'événement n'existe pas

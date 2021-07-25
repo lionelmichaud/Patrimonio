@@ -11,15 +11,15 @@ import RetirementModel
 import Files
 
 struct ComputationView: View {
-    @EnvironmentObject var model            : Model
-    @EnvironmentObject var uiState          : UIState
-    @EnvironmentObject var dataStore        : Store
-    @EnvironmentObject var family           : Family
-    @EnvironmentObject var patrimoine       : Patrimoin
-    @EnvironmentObject var simulation       : Simulation
-    @State private var busySaveWheelAnimate : Bool = false
-    @State private var busyCompWheelAnimate : Bool = false
-    @State private var alertItem            : AlertItem?
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var uiState    : UIState
+    @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var simulation : Simulation
+    @State private var busySaveWheelAnimate   : Bool = false
+    @State private var busyCompWheelAnimate   : Bool = false
+    @State private var alertItem              : AlertItem?
 //    @Environment(\.presentationMode) var presentationMode
 
     struct ComputationForm: View {

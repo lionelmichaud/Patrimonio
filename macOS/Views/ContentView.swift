@@ -77,7 +77,12 @@ struct ContentView: View {
 }
 
 struct ContentView_Previews: PreviewProvider {
+    static let uiState    = UIState()
+    static let simulation = Simulation()
+
     static var previews: some View {
         ContentView()
+            .environmentObject(uiState)
+            .environmentObject(simulation)
     }
 }

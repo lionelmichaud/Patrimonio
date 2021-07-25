@@ -10,8 +10,10 @@ import SwiftUI
 struct DossierDetailView: View {
     @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var simulation : Simulation
     var dossier: Dossier
     @State private var alertItem: AlertItem?
     @State private var showingSheet = false
@@ -182,6 +184,10 @@ struct DossierDetailView: View {
 
         // rendre le Dossier actif seulement si tout c'est bien passé
         dataStore.activate(dossierAtIndex: dossierIndex)
+        
+        // remettre à zéro la simulation et sa vue
+        simulation.reset()
+        uiState.reset()
     }
 
     /// Dupliquer le Dossier sélectionné
@@ -196,6 +202,13 @@ struct DossierDetailView: View {
 }
 
 struct DossierDetailView_Previews: PreviewProvider {
+    static var dataStore  = Store()
+    static var model      = Model(fromBundle: Bundle.main)
+    static var uiState    = UIState()
+    static var family     = Family()
+    static var patrimoine = Patrimoin()
+    static var simulation = Simulation()
+
     static let dossier = Dossier()
         .namedAs("Nom du dossier")
         .annotatedBy("note ligne 1\nligne 2")
@@ -203,7 +216,21 @@ struct DossierDetailView_Previews: PreviewProvider {
         .activated()
     
     static var previews: some View {
-        DossierDetailView(dossier: dossier)
-            .previewLayout(.sizeThatFits)
+        NavigationView {
+            List {
+                NavigationLink(destination : DossierDetailView(dossier: dossier)
+                    .previewLayout(.sizeThatFits)
+                    .environmentObject(dataStore)
+                    .environmentObject(model)
+                    .environmentObject(uiState)
+                    .environmentObject(family)
+                    .environmentObject(patrimoine)
+                    .environmentObject(simulation)
+                ) {
+                    Text("DossierDetailView")
+                }
+                .isDetailLink(true)
+            }
+        }
     }
 }
