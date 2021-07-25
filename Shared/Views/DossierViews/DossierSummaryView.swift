@@ -10,6 +10,7 @@ import Files
 
 struct DossierSummaryView: View {
     @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
     @State private var alertItem: AlertItem?
@@ -44,7 +45,7 @@ struct DossierSummaryView: View {
     }
     
     private func savable() -> Bool {
-        family.isModified || patrimoine.isModified
+        family.isModified || patrimoine.isModified || model.isModified
     }
 
     /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
@@ -66,6 +67,7 @@ struct DossierSummaryView: View {
 
 struct DossierSummaryView_Previews: PreviewProvider {
     static let dataStore  = Store()
+    static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var family     = Family()
     static var patrimoine = Patrimoin()
@@ -74,6 +76,7 @@ struct DossierSummaryView_Previews: PreviewProvider {
     static var previews: some View {
         DossierSummaryView()
             .environmentObject(dataStore)
+            .environmentObject(model)
             .environmentObject(uiState)
             .environmentObject(family)
             .environmentObject(patrimoine)

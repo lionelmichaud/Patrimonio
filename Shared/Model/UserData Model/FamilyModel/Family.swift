@@ -87,10 +87,10 @@ final class Family: ObservableObject {
     /// lire à partir d'un fichier JSON contenu dans le dossier `fromFolder`
     /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
     func loadFromJSON(fromFolder folder : Folder,
-                      usingModel model  : Model) throws {
+                      using model  : Model) throws {
         expenses = try LifeExpensesDic(fromFolder : folder)
         members  = try PersistableArrayOfPerson(fromFolder: folder,
-                                                usingModel: model)
+                                                using     : model)
     }
 
     func saveAsJSON(toFolder folder: Folder) throws {
@@ -172,12 +172,15 @@ final class Family: ObservableObject {
     /// Pensions de retraite cumulées de la famille durant l'année
     /// - Parameter year: année
     /// - Returns: Pensions de retraite cumulées brutes
-    func pension(during year: Int, withReversion: Bool = true) -> Double {
+    func pension(during year   : Int,
+                 withReversion : Bool = true,
+                 using model   : Model) -> Double {
         var pension = 0.0
         for person in members.items {
             if let adult = person as? Adult {
                 pension += adult.pension(during        : year,
-                                         withReversion : withReversion).brut
+                                         withReversion : withReversion,
+                                         using         : model).brut
             }
         }
         return pension

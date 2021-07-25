@@ -17,6 +17,7 @@ let package = Package(
         // .package(url: /* package url */, from: "1.0.0"),
         .package(path: "../AppFoundation"),
         .package(path: "../Statistics"),
+        .package(path: "../Persistable"),
         .package(path: "../FileAndFolder")
     ],
     targets: [
@@ -28,6 +29,7 @@ let package = Package(
                 [
                     "AppFoundation",
                     "Statistics",
+                    "Persistable",
                     "FileAndFolder"
                 ]
         ),

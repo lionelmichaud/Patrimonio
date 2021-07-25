@@ -234,7 +234,8 @@ final class Simulation: ObservableObject, CanResetSimulation {
                                                         withFamily     : family,
                                                         withPatrimoine : patrimoine,
                                                         withKPIs       : &kpis,
-                                                        withMode       : mode)
+                                                        withMode       : mode,
+                                                        using          : model)
             // Synthèse du Run de Simulation
             currentRunResults = SimulationResultLine(runNumber                         : run,
                                                      dicoOfAdultsRandomProperties      : dicoOfAdultsRandomProperties,
@@ -263,7 +264,8 @@ final class Simulation: ObservableObject, CanResetSimulation {
     ///   - thisRun: paramètres du run à rejouer
     func replay(thisRun                   : SimulationResultLine,
                 withFamily family         : Family,
-                withPatrimoine patrimoine : Patrimoin) {
+                withPatrimoine patrimoine : Patrimoin,
+                using model          : Model) {
         defer {
             // jouer le son à la fin de la simulation
             Simulation.playSound()
@@ -304,7 +306,8 @@ final class Simulation: ObservableObject, CanResetSimulation {
                                  withFamily     : family,
                                  withPatrimoine : patrimoine,
                                  withKPIs       : &kpis,
-                                 withMode       : mode)
+                                 withMode       : mode,
+                                 using          : model)
         patrimoine.restoreState()
 
         isComputed  = true

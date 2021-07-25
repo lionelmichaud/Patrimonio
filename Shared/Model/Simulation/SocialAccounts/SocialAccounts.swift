@@ -215,7 +215,8 @@ struct SocialAccounts {
                         withFamily family         : Family,
                         withPatrimoine patrimoine : Patrimoin,
                         withKPIs kpis             : inout KpiArray,
-                        withMode simulationMode   : SimulationModeEnum) -> DictionaryOfKpiResults {
+                        withMode simulationMode   : SimulationModeEnum,
+                        using model               : Model) -> DictionaryOfKpiResults {
         
         //-------------------------------------------------------------------------------------------
         firstYear = Date.now.year
@@ -242,7 +243,8 @@ struct SocialAccounts {
                                                        withYear                              : year,
                                                        withFamily                            : family,
                                                        withPatrimoine                        : patrimoine,
-                                                       taxableIrppRevenueDelayedFromLastyear : lastYearDelayedTaxableIrppRevenue)
+                                                       taxableIrppRevenueDelayedFromLastyear : lastYearDelayedTaxableIrppRevenue,
+                                                       using                                 : model)
                 cashFlowArray.append(newCashFlowLine)
                 // ajouter les éventuelles successions survenues pendant l'année à la liste globale
                 legalSuccessions   += newCashFlowLine.successions

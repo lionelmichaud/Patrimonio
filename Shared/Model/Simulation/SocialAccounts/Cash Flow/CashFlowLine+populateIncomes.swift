@@ -12,7 +12,8 @@ import FiscalModel
 extension CashFlowLine {
     /// Populate Ages and Work incomes
     /// - Parameter family: de la famille
-    mutating func populateIncomes(of family: Family) {
+    mutating func populateIncomes(of family        : Family,
+                                  using model : Model) {
         var totalPensionDiscount = 0.0
         
         // pour chaque membre de la famille
@@ -34,7 +35,7 @@ extension CashFlowLine {
                              value: workIncome.taxableIrpp.rounded()))
                 
                 /// pension de retraite
-                let pension  = adult.pension(during: year)
+                let pension  = adult.pension(during: year, using: model)
                 // pension inscrit en compte avant IRPP (net de charges sociales)
                 adultsRevenues.perCategory[.pensions]?.credits.namedValues
                     .append((name: name,

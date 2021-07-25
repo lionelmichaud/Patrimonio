@@ -17,7 +17,7 @@ extension PersistableArrayOfPerson {
     /// contenu dans le dossier `folder` du répertoire `Documents`
     /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
     init(fromFolder folder : Folder,
-         usingModel model  : Model) throws {
+         using model  : Model) throws {
         
         self.init()
         
@@ -49,7 +49,7 @@ extension PersistableArrayOfPerson {
         self.items.forEach { person in
             // initialiser l'age de décès avec la valeur moyenne déterministe
             // initialiser le nombre d'années de dépendence
-            person.initialize(usingModel: model)
+            person.initialize(using: model)
         }
         
         // exécuter la transition

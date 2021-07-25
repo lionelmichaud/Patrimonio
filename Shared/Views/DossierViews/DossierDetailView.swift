@@ -143,7 +143,7 @@ struct DossierDetailView: View {
     /// True si le dossier est actif et à été modifié
     private func savable() -> Bool {
         dossier.isActive &&
-            (family.isModified || patrimoine.isModified)
+            (family.isModified || patrimoine.isModified || model.isModified)
     }
 
     /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
@@ -176,7 +176,7 @@ struct DossierDetailView: View {
                 try model.loadFromJSON(fromFolder: folder)
                 try patrimoine.loadFromJSON(fromFolder: folder)
                 try family.loadFromJSON(fromFolder: folder,
-                                        usingModel: model)
+                                        using     : model)
             }
         } catch {
             self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),

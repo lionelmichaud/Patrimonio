@@ -10,7 +10,6 @@ import Foundation
 import Persistable
 import AppFoundation
 import Statistics
-import Files
 import FileAndFolder
 
 // MARK: - Human Life Model
@@ -75,7 +74,9 @@ public struct HumanLife: PersistableModel {
     
     public static var defaultFileName: String = "HumanLifeModelConfig.json"
     
-    public var model         : HumanLife.Model?
+    // MARK: - Properties
+    
+    public var model         : Model?
     public var persistenceSM = PersistenceStateMachine()
 
     // MARK: - Initializers

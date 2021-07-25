@@ -89,7 +89,8 @@ private struct LifeScenarioSectionView: View {
 // MARK: - MemberDetailView / AdultDetailView / RevenuSectionView
 
 private struct RevenuSectionView: View {
-    
+    @EnvironmentObject private var model: Model
+
     // MARK: - View Model
     
     struct ViewModel {
@@ -109,10 +110,10 @@ private struct RevenuSectionView: View {
         init() {
         }
         
-        init(from adult: Adult) {
+        init(from adult: Adult, using model: Model) {
             hasUnemployementAllocationPeriod = adult.hasUnemployementAllocationPeriod
             unemployementAllocation          = adult.unemployementAllocation
-            pension                          = adult.pension
+            pension                          = adult.pension(using: model)
             income                           = adult.workIncome
             switch income {
                 case let .salary(_, _, _, fromDate1, healthInsurance):
@@ -194,7 +195,7 @@ private struct RevenuSectionView: View {
     
     func onAppear() {
         let adult = member as! Adult
-        viewModel = ViewModel(from: adult)
+        viewModel = ViewModel(from: adult, using: model)
     }
 }
 
@@ -284,6 +285,7 @@ private struct InheritanceSectionView: View {
 }
 
 struct AdultDetailView_Previews: PreviewProvider {
+    static var model     = Model(fromBundle: Bundle.main)
     static var family    = Family()
     static var patrimoin = Patrimoin()
     static var anAdult   = family.members.items.first!
@@ -294,6 +296,7 @@ struct AdultDetailView_Previews: PreviewProvider {
         Form {
             AdultDetailView()
                 .environmentObject(patrimoin)
+                .environmentObject(model)
                 .environmentObject(anAdult)
         }
     }

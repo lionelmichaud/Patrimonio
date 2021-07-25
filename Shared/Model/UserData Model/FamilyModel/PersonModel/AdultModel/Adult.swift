@@ -118,16 +118,6 @@ final class Adult: Person {
     @Published var ageOfAgircPensionLiquidComp: DateComponents = DateComponents(calendar: Date.calendar, year: 62, month: 0, day: 1)
     @Published var lastKnownAgircPensionSituation = RegimeAgircSituation()
     
-    /// RETRAITE: pension évaluée l'année de la liquidation de la pension (non révaluée)
-    var pension: BrutNetTaxable { // computed
-        let pensionGeneral = pensionRegimeGeneral
-        let pensionAgirc   = pensionRegimeAgirc
-        let brut           = pensionGeneral.brut + pensionAgirc.brut
-        let net            = pensionGeneral.net  + pensionAgirc.net
-        let taxable        = try! Fiscal.model.pensionTaxes.taxable(brut: brut, net:net)
-        return BrutNetTaxable(brut: brut, net: net, taxable: taxable)
-    } // computed
-    
     /// DEPENDANCE
     @Published var nbOfYearOfDependency : Int = 0
     var ageOfDependency                 : Int {
@@ -227,8 +217,8 @@ final class Adult: Person {
     /// Initialise les propriétés qui ne peuvent pas l'être à la création
     /// quand le modèle n'est pas encore créé
     /// - Parameter model: modèle à utiliser
-    override func initialize(usingModel model: Model) {
-        super.initialize(usingModel: model)
+    override func initialize(using model: Model) {
+        super.initialize(using: model)
         
         // initialiser le nombre d'années de dépendence
         // initialiser avec la valeur moyenne déterministe
@@ -328,5 +318,15 @@ final class Adult: Person {
         
         // pas de dépendance avant l'âge de 65 ans
         nbOfYearOfDependency = min(nbOfYearOfDependency, zeroOrPositive(ageOfDeath - 65))
+    }
+    
+    /// RETRAITE: pension évaluée l'année de la liquidation de la pension (non révaluée)
+    func pension(using model: Model) -> BrutNetTaxable { // computed
+        let pensionGeneral = pensionRegimeGeneral(using: model)
+        let pensionAgirc   = pensionRegimeAgirc(using: model)
+        let brut           = pensionGeneral.brut + pensionAgirc.brut
+        let net            = pensionGeneral.net  + pensionAgirc.net
+        let taxable        = try! Fiscal.model.pensionTaxes.taxable(brut: brut, net:net)
+        return BrutNetTaxable(brut: brut, net: net, taxable: taxable)
     }
 }

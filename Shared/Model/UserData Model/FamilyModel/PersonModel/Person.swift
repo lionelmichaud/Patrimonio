@@ -123,7 +123,7 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     /// Initialise les propriétés qui ne peuvent pas l'être à la création
     /// quand le modèle n'est pas encore créé
     /// - Parameter model: modèle à utiliser
-    func initialize(usingModel model: Model) {
+    func initialize(using model: Model) {
         // initialiser l'age de décès avec la valeur moyenne déterministe
         switch self.sexe {
             case .male:

@@ -116,7 +116,8 @@ struct CashFlowLine {
          withYear       year                   : Int,
          withFamily     family                 : Family,
          withPatrimoine patrimoine             : Patrimoin,
-         taxableIrppRevenueDelayedFromLastyear : Double) throws {
+         taxableIrppRevenueDelayedFromLastyear : Double,
+         using model                           : Model) throws {
         self.year = year
         let adultsNames = family.adults.compactMap {
             $0.isAlive(atEndOf: year) ? $0.displayName : nil
@@ -134,7 +135,7 @@ struct CashFlowLine {
         
         try autoreleasepool {
             /// INCOME: populate Ages and Work incomes
-            populateIncomes(of: family)
+            populateIncomes(of: family, using: model)
             
             /// REAL ESTATE: populate produit de vente, loyers, taxes sociales et taxes locales des bien immobiliers
             manageRealEstateRevenues(of  : patrimoine,

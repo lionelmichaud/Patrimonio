@@ -7,30 +7,36 @@
 //
 
 import Foundation
+import Persistable
 import AppFoundation
 import Statistics
+import FileAndFolder
 
 // https://www.service-public.fr/particuliers/vosdroits/F21552
 
-// MARK: - SINGLETON: Modèle de pension de retraite
+// MARK: - Modèle de pension de retraite
 
-public struct Retirement {
+public struct Retirement: PersistableModel {
     
     // MARK: - Nested types
     
-    public struct Model: JsonCodableToBundleP {
+    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable {
         public static var defaultFileName : String = "RetirementModelConfig.json"
         public var regimeGeneral: RegimeGeneral
         public var regimeAgirc  : RegimeAgirc
         public var reversion    : PensionReversion
         
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
-        func initialized() -> Model {
+        public func initialized() -> Model {
             var model = self
             model.regimeAgirc.setRegimeGeneral(regimeGeneral)
             return model
         }
     }
+    
+    // MARK: - Static Properties
+    
+    public static var defaultFileName: String = "RetirementModelConfig.json"
     
     // MARK: - Static methods
     
@@ -42,12 +48,15 @@ public struct Retirement {
         RegimeGeneral.setSimulationMode(to: simulationMode)
         RegimeAgirc.setSimulationMode(to: simulationMode)
     }
+        
+    // MARK: - Properties
     
-    // MARK: - Static properties
+    public var model         : Model?
+    public var persistenceSM = PersistenceStateMachine()
     
-    public static var model: Model = Model(fromFile: Model.defaultFileName).initialized()
+    // MARK: - Initializers
     
-    // MARK: - Initializer
-    
-    private init() { }
+    public init() {
+        self.persistenceSM = PersistenceStateMachine()
+    }
 }
