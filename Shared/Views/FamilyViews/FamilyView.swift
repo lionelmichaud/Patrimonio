@@ -10,6 +10,7 @@ import SwiftUI
 
 struct FamilyView: View {
     @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
     @EnvironmentObject private var patrimoine : Patrimoin
@@ -42,7 +43,8 @@ struct FamilyView: View {
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
         // Vue modale de saisie d'un nouveau membre de la famille
         .sheet(isPresented: $showingSheet) {
-            PersonAddView()
+            PersonAddView(using: model)
+                .environmentObject(self.model)
                 .environmentObject(self.family)
                 .environmentObject(self.simulation)
                 .environmentObject(self.patrimoine)
@@ -62,6 +64,7 @@ struct FamilyHeaderView: View {
 
 struct FamilyView_Previews: PreviewProvider {
     static let dataStore  = Store()
+    static var model      = Model(fromBundle: Bundle.main)
     static let family     = Family()
     static let simulation = Simulation()
     static let patrimoine = Patrimoin()
@@ -70,6 +73,7 @@ struct FamilyView_Previews: PreviewProvider {
     static var previews: some View {
         FamilyView()
             .environmentObject(dataStore)
+            .environmentObject(model)
             .environmentObject(family)
             .environmentObject(simulation)
             .environmentObject(patrimoine)

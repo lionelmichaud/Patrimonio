@@ -12,27 +12,27 @@ import HumanLifeModel
 import UnemployementModel
 
 struct PersonEditView: View {
-    @EnvironmentObject var model      : Model
     @EnvironmentObject var family     : Family
     @EnvironmentObject var patrimoine : Patrimoin
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
     @Environment(\.presentationMode) var presentationMode
     
-    let member: Person
+    private let member: Person
     
-    @State var showingSheet = false
+    @State private var showingSheet = false
     // Person
-    @StateObject var personViewModel: PersonViewModel
+    @StateObject private var personViewModel: PersonViewModel
     // Child
     @State private var ageUniversity   : Int = 0
     @State private var ageIndependance : Int = 0
     // Adult
-    @StateObject var adultViewModel = AdultViewModel()
+    @StateObject private var adultViewModel = AdultViewModel()
     
     /// Initialise le ViewModel à partir des propriété d'un membre existant
     /// - Parameter member: le membre de la famille
-    init(withInitialValueFrom member: Person) {
+    init(withInitialValueFrom member : Person,
+         using model                 : Model) {
         self.member = member
         // Initialize Person ViewModel
         _personViewModel = StateObject(wrappedValue: PersonViewModel(from: member))
@@ -79,15 +79,17 @@ struct PersonEditView: View {
                         Spacer()
                         Text("\((member as! Adult).nbOfChildBirth)")
                     }
-                    AdultEditView(personViewModel: personViewModel,
-                                  adultViewModel : adultViewModel)
+                    AdultEditView(authorizeDeathAgeModification : true,
+                                  personViewModel               : personViewModel,
+                                  adultViewModel                : adultViewModel)
                     
                 } else if member is Child {
                     /// Enfant
-                    ChildEditView(birthDate       : member.birthDate,
-                                  deathAge        : $personViewModel.deathAge,
-                                  ageUniversity   : $ageUniversity,
-                                  ageIndependance : $ageIndependance)
+                    ChildEditView(authorizeDeathAgeModification : true,
+                                  birthDate                     : member.birthDate,
+                                  deathAge                      : $personViewModel.deathAge,
+                                  ageUniversity                 : $ageUniversity,
+                                  ageIndependance               : $ageIndependance)
                 }
             }
             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -97,7 +99,7 @@ struct PersonEditView: View {
     /// Applique les modifications: recopie le ViewModel dans les propriétés d'un membre existant
     func applyChanges() {
         // Update Person from ViewModel
-        personViewModel.updateFromViewModel(member: member)
+        personViewModel.update(member: member)
         
         // Child
         if let child = member as? Child {
@@ -107,7 +109,7 @@ struct PersonEditView: View {
         
         // Update Adult from ViewModel
         if let adult = member as? Adult {
-            adultViewModel.updateFromViewModel(adult: adult)
+            adultViewModel.update(adult: adult)
         }
         
         // mettre à jour le nombre d'enfant de chaque parent de la famille
@@ -123,16 +125,17 @@ struct PersonEditView: View {
 
 // MARK: - Saisie Adult
 struct AdultEditView : View {
-    @ObservedObject var personViewModel        : PersonViewModel
-    @ObservedObject var adultViewModel         : AdultViewModel
-//    @State private var compenstationSupraLegal : Bool = false
-//    @State private var alertItem               : AlertItem?
+    var authorizeDeathAgeModification: Bool
+
+    @ObservedObject var personViewModel : PersonViewModel
+    @ObservedObject var adultViewModel  : AdultViewModel
     
     var body: some View {
         Group {
             // Section scénario
-            ScenarioSection(personViewModel : personViewModel,
-                            adultViewModel  : adultViewModel)
+            ScenarioSection(authorizeDeathAgeModification : authorizeDeathAgeModification,
+                            personViewModel               : personViewModel,
+                            adultViewModel                : adultViewModel)
             
             // Section activité
             ActivitySection(adultViewModel: adultViewModel)
@@ -149,16 +152,20 @@ struct AdultEditView : View {
 
 // MARK: - Saisie Adult / Section Scenario
 private struct ScenarioSection: View {
+    var authorizeDeathAgeModification: Bool
+
     @ObservedObject var personViewModel : PersonViewModel
     @ObservedObject var adultViewModel  : AdultViewModel
 
     var body: some View {
         Section(header: Text("SCENARIO").font(.subheadline)) {
-            Stepper(value: $personViewModel.deathAge, in: Date().year - personViewModel.birthDate.year ... 100) {
-                HStack {
-                    Text("Age de décès estimé ")
-                    Spacer()
-                    Text("\(personViewModel.deathAge) ans").foregroundColor(.secondary)
+            if authorizeDeathAgeModification {
+                Stepper(value: $personViewModel.deathAge, in: Date().year - personViewModel.birthDate.year ... 100) {
+                    HStack {
+                        Text("Age de décès estimé ")
+                        Spacer()
+                        Text("\(personViewModel.deathAge) ans").foregroundColor(.secondary)
+                    }
                 }
             }
             HStack {
@@ -255,6 +262,8 @@ private struct EndOfWorkingPeriodEditView: View {
 
 // MARK: - Saisie enfant
 struct ChildEditView : View {
+    var authorizeDeathAgeModification: Bool
+    
     @EnvironmentObject private var model: Model
     let birthDate                : Date
     @Binding var deathAge        : Int
@@ -264,11 +273,13 @@ struct ChildEditView : View {
     var body: some View {
         Group {
             Section(header: Text("SCENARIO").font(.subheadline)) {
-                Stepper(value: $deathAge, in: Date().year - birthDate.year ... 100) {
-                    HStack {
-                        Text("Age de décès estimé")
-                        Spacer()
-                        Text("\(deathAge) ans").foregroundColor(.secondary)
+                if authorizeDeathAgeModification {
+                    Stepper(value: $deathAge, in: Date().year - birthDate.year ... 100) {
+                        HStack {
+                            Text("Age de décès estimé")
+                            Spacer()
+                            Text("\(deathAge) ans").foregroundColor(.secondary)
+                        }
                     }
                 }
                 Stepper(value: $ageUniversity, in: model.humanLifeModel.minAgeUniversity ... model.humanLifeModel.minAgeIndependance) {
@@ -299,13 +310,13 @@ struct PersonEditView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             // adult
-            PersonEditView(withInitialValueFrom: anAdult)
-                .environmentObject(model)
+            PersonEditView(withInitialValueFrom : anAdult,
+                           using                : model)
                 .environmentObject(family)
                 .environmentObject(anAdult)
             // child
-            PersonEditView(withInitialValueFrom: aChild)
-                .environmentObject(model)
+            PersonEditView(withInitialValueFrom : aChild,
+                           using                : model)
                 .environmentObject(family)
                 .environmentObject(aChild)
             Form {

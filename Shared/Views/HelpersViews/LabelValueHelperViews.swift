@@ -169,9 +169,11 @@ struct IntegerEditView: View {
                     // filtrer les caractères non numériques
                     var filtered = newValue.filter { "-0123456789".contains($0) }
                     // filtrer `-` s'il n'est pas le premier caractère
-                    filtered = filtered.replacingOccurrences(of: "-",
-                                                             with: "",
-                                                             range: filtered.index(filtered.startIndex, offsetBy: 1)..<filtered.endIndex)
+                    if filtered.count > 0 {
+                        filtered = filtered.replacingOccurrences(of: "-",
+                                                                 with: "",
+                                                                 range: filtered.index(filtered.startIndex, offsetBy: 1)..<filtered.endIndex)
+                    }
                     if filtered != newValue {
                         self.textAmount = filtered
                     }

@@ -15,12 +15,12 @@ final class Model: ObservableObject {
 
     // MARK: - Properties
 
-    var humanLife       : HumanLife
-    var humanLifeModel  : HumanLife.Model {
+    @Published var humanLife: HumanLife
+    var humanLifeModel: HumanLife.Model {
         humanLife.model!
     }
-    var retirement : Retirement
-    var retirementModel : Retirement.Model {
+    @Published var retirement: Retirement
+    var retirementModel: Retirement.Model {
         retirement.model!
     }
 

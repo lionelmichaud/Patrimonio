@@ -28,7 +28,7 @@ struct PersonAddView: View {
     // Adult
     @StateObject var adultViewModel = AdultViewModel()
     
-    init() {
+    init(using model: Model) {
         _ageUniversity   = State(initialValue: model.humanLifeModel.minAgeUniversity)
         _ageIndependance = State(initialValue: model.humanLifeModel.minAgeIndependance)
     }
@@ -68,14 +68,16 @@ struct PersonAddView: View {
 
                 if formIsValid() {
                     if personViewModel.seniority == .adult {
-                        AdultEditView(personViewModel: personViewModel,
-                                      adultViewModel : adultViewModel)
+                        AdultEditView(authorizeDeathAgeModification : false,
+                                      personViewModel               : personViewModel,
+                                      adultViewModel                : adultViewModel)
                         
                     } else {
-                        ChildEditView(birthDate       : personViewModel.birthDate,
-                                      deathAge        : $personViewModel.deathAge,
-                                      ageUniversity   : $ageUniversity,
-                                      ageIndependance : $ageIndependance)
+                        ChildEditView(authorizeDeathAgeModification : false,
+                                      birthDate                     : personViewModel.birthDate,
+                                      deathAge                      : $personViewModel.deathAge,
+                                      ageUniversity                 : $ageUniversity,
+                                      ageIndependance               : $ageIndependance)
                     }
                 }
             }
@@ -89,15 +91,24 @@ struct PersonAddView: View {
         simulation.reset()
         uiState.reset()
         
+        // initialiser l'espérace de vie à partir du modèle
+        let deathAge: Int
+        // creation du nouveau membre Adult
+        switch personViewModel.sexe {
+            case .male:
+                deathAge = Int(model.humanLife.model!.menLifeExpectation.value(withMode: .deterministic))
+            case .female:
+                deathAge = Int(model.humanLife.model!.womenLifeExpectation.value(withMode: .deterministic))
+        }
+
         switch personViewModel.seniority {
             case .adult  :
-                // creation du nouveau membre Adult
                 let newMember = Adult(sexe       : personViewModel.sexe,
                                       givenName  : personViewModel.givenName,
                                       familyName : personViewModel.familyName.uppercased(),
                                       birthDate  : personViewModel.birthDate,
-                                      ageOfDeath : personViewModel.deathAge)
-                adultViewModel.updateFromViewModel(adult: newMember)
+                                      ageOfDeath : deathAge)
+                adultViewModel.update(adult: newMember)
                 
                 // ajout du nouveau membre à la famille
                 family.addMember(newMember)
@@ -108,7 +119,7 @@ struct PersonAddView: View {
                                       givenName  : personViewModel.givenName,
                                       familyName : personViewModel.familyName.uppercased(),
                                       birthDate  : personViewModel.birthDate,
-                                      ageOfDeath : personViewModel.deathAge)
+                                      ageOfDeath : deathAge)
                 newMember.ageOfUniversity = ageUniversity
                 newMember.ageOfIndependence = ageIndependance
                 // ajout du nouveau membre à la famille
@@ -161,13 +172,15 @@ struct CiviliteEditView : View {
 
 struct MemberAddView_Previews: PreviewProvider {
     static var family     = Family()
+    static var model      = Model(fromBundle: Bundle.main)
     static var simulation = Simulation()
     static var patrimoine = Patrimoin()
     static var uiState    = UIState()
     
     static var previews: some View {
-        PersonAddView()
+        PersonAddView(using: model)
             .environmentObject(family)
+            .environmentObject(model)
             .environmentObject(simulation)
             .environmentObject(patrimoine)
             .environmentObject(uiState)

@@ -11,6 +11,7 @@ import SwiftUI
 // MARK: - Afficher les détails d'un membre de la famille
 
 struct PersonDetailView: View {
+    @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var member     : Person
     @EnvironmentObject private var patrimoine : Patrimoin
@@ -40,7 +41,12 @@ struct PersonDetailView: View {
             }
         }
         .sheet(isPresented: $showingSheet) {
-            PersonEditView(withInitialValueFrom: self.member)
+            PersonEditView(withInitialValueFrom: self.member, using: model)
+                .environmentObject(model)
+                .environmentObject(family)
+                .environmentObject(simulation)
+                .environmentObject(patrimoine)
+                .environmentObject(uiState)
         }
         .navigationTitle("Membre")
         .toolbar {
@@ -61,17 +67,19 @@ struct PersonDetailView: View {
 }
 
 struct PersonDetailView_Previews: PreviewProvider {
+    static var model      = Model(fromBundle: Bundle.main)
     static var family     = Family()
     static var patrimoin  = Patrimoin()
     static var simulation = Simulation()
     static var uiState    = UIState()
-    static var anAdult   = family.members.items.first!
-    static var aChild    = family.members.items.last!
+    static var anAdult    = family.members.items.first!
+    static var aChild     = family.members.items.last!
     
     static var previews: some View {
         Group {
             // adult
             PersonDetailView()
+                .environmentObject(model)
                 .environmentObject(family)
                 .environmentObject(patrimoin)
                 .environmentObject(simulation)
@@ -79,6 +87,7 @@ struct PersonDetailView_Previews: PreviewProvider {
                 .environmentObject(anAdult)
             // enfant
             PersonDetailView()
+                .environmentObject(model)
                 .environmentObject(family)
                 .environmentObject(patrimoin)
                 .environmentObject(simulation)

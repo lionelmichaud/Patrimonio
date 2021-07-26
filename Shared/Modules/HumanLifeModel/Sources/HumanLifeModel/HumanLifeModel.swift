@@ -77,7 +77,7 @@ public struct HumanLife: PersistableModel {
     // MARK: - Properties
     
     public var model         : Model?
-    public var persistenceSM = PersistenceStateMachine()
+    public var persistenceSM : PersistenceStateMachine
 
     // MARK: - Initializers
 

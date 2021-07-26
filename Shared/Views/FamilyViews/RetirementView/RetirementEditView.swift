@@ -151,11 +151,12 @@ struct RegimeGeneralSituationEditView : View {
 }
 
 struct RetirementEditView_Previews: PreviewProvider {
-    static var model   = Model(fromBundle: Bundle.main)
+    static var model = Model(fromBundle: Bundle.main)
 
     static var previews: some View {
         Form {
-            RetirementEditView(personViewModel: PersonViewModel(), adultViewModel: AdultViewModel())
+            RetirementEditView(personViewModel : PersonViewModel(),
+                               adultViewModel  : AdultViewModel())
                 .environmentObject(model)
         }
     }

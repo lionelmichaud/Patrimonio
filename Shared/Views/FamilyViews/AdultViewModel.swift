@@ -73,7 +73,7 @@ class AdultViewModel: ObservableObject {
     init() {
     }
 
-    func updateFromViewModel(adult: Adult) {
+    func update(adult: Adult) {
         adult.fiscalOption      = fiscalOption
         adult.dateOfRetirement  = dateRetirement
         adult.causeOfRetirement = causeOfRetirement

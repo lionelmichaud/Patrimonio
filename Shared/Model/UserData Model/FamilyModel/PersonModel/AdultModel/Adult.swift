@@ -218,14 +218,10 @@ final class Adult: Person {
     /// quand le modèle n'est pas encore créé
     /// - Parameter model: modèle à utiliser
     override func initialize(using model: Model) {
-        super.initialize(using: model)
+        //super.initialize(using: model)
         
         // initialiser le nombre d'années de dépendence
-        // initialiser avec la valeur moyenne déterministe
-        self.nbOfYearOfDependency =
-            min(Int(model.humanLifeModel.nbOfYearsOfdependency.value(withMode: .deterministic)),
-                // pas de dépendance avant l'âge de 65 ans
-                zeroOrPositive(self.ageOfDeath - 65))
+        setRandomPropertiesDeterministicaly(using: model)
     }
     
     /// Année ou a lieu l'événement recherché
@@ -308,7 +304,7 @@ final class Adult: Person {
                 taxableIrpp : workTaxableIncome * nbWeeks / 52)
     }
     
-    /// Réinitialiser les prioriétés aléatoires des membres
+    /// Réinitialiser les prioriétés variables des membres de manière aléatoires
     override func nextRandomProperties(using model: Model) {
         super.nextRandomProperties(using: model)
         
@@ -318,6 +314,17 @@ final class Adult: Person {
         
         // pas de dépendance avant l'âge de 65 ans
         nbOfYearOfDependency = min(nbOfYearOfDependency, zeroOrPositive(ageOfDeath - 65))
+    }
+    
+    /// Réinitialiser les prioriétés variables des membres de manière déterministe
+    override func setRandomPropertiesDeterministicaly(using model: Model) {
+        super.setRandomPropertiesDeterministicaly(using: model)
+        
+        // initialiser le nombre d'années de dépendence
+        // initialiser avec la valeur moyenne déterministe
+        let modelValue = Int(model.humanLifeModel.nbOfYearsOfdependency.value(withMode: .deterministic))
+        nbOfYearOfDependency =
+            min(modelValue, zeroOrPositive(self.ageOfDeath - 65)) // pas de dépendance avant l'âge de 65 ans
     }
     
     /// RETRAITE: pension évaluée l'année de la liquidation de la pension (non révaluée)

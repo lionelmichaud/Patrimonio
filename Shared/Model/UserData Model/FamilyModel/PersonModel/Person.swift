@@ -124,14 +124,7 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     /// quand le modèle n'est pas encore créé
     /// - Parameter model: modèle à utiliser
     func initialize(using model: Model) {
-        // initialiser l'age de décès avec la valeur moyenne déterministe
-        switch self.sexe {
-            case .male:
-                self.ageOfDeath = Int(model.humanLifeModel.menLifeExpectation.value(withMode: .deterministic))
-                
-            case .female:
-                self.ageOfDeath = Int(model.humanLifeModel.womenLifeExpectation.value(withMode: .deterministic))
-        }
+        setRandomPropertiesDeterministicaly(using: model)
     }
 
     func age(atEndOf year: Int) -> Int {
@@ -174,7 +167,7 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
         }
     }
         
-    /// Réinitialiser les prioriétés aléatoires des membres
+    /// Réinitialiser les prioriétés variables des membres de manière aléatoires
     func nextRandomProperties(using model: Model) {
         switch self.sexe {
             case .male:
@@ -182,6 +175,19 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
                 
             case .female:
                 ageOfDeath = Int(model.humanLife.model!.womenLifeExpectation.next())
+        }
+        // on ne peut mourire à un age < à celui que l'on a déjà
+        ageOfDeath = max(ageOfDeath, age(atEndOf: Date.now.year))
+    }
+
+    /// Réinitialiser les prioriétés variables des membres de manière déterministe
+    func setRandomPropertiesDeterministicaly(using model: Model) {
+        switch sexe {
+            case .male:
+                ageOfDeath = Int(model.humanLifeModel.menLifeExpectation.value(withMode: .deterministic))
+                
+            case .female:
+                ageOfDeath = Int(model.humanLifeModel.womenLifeExpectation.value(withMode: .deterministic))
         }
         // on ne peut mourire à un age < à celui que l'on a déjà
         ageOfDeath = max(ageOfDeath, age(atEndOf: Date.now.year))

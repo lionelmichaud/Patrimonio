@@ -20,7 +20,7 @@ where R: Codable,
     public var version       : Version
     public var name          : String
     public var rndGenerator  : R
-    private var defaultValue : Double = 0 // valeur par defaut déterministe
+    public var defaultValue : Double = 0 // valeur par defaut déterministe
     private var randomValue  : Double = 0 // dernière valeur randomisée
     public var randomHistory : [Double]? // historique des tirages aléatoires
 
@@ -32,7 +32,7 @@ where R: Codable,
     }
     
     /// Générer le nombre aléatoire suivant
-    public mutating func next() -> Double {
+    @discardableResult public mutating func next() -> Double {
         randomValue = Double(rndGenerator.next())
         if randomHistory == nil {
             randomHistory = []
