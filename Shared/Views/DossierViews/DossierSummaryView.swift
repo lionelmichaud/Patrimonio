@@ -26,17 +26,8 @@ struct DossierSummaryView: View {
             .toolbar {
                 /// Bouton: Sauvegarder
                 ToolbarItem(placement: .automatic) {
-                    Button(
-                        action : { save(activeDossier) },
-                        label  : {
-                            HStack {
-                                Image(systemName: "externaldrive.fill")
-                                    .imageScale(.large)
-                                Text("Enregistrer")
-                            }
-                        })
-                        .capsuleButtonStyle()
-                        .disabled(!savable())
+                    SaveToDiskButton { save(activeDossier) }
+                        .disabled(!savable)
                 }
             }
         } else {
@@ -44,14 +35,18 @@ struct DossierSummaryView: View {
         }
     }
     
-    private func savable() -> Bool {
+    /// True si le dossier a été modifié
+    private var savable: Bool {
         family.isModified || patrimoine.isModified || model.isModified
     }
+
+    // MARK: - Methods
 
     /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
     private func save(_ dossier: Dossier) {
         do {
             try dossier.saveDossierContentAsJSON { folder in
+                try model.saveAsJSON(toFolder: folder)
                 try family.saveAsJSON(toFolder: folder)
                 try patrimoine.saveAsJSON(toFolder: folder)
                 // forcer la vue à se rafraichir

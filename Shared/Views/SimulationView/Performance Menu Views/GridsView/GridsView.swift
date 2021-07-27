@@ -127,7 +127,7 @@ struct ShortGridView: View {
                             if busySaveWheelAnimate {
                                 ProgressView()
                             }
-                            Label("Enregistrer", systemImage: "square.and.arrow.up")
+                            Label("Enregistrer", systemImage: "externaldrive.fill")
                         }
                     }
                     .disabled(dataStore.activeDossier == nil)

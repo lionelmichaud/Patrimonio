@@ -61,22 +61,22 @@ struct PeriodicInvestDetailedView: View {
                            inRange: localItem.firstYear...localItem.firstYear + 100,
                            selection: $localItem.lastYear)
                 AmountView(label: "Valeur liquidative avant prélèvements sociaux et IRPP",
-                           amount: liquidatedValue())
+                           amount: liquidatedValue)
                     .foregroundColor(.secondary)
                 AmountView(label: "Prélèvements sociaux",
-                           amount: socialTaxes())
+                           amount: socialTaxes)
                     .foregroundColor(.secondary)
                 AmountView(label: "Valeure liquidative net de prélèvements sociaux",
-                           amount: liquidatedValueAfterSocialTaxes())
+                           amount: liquidatedValueAfterSocialTaxes)
                     .foregroundColor(.secondary)
                 AmountView(label: "Intérêts cumulés avant prélèvements sociaux",
-                           amount: cumulatedInterests())
+                           amount: cumulatedInterests)
                     .foregroundColor(.secondary)
                 AmountView(label: "Intérêts cumulés après prélèvements sociaux",
-                           amount: netCmulatedInterests())
+                           amount: netCmulatedInterests)
                     .foregroundColor(.secondary)
                 AmountView(label: "Intérêts cumulés taxables à l'IRPP",
-                           amount: netCmulatedInterests())
+                           amount: netCmulatedInterests)
                     .foregroundColor(.secondary)
             }
         }
@@ -94,20 +94,11 @@ struct PeriodicInvestDetailedView: View {
                         }
                     })
                     .capsuleButtonStyle()
-                    .disabled((index == nil) || changeOccured())
+                    .disabled((index == nil) || changeOccured)
             }
             ToolbarItem(placement: .automatic) {
-                Button(
-                    action : applyChanges,
-                    label  : {
-                        HStack {
-                            Image(systemName: "externaldrive.fill")
-                                .imageScale(.large)
-                            Text("Enregistrer")
-                        }
-                    })
-                    .capsuleButtonStyle()
-                    .disabled(!changeOccured())
+                SaveToFolderButton(action : applyChanges)
+                    .disabled(!changeOccured)
             }
         }
         .alert(item: $alertItem, content: myAlert)
@@ -208,31 +199,31 @@ struct PeriodicInvestDetailedView: View {
         return true
     }
     
-    private func changeOccured() -> Bool {
+    private var changeOccured: Bool {
         return localItem != originalItem
     }
     
-    private func liquidatedValue() -> Double {
+    private var liquidatedValue: Double {
         let liquidationDate = self.localItem.lastYear
         return self.localItem.value(atEndOf: liquidationDate)
     }
-    private func cumulatedInterests() -> Double {
+    private var cumulatedInterests: Double {
         let liquidationDate = self.localItem.lastYear
         return self.localItem.cumulatedInterests(atEndOf: liquidationDate)
     }
-    private func netCmulatedInterests() -> Double {
+    private var netCmulatedInterests: Double {
         let liquidationDate = self.localItem.lastYear
         return self.localItem.liquidatedValue(atEndOf: liquidationDate).netInterests
     }
-    private func taxableCmulatedInterests() -> Double {
+    private var taxableCmulatedInterests: Double {
         let liquidationDate = self.localItem.lastYear
         return self.localItem.liquidatedValue(atEndOf: liquidationDate).taxableIrppInterests
     }
-    private func socialTaxes() -> Double {
+    private var socialTaxes: Double {
         let liquidationDate = self.localItem.lastYear
         return self.localItem.liquidatedValue(atEndOf: liquidationDate).socialTaxes
     }
-    private func liquidatedValueAfterSocialTaxes() -> Double {
+    private var liquidatedValueAfterSocialTaxes: Double {
         let liquidationDate = self.localItem.lastYear
         let liquidatedValue = self.localItem.liquidatedValue(atEndOf: liquidationDate)
         return liquidatedValue.revenue - liquidatedValue.socialTaxes

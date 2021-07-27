@@ -531,6 +531,8 @@
 		79F222F3265ACC9F005EE0B9 /* DossierEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F222F1265ACC9F005EE0B9 /* DossierEditView.swift */; };
 		79F222F5265AD0B9005EE0B9 /* DossierViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F222F4265AD0B9005EE0B9 /* DossierViewModel.swift */; };
 		79F222F6265AD0B9005EE0B9 /* DossierViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F222F4265AD0B9005EE0B9 /* DossierViewModel.swift */; };
+		79F4D12326B03D62009D91B9 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F4D12226B03D62009D91B9 /* Buttons.swift */; };
+		79F4D12426B03D62009D91B9 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F4D12226B03D62009D91B9 /* Buttons.swift */; };
 		79FA8CE12630684F009FEA00 /* PeriodicInvestment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD62630684F009FEA00 /* PeriodicInvestment.swift */; };
 		79FA8CE22630684F009FEA00 /* PeriodicInvestment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD62630684F009FEA00 /* PeriodicInvestment.swift */; };
 		79FA8CE32630684F009FEA00 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD72630684F009FEA00 /* Assets.swift */; };
@@ -838,6 +840,7 @@
 		79EF935826376D1100C1BE5B /* Simulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Simulation.swift; sourceTree = "<group>"; };
 		79F222F1265ACC9F005EE0B9 /* DossierEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierEditView.swift; sourceTree = "<group>"; };
 		79F222F4265AD0B9005EE0B9 /* DossierViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierViewModel.swift; sourceTree = "<group>"; };
+		79F4D12226B03D62009D91B9 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		79FA8CD62630684F009FEA00 /* PeriodicInvestment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodicInvestment.swift; sourceTree = "<group>"; };
 		79FA8CD72630684F009FEA00 /* Assets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
 		79FA8CD82630684F009FEA00 /* InterestRateKind.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterestRateKind.swift; sourceTree = "<group>"; };
@@ -1784,6 +1787,7 @@
 				799025C32642007300ED53D4 /* ProgressViews.swift */,
 				79C838302641E02B008B29BF /* MenuCollapsable.swift */,
 				79C838332641E04C008B29BF /* PopOverContentView.swift */,
+				79F4D12226B03D62009D91B9 /* Buttons.swift */,
 			);
 			path = HelpersViews;
 			sourceTree = "<group>";
@@ -2187,6 +2191,7 @@
 				79B164842651DD7200D0603C /* ScenarioSummaryView.swift in Sources */,
 				791ED104263A20F600701202 /* SuccessorListView.swift in Sources */,
 				7998E1A2262DBE3E00DA4A12 /* Adult+Unemployement.swift in Sources */,
+				79F4D12326B03D62009D91B9 /* Buttons.swift in Sources */,
 				79FA8CEB2630684F009FEA00 /* SCPI.swift in Sources */,
 				79EC479926307B260006EE44 /* UserSettings.swift in Sources */,
 				79B2727A2634D68E00298E5D /* BoundaryEditView.swift in Sources */,
@@ -2393,6 +2398,7 @@
 				790C6171266AA5A80032A35E /* ExportSettingsView.swift in Sources */,
 				79EC5EAB26406FD900FF8263 /* OwnerGroupBox.swift in Sources */,
 				7990D8E2264F1C4000078CB6 /* BarChartCashFlowVisitor.swift in Sources */,
+				79F4D12426B03D62009D91B9 /* Buttons.swift in Sources */,
 				7998E1A3262DBE3E00DA4A12 /* Adult+Unemployement.swift in Sources */,
 				79FA8CEC2630684F009FEA00 /* SCPI.swift in Sources */,
 				791ED0F0263A173D00701202 /* PersonAddView.swift in Sources */,

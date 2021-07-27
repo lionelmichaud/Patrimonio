@@ -73,20 +73,11 @@ struct FreeInvestDetailedView: View {
                         }
                     })
                     .capsuleButtonStyle()
-                    .disabled((index == nil) || changeOccured())
+                    .disabled((index == nil) || changeOccured)
             }
             ToolbarItem(placement: .automatic) {
-                Button(
-                    action : applyChanges,
-                    label  : {
-                        HStack {
-                            Image(systemName: "externaldrive.fill")
-                                .imageScale(.large)
-                            Text("Enregistrer")
-                        }
-                    })
-                    .capsuleButtonStyle()
-                    .disabled(!changeOccured())
+                SaveToFolderButton(action : applyChanges)
+                    .disabled(!changeOccured)
             }
         }
         .alert(item: $alertItem, content: myAlert)
@@ -140,7 +131,7 @@ struct FreeInvestDetailedView: View {
     // sauvegarder les changements
     private func applyChanges() {
         // validation avant sauvegarde
-        guard self.isValid() else { return }
+        guard self.isValid else { return }
         
         if let index = index {
             // modifier un éléménet existant
@@ -158,7 +149,7 @@ struct FreeInvestDetailedView: View {
         resetSimulation()
     }
     
-    private func isValid() -> Bool {
+    private var isValid: Bool {
         /// vérifier que le nom n'est pas vide
         guard localItem.name != "" else {
             self.alertItem = AlertItem(title         : Text("Donner un nom"),
@@ -188,8 +179,8 @@ struct FreeInvestDetailedView: View {
         return true
     }
     
-    private func changeOccured() -> Bool {
-        return localItem != originalItem
+    private var changeOccured: Bool {
+        localItem != originalItem
     }
 }
 

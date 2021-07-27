@@ -78,6 +78,37 @@ public struct HumanLife: PersistableModel {
     
     public var model         : Model?
     public var persistenceSM : PersistenceStateMachine
+    
+    public var menLifeExpectationDeterministic: Int {
+        get {
+            Int(model!.menLifeExpectation.defaultValue.rounded())
+        }
+        set {
+            model?.menLifeExpectation.defaultValue = newValue.double()
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+    public var womenLifeExpectationDeterministic: Int {
+        get {
+            Int(model!.womenLifeExpectation.defaultValue.rounded())
+        }
+        set {
+            model?.womenLifeExpectation.defaultValue = newValue.double()
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+    public var nbOfYearsOfdependencyDeterministic: Int {
+        get {
+            Int(model!.nbOfYearsOfdependency.defaultValue.rounded())
+        }
+        set {
+            model?.nbOfYearsOfdependency.defaultValue = newValue.double()
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
 
     // MARK: - Initializers
 

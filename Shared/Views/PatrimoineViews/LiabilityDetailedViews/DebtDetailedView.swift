@@ -51,20 +51,11 @@ struct DebtDetailedView: View {
                     })
                     //.capsuleButtonStyle()
                     .capsuleButtonStyle()
-                    .disabled((index == nil) || changeOccured())
+                    .disabled((index == nil) || changeOccured)
             }
             ToolbarItem(placement: .automatic) {
-                Button(
-                    action : applyChanges,
-                    label  : {
-                        HStack {
-                            Image(systemName: "externaldrive.fill")
-                                .imageScale(.large)
-                            Text("Enregistrer")
-                        }
-                    })
-                    .capsuleButtonStyle()
-                    .disabled(!changeOccured())
+                SaveToFolderButton(action : applyChanges)
+                    .disabled(!changeOccured)
             }
         }
         .alert(item: $alertItem, content: myAlert)
@@ -110,7 +101,7 @@ struct DebtDetailedView: View {
     
     // sauvegarder les changements
     private func applyChanges() {
-        guard self.isValid() else { return }
+        guard self.isValid else { return }
 
         if let index = index {
             // modifier un éléménet existant
@@ -127,11 +118,11 @@ struct DebtDetailedView: View {
         resetSimulation()
     }
     
-    private func changeOccured() -> Bool {
+    private var changeOccured: Bool {
         return localItem != originalItem
     }
     
-    private func isValid() -> Bool {
+    private var isValid: Bool {
         if localItem.value > 0 {
             self.alertItem = AlertItem(title         : Text("Erreur"),
                                        message       : Text("Le montant emprunté doit être négatif"),

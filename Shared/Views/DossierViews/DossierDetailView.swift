@@ -72,21 +72,12 @@ struct DossierDetailView: View {
                         }
                     })
                     .capsuleButtonStyle()
-                    .disabled(!activable())
+                    .disabled(!activable)
             }
             /// Bouton: Sauvegarder
             ToolbarItem(placement: .automatic) {
-                Button(
-                    action : { save(dossier) },
-                    label  : {
-                        HStack {
-                            Image(systemName: "externaldrive.fill")
-                                .imageScale(.large)
-                            Text("Enregistrer")
-                        }
-                    })
-                    .capsuleButtonStyle()
-                    .disabled(!savable())
+                SaveToDiskButton { save(dossier) }
+                    .disabled(!savable)
             }
             /// Bouton: Dupliquer
             ToolbarItem(placement: .automatic) {
@@ -123,8 +114,14 @@ struct DossierDetailView: View {
     }
 
     /// True si le dossier est inactif ou s'il est actif et à été modifié
-    private func activable() -> Bool {
-        !dossier.isActive || savable()
+    private var activable: Bool {
+        !dossier.isActive || savable
+    }
+    
+    /// True si le dossier est actif et a été modifié
+    private var savable: Bool {
+        dossier.isActive &&
+            (family.isModified || patrimoine.isModified || model.isModified)
     }
     
     /// si le dossier est déjà actif et a été modifié alors prévenir que les modif vont être écrasées
@@ -140,12 +137,8 @@ struct DossierDetailView: View {
         }
     }
 
-    /// True si le dossier est actif et à été modifié
-    private func savable() -> Bool {
-        dossier.isActive &&
-            (family.isModified || patrimoine.isModified || model.isModified)
-    }
-
+    // MARK: - Methods
+    
     /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
     private func save(_ dossier: Dossier) {
         do {
