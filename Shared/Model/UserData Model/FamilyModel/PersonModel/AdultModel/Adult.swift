@@ -336,4 +336,29 @@ final class Adult: Person {
         let taxable        = try! Fiscal.model.pensionTaxes.taxable(brut: brut, net:net)
         return BrutNetTaxable(brut: brut, net: net, taxable: taxable)
     }
+
+    override func updateMembersDterministicValues(
+        _ menLifeExpectation    : Int,
+        _ womenLifeExpectation  : Int,
+        _ nbOfYearsOfdependency : Int,
+        _ ageMinimumLegal       : Int,
+        _ ageMinimumAGIRC       : Int
+    ) {
+        super.updateMembersDterministicValues(
+            menLifeExpectation,
+            womenLifeExpectation,
+            nbOfYearsOfdependency,
+            ageMinimumLegal,
+            ageMinimumAGIRC)
+        
+        nbOfYearOfDependency = nbOfYearsOfdependency
+
+        var ageLiquidationPension = max(ageOfPensionLiquidComp.year!, ageMinimumLegal)
+        ageOfPensionLiquidComp = DateComponents(calendar: Date.calendar,
+                                                year: ageLiquidationPension, month: 0, day: 1)
+
+        ageLiquidationPension = max(ageOfAgircPensionLiquidComp.year!, ageMinimumAGIRC)
+        ageOfAgircPensionLiquidComp = DateComponents(calendar: Date.calendar,
+                                                year: ageLiquidationPension, month: 0, day: 1)
+    }
 }

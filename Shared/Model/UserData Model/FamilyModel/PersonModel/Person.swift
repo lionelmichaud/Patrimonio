@@ -192,6 +192,22 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
         // on ne peut mourire à un age < à celui que l'on a déjà
         ageOfDeath = max(ageOfDeath, age(atEndOf: Date.now.year))
     }
+
+    func updateMembersDterministicValues(
+        _ menLifeExpectation    : Int,
+        _ womenLifeExpectation  : Int,
+        _ nbOfYearsOfdependency : Int,
+        _ ageMinimumLegal       : Int,
+        _ ageMinimumAGIRC       : Int
+    ) {
+        switch sexe {
+            case .male:
+                ageOfDeath = menLifeExpectation
+
+            case .female:
+                ageOfDeath = womenLifeExpectation
+        }
+    }
 }
 
 // MARK: Extensions

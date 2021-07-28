@@ -114,7 +114,18 @@ public extension Double {
     var €String: String {
         value€Formatter.string(from: self as NSNumber) ?? ""
     }
-    
+
+    func €String(digit: Int = 0) -> String {
+        let numFormatter = NumberFormatter()
+        numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
+        numFormatter.isLenient             = true
+        numFormatter.minimumIntegerDigits  = 1
+        numFormatter.minimumFractionDigits = 0
+        numFormatter.maximumFractionDigits = digit
+        numFormatter.numberStyle           = .currency
+        return numFormatter.string(from: self as NSNumber) ?? ""
+    }
+
     var k€String: String {
         valueKilo€Formatter.string(from: self as NSNumber) ?? ""
     }

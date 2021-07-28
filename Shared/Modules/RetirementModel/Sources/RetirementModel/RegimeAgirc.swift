@@ -65,8 +65,8 @@ public struct RegimeAgirc: Codable {
         public var version       : Version
         let gridAvant62          : [SliceAvantAgeLegal]
         let gridApres62          : [SliceApresAgeLegal]
-        let valeurDuPoint        : Double // 1.2714
-        let ageMinimum           : Int    // 57
+        var valeurDuPoint        : Double // 1.2714
+        var ageMinimum           : Int    // 57
         let majorationPourEnfant : MajorationPourEnfant
         var regimeGeneral        : RegimeGeneral!
     }
@@ -126,11 +126,21 @@ public struct RegimeAgirc: Codable {
     private var model: Model
     
     public var valeurDuPoint : Double {
-        model.valeurDuPoint
+        get {
+            model.valeurDuPoint
+        }
+        set {
+            model.valeurDuPoint = newValue
+        }
     }
     
     public var ageMinimum    : Int {
-        model.ageMinimum
+        get {
+            model.ageMinimum
+        }
+        set {
+            model.ageMinimum = newValue
+        }
     }
     
     // MARK: - Initializer

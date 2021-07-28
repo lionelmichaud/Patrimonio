@@ -21,6 +21,9 @@ class DeterministicViewModel: ObservableObject {
     @Published var menLifeExpectation    : Int
     @Published var womenLifeExpectation  : Int
     @Published var nbOfYearsOfdependency : Int
+    @Published var ageMinimumLegal       : Int
+    @Published var ageMinimumAGIRC       : Int
+    @Published var valeurDuPointAGIRC    : Double
 
     // MARK: - Initialization
     
@@ -28,6 +31,9 @@ class DeterministicViewModel: ObservableObject {
         menLifeExpectation    = model.humanLife.menLifeExpectationDeterministic
         womenLifeExpectation  = model.humanLife.womenLifeExpectationDeterministic
         nbOfYearsOfdependency = model.humanLife.nbOfYearsOfdependencyDeterministic
+        ageMinimumLegal       = model.retirement.ageMinimumLegal
+        ageMinimumAGIRC       = model.retirement.ageMinimumAGIRC
+        valeurDuPointAGIRC    = model.retirement.valeurDuPointAGIRC
         isModified = false
     }
 
@@ -37,13 +43,28 @@ class DeterministicViewModel: ObservableObject {
         menLifeExpectation    = model.humanLife.menLifeExpectationDeterministic
         womenLifeExpectation  = model.humanLife.womenLifeExpectationDeterministic
         nbOfYearsOfdependency = model.humanLife.nbOfYearsOfdependencyDeterministic
+        ageMinimumLegal       = model.retirement.ageMinimumLegal
+        ageMinimumAGIRC       = model.retirement.ageMinimumAGIRC
+        valeurDuPointAGIRC    = model.retirement.valeurDuPointAGIRC
     }
     
     func update(_ model: Model) {
         model.humanLife.menLifeExpectationDeterministic    = menLifeExpectation
         model.humanLife.womenLifeExpectationDeterministic  = womenLifeExpectation
         model.humanLife.nbOfYearsOfdependencyDeterministic = nbOfYearsOfdependency
+        model.retirement.ageMinimumLegal                   = ageMinimumLegal
+        model.retirement.ageMinimumAGIRC                   = ageMinimumAGIRC
+        model.retirement.valeurDuPointAGIRC                = valeurDuPointAGIRC
         isModified = false
+    }
+
+    func update(_ family: Family) {
+        family.updateMembersDterministicValues(
+            menLifeExpectation,
+            womenLifeExpectation,
+            nbOfYearsOfdependency,
+            ageMinimumLegal,
+            ageMinimumAGIRC)
     }
 }
 
@@ -51,7 +72,8 @@ class DeterministicViewModel: ObservableObject {
 
 /// Affiche les valeurs déterministes retenues pour les paramètres des modèles dans une simulation "déterministe"
 struct ModelDeterministicView: View {
-    @EnvironmentObject private var model: Model
+    @EnvironmentObject private var model  : Model
+    @EnvironmentObject private var family : Family
     //private let model: Model // reference sur le modèle
     @StateObject private var viewModel: DeterministicViewModel
 
@@ -66,7 +88,10 @@ struct ModelDeterministicView: View {
 
                 // modèle sociologie
                 ModelDeterministicSociologyView(viewModel: viewModel)
-            }
+
+                // modèle retraite
+                ModelDeterministicRetirementView(viewModel: viewModel)
+}
             .navigationTitle("Modèle Déterministe")
             .toolbar {
                 ToolbarItem(placement: .automatic) {
@@ -96,7 +121,11 @@ struct ModelDeterministicView: View {
     // MARK: - Methods
     
     func applyChanges() {
+        // mettre à jour le modèle avec les nouvelles valeurs
         viewModel.update(model)
+
+        // mettre à jour les membres de la famille existants
+        viewModel.update(family)
     }
 }
 
@@ -167,6 +196,45 @@ struct ModelDeterministicSociologyView: View {
                         integer : Int(SocioEconomy.model.nbTrimTauxPlein.value(withMode: .deterministic)))
             PercentView(label   : "Pénalisation des dépenses",
                         percent : SocioEconomy.model.expensesUnderEvaluationRate.value(withMode: .deterministic)/100.0)
+        }
+    }
+}
+
+// MARK: - Deterministic Retraite View
+
+struct ModelDeterministicRetirementView: View {
+    @ObservedObject var viewModel: DeterministicViewModel
+    @State private var isExpanded: Bool = true
+
+    var body: some View {
+        Section(header: Text("Modèle Retraite")) {
+            DisclosureGroup("Régime Général",
+                            isExpanded: $isExpanded) {
+                Stepper(value : $viewModel.ageMinimumLegal,
+                        in    : 50 ... 100) {
+                    HStack {
+                        Text("Age minimum légal de liquidation")
+                        Spacer()
+                        Text("\(viewModel.ageMinimumLegal) ans").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.ageMinimumLegal) { _ in viewModel.isModified = true }
+            }
+
+            DisclosureGroup("Régime Complémentaire",
+                            isExpanded: $isExpanded) {
+                Stepper(value : $viewModel.ageMinimumAGIRC,
+                        in    : 50 ... 100) {
+                    HStack {
+                        Text("Age minimum de liquidation")
+                        Spacer()
+                        Text("\(viewModel.ageMinimumAGIRC) ans").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.ageMinimumAGIRC) { _ in viewModel.isModified = true }
+
+                AmountView(label  : "Valeur du point",
+                           amount : viewModel.valeurDuPointAGIRC,
+                           digit: 4)
+            }
         }
     }
 }

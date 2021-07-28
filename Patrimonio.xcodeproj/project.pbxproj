@@ -1541,12 +1541,12 @@
 		79AB5407263241CF00FADBA7 /* ModelConfig */ = {
 			isa = PBXGroup;
 			children = (
-				79AB5408263241CF00FADBA7 /* FiscalModelConfig.json */,
-				79AB5409263241CF00FADBA7 /* SocioEconomyModelConfig.json */,
-				79AB540A263241CF00FADBA7 /* EconomyModelConfig.json */,
-				79AB540B263241CF00FADBA7 /* UnemploymentModelConfig.json */,
 				79AB540C263241CF00FADBA7 /* HumanLifeModelConfig.json */,
+				79AB540A263241CF00FADBA7 /* EconomyModelConfig.json */,
+				79AB5409263241CF00FADBA7 /* SocioEconomyModelConfig.json */,
 				79AB540D263241CF00FADBA7 /* RetirementModelConfig.json */,
+				79AB5408263241CF00FADBA7 /* FiscalModelConfig.json */,
+				79AB540B263241CF00FADBA7 /* UnemploymentModelConfig.json */,
 			);
 			path = ModelConfig;
 			sourceTree = "<group>";

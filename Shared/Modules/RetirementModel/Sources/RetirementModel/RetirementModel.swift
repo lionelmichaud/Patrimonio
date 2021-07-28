@@ -53,7 +53,40 @@ public struct Retirement: PersistableModel {
     
     public var model         : Model?
     public var persistenceSM : PersistenceStateMachine
-    
+
+    public var ageMinimumLegal: Int {
+        get {
+            model!.regimeGeneral.ageMinimumLegal
+        }
+        set {
+            model?.regimeGeneral.ageMinimumLegal = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+
+    public var valeurDuPointAGIRC: Double {
+        get {
+            model!.regimeAgirc.valeurDuPoint
+        }
+        set {
+            model?.regimeAgirc.valeurDuPoint = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+
+    public var ageMinimumAGIRC: Int {
+        get {
+            model!.regimeAgirc.ageMinimum
+        }
+        set {
+            model?.regimeAgirc.ageMinimum = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+
     // MARK: - Initializers
     
     public init() {

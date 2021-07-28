@@ -68,7 +68,7 @@ public struct RegimeGeneral: Codable {
         var version                : Version
         let dureeDeReferenceGrid   : [SliceRegimeLegal]
         let nbTrimNonIndemniseGrid : [SliceUnemployement]
-        let ageMinimumLegal        : Int    // 62
+        var ageMinimumLegal        : Int    // 62
         let nbOfYearForSAM         : Int    // 25 pour le calcul du SAM
         let maxReversionRate       : Double // 50.0 // % du SAM
         let decoteParTrimestre     : Double // 0.625 // % par trimestre
@@ -135,7 +135,12 @@ public struct RegimeGeneral: Codable {
     private var model: Model
     
     public var ageMinimumLegal: Int {
-        model.ageMinimumLegal
+        get {
+            model.ageMinimumLegal
+        }
+        set {
+            model.ageMinimumLegal = newValue
+        }
     }
     
     // MARK: - Initializer

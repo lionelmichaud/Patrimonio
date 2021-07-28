@@ -194,6 +194,23 @@ final class Family: ObservableObject {
             }
         }
     }
+
+    func updateMembersDterministicValues(
+        _ menLifeExpectation    : Int,
+        _ womenLifeExpectation  : Int,
+        _ nbOfYearsOfdependency : Int,
+        _ ageMinimumLegal       : Int,
+        _ ageMinimumAGIRC       : Int
+    ) {
+        members.items.forEach { member in
+            member.updateMembersDterministicValues(
+                menLifeExpectation,
+                womenLifeExpectation,
+                nbOfYearsOfdependency,
+                ageMinimumLegal,
+                ageMinimumAGIRC)
+        }
+    }
     
     /// Trouver le membre de la famille avec le displayName recherché
     /// - Parameter name: displayName recherché
