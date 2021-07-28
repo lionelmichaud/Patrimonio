@@ -113,7 +113,8 @@ struct PersonEditView: View {
         }
         
         // mettre à jour le nombre d'enfant de chaque parent de la famille
-        family.aMemberIsUpdated()
+        // et mémoriser l'existence d'une modification
+        family.aMemberIsModified()
         
         // remettre à zéro la simulation et sa vue
         simulation.reset()

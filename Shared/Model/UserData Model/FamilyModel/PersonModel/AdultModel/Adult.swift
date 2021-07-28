@@ -129,15 +129,16 @@ final class Adult: Person {
     override var description: String {
         return super.description +
         """
-        - nombre d'années de dépendance: \(nbOfYearOfDependency)
-        - age of retirement:  \(ageOfRetirementComp)
-        - date of retirement: \(dateOfRetirement.stringMediumDate)
-        - age of AGIRC pension liquidation:  \(ageOfAgircPensionLiquidComp)
-        - date of AGIRC pension liquidation: \(dateOfAgircPensionLiquid.stringMediumDate)
-        - age of pension liquidation:  \(ageOfPensionLiquidComp)
-        - date of pension liquidation: \(dateOfPensionLiquid.stringMediumDate)
-        - number of children: \(nbOfChildBirth)
-        - taxable income: \(workTaxableIncome.€String)
+        - Nombre d'années de dépendance: \(nbOfYearOfDependency)
+        - Cessation d'activité - age :  \(ageOfRetirementComp)
+        - Cessation d'activité - date: \(displayDateOfRetirement)
+        - AGIRC pension liquidation - age :  \(ageOfAgircPensionLiquidComp)
+        - AGIRC pension liquidation - date: \(dateOfAgircPensionLiquid.stringMediumDate)
+        - Pension liquidation - age :  \(ageOfPensionLiquidComp)
+        - Pension liquidation - date: \(dateOfPensionLiquid.stringMediumDate)
+        - Nombre d'enfants: \(nbOfChildBirth)
+        - Option fiscale à la succession: \(String(describing: fiscalOption))
+        - Revenu taxable: \(workTaxableIncome.€String)
         - Revenu:\(workIncome?.description.withPrefixedSplittedLines("  ") ?? "aucun")
           - Imposable: \(workLivingIncome.€String) (après abattement)\n
         """
@@ -337,6 +338,8 @@ final class Adult: Person {
         return BrutNetTaxable(brut: brut, net: net, taxable: taxable)
     }
 
+    /// Actualiser les propriétés d'une personne à partir des valeurs modifiées
+    /// des paramètres du modèle (valeur déterministes modifiées par l'utilisateur).
     override func updateMembersDterministicValues(
         _ menLifeExpectation    : Int,
         _ womenLifeExpectation  : Int,

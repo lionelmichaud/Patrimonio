@@ -52,8 +52,8 @@ struct DossierDetailView: View {
                 .environmentObject(self.dataStore)
         }
         .toolbar {
-            /// Bouton: Charger
             ToolbarItem(placement: .primaryAction) {
+                /// Bouton: Charger
                 Button(
                     action : activate,
                     label  : {
@@ -126,10 +126,21 @@ struct DossierDetailView: View {
     
     /// si le dossier est déjà actif et a été modifié alors prévenir que les modif vont être écrasées
     private func activate() {
-        if dossier.isActive {
+        if savable {
+            // le dossier sélectionné est déjà chargé avec des modifications non sauvegardées
             self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
                                        message       : Text("Toutes les modifications seront perdues"),
                                        primaryButton : .destructive(Text("Revenir"),
+                                                                    action: load),
+                                       secondaryButton: .cancel())
+        } else if let activeDossier = dataStore.activeDossier,
+                  activeDossier != dossier,
+                  (family.isModified || patrimoine.isModified || model.isModified) {
+            // le dossier sélectionné n'est pas encore chargé
+            // et il y a déjà un autre dossier chargé avec des modifications non sauvegardées
+            self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
+                                       message       : Text("Toutes les modifications sur le dossier ouvert seront perdues"),
+                                       primaryButton : .destructive(Text("Charger"),
                                                                     action: load),
                                        secondaryButton: .cancel())
         } else {

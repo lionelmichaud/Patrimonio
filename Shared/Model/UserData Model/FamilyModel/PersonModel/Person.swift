@@ -192,7 +192,9 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
         // on ne peut mourire à un age < à celui que l'on a déjà
         ageOfDeath = max(ageOfDeath, age(atEndOf: Date.now.year))
     }
-
+    
+    /// Actualiser les propriétés d'une personne à partir des valeurs modifiées
+    /// des paramètres du modèle (valeur déterministes modifiées par l'utilisateur).
     func updateMembersDterministicValues(
         _ menLifeExpectation    : Int,
         _ womenLifeExpectation  : Int,

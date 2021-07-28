@@ -195,6 +195,9 @@ final class Family: ObservableObject {
         }
     }
 
+    /// Actualiser les propriétés d'une personne à partir des valeurs modifiées
+    /// des paramètres du modèle (valeur déterministes modifiées par l'utilisateur).
+    /// Mémoriser l'existence d'une modification pour ne sauvegarde ultérieure.
     func updateMembersDterministicValues(
         _ menLifeExpectation    : Int,
         _ womenLifeExpectation  : Int,
@@ -210,6 +213,8 @@ final class Family: ObservableObject {
                 ageMinimumLegal,
                 ageMinimumAGIRC)
         }
+        // exécuter la transition
+        members.persistenceSM.process(event: .modify)
     }
     
     /// Trouver le membre de la famille avec le displayName recherché
@@ -238,15 +243,15 @@ final class Family: ObservableObject {
     }
     
     func moveMembers(from indexes: IndexSet, to destination: Int) {
-        self.members.items.move(fromOffsets: indexes, toOffset: destination)
+        self.members.move(from: indexes, to: destination)
     }
     
-    func aMemberIsUpdated() {
-        // exécuter la transition
-        members.persistenceSM.process(event: .modify)
-        
+    func aMemberIsModified() {
         // mettre à jour le nombre d'enfant de chaque parent de la famille
         self.updateChildrenNumber()
+        
+        // exécuter la transition
+        members.persistenceSM.process(event: .modify)
     }
     
     /// Réinitialiser les prioriétés aléatoires des membres et des dépenses
