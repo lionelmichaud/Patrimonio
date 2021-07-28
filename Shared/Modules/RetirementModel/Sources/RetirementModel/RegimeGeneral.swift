@@ -135,12 +135,8 @@ public class RegimeGeneral: Codable {
     private var model: Model
     
     public var ageMinimumLegal: Int {
-        get {
-            model.ageMinimumLegal
-        }
-        set {
-            model.ageMinimumLegal = newValue
-        }
+        get { model.ageMinimumLegal }
+        set { model.ageMinimumLegal = newValue }
     }
     
     // MARK: - Initializer

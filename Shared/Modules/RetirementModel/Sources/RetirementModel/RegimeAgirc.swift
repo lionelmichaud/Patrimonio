@@ -37,7 +37,7 @@ public struct RegimeAgircSituation: Codable {
     }
 }
 
-public struct RegimeAgirc: Codable {
+public class RegimeAgirc: Codable {
     
     // MARK: - Nested types
     
@@ -126,21 +126,13 @@ public struct RegimeAgirc: Codable {
     private var model: Model
     
     public var valeurDuPoint : Double {
-        get {
-            model.valeurDuPoint
-        }
-        set {
-            model.valeurDuPoint = newValue
-        }
+        get { model.valeurDuPoint }
+        set { model.valeurDuPoint = newValue }
     }
     
     public var ageMinimum    : Int {
-        get {
-            model.ageMinimum
-        }
-        set {
-            model.ageMinimum = newValue
-        }
+        get { model.ageMinimum }
+        set { model.ageMinimum = newValue }
     }
     
     // MARK: - Initializer
@@ -151,7 +143,7 @@ public struct RegimeAgirc: Codable {
     
     // MARK: - Methods
     
-    mutating func setRegimeGeneral(_ regimeGeneral: RegimeGeneral) {
+    func setRegimeGeneral(_ regimeGeneral: RegimeGeneral) {
         model.regimeGeneral = regimeGeneral
     }
     
