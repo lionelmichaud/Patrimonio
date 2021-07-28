@@ -108,14 +108,14 @@ extension RegimeAgirc {
                 fatalError("pension:yearEval < dateOfPensionLiquid")
             }
             // révaluer le montant de la pension à la date demandée
-            let coefReavluation = RegimeAgirc.revaluationCoef(
+            let coefReavluation = revaluationCoef(
                 during              : yearEval,
                 dateOfPensionLiquid : dateOfPensionLiquid)
             
             pensionBrute *= coefReavluation
         }
         
-        let pensionNette = RegimeAgirc.fiscalModel.pensionTaxes.netRegimeAgirc(pensionBrute)
+        let pensionNette = model.fiscal.pensionTaxes.netRegimeAgirc(pensionBrute)
         //customLog.log(level: .info, "pension Nette = \(pensionNette, privacy: .public)")
         
         return (coefMinoration       : coefMinoration,

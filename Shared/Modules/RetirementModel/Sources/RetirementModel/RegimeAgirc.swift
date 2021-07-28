@@ -59,7 +59,11 @@ public class RegimeAgirc: Codable {
         var plafondMajoEnfantNe   : Double // €
     }
     
-    struct Model: JsonCodableToBundleP, Versionable {
+    public struct Model: JsonCodableToBundleP, Versionable {
+        enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
+            case version, gridAvant62, gridApres62, valeurDuPoint, ageMinimum, majorationPourEnfant
+        }
+        
         public static var defaultFileName : String = "RegimeAgircModel.json"
 
         public var version       : Version
@@ -68,25 +72,17 @@ public class RegimeAgirc: Codable {
         var valeurDuPoint        : Double // 1.2714
         var ageMinimum           : Int    // 57
         let majorationPourEnfant : MajorationPourEnfant
+        // dependencies to other Models
         var regimeGeneral        : RegimeGeneral!
+        public var fiscal        : Fiscal.Model!
+        var pensionDevaluationRateProvider: PensionDevaluationRateProviderProtocol!
     }
     
     // MARK: - Static Properties
     
     private static var simulationMode: SimulationModeEnum = .deterministic
-    // dependencies to other Models
-    private static var pensionDevaluationRateProvider: PensionDevaluationRateProviderProtocol!
-    static var fiscalModel: Fiscal.Model!
 
     // MARK: - Static Methods
-
-    public static func setPensionDevaluationRateProvider(_ provider : PensionDevaluationRateProviderProtocol) {
-        pensionDevaluationRateProvider = provider
-    }
-
-    public static func setFiscalModel(_ model: Fiscal.Model) {
-        fiscalModel = model
-    }
 
     /// Définir le mode de simulation à utiliser pour tous les calculs futurs
     /// - Parameter simulationMode: mode de simulation à utiliser
@@ -94,45 +90,32 @@ public class RegimeAgirc: Codable {
         RegimeAgirc.simulationMode = simulationMode
     }
 
-    static var devaluationRate: Double { // %
-        pensionDevaluationRateProvider.pensionDevaluationRate(withMode: simulationMode)
-    }
-    
-    static var yearlyRevaluationRate: Double { // %
-        // on ne tient pas compte de l'inflation car les dépenses ne sont pas inflatées
-        // donc les revenus non plus s'ils sont supposés progresser comme l'inflation
-        // on ne tient donc compte que du delta par rapport à l'inflation
-        -devaluationRate
-    }
-    
-    /// Coefficient de réévaluation de la pension en prenant comme base 1.0
-    ///  la valeur à la date de liquidation de la pension.
-    /// - Parameters:
-    ///   - year: année de calcul du coefficient
-    ///   - dateOfPensionLiquid: date de liquidation de la pension
-    /// - Returns: Coefficient multiplicateur
-    /// - Note: Coefficient = coef de dévaluation par rapport à l'inflation
-    ///
-    ///   On ne tient pas compte de l'inflation car les dépenses ne sont pas inflatées
-    ///   donc les revenus non plus s'ils sont supposés progresser comme l'inflation
-    ///   on ne tient donc compte que du delta par rapport à l'inflation
-    static func revaluationCoef(during year         : Int,
-                                dateOfPensionLiquid : Date) -> Double { // %
-        pow(1.0 + yearlyRevaluationRate/100.0, Double(year - dateOfPensionLiquid.year))
-    }
-    
     // MARK: - Properties
     
-    private var model: Model
-    
-    public var valeurDuPoint : Double {
+    public var model: Model
+    // dependencies to other Models
+
+    // MARK: - Computed Properties
+
+    public var valeurDuPoint: Double {
         get { model.valeurDuPoint }
         set { model.valeurDuPoint = newValue }
     }
     
-    public var ageMinimum    : Int {
+    public var ageMinimum: Int {
         get { model.ageMinimum }
         set { model.ageMinimum = newValue }
+    }
+    
+    var devaluationRate: Double { // %
+        model.pensionDevaluationRateProvider.pensionDevaluationRate(withMode: RegimeAgirc.simulationMode)
+    }
+    
+    var yearlyRevaluationRate: Double { // %
+        // on ne tient pas compte de l'inflation car les dépenses ne sont pas inflatées
+        // donc les revenus non plus s'ils sont supposés progresser comme l'inflation
+        // on ne tient donc compte que du delta par rapport à l'inflation
+        -devaluationRate
     }
     
     // MARK: - Initializer
@@ -142,6 +125,14 @@ public class RegimeAgirc: Codable {
     }
     
     // MARK: - Methods
+    
+    public func setPensionDevaluationRateProvider(_ provider : PensionDevaluationRateProviderProtocol) {
+        model.pensionDevaluationRateProvider = provider
+    }
+    
+    public func setFiscalModel(_ model: Fiscal.Model) {
+        self.model.fiscal = model
+    }
     
     func setRegimeGeneral(_ regimeGeneral: RegimeGeneral) {
         model.regimeGeneral = regimeGeneral
@@ -157,6 +148,22 @@ public class RegimeAgirc: Codable {
                            toBundle             : bundle,
                            dateEncodingStrategy : dateEncodingStrategy,
                            keyEncodingStrategy  :  keyEncodingStrategy)
+    }
+    
+    /// Coefficient de réévaluation de la pension en prenant comme base 1.0
+    ///  la valeur à la date de liquidation de la pension.
+    /// - Parameters:
+    ///   - year: année de calcul du coefficient
+    ///   - dateOfPensionLiquid: date de liquidation de la pension
+    /// - Returns: Coefficient multiplicateur
+    /// - Note: Coefficient = coef de dévaluation par rapport à l'inflation
+    ///
+    ///   On ne tient pas compte de l'inflation car les dépenses ne sont pas inflatées
+    ///   donc les revenus non plus s'ils sont supposés progresser comme l'inflation
+    ///   on ne tient donc compte que du delta par rapport à l'inflation
+    func revaluationCoef(during year         : Int,
+                         dateOfPensionLiquid : Date) -> Double { // %
+        pow(1.0 + yearlyRevaluationRate/100.0, Double(year - dateOfPensionLiquid.year))
     }
     
     /// Age minimum pour demander la liquidation de pension Agirc

@@ -30,11 +30,11 @@ extension FreeInvestement {
         switch type {
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // montant brut à retirer pour obtenir le montant net souhaité
-                brutAmount = (periodicSocialTaxes ? netAmount : FreeInvestement.fiscalModel!.financialRevenuTaxes.brut(netAmount))
+                brutAmount = (periodicSocialTaxes ? netAmount : FreeInvestement.fiscalModel.financialRevenuTaxes.brut(netAmount))
                 // on ne peut pas retirer plus que la capital présent
                 if brutAmount > maxPermitedValue {
                     brutAmount = maxPermitedValue
-                    revenue    = (periodicSocialTaxes ? brutAmount : FreeInvestement.fiscalModel!.financialRevenuTaxes.net(brutAmount))
+                    revenue    = (periodicSocialTaxes ? brutAmount : FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmount))
                 }
                 // parts d'intérêt et de capital contenues dans le brut retiré
                 brutAmountSplit = split(removal: brutAmount)
@@ -43,41 +43,41 @@ extension FreeInvestement {
                     netInterests = brutAmountSplit.interest
                     socialTaxes  = 0.0
                 } else {
-                    netInterests = FreeInvestement.fiscalModel!.financialRevenuTaxes.net(brutAmountSplit.interest)
-                    socialTaxes  = FreeInvestement.fiscalModel!.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
+                    netInterests = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmountSplit.interest)
+                    socialTaxes  = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
                 }
                 // Assurance vie: les plus values sont imposables à l'IRPP (mais avec une franchise applicable à la totalité des interets retirés dans l'année: calculé ailleurs)
                 taxableInterests = netInterests
                 
             case .pea:
                 // montant brut à retirer pour obtenir le montant net souhaité
-                brutAmount = FreeInvestement.fiscalModel!.financialRevenuTaxes.brut(netAmount)
+                brutAmount = FreeInvestement.fiscalModel.financialRevenuTaxes.brut(netAmount)
                 // on ne peut pas retirer plus que la capital présent
                 if brutAmount > maxPermitedValue {
                     brutAmount = maxPermitedValue
-                    revenue    = FreeInvestement.fiscalModel!.financialRevenuTaxes.net(brutAmount)
+                    revenue    = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmount)
                 }
                 // parts d'intérêt et de capital contenues dans le brut retiré
                 brutAmountSplit = split(removal: brutAmount)
                 // intérêts nets de charges sociales
-                netInterests = FreeInvestement.fiscalModel!.financialRevenuTaxes.net(brutAmountSplit.interest)
-                socialTaxes  = FreeInvestement.fiscalModel!.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
+                netInterests = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmountSplit.interest)
+                socialTaxes  = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
                 // PEA: les plus values ne sont pas imposables à l'IRPP
                 taxableInterests = 0.0
                 
             case .other:
                 // montant brut à retirer pour obtenir le montant net souhaité
-                brutAmount = FreeInvestement.fiscalModel!.financialRevenuTaxes.brut(netAmount)
+                brutAmount = FreeInvestement.fiscalModel.financialRevenuTaxes.brut(netAmount)
                 // on ne peut pas retirer plus que la capital présent
                 if brutAmount > maxPermitedValue {
                     brutAmount = maxPermitedValue
-                    revenue    = FreeInvestement.fiscalModel!.financialRevenuTaxes.net(brutAmount)
+                    revenue    = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmount)
                 }
                 // parts d'intérêt et de capital contenues dans le brut retiré
                 brutAmountSplit = split(removal: brutAmount)
                 // intérêts nets de charges sociales
-                netInterests = FreeInvestement.fiscalModel!.financialRevenuTaxes.net(brutAmountSplit.interest)
-                socialTaxes  = FreeInvestement.fiscalModel!.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
+                netInterests = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmountSplit.interest)
+                socialTaxes  = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
                 // autre cas: les plus values sont totalement imposables à l'IRPP
                 taxableInterests = netInterests
         }

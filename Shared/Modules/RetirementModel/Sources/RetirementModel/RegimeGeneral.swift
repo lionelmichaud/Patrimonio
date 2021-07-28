@@ -62,10 +62,15 @@ public class RegimeGeneral: Codable {
         var nbTrimNonIndemnise : Int
     }
     
-    struct Model: JsonCodableToBundleP, Versionable {
+    public struct Model: JsonCodableToBundleP, Versionable {
+        enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
+            case version, dureeDeReferenceGrid, nbTrimNonIndemniseGrid, ageMinimumLegal,
+            nbOfYearForSAM, maxReversionRate, decoteParTrimestre, surcoteParTrimestre, maxNbTrimestreDecote
+        }
+        
         static var defaultFileName : String = "RegimeGeneralModel.json"
 
-        var version                : Version
+        public var version         : Version
         let dureeDeReferenceGrid   : [SliceRegimeLegal]
         let nbTrimNonIndemniseGrid : [SliceUnemployement]
         var ageMinimumLegal        : Int    // 62
@@ -74,24 +79,24 @@ public class RegimeGeneral: Codable {
         let decoteParTrimestre     : Double // 0.625 // % par trimestre
         let surcoteParTrimestre    : Double // 1.25  // % par trimestre
         let maxNbTrimestreDecote   : Int    // 20 // plafond
+        var fiscal                 : Fiscal.Model!
+        var socioEconomy           : SocioEconomyModelProvider!
     }
     
     // MARK: - Static Properties
     
     private static var simulationMode: SimulationModeEnum = .deterministic
     // dependencies to other Models
-    private static var socioEconomyModel: SocioEconomyModelProvider!
-    static var fiscalModel: Fiscal.Model!
-    
-    static var devaluationRate: Double { // %
-        socioEconomyModel.pensionDevaluationRate(withMode: simulationMode)
+
+    var devaluationRate: Double { // %
+        model.socioEconomy.pensionDevaluationRate(withMode: RegimeGeneral.simulationMode)
     }
     
-    static var nbTrimAdditional: Double { // %
-        socioEconomyModel.nbTrimTauxPlein(withMode: simulationMode)
+    var nbTrimAdditional: Double { // %
+        model.socioEconomy.nbTrimTauxPlein(withMode: RegimeGeneral.simulationMode)
     }
     
-    static var yearlyRevaluationRate: Double { // %
+    var yearlyRevaluationRate: Double { // %
         // on ne tient pas compte de l'inflation car les dépenses ne sont pas inflatées
         // donc les revenus non plus s'ils sont supposés progresser comme l'inflation
         // on ne tient donc compte que du delta par rapport à l'inflation
@@ -106,12 +111,12 @@ public class RegimeGeneral: Codable {
         RegimeGeneral.simulationMode = simulationMode
     }
 
-    public static func setSocioEconomyModel(_ model: SocioEconomyModelProvider) {
-        socioEconomyModel = model
+    public func setSocioEconomyModel(_ model: SocioEconomyModelProvider) {
+        self.model.socioEconomy = model
     }
 
-    public static func setFiscalModel(_ model: Fiscal.Model) {
-        fiscalModel = model
+    public func setFiscalModel(_ model: Fiscal.Model) {
+        self.model.fiscal = model
     }
 
     /// Coefficient de réévaluation de la pension en prenant comme base 1.0
@@ -125,14 +130,14 @@ public class RegimeGeneral: Codable {
     ///   On ne tient pas compte de l'inflation car les dépenses ne sont pas inflatées
     ///   donc les revenus non plus s'ils sont supposés progresser comme l'inflation
     ///   on ne tient donc compte que du delta par rapport à l'inflation
-    static func revaluationCoef(during year         : Int,
-                                dateOfPensionLiquid : Date) -> Double { // %
+    func revaluationCoef(during year         : Int,
+                         dateOfPensionLiquid : Date) -> Double { // %
         pow(1.0 + yearlyRevaluationRate/100.0, Double(year - dateOfPensionLiquid.year))
     }
     
     // MARK: - Properties
     
-    private var model: Model
+    public var model: Model
     
     public var ageMinimumLegal: Int {
         get { model.ageMinimumLegal }

@@ -88,6 +88,9 @@ public struct Retirement: PersistableModel {
 
     // MARK: - Initializers
     
+    /// Initialize seulement la StateMachine.
+    /// L'objet ainsi obtenu n'est pas utilisable en l'état car le modèle n'est pas initialiser.
+    /// Pour pouvoir obtenir un objet utilisable il faut utiliser initialiser le model.
     public init() {
         self.persistenceSM = PersistenceStateMachine()
     }

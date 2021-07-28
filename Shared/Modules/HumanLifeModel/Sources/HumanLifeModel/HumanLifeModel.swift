@@ -112,6 +112,10 @@ public struct HumanLife: PersistableModel {
 
     // MARK: - Initializers
 
+    /// Initialize seulement la StateMachine.
+    /// L'objet ainsi obtenu n'est pas utilisable en l'état car le modèle n'est pas initialiser.
+    /// Pour pouvoir obtenir un objet utilisable il faut utiliser un des autres init().
+    /// Cet init() n'est utile que pour pouvoir créer un StateObject dans App.main()
     public init() {
         self.persistenceSM = PersistenceStateMachine()
     }

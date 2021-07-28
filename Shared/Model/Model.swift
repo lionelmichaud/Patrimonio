@@ -35,34 +35,12 @@ final class Model: ObservableObject {
     // MARK: - Initialization
     
     /// Note: nécessaire pour une initialization dans App au lancement de l'application
+    /// Cet init() n'est utile que pour pouvoir créer un StateObject dans App.main()
+    /// Pour pouvoir utiliser cet objet il faut d'abord initialiser les modèles avec
+    /// une méthode: init(fromBundle bundle: Bundle) ou loadFromJSON(fromFolder folder: Folder)
     init() {
         humanLife  = HumanLife()
         retirement = Retirement()
-        
-        /// gérer les dépendances
-        
-        // récupérer une copie du singleton
-        let fiscalModel = Fiscal.model
-        // l'injecter dans les singletons qui en dépendent
-        LayoffCompensation.setFiscalModel(fiscalModel)
-        UnemploymentCompensation.setFiscalModel(fiscalModel)
-        RegimeAgirc.setFiscalModel(fiscalModel)
-        RegimeGeneral.setFiscalModel(fiscalModel)
-        SCPI.setFiscalModelProvider(fiscalModel)
-        PeriodicInvestement.setFiscalModelProvider(fiscalModel)
-        FreeInvestement.setFiscalModelProvider(fiscalModel)
-        
-        // récupérer une copie du singleton
-        let socioEconomyModel = SocioEconomy.model
-        // l'injecter dans les singletons qui en dépendent
-        RegimeAgirc.setPensionDevaluationRateProvider(socioEconomyModel)
-        RegimeGeneral.setSocioEconomyModel(socioEconomyModel)
-        
-        // récupérer une copie du singleton
-        let economyModel = Economy.model
-        SCPI.setInflationProvider(economyModel)
-        PeriodicInvestement.setEconomyModelProvider(economyModel)
-        FreeInvestement.setEconomyModelProvider(economyModel)
     }
     
     /// Charger tous les modèles à partir des fichiers JSON contenu de fichiers contenus dans le bundle `bundle`
@@ -71,6 +49,9 @@ final class Model: ObservableObject {
     init(fromBundle bundle: Bundle) {
         humanLife  = HumanLife(fromBundle: Bundle.main)
         retirement = Retirement(fromBundle: Bundle.main)
+        
+        // gérer les dépendances
+        manageDependencies()
     }
 
     // MARK: - Methods
@@ -80,6 +61,9 @@ final class Model: ObservableObject {
     func loadFromJSON(fromFolder folder: Folder) throws {
         humanLife  = try HumanLife(fromFolder: folder)
         retirement = try Retirement(fromFolder: folder)
+        
+        // gérer les dépendances
+        manageDependencies()
     }
 
     /// Enregistrer tous les modèles dans des fichiers JSON contenu dans le `folder`
@@ -87,5 +71,31 @@ final class Model: ObservableObject {
     func saveAsJSON(toFolder folder: Folder) throws {
         try humanLife.saveAsJSON(toFolder: folder)
         try retirement.saveAsJSON(toFolder: folder)
+    }
+    
+    /// Gérer les dépendances entre modèles
+    func manageDependencies() {
+        // récupérer une copie du singleton
+        let fiscalModel = Fiscal.model
+        // l'injecter dans les singletons qui en dépendent
+        LayoffCompensation.setFiscalModel(fiscalModel)
+        UnemploymentCompensation.setFiscalModel(fiscalModel)
+        retirement.model!.regimeAgirc.setFiscalModel(fiscalModel)
+        retirement.model!.regimeGeneral.setFiscalModel(fiscalModel)
+        SCPI.setFiscalModelProvider(fiscalModel)
+        PeriodicInvestement.setFiscalModelProvider(fiscalModel)
+        FreeInvestement.setFiscalModelProvider(fiscalModel)
+        
+        // récupérer une copie du singleton
+        let socioEconomyModel = SocioEconomy.model
+        // l'injecter dans les singletons qui en dépendent
+        retirement.model!.regimeAgirc.setPensionDevaluationRateProvider(socioEconomyModel)
+        retirement.model!.regimeGeneral.setSocioEconomyModel(socioEconomyModel)
+        
+        // récupérer une copie du singleton
+        let economyModel = Economy.model
+        SCPI.setInflationProvider(economyModel)
+        PeriodicInvestement.setEconomyModelProvider(economyModel)
+        FreeInvestement.setEconomyModelProvider(economyModel)
     }
 }

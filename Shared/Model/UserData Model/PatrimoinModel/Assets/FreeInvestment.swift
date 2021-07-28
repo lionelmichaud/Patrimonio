@@ -45,18 +45,18 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
     
     private static var simulationMode: SimulationModeEnum = .deterministic
     // dependencies
-    private static var economyModel : EconomyModelProviderProtocol?
-    public static var fiscalModel  : Fiscal.Model?
+    private static var economyModel : EconomyModelProviderProtocol!
+    public static var fiscalModel   : Fiscal.Model!
 
     // tous ces actifs sont dépréciés de l'inflation
     private static var inflation: Double { // %
-        FreeInvestement.economyModel!.inflation(withMode: simulationMode)
+        FreeInvestement.economyModel.inflation(withMode: simulationMode)
     }
     
     /// averageSecuredRate: taux à long terme - rendement des obligations - en moyenne
     /// averageStockRate: rendement des actions - en moyenne
     private static var rates: (averageSecuredRate: Double, averageStockRate: Double) { // %
-        let rates = FreeInvestement.economyModel!.rates(withMode: simulationMode)
+        let rates = FreeInvestement.economyModel.rates(withMode: simulationMode)
         return (rates.securedRate, rates.stockRate)
     }
     
@@ -79,7 +79,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
     private static func rates(in year : Int)
     -> (securedRate : Double,
         stockRate   : Double) {
-        FreeInvestement.economyModel!.rates(in                 : year,
+        FreeInvestement.economyModel.rates(in                 : year,
                                            withMode           : simulationMode,
                                            simulateVolatility : UserSettings.shared.simulateVolatility)
     }
@@ -124,7 +124,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
                 return (periodicSocialTaxes ?
-                            FreeInvestement.fiscalModel!.financialRevenuTaxes.net(averageInterestRate) :
+                            FreeInvestement.fiscalModel.financialRevenuTaxes.net(averageInterestRate) :
                             averageInterestRate)
             default:
                 // dans tous les autres cas: pas de charges sociales prélevées à la source anuellement (capitalisation et taxation à la sortie)

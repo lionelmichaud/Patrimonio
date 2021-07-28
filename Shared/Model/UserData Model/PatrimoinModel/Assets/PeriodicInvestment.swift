@@ -28,18 +28,18 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
     
     private static var simulationMode: SimulationModeEnum = .deterministic
     // dependencies
-    private static var economyModel : EconomyModelProviderProtocol?
-    private static var fiscalModel  : Fiscal.Model?
+    private static var economyModel : EconomyModelProviderProtocol!
+    private static var fiscalModel  : Fiscal.Model!
     
     // tous ces revenus sont dépréciés de l'inflation
     private static var inflation: Double { // %
-        PeriodicInvestement.economyModel!.inflation(withMode: simulationMode)
+        PeriodicInvestement.economyModel.inflation(withMode: simulationMode)
     }
     
     /// taux à long terme - rendem
     /// rendement des actions - en moyenne
     private static var rates: (averageSecuredRate: Double, averageStockRate: Double) { // %
-        let rates = PeriodicInvestement.economyModel!.rates(withMode: simulationMode)
+        let rates = PeriodicInvestement.economyModel.rates(withMode: simulationMode)
         return (rates.securedRate, rates.stockRate)
     }
     
@@ -62,7 +62,7 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
     private static func rates(in year : Int)
     -> (securedRate : Double,
         stockRate   : Double) {
-        PeriodicInvestement.economyModel!.rates(in                 : year,
+        PeriodicInvestement.economyModel.rates(in                 : year,
                                                withMode           : simulationMode,
                                                simulateVolatility : UserSettings.shared.simulateVolatility)
     }
@@ -104,7 +104,7 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
                 return (periodicSocialTaxes ?
-                            PeriodicInvestement.fiscalModel!.financialRevenuTaxes.net(averageInterestRate) :
+                            PeriodicInvestement.fiscalModel.financialRevenuTaxes.net(averageInterestRate) :
                             averageInterestRate)
             default:
                 // dans tous les autres cas: pas de charges sociales prélevées à la source anuellement (capitalisation et taxation à la sortie)
@@ -256,13 +256,13 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
         switch type {
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // Si les intérêts sont prélevés au fil de l'eau on les prélève pas à la liquidation
-                netInterests     = (periodicSocialTaxes ? cumulatedInterest : PeriodicInvestement.fiscalModel!.financialRevenuTaxes.net(cumulatedInterest))
+                netInterests     = (periodicSocialTaxes ? cumulatedInterest : PeriodicInvestement.fiscalModel.financialRevenuTaxes.net(cumulatedInterest))
                 taxableInterests = netInterests
             case .pea:
-                netInterests     = PeriodicInvestement.fiscalModel!.financialRevenuTaxes.net(cumulatedInterest)
+                netInterests     = PeriodicInvestement.fiscalModel.financialRevenuTaxes.net(cumulatedInterest)
                 taxableInterests = 0.0
             case .other:
-                netInterests     = PeriodicInvestement.fiscalModel!.financialRevenuTaxes.net(cumulatedInterest)
+                netInterests     = PeriodicInvestement.fiscalModel.financialRevenuTaxes.net(cumulatedInterest)
                 taxableInterests = netInterests
         }
         return (revenue              : value(atEndOf: year),

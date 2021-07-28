@@ -131,11 +131,11 @@ extension RegimeGeneral {
                 fatalError("pension:yearEval < dateOfPensionLiquid")
             }
             // révaluer le montant de la pension à la date demandée
-            pensionBrute = pensionBrute * RegimeGeneral.revaluationCoef(during              : yearEval,
-                                                                        dateOfPensionLiquid : dateOfPensionLiquid)
+            pensionBrute = pensionBrute * revaluationCoef(during              : yearEval,
+                                                          dateOfPensionLiquid : dateOfPensionLiquid)
         }
         
-        let pensionNette = RegimeGeneral.fiscalModel.pensionTaxes.netRegimeGeneral(pensionBrute)
+        let pensionNette = model.fiscal.pensionTaxes.netRegimeGeneral(pensionBrute)
         
         return (tauxDePension            : tauxDePension,
                 majorationEnfant         : majorationEnfant,
