@@ -28,9 +28,8 @@ public struct Retirement: PersistableModel {
         
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
         public func initialized() -> Model {
-            var model = self
-            model.regimeAgirc.setRegimeGeneral(regimeGeneral)
-            return model
+            self.regimeAgirc.setRegimeGeneral(self.regimeGeneral)
+            return self
         }
     }
     

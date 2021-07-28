@@ -6,8 +6,12 @@
 //
 
 import Foundation
-import HumanLifeModel
+import FiscalModel
 import RetirementModel
+import UnemployementModel
+import EconomyModel
+import SocioEconomyModel
+import HumanLifeModel
 import Files
 
 /// Agregat des éléments du Model environmental
@@ -34,6 +38,31 @@ final class Model: ObservableObject {
     init() {
         humanLife  = HumanLife()
         retirement = Retirement()
+        
+        /// gérer les dépendances
+        
+        // récupérer une copie du singleton
+        let fiscalModel = Fiscal.model
+        // l'injecter dans les singletons qui en dépendent
+        LayoffCompensation.setFiscalModel(fiscalModel)
+        UnemploymentCompensation.setFiscalModel(fiscalModel)
+        RegimeAgirc.setFiscalModel(fiscalModel)
+        RegimeGeneral.setFiscalModel(fiscalModel)
+        SCPI.setFiscalModelProvider(fiscalModel)
+        PeriodicInvestement.setFiscalModelProvider(fiscalModel)
+        FreeInvestement.setFiscalModelProvider(fiscalModel)
+        
+        // récupérer une copie du singleton
+        let socioEconomyModel = SocioEconomy.model
+        // l'injecter dans les singletons qui en dépendent
+        RegimeAgirc.setPensionDevaluationRateProvider(socioEconomyModel)
+        RegimeGeneral.setSocioEconomyModel(socioEconomyModel)
+        
+        // récupérer une copie du singleton
+        let economyModel = Economy.model
+        SCPI.setInflationProvider(economyModel)
+        PeriodicInvestement.setEconomyModelProvider(economyModel)
+        FreeInvestement.setEconomyModelProvider(economyModel)
     }
     
     /// Charger tous les modèles à partir des fichiers JSON contenu de fichiers contenus dans le bundle `bundle`

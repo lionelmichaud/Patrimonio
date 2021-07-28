@@ -27,12 +27,12 @@ struct SCPI: Identifiable, JsonCodableToBundleP, Ownable {
     private static var saleCommission    : Double                    = 10.0 // %
     private static var simulationMode    : SimulationModeEnum        = .deterministic
     // dependencies
-    private static var inflationProvider : InflationProviderProtocol = Economy.model
-    private static var fiscalModel       : Fiscal.Model              = Fiscal.model
+    private static var inflationProvider : InflationProviderProtocol?
+    private static var fiscalModel       : Fiscal.Model?
 
-    // tous ces actifs sont dépréciés de l'inflation
+    // tous ces revenus sont dépréciés de l'inflation
     private static var inflation: Double { // %
-        SCPI.inflationProvider.inflation(withMode: simulationMode)
+        SCPI.inflationProvider!.inflation(withMode: simulationMode)
     }
     
     // MARK: - Static Methods
@@ -41,7 +41,7 @@ struct SCPI: Identifiable, JsonCodableToBundleP, Ownable {
     static func setInflationProvider(_ inflationProvider : InflationProviderProtocol) {
         SCPI.inflationProvider = inflationProvider
     }
-
+    
     /// Dependency Injection: Setter Injection
     static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
         SCPI.fiscalModel = fiscalModel
@@ -112,7 +112,7 @@ struct SCPI: Identifiable, JsonCodableToBundleP, Ownable {
         let revenue     = (isOwned(during: year) ?
                             buyingPrice * (interestRate - SCPI.inflation) / 100.0 :
                             0.0)
-        let taxableIrpp = SCPI.fiscalModel.financialRevenuTaxes.net(revenue)
+        let taxableIrpp = SCPI.fiscalModel!.financialRevenuTaxes.net(revenue)
         return (revenue    : revenue,
                 taxableIrpp: taxableIrpp,
                 socialTaxes: revenue - taxableIrpp)
@@ -163,11 +163,11 @@ struct SCPI: Identifiable, JsonCodableToBundleP, Ownable {
         let projectedSaleRevenue = value(atEndOf: sellingDate.year)
         let capitalGain          = projectedSaleRevenue - buyingPrice
         let socialTaxes          =
-            SCPI.fiscalModel.estateCapitalGainTaxes.socialTaxes(
+            SCPI.fiscalModel!.estateCapitalGainTaxes.socialTaxes(
                 capitalGain      : zeroOrPositive(capitalGain),
                 detentionDuration: detentionDuration)
         let irpp              =
-            SCPI.fiscalModel.estateCapitalGainIrpp.irpp(
+            SCPI.fiscalModel!.estateCapitalGainIrpp.irpp(
                 capitalGain      : zeroOrPositive(capitalGain),
                 detentionDuration: detentionDuration)
         return (revenue     : projectedSaleRevenue,

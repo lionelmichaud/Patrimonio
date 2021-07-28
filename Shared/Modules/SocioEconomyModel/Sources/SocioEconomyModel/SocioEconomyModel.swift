@@ -10,7 +10,7 @@ import Foundation
 import AppFoundation
 import Statistics
 
-// MARK: - DI: Protocol InflationProviderProtocol
+// MARK: - DI: Protocols
 
 public protocol PensionDevaluationRateProviderProtocol {
     func pensionDevaluationRate(withMode simulationMode: SimulationModeEnum) -> Double
