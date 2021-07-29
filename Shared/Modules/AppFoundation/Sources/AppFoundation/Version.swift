@@ -74,6 +74,32 @@ public struct Version: Codable {
         }
     }
     
+    // MARK: - Builders
+
+     func named(_ name: String) -> Version {
+        var new = self
+        new.name = name
+        return new
+    }
+
+    func dated(_ date: Date) -> Version {
+        var new = self
+        new.date = date
+        return new
+    }
+
+    func commented(with comment: String) -> Version {
+        var new = self
+        new.comment = comment
+        return new
+    }
+
+    func versioned(_ version: String) -> Version {
+        var new = self
+        new.version = version
+        return new
+    }
+
     // MARK: - Methods
     
     public mutating func initializeWithBundleValues() {

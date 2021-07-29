@@ -18,12 +18,18 @@ class DeterministicViewModel: ObservableObject {
 
     // MARK: - Properties
     var isModified : Bool
+    // model: HumanLife
     @Published var menLifeExpectation    : Int
     @Published var womenLifeExpectation  : Int
     @Published var nbOfYearsOfdependency : Int
-    @Published var ageMinimumLegal       : Int
-    @Published var ageMinimumAGIRC       : Int
-    @Published var valeurDuPointAGIRC    : Double
+    // model: Retirement
+    @Published var ageMinimumLegal    : Int
+    @Published var ageMinimumAGIRC    : Int
+    @Published var valeurDuPointAGIRC : Double
+    // model: Economy
+    @Published var inflation         : Double
+    @Published var securedRate       : Double
+    @Published var stockRate         : Double
 
     // MARK: - Initialization
     
@@ -31,9 +37,13 @@ class DeterministicViewModel: ObservableObject {
         menLifeExpectation    = model.humanLife.menLifeExpectationDeterministic
         womenLifeExpectation  = model.humanLife.womenLifeExpectationDeterministic
         nbOfYearsOfdependency = model.humanLife.nbOfYearsOfdependencyDeterministic
-        ageMinimumLegal       = model.retirement.ageMinimumLegal
-        ageMinimumAGIRC       = model.retirement.ageMinimumAGIRC
-        valeurDuPointAGIRC    = model.retirement.valeurDuPointAGIRC
+        ageMinimumLegal    = model.retirement.ageMinimumLegal
+        ageMinimumAGIRC    = model.retirement.ageMinimumAGIRC
+        valeurDuPointAGIRC = model.retirement.valeurDuPointAGIRC
+        inflation         = model.economy.inflation
+        securedRate       = model.economy.securedRate
+        stockRate         = model.economy.stockRate
+        
         isModified = false
     }
 
@@ -43,18 +53,25 @@ class DeterministicViewModel: ObservableObject {
         menLifeExpectation    = model.humanLife.menLifeExpectationDeterministic
         womenLifeExpectation  = model.humanLife.womenLifeExpectationDeterministic
         nbOfYearsOfdependency = model.humanLife.nbOfYearsOfdependencyDeterministic
-        ageMinimumLegal       = model.retirement.ageMinimumLegal
-        ageMinimumAGIRC       = model.retirement.ageMinimumAGIRC
-        valeurDuPointAGIRC    = model.retirement.valeurDuPointAGIRC
+        ageMinimumLegal    = model.retirement.ageMinimumLegal
+        ageMinimumAGIRC    = model.retirement.ageMinimumAGIRC
+        valeurDuPointAGIRC = model.retirement.valeurDuPointAGIRC
+        inflation         = model.economy.inflation
+        securedRate       = model.economy.securedRate
+        stockRate         = model.economy.stockRate
     }
     
     func update(_ model: Model) {
         model.humanLife.menLifeExpectationDeterministic    = menLifeExpectation
         model.humanLife.womenLifeExpectationDeterministic  = womenLifeExpectation
         model.humanLife.nbOfYearsOfdependencyDeterministic = nbOfYearsOfdependency
-        model.retirement.ageMinimumLegal                   = ageMinimumLegal
-        model.retirement.ageMinimumAGIRC                   = ageMinimumAGIRC
-        model.retirement.valeurDuPointAGIRC                = valeurDuPointAGIRC
+        model.retirement.ageMinimumLegal    = ageMinimumLegal
+        model.retirement.ageMinimumAGIRC    = ageMinimumAGIRC
+        model.retirement.valeurDuPointAGIRC = valeurDuPointAGIRC
+        model.economy.inflation         = inflation
+        model.economy.securedRate       = securedRate
+        model.economy.stockRate         = stockRate
+            
         isModified = false
     }
 
@@ -172,13 +189,17 @@ struct ModeldeterministicEconomyModel: View {
     @ObservedObject var viewModel: DeterministicViewModel
 
     var body: some View {
-        Section(header: Text("Modèle Economique")) {
-            PercentView(label   : "Inflation",
-                        percent : Economy.model.randomizers.inflation.value(withMode: .deterministic)/100.0)
-            PercentView(label   : "Rendement sans Risque",
-                        percent : Economy.model.randomizers.securedRate.value(withMode: .deterministic)/100.0)
-            PercentView(label   : "Rendement des Actions",
-                        percent : Economy.model.randomizers.stockRate.value(withMode: .deterministic)/100.0)
+        print($viewModel.inflation)
+        return Section(header: Text("Modèle Economique")) {
+            PercentEditView(label   : "Inflation",
+                            percent : $viewModel.inflation)
+                .onChange(of: viewModel.inflation) { _ in viewModel.isModified = true }
+            PercentEditView(label   : "Rendement sans Risque",
+                            percent : $viewModel.securedRate)
+                .onChange(of: viewModel.securedRate) { _ in viewModel.isModified = true }
+            PercentEditView(label   : "Rendement des Actions",
+                            percent : $viewModel.stockRate)
+                .onChange(of: viewModel.stockRate) { _ in viewModel.isModified = true }
         }
     }
 }

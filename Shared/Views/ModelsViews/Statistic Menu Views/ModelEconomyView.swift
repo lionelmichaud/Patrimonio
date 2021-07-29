@@ -11,6 +11,7 @@ import EconomyModel
 
 /// Affiche un graphique des fonctions de distribution des modèles statistiques
 struct ModelEconomyView: View {
+    @EnvironmentObject private var model  : Model
     @State private var modelChoice: Economy.RandomVariable = .inflation
     
     var body: some View {
@@ -21,13 +22,13 @@ struct ModelEconomyView: View {
                 .pickerStyle(SegmentedPickerStyle())
             switch modelChoice {
                 case .inflation:
-                    BetaRandomizerView(randomizer: Economy.model.randomizers.inflation)
+                    BetaRandomizerView(randomizer: model.economyModel.randomizers.inflation)
 
                 case .securedRate:
-                    BetaRandomizerView(randomizer: Economy.model.randomizers.securedRate)
+                    BetaRandomizerView(randomizer: model.economyModel.randomizers.securedRate)
 
                 case .stockRate:
-                    BetaRandomizerView(randomizer: Economy.model.randomizers.stockRate)
+                    BetaRandomizerView(randomizer: model.economyModel.randomizers.stockRate)
             }
         }
         .navigationTitle("Modèle Economique: Fonctions de Distribution")

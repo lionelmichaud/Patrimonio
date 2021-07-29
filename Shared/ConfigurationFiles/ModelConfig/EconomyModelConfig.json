@@ -1,72 +1,73 @@
 {
-    "inflation" :
+    "randomizers" :
     {
-        "name"    : "Inflation",
-        "version" :
+        "inflation" :
         {
-            "version" : "0.1",
-            "date"    : "2020-10-12T23:00:00+01:00",
-            "comment" : null
+            "name"    : "Inflation",
+            "version" :
+            {
+                "version" : "0.1",
+                "date"    : "2020-10-12T23:00:00+01:00",
+                "comment" : null
+            },
+            "rndGenerator":
+            {
+                "minX"     : 0.0,
+                "maxX"     : 4.0,
+                "alpha"    : 2.0,
+                "beta"     : 3.0,
+                "pdfMax"   : null,
+                "cdfCurve" : null
+            },
+            "defaultValue" : 1.5,
+            "randomValue"  : 0.0
         },
-        "rndGenerator":
+        
+        "securedRate":
         {
-            "minX"     : 0.0,
-            "maxX"     : 4.0,
-            "alpha"    : 2.0,
-            "beta"     : 3.0,
-            "pdfMax"   : null,
-            "cdfCurve" : null
+            "name"    : "Taux de rendement des placements sûrs",
+            "version" :
+            {
+                "version" : "0.1",
+                "date"    : "2020-10-12T23:00:00+01:00",
+                "comment" : null
+            },
+            "rndGenerator":
+            {
+                "minX"     : 1.0,
+                "maxX"     : 3.0,
+                "alpha"    : 1.5,
+                "beta"     : 2.0,
+                "pdfMax"   : null,
+                "cdfCurve" : null
+            },
+            "defaultValue" : 1.7,
+            "randomValue"  : 0.0
         },
-        "defaultValue" : 1.5,
-        "randomValue"  : 0.0
-    },
-    
-    "securedRate":
-    {
-        "name"    : "Taux de rendement des placements sûrs",
-        "version" :
+        
+        "stockRate":
         {
-            "version" : "0.1",
-            "date"    : "2020-10-12T23:00:00+01:00",
-            "comment" : null
+            "name"    : "Taux de rendement des action",
+            "version" :
+            {
+                "version" : "0.2",
+                "date"    : "2020-12-30T23:00:00+01:00",
+                "comment" : null
+            },
+            "rndGenerator":
+            {
+                "minX"     : 5.0,
+                "maxX"     : 9.0,
+                "alpha"    : 2.0,
+                "beta"     : 2.5,
+                "pdfMax"   : null,
+                "cdfCurve" : null
+            },
+            "defaultValue" : 5.0,
+            "randomValue"  : 0.0
         },
-        "rndGenerator":
-        {
-            "minX"     : 1.0,
-            "maxX"     : 3.0,
-            "alpha"    : 1.5,
-            "beta"     : 2.0,
-            "pdfMax"   : null,
-            "cdfCurve" : null
-        },
-        "defaultValue" : 1.7,
-        "randomValue"  : 0.0
-    },
-    
-    "stockRate":
-    {
-        "name"    : "Taux de rendement des action",
-        "version" :
-        {
-            "version" : "0.2",
-            "date"    : "2020-12-30T23:00:00+01:00",
-            "comment" : null
-        },
-        "rndGenerator":
-        {
-            "minX"     : 5.0,
-            "maxX"     : 9.0,
-            "alpha"    : 2.0,
-            "beta"     : 2.5,
-            "pdfMax"   : null,
-            "cdfCurve" : null
-        },
-        "defaultValue" : 5.0,
-        "randomValue"  : 0.0
-    },
-    
-    "simulateVolatility": false,
-    "securedVolatility" : 0.5,
-    "stockVolatility"   : 14.0
+        
+        "securedVolatility" : 0.5,
+        "stockVolatility"   : 14.0
+    }
 }
-

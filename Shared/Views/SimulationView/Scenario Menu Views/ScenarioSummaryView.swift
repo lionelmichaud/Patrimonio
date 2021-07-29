@@ -12,8 +12,9 @@ import SocioEconomyModel
 
 /// Affiche des valeures des modèles utilisées pour le dernier Run de simulation
 struct ScenarioSummaryView: View {
-    @EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var family     : Family
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var simulation : Simulation
+    @EnvironmentObject private var family     : Family
 
     var body: some View {
         VStack {
@@ -36,18 +37,18 @@ struct ScenarioSummaryView: View {
                 }
                 Section(header: Text("Modèle Economique")) {
                     PercentView(label   : "Inflation",
-                                percent : Economy.model.randomizers.inflation.value(withMode: simulation.mode)/100.0)
+                                percent : model.economyModel.randomizers.inflation.value(withMode: simulation.mode)/100.0)
                     PercentView(label   : "Rendement annuel moyen des Obligations sans risque",
-                                percent : Economy.model.randomizers.securedRate.value(withMode: simulation.mode)/100.0)
+                                percent : model.economyModel.randomizers.securedRate.value(withMode: simulation.mode)/100.0)
                     if UserSettings.shared.simulateVolatility {
                         PercentView(label   : "Volatilité des Obligations sans risque",
-                                    percent : Economy.model.randomizers.securedVolatility/100.0)
+                                    percent : model.economyModel.randomizers.securedVolatility/100.0)
                     }
                     PercentView(label   : "Rendement annuel moyen des Actions",
-                                percent : Economy.model.randomizers.stockRate.value(withMode: simulation.mode)/100.0)
+                                percent : model.economyModel.randomizers.stockRate.value(withMode: simulation.mode)/100.0)
                     if UserSettings.shared.simulateVolatility {
                         PercentView(label   : "Volatilité des Actions",
-                                    percent : Economy.model.randomizers.stockVolatility/100.0)
+                                    percent : model.economyModel.randomizers.stockVolatility/100.0)
                     }
                 }
                 Section(header: Text("Modèle Sociologique")) {

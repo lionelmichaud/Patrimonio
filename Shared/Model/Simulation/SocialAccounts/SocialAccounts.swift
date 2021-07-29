@@ -320,7 +320,8 @@ struct SocialAccounts {
     ///
     /// - Parameter mode: mode de simulation utilisé lors de la dernière simulation
     /// - Returns: dictionnaire [Nom de fichier : CSV string]
-    func lastSimulationResultCsvStrings(withMode mode: SimulationModeEnum) -> [String:String] {
+    func lastSimulationResultCsvStrings(using model  : Model,
+                                        withMode mode: SimulationModeEnum) -> [String:String] {
         //    (balanceSheetCSV : String,
         //     cashFlowCSV     : String,
         //     successionsCSV  : String) {
@@ -328,6 +329,7 @@ struct SocialAccounts {
         // construction du tableau de bilans annnuels au format CSV
         dico[FileNameCst.kBalanceSheetCSVFileName] =
             CsvBuilder.balanceSheetCSV(from     : balanceArray,
+                                       using    : model,
                                        withMode : mode)
         // construction du tableau de cash flow annnuels au format CSV
         dico[FileNameCst.kCashFlowCSVFileName] =

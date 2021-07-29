@@ -26,6 +26,8 @@ public struct Retirement: PersistableModel {
         public var regimeAgirc  : RegimeAgirc
         public var reversion    : PensionReversion
         
+        // MARK: - Methods
+
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
         public func initialized() -> Model {
             self.regimeAgirc.setRegimeGeneral(self.regimeGeneral)
@@ -54,9 +56,7 @@ public struct Retirement: PersistableModel {
     public var persistenceSM : PersistenceStateMachine
 
     public var ageMinimumLegal: Int {
-        get {
-            model!.regimeGeneral.ageMinimumLegal
-        }
+        get { model!.regimeGeneral.ageMinimumLegal }
         set {
             model?.regimeGeneral.ageMinimumLegal = newValue
             // mémoriser la modification
@@ -65,9 +65,7 @@ public struct Retirement: PersistableModel {
     }
 
     public var valeurDuPointAGIRC: Double {
-        get {
-            model!.regimeAgirc.valeurDuPoint
-        }
+        get { model!.regimeAgirc.valeurDuPoint }
         set {
             model?.regimeAgirc.valeurDuPoint = newValue
             // mémoriser la modification
@@ -76,9 +74,7 @@ public struct Retirement: PersistableModel {
     }
 
     public var ageMinimumAGIRC: Int {
-        get {
-            model!.regimeAgirc.ageMinimum
-        }
+        get { model!.regimeAgirc.ageMinimum }
         set {
             model?.regimeAgirc.ageMinimum = newValue
             // mémoriser la modification

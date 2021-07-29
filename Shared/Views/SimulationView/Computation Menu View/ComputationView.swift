@@ -220,7 +220,7 @@ struct ComputationView: View {
     
     /// Exporter les résultats de la simulation
     private func exportSimulationResults() {
-        let dicoOfCsv = simulation.simulationResultsCSV()
+        let dicoOfCsv = simulation.simulationResultsCSV(using: model)
 
         // executer l'enregistrement en tâche de fond
         saveSimulationToDocumentsDirectory(dicoOfCSV: dicoOfCsv)

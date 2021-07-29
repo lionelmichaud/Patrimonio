@@ -57,14 +57,6 @@ class NamedValueTableTests: XCTestCase {
         ], NamedValueTableTests.namedValueTable.valuesArray)
     }
 
-    func test_headerCSV() {
-        XCTAssertEqual("Item 1; Item 2; Item 3; Item 4; TITRE DE LA TABLE TOTAL", NamedValueTableTests.namedValueTable.headerCSV)
-    }
-    
-    func test_valuesCSV() {
-        XCTAssertEqual("1; 2; 3; 4; 10", NamedValueTableTests.namedValueTable.valuesCSV)
-    }
-    
     func test_filtredTableName() {
         var itemSelectionList: ItemSelectionList =
             [
@@ -73,7 +65,8 @@ class NamedValueTableTests: XCTestCase {
                 (label: "Titre de la table", selected: true),
                 (label: "Item z", selected: true)
             ]
-        XCTAssertEqual(["Titre de la table"], NamedValueTableTests.namedValueTable.filtredTableName(with: itemSelectionList))
+        XCTAssertEqual(["Titre de la table"],
+                       NamedValueTableTests.namedValueTable.filtredTableName(with: itemSelectionList))
         itemSelectionList =
             [
                 (label: "Item x", selected: true),
@@ -92,7 +85,8 @@ class NamedValueTableTests: XCTestCase {
                 (label: "Item 3", selected: true),
                 (label: "Item z", selected: true)
             ]
-        XCTAssertEqual(["Item 3"], NamedValueTableTests.namedValueTable.filtredNames(with: itemSelectionList))
+        XCTAssertEqual(["Item 3"],
+                       NamedValueTableTests.namedValueTable.filtredNames(with: itemSelectionList))
         itemSelectionList =
             [
                 (label: "Item x", selected: true),
@@ -100,7 +94,8 @@ class NamedValueTableTests: XCTestCase {
                 (label: "Truc", selected: true),
                 (label: "Item z", selected: true)
             ]
-        XCTAssertEqual([], NamedValueTableTests.namedValueTable.filtredNames(with: itemSelectionList))
+        XCTAssertEqual([],
+                       NamedValueTableTests.namedValueTable.filtredNames(with: itemSelectionList))
     }
     
     func test_filtredValues() {
@@ -111,7 +106,8 @@ class NamedValueTableTests: XCTestCase {
                 (label: "Item 3", selected: true),
                 (label: "Item z", selected: true)
             ]
-        XCTAssertEqual([3.0], NamedValueTableTests.namedValueTable.filtredValues(with: itemSelectionList))
+        XCTAssertEqual([3.0],
+                       NamedValueTableTests.namedValueTable.filtredValues(with: itemSelectionList))
         itemSelectionList =
             [
                 (label: "Item x", selected: true),
@@ -119,7 +115,8 @@ class NamedValueTableTests: XCTestCase {
                 (label: "Truc", selected: true),
                 (label: "Item z", selected: true)
             ]
-        XCTAssertEqual([], NamedValueTableTests.namedValueTable.filtredValues(with: itemSelectionList))
+        XCTAssertEqual([],
+                       NamedValueTableTests.namedValueTable.filtredValues(with: itemSelectionList))
     }
     
     func test_filtredTableValue() {
@@ -130,7 +127,8 @@ class NamedValueTableTests: XCTestCase {
                 (label: "Titre de la table", selected: true),
                 (label: "Item z", selected: true)
             ]
-        XCTAssertEqual([10.0], NamedValueTableTests.namedValueTable.filtredTableValue(with: itemSelectionList))
+        XCTAssertEqual([10.0],
+                       NamedValueTableTests.namedValueTable.filtredTableValue(with: itemSelectionList))
         itemSelectionList =
             [
                 (label: "Item x", selected: true),
@@ -138,6 +136,7 @@ class NamedValueTableTests: XCTestCase {
                 (label: "Truc", selected: true),
                 (label: "Item z", selected: true)
             ]
-        XCTAssertEqual([], NamedValueTableTests.namedValueTable.filtredTableValue(with: itemSelectionList))
+        XCTAssertEqual([],
+                       NamedValueTableTests.namedValueTable.filtredTableValue(with: itemSelectionList))
     }
 }

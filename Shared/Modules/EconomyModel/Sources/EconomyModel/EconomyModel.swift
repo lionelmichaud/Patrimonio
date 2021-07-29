@@ -8,8 +8,10 @@
 
 import Foundation
 import os
+import Persistable
 import AppFoundation
 import Statistics
+import FileAndFolder
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Economy")
 
@@ -35,7 +37,7 @@ public typealias EconomyModelProviderProtocol = InflationProviderProtocol & Fina
 
 // MARK: - SINGLETON: Economy Model
 
-public struct Economy {
+public struct Economy: PersistableModel {
     
     // MARK: - Nested Types
     
@@ -56,15 +58,13 @@ public struct Economy {
     public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
     // MARK: - Modèles statistiques de générateurs aléatoires
-    public struct RandomizersModel: JsonCodableToBundleP {
-        public static var defaultFileName : String = "EconomyModelConfig.json"
+    public struct RandomizersModel: Codable {
         
         // MARK: - Properties
         
         public var inflation   : ModelRandomizer<BetaRandomGenerator>
         public var securedRate : ModelRandomizer<BetaRandomGenerator> // moyenne annuelle
         public var stockRate   : ModelRandomizer<BetaRandomGenerator> // moyenne annuelle
-        //var simulateVolatility: Bool = false
         public var securedVolatility : Double // % [0, 100]
         public var stockVolatility   : Double // % [0, 100]
         
@@ -132,8 +132,10 @@ public struct Economy {
     }
     
     // MARK: - Modèles statistiques de générateurs aléatoires + échantillons tirés pour une simulation
-    public class Model: EconomyModelProviderProtocol {
-        
+    public class Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable, EconomyModelProviderProtocol {
+        enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
+            case randomizers
+        }
         // MARK: - Properties
         
         public var randomizers : RandomizersModel // les modèles de générateurs aléatoires
@@ -144,24 +146,17 @@ public struct Economy {
         
         // MARK: - Methods
         
-        init() {
-            self.randomizers = RandomizersModel(fromFile: RandomizersModel.defaultFileName).initialized()
+        /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
+        public func initialized() -> Self {
+            self.randomizers = self.randomizers.initialized()
+            return self
         }
-        
-        /// A utiliser uniquement pour les Tests Unitaires
-        /// - Parameter fromBundle: le Bundle dans lequel chercher le fichier de configuration JSON
-        init(fromBundle: Bundle) {
-            self.randomizers = RandomizersModel(fromFile: RandomizersModel.defaultFileName,
-                                                fromBundle: fromBundle).initialized()
-        }
-
-        // MARK: - Methods
         
         /// Retourne les taux pour une année donnée
         /// - Parameters:
         ///   - year: année
         ///   - mode: mode de simulation : Monté-Carlo ou Détermnisite
-        /// - Returns: Taux Oblig / Taux Action
+        /// - Returns: Taux Oblig / Taux Action [0%, 100%]
         /// - Important: Les taux changent d'une année à l'autre seuelement en mode Monté-Carlo
         ///             et si la ‘volatilité‘ à été activée dans le fichier de conf
         public func rates(in year            : Int,
@@ -184,7 +179,7 @@ public struct Economy {
         /// Retourne les taux moyen pour toute la durée de la simulation
         /// - Parameters:
         ///   - mode: mode de simulation : Monté-Carlo ou Détermnisite
-        /// - Returns: Taux Oblig / Taux Action
+        /// - Returns: Taux Oblig / Taux Action [0%, 100%]
         public func rates(withMode mode : SimulationModeEnum)
         -> (securedRate : Double,
             stockRate   : Double) {
@@ -280,10 +275,61 @@ public struct Economy {
     
     // MARK: - Static Properties
     
-    public static var model: Model = Model()
+    public static var defaultFileName: String = "EconomyModelConfig.json"
     
+    // MARK: - Properties
+    
+    public var model         : Model?
+    public var persistenceSM : PersistenceStateMachine
+    
+    public var inflation: Double { // [0%, 100%]
+        get { model!.randomizers.inflation.defaultValue }
+        set {
+            model?.randomizers.inflation.defaultValue = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+    public var securedRate: Double { // [0%, 100%]
+        get { model!.randomizers.securedRate.defaultValue }
+        set {
+            model?.randomizers.securedRate.defaultValue = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+    public var stockRate: Double { // [0%, 100%]
+        get { model!.randomizers.stockRate.defaultValue }
+        set {
+            model?.randomizers.stockRate.defaultValue = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+    public var securedVolatility: Double { // [0%, 100%]
+        get { model!.randomizers.securedVolatility }
+        set {
+            model?.randomizers.securedVolatility = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+    public var stockVolatility: Double { // [0%, 100%]
+        get { model!.randomizers.stockVolatility }
+        set {
+            model?.randomizers.stockVolatility = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+
     // MARK: - Initializer
     
-    private init() {
+    /// Initialize seulement la StateMachine.
+    /// L'objet ainsi obtenu n'est pas utilisable en l'état car le modèle n'est pas initialiser.
+    /// Pour pouvoir obtenir un objet utilisable il faut utiliser un des autres init().
+    /// Cet init() n'est utile que pour pouvoir créer un StateObject dans App.main()
+    public init() {
+        self.persistenceSM = PersistenceStateMachine()
     }
 }
