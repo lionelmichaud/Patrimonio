@@ -32,7 +32,7 @@ class LayoffCompensationTests: XCTestCase {
         let fiscalModel =
             Fiscal.Model(fromFile: Fiscal.Model.defaultFileName, fromBundle: Bundle.module)
             .initialized()
-        LayoffCompensation.setFiscalModel(fiscalModel)
+        LayoffCompensationTests.layoffCompensation.setFiscalModel(fiscalModel)
     }
     
     func date(year: Int, month: Int, day: Int) -> Date {

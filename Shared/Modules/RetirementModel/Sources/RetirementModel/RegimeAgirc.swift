@@ -72,7 +72,7 @@ public class RegimeAgirc: Codable {
         let majorationPourEnfant : MajorationPourEnfant
         // dependencies to other Models
         var regimeGeneral        : RegimeGeneral!
-        public var fiscal        : Fiscal.Model!
+        var fiscal               : Fiscal.Model!
         var pensionDevaluationRateProvider: PensionDevaluationRateProviderP!
     }
     
@@ -91,7 +91,6 @@ public class RegimeAgirc: Codable {
     // MARK: - Properties
     
     public var model: Model
-    // dependencies to other Models
 
     // MARK: - Computed Properties
 

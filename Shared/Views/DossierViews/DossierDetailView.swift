@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FiscalModel
 
 struct DossierDetailView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -175,6 +176,7 @@ struct DossierDetailView: View {
             return
         }
 
+        /// charger les fichiers JSON
         do {
             try dossier.loadDossierContentAsJSON { folder in
                 try model.loadFromJSON(fromFolder: folder)
@@ -186,11 +188,28 @@ struct DossierDetailView: View {
             self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
                                        dismissButton : .default(Text("OK")))
         }
+        
+        /// gérer les dépendances entre le Modèle et les objets applicatifs
+        // Injection de Fiscal
+        //   récupérer une copie du singleton
+        let fiscalModel = Fiscal.model
+        //   l'injecter dans les objets qui en dépendent
+        SCPI.setFiscalModelProvider(fiscalModel)
+        PeriodicInvestement.setFiscalModelProvider(fiscalModel)
+        FreeInvestement.setFiscalModelProvider(fiscalModel)
+        
+        // Injection de SocioEconomy
+        LifeExpense.setExpensesUnderEvaluationRateProvider(model.socioEconomyModel)
+        
+        // Injection de Economy
+        SCPI.setInflationProvider(model.economyModel)
+        PeriodicInvestement.setEconomyModelProvider(model.economyModel)
+        FreeInvestement.setEconomyModelProvider(model.economyModel)
 
-        // rendre le Dossier actif seulement si tout c'est bien passé
+        /// rendre le Dossier actif seulement si tout c'est bien passé
         dataStore.activate(dossierAtIndex: dossierIndex)
         
-        // remettre à zéro la simulation et sa vue
+        /// remettre à zéro la simulation et sa vue
         simulation.reset()
         uiState.reset()
     }

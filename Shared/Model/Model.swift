@@ -118,6 +118,9 @@ final class Model: ObservableObject, CustomStringConvertible {
     }
     
     /// Charger tous les modèles à partir des fichiers JSON contenu de fichiers contenus dans le bundle `bundle`
+    /// Gérer les dépendances internes au Model (entre les sous-modèle).
+    /// - Warning: les dépendance externes entre le Model et les objets applicatifs doivent
+    ///                        être gérées en dehors de cette méthode.
     /// - Parameters:
     ///   - bundle: le bundle dans lequel chercher les fichiers JSON
     init(fromBundle bundle: Bundle) {
@@ -128,12 +131,15 @@ final class Model: ObservableObject, CustomStringConvertible {
         unemployment = Unemployment(fromBundle : Bundle.main)
 
         // gérer les dépendances
-        manageDependencies()
+        manageInternalDependencies()
     }
 
     // MARK: - Methods
 
     /// Charger tous les modèles à partir des fichiers JSON contenu dans le `folder`
+    /// Gérer les dépendances internes au Model (entre les sous-modèle).
+    /// - Warning: les dépendance externes entre le Model et les objets applicatifs doivent
+    ///                        être gérées en dehors de cette méthode.
     /// - Parameter folder: dossier chargé par l'utilisateur
     func loadFromJSON(fromFolder folder: Folder) throws {
         humanLife    = try HumanLife(fromFolder    : folder)
@@ -143,7 +149,7 @@ final class Model: ObservableObject, CustomStringConvertible {
         unemployment = try Unemployment(fromFolder : folder)
 
         // gérer les dépendances
-        manageDependencies()
+        manageInternalDependencies()
     }
 
     /// Enregistrer tous les modèles dans des fichiers JSON contenu dans le `folder`
@@ -167,27 +173,18 @@ final class Model: ObservableObject, CustomStringConvertible {
     }
 
     /// Gérer les dépendances entre modèles
-    func manageDependencies() {
+    func manageInternalDependencies() {
         /// Injection de Fiscal
         // récupérer une copie du singleton
         let fiscalModel = Fiscal.model
         // l'injecter dans les objets qui en dépendent
-        LayoffCompensation.setFiscalModel(fiscalModel)
-        UnemploymentCompensation.setFiscalModel(fiscalModel)
+        unemployment.model!.indemniteLicenciement.setFiscalModel(fiscalModel)
+        unemployment.model!.allocationChomage.setFiscalModel(fiscalModel)
         retirement.model!.regimeAgirc.setFiscalModel(fiscalModel)
         retirement.model!.regimeGeneral.setFiscalModel(fiscalModel)
-        SCPI.setFiscalModelProvider(fiscalModel)
-        PeriodicInvestement.setFiscalModelProvider(fiscalModel)
-        FreeInvestement.setFiscalModelProvider(fiscalModel)
         
         /// Injection de SocioEconomy
         retirement.model!.regimeAgirc.setPensionDevaluationRateProvider(socioEconomyModel)
         retirement.model!.regimeGeneral.setSocioEconomyModel(socioEconomyModel)
-        LifeExpense.setExpensesUnderEvaluationRateProvider(socioEconomyModel)
-        
-        /// Injection de Economy
-        SCPI.setInflationProvider(economyModel)
-        PeriodicInvestement.setEconomyModelProvider(economyModel)
-        FreeInvestement.setEconomyModelProvider(economyModel)
     }
 }

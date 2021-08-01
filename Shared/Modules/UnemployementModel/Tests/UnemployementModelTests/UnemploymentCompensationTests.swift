@@ -18,14 +18,14 @@ class UnemploymentCompensationTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        let model = UnemploymentCompensation.Model(fromFile: UnemploymentCompensation.Model.defaultFileName,
-                                                   fromBundle: Bundle.module)
+        let model = UnemploymentCompensation.Model(fromFile   : UnemploymentCompensation.Model.defaultFileName,
+                                                   fromBundle : Bundle.module)
         UnemploymentCompensationTests.unemploymentCompensation = UnemploymentCompensation(model: model)
         // injection de dépendance
         let fiscalModel =
             Fiscal.Model(fromFile: Fiscal.Model.defaultFileName, fromBundle: Bundle.module)
             .initialized()
-        UnemploymentCompensation.setFiscalModel(fiscalModel)
+        UnemploymentCompensationTests.unemploymentCompensation.setFiscalModel(fiscalModel)
     }
     
     func date(year: Int, month: Int, day: Int) -> Date {
