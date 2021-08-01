@@ -140,13 +140,15 @@ struct IntegerEditView: View {
     
     var body: some View {
         let numberFormatter = NumberFormatter()
-        let textValueBinding = Binding<String>(get: {
-            String(integer)
-        }, set: {
-            if let value = numberFormatter.number(from: $0) {
-                self.integer = value.intValue
-            }
-        })
+        let textValueBinding = Binding<String>(
+            get: {
+                String(integer)
+            },
+            set: {
+                if let value = numberFormatter.number(from: $0) {
+                    self.integer = value.intValue
+                }
+            })
         
         HStack {
             Text(label)
@@ -197,17 +199,19 @@ struct IntegerView: View {
 // MARK: - Saisie d'un pourcentage %
 struct PercentEditView: View {
     private let label     : String
-    @Binding var percent  : Double
+    @Binding var percent  : Double // [0% ... 100%]
     @State var textPercent: String
     
     var body: some View {
-        let textValueBinding = Binding<String>(get: {
-            self.textPercent
-        }, set: {
-            self.textPercent = $0
-            // actualiser la valeur numérique
-            self.percent = Double($0.replacingOccurrences(of: ",", with: ".")) ?? 0
-        })
+        let textValueBinding = Binding<String>(
+            get: {
+                self.textPercent
+            },
+            set: {
+                self.textPercent = $0
+                // actualiser la valeur numérique
+                self.percent = Double($0.replacingOccurrences(of: ",", with: ".")) ?? 0
+            })
         
         return HStack {
             Text(label)
@@ -246,7 +250,7 @@ struct PercentEditView: View {
 // MARK: - Affichage d'un pourcentage %
 struct PercentView: View {
     let label   : String
-    let percent : Double
+    let percent : Double // [0.0 ... 1.0]
     let comment : String?
     
     var body: some View {

@@ -471,6 +471,7 @@
 		79CC63AC26AB297A000A2DC6 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CC63AA26AB297A000A2DC6 /* Model.swift */; };
 		79D3E9ED2661A8E4006FAA3F /* Stateful in Frameworks */ = {isa = PBXBuildFile; productRef = 79D3E9EC2661A8E4006FAA3F /* Stateful */; };
 		79D3E9EF2661A8F1006FAA3F /* Stateful in Frameworks */ = {isa = PBXBuildFile; productRef = 79D3E9EE2661A8F1006FAA3F /* Stateful */; };
+		79D7C41626B6EFCA0057E343 /* ModelDeterministicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D7C41526B6EFCA0057E343 /* ModelDeterministicViewModel.swift */; };
 		79E713EC262C9886000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713EB262C9886000FD625 /* EconomyModel */; };
 		79E713EE262C9891000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713ED262C9891000FD625 /* EconomyModel */; };
 		79EC47922630753D0006EE44 /* ArrayOfNameableValuable+Ownable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC47912630753D0006EE44 /* ArrayOfNameableValuable+Ownable.swift */; };
@@ -812,6 +813,7 @@
 		79CB2C86264D723100B3E493 /* MonteCarloVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonteCarloVisitor.swift; sourceTree = "<group>"; };
 		79CB2C88264D731900B3E493 /* CsvMonteCarloVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvMonteCarloVisitor.swift; sourceTree = "<group>"; };
 		79CC63AA26AB297A000A2DC6 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		79D7C41526B6EFCA0057E343 /* ModelDeterministicViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDeterministicViewModel.swift; sourceTree = "<group>"; };
 		79EC47912630753D0006EE44 /* ArrayOfNameableValuable+Ownable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArrayOfNameableValuable+Ownable.swift"; sourceTree = "<group>"; };
 		79EC479826307B260006EE44 /* UserSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		79EC47B126307C910006EE44 /* Debt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debt.swift; sourceTree = "<group>"; };
@@ -939,6 +941,7 @@
 			children = (
 				795049F2266792C2000AAEF0 /* DeterministicSectionView.swift */,
 				79BE4A722651CE7800BBF46C /* ModelDeterministicView.swift */,
+				79D7C41526B6EFCA0057E343 /* ModelDeterministicViewModel.swift */,
 			);
 			path = "Determinitic Menu Views";
 			sourceTree = "<group>";
@@ -2176,6 +2179,7 @@
 				792DE958264C8DBF004DA53D /* PersistenceManager.swift in Sources */,
 				79EC47F7263095C20006EE44 /* NetCashFlowManager.swift in Sources */,
 				798DE8C02635CD3C00C0C3B5 /* AlertView.swift in Sources */,
+				79D7C41626B6EFCA0057E343 /* ModelDeterministicViewModel.swift in Sources */,
 				79EC5EAA26406FD900FF8263 /* OwnerGroupBox.swift in Sources */,
 				795049F3266792C2000AAEF0 /* DeterministicSectionView.swift in Sources */,
 				79EC4800263096200006EE44 /* ValuedTaxes.swift in Sources */,

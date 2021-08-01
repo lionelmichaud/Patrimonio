@@ -59,7 +59,8 @@ struct ModelsView_Previews: PreviewProvider {
     static var simulation = Simulation()
     
     static var previews: some View {
-        ModelsView()
+        dataStore.activate(dossierAtIndex: 0)
+        return ModelsView()
             .environmentObject(dataStore)
             .environmentObject(model)
             .environmentObject(uiState)

@@ -17,11 +17,11 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 
 // MARK: - DI: Protocol InflationProviderProtocol
 
-public protocol InflationProviderProtocol {
+public protocol InflationProviderP {
     func inflation(withMode simulationMode: SimulationModeEnum) -> Double
 }
 
-public protocol FinancialRatesProviderProtocol {
+public protocol FinancialRatesProviderP {
     func rates(in year            : Int,
                withMode mode      : SimulationModeEnum,
                simulateVolatility : Bool)
@@ -33,7 +33,7 @@ public protocol FinancialRatesProviderProtocol {
         stockRate   : Double)
 }
 
-public typealias EconomyModelProviderProtocol = InflationProviderProtocol & FinancialRatesProviderProtocol
+public typealias EconomyModelProviderP = InflationProviderP & FinancialRatesProviderP
 
 // MARK: - SINGLETON: Economy Model
 
@@ -96,7 +96,7 @@ public struct Economy: PersistableModel {
             dicoOfRandomVariable[.stockRate]   = stockRate.next()
             return dicoOfRandomVariable
         }
-
+        
         fileprivate func current(withMode mode : SimulationModeEnum) -> DictionaryOfRandomVariable {
             var dicoOfRandomVariable           = DictionaryOfRandomVariable()
             dicoOfRandomVariable[.inflation]   = inflation.value(withMode: mode)
@@ -132,7 +132,7 @@ public struct Economy: PersistableModel {
     }
     
     // MARK: - Modèles statistiques de générateurs aléatoires + échantillons tirés pour une simulation
-    public class Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable, EconomyModelProviderProtocol {
+    public class Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable, EconomyModelProviderP {
         enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
             case randomizers
         }
@@ -147,18 +147,18 @@ public struct Economy: PersistableModel {
         // MARK: - Methods
         
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
-        public func initialized() -> Self {
+        public final func initialized() -> Self {
             randomizers = randomizers.initialized()
             return self
         }
         
         /// Remettre à zéro les historiques des tirages aléatoires
         /// - Note : Appeler avant de lancer une simulation
-        public func resetRandomHistory() {
+        public final func resetRandomHistory() {
             randomizers.resetRandomHistory()
         }
         
-        public func currentRandomizersValues(withMode: SimulationModeEnum) -> DictionaryOfRandomVariable {
+        public final func currentRandomizersValues(withMode: SimulationModeEnum) -> DictionaryOfRandomVariable {
             return randomizers.current(withMode: withMode)
         }
         
@@ -169,9 +169,9 @@ public struct Economy: PersistableModel {
         /// - Returns: Taux Oblig / Taux Action [0%, 100%]
         /// - Important: Les taux changent d'une année à l'autre seuelement en mode Monté-Carlo
         ///             et si la ‘volatilité‘ à été activée dans le fichier de conf
-        public func rates(in year            : Int,
-                          withMode mode      : SimulationModeEnum,
-                          simulateVolatility : Bool)
+        public final func rates(in year            : Int,
+                                withMode mode      : SimulationModeEnum,
+                                simulateVolatility : Bool)
         -> (securedRate : Double,
             stockRate   : Double) {
             if mode == .random && simulateVolatility {
@@ -185,12 +185,12 @@ public struct Economy: PersistableModel {
                         stockRate   : randomizers.stockRate.value(withMode: mode))
             }
         }
-
+        
         /// Retourne les taux moyen pour toute la durée de la simulation
         /// - Parameters:
         ///   - mode: mode de simulation : Monté-Carlo ou Détermnisite
         /// - Returns: Taux Oblig / Taux Action [0%, 100%]
-        public func rates(withMode mode : SimulationModeEnum)
+        public final func rates(withMode mode : SimulationModeEnum)
         -> (securedRate : Double,
             stockRate   : Double) {
             (securedRate : randomizers.securedRate.value(withMode: mode),
@@ -205,10 +205,10 @@ public struct Economy: PersistableModel {
         ///   - firstYear: première année
         ///   - lastYear: dernière année
         /// - Note: comportement différent selon que la volatilité doit être prise en compte ou pas
-        private func generateRandomSamples(averageMode        : SimulationModeEnum,
-                                           simulateVolatility : Bool,
-                                           firstYear          : Int,
-                                           lastYear           : Int) throws {
+        private final func generateRandomSamples(averageMode        : SimulationModeEnum,
+                                                 simulateVolatility : Bool,
+                                                 firstYear          : Int,
+                                                 lastYear           : Int) throws {
             guard lastYear >= firstYear else {
                 customLog.log(level: .fault, "generateRandomSamples: lastYear < firstYear")
                 throw ModelError.outOfBounds
@@ -239,9 +239,9 @@ public struct Economy: PersistableModel {
         ///   - Comportement différent selon que la volatilité doit être prise en compte ou pas
         /// - Throws:
         @discardableResult
-        public func nextRun(simulateVolatility : Bool,
-                            firstYear          : Int,
-                            lastYear           : Int) throws -> DictionaryOfRandomVariable {
+        public final func nextRun(simulateVolatility : Bool,
+                                  firstYear          : Int,
+                                  lastYear           : Int) throws -> DictionaryOfRandomVariable {
             // tirer au hazard une nouvelle valeure moyenne pour le prochain run
             let dico = randomizers.next()
             // à partir de la nouvelle valeure moyenne, tirer au hazard une valeur pour chaque année
@@ -251,7 +251,7 @@ public struct Economy: PersistableModel {
                                       lastYear           : lastYear)
             return dico
         }
-
+        
         /// Définir une valeur pour chaque variable aléatoire avant un rejeu
         /// - Parameters:
         ///   - values: nouvelles valeure sà rejouer
@@ -262,10 +262,10 @@ public struct Economy: PersistableModel {
         ///   - Appeler avant de rejouer un Run de simulation
         ///   - Comportement différent selon que la volatilité doit être prise en compte ou pas
         /// - Throws:
-        public func setRandomValue(to values          : DictionaryOfRandomVariable,
-                                   simulateVolatility : Bool,
-                                   firstYear          : Int,
-                                   lastYear           : Int) throws {
+        public final func setRandomValue(to values          : DictionaryOfRandomVariable,
+                                         simulateVolatility : Bool,
+                                         firstYear          : Int,
+                                         lastYear           : Int) throws {
             // Définir une valeur pour chaque variable aléatoire avant un rejeu
             randomizers.setRandomValue(to: values)
             // à partir de la nouvelle valeure moyenne, tirer au hazard une valeur pour chaque année
@@ -275,7 +275,7 @@ public struct Economy: PersistableModel {
                                       lastYear           : lastYear)
         }
         
-        public func inflation(withMode simulationMode: SimulationModeEnum) -> Double {
+        public final func inflation(withMode simulationMode: SimulationModeEnum) -> Double {
             randomizers.inflation.value(withMode: simulationMode)
         }
     }
@@ -329,7 +329,7 @@ public struct Economy: PersistableModel {
             persistenceSM.process(event: .modify)
         }
     }
-
+    
     // MARK: - Initializer
     
     /// Initialize seulement la StateMachine.

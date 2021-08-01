@@ -1,0 +1,121 @@
+{
+  "configurations" : [
+    {
+      "id" : "DDB71863-5B6C-4378-BE98-BB4B88E97341",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Patrimonio.xcodeproj",
+      "identifier" : "7920DC50262C700500536B03",
+      "name" : "Patrimonio (iOS)"
+    }
+  },
+  "testTargets" : [
+    {
+      "enabled" : false,
+      "skippedTests" : [
+        "Tests_iOS\/testExample()",
+        "Tests_iOS\/testLaunchPerformance()",
+        "Tests_iOS\/test_truc()"
+      ],
+      "target" : {
+        "containerPath" : "container:Patrimonio.xcodeproj",
+        "identifier" : "7920DC60262C700500536B03",
+        "name" : "Tests iOS"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/AppFoundation",
+        "identifier" : "AppFoundationTests",
+        "name" : "AppFoundationTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/EconomyModel",
+        "identifier" : "EconomyModelTests",
+        "name" : "EconomyModelTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/FileAndFolder",
+        "identifier" : "FileAndFolderTests",
+        "name" : "FileAndFolderTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/FiscalModel",
+        "identifier" : "FiscalModelTests",
+        "name" : "FiscalModelTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/HumanLifeModel",
+        "identifier" : "HumanLifeModelTests",
+        "name" : "HumanLifeModelTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/NamedValue",
+        "identifier" : "NamedValueTests",
+        "name" : "NamedValueTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/Persistable",
+        "identifier" : "PersistableTests",
+        "name" : "PersistableTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/RetirementModel",
+        "identifier" : "RetirementModelTests",
+        "name" : "RetirementModelTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/SocioEconomyModel",
+        "identifier" : "SocioEconomyModelTests",
+        "name" : "SocioEconomyModelTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/Stateful",
+        "identifier" : "StatefulTests",
+        "name" : "StatefulTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/UnemployementModel",
+        "identifier" : "UnemployementModelTests",
+        "name" : "UnemployementModelTests"
+      }
+    }
+  ],
+  "version" : 1
+}

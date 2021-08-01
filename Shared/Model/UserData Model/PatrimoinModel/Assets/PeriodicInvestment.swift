@@ -28,7 +28,7 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
     
     private static var simulationMode: SimulationModeEnum = .deterministic
     // dependencies
-    private static var economyModel : EconomyModelProviderProtocol!
+    private static var economyModel : EconomyModelProviderP!
     private static var fiscalModel  : Fiscal.Model!
     
     // tous ces revenus sont dépréciés de l'inflation
@@ -46,7 +46,7 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
     // MARK: - Static Methods
     
     /// Dependency Injection: Setter Injection
-    static func setEconomyModelProvider(_ economyModel : EconomyModelProviderProtocol) {
+    static func setEconomyModelProvider(_ economyModel : EconomyModelProviderP) {
         PeriodicInvestement.economyModel = economyModel
     }
     

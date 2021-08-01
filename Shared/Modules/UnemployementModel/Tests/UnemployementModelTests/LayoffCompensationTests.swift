@@ -10,6 +10,14 @@ import XCTest
 @testable import UnemployementModel
 import FiscalModel
 
+func isApproximatelyEqual(_ x: Double, _ y: Double) -> Bool {
+    if x == 0 {
+        return abs((x-y)) < 0.0001
+    } else {
+        return abs((x-y)) / x < 0.0001
+    }
+}
+
 class LayoffCompensationTests: XCTestCase {
 
     static var layoffCompensation: LayoffCompensation!
@@ -18,9 +26,13 @@ class LayoffCompensationTests: XCTestCase {
 
     override class func setUp() {
         super.setUp()
-        let model = LayoffCompensation.Model(fromBundle: Bundle.module)
+        let model = LayoffCompensation.Model(fromFile: LayoffCompensation.Model.defaultFileName,
+                                             fromBundle: Bundle.module)
         LayoffCompensationTests.layoffCompensation = LayoffCompensation(model: model)
-        LayoffCompensation.setFiscalModel(Fiscal.Model(fromBundle: Bundle.module).initialized())
+        let fiscalModel =
+            Fiscal.Model(fromFile: Fiscal.Model.defaultFileName, fromBundle: Bundle.module)
+            .initialized()
+        LayoffCompensation.setFiscalModel(fiscalModel)
     }
     
     func date(year: Int, month: Int, day: Int) -> Date {
@@ -51,14 +63,13 @@ class LayoffCompensationTests: XCTestCase {
         nbMois = LayoffCompensationTests.layoffCompensation.layoffCompensationLegalInMonth(
             nbYearsSeniority: Anciennete)
         let theory = 10.0 / 4.0 + Double(Anciennete - 10) * 1.0/3.0
-        XCTAssert(theory.isApproximatelyEqual(to: nbMois, relativeTolerance: 0.001))
+        XCTAssert(isApproximatelyEqual(theory, nbMois))
         //print("layoffCompensationLegalInMonth = \(theory)")
 
         Anciennete = 30 // ans
         nbMois = LayoffCompensationTests.layoffCompensation.layoffCompensationLegalInMonth(
             nbYearsSeniority: Anciennete)
-        XCTAssert((10.0 / 4.0 + Double(Anciennete - 10) * 1.0/3.0).isApproximatelyEqual(to: nbMois,
-                                                                                        relativeTolerance: 0.001))
+        XCTAssert(isApproximatelyEqual(10.0 / 4.0 + Double(Anciennete - 10) * 1.0/3.0, nbMois))
     }
 
     func test_calcul_indemnite_legale() {
@@ -70,7 +81,7 @@ class LayoffCompensationTests: XCTestCase {
             nbYearsSeniority     : nbYearsSeniority)
         let nbMonth = 5.5
         let theory  = nbMonth * yearlyWorkIncomeBrut / 12.0
-        XCTAssert(theory.isApproximatelyEqual(to: indemnite))
+        XCTAssert(isApproximatelyEqual(theory, indemnite))
         print("***** Indemnité légale de licenciement pour un dernier salaire de \(yearlyWorkIncomeBrut)€ et une ancienneté de \(nbYearsSeniority) ans = \(theory)")
     }
 

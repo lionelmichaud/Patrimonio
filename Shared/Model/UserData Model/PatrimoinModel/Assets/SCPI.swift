@@ -24,10 +24,10 @@ struct SCPI: Identifiable, JsonCodableToBundleP, Ownable {
     
     static var defaultFileName : String = "SCPI.json"
 
-    private static var saleCommission    : Double                    = 10.0 // %
-    private static var simulationMode    : SimulationModeEnum        = .deterministic
+    private static var saleCommission    : Double             = 10.0 // %
+    private static var simulationMode    : SimulationModeEnum = .deterministic
     // dependencies
-    private static var inflationProvider : InflationProviderProtocol!
+    private static var inflationProvider : InflationProviderP!
     private static var fiscalModel       : Fiscal.Model!
 
     // tous ces revenus sont dépréciés de l'inflation
@@ -38,7 +38,7 @@ struct SCPI: Identifiable, JsonCodableToBundleP, Ownable {
     // MARK: - Static Methods
     
     /// Dependency Injection: Setter Injection
-    static func setInflationProvider(_ inflationProvider : InflationProviderProtocol) {
+    static func setInflationProvider(_ inflationProvider : InflationProviderP) {
         SCPI.inflationProvider = inflationProvider
     }
     

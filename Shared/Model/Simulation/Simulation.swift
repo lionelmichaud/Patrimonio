@@ -137,7 +137,7 @@ final class Simulation: ObservableObject, CanResetSimulation {
     private func resetAllRandomHistories(using model: Model) {
         model.humanLife.model!.resetRandomHistory()
         model.economy.model!.resetRandomHistory()
-        SocioEconomy.model.resetRandomHistory()
+        model.socioEconomy.model!.resetRandomHistory()
     }
 
     private func currentRandomProperties(using model: Model,
@@ -147,7 +147,7 @@ final class Simulation: ObservableObject, CanResetSimulation {
                                          _ dicoOfSocioEconomyRandomVariables : inout SocioEconomy.DictionaryOfRandomVariable) {
         dicoOfAdultsRandomProperties      = family.currentRandomProperties()
         dicoOfEconomyRandomVariables      = model.economyModel.currentRandomizersValues(withMode: mode)
-        dicoOfSocioEconomyRandomVariables = SocioEconomy.model.currentRandomizersValues(withMode: mode)
+        dicoOfSocioEconomyRandomVariables = model.socioEconomyModel.currentRandomizersValues(withMode: mode)
     }
 
     private func nextRandomProperties(using model                         : Model,
@@ -163,7 +163,7 @@ final class Simulation: ObservableObject, CanResetSimulation {
                                                                        firstYear          : firstYear!,
                                                                        lastYear           : lastYear!)
         // re-générer les propriétés aléatoires du modèle socio économique
-        dicoOfSocioEconomyRandomVariables = SocioEconomy.model.nextRun()
+        dicoOfSocioEconomyRandomVariables = model.socioEconomyModel.nextRun()
     }
 
     /// Exécuter une simulation Déterministe ou Aléatoire
@@ -297,7 +297,7 @@ final class Simulation: ObservableObject, CanResetSimulation {
                                                simulateVolatility : UserSettings.shared.simulateVolatility,
                                                firstYear          : firstYear!,
                                                lastYear           : lastYear!)
-        SocioEconomy.model.setRandomValue(to: thisRun.dicoOfSocioEconomyRandomVariables)
+        model.socioEconomyModel.setRandomValue(to: thisRun.dicoOfSocioEconomyRandomVariables)
         family.members.items.forEach { person in
             if let adult = person as? Adult {
                 adult.ageOfDeath           = thisRun.dicoOfAdultsRandomProperties[adult.displayName]!.ageOfDeath

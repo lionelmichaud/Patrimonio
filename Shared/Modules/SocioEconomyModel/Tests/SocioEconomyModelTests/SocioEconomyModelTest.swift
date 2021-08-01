@@ -11,47 +11,50 @@ import XCTest
 
 class SocioEconomyModelTest: XCTestCase {
 
+    static var socioEconomy: SocioEconomy!
+
     // MARK: Helpers
 
+    override func setUpWithError() throws {
+        super.setUp()
+        SocioEconomyModelTest.socioEconomy = SocioEconomy(fromBundle : Bundle.module)
+    }
+    
     // MARK: Tests
 
     func test_loading_from_module_bundle() throws {
-        XCTAssertNoThrow(SocioEconomy.Model(fromFile   : "SocioEconomyModelConfig.json",
-                                            fromBundle : Bundle.module).initialized(),
+        XCTAssertNoThrow(SocioEconomy(fromBundle : Bundle.module),
                          "Failed to read model from Main Bundle \(String(describing: Bundle.module.resourcePath))")
     }
     
     func test_saving_to_module_bundle() throws {
-        let model = SocioEconomy.Model(fromFile   : "SocioEconomyModelConfig.json",
-                                       fromBundle : Bundle.module).initialized()
-        model.saveAsJSON(toFile               : "SocioEconomyModelConfig.json",
-                         toBundle             : Bundle.module,
-                         dateEncodingStrategy : .iso8601,
-                         keyEncodingStrategy  : .useDefaultKeys)
+        XCTAssertNoThrow(SocioEconomyModelTest.socioEconomy.saveAsJSON(toBundle: Bundle.module))
     }
     
     func test_next_currentRandomizersValues_setRandomValue() {
-        var model = SocioEconomy.Model(fromFile   : "SocioEconomyModelConfig.json",
-                                       fromBundle : Bundle.module).initialized()
-        var dico = model.nextRun()
+        var dico = SocioEconomyModelTest.socioEconomy.model!.nextRun()
         
         XCTAssertNotNil(dico[.expensesUnderEvaluationRate])
         XCTAssertNotNil(dico[.nbTrimTauxPlein])
         XCTAssertNotNil(dico[.pensionDevaluationRate])
-
-        var currentRandomizersValues = model.currentRandomizersValues(withMode: .random)
+        
+        var currentRandomizersValues =
+            SocioEconomyModelTest.socioEconomy.model!
+            .currentRandomizersValues(withMode: .random)
         XCTAssertNotNil(currentRandomizersValues[.expensesUnderEvaluationRate])
         XCTAssertNotNil(currentRandomizersValues[.nbTrimTauxPlein])
         XCTAssertNotNil(currentRandomizersValues[.pensionDevaluationRate])
-
+        
         XCTAssertEqual(dico, currentRandomizersValues)
-
+        
         for (v, value) in dico {
             dico[v] = value + 1.0
         }
-        model.setRandomValue(to: dico)
-
-        currentRandomizersValues = model.currentRandomizersValues(withMode: .random)
+        SocioEconomyModelTest.socioEconomy.model!.setRandomValue(to: dico)
+        
+        currentRandomizersValues =
+            SocioEconomyModelTest.socioEconomy.model!
+            .currentRandomizersValues(withMode: .random)
         XCTAssertNotNil(currentRandomizersValues[.expensesUnderEvaluationRate])
         XCTAssertNotNil(currentRandomizersValues[.nbTrimTauxPlein])
         XCTAssertNotNil(currentRandomizersValues[.pensionDevaluationRate])
@@ -60,24 +63,33 @@ class SocioEconomyModelTest: XCTestCase {
     }
 
     func test_pensionDevaluationRate() {
-        let model = SocioEconomy.Model(fromFile   : "SocioEconomyModelConfig.json",
-                                       fromBundle : Bundle.module).initialized()
-        XCTAssertEqual(model.pensionDevaluationRate(withMode: .deterministic),
+        XCTAssertEqual(SocioEconomyModelTest.socioEconomy.pensionDevaluationRateDeterministic,
                        1.0)
+
+        var socioEconomy = SocioEconomy(fromBundle : Bundle.module)
+        socioEconomy.pensionDevaluationRateDeterministic = 60
+        XCTAssertEqual(socioEconomy.pensionDevaluationRateDeterministic, 60)
+        XCTAssertEqual(socioEconomy.persistenceSM.currentState , .modified)
     }
 
     func test_nbTrimTauxPlein() {
-        let model = SocioEconomy.Model(fromFile   : "SocioEconomyModelConfig.json",
-                                       fromBundle : Bundle.module).initialized()
-        XCTAssertEqual(model.nbTrimTauxPlein(withMode: .deterministic),
+        XCTAssertEqual(SocioEconomyModelTest.socioEconomy.nbTrimTauxPleinDeterministic,
                        0)
+
+        var socioEconomy = SocioEconomy(fromBundle : Bundle.module)
+        socioEconomy.nbTrimTauxPleinDeterministic = 50
+        XCTAssertEqual(socioEconomy.nbTrimTauxPleinDeterministic, 50)
+        XCTAssertEqual(socioEconomy.persistenceSM.currentState , .modified)
     }
 
     func test_expensesUnderEvaluationRate() {
-        let model = SocioEconomy.Model(fromFile   : "SocioEconomyModelConfig.json",
-                                       fromBundle : Bundle.module).initialized()
-        XCTAssertEqual(model.expensesUnderEvaluationRate(withMode: .deterministic),
+        XCTAssertEqual(SocioEconomyModelTest.socioEconomy.expensesUnderEvaluationRateDeterministic,
                        5)
+
+        var socioEconomy = SocioEconomy(fromBundle : Bundle.module)
+        socioEconomy.expensesUnderEvaluationRateDeterministic = 40
+        XCTAssertEqual(socioEconomy.expensesUnderEvaluationRateDeterministic, 40)
+        XCTAssertEqual(socioEconomy.persistenceSM.currentState , .modified)
     }
 
 }

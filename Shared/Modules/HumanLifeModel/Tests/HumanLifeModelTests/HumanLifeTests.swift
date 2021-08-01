@@ -20,6 +20,8 @@ class HumanLifeTests: XCTestCase {
         HumanLifeTests.humanLife = HumanLife(fromBundle : Bundle.module)
     }
     
+    // MARK: Tests
+
     func test_loading_from_module_bundle() {
         XCTAssertNoThrow(HumanLife(fromBundle : Bundle.module),
                          "Failed to read HumanLife from Main Bundle \(String(describing: Bundle.module.resourcePath))")
@@ -29,7 +31,7 @@ class HumanLifeTests: XCTestCase {
         XCTAssertNoThrow(HumanLifeTests.humanLife.saveAsJSON(toBundle: Bundle.module))
     }
 
-    func test_get_menLifeExpectationDeterministic() {
+    func test_get_set_menLifeExpectationDeterministic() {
         XCTAssertEqual(HumanLifeTests.humanLife.menLifeExpectationDeterministic, 82)
 
         var humanLife = HumanLife(fromBundle : Bundle.module)
@@ -38,7 +40,7 @@ class HumanLifeTests: XCTestCase {
         XCTAssertEqual(humanLife.persistenceSM.currentState , .modified)
     }
 
-    func test_get_womenLifeExpectationDeterministic() {
+    func test_get_set_womenLifeExpectationDeterministic() {
         XCTAssertEqual(HumanLifeTests.humanLife.womenLifeExpectationDeterministic, 89)
 
         var humanLife = HumanLife(fromBundle : Bundle.module)
@@ -47,7 +49,7 @@ class HumanLifeTests: XCTestCase {
         XCTAssertEqual(humanLife.persistenceSM.currentState , .modified)
     }
 
-    func test_get_nbOfYearsOfdependencyDeterministic() {
+    func test_get_set_nbOfYearsOfdependencyDeterministic() {
         XCTAssertEqual(HumanLifeTests.humanLife.nbOfYearsOfdependencyDeterministic, 6)
 
         var humanLife = HumanLife(fromBundle : Bundle.module)

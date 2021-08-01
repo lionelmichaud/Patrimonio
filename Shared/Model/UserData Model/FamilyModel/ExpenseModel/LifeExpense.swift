@@ -48,9 +48,11 @@ struct LifeExpense: Identifiable, Codable, Hashable, NameableValuable {
                                        note     : "",
                                        timeSpan : .permanent,
                                        value    : 0.0)
+    private static var simulationMode : SimulationModeEnum = .deterministic
+    // dependencies
     private static var membersCountProvider : MembersCountProvider!
-    private static var simulationMode       : SimulationModeEnum = .deterministic
-    
+    private static var expensesUnderEvaluationRateProvider : ExpensesUnderEvaluationRateProviderP!
+
     // MARK: - Static Methods
     
     /// Définir le mode de simulation à utiliser pour tous les calculs futurs
@@ -63,10 +65,14 @@ struct LifeExpense: Identifiable, Codable, Hashable, NameableValuable {
         LifeExpense.membersCountProvider = membersCountProvider
     }
     
-    /// Calcule le facteur aléatoire de correction à appliquer
+    static func setExpensesUnderEvaluationRateProvider(_ expensesUnderEvaluationRateProvider: ExpensesUnderEvaluationRateProviderP) {
+        LifeExpense.expensesUnderEvaluationRateProvider = expensesUnderEvaluationRateProvider
+    }
+    
+   /// Calcule le facteur aléatoire de correction à appliquer
     /// - Note: valeur > 1.0
     static var correctionFactor: Double {
-        1.0 + SocioEconomy.model.expensesUnderEvaluationRate.value(withMode: simulationMode) / 100.0
+        1.0 + LifeExpense.expensesUnderEvaluationRateProvider.expensesUnderEvaluationRate(withMode: simulationMode) / 100.0
     }
     
     // MARK: - Properties
@@ -90,7 +96,11 @@ struct LifeExpense: Identifiable, Codable, Hashable, NameableValuable {
     
     // MARK: - Initializers
     
-    init(name: String, note: String, timeSpan: TimeSpan, proportional: Bool = false, value: Double) {
+    init(name         : String,
+         note         : String,
+         timeSpan     : TimeSpan,
+         proportional : Bool = false,
+         value        : Double) {
         self.name         = name
         self.value        = value
         self.note         = note

@@ -45,7 +45,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
     
     private static var simulationMode: SimulationModeEnum = .deterministic
     // dependencies
-    private static var economyModel : EconomyModelProviderProtocol!
+    private static var economyModel : EconomyModelProviderP!
     public static var fiscalModel   : Fiscal.Model!
 
     // tous ces actifs sont dépréciés de l'inflation
@@ -63,7 +63,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelop {
     // MARK: - Static Methods
     
     /// Dependency Injection: Setter Injection
-    static func setEconomyModelProvider(_ economyModel : EconomyModelProviderProtocol) {
+    static func setEconomyModelProvider(_ economyModel : EconomyModelProviderP) {
         FreeInvestement.economyModel = economyModel
     }
     

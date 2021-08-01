@@ -12,113 +12,44 @@ import HumanLifeModel
 import EconomyModel
 import SocioEconomyModel
 
-// MARK: - Deterministic View Model
-
-class DeterministicViewModel: ObservableObject {
-
-    // MARK: - Properties
-    var isModified : Bool
-    // model: HumanLife
-    @Published var menLifeExpectation    : Int
-    @Published var womenLifeExpectation  : Int
-    @Published var nbOfYearsOfdependency : Int
-    // model: Retirement
-    @Published var ageMinimumLegal    : Int
-    @Published var ageMinimumAGIRC    : Int
-    @Published var valeurDuPointAGIRC : Double
-    // model: Economy
-    @Published var inflation         : Double
-    @Published var securedRate       : Double
-    @Published var stockRate         : Double
-
-    // MARK: - Initialization
-    
-    init(using model: Model) {
-        menLifeExpectation    = model.humanLife.menLifeExpectationDeterministic
-        womenLifeExpectation  = model.humanLife.womenLifeExpectationDeterministic
-        nbOfYearsOfdependency = model.humanLife.nbOfYearsOfdependencyDeterministic
-        ageMinimumLegal    = model.retirement.ageMinimumLegal
-        ageMinimumAGIRC    = model.retirement.ageMinimumAGIRC
-        valeurDuPointAGIRC = model.retirement.valeurDuPointAGIRC
-        inflation         = model.economy.inflation
-        securedRate       = model.economy.securedRate
-        stockRate         = model.economy.stockRate
-        
-        isModified = false
-    }
-
-    // MARK: - methods
-    
-    func updateFrom(_ model: Model) {
-        menLifeExpectation    = model.humanLife.menLifeExpectationDeterministic
-        womenLifeExpectation  = model.humanLife.womenLifeExpectationDeterministic
-        nbOfYearsOfdependency = model.humanLife.nbOfYearsOfdependencyDeterministic
-        ageMinimumLegal    = model.retirement.ageMinimumLegal
-        ageMinimumAGIRC    = model.retirement.ageMinimumAGIRC
-        valeurDuPointAGIRC = model.retirement.valeurDuPointAGIRC
-        inflation         = model.economy.inflation
-        securedRate       = model.economy.securedRate
-        stockRate         = model.economy.stockRate
-    }
-    
-    func update(_ model: Model) {
-        model.humanLife.menLifeExpectationDeterministic    = menLifeExpectation
-        model.humanLife.womenLifeExpectationDeterministic  = womenLifeExpectation
-        model.humanLife.nbOfYearsOfdependencyDeterministic = nbOfYearsOfdependency
-        model.retirement.ageMinimumLegal    = ageMinimumLegal
-        model.retirement.ageMinimumAGIRC    = ageMinimumAGIRC
-        model.retirement.valeurDuPointAGIRC = valeurDuPointAGIRC
-        model.economy.inflation         = inflation
-        model.economy.securedRate       = securedRate
-        model.economy.stockRate         = stockRate
-            
-        isModified = false
-    }
-
-    func update(_ family: Family) {
-        family.updateMembersDterministicValues(
-            menLifeExpectation,
-            womenLifeExpectation,
-            nbOfYearsOfdependency,
-            ageMinimumLegal,
-            ageMinimumAGIRC)
-    }
-}
-
 // MARK: - Deterministic View
 
 /// Affiche les valeurs déterministes retenues pour les paramètres des modèles dans une simulation "déterministe"
 struct ModelDeterministicView: View {
-    @EnvironmentObject private var model  : Model
-    @EnvironmentObject private var family : Family
-    //private let model: Model // reference sur le modèle
-    @StateObject private var viewModel: DeterministicViewModel
+    @EnvironmentObject private var dataStore : Store
+    @EnvironmentObject private var model     : Model
+    @EnvironmentObject private var family    : Family
+    @StateObject private var viewModel       : DeterministicViewModel
 
     var body: some View {
-        VStack {
-            Form {
-                // modèle vie humaine
-                ModelDeterministicHumanView(viewModel: viewModel)
-                
-                // modèle écnonomie
-                ModeldeterministicEconomyModel(viewModel: viewModel)
-
-                // modèle sociologie
-                ModelDeterministicSociologyView(viewModel: viewModel)
-
-                // modèle retraite
-                ModelDeterministicRetirementView(viewModel: viewModel)
-}
-            .navigationTitle("Modèle Déterministe")
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    SaveToFolderButton(action : applyChanges)
-                        .disabled(!changeOccured)
+        if dataStore.activeDossier != nil {
+            VStack {
+                Form {
+                    // modèle vie humaine
+                    ModelDeterministicHumanView(viewModel: viewModel)
+                    
+                    // modèle écnonomie
+                    ModelDeterministicEconomyModel(viewModel: viewModel)
+                    
+                    // modèle sociologie
+                    ModelDeterministicSociologyView(viewModel: viewModel)
+                    
+                    // modèle retraite
+                    ModelDeterministicRetirementView(viewModel: viewModel)
+                }
+                .navigationTitle("Modèle Déterministe")
+                .toolbar {
+                    ToolbarItem(placement: .automatic) {
+                        SaveToFolderButton(action : applyChanges)
+                            .disabled(!changeOccured)
+                    }
                 }
             }
-        }
-        .onAppear {
-            viewModel.updateFrom(model)
+            .onAppear {
+                viewModel.updateFrom(model)
+            }
+        } else {
+            NoLoadedDossierView()
         }
     }
     
@@ -131,7 +62,6 @@ struct ModelDeterministicView: View {
     // MARK: - Initialization
     
     init(using model: Model) {
-//        self.model = model
         _viewModel = StateObject(wrappedValue: DeterministicViewModel(using: model))
     }
     
@@ -185,18 +115,28 @@ struct ModelDeterministicHumanView: View {
 
 // MARK: - Deterministic Economy View
 
-struct ModeldeterministicEconomyModel: View {
+struct ModelDeterministicEconomyModel: View {
     @ObservedObject var viewModel: DeterministicViewModel
-
+    
     var body: some View {
-        print($viewModel.inflation)
         return Section(header: Text("Modèle Economique")) {
             PercentEditView(label   : "Inflation",
                             percent : $viewModel.inflation)
-                .onChange(of: viewModel.inflation) { _ in viewModel.isModified = true }
+            Stepper(value : $viewModel.inflation,
+                    in    : 0 ... 12,
+                    step  : 0.1) {
+                HStack {
+                    Text("Inflation")
+                    Spacer()
+                    Text("\(viewModel.inflation.percentString(digit: 1)) %").foregroundColor(.secondary)
+                }
+            }
+            .onChange(of: viewModel.inflation) { _ in viewModel.isModified = true }
+            
             PercentEditView(label   : "Rendement sans Risque",
                             percent : $viewModel.securedRate)
                 .onChange(of: viewModel.securedRate) { _ in viewModel.isModified = true }
+            
             PercentEditView(label   : "Rendement des Actions",
                             percent : $viewModel.stockRate)
                 .onChange(of: viewModel.stockRate) { _ in viewModel.isModified = true }
@@ -211,17 +151,27 @@ struct ModelDeterministicSociologyView: View {
     
     var body: some View {
         Section(header: Text("Modèle Sociologique")) {
-            PercentView(label   : "Dévaluation anuelle des pensions par rapport à l'inflation",
-                        percent : -SocioEconomy.model.pensionDevaluationRate.value(withMode: .deterministic)/100.0)
-            IntegerView(label   : "Nombre de trimestres additionels pour obtenir le taux plein",
-                        integer : Int(SocioEconomy.model.nbTrimTauxPlein.value(withMode: .deterministic)))
-            PercentView(label   : "Pénalisation des dépenses",
-                        percent : SocioEconomy.model.expensesUnderEvaluationRate.value(withMode: .deterministic)/100.0)
+            PercentEditView(label   : "Dévaluation anuelle des pensions par rapport à l'inflation",
+                            percent : $viewModel.pensionDevaluationRate)
+                .onChange(of: viewModel.pensionDevaluationRate) { _ in viewModel.isModified = true }
+            
+            Stepper(value : $viewModel.nbTrimTauxPlein,
+                    in    : 0 ... 12) {
+                HStack {
+                    Text("Nombre de trimestres additionels pour obtenir le taux plein")
+                    Spacer()
+                    Text("\(viewModel.nbTrimTauxPlein) ans").foregroundColor(.secondary)
+                }
+            }.onChange(of: viewModel.menLifeExpectation) { _ in viewModel.isModified = true }
+            
+            PercentEditView(label   : "Pénalisation des dépenses",
+                            percent : $viewModel.expensesUnderEvaluationRate)
+                .onChange(of: viewModel.expensesUnderEvaluationRate) { _ in viewModel.isModified = true }
         }
     }
 }
 
-// MARK: - Deterministic Retraite View
+// MARK: - Deterministic Retirement View
 
 struct ModelDeterministicRetirementView: View {
     @ObservedObject var viewModel: DeterministicViewModel
@@ -261,9 +211,14 @@ struct ModelDeterministicRetirementView: View {
 }
 
 struct ModelDeterministicView_Previews: PreviewProvider {
-    static var model = Model(fromBundle: Bundle.main)
-    
+    static let dataStore = Store()
+    static var model     = Model(fromBundle : Bundle.main)
+    static var family    = Family()
+
     static var previews: some View {
-        ModelDeterministicView(using: model)
+        dataStore.activate(dossierAtIndex: 0)
+        return ModelDeterministicView(using: model)
+            .environmentObject(model)
+            .environmentObject(family)
     }
 }

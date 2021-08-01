@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 import FiscalModel
 import RetirementModel
 import UnemployementModel
@@ -14,27 +15,77 @@ import SocioEconomyModel
 import HumanLifeModel
 import Files
 
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Model")
+
 /// Agregat des éléments du Model environmental
-final class Model: ObservableObject {
+final class Model: ObservableObject, CustomStringConvertible {
 
     // MARK: - Properties
-
+    
     @Published var humanLife: HumanLife
     var humanLifeModel: HumanLife.Model {
-        humanLife.model!
+        if humanLife.model == nil {
+            customLog.log(level: .fault, "Tentative d'accès au modèle HumanLife.model : non initialisé")
+            fatalError()
+        } else {
+            return humanLife.model!
+        }
     }
+    
     @Published var retirement: Retirement
     var retirementModel: Retirement.Model {
-        retirement.model!
+        if retirement.model == nil {
+            customLog.log(level: .fault, "Tentative d'accès au modèle Retirement.model : non initialisé")
+            fatalError()
+        } else {
+            return retirement.model!
+        }
     }
-
+    
     @Published var economy: Economy
     var economyModel: Economy.Model {
-        economy.model!
+        if economy.model == nil {
+            customLog.log(level: .fault, "Tentative d'accès au modèle Economy.model : non initialisé")
+            fatalError()
+        } else {
+            return economy.model!
+        }
+    }
+    
+    @Published var socioEconomy: SocioEconomy
+    var socioEconomyModel: SocioEconomy.Model {
+        if socioEconomy.model == nil {
+            customLog.log(level: .fault, "Tentative d'accès au modèle SocioEconomy.model : non initialisé")
+            fatalError()
+        } else {
+            return socioEconomy.model!
+        }
     }
     
     var isModified: Bool {
-        humanLife.isModified || retirement.isModified || economy.isModified
+        humanLife.isModified || retirement.isModified || economy.isModified || socioEconomy.isModified
+    }
+    
+    var description: String {
+        return """
+        
+        MODEL: HumanLife
+        - Etat:   \(humanLife.persistenceState)
+        - Modèle: \(humanLife.model == nil ? "non initialisé" : "initialisé")
+
+        MODEL: Retirement
+        - Etat:   \(retirement.persistenceState)
+        - Modèle: \(retirement.model == nil ? "non initialisé" : "initialisé")
+
+        MODEL: Economy
+        - Etat:   \(economy.persistenceState)
+        - Modèle: \(economy.model == nil ? "non initialisé" : "initialisé")
+
+        MODEL: SocioEconomy
+        - Etat:   \(socioEconomy.persistenceState)
+        - Modèle: \(socioEconomy.model == nil ? "non initialisé" : "initialisé")
+
+        """
     }
     
     // MARK: - Initialization
@@ -44,18 +95,20 @@ final class Model: ObservableObject {
     /// une méthode: init(fromBundle bundle: Bundle) ou loadFromJSON(fromFolder folder: Folder)
     /// - Note: Nécessaire pour une initialization dans AppMain au lancement de l'application
     init() {
-        humanLife  = HumanLife()
-        retirement = Retirement()
-        economy    = Economy()
+        humanLife    = HumanLife()
+        retirement   = Retirement()
+        economy      = Economy()
+        socioEconomy = SocioEconomy()
     }
     
     /// Charger tous les modèles à partir des fichiers JSON contenu de fichiers contenus dans le bundle `bundle`
     /// - Parameters:
     ///   - bundle: le bundle dans lequel chercher les fichiers JSON
     init(fromBundle bundle: Bundle) {
-        humanLife  = HumanLife(fromBundle: Bundle.main)
-        retirement = Retirement(fromBundle: Bundle.main)
-        economy    = Economy(fromBundle: Bundle.main)
+        humanLife    = HumanLife(fromBundle    : Bundle.main)
+        retirement   = Retirement(fromBundle   : Bundle.main)
+        economy      = Economy(fromBundle      : Bundle.main)
+        socioEconomy = SocioEconomy(fromBundle : Bundle.main)
 
         // gérer les dépendances
         manageDependencies()
@@ -66,9 +119,10 @@ final class Model: ObservableObject {
     /// Charger tous les modèles à partir des fichiers JSON contenu dans le `folder`
     /// - Parameter folder: dossier chargé par l'utilisateur
     func loadFromJSON(fromFolder folder: Folder) throws {
-        humanLife  = try HumanLife(fromFolder: folder)
-        retirement = try Retirement(fromFolder: folder)
-        economy    = try Economy(fromFolder: folder)
+        humanLife    = try HumanLife(fromFolder    : folder)
+        retirement   = try Retirement(fromFolder   : folder)
+        economy      = try Economy(fromFolder      : folder)
+        socioEconomy = try SocioEconomy(fromFolder : folder)
 
         // gérer les dépendances
         manageDependencies()
@@ -80,6 +134,7 @@ final class Model: ObservableObject {
         try humanLife.saveAsJSON(toFolder: folder)
         try retirement.saveAsJSON(toFolder: folder)
         try economy.saveAsJSON(toFolder: folder)
+        try socioEconomy.saveAsJSON(toFolder: folder)
     }
     
     /// Enregistrer tous les modèles dans des fichiers JSON contenu dans le `folder`
@@ -88,6 +143,7 @@ final class Model: ObservableObject {
         humanLife.saveAsJSON(toBundle: bundle)
         retirement.saveAsJSON(toBundle: bundle)
         economy.saveAsJSON(toBundle: bundle)
+        socioEconomy.saveAsJSON(toBundle: bundle)
     }
 
     /// Gérer les dépendances entre modèles
@@ -95,7 +151,7 @@ final class Model: ObservableObject {
         /// Injection de Fiscal
         // récupérer une copie du singleton
         let fiscalModel = Fiscal.model
-        // l'injecter dans les singletons qui en dépendent
+        // l'injecter dans les objets qui en dépendent
         LayoffCompensation.setFiscalModel(fiscalModel)
         UnemploymentCompensation.setFiscalModel(fiscalModel)
         retirement.model!.regimeAgirc.setFiscalModel(fiscalModel)
@@ -105,14 +161,11 @@ final class Model: ObservableObject {
         FreeInvestement.setFiscalModelProvider(fiscalModel)
         
         /// Injection de SocioEconomy
-        // récupérer une copie du singleton
-        let socioEconomyModel = SocioEconomy.model
-        // l'injecter dans les singletons qui en dépendent
         retirement.model!.regimeAgirc.setPensionDevaluationRateProvider(socioEconomyModel)
         retirement.model!.regimeGeneral.setSocioEconomyModel(socioEconomyModel)
+        LifeExpense.setExpensesUnderEvaluationRateProvider(socioEconomyModel)
         
         /// Injection de Economy
-        // l'injecter dans les singletons qui en dépendent
         SCPI.setInflationProvider(economyModel)
         PeriodicInvestement.setEconomyModelProvider(economyModel)
         FreeInvestement.setEconomyModelProvider(economyModel)
