@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @State private var simulateVolatility      = UserSettings.shared.simulateVolatility
+    @State private var kpiOwnership            = UserSettings.shared.ownershipGraphicSelection
+    @State private var kpiEvaluationMethod     = UserSettings.shared.assetGraphicEvaluationMethod
+    
     @State private var graphicOwnership        = UserSettings.shared.ownershipGraphicSelection
     @State private var graphicEvaluationMethod = UserSettings.shared.assetGraphicEvaluationMethod
-    @State private var kpiOwnership        = UserSettings.shared.ownershipGraphicSelection
-    @State private var kpiEvaluationMethod = UserSettings.shared.assetGraphicEvaluationMethod
-    @State private var shareCsvFiles    = UserSettings.shared.shareCsvFiles
-    @State private var shareImageFiles  = UserSettings.shared.shareImageFiles
+    
+    @State private var shareCsvFiles           = UserSettings.shared.shareCsvFiles
+    @State private var shareImageFiles         = UserSettings.shared.shareImageFiles
 
     var body: some View {
         NavigationView {
@@ -24,8 +27,9 @@ struct SettingsView: View {
                     .isDetailLink(true)
                 
                 // Simulation settings
-                NavigationLink(destination: SimulationUserSettingsView(ownership        : $kpiOwnership,
-                                                                       evaluationMethod : $kpiEvaluationMethod)) {
+                NavigationLink(destination: SimulationUserSettingsView(simulateVolatility: $simulateVolatility,
+                                                                       ownership         : $kpiOwnership,
+                                                                       evaluationMethod  : $kpiEvaluationMethod)) {
                     Label("Simulation", systemImage: "function")
                 }
                     .isDetailLink(true)

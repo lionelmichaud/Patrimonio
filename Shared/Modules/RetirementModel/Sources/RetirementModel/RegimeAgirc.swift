@@ -64,8 +64,6 @@ public class RegimeAgirc: Codable {
             case version, gridAvant62, gridApres62, valeurDuPoint, ageMinimum, majorationPourEnfant
         }
         
-        public static var defaultFileName : String = "RegimeAgircModel.json"
-
         public var version       : Version
         let gridAvant62          : [SliceAvantAgeLegal]
         let gridApres62          : [SliceApresAgeLegal]
@@ -75,7 +73,7 @@ public class RegimeAgirc: Codable {
         // dependencies to other Models
         var regimeGeneral        : RegimeGeneral!
         public var fiscal        : Fiscal.Model!
-        var pensionDevaluationRateProvider: PensionDevaluationRateProviderProtocol!
+        var pensionDevaluationRateProvider: PensionDevaluationRateProviderP!
     }
     
     // MARK: - Static Properties
@@ -126,7 +124,7 @@ public class RegimeAgirc: Codable {
     
     // MARK: - Methods
     
-    public func setPensionDevaluationRateProvider(_ provider : PensionDevaluationRateProviderProtocol) {
+    public func setPensionDevaluationRateProvider(_ provider : PensionDevaluationRateProviderP) {
         model.pensionDevaluationRateProvider = provider
     }
     
@@ -138,11 +136,11 @@ public class RegimeAgirc: Codable {
         model.regimeGeneral = regimeGeneral
     }
     
-    /// Encode l'objet dans un fichier stocké dans le Bundle de contenant la définition de la classe aClass
-    func saveToBundle(toFile file          : String,
-                      toBundle bundle      : Bundle,
-                      dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
-                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) {
+    /// Encode l'objet dans un fichier stocké dans le Bundle 
+    func saveAsJSON(toFile file          : String,
+                    toBundle bundle      : Bundle,
+                    dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
+                    keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) {
         
         model.saveAsJSON(toFile               : file,
                            toBundle             : bundle,

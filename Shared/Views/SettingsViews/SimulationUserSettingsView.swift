@@ -10,10 +10,10 @@ import SwiftUI
 struct SimulationUserSettingsView: View {
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
-    @State private var simulateVolatility = UserSettings.shared.simulateVolatility
     // si la variable d'état est locale (@State) cela ne fonctionne pas correctement
-    @Binding var ownership        : OwnershipNature
-    @Binding var evaluationMethod : AssetEvaluationMethod
+    @Binding var simulateVolatility : Bool
+    @Binding var ownership          : OwnershipNature
+    @Binding var evaluationMethod   : AssetEvaluationMethod
 
     var body: some View {
         Form {
@@ -22,7 +22,8 @@ struct SimulationUserSettingsView: View {
                 Toggle("Simuler la volatilité des marchés financiers (actions et obligations)",
                        isOn: $simulateVolatility)
                     .onChange(of     : simulateVolatility,
-                              perform: { _ in
+                              perform: { newValue in
+                                UserSettings.shared.simulateVolatility = newValue
                                 // remettre à zéro la simulation et sa vue
                                 simulation.reset()
                                 uiState.reset()
@@ -57,8 +58,9 @@ struct SimulationUserSettings_Previews: PreviewProvider {
     static var patrimoine = Patrimoin()
     static var simulation = Simulation()
     static var previews: some View {
-        SimulationUserSettingsView(ownership        : .constant(.all),
-                                   evaluationMethod : .constant(.totalValue))
+        SimulationUserSettingsView(simulateVolatility : .constant(true),
+                                   ownership          : .constant(.all),
+                                   evaluationMethod   : .constant(.totalValue))
             .environmentObject(uiState)
             .environmentObject(family)
             .environmentObject(patrimoine)

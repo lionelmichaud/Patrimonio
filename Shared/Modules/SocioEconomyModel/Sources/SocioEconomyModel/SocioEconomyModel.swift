@@ -12,21 +12,22 @@ import Statistics
 
 // MARK: - DI: Protocols
 
-public protocol PensionDevaluationRateProviderProtocol {
+public protocol PensionDevaluationRateProviderP {
     func pensionDevaluationRate(withMode simulationMode: SimulationModeEnum) -> Double
 }
 
-public protocol NbTrimTauxPleinProviderProtocol {
+public protocol NbTrimTauxPleinProviderP {
     func nbTrimTauxPlein(withMode simulationMode: SimulationModeEnum) -> Double
 }
 
-public protocol ExpensesUnderEvaluationRateProviderProtocol {
+public protocol ExpensesUnderEvaluationRateProviderP {
     func expensesUnderEvaluationRate(withMode simulationMode: SimulationModeEnum) -> Double
 }
 
-public typealias SocioEconomyModelProvider = PensionDevaluationRateProviderProtocol &
-    NbTrimTauxPleinProviderProtocol &
-    ExpensesUnderEvaluationRateProviderProtocol
+public typealias SocioEconomyModelProviderP =
+    PensionDevaluationRateProviderP &
+    NbTrimTauxPleinProviderP &
+    ExpensesUnderEvaluationRateProviderP
 
 // MARK: - SINGLETON: SocioEconomic Model
 
@@ -46,7 +47,7 @@ public struct SocioEconomy {
     
     public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
-    public struct Model: JsonCodableToBundleP, SocioEconomyModelProvider {
+    public struct Model: JsonCodableToBundleP, SocioEconomyModelProviderP {
         public static var defaultFileName     : String = "SocioEconomyModelConfig.json"
         public var pensionDevaluationRate     : ModelRandomizer<BetaRandomGenerator>
         public var nbTrimTauxPlein            : ModelRandomizer<DiscreteRandomGenerator>
@@ -61,13 +62,30 @@ public struct SocioEconomy {
             return model
         }
         
-        /// Vide l'ihistorique des tirages de chaque variable aléatoire du modèle
+        /// Vide l'historique des tirages de chaque variable aléatoire du modèle
         public mutating func resetRandomHistory() {
             pensionDevaluationRate.resetRandomHistory()
             nbTrimTauxPlein.resetRandomHistory()
             expensesUnderEvaluationRate.resetRandomHistory()
         }
         
+        /// Retourne un dictionnaire donnant pour chaque variable aléatoire son historique de tirage
+        /// Retourne la suite de valeurs aléatoires tirées pour chaque Run d'un Monté-Carlo
+        func randomHistories() -> [RandomVariable: [Double]?] {
+            var dico = [RandomVariable: [Double]?]()
+            for randomVariable in RandomVariable.allCases {
+                switch randomVariable {
+                    case .pensionDevaluationRate:
+                        dico[randomVariable] = pensionDevaluationRate.randomHistory
+                    case .nbTrimTauxPlein:
+                        dico[randomVariable] = nbTrimTauxPlein.randomHistory
+                    case .expensesUnderEvaluationRate:
+                        dico[randomVariable] = expensesUnderEvaluationRate.randomHistory
+                }
+            }
+            return dico
+        }
+
         /// Générer les nombres aléatoires suivants et retourner leur valeur pour historisation
         public mutating func nextRun() -> DictionaryOfRandomVariable {
             var dicoOfRandomVariable = DictionaryOfRandomVariable()
@@ -93,23 +111,6 @@ public struct SocioEconomy {
             expensesUnderEvaluationRate.setRandomValue(to: values[.expensesUnderEvaluationRate]!)
         }
         
-        /// Retourne un dictionnaire donnant pour chaque variable aléatoire son historique de tirage
-        /// Retourne la suite de valeurs aléatoires tirées pour chaque Run d'un Monté-Carlo
-        func randomHistories() -> [RandomVariable: [Double]?] {
-            var dico = [RandomVariable: [Double]?]()
-            for randomVariable in RandomVariable.allCases {
-                switch randomVariable {
-                    case .pensionDevaluationRate:
-                        dico[randomVariable] = pensionDevaluationRate.randomHistory
-                    case .nbTrimTauxPlein:
-                        dico[randomVariable] = nbTrimTauxPlein.randomHistory
-                    case .expensesUnderEvaluationRate:
-                        dico[randomVariable] = expensesUnderEvaluationRate.randomHistory
-                }
-            }
-            return dico
-        }
-
         public func pensionDevaluationRate(withMode simulationMode: SimulationModeEnum) -> Double {
             pensionDevaluationRate.value(withMode: simulationMode)
         }

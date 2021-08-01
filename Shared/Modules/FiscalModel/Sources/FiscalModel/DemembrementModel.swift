@@ -49,13 +49,16 @@ public struct DemembrementModel: Codable {
                              usufructuaryAge : Int) throws
     -> (usufructValue : Double,
         bareValue     : Double) {
-        guard usufructuaryAge > 0 else {
-            return (usufructValue: 1.0, bareValue: 0.0)
+        guard usufructuaryAge >= 0 else {
+            throw ModelError.outOfBounds
         }
-        
-        if let slice = model.grid.last(where: \.floor, < , usufructuaryAge) {
+        if usufructuaryAge == 0 {
+            return (usufructValue: 1.0, bareValue: 0.0)
+
+        } else if let slice = model.grid.last(where: \.floor, < , usufructuaryAge) {
             return (usufructValue : assetValue * slice.usuFruit,
                     bareValue     : assetValue * slice.nueProp)
+
         } else {
             throw ModelError.gridSliceIssue
         }

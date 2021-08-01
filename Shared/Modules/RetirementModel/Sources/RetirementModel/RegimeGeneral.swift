@@ -68,8 +68,6 @@ public class RegimeGeneral: Codable {
             nbOfYearForSAM, maxReversionRate, decoteParTrimestre, surcoteParTrimestre, maxNbTrimestreDecote
         }
         
-        static var defaultFileName : String = "RegimeGeneralModel.json"
-
         public var version         : Version
         let dureeDeReferenceGrid   : [SliceRegimeLegal]
         let nbTrimNonIndemniseGrid : [SliceUnemployement]
@@ -80,7 +78,7 @@ public class RegimeGeneral: Codable {
         let surcoteParTrimestre    : Double // 1.25  // % par trimestre
         let maxNbTrimestreDecote   : Int    // 20 // plafond
         var fiscal                 : Fiscal.Model!
-        var socioEconomy           : SocioEconomyModelProvider!
+        var socioEconomy           : SocioEconomyModelProviderP!
     }
     
     // MARK: - Static Properties
@@ -111,7 +109,7 @@ public class RegimeGeneral: Codable {
         RegimeGeneral.simulationMode = simulationMode
     }
 
-    public func setSocioEconomyModel(_ model: SocioEconomyModelProvider) {
+    public func setSocioEconomyModel(_ model: SocioEconomyModelProviderP) {
         self.model.socioEconomy = model
     }
 
@@ -153,15 +151,15 @@ public class RegimeGeneral: Codable {
     // MARK: - Methods
 
     /// Encode l'objet dans un fichier stocké dans le Bundle de contenant la définition de la classe aClass
-    func saveToBundle(toFile file          : String,
-                      toBundle bundle      : Bundle,
-                      dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
-                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) {
+    func saveAsJSON(toFile file          : String,
+                    toBundle bundle      : Bundle,
+                    dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
+                    keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) {
 
         model.saveAsJSON(toFile               : file,
-                           toBundle             : bundle,
-                           dateEncodingStrategy : dateEncodingStrategy,
-                           keyEncodingStrategy  :  keyEncodingStrategy)
+                         toBundle             : bundle,
+                         dateEncodingStrategy : dateEncodingStrategy,
+                         keyEncodingStrategy  :  keyEncodingStrategy)
     }
     
     /// Calcul du taux de reversion en tenant compte d'une décote ou d'une surcote éventuelle

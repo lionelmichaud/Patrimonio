@@ -186,10 +186,10 @@ struct CashFlowLine {
     
     fileprivate mutating func computeIrpp(of family: Family) {
         adultTaxes.irpp = try! Fiscal.model.incomeTaxes.irpp(taxableIncome : adultsRevenues.totalTaxableIrpp,
-                                                        nbAdults      : family.nbOfAdultAlive(atEndOf: year),
-                                                        nbChildren    : family.nbOfFiscalChildren(during: year))
+                                                             nbAdults      : family.nbOfAdultAlive(atEndOf: year),
+                                                             nbChildren    : family.nbOfFiscalChildren(during: year))
         adultTaxes.perCategory[.irpp]?.namedValues.append((name  : TaxeCategory.irpp.rawValue,
-                                                      value : adultTaxes.irpp.amount.rounded()))
+                                                           value : adultTaxes.irpp.amount.rounded()))
     }
     
     fileprivate mutating func computeISF(with patrimoine : Patrimoin) {
@@ -197,7 +197,7 @@ struct CashFlowLine {
                                                       evaluationMethod : .ifi)
         adultTaxes.isf = try! Fiscal.model.isf.isf(taxableAsset: taxableAsset)
         adultTaxes.perCategory[.isf]?.namedValues.append((name  : TaxeCategory.isf.rawValue,
-                                                     value : adultTaxes.isf.amount.rounded()))
+                                                          value : adultTaxes.isf.amount.rounded()))
     }
     
     /// Populate remboursement d'emprunts des adultes de la famille

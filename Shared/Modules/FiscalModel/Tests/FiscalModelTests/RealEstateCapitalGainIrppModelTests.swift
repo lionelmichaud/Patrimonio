@@ -17,7 +17,8 @@ class RealEstateCapitalGainIrppModelTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        let model = RealEstateCapitalGainIrppModel.Model(fromBundle: Bundle.module)
+        let model = RealEstateCapitalGainIrppModel.Model(fromFile   : RealEstateCapitalGainIrppModel.Model.defaultFileName,
+                                                         fromBundle : Bundle.module)
         RealEstateCapitalGainIrppModelTests.estateCapitalGainIrpp = RealEstateCapitalGainIrppModel(model: model)
     }
     

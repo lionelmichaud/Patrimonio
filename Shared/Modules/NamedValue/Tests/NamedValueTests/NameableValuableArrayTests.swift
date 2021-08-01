@@ -30,7 +30,7 @@ class NameableValuableArrayTests: XCTestCase {
     }
     
     struct TableOfItems: NameableValuableArray {
-        private enum CodingKeys: String, CodingKey {
+        private enum CodingKeys: String, CodingKey { // swiftlint:disable:this nesting
             case items
         }
 

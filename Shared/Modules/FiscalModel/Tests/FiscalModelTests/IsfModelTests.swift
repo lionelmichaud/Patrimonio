@@ -17,7 +17,9 @@ class IsfModelTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        let model = IsfModel.Model(fromBundle: Bundle.module)
+        let model = IsfModel.Model(
+            fromFile   : IsfModel.Model.defaultFileName,
+            fromBundle : Bundle.module)
         IsfModelTests.isfTaxes = IsfModel(model: model)
         do {
             try IsfModelTests.isfTaxes.initialize()
@@ -34,7 +36,7 @@ class IsfModelTests: XCTestCase {
         
         isf = try IsfModelTests.isfTaxes.isf(taxableAsset: 1_000_000)
         XCTAssertEqual(0.0, isf.amount)
-        XCTAssertEqual(0.0, isf.taxable)
+        XCTAssertEqual(1_000_000.0, isf.taxable)
         XCTAssertEqual(0.0, isf.marginalRate)
 
         // supérieur au seuil de taxation / dans la zone intermédiaire

@@ -18,7 +18,9 @@ class LayOffTaxesTests: XCTestCase {
     override class func setUp() {
         super.setUp()
         
-        LayOffTaxesTests.fiscalModel = Fiscal.Model(fromBundle: Bundle.module).initialized()
+        LayOffTaxesTests.fiscalModel =
+            Fiscal.Model(fromFile: Fiscal.Model.defaultFileName, fromBundle: Bundle.module)
+            .initialized()
     }
     
     // MARK: Tests

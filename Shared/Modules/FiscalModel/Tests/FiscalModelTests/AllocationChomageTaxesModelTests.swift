@@ -16,7 +16,9 @@ class AllocationChomageTaxesModelTests: XCTestCase {
         
     override class func setUp() {
         super.setUp()
-        let model = AllocationChomageTaxesModel.Model(fromBundle: Bundle.module)
+        let model = AllocationChomageTaxesModel.Model(
+            fromFile   : AllocationChomageTaxesModel.Model.defaultFileName,
+            fromBundle : Bundle.module)
         AllocationChomageTaxesModelTests.allocationChomageTaxes = AllocationChomageTaxesModel(model: model)
     }
     

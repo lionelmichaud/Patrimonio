@@ -18,7 +18,9 @@ class FinancialRevenuTaxesModelTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        let model = FinancialRevenuTaxesModel.Model(fromBundle: Bundle.module)
+        let model = FinancialRevenuTaxesModel.Model(
+            fromFile   : FinancialRevenuTaxesModel.Model.defaultFileName,
+            fromBundle : Bundle.module)
         FinancialRevenuTaxesModelTests.financialRevenuTaxes = FinancialRevenuTaxesModel(model: model)
     }
     

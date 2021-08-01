@@ -11,15 +11,52 @@ import XCTest
 
 class RetirementModelTest: XCTestCase {
     
-    func test_loading_from_module_bundle() throws {
-        XCTAssertNoThrow(Retirement.Model(fromBundle: Bundle.module).initialized(),
-                         "Failed to read model from Main Bundle \(String(describing: Bundle.module.resourcePath))")
+    static var retirement: Retirement!
+
+    // MARK: Helpers
+
+    override class func setUp() {
+        super.setUp()
+        RetirementModelTest.retirement = Retirement(fromBundle : Bundle.module)
+        Retirement.setSimulationMode(to: .deterministic)
     }
-    
-    func test_saving_to_test_bundle() throws {
-        let model = Retirement.Model(fromBundle: Bundle.module).initialized()
-        model.saveToBundle(toBundle             : Bundle.module,
-                           dateEncodingStrategy : .iso8601,
-                           keyEncodingStrategy  : .useDefaultKeys)
+
+    // MARK: Tests
+
+    func test_loading_from_module_bundle() {
+        XCTAssertNoThrow(Retirement(fromBundle : Bundle.module),
+                         "Failed to read HumanLife from Main Bundle \(String(describing: Bundle.module.resourcePath))")
     }
+
+    func test_saving_to_module_bundle() {
+        XCTAssertNoThrow(RetirementModelTest.retirement.saveAsJSON(toBundle: Bundle.module))
+    }
+
+    func test_ageMinimumLegal() {
+        XCTAssertEqual(RetirementModelTest.retirement.ageMinimumLegal, 62)
+
+        var retirement = Retirement(fromBundle : Bundle.module)
+        retirement.ageMinimumLegal = 60
+        XCTAssertEqual(retirement.ageMinimumLegal, 60)
+        XCTAssertEqual(retirement.persistenceSM.currentState , .modified)
+    }
+
+    func test_ageMinimumAGIRC() {
+        XCTAssertEqual(RetirementModelTest.retirement.ageMinimumAGIRC, 57)
+
+        var retirement = Retirement(fromBundle : Bundle.module)
+        retirement.ageMinimumAGIRC = 50
+        XCTAssertEqual(retirement.ageMinimumAGIRC, 50)
+        XCTAssertEqual(retirement.persistenceSM.currentState , .modified)
+    }
+
+    func test_valeurDuPointAGIRC() {
+        XCTAssertEqual(RetirementModelTest.retirement.valeurDuPointAGIRC, 1.2714)
+
+        var retirement = Retirement(fromBundle : Bundle.module)
+        retirement.valeurDuPointAGIRC = 2.54
+        XCTAssertEqual(retirement.valeurDuPointAGIRC, 2.54)
+        XCTAssertEqual(retirement.persistenceSM.currentState , .modified)
+    }
+
 }

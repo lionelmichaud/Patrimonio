@@ -82,6 +82,14 @@ final class Model: ObservableObject {
         try economy.saveAsJSON(toFolder: folder)
     }
     
+    /// Enregistrer tous les modèles dans des fichiers JSON contenu dans le `folder`
+    /// - Parameter folder: dossier chargé par l'utilisateur
+    func saveAsJSON(toBundle bundle: Bundle) throws {
+        humanLife.saveAsJSON(toBundle: bundle)
+        retirement.saveAsJSON(toBundle: bundle)
+        economy.saveAsJSON(toBundle: bundle)
+    }
+
     /// Gérer les dépendances entre modèles
     func manageDependencies() {
         /// Injection de Fiscal

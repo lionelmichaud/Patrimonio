@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 import AVFoundation
 import AppFoundation
 import Statistics
@@ -13,6 +14,8 @@ import EconomyModel
 import SocioEconomyModel
 import HumanLifeModel
 import Files
+
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Simulation")
 
 protocol CanResetSimulation {
     func reset()
@@ -156,8 +159,7 @@ final class Simulation: ObservableObject, CanResetSimulation {
         dicoOfAdultsRandomProperties = family.nextRun(using: model)
 
         // re-générer les propriétés aléatoires du modèle macro économique
-        dicoOfEconomyRandomVariables = try! model.economyModel.nextRun(withMode           : mode,
-                                                                       simulateVolatility : UserSettings.shared.simulateVolatility,
+        dicoOfEconomyRandomVariables = try! model.economyModel.nextRun(simulateVolatility : UserSettings.shared.simulateVolatility,
                                                                        firstYear          : firstYear!,
                                                                        lastYear           : lastYear!)
         // re-générer les propriétés aléatoires du modèle socio économique
@@ -189,6 +191,11 @@ final class Simulation: ObservableObject, CanResetSimulation {
 //        } // DispatchQueue.main.async
 
         let monteCarlo = nbOfRuns > 1
+        if monteCarlo && mode != .random {
+            customLog.log(level: .fault, "monteCarlo && mode != .random")
+            fatalError()
+        }
+        
         var dicoOfAdultsRandomProperties      = DictionaryOfAdultRandomProperties()
         var dicoOfEconomyRandomVariables      = Economy.DictionaryOfRandomVariable()
         var dicoOfSocioEconomyRandomVariables = SocioEconomy.DictionaryOfRandomVariable()
@@ -287,7 +294,6 @@ final class Simulation: ObservableObject, CanResetSimulation {
 
         // fixer tous les paramètres du run à rejouer
         try! model.economyModel.setRandomValue(to                 : thisRun.dicoOfEconomyRandomVariables,
-                                               withMode           : mode,
                                                simulateVolatility : UserSettings.shared.simulateVolatility,
                                                firstYear          : firstYear!,
                                                lastYear           : lastYear!)

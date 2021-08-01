@@ -18,7 +18,9 @@ class IncomeTaxesModelTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        let model = IncomeTaxesModel.Model(fromBundle: Bundle.module)
+        let model = IncomeTaxesModel.Model(
+            fromFile   : IncomeTaxesModel.Model.defaultFileName,
+            fromBundle : Bundle.module)
         IncomeTaxesModelTests.incomeTaxes = IncomeTaxesModel(model: model)
         do {
             try IncomeTaxesModelTests.incomeTaxes.initialize()
