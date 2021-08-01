@@ -11,7 +11,6 @@ import AppFoundation
 import RetirementModel
 
 struct RetirementDetailView: View {
-    @EnvironmentObject private var model: Model
 
     // MARK: - View Model
     
@@ -46,8 +45,9 @@ struct RetirementDetailView: View {
     
     // MARK: - Properties
     
-    @EnvironmentObject var member: Person
-    @ObservedObject var viewModel = ViewModel()
+    @EnvironmentObject private var model  : Model
+    @EnvironmentObject private var member : Person
+    @ObservedObject private var viewModel = ViewModel()
     
     var body: some View {
         Form {
@@ -107,7 +107,7 @@ struct RetirementDetailView: View {
                 model.retirementModel.regimeGeneral.pension(
                     birthDate                : adult.birthDate,
                     dateOfRetirement         : adult.dateOfRetirement,
-                    dateOfEndOfUnemployAlloc : adult.dateOfEndOfUnemployementAllocation,
+                    dateOfEndOfUnemployAlloc : adult.dateOfEndOfUnemployementAllocation(using: model),
                     dateOfPensionLiquid      : adult.dateOfPensionLiquid,
                     lastKnownSituation       : adult.lastKnownPensionSituation,
                     nbEnfant                 : 3) else {
@@ -144,7 +144,7 @@ struct RetirementDetailView: View {
                     birthDate               : adult.birthDate,
                     lastKnownSituation      : adult.lastKnownPensionSituation,
                     dateOfRetirement        : adult.dateOfRetirement,
-                    dateOfEndOfUnemployAlloc: adult.dateOfEndOfUnemployementAllocation,
+                    dateOfEndOfUnemployAlloc: adult.dateOfEndOfUnemployementAllocation(using: model),
                     dateOfPensionLiquid     : adult.dateOfPensionLiquid,
                     nbEnfantNe              : adult.nbOfChildren(),
                     nbEnfantACharge         : adult.nbOfFiscalChildren(during: adult.dateOfPensionLiquid.year)) else { return }

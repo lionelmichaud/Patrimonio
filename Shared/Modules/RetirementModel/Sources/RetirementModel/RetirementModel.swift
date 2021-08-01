@@ -21,7 +21,6 @@ public struct Retirement: PersistableModel {
     // MARK: - Nested types
     
     public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable {
-        public static var defaultFileName : String = "RetirementModelConfig.json"
         public var regimeGeneral: RegimeGeneral
         public var regimeAgirc  : RegimeAgirc
         public var reversion    : PensionReversion

@@ -62,8 +62,19 @@ final class Model: ObservableObject, CustomStringConvertible {
         }
     }
     
+    @Published var unemployment: Unemployment
+    var unemploymentModel: Unemployment.Model {
+        if unemployment.model == nil {
+            customLog.log(level: .fault, "Tentative d'accès au modèle Unemployment.model : non initialisé")
+            fatalError()
+        } else {
+            return unemployment.model!
+        }
+    }
+    
     var isModified: Bool {
-        humanLife.isModified || retirement.isModified || economy.isModified || socioEconomy.isModified
+        humanLife.isModified || retirement.isModified
+            || economy.isModified || socioEconomy.isModified || unemployment.isModified
     }
     
     var description: String {
@@ -85,6 +96,10 @@ final class Model: ObservableObject, CustomStringConvertible {
         - Etat:   \(socioEconomy.persistenceState)
         - Modèle: \(socioEconomy.model == nil ? "non initialisé" : "initialisé")
 
+        MODEL: Unemployment
+        - Etat:   \(unemployment.persistenceState)
+        - Modèle: \(unemployment.model == nil ? "non initialisé" : "initialisé")
+
         """
     }
     
@@ -99,6 +114,7 @@ final class Model: ObservableObject, CustomStringConvertible {
         retirement   = Retirement()
         economy      = Economy()
         socioEconomy = SocioEconomy()
+        unemployment = Unemployment()
     }
     
     /// Charger tous les modèles à partir des fichiers JSON contenu de fichiers contenus dans le bundle `bundle`
@@ -109,6 +125,7 @@ final class Model: ObservableObject, CustomStringConvertible {
         retirement   = Retirement(fromBundle   : Bundle.main)
         economy      = Economy(fromBundle      : Bundle.main)
         socioEconomy = SocioEconomy(fromBundle : Bundle.main)
+        unemployment = Unemployment(fromBundle : Bundle.main)
 
         // gérer les dépendances
         manageDependencies()
@@ -123,6 +140,7 @@ final class Model: ObservableObject, CustomStringConvertible {
         retirement   = try Retirement(fromFolder   : folder)
         economy      = try Economy(fromFolder      : folder)
         socioEconomy = try SocioEconomy(fromFolder : folder)
+        unemployment = try Unemployment(fromFolder : folder)
 
         // gérer les dépendances
         manageDependencies()
@@ -135,6 +153,7 @@ final class Model: ObservableObject, CustomStringConvertible {
         try retirement.saveAsJSON(toFolder: folder)
         try economy.saveAsJSON(toFolder: folder)
         try socioEconomy.saveAsJSON(toFolder: folder)
+        try unemployment.saveAsJSON(toFolder: folder)
     }
     
     /// Enregistrer tous les modèles dans des fichiers JSON contenu dans le `folder`
@@ -144,6 +163,7 @@ final class Model: ObservableObject, CustomStringConvertible {
         retirement.saveAsJSON(toBundle: bundle)
         economy.saveAsJSON(toBundle: bundle)
         socioEconomy.saveAsJSON(toBundle: bundle)
+        unemployment.saveAsJSON(toBundle: bundle)
     }
 
     /// Gérer les dépendances entre modèles

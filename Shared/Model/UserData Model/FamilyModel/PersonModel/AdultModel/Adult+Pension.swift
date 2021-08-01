@@ -40,7 +40,7 @@ extension Adult {
             model.retirementModel.regimeGeneral.pension(
                 birthDate                : birthDate,
                 dateOfRetirement         : dateOfRetirement,
-                dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation,
+                dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation(using: model),
                 dateOfPensionLiquid      : dateOfPensionLiquid,
                 lastKnownSituation       : lastKnownPensionSituation,
                 nbEnfant                 : 3,
@@ -56,7 +56,7 @@ extension Adult {
             model.retirementModel.regimeGeneral.pension(
                 birthDate                : birthDate,
                 dateOfRetirement         : dateOfRetirement,
-                dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation,
+                dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation(using: model),
                 dateOfPensionLiquid      : dateOfPensionLiquid,
                 lastKnownSituation       : lastKnownPensionSituation,
                 nbEnfant                 : 3) {
@@ -99,7 +99,7 @@ extension Adult {
                 birthDate                : birthDate,
                 lastKnownSituation       : lastKnownPensionSituation,
                 dateOfRetirement         : dateOfRetirement,
-                dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation,
+                dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation(using: model),
                 dateOfPensionLiquid      : dateOfAgircPensionLiquid,
                 nbEnfantNe               : nbOfChildren(),
                 nbEnfantACharge          : nbOfFiscalChildren(during: year),
@@ -117,7 +117,7 @@ extension Adult {
                 birthDate                : birthDate,
                 lastKnownSituation       : lastKnownPensionSituation,
                 dateOfRetirement         : dateOfRetirement,
-                dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation,
+                dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation(using: model),
                 dateOfPensionLiquid      : dateOfAgircPensionLiquid,
                 nbEnfantNe               : Adult.adultRelativesProvider.nbOfChildren,
                 nbEnfantACharge          : Adult.adultRelativesProvider.nbOfFiscalChildren(during: dateOfAgircPensionLiquid.year)) {

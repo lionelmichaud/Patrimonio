@@ -57,7 +57,7 @@ extension CashFlowLine {
                 totalPensionDiscount += discount
                 
                 /// indemnité de licenciement
-                let compensation = adult.layoffCompensation(during: year)
+                let compensation = adult.layoffCompensation(during: year, using: model)
                 adultsRevenues.perCategory[.layoffCompensation]?.credits.namedValues
                     .append((name: name,
                              value: compensation.net.rounded()))
@@ -65,7 +65,7 @@ extension CashFlowLine {
                     .append((name: name,
                              value: compensation.taxable.rounded()))
                 /// allocation chomage
-                let alocation = adult.unemployementAllocation(during: year)
+                let alocation = adult.unemployementAllocation(during: year, using: model)
                 adultsRevenues.perCategory[.unemployAlloc]?.credits.namedValues
                     .append((name: name, value: alocation.net.rounded()))
                 adultsRevenues.perCategory[.unemployAlloc]?.taxablesIrpp.namedValues
