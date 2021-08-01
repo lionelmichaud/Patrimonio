@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 struct KpiListView : View {
     @EnvironmentObject var simulation : Simulation

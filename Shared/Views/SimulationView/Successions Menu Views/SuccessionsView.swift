@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 struct SuccessionsView: View {
     @EnvironmentObject var simulation : Simulation

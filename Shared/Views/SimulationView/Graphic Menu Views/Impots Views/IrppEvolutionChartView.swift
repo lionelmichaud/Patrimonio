@@ -11,6 +11,7 @@ import SwiftUI
 import AppFoundation
 import Charts // https://github.com/danielgindi/Charts.git
 import Files
+import ModelEnvironment
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.IrppEvolutionChartView")
 

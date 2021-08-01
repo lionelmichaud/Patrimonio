@@ -10,6 +10,7 @@ import AppFoundation
 import Files
 import NamedValue
 import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
+import ModelEnvironment
 
 typealias PersistableArrayOfPerson = PersistableArray<Person>
 extension PersistableArrayOfPerson {

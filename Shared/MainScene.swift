@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 /// Defines the main scene of the App
 struct MainScene: Scene {

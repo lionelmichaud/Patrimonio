@@ -14,6 +14,7 @@ import EconomyModel
 import SocioEconomyModel
 import HumanLifeModel
 import Files
+import ModelEnvironment
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Simulation")
 

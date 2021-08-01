@@ -9,6 +9,7 @@
 import Foundation
 import AppFoundation
 import UnemployementModel
+import ModelEnvironment
 
 // MARK: - EXTENSION: Chômage
 extension Adult {

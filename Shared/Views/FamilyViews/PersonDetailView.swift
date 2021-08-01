@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 // MARK: - Afficher les détails d'un membre de la famille
 

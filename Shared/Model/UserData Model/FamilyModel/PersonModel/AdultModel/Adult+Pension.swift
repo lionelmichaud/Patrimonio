@@ -10,6 +10,7 @@ import Foundation
 import AppFoundation
 import FiscalModel
 import RetirementModel
+import ModelEnvironment
 
 // MARK: - EXTENSION: Retraite Régime Général
 extension Adult {

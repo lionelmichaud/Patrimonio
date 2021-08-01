@@ -9,6 +9,7 @@
 import SwiftUI
 import RetirementModel
 import Files
+import ModelEnvironment
 
 struct ComputationView: View {
     @EnvironmentObject private var model      : Model

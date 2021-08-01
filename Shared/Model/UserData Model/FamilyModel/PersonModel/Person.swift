@@ -11,6 +11,7 @@ import AppFoundation
 import HumanLifeModel
 import NamedValue
 import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
+import ModelEnvironment
 
 // MARK: - Tableau de Person
 

@@ -45,6 +45,16 @@
                ReferencedContainer = "container:Patrimonio.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ModelEnvironmentTests"
+               BuildableName = "ModelEnvironmentTests"
+               BlueprintName = "ModelEnvironmentTests"
+               ReferencedContainer = "container:Shared/Modules/ModelEnvironment">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

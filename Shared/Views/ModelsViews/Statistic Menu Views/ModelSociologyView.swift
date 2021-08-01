@@ -8,6 +8,7 @@
 
 import SwiftUI
 import SocioEconomyModel
+import ModelEnvironment
 
 struct ModelSociologyView: View {
     @EnvironmentObject private var model: Model

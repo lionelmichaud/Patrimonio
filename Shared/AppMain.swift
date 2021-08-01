@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 @main
 struct AppMain: App {

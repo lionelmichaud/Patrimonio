@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 struct SimulationView: View {
     @EnvironmentObject private var dataStore  : Store

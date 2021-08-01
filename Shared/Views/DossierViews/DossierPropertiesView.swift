@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 struct DossierPropertiesView: View {
     @EnvironmentObject private var dataStore  : Store

@@ -10,6 +10,7 @@ import SwiftUI
 import Statistics
 import HumanLifeModel
 import Charts // https://github.com/danielgindi/Charts.git
+import ModelEnvironment
 
 struct DiscreteRandomizerView: UIViewRepresentable {
     var randomizer: ModelRandomizer<DiscreteRandomGenerator>

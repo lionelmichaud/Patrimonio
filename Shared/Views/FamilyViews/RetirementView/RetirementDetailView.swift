@@ -9,6 +9,7 @@
 import SwiftUI
 import AppFoundation
 import RetirementModel
+import ModelEnvironment
 
 struct RetirementDetailView: View {
 

@@ -10,6 +10,7 @@ import SwiftUI
 import AppFoundation
 import EconomyModel
 import SocioEconomyModel
+import ModelEnvironment
 
 struct GridsView: View {
     @EnvironmentObject var uiState    : UIState

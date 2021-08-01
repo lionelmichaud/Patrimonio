@@ -10,6 +10,7 @@ import SwiftUI
 import FiscalModel
 import HumanLifeModel
 import UnemployementModel
+import ModelEnvironment
 
 struct PersonEditView: View {
     @EnvironmentObject var family     : Family

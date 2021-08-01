@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Files
+import ModelEnvironment
 
 struct DossierSummaryView: View {
     @EnvironmentObject private var dataStore  : Store

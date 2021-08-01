@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FiscalModel
+import ModelEnvironment
 
 struct DossierDetailView: View {
     @EnvironmentObject private var dataStore  : Store

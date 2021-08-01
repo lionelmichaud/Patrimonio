@@ -10,6 +10,7 @@ import os
 import NamedValue
 import EconomyModel
 import Statistics
+import ModelEnvironment
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CsvBalanceSheetTableVisitor")
 

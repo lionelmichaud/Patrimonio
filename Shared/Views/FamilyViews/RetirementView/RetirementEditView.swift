@@ -8,6 +8,7 @@
 
 import SwiftUI
 import RetirementModel
+import ModelEnvironment
 
 // MARK: - Saisie pension retraite
 

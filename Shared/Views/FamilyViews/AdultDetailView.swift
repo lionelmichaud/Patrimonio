@@ -9,6 +9,7 @@
 import SwiftUI
 import AppFoundation
 import FiscalModel
+import ModelEnvironment
 
 // MARK: - MemberDetailView / AdultDetailView
 

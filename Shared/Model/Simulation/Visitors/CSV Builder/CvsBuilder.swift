@@ -7,6 +7,7 @@
 
 import Foundation
 import Statistics
+import ModelEnvironment
 
 // MARK: - Constructeur de fichier d'export CSV
 

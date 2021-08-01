@@ -8,6 +8,7 @@
 
 import SwiftUI
 import HumanLifeModel
+import ModelEnvironment
 
 // MARK: - Saisie du nouveau membre de la famille
 

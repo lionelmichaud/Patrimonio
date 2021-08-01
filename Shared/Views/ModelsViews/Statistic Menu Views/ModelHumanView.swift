@@ -8,6 +8,7 @@
 
 import SwiftUI
 import HumanLifeModel
+import ModelEnvironment
 
 struct ModelHumanView: View {
     @EnvironmentObject var model: Model

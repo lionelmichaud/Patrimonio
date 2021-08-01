@@ -8,6 +8,7 @@
 
 import Foundation
 import FiscalModel
+import ModelEnvironment
 
 extension CashFlowLine {
     /// Populate Ages and Work incomes

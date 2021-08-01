@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ModelEnvironment
 
 // MARK: - Deterministic View Model
 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 struct DeterministicSectionView: View {
     @EnvironmentObject private var model      : Model

@@ -35,6 +35,9 @@
       location = "group:Shared/Modules/RetirementModel">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/ModelEnvironment">
+   </FileRef>
+   <FileRef
       location = "group:Shared/Modules/NamedValue">
    </FileRef>
    <FileRef

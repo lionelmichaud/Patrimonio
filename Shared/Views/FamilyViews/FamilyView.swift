@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 struct FamilyView: View {
     @EnvironmentObject private var dataStore  : Store

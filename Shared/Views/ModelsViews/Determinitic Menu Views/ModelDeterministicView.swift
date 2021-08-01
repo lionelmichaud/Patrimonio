@@ -11,6 +11,7 @@ import Statistics
 import HumanLifeModel
 import EconomyModel
 import SocioEconomyModel
+import ModelEnvironment
 
 // MARK: - Deterministic View
 

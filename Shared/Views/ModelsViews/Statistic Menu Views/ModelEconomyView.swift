@@ -8,6 +8,7 @@
 
 import SwiftUI
 import EconomyModel
+import ModelEnvironment
 
 /// Affiche un graphique des fonctions de distribution des modèles statistiques
 struct ModelEconomyView: View {
