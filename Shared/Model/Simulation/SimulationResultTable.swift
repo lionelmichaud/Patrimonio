@@ -11,6 +11,7 @@ import AppFoundation
 import EconomyModel
 import SocioEconomyModel
 import Files
+import Persistence
 
 // MARK: - KPI results
 

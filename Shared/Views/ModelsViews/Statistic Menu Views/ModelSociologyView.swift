@@ -8,8 +8,10 @@
 
 import SwiftUI
 import SocioEconomyModel
+import ModelEnvironment
 
 struct ModelSociologyView: View {
+    @EnvironmentObject private var model: Model
     @State private var modelChoice: SocioEconomy.RandomVariable = .pensionDevaluationRate
     
     var body: some View {
@@ -22,14 +24,14 @@ struct ModelSociologyView: View {
             switch modelChoice {
                 case .pensionDevaluationRate:
                     EmptyView()
-                    BetaRandomizerView(randomizer: SocioEconomy.model.pensionDevaluationRate)
+                    BetaRandomizerView(randomizer: model.socioEconomyModel.pensionDevaluationRate)
 
                 case .nbTrimTauxPlein:
                     EmptyView()
-                    DiscreteRandomizerView(randomizer: SocioEconomy.model.nbTrimTauxPlein)
+                    DiscreteRandomizerView(randomizer: model.socioEconomyModel.nbTrimTauxPlein)
 
                 case .expensesUnderEvaluationRate:
-                    BetaRandomizerView(randomizer: SocioEconomy.model.expensesUnderEvaluationRate)
+                    BetaRandomizerView(randomizer: model.socioEconomyModel.expensesUnderEvaluationRate)
             }
         }
         .navigationTitle("Modèle Sociologique: Fonctions de Distribution")

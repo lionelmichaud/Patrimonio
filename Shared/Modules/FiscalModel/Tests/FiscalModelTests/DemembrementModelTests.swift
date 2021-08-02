@@ -17,7 +17,8 @@ class DemembrementModelTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        let model = DemembrementModel.Model(fromBundle: Bundle.module)
+        let model = DemembrementModel.Model(fromFile   : DemembrementModel.Model.defaultFileName,
+                                            fromBundle : Bundle.module)
         DemembrementModelTests.demembrement = DemembrementModel(model: model)
     }
 

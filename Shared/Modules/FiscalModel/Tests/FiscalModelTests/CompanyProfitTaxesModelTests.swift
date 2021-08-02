@@ -17,7 +17,8 @@ class CompanyProfitTaxesModelTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        let model = CompanyProfitTaxesModel.Model(fromBundle: Bundle.module)
+        let model = CompanyProfitTaxesModel.Model(fromFile   : CompanyProfitTaxesModel.Model.defaultFileName,
+                                                  fromBundle : Bundle.module)
         CompanyProfitTaxesModelTests.companyProfitTaxes = CompanyProfitTaxesModel(model: model)
     }
     

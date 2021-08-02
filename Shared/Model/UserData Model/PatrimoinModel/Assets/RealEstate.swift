@@ -237,7 +237,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, Ownable {
     ///   - la premièe année est inclue
     ///   - la dernière année est exclue
     func isRented(during year: Int) -> Bool {
-        guard willBeRented && !isSold(before: year) else {
+        guard willBeRented && !isSold(before: year) && rentalFrom.year! < rentalTo.year! else {
             return false
         }
         return (rentalFrom.year! ..< rentalTo.year!).contains(year)

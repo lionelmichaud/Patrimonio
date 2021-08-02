@@ -11,17 +11,30 @@ import XCTest
 class VersionTest: XCTestCase {
 
     func test_toVersion() {
-        var version = Version.toVersion(major: 1, minor: 2, patch: 3)
+        var version = Version.toVersion(major: 1,
+                                        minor: 2,
+                                        patch: 3)
         XCTAssertEqual(version, "1.2.3")
-        version = Version.toVersion(major: 1, minor: 2, patch: nil)
+        version = Version.toVersion(major: 1,
+                                    minor: 2,
+                                    patch: nil)
         XCTAssertEqual(version, "1.2")
     }
 
     func test_fromVersion() {
-        let version = Version(name: "test",
-                              version: "1.2.3",
-                              date: Date.now,
-                              comment: "comment")
+        let date = Date.now
+        let vers = Version.toVersion(major: 1,
+                                     minor: 2,
+                                     patch: 3)
+        let version = Version()
+            .named("test")
+            .dated(date)
+            .versioned(vers)
+            .commented(with: "comment")
+        XCTAssertEqual(version.name, "test")
+        XCTAssertEqual(version.date, date)
+        XCTAssertEqual(version.version, vers)
+        XCTAssertEqual(version.comment, "comment")
 
         let major = version.major
         XCTAssertNotNil(major)

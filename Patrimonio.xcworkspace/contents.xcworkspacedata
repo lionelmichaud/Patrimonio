@@ -5,10 +5,16 @@
       location = "group:Shared/Modules/Stateful">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/Persistable">
+   </FileRef>
+   <FileRef
       location = "group:Shared/Modules/AppFoundation">
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/Statistics">
+   </FileRef>
+   <FileRef
+      location = "group:Shared/Modules/FileAndFolder">
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/FiscalModel">
@@ -29,12 +35,18 @@
       location = "group:Shared/Modules/RetirementModel">
    </FileRef>
    <FileRef
-      location = "group:Shared/Modules/FileAndFolder">
+      location = "group:Shared/Modules/ModelEnvironment">
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/NamedValue">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/Persistence">
+   </FileRef>
+   <FileRef
       location = "container:Patrimonio.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:iOS/Patrimonio (iOS).xctestplan">
    </FileRef>
 </Workspace>

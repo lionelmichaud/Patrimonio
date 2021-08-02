@@ -18,7 +18,9 @@ class InheritanceDonationTests: XCTestCase {
     override class func setUp() {
         super.setUp()
         
-        let model = InheritanceDonation.Model(fromBundle: Bundle.module)
+        let model = InheritanceDonation.Model(
+            fromFile: InheritanceDonation.Model.defaultFileName,
+            fromBundle: Bundle.module)
         InheritanceDonationTests.inheritanceDonation = InheritanceDonation(model: model)
         do {
             try InheritanceDonationTests.inheritanceDonation.initialize()
@@ -127,9 +129,12 @@ class FiscalOptionTests: XCTestCase {
     override class func setUp() {
         super.setUp()
         
-        FiscalOptionTests.fiscalModel = Fiscal.Model(fromBundle: Bundle.module).initialized()
+        FiscalOptionTests.fiscalModel =
+            Fiscal.Model(fromFile: Fiscal.Model.defaultFileName, fromBundle: Bundle.module)
+            .initialized()
         
-        let model = InheritanceDonation.Model(fromBundle: Bundle.module)
+        let model = InheritanceDonation.Model(fromFile   : InheritanceDonation.Model.defaultFileName,
+                                              fromBundle : Bundle.module)
         InheritanceDonationTests.inheritanceDonation = InheritanceDonation(model: model)
         do {
             try InheritanceDonationTests.inheritanceDonation.initialize()
@@ -214,7 +219,9 @@ class LifeInsuranceInheritanceTests: XCTestCase {
     override class func setUp() {
         super.setUp()
         
-        let model = LifeInsuranceInheritance.Model(fromBundle: Bundle.module)
+        let model = LifeInsuranceInheritance.Model(
+            fromFile   : LifeInsuranceInheritance.Model.defaultFileName,
+            fromBundle : Bundle.module)
         LifeInsuranceInheritanceTests.lifeInsuranceInheritance = LifeInsuranceInheritance(model: model)
         do {
             try LifeInsuranceInheritanceTests.lifeInsuranceInheritance.initialize()

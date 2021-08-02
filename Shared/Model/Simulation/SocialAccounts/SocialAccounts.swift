@@ -3,6 +3,8 @@ import os
 import AppFoundation
 import Statistics
 import Files
+import ModelEnvironment
+import Persistence
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.SocialAccounts")
 
@@ -215,7 +217,8 @@ struct SocialAccounts {
                         withFamily family         : Family,
                         withPatrimoine patrimoine : Patrimoin,
                         withKPIs kpis             : inout KpiArray,
-                        withMode simulationMode   : SimulationModeEnum) -> DictionaryOfKpiResults {
+                        withMode simulationMode   : SimulationModeEnum,
+                        using model               : Model) -> DictionaryOfKpiResults {
         
         //-------------------------------------------------------------------------------------------
         firstYear = Date.now.year
@@ -242,7 +245,8 @@ struct SocialAccounts {
                                                        withYear                              : year,
                                                        withFamily                            : family,
                                                        withPatrimoine                        : patrimoine,
-                                                       taxableIrppRevenueDelayedFromLastyear : lastYearDelayedTaxableIrppRevenue)
+                                                       taxableIrppRevenueDelayedFromLastyear : lastYearDelayedTaxableIrppRevenue,
+                                                       using                                 : model)
                 cashFlowArray.append(newCashFlowLine)
                 // ajouter les éventuelles successions survenues pendant l'année à la liste globale
                 legalSuccessions   += newCashFlowLine.successions
@@ -318,7 +322,8 @@ struct SocialAccounts {
     ///
     /// - Parameter mode: mode de simulation utilisé lors de la dernière simulation
     /// - Returns: dictionnaire [Nom de fichier : CSV string]
-    func lastSimulationResultCsvStrings(withMode mode: SimulationModeEnum) -> [String:String] {
+    func lastSimulationResultCsvStrings(using model  : Model,
+                                        withMode mode: SimulationModeEnum) -> [String:String] {
         //    (balanceSheetCSV : String,
         //     cashFlowCSV     : String,
         //     successionsCSV  : String) {
@@ -326,6 +331,7 @@ struct SocialAccounts {
         // construction du tableau de bilans annnuels au format CSV
         dico[FileNameCst.kBalanceSheetCSVFileName] =
             CsvBuilder.balanceSheetCSV(from     : balanceArray,
+                                       using    : model,
                                        withMode : mode)
         // construction du tableau de cash flow annnuels au format CSV
         dico[FileNameCst.kCashFlowCSVFileName] =

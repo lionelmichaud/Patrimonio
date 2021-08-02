@@ -9,11 +9,13 @@
 import SwiftUI
 import EconomyModel
 import SocioEconomyModel
+import ModelEnvironment
 
 /// Affiche des valeures des modèles utilisées pour le dernier Run de simulation
 struct ScenarioSummaryView: View {
-    @EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var family     : Family
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var simulation : Simulation
+    @EnvironmentObject private var family     : Family
 
     var body: some View {
         VStack {
@@ -36,27 +38,27 @@ struct ScenarioSummaryView: View {
                 }
                 Section(header: Text("Modèle Economique")) {
                     PercentView(label   : "Inflation",
-                                percent : Economy.model.randomizers.inflation.value(withMode: simulation.mode)/100.0)
+                                percent : model.economyModel.randomizers.inflation.value(withMode: simulation.mode)/100.0)
                     PercentView(label   : "Rendement annuel moyen des Obligations sans risque",
-                                percent : Economy.model.randomizers.securedRate.value(withMode: simulation.mode)/100.0)
+                                percent : model.economyModel.randomizers.securedRate.value(withMode: simulation.mode)/100.0)
                     if UserSettings.shared.simulateVolatility {
                         PercentView(label   : "Volatilité des Obligations sans risque",
-                                    percent : Economy.model.randomizers.securedVolatility/100.0)
+                                    percent : model.economyModel.randomizers.securedVolatility/100.0)
                     }
                     PercentView(label   : "Rendement annuel moyen des Actions",
-                                percent : Economy.model.randomizers.stockRate.value(withMode: simulation.mode)/100.0)
+                                percent : model.economyModel.randomizers.stockRate.value(withMode: simulation.mode)/100.0)
                     if UserSettings.shared.simulateVolatility {
                         PercentView(label   : "Volatilité des Actions",
-                                    percent : Economy.model.randomizers.stockVolatility/100.0)
+                                    percent : model.economyModel.randomizers.stockVolatility/100.0)
                     }
                 }
                 Section(header: Text("Modèle Sociologique")) {
                     PercentView(label   : "Dévaluation anuelle des pensions par rapport à l'inflation",
-                                percent : -SocioEconomy.model.pensionDevaluationRate.value(withMode: simulation.mode)/100.0)
+                                percent : -model.socioEconomyModel.pensionDevaluationRate.value(withMode: simulation.mode)/100.0)
                     IntegerView(label   : "Nombre de trimestres additionels pour obtenir le taux plein",
-                                integer : Int(SocioEconomy.model.nbTrimTauxPlein.value(withMode: simulation.mode)))
+                                integer : Int(model.socioEconomyModel.nbTrimTauxPlein.value(withMode: simulation.mode)))
                     PercentView(label   : "Pénalisation des dépenses",
-                                percent : SocioEconomy.model.expensesUnderEvaluationRate.value(withMode: simulation.mode)/100.0)
+                                percent : model.socioEconomyModel.expensesUnderEvaluationRate.value(withMode: simulation.mode)/100.0)
                 }
             }
             .navigationTitle("Résumé")

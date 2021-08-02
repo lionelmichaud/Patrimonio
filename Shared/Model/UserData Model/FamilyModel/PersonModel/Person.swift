@@ -11,6 +11,7 @@ import AppFoundation
 import HumanLifeModel
 import NamedValue
 import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
+import ModelEnvironment
 
 // MARK: - Tableau de Person
 
@@ -106,14 +107,7 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
         self.birthDate           = try container.decode(Date.self, forKey: .birth_Date)
         displayBirthDate = mediumDateFormatter.string(from: birthDate) // disSet not executed during init
         self.birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate)
-        // initialiser avec la valeur moyenne déterministe
-        switch self.sexe {
-            case .male:
-                self.ageOfDeath = Int(HumanLife.model.menLifeExpectation.value(withMode: .deterministic))
-                
-            case .female:
-                self.ageOfDeath = Int(HumanLife.model.womenLifeExpectation.value(withMode: .deterministic))
-        }
+        self.ageOfDeath          = 81
     }
     
     // MARK: - Conformance to Encodable
@@ -126,6 +120,13 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     }
 
     // MARK: - Methodes
+    
+    /// Initialise les propriétés qui ne peuvent pas l'être à la création
+    /// quand le modèle n'est pas encore créé
+    /// - Parameter model: modèle à utiliser
+    func initialize(using model: Model) {
+        setRandomPropertiesDeterministicaly(using: model)
+    }
 
     func age(atEndOf year: Int) -> Int {
         ageAtEndOfCurrentYear + (year - CalendarCst.thisYear)
@@ -167,17 +168,48 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
         }
     }
         
-    /// Réinitialiser les prioriétés aléatoires des membres
-    func nextRandomProperties() {
+    /// Réinitialiser les prioriétés variables des membres de manière aléatoires
+    func nextRandomProperties(using model: Model) {
         switch self.sexe {
             case .male:
-                ageOfDeath = Int(HumanLife.model.menLifeExpectation.next())
+                ageOfDeath = Int(model.humanLife.model!.menLifeExpectation.next())
                 
             case .female:
-                ageOfDeath = Int(HumanLife.model.womenLifeExpectation.next())
+                ageOfDeath = Int(model.humanLife.model!.womenLifeExpectation.next())
         }
         // on ne peut mourire à un age < à celui que l'on a déjà
         ageOfDeath = max(ageOfDeath, age(atEndOf: Date.now.year))
+    }
+
+    /// Réinitialiser les prioriétés variables des membres de manière déterministe
+    func setRandomPropertiesDeterministicaly(using model: Model) {
+        switch sexe {
+            case .male:
+                ageOfDeath = Int(model.humanLifeModel.menLifeExpectation.value(withMode: .deterministic))
+                
+            case .female:
+                ageOfDeath = Int(model.humanLifeModel.womenLifeExpectation.value(withMode: .deterministic))
+        }
+        // on ne peut mourire à un age < à celui que l'on a déjà
+        ageOfDeath = max(ageOfDeath, age(atEndOf: Date.now.year))
+    }
+    
+    /// Actualiser les propriétés d'une personne à partir des valeurs modifiées
+    /// des paramètres du modèle (valeur déterministes modifiées par l'utilisateur).
+    func updateMembersDterministicValues(
+        _ menLifeExpectation    : Int,
+        _ womenLifeExpectation  : Int,
+        _ nbOfYearsOfdependency : Int,
+        _ ageMinimumLegal       : Int,
+        _ ageMinimumAGIRC       : Int
+    ) {
+        switch sexe {
+            case .male:
+                ageOfDeath = menLifeExpectation
+
+            case .female:
+                ageOfDeath = womenLifeExpectation
+        }
     }
 }
 

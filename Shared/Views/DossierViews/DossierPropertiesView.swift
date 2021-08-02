@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import ModelEnvironment
+import Persistence
 
 struct DossierPropertiesView: View {
     @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
     var dossier: Dossier
@@ -34,12 +37,16 @@ struct DossierPropertiesView: View {
     }
     
     private func savable() -> Bool {
-        family.isModified ||
-            patrimoine.isModified
+        family.isModified || patrimoine.isModified || model.isModified
     }
 }
 
 struct DossierPropertiesView_Previews: PreviewProvider {
+    static let dataStore  = Store()
+    static var model      = Model(fromBundle: Bundle.main)
+    static var family     = Family()
+    static var patrimoine = Patrimoin()
+
     static var previews: some View {
         Form {
             DossierPropertiesView(dossier: Dossier()
@@ -48,6 +55,10 @@ struct DossierPropertiesView_Previews: PreviewProvider {
                                     .activated()
                                     .createdOn(),
                                   sectionHeader: "Header")
+                .environmentObject(dataStore)
+                .environmentObject(model)
+                .environmentObject(family)
+                .environmentObject(patrimoine)
         }
     }
 }

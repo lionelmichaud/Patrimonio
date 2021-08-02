@@ -9,6 +9,7 @@
 import SwiftUI
 import AppFoundation
 import FiscalModel
+import ModelEnvironment
 
 // MARK: - MemberDetailView / AdultDetailView
 
@@ -30,7 +31,8 @@ struct AdultDetailView: View {
 // MARK: - MemberDetailView / AdultDetailView / ScenarioSectionView
 
 private struct LifeScenarioSectionView: View {
-    @EnvironmentObject var member : Person
+    @EnvironmentObject private var model  : Model
+    @EnvironmentObject private var member : Person
     
     var body: some View {
         Section {
@@ -45,17 +47,17 @@ private struct LifeScenarioSectionView: View {
                                     text : adult.causeOfRetirement.displayString)
                             .padding(.leading)
                         if adult.hasUnemployementAllocationPeriod {
-                            if let date = adult.dateOfStartOfUnemployementAllocation {
+                            if let date = adult.dateOfStartOfUnemployementAllocation(using: model) {
                                 LabeledText(label: "Début de la période d'allocation chômage",
                                             text : "\(adult.age(atDate: date).year!) ans \(adult.age(atDate: date).month!) mois au \(mediumDateFormatter.string(from: date))")
                                     .padding(.leading)
                             }
-                            if let date = adult.dateOfStartOfAllocationReduction {
+                            if let date = adult.dateOfStartOfAllocationReduction(using: model) {
                                 LabeledText(label: "Début de la période de réduction d'allocation chômage",
                                             text : "\(adult.age(atDate: date).year!) ans \(adult.age(atDate: date).month!) mois au \(mediumDateFormatter.string(from: date))")
                                     .padding(.leading)
                             }
-                            if let date = adult.dateOfEndOfUnemployementAllocation {
+                            if let date = adult.dateOfEndOfUnemployementAllocation(using: model) {
                                 LabeledText(label: "Fin de la période d'allocation chômage",
                                             text : "\(adult.age(atDate: date).year!) ans \(adult.age(atDate: date).month!) mois au \(mediumDateFormatter.string(from: date))")
                                     .padding(.leading)
@@ -74,7 +76,7 @@ private struct LifeScenarioSectionView: View {
                                 Text("\(adult.nbOfYearOfDependency) ans à partir de \(String(adult.yearOfDependency))")
                             }
                         }
-                        NavigationLink(destination: PersonLifeLineView(from: self.member)) {
+                        NavigationLink(destination: PersonLifeLineView(from: self.member, using: model)) {
                             Text("Ligne de vie").foregroundColor(.blue)
                         }
                     },
@@ -89,7 +91,8 @@ private struct LifeScenarioSectionView: View {
 // MARK: - MemberDetailView / AdultDetailView / RevenuSectionView
 
 private struct RevenuSectionView: View {
-    
+    @EnvironmentObject private var model: Model
+
     // MARK: - View Model
     
     struct ViewModel {
@@ -109,10 +112,10 @@ private struct RevenuSectionView: View {
         init() {
         }
         
-        init(from adult: Adult) {
+        init(from adult: Adult, using model: Model) {
             hasUnemployementAllocationPeriod = adult.hasUnemployementAllocationPeriod
-            unemployementAllocation          = adult.unemployementAllocation
-            pension                          = adult.pension
+            unemployementAllocation          = adult.unemployementAllocation(using: model)
+            pension                          = adult.pension(using: model)
             income                           = adult.workIncome
             switch income {
                 case let .salary(_, _, _, fromDate1, healthInsurance):
@@ -194,7 +197,7 @@ private struct RevenuSectionView: View {
     
     func onAppear() {
         let adult = member as! Adult
-        viewModel = ViewModel(from: adult)
+        viewModel = ViewModel(from: adult, using: model)
     }
 }
 
@@ -284,6 +287,7 @@ private struct InheritanceSectionView: View {
 }
 
 struct AdultDetailView_Previews: PreviewProvider {
+    static var model     = Model(fromBundle: Bundle.main)
     static var family    = Family()
     static var patrimoin = Patrimoin()
     static var anAdult   = family.members.items.first!
@@ -294,6 +298,7 @@ struct AdultDetailView_Previews: PreviewProvider {
         Form {
             AdultDetailView()
                 .environmentObject(patrimoin)
+                .environmentObject(model)
                 .environmentObject(anAdult)
         }
     }

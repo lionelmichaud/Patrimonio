@@ -9,9 +9,10 @@
 import SwiftUI
 import AppFoundation
 import RetirementModel
+import ModelEnvironment
 
 struct RetirementDetailView: View {
-    
+
     // MARK: - View Model
     
     class ViewModel: ObservableObject {
@@ -45,8 +46,9 @@ struct RetirementDetailView: View {
     
     // MARK: - Properties
     
-    @EnvironmentObject var member: Person
-    @ObservedObject var viewModel = ViewModel()
+    @EnvironmentObject private var model  : Model
+    @EnvironmentObject private var member : Person
+    @ObservedObject private var viewModel = ViewModel()
     
     var body: some View {
         Form {
@@ -103,17 +105,17 @@ struct RetirementDetailView: View {
                    dureeAssuranceDeplafonne,
                    pensionBrute,
                    pensionNette) =
-                Retirement.model.regimeGeneral.pension(
+                model.retirementModel.regimeGeneral.pension(
                     birthDate                : adult.birthDate,
                     dateOfRetirement         : adult.dateOfRetirement,
-                    dateOfEndOfUnemployAlloc : adult.dateOfEndOfUnemployementAllocation,
+                    dateOfEndOfUnemployAlloc : adult.dateOfEndOfUnemployementAllocation(using: model),
                     dateOfPensionLiquid      : adult.dateOfPensionLiquid,
                     lastKnownSituation       : adult.lastKnownPensionSituation,
                     nbEnfant                 : 3) else {
             return
         }
         guard let nbTrimestreDecote =
-                Retirement.model.regimeGeneral.nbTrimestreSurDecote(
+                model.retirementModel.regimeGeneral.nbTrimestreSurDecote(
                     birthDate           : adult.birthDate,
                     dureeAssurance      : dureeAssuranceDeplafonne,
                     dureeDeReference    : dureeDeReference,
@@ -121,8 +123,9 @@ struct RetirementDetailView: View {
             return
         }
         viewModel.general.dateTauxPlein     =
-            Retirement.model.regimeGeneral.dateAgeTauxPlein(birthDate          : member.birthDate,
-                                                            lastKnownSituation : (member as! Adult).lastKnownPensionSituation)
+            model.retirementModel.regimeGeneral.dateAgeTauxPlein(
+                birthDate          : member.birthDate,
+                lastKnownSituation : (member as! Adult).lastKnownPensionSituation)
         if viewModel.general.dateTauxPlein != nil {
             viewModel.general.ageTauxPlein  = member.age(atDate: viewModel.general.dateTauxPlein!)
         }
@@ -137,17 +140,17 @@ struct RetirementDetailView: View {
         
         // régime complémentaire
         guard let pension =
-                Retirement.model.regimeAgirc.pension(
+                model.retirementModel.regimeAgirc.pension(
                     lastAgircKnownSituation : adult.lastKnownAgircPensionSituation,
                     birthDate               : adult.birthDate,
                     lastKnownSituation      : adult.lastKnownPensionSituation,
                     dateOfRetirement        : adult.dateOfRetirement,
-                    dateOfEndOfUnemployAlloc: adult.dateOfEndOfUnemployementAllocation,
+                    dateOfEndOfUnemployAlloc: adult.dateOfEndOfUnemployementAllocation(using: model),
                     dateOfPensionLiquid     : adult.dateOfPensionLiquid,
                     nbEnfantNe              : adult.nbOfChildren(),
                     nbEnfantACharge         : adult.nbOfFiscalChildren(during: adult.dateOfPensionLiquid.year)) else { return }
         viewModel.agirc.projectedNbOfPoints = pension.projectedNbOfPoints
-        viewModel.agirc.valeurDuPoint       = Retirement.model.regimeAgirc.valeurDuPoint
+        viewModel.agirc.valeurDuPoint       = model.retirementModel.regimeAgirc.valeurDuPoint
         viewModel.agirc.coefMinoration      = pension.coefMinoration
         viewModel.agirc.majorationEnfant    = pension.majorationPourEnfant
         viewModel.agirc.pensionBrute        = pension.pensionBrute
@@ -157,11 +160,14 @@ struct RetirementDetailView: View {
 
 struct RetirementDetailView_Previews: PreviewProvider {
     static var family  = Family()
-    
+    static var model   = Model(fromBundle: Bundle.main)
+
     static var previews: some View {
         let aMember = family.members.items.first!
         
-        return RetirementDetailView().environmentObject(aMember)
+        return RetirementDetailView()
+            .environmentObject(model)
+            .environmentObject(aMember)
         
     }
 }

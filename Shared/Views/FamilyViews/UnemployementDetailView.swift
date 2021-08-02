@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 struct UnemployementDetailView: View {
 
@@ -35,24 +36,26 @@ struct UnemployementDetailView: View {
         init() {
         }
         
-        init(from adult: Adult) {
-            differe                                       = adult.unemployementAllocationDiffere
-            durationInMonth                               = adult.unemployementAllocationDuration!
-            (allocationBrut, allocationNet)               = adult.unemployementAllocation!
-            (percentReduc, afterMonth)                    = adult.unemployementAllocationReduction!
+        init(from adult  : Adult,
+             using model : Model) {
+            differe                                       = adult.unemployementAllocationDiffere(using: model)
+            durationInMonth                               = adult.unemployementAllocationDuration(using: model)!
+            (allocationBrut, allocationNet)               = adult.unemployementAllocation(using: model)!
+            (percentReduc, afterMonth)                    = adult.unemployementAllocationReduction(using: model)!
             (compensationNbMonth, compensationBrut,
-             compensationNet, compensationTaxable)        = adult.layoffCompensation!
-            compensationLegal                             = adult.layoffCompensationBrutLegal!
-            compensationConvention                        = adult.layoffCompensationBrutConvention!
+             compensationNet, compensationTaxable)        = adult.layoffCompensation(using: model)!
+            compensationLegal                             = adult.layoffCompensationBrutLegal(using: model)!
+            compensationConvention                        = adult.layoffCompensationBrutConvention(using: model)!
             allocationBonnified                           = (adult.layoffCompensationBonified != nil)
-            (allocationReducedBrut, allocationReducedNet) = adult.unemployementReducedAllocation!
-            totalAllocationNet                            = adult.unemployementTotalAllocation!.net
+            (allocationReducedBrut, allocationReducedNet) = adult.unemployementReducedAllocation(using: model)!
+            totalAllocationNet                            = adult.unemployementTotalAllocation(using: model)!.net
         }
     }
     
     // MARK: - Properties
     
-    @EnvironmentObject var member : Person
+    @EnvironmentObject private var model  : Model
+    @EnvironmentObject private var member : Person
     @State var viewModel = ViewModel()
     
     var body: some View {
@@ -111,16 +114,19 @@ struct UnemployementDetailView: View {
     
     func onAppear() {
         let adult = member as! Adult
-        viewModel = ViewModel(from: adult)
+        viewModel = ViewModel(from: adult, using: model)
     }
 }
 
 struct UnemployementDetailView_Previews: PreviewProvider {
-    static var family  = Family()
-    
+    static var family = Family()
+    static var model  = Model(fromBundle : Bundle.main)
+
     static var previews: some View {
         let aMember = family.members.items.first!
         
-        return UnemployementDetailView().environmentObject(aMember)
+        return UnemployementDetailView()
+            .environmentObject(model)
+            .environmentObject(aMember)
     }
 }

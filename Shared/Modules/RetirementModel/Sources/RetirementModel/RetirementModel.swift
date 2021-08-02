@@ -7,30 +7,36 @@
 //
 
 import Foundation
+import Persistable
 import AppFoundation
 import Statistics
+import FileAndFolder
 
 // https://www.service-public.fr/particuliers/vosdroits/F21552
 
-// MARK: - SINGLETON: Modèle de pension de retraite
+// MARK: - Modèle de pension de retraite
 
-public struct Retirement {
+public struct Retirement: PersistableModel {
     
     // MARK: - Nested types
     
-    public struct Model: JsonCodableToBundleP {
-        public static var defaultFileName : String = "RetirementModelConfig.json"
+    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable {
         public var regimeGeneral: RegimeGeneral
         public var regimeAgirc  : RegimeAgirc
         public var reversion    : PensionReversion
         
+        // MARK: - Methods
+
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
-        func initialized() -> Model {
-            var model = self
-            model.regimeAgirc.setRegimeGeneral(regimeGeneral)
-            return model
+        public func initialized() -> Model {
+            self.regimeAgirc.setRegimeGeneral(self.regimeGeneral)
+            return self
         }
     }
+    
+    // MARK: - Static Properties
+    
+    public static var defaultFileName: String = "RetirementModelConfig.json"
     
     // MARK: - Static methods
     
@@ -42,12 +48,45 @@ public struct Retirement {
         RegimeGeneral.setSimulationMode(to: simulationMode)
         RegimeAgirc.setSimulationMode(to: simulationMode)
     }
+        
+    // MARK: - Properties
     
-    // MARK: - Static properties
+    public var model         : Model?
+    public var persistenceSM : PersistenceStateMachine
+
+    public var ageMinimumLegal: Int {
+        get { model!.regimeGeneral.ageMinimumLegal }
+        set {
+            model?.regimeGeneral.ageMinimumLegal = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+
+    public var valeurDuPointAGIRC: Double {
+        get { model!.regimeAgirc.valeurDuPoint }
+        set {
+            model?.regimeAgirc.valeurDuPoint = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+
+    public var ageMinimumAGIRC: Int {
+        get { model!.regimeAgirc.ageMinimum }
+        set {
+            model?.regimeAgirc.ageMinimum = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+
+    // MARK: - Initializers
     
-    public static var model: Model = Model(fromFile: Model.defaultFileName).initialized()
-    
-    // MARK: - Initializer
-    
-    private init() { }
+    /// Initialize seulement la StateMachine.
+    /// L'objet ainsi obtenu n'est pas utilisable en l'état car le modèle n'est pas initialiser.
+    /// Pour pouvoir obtenir un objet utilisable il faut utiliser initialiser le model.
+    public init() {
+        self.persistenceSM = PersistenceStateMachine()
+    }
 }

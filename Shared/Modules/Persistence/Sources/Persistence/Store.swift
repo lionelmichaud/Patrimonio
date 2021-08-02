@@ -10,18 +10,18 @@ import os
 
 // MARK: - STORE
 
-class Store: ObservableObject {
-    @Published var dossiers                     : DossierArray
-    @Published var failedToLoadDossiers         : Bool
-    @Published var failedToUpdateTemplateFolder : Bool
+public class Store: ObservableObject {
+    @Published public var dossiers                     : DossierArray
+    @Published public var failedToLoadDossiers         : Bool
+    @Published public var failedToUpdateTemplateFolder : Bool
     // le dossier en cours d'utilisation
-    var activeDossier : Dossier? {
+    public var activeDossier : Dossier? {
         dossiers.first(where: { $0.isActive })
     }
 
     /// Charger la liste des Dossiers utilisateur et
     /// mettre à jour le répertoire des templates à partir du Bundle App Main
-    init() {
+    public init() {
         // charger tous les dossiers utilisateur
         do {
             var loadedDossiers = DossierArray()
@@ -46,7 +46,7 @@ class Store: ObservableObject {
 
     /// Activer le dossier situé à l'index 'index'.
     /// Désativer tous les autres.
-    func activate(dossierAtIndex index: Int) {
+    public func activate(dossierAtIndex index: Int) {
         for idx in dossiers.startIndex..<dossiers.endIndex {
             dossiers[idx].isActive = false
         }
@@ -57,8 +57,8 @@ class Store: ObservableObject {
     /// - Parameters:
     ///   - name: nom du dossier
     ///   - note: note décrivant le dossier
-    func createDossier(named name       : String,
-                       annotatedBy note : String) throws {
+    public func createDossier(named name       : String,
+                              annotatedBy note : String) throws {
         let newDossier = try Dossier(name: name,
                                      note: note)
         dossiers.append(newDossier)
@@ -66,20 +66,20 @@ class Store: ObservableObject {
 
     /// Dupliquer un Dossier
     /// - Parameter dossier: Dossier à duspliquer
-    func duplicate(_ dossier: Dossier) throws {
+    public func duplicate(_ dossier: Dossier) throws {
         let newDossier = try dossier.duplicate()
         dossiers.append(newDossier)
     }
     
     /// Supprimer le contenu du dossier et le directory associé
-    func deleteDossier(atOffsets offsets: IndexSet) throws {
+    public func deleteDossier(atOffsets offsets: IndexSet) throws {
         try dossiers[offsets.first!].delete()
         dossiers.remove(atOffsets: offsets)
     }
 }
 
 extension Store: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         var str = ""
         dossiers.forEach { dossier in
             str += String(describing: dossier).withPrefixedSplittedLines("  ") + "\n"

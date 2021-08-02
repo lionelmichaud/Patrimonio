@@ -8,8 +8,10 @@
 
 import SwiftUI
 import HumanLifeModel
+import ModelEnvironment
 
 struct ModelHumanView: View {
+    @EnvironmentObject var model: Model
     @State private var modelChoice: HumanLife.RandomVariable = .menLifeExpectation
     
     var body: some View {
@@ -20,13 +22,13 @@ struct ModelHumanView: View {
                 .pickerStyle(SegmentedPickerStyle())
             switch modelChoice {
                 case .menLifeExpectation:
-                    DiscreteRandomizerView(randomizer: HumanLife.model.menLifeExpectation)
+                    DiscreteRandomizerView(randomizer: model.humanLifeModel.menLifeExpectation)
                 
                 case .womenLifeExpectation:
-                    DiscreteRandomizerView(randomizer: HumanLife.model.womenLifeExpectation)
+                    DiscreteRandomizerView(randomizer: model.humanLifeModel.womenLifeExpectation)
                 
                 case .nbOfYearsOfdependency:
-                    DiscreteRandomizerView(randomizer: HumanLife.model.nbOfYearsOfdependency)
+                    DiscreteRandomizerView(randomizer: model.humanLifeModel.nbOfYearsOfdependency)
             }
         }
         .navigationTitle("Modèle Humain: Fonctions de Distribution")
@@ -35,7 +37,10 @@ struct ModelHumanView: View {
 }
 
 struct ModelHumanView_Previews: PreviewProvider {
+    static var model = Model(fromBundle: Bundle.main)
+    
     static var previews: some View {
         ModelHumanView()
+            .environmentObject(model)
     }
 }

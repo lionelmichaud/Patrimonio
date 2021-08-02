@@ -6,18 +6,19 @@
 //
 
 import Foundation
+import UIKit
 import os
 import FileAndFolder
 import NamedValue
 import Files
-import Charts // https://github.com/danielgindi/Charts.git
+//import Charts // https://github.com/danielgindi/Charts.git
 
 private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
                                category  : "PersistenceManager")
 
 // MARK: - Extension de Folder
 
-extension Folder {
+public extension Folder {
     // The current Application folder
     static var application: Folder? {
         guard let resourcePath = Bundle.main.resourcePath else {
@@ -32,7 +33,7 @@ extension Folder {
     }
 }
 
-enum FileError: String, Error {
+public enum FileError: String, Error {
     case failedToSaveCashFlowCsv           = "La sauvegarde de l'historique des bilans a échoué"
     case failedToSaveBalanceSheetCsv       = "La sauvegarde de l'historique des cash-flow a échoué"
     case failedToSaveMonteCarloCsv         = "La sauvegarde de l'historique des runs a échoué"
@@ -50,7 +51,7 @@ enum FileError: String, Error {
     case failedToImportTemplates           = "Echec de l'importation des templates depuis Bundle.Main vers 'Library'"
 }
 
-struct PersistenceManager {
+public struct PersistenceManager {
     
     // MARK: - Static Methods
     
@@ -82,7 +83,7 @@ struct PersistenceManager {
     /// Itérer une action `perform` sur tous les dossiers `utilisateur` du directory `Documents`
     /// - Parameter perform: action à réaliser sur chaque Folder
     /// - Throws: `FileError.failedToResolveDocuments`
-    static func forEachUserFolder(perform: (Folder) throws -> Void) throws {
+    public static func forEachUserFolder(perform: (Folder) throws -> Void) throws {
         /// rechercher le dossier 'Documents' de l'utilisateur
         guard let documentsFolder = Folder.documents else {
             customLog.log(level: .error,
@@ -239,8 +240,8 @@ struct PersistenceManager {
     ///   - folder: Folder actif dans lequel se trouve le Folder `CSV`
     ///   - forSimulationTitle: nom de la de la simulation
     /// - Returns: Folder dans lequel sont enregistrés les fichier `CSV`résultant d'une simulation
-    static func csvFolder(in folder          : Folder,
-                          forSimulationTitle : String) throws -> Folder {
+    public static func csvFolder(in folder          : Folder,
+                                 forSimulationTitle : String) throws -> Folder {
         return try Folder(path: folder.path + AppSettings.shared.csvPath(forSimulationTitle))
     }
     
@@ -250,8 +251,8 @@ struct PersistenceManager {
     ///   - folder: Folder actif dans lequel se trouve le Folder `image`
     ///   - forSimulationTitle: nom de la de la simulation
     /// - Returns: Folder dans lequel sont enregistrés les fichier `image`résultant d'une simulation
-    static func imageFolder(in folder          : Folder,
-                            forSimulationTitle : String) throws -> Folder {
+    public static func imageFolder(in folder          : Folder,
+                                   forSimulationTitle : String) throws -> Folder {
         return try Folder(path: folder.path + AppSettings.shared.imagePath(forSimulationTitle))
     }
     
@@ -259,7 +260,7 @@ struct PersistenceManager {
     /// vers le répertoire `Library/template`
     /// - Returns: le dossier 'template' si l'import a réussi, 'nil' sinon
     @discardableResult
-    static func importTemplatesFromApp() throws -> Folder {
+    public static func importTemplatesFromApp() throws -> Folder {
         guard let originFolder = Folder.application else {
             customLog.log(level: .fault,
                           "\(FileError.failedToResolveAppBundle.rawValue))")
@@ -314,10 +315,10 @@ struct PersistenceManager {
     ///   - simulationTitle: nom de ls simulation utilisé pour générer le nom du répertoire
     ///   - csvString: String au format CSV à enregistrer
     ///   - fileName: nom du fichier à créer
-    static func saveToCsvPath(to folder       : Folder,
-                              fileName        : String,
-                              simulationTitle : String,
-                              csvString       : String) throws {
+    public static func saveToCsvPath(to folder       : Folder,
+                                     fileName        : String,
+                                     simulationTitle : String,
+                                     csvString       : String) throws {
         #if DEBUG
 //        print(csvString)
         /// sauvegarder le fichier dans le répertoire Bundle.main
@@ -370,10 +371,10 @@ struct PersistenceManager {
         }
     }
     
-    static func saveToImagePath(to folder       : Folder,
-                                fileName        : String,
-                                simulationTitle : String,
-                                image           : NSUIImage) throws {
+    public static func saveToImagePath(to folder       : Folder,
+                                       fileName        : String,
+                                       simulationTitle : String,
+                                       image           : UIImage) throws {
         /// sauvegarder le fichier dans le fichier: data/Containers/Data/Application/xxx/Documents/Dossier en cours/simulationTitle/iamge/fileName
         do {
             // créer le fichier .csv dans le directory 'Documents/Dossier en cours/simulationTitle/csv/' de l'utilisateur

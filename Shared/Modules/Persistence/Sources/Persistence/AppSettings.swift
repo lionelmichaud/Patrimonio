@@ -8,19 +8,19 @@
 
 import Foundation
 
-struct AppSettings: Decodable {
+public struct AppSettings: Decodable {
     
     // MARK: - Singleton
     
-    static let shared = AppSettings()
+    public static let shared = AppSettings()
     
     // MARK: - Properties
 
     var templateDir     : String
     var imageDir        : String
     var tableDir        : String
-    var allPersonsLabel : String
-    var adultsLabel     : String
+    public var allPersonsLabel : String
+    public var adultsLabel     : String
 
     // MARK: - Static Methods
     

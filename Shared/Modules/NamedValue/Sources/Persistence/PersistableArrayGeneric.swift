@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Persistable
 import AppFoundation
 import FileAndFolder
 import Files

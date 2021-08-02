@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+import ModelEnvironment
+import Persistence
 
 struct SimulationView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -55,6 +57,7 @@ struct SimulationView: View {
 }
 
 struct SimulationView_Previews: PreviewProvider {
+    static var model      = Model(fromBundle: Bundle.main)
     static let dataStore  = Store()
     static var uiState    = UIState()
     static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromApp())
@@ -62,7 +65,8 @@ struct SimulationView_Previews: PreviewProvider {
     static var simulation = Simulation()
 
     static var previews: some View {
-        simulation.compute(nbOfYears      : 5,
+        simulation.compute(using          : model,
+                           nbOfYears      : 5,
                            nbOfRuns       : 1,
                            withFamily     : family,
                            withPatrimoine : patrimoine)

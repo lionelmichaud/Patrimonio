@@ -37,7 +37,7 @@ public struct RegimeAgircSituation: Codable {
     }
 }
 
-public struct RegimeAgirc: Codable {
+public class RegimeAgirc: Codable {
     
     // MARK: - Nested types
     
@@ -59,34 +59,28 @@ public struct RegimeAgirc: Codable {
         var plafondMajoEnfantNe   : Double // €
     }
     
-    struct Model: JsonCodableToBundleP, Versionable {
-        public static var defaultFileName : String = "RegimeAgircModel.json"
-
+    public struct Model: JsonCodableToBundleP, Versionable {
+        enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
+            case version, gridAvant62, gridApres62, valeurDuPoint, ageMinimum, majorationPourEnfant
+        }
+        
         public var version       : Version
         let gridAvant62          : [SliceAvantAgeLegal]
         let gridApres62          : [SliceApresAgeLegal]
-        let valeurDuPoint        : Double // 1.2714
-        let ageMinimum           : Int    // 57
+        var valeurDuPoint        : Double // 1.2714
+        var ageMinimum           : Int    // 57
         let majorationPourEnfant : MajorationPourEnfant
+        // dependencies to other Models
         var regimeGeneral        : RegimeGeneral!
+        var fiscal               : Fiscal.Model!
+        var pensionDevaluationRateProvider: PensionDevaluationRateProviderP!
     }
     
     // MARK: - Static Properties
     
     private static var simulationMode: SimulationModeEnum = .deterministic
-    // dependencies to other Models
-    private static var pensionDevaluationRateProvider: PensionDevaluationRateProviderProtocol!
-    static var fiscalModel: Fiscal.Model!
 
     // MARK: - Static Methods
-
-    public static func setPensionDevaluationRateProvider(_ provider : PensionDevaluationRateProviderProtocol) {
-        pensionDevaluationRateProvider = provider
-    }
-
-    public static func setFiscalModel(_ model: Fiscal.Model) {
-        fiscalModel = model
-    }
 
     /// Définir le mode de simulation à utiliser pour tous les calculs futurs
     /// - Parameter simulationMode: mode de simulation à utiliser
@@ -94,15 +88,63 @@ public struct RegimeAgirc: Codable {
         RegimeAgirc.simulationMode = simulationMode
     }
 
-    static var devaluationRate: Double { // %
-        pensionDevaluationRateProvider.pensionDevaluationRate(withMode: simulationMode)
+    // MARK: - Properties
+    
+    public var model: Model
+
+    // MARK: - Computed Properties
+
+    public var valeurDuPoint: Double {
+        get { model.valeurDuPoint }
+        set { model.valeurDuPoint = newValue }
     }
     
-    static var yearlyRevaluationRate: Double { // %
+    public var ageMinimum: Int {
+        get { model.ageMinimum }
+        set { model.ageMinimum = newValue }
+    }
+    
+    var devaluationRate: Double { // %
+        model.pensionDevaluationRateProvider.pensionDevaluationRate(withMode: RegimeAgirc.simulationMode)
+    }
+    
+    var yearlyRevaluationRate: Double { // %
         // on ne tient pas compte de l'inflation car les dépenses ne sont pas inflatées
         // donc les revenus non plus s'ils sont supposés progresser comme l'inflation
         // on ne tient donc compte que du delta par rapport à l'inflation
         -devaluationRate
+    }
+    
+    // MARK: - Initializer
+    
+    init(model: Model) {
+        self.model = model
+    }
+    
+    // MARK: - Methods
+    
+    public func setPensionDevaluationRateProvider(_ provider : PensionDevaluationRateProviderP) {
+        model.pensionDevaluationRateProvider = provider
+    }
+    
+    public func setFiscalModel(_ model: Fiscal.Model) {
+        self.model.fiscal = model
+    }
+    
+    func setRegimeGeneral(_ regimeGeneral: RegimeGeneral) {
+        model.regimeGeneral = regimeGeneral
+    }
+    
+    /// Encode l'objet dans un fichier stocké dans le Bundle 
+    func saveAsJSON(toFile file          : String,
+                    toBundle bundle      : Bundle,
+                    dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
+                    keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) {
+        
+        model.saveAsJSON(toFile               : file,
+                           toBundle             : bundle,
+                           dateEncodingStrategy : dateEncodingStrategy,
+                           keyEncodingStrategy  :  keyEncodingStrategy)
     }
     
     /// Coefficient de réévaluation de la pension en prenant comme base 1.0
@@ -116,45 +158,9 @@ public struct RegimeAgirc: Codable {
     ///   On ne tient pas compte de l'inflation car les dépenses ne sont pas inflatées
     ///   donc les revenus non plus s'ils sont supposés progresser comme l'inflation
     ///   on ne tient donc compte que du delta par rapport à l'inflation
-    static func revaluationCoef(during year         : Int,
-                                dateOfPensionLiquid : Date) -> Double { // %
+    func revaluationCoef(during year         : Int,
+                         dateOfPensionLiquid : Date) -> Double { // %
         pow(1.0 + yearlyRevaluationRate/100.0, Double(year - dateOfPensionLiquid.year))
-    }
-    
-    // MARK: - Properties
-    
-    private var model: Model
-    
-    public var valeurDuPoint : Double {
-        model.valeurDuPoint
-    }
-    
-    public var ageMinimum    : Int {
-        model.ageMinimum
-    }
-    
-    // MARK: - Initializer
-    
-    init(model: Model) {
-        self.model = model
-    }
-    
-    // MARK: - Methods
-    
-    mutating func setRegimeGeneral(_ regimeGeneral: RegimeGeneral) {
-        model.regimeGeneral = regimeGeneral
-    }
-    
-    /// Encode l'objet dans un fichier stocké dans le Bundle de contenant la définition de la classe aClass
-    func saveToBundle(toFile file          : String,
-                      toBundle bundle      : Bundle,
-                      dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,
-                      keyEncodingStrategy  : JSONEncoder.KeyEncodingStrategy) {
-        
-        model.saveAsJSON(toFile               : file,
-                           toBundle             : bundle,
-                           dateEncodingStrategy : dateEncodingStrategy,
-                           keyEncodingStrategy  :  keyEncodingStrategy)
     }
     
     /// Age minimum pour demander la liquidation de pension Agirc

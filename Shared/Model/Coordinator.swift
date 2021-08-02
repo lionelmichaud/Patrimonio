@@ -10,6 +10,7 @@ import Foundation
 import FiscalModel
 import RetirementModel
 import UnemployementModel
+import EconomyModel
 import SocioEconomyModel
 
 /// - Warning: Attention on fait des copies des Singletons ce qui suppose que ceux-ci
@@ -21,20 +22,5 @@ struct Coordinator {
     /// Coordonne les diffférents singletons du modèle en terme de dépendance
     /// - Warning: Doit être appelé avant l'utilisation du Modèle
     init() {
-        // récupérer une copie du singleton
-        let fiscalModel = Fiscal.model
-        
-        // l'injecter dans les singletons qui en dépendent
-        LayoffCompensation.setFiscalModel(fiscalModel)
-        UnemploymentCompensation.setFiscalModel(fiscalModel)
-        RegimeAgirc.setFiscalModel(fiscalModel)
-        RegimeGeneral.setFiscalModel(fiscalModel)
-        
-        // récupérer une copie du singleton
-        let socioEconomyModel = SocioEconomy.model
-        
-        // l'injecter dans les singletons qui en dépendent
-        RegimeAgirc.setPensionDevaluationRateProvider(socioEconomyModel)
-        RegimeGeneral.setSocioEconomyModel(socioEconomyModel)
     }
 }

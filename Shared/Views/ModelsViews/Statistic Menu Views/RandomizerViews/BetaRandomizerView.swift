@@ -10,6 +10,7 @@ import SwiftUI
 import Statistics
 import EconomyModel
 import Charts // https://github.com/danielgindi/Charts.git
+import ModelEnvironment
 
 struct BetaRandomizerView: UIViewRepresentable {
     var randomizer: ModelRandomizer<BetaRandomGenerator>
@@ -127,7 +128,9 @@ struct BetaRandomizerView: UIViewRepresentable {
 }
 
 struct BetaRandomizerView_Previews: PreviewProvider {
+    static var model      = Model(fromBundle: Bundle.main)
+
     static var previews: some View {
-        BetaRandomizerView(randomizer: Economy.model.randomizers.inflation)
+        BetaRandomizerView(randomizer: model.economyModel.randomizers.inflation)
     }
 }

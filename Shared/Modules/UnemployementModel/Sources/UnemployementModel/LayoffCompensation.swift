@@ -17,7 +17,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 // https://www.juritravail.com/Actualite/respecter-salaire-minimum/Id/221441
 // https://www.service-public.fr/particuliers/vosdroits/F408
 // https://www.service-public.fr/particuliers/vosdroits/F987
-public struct LayoffCompensation: Codable {
+public class LayoffCompensation: Codable {
     
     // MARK: - Nested types
 
@@ -48,30 +48,31 @@ public struct LayoffCompensation: Codable {
     public struct Model: JsonCodableToBundleP, Versionable {
         public static var defaultFileName : String = "LayoffCompensationModel.json"
         
-        public var version           : Version
+        public var version    : Version
         let legalGrid         : [SliceBase]
         let metallurgieGrid   : [SliceBase]
         let correctionAgeGrid : [SliceCorrection]
         let irppDiscount      : IrppDiscount
+        // dependencies to other Models
+        var fiscal            : Fiscal.Model!
     }
     
-    // MARK: - Static Properties
-
-    private static var fiscalModel: Fiscal.Model!
-
-    // MARK: - Static Methods
-    
-    /// Utiliser pour les Tets Unitaires. Permet d'injecter un modèle fiscal lu en fichier de test
-    public static func setFiscalModel(_ model: Fiscal.Model) {
-        fiscalModel = model
-    }
-
     // MARK: - Properties
 
     public var model: Model
     
+    // MARK: - Initializer
+    
+    init(model: Model) {
+        self.model = model
+    }
+    
     // MARK: - Methods
 
+    public func setFiscalModel(_ model: Fiscal.Model) {
+        self.model.fiscal = model
+    }
+    
     /// Calcul du nombre de mois de salaire de l'indemnité de licenciement pour une grille donnée
     /// - Parameters:
     ///   - nbYearsSeniority: nombre d'année d'ancienneté au moment du licenciement
@@ -208,7 +209,7 @@ public struct LayoffCompensation: Codable {
         taxable = brutReel - irppDiscount
         
         // indemnité nette de charges sociales
-        let net = LayoffCompensation.fiscalModel.layOffTaxes.net(
+        let net = model.fiscal.layOffTaxes.net(
             compensationConventional : brutConventionnel,
             compensationBrut         : brutReel,
             compensationTaxable      : &taxable,

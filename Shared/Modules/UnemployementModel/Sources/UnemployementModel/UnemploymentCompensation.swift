@@ -22,7 +22,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 // https://www.cadremploi.fr/editorial/conseils/droit-du-travail/detail/article/ce-que-les-cadres-doivent-savoir-sur-la-nouvelle-convention-dassurance-chomage0.html
 // https://www.cadremploi.fr/editorial/conseils/droit-du-travail/detail/article/allocations-chomage-combien-toucheriez-vous.html
 
-public struct UnemploymentCompensation: Codable {
+public class UnemploymentCompensation: Codable {
     
     // MARK: - Nested types
 
@@ -57,24 +57,26 @@ public struct UnemploymentCompensation: Codable {
         let durationGrid : [DurationSlice]
         let delayModel   : DelayModel
         let amountModel  : AmountModel
+        // dependencies to other Models
+        var fiscal       : Fiscal.Model!
     }
     
-    // MARK: - Static Properties
-
-    private static var fiscalModel: Fiscal.Model!
-
+    // MARK: - Initializer
+    
+    init(model: Model) {
+        self.model = model
+    }
+    
     // MARK: - Properties
 
     var model: Model
     
-    // MARK: - Static Methods
-
-    public static func setFiscalModel(_ model: Fiscal.Model) {
-        fiscalModel = model
-    }
-
     // MARK: - Methods
 
+    public func setFiscalModel(_ model: Fiscal.Model) {
+        self.model.fiscal = model
+    }
+    
     /// Durée d'indemnisation en mois
     /// - Parameter age: age au moment du licenciement
     /// - Returns: durée d'indemnisation en mois
@@ -171,9 +173,8 @@ public struct UnemploymentCompensation: Codable {
                                   high : plafond)
         
         // nette de charges sociales
-        let net = try! UnemploymentCompensation.fiscalModel.allocationChomageTaxes.net(
-            brut : brut,
-            SJR  : SJR)
+        let net = try! model.fiscal.allocationChomageTaxes.net(brut : brut,
+                                                               SJR  : SJR)
         return (brut : brut,
                 net  : net)
     }

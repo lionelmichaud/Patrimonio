@@ -8,6 +8,7 @@
 
 import Foundation
 import NamedValue
+import Persistence
 
 class UIState: ObservableObject {
     enum Tab: Int, Hashable {

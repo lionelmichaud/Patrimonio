@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Files
+import Persistence
 
 struct AppVersionView: View {
     var body: some View {

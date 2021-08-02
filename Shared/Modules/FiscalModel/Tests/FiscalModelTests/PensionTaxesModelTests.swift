@@ -17,7 +17,8 @@ class PensionTaxesModelTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        let model = PensionTaxesModel.Model(fromBundle: Bundle.module)
+        let model = PensionTaxesModel.Model(fromFile   : PensionTaxesModel.Model.defaultFileName,
+                                            fromBundle : Bundle.module)
         PensionTaxesModelTests.pensionTaxes = PensionTaxesModel(model: model)
     }
     

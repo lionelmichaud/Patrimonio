@@ -12,7 +12,10 @@ import Foundation
 
 public protocol JsonDecodableFromBundleP: Decodable {
     
-    /// Lit le modèle dans un fichier JSON du Bundle
+    /// Charger le modèle à partir d'un fichier JSON contenu dans le fichier `file` du bundle `Bundle`
+    /// - Parameters:
+    ///   - file: nom du fichier
+    ///   - bundle: le bundle dans lequel chercher le fichier nommé `file`
     init(fromFile file        : String,
          fromBundle bundle    : Bundle,
          dateDecodingStrategy : JSONDecoder.DateDecodingStrategy,
@@ -36,7 +39,10 @@ public extension JsonDecodableFromBundleP {
 
 public protocol JsonEncodableToBundleP: Encodable {
     
-    /// Encode l'objet dans un fichier stocké dans le Bundle Main de l'Application
+    /// Enregistrer le modèle dans un fichier JSON contenu dans le fichier `file` du bundle `Bundle`
+    /// - Parameters:
+    ///   - file: nom du fichier
+    ///   - bundle: le bundle dans lequel chercher le fichier nommé `file`
     func saveAsJSON(toFile file          : String,
                     toBundle bundle      : Bundle,
                     dateEncodingStrategy : JSONEncoder.DateEncodingStrategy,

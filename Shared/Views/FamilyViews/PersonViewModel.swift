@@ -15,7 +15,7 @@ class PersonViewModel: ObservableObject {
     @Published var sexe         = Sexe.male
     @Published var seniority    = Seniority.enfant
     @Published var birthDate    = Date()
-    @Published var deathAge     = 81
+    @Published var deathAge     = 0
 
     // MARK: - Initializers of ViewModel from Model
 
@@ -25,7 +25,7 @@ class PersonViewModel: ObservableObject {
 
     // MARK: - Methods
 
-    func updateFromViewModel(member: Person) {
+    func update(member: Person) {
         member.ageOfDeath = deathAge
     }
 

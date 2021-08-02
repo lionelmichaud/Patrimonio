@@ -9,6 +9,7 @@
 import Foundation
 import AppFoundation
 import UnemployementModel
+import ModelEnvironment
 
 // MARK: - EXTENSION: Chômage
 extension Adult {
@@ -39,7 +40,10 @@ extension Adult {
                 return Unemployment.canReceiveAllocation(for: causeOfRetirement)
         }
     } // computed
-    var layoffCompensationBrutLegal           : Double? { // computed
+    
+    // MARK: - Methods
+    
+    final func layoffCompensationBrutLegal(using model: Model) -> Double? { // computed
         guard hasUnemployementAllocationPeriod else {
             return nil
         }
@@ -51,14 +55,15 @@ extension Adult {
                 let nbYearsSeniority = numberOf(.year,
                                                 from : fromDate,
                                                 to   : dateOfRetirement).year!
-                return Unemployment.model.indemniteLicenciement.layoffCompensationLegal(
+                return model.unemploymentModel.indemniteLicenciement.layoffCompensationLegal(
                     yearlyWorkIncomeBrut : workBrutIncome,
                     nbYearsSeniority     : nbYearsSeniority)
             default:
                 fatalError()
         }
-    } // computed
-    var layoffCompensationBrutConvention      : Double? { // computed
+    }
+    
+    final func layoffCompensationBrutConvention(using model: Model) -> Double? { // computed
         guard hasUnemployementAllocationPeriod else {
             return nil
         }
@@ -71,7 +76,7 @@ extension Adult {
                                                 from : fromDate,
                                                 to   : dateOfRetirement).year!
                 // base: salaire brut
-                return Unemployment.model.indemniteLicenciement.layoffCompensation(
+                return model.unemploymentModel.indemniteLicenciement.layoffCompensation(
                     actualCompensationBrut : nil,
                     causeOfRetirement      : causeOfRetirement,
                     yearlyWorkIncomeBrut   : workBrutIncome,
@@ -80,8 +85,9 @@ extension Adult {
             default:
                 fatalError()
         }
-    } // computed
-    var layoffCompensation                    : (nbMonth: Double, brut: Double, net: Double, taxable: Double)? { // computed
+    }
+    
+    final func layoffCompensation(using model: Model) -> (nbMonth: Double, brut: Double, net: Double, taxable: Double)? { // computed
         guard hasUnemployementAllocationPeriod else {
             return nil
         }
@@ -94,7 +100,7 @@ extension Adult {
                                                 from : fromDate,
                                                 to   : dateOfRetirement).year!
                 // base: salaire brut
-                return Unemployment.model.indemniteLicenciement.layoffCompensation(
+                return model.unemploymentModel.indemniteLicenciement.layoffCompensation(
                     actualCompensationBrut : layoffCompensationBonified,
                     causeOfRetirement      : causeOfRetirement,
                     yearlyWorkIncomeBrut   : workBrutIncome,
@@ -103,102 +109,111 @@ extension Adult {
             default:
                 fatalError()
         }
-    } // computed
-    var unemployementAllocationDiffere        : Int? { // en jours
+    }
+    
+    final func unemployementAllocationDiffere(using model: Model) -> Int? { // en jours
         guard hasUnemployementAllocationPeriod else {
             return nil
         }
-        guard let compensationSupralegal = layoffCompensation?.brut - layoffCompensationBrutLegal else {
+        guard let compensationSupralegal =
+                layoffCompensation(using: model)?.brut - layoffCompensationBrutLegal(using: model) else {
             return nil
         }
         //Swift.print("supralégal = \(compensationSupralegal)")
-        return Unemployment.model.allocationChomage.differeSpecifique(
+        return model.unemploymentModel.allocationChomage.differeSpecifique(
             compensationSupralegal : compensationSupralegal,
             causeOfUnemployement   : causeOfRetirement)
-    } // computed
-    var unemployementAllocationDuration       : Int? { // en mois
+    }
+    
+    final func unemployementAllocationDuration(using model: Model) -> Int? { // en mois
         guard hasUnemployementAllocationPeriod else {
             return nil
         }
-        return Unemployment.model.allocationChomage.durationInMonth(age: age(atDate: dateOfRetirement).year!)
-    } // computed
-    var dateOfStartOfUnemployementAllocation  : Date? { // computed
+        return model.unemploymentModel.allocationChomage.durationInMonth(age: age(atDate: dateOfRetirement).year!)
+    }
+    
+    final func dateOfStartOfUnemployementAllocation(using model: Model) -> Date? { // computed
         guard hasUnemployementAllocationPeriod else {
             return nil
         }
-        return unemployementAllocationDiffere!.days.from(dateOfRetirement)!
-    } // computed
-    var dateOfStartOfAllocationReduction      : Date? { // computed
+        return unemployementAllocationDiffere(using: model)!.days.from(dateOfRetirement)!
+    }
+    
+    final func dateOfStartOfAllocationReduction(using model: Model) -> Date? { // computed
         guard hasUnemployementAllocationPeriod else {
             return nil
         }
-        guard let reductionAfter = Unemployment.model.allocationChomage.reductionAfter(
+        guard let reductionAfter = model.unemploymentModel.allocationChomage.reductionAfter(
                 age: age(atDate: dateOfRetirement).year!,
                 SJR: SJR) else {
             return nil
         }
-        guard let dateOfStart = dateOfStartOfUnemployementAllocation else {
+        guard let dateOfStart = dateOfStartOfUnemployementAllocation(using: model) else {
             return nil
         }
         return reductionAfter.months.from(dateOfStart)!
-    } // computed
-    var dateOfEndOfUnemployementAllocation    : Date? { // computed
+    }
+    
+    final func dateOfEndOfUnemployementAllocation(using model: Model) -> Date? { // computed
         guard hasUnemployementAllocationPeriod else {
             return nil
         }
-        guard let dateOfStart = dateOfStartOfUnemployementAllocation else {
+        guard let dateOfStart = dateOfStartOfUnemployementAllocation(using: model) else {
             return nil
         }
-        return unemployementAllocationDuration!.months.from(dateOfStart)!
-    } // computed
-    var unemployementAllocation               : (brut: Double, net: Double)? { // computed
+        return unemployementAllocationDuration(using: model)!.months.from(dateOfStart)!
+    }
+    
+    final func unemployementAllocation(using model: Model) -> (brut: Double, net: Double)? { // computed
         guard hasUnemployementAllocationPeriod else {
             return nil
         }
-        let dayly = Unemployment.model.allocationChomage.daylyAllocBeforeReduction(SJR: SJR)
+        let dayly = model.unemploymentModel.allocationChomage.daylyAllocBeforeReduction(SJR: SJR)
         return (brut: dayly.brut * 365, net: dayly.net * 365)
-    } // computed
-    var unemployementReducedAllocation        : (brut: Double, net: Double)? { // computed
-        guard let alloc = unemployementAllocation else {
+    }
+    
+    final func unemployementReducedAllocation(using model: Model) -> (brut: Double, net: Double)? { // computed
+        guard let alloc = unemployementAllocation(using: model) else {
             return nil
         }
-        let reduc = unemployementAllocationReduction!
+        let reduc = unemployementAllocationReduction(using: model)!
         return (brut: alloc.brut * (1 - reduc.percentReduc / 100),
                 net : alloc.net  * (1 - reduc.percentReduc / 100))
-    } // computed
-    var unemployementTotalAllocation          : (brut: Double, net: Double)? { // computed
+    }
+    
+    final func unemployementTotalAllocation(using model: Model) -> (brut: Double, net: Double)? { // computed
         guard hasUnemployementAllocationPeriod else {
             return nil
         }
-        let totalDuration = unemployementAllocationDuration!
-        let alloc         = unemployementAllocation!
-        let allocReduite  = unemployementReducedAllocation!
-        if let afterMonth = unemployementAllocationReduction!.afterMonth {
+        let totalDuration = unemployementAllocationDuration(using: model)!
+        let alloc         = unemployementAllocation(using: model)!
+        let allocReduite  = unemployementReducedAllocation(using: model)!
+        if let afterMonth = unemployementAllocationReduction(using: model)!.afterMonth {
             return (brut: alloc.brut / 12 * afterMonth.double() + allocReduite.brut / 12 * (totalDuration - afterMonth).double(),
                     net : alloc.net  / 12 * afterMonth.double() + allocReduite.net  / 12 * (totalDuration - afterMonth).double())
         } else {
             return (brut: alloc.brut / 12 * totalDuration.double(),
                     net : alloc.net  / 12 * totalDuration.double())
         }
-    } // computed
-    var unemployementAllocationReduction      : (percentReduc: Double, afterMonth: Int?)? { // computed
+    }
+    
+    final func unemployementAllocationReduction(using model: Model) -> (percentReduc: Double, afterMonth: Int?)? { // computed
         guard hasUnemployementAllocationPeriod else {
             return nil
         }
-        return Unemployment.model.allocationChomage.reduction(age        : age(atDate: dateOfRetirement).year!,
-                                                              daylyAlloc : unemployementAllocation!.brut / 365)
-    } // computed
-
-    // MARK: - Methods
+        return model.unemploymentModel.allocationChomage.reduction(
+            age        : age(atDate: dateOfRetirement).year!,
+            daylyAlloc : unemployementAllocation(using: model)!.brut / 365)
+    }
 
     /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de cessation d'activité et égale ou inférieure à l'année de fin de droit d'allocation chomage
     /// - Parameter year: année
-    func isReceivingUnemployementAllocation(during year: Int) -> Bool {
+    final func isReceivingUnemployementAllocation(during year: Int, using model: Model) -> Bool {
         guard isRetired(during: year) else {
             return false
         }
-        guard let startDate = dateOfStartOfUnemployementAllocation,
-              let endDate   = dateOfEndOfUnemployementAllocation else {
+        guard let startDate = dateOfStartOfUnemployementAllocation(using: model),
+              let endDate   = dateOfEndOfUnemployementAllocation(using: model) else {
             return false
         }
         return (startDate.year...endDate.year).contains(year)
@@ -207,18 +222,18 @@ extension Adult {
     /// Allocation chômage perçue dans l'année
     /// - Parameter year: année
     /// - Returns: Allocation chômage perçue dans l'année brute, nette de charges sociales, taxable à l'IRPP
-    func unemployementAllocation(during year: Int) -> BrutNetTaxable {
-        guard isReceivingUnemployementAllocation(during: year) else {
+    final func unemployementAllocation(during year: Int, using model: Model) -> BrutNetTaxable {
+        guard isReceivingUnemployementAllocation(during: year, using: model) else {
             return BrutNetTaxable(brut: 0, net: 0, taxable: 0)
         }
         let firstYearDay = firstDayOf(year : year)
         let lastYearDay  = lastDayOf(year  : year)
-        let alloc        = unemployementAllocation!
-        let dateDebAlloc = dateOfStartOfUnemployementAllocation!
-        let dateFinAlloc = dateOfEndOfUnemployementAllocation!
-        if let dateReducAlloc = dateOfStartOfAllocationReduction {
+        let alloc        = unemployementAllocation(using: model)!
+        let dateDebAlloc = dateOfStartOfUnemployementAllocation(using: model)!
+        let dateFinAlloc = dateOfEndOfUnemployementAllocation(using: model)!
+        if let dateReducAlloc = dateOfStartOfAllocationReduction(using: model) {
             // reduction d'allocation après un certaine date
-            let allocReduite  = unemployementReducedAllocation!
+            let allocReduite  = unemployementReducedAllocation(using: model)!
             // intersection de l'année avec la période taux plein
             var debut   = max(dateDebAlloc, firstYearDay)
             var fin     = min(dateReducAlloc, lastYearDay)
@@ -262,7 +277,7 @@ extension Adult {
     /// - Parameter year: année
     /// - Returns: Indemnité de licenciement perçue dans l'année brute, nette de charges sociales, taxable à l'IRPP
     /// - Note: L'indemnité de licenciement est due m^me si le licencié est décédé pendant le préavis
-    func layoffCompensation(during year: Int) -> BrutNetTaxable {
+    func layoffCompensation(during year: Int, using model: Model) -> BrutNetTaxable {
         guard year == dateOfRetirement.year else {
             return BrutNetTaxable(brut: 0, net: 0, taxable: 0)
         }
@@ -272,7 +287,7 @@ extension Adult {
             return BrutNetTaxable(brut: 0, net: 0, taxable: 0)
         }
         // la personne était encore vivante l'année précédent son licenciement
-        if let layoffCompensation = layoffCompensation {
+        if let layoffCompensation = layoffCompensation(using: model) {
             return BrutNetTaxable(brut    : layoffCompensation.brut,
                                   net     : layoffCompensation.net,
                                   taxable : layoffCompensation.taxable)

@@ -8,6 +8,7 @@
 
 import SwiftUI
 import StepperView
+import ModelEnvironment
 
 struct PersonLifeLineView: View {
    
@@ -20,7 +21,7 @@ struct PersonLifeLineView: View {
         let radius   : CGFloat = 45
         let fontSize : CGFloat = 14
 
-        init(from member: Person) {
+        init(from member: Person, using model: Model) {
             personName = member.displayName
             steps.append(TextView(text:member.birthDate.stringShortDayMonth + ": Naissance", font: .system(size: fontSize, weight: .semibold)).padding(.leading).eraseToAnyView())
             indicators.append(StepperIndicationType.custom(NumberedCircleView(text: String(member.birthDate.year), width: radius).eraseToAnyView()))
@@ -36,19 +37,19 @@ struct PersonLifeLineView: View {
                     pitStops.append(PitStopStep(view: TextView(text:"Aucun revenu").eraseToAnyView(), lineOptions: PitStopLineOptions.custom(1, Colors.teal.rawValue)))
                     // période d'allocation chomage éventuelle
                     if adult.hasUnemployementAllocationPeriod {
-                        if let date = adult.dateOfStartOfUnemployementAllocation {
+                        if let date = adult.dateOfStartOfUnemployementAllocation(using: model) {
                             steps.append(TextView(text: date.stringShortDayMonth + ": Début de la période d'allocation chômage à l'age de \(adult.age(atDate: date).year!) ans \(adult.age(atDate: date).month!) mois",
                                                   font: .system(size: fontSize, weight: .semibold)).padding(.leading).eraseToAnyView())
                             indicators.append(StepperIndicationType.custom(NumberedCircleView(text: String(date.year), width: radius).eraseToAnyView()))
                             pitStops.append(PitStopStep(view: TextView(text:"Allocation chômage").eraseToAnyView(), lineOptions: PitStopLineOptions.custom(1, Colors.teal.rawValue)))
                         }
-                        if let date = adult.dateOfStartOfAllocationReduction {
+                        if let date = adult.dateOfStartOfAllocationReduction(using: model) {
                             steps.append(TextView(text: date.stringShortDayMonth + ": Début de réduction de l'allocation chômage à l'age de \(adult.age(atDate: date).year!) ans \(adult.age(atDate: date).month!) mois",
                                                   font: .system(size: fontSize, weight: .semibold)).padding(.leading).eraseToAnyView())
                             indicators.append(StepperIndicationType.custom(NumberedCircleView(text: String(date.year), width: radius).eraseToAnyView()))
                             pitStops.append(PitStopStep(view: TextView(text:"Allocation chômage").eraseToAnyView(), lineOptions: PitStopLineOptions.custom(1, Colors.teal.rawValue)))
                         }
-                        if let date = adult.dateOfEndOfUnemployementAllocation {
+                        if let date = adult.dateOfEndOfUnemployementAllocation(using: model) {
                             steps.append(TextView(text: date.stringShortDayMonth + ": Fin de période d'allocation chômage à l'age de \(adult.age(atDate: date).year!) ans \(adult.age(atDate: date).month!) mois",
                                                   font: .system(size: fontSize, weight: .semibold)).padding(.leading).eraseToAnyView())
                             indicators.append(StepperIndicationType.custom(NumberedCircleView(text: String(date.year), width: radius).eraseToAnyView()))
@@ -94,7 +95,8 @@ struct PersonLifeLineView: View {
         }
     }
     
-    @StateObject var viewModel: ViewModel
+    @EnvironmentObject private var model : Model
+    @StateObject private var viewModel   : ViewModel
     
     var body: some View {
         VStack(spacing: 5) {
@@ -116,18 +118,20 @@ struct PersonLifeLineView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
-    init(from member: Person) {
+    init(from member: Person, using model: Model) {
         // initialize ViewModel
-        _viewModel = StateObject(wrappedValue: ViewModel(from: member))
+        _viewModel = StateObject(wrappedValue: ViewModel(from: member, using: model))
     }
 }
 
 struct PersonLifeLineView_Previews: PreviewProvider {
     static var family  = Family()
+    static var model   = Model(fromBundle : Bundle.main)
     static var aMember = family.members.items.first!
     
     static var previews: some View {
-        PersonLifeLineView(from: aMember)
+        PersonLifeLineView(from: aMember, using: model)
             .environmentObject(aMember)
+            .environmentObject(model)
     }
 }

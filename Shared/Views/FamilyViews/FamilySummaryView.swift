@@ -7,9 +7,12 @@
 //
 
 import SwiftUI
+import ModelEnvironment
+import Persistence
 
 struct FamilySummaryView: View {
     @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var simulation : Simulation
@@ -23,7 +26,8 @@ struct FamilySummaryView: View {
                                           withYear      : Date.now.year,
                                           withFamily    : self.family,
                                           withPatrimoine: self.patrimoine,
-                                          taxableIrppRevenueDelayedFromLastyear : 0)
+                                          taxableIrppRevenueDelayedFromLastyear : 0,
+                                          using         : model)
         patrimoine.restoreState()
     }
     
@@ -155,6 +159,7 @@ struct SciSummarySection: View {
 
 struct FamilySummaryView_Previews: PreviewProvider {
     static let dataStore  = Store()
+    static var model      = Model(fromBundle: Bundle.main)
     static var family     = Family()
     static var patrimoine = Patrimoin()
     static var simulation = Simulation()
@@ -162,6 +167,7 @@ struct FamilySummaryView_Previews: PreviewProvider {
     static var previews: some View {
         FamilySummaryView()
             .environmentObject(dataStore)
+            .environmentObject(model)
             .environmentObject(family)
             .environmentObject(patrimoine)
             .environmentObject(simulation)

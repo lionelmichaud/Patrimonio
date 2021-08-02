@@ -3,6 +3,7 @@ import Statistics
 import EconomyModel
 import SocioEconomyModel
 import NamedValue
+import Persistence
 
 // MARK: - BalanceSheetArray: Table des Bilans annuels
 

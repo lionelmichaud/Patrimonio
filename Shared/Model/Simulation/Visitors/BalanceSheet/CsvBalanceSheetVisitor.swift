@@ -10,6 +10,8 @@ import os
 import NamedValue
 import EconomyModel
 import Statistics
+import ModelEnvironment
+import Persistence
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CsvBalanceSheetTableVisitor")
 
@@ -24,11 +26,14 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 /// executing visitor's methods over various objects of the structure.
 class CsvBalanceSheetTableVisitor: BalanceSheetCsvVisitorP {
 
-    private var table  = ""
-    private let mode: SimulationModeEnum
+    private var table = ""
+    private let mode  : SimulationModeEnum
+    private let model : Model
 
-    internal init(withMode mode: SimulationModeEnum) {
-        self.mode = mode
+    internal init(using model  : Model,
+                  withMode mode: SimulationModeEnum) {
+        self.mode  = mode
+        self.model = model
     }
 
     func buildCsv(element: ValuedLiabilities) {
@@ -77,9 +82,9 @@ class CsvBalanceSheetTableVisitor: BalanceSheetCsvVisitorP {
         }
 
         table.append("\(element.year); ")
-        table.append("\(Economy.model.randomizers.inflation.value(withMode: mode).percentString(digit: 1)); ")
-        table.append("\(Economy.model.rates(in: element.year, withMode: mode, simulateVolatility: UserSettings.shared.simulateVolatility).securedRate.percentString(digit: 1)); ")
-        table.append("\(Economy.model.rates(in: element.year, withMode: mode, simulateVolatility: UserSettings.shared.simulateVolatility).stockRate.percentString(digit: 1)); ")
+        table.append("\(model.economyModel.randomizers.inflation.value(withMode: mode).percentString(digit: 1)); ")
+        table.append("\(model.economyModel.rates(in: element.year, withMode: mode, simulateVolatility: UserSettings.shared.simulateVolatility).securedRate.percentString(digit: 1)); ")
+        table.append("\(model.economyModel.rates(in: element.year, withMode: mode, simulateVolatility: UserSettings.shared.simulateVolatility).stockRate.percentString(digit: 1)); ")
 
         // actifs
         visitAssets()

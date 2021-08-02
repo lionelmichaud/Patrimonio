@@ -8,6 +8,7 @@
 
 import SwiftUI
 import RetirementModel
+import ModelEnvironment
 
 // MARK: - Saisie pension retraite
 
@@ -66,6 +67,7 @@ struct RetirementEditView: View {
 // MARK: - Saisie de la situation - Régime complémentaire
 
 struct RegimeAgircEditView: View {
+    @EnvironmentObject private var model: Model
     @ObservedObject var personViewModel : PersonViewModel
     @ObservedObject var adultViewModel  : AdultViewModel
     
@@ -73,7 +75,7 @@ struct RegimeAgircEditView: View {
         Section(header: Text("RETRAITE - Régime complémentaire")) {
             HStack {
                 Stepper(value: $adultViewModel.ageAgircPension,
-                        in: Retirement.model.regimeAgirc.ageMinimum ... Retirement.model.regimeGeneral.ageTauxPleinLegal(birthYear: personViewModel.birthDate.year)!) {
+                        in: model.retirementModel.regimeAgirc.ageMinimum ... model.retirementModel.regimeGeneral.ageTauxPleinLegal(birthYear: personViewModel.birthDate.year)!) {
                     HStack {
                         Text("Age de liquidation")
                         Spacer()
@@ -108,6 +110,7 @@ struct RegimeAgircSituationEditView : View {
 // MARK: - Saisie de la situation - Régime général
 
 struct RegimeGeneralEditView: View {
+    @EnvironmentObject private var model: Model
     @ObservedObject var personViewModel : PersonViewModel
     @ObservedObject var adultViewModel  : AdultViewModel
     
@@ -116,7 +119,7 @@ struct RegimeGeneralEditView: View {
             // régime complémentaire
             HStack {
                 Stepper(value: $adultViewModel.agePension,
-                        in: Retirement.model.regimeGeneral.ageMinimumLegal ... Retirement.model.regimeGeneral.ageTauxPleinLegal(birthYear: personViewModel.birthDate.year)!) {
+                        in: model.retirementModel.regimeGeneral.ageMinimumLegal ... model.retirementModel.regimeGeneral.ageTauxPleinLegal(birthYear: personViewModel.birthDate.year)!) {
                     HStack {
                         Text("Age de liquidation")
                         Spacer()
@@ -149,9 +152,13 @@ struct RegimeGeneralSituationEditView : View {
 }
 
 struct RetirementEditView_Previews: PreviewProvider {
+    static var model = Model(fromBundle: Bundle.main)
+
     static var previews: some View {
         Form {
-            RetirementEditView(personViewModel: PersonViewModel(), adultViewModel: AdultViewModel())
+            RetirementEditView(personViewModel : PersonViewModel(),
+                               adultViewModel  : AdultViewModel())
+                .environmentObject(model)
         }
     }
 }

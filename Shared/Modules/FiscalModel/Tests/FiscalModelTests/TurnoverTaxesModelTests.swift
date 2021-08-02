@@ -16,7 +16,8 @@ class TurnoverTaxesModelTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        let model = TurnoverTaxesModel.Model(fromBundle: Bundle.module)
+        let model = TurnoverTaxesModel.Model(fromFile   : TurnoverTaxesModel.Model.defaultFileName,
+                                             fromBundle : Bundle.module)
         TurnoverTaxesModelTests.turnoverTaxes = TurnoverTaxesModel(model: model)
     }
     

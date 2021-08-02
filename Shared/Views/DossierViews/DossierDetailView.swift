@@ -6,11 +6,17 @@
 //
 
 import SwiftUI
+import FiscalModel
+import ModelEnvironment
+import Persistence
 
 struct DossierDetailView: View {
     @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var simulation : Simulation
     var dossier: Dossier
     @State private var alertItem: AlertItem?
     @State private var showingSheet = false
@@ -49,8 +55,8 @@ struct DossierDetailView: View {
                 .environmentObject(self.dataStore)
         }
         .toolbar {
-            /// Bouton: Charger
             ToolbarItem(placement: .primaryAction) {
+                /// Bouton: Charger
                 Button(
                     action : activate,
                     label  : {
@@ -69,21 +75,12 @@ struct DossierDetailView: View {
                         }
                     })
                     .capsuleButtonStyle()
-                    .disabled(!activable())
+                    .disabled(!activable)
             }
             /// Bouton: Sauvegarder
             ToolbarItem(placement: .automatic) {
-                Button(
-                    action : { save(dossier) },
-                    label  : {
-                        HStack {
-                            Image(systemName: "externaldrive.fill")
-                                .imageScale(.large)
-                            Text("Enregistrer")
-                        }
-                    })
-                    .capsuleButtonStyle()
-                    .disabled(!savable())
+                SaveToDiskButton { save(dossier) }
+                    .disabled(!savable)
             }
             /// Bouton: Dupliquer
             ToolbarItem(placement: .automatic) {
@@ -120,16 +117,33 @@ struct DossierDetailView: View {
     }
 
     /// True si le dossier est inactif ou s'il est actif et à été modifié
-    private func activable() -> Bool {
-        !dossier.isActive || savable()
+    private var activable: Bool {
+        !dossier.isActive || savable
+    }
+    
+    /// True si le dossier est actif et a été modifié
+    private var savable: Bool {
+        dossier.isActive &&
+            (family.isModified || patrimoine.isModified || model.isModified)
     }
     
     /// si le dossier est déjà actif et a été modifié alors prévenir que les modif vont être écrasées
     private func activate() {
-        if dossier.isActive {
+        if savable {
+            // le dossier sélectionné est déjà chargé avec des modifications non sauvegardées
             self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
                                        message       : Text("Toutes les modifications seront perdues"),
                                        primaryButton : .destructive(Text("Revenir"),
+                                                                    action: load),
+                                       secondaryButton: .cancel())
+        } else if let activeDossier = dataStore.activeDossier,
+                  activeDossier != dossier,
+                  (family.isModified || patrimoine.isModified || model.isModified) {
+            // le dossier sélectionné n'est pas encore chargé
+            // et il y a déjà un autre dossier chargé avec des modifications non sauvegardées
+            self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
+                                       message       : Text("Toutes les modifications sur le dossier ouvert seront perdues"),
+                                       primaryButton : .destructive(Text("Charger"),
                                                                     action: load),
                                        secondaryButton: .cancel())
         } else {
@@ -137,15 +151,13 @@ struct DossierDetailView: View {
         }
     }
 
-    /// True si le dossier est actif et à été modifié
-    private func savable() -> Bool {
-        dossier.isActive && (family.isModified || patrimoine.isModified)
-    }
-
+    // MARK: - Methods
+    
     /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
     private func save(_ dossier: Dossier) {
         do {
             try dossier.saveDossierContentAsJSON { folder in
+                try model.saveAsJSON(toFolder: folder)
                 try family.saveAsJSON(toFolder: folder)
                 try patrimoine.saveAsJSON(toFolder: folder)
                 // forcer la vue à se rafraichir
@@ -166,18 +178,42 @@ struct DossierDetailView: View {
             return
         }
 
+        /// charger les fichiers JSON
         do {
             try dossier.loadDossierContentAsJSON { folder in
+                try model.loadFromJSON(fromFolder: folder)
                 try patrimoine.loadFromJSON(fromFolder: folder)
-                try family.loadFromJSON(fromFolder: folder)
+                try family.loadFromJSON(fromFolder: folder,
+                                        using     : model)
             }
         } catch {
             self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
                                        dismissButton : .default(Text("OK")))
         }
+        
+        /// gérer les dépendances entre le Modèle et les objets applicatifs
+        // Injection de Fiscal
+        //   récupérer une copie du singleton
+        let fiscalModel = Fiscal.model
+        //   l'injecter dans les objets qui en dépendent
+        SCPI.setFiscalModelProvider(fiscalModel)
+        PeriodicInvestement.setFiscalModelProvider(fiscalModel)
+        FreeInvestement.setFiscalModelProvider(fiscalModel)
+        
+        // Injection de SocioEconomy
+        LifeExpense.setExpensesUnderEvaluationRateProvider(model.socioEconomyModel)
+        
+        // Injection de Economy
+        SCPI.setInflationProvider(model.economyModel)
+        PeriodicInvestement.setEconomyModelProvider(model.economyModel)
+        FreeInvestement.setEconomyModelProvider(model.economyModel)
 
-        // rendre le Dossier actif seulement si tout c'est bien passé
+        /// rendre le Dossier actif seulement si tout c'est bien passé
         dataStore.activate(dossierAtIndex: dossierIndex)
+        
+        /// remettre à zéro la simulation et sa vue
+        simulation.reset()
+        uiState.reset()
     }
 
     /// Dupliquer le Dossier sélectionné
@@ -192,6 +228,13 @@ struct DossierDetailView: View {
 }
 
 struct DossierDetailView_Previews: PreviewProvider {
+    static var dataStore  = Store()
+    static var model      = Model(fromBundle: Bundle.main)
+    static var uiState    = UIState()
+    static var family     = Family()
+    static var patrimoine = Patrimoin()
+    static var simulation = Simulation()
+
     static let dossier = Dossier()
         .namedAs("Nom du dossier")
         .annotatedBy("note ligne 1\nligne 2")
@@ -199,7 +242,21 @@ struct DossierDetailView_Previews: PreviewProvider {
         .activated()
     
     static var previews: some View {
-        DossierDetailView(dossier: dossier)
-            .previewLayout(.sizeThatFits)
+        NavigationView {
+            List {
+                NavigationLink(destination : DossierDetailView(dossier: dossier)
+                    .previewLayout(.sizeThatFits)
+                    .environmentObject(dataStore)
+                    .environmentObject(model)
+                    .environmentObject(uiState)
+                    .environmentObject(family)
+                    .environmentObject(patrimoine)
+                    .environmentObject(simulation)
+                ) {
+                    Text("DossierDetailView")
+                }
+                .isDetailLink(true)
+            }
+        }
     }
 }

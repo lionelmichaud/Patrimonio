@@ -11,16 +11,51 @@ import XCTest
 
 class HumanLifeTests: XCTestCase {
     
-    func test_loading_from_module_bundle() {
-        XCTAssertNoThrow(HumanLife.Model(fromBundle: Bundle.module).initialized(),
-                         "Failed to read model from Main Bundle \(String(describing: Bundle.module.resourcePath))")
+    static var humanLife: HumanLife!
+    
+    // MARK: Helpers
+    
+    override class func setUp() {
+        super.setUp()
+        HumanLifeTests.humanLife = HumanLife(fromBundle : Bundle.module)
     }
     
-    func test_saving_to_test_bundle() throws {
-        let model = HumanLife.Model(fromBundle: Bundle.module).initialized()
-        model.saveToBundle(toBundle             : Bundle.module,
-                           dateEncodingStrategy : .iso8601,
-                           keyEncodingStrategy  : .useDefaultKeys)
+    // MARK: Tests
+
+    func test_loading_from_module_bundle() {
+        XCTAssertNoThrow(HumanLife(fromBundle : Bundle.module),
+                         "Failed to read HumanLife from Main Bundle \(String(describing: Bundle.module.resourcePath))")
+    }
+
+    func test_saving_to_module_bundle() {
+        XCTAssertNoThrow(HumanLifeTests.humanLife.saveAsJSON(toBundle: Bundle.module))
+    }
+
+    func test_get_set_menLifeExpectationDeterministic() {
+        XCTAssertEqual(HumanLifeTests.humanLife.menLifeExpectationDeterministic, 82)
+
+        var humanLife = HumanLife(fromBundle : Bundle.module)
+        humanLife.menLifeExpectationDeterministic = 60
+        XCTAssertEqual(humanLife.menLifeExpectationDeterministic, 60)
+        XCTAssertEqual(humanLife.persistenceSM.currentState , .modified)
+    }
+
+    func test_get_set_womenLifeExpectationDeterministic() {
+        XCTAssertEqual(HumanLifeTests.humanLife.womenLifeExpectationDeterministic, 89)
+
+        var humanLife = HumanLife(fromBundle : Bundle.module)
+        humanLife.womenLifeExpectationDeterministic = 50
+        XCTAssertEqual(humanLife.womenLifeExpectationDeterministic, 50)
+        XCTAssertEqual(humanLife.persistenceSM.currentState , .modified)
+    }
+
+    func test_get_set_nbOfYearsOfdependencyDeterministic() {
+        XCTAssertEqual(HumanLifeTests.humanLife.nbOfYearsOfdependencyDeterministic, 6)
+
+        var humanLife = HumanLife(fromBundle : Bundle.module)
+        humanLife.nbOfYearsOfdependencyDeterministic = 4
+        XCTAssertEqual(humanLife.nbOfYearsOfdependencyDeterministic, 4)
+        XCTAssertEqual(humanLife.persistenceSM.currentState , .modified)
     }
 
 }

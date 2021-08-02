@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 struct KpiListView : View {
     @EnvironmentObject var simulation : Simulation
@@ -75,6 +76,7 @@ struct KpiDetailedView: View {
 }
 
 struct KpiListView_Previews: PreviewProvider {
+    static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var family     = Family()
     static var patrimoine = Patrimoin()
@@ -101,8 +103,11 @@ struct KpiListView_Previews: PreviewProvider {
         return kpi
     }
     static var previews: some View {
-        simulation.compute(nbOfYears: 40, nbOfRuns: 1,
-                           withFamily: family, withPatrimoine: patrimoine)
+        simulation.compute(using          : model,
+                           nbOfYears      : 40,
+                           nbOfRuns       : 1,
+                           withFamily     : family,
+                           withPatrimoine : patrimoine)
         return Group {
             KpiDetailedView(kpi: kpiDeter())
                 .environmentObject(simulation)

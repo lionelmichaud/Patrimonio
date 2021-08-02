@@ -2,7 +2,7 @@ import Foundation
 import os
 import FiscalModel
 import NamedValue
-//import Disk
+import ModelEnvironment
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CashFlow")
 
@@ -116,7 +116,8 @@ struct CashFlowLine {
          withYear       year                   : Int,
          withFamily     family                 : Family,
          withPatrimoine patrimoine             : Patrimoin,
-         taxableIrppRevenueDelayedFromLastyear : Double) throws {
+         taxableIrppRevenueDelayedFromLastyear : Double,
+         using model                           : Model) throws {
         self.year = year
         let adultsNames = family.adults.compactMap {
             $0.isAlive(atEndOf: year) ? $0.displayName : nil
@@ -134,7 +135,7 @@ struct CashFlowLine {
         
         try autoreleasepool {
             /// INCOME: populate Ages and Work incomes
-            populateIncomes(of: family)
+            populateIncomes(of: family, using: model)
             
             /// REAL ESTATE: populate produit de vente, loyers, taxes sociales et taxes locales des bien immobiliers
             manageRealEstateRevenues(of  : patrimoine,
@@ -185,10 +186,10 @@ struct CashFlowLine {
     
     fileprivate mutating func computeIrpp(of family: Family) {
         adultTaxes.irpp = try! Fiscal.model.incomeTaxes.irpp(taxableIncome : adultsRevenues.totalTaxableIrpp,
-                                                        nbAdults      : family.nbOfAdultAlive(atEndOf: year),
-                                                        nbChildren    : family.nbOfFiscalChildren(during: year))
+                                                             nbAdults      : family.nbOfAdultAlive(atEndOf: year),
+                                                             nbChildren    : family.nbOfFiscalChildren(during: year))
         adultTaxes.perCategory[.irpp]?.namedValues.append((name  : TaxeCategory.irpp.rawValue,
-                                                      value : adultTaxes.irpp.amount.rounded()))
+                                                           value : adultTaxes.irpp.amount.rounded()))
     }
     
     fileprivate mutating func computeISF(with patrimoine : Patrimoin) {
@@ -196,7 +197,7 @@ struct CashFlowLine {
                                                       evaluationMethod : .ifi)
         adultTaxes.isf = try! Fiscal.model.isf.isf(taxableAsset: taxableAsset)
         adultTaxes.perCategory[.isf]?.namedValues.append((name  : TaxeCategory.isf.rawValue,
-                                                     value : adultTaxes.isf.amount.rounded()))
+                                                          value : adultTaxes.isf.amount.rounded()))
     }
     
     /// Populate remboursement d'emprunts des adultes de la famille

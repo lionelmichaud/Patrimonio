@@ -7,6 +7,7 @@
 
 import Foundation
 import Statistics
+import ModelEnvironment
 
 // MARK: - Constructeur de fichier d'export CSV
 
@@ -23,13 +24,14 @@ class CsvBuilder {
     ///   - mode: mode de simulation utilisé pour la dernière simulation
     /// - Returns: String au format CSV
     static func balanceSheetCSV(from balanceSheetArray : BalanceSheetArray,
+                                using model            : Model,
                                 withMode mode          : SimulationModeEnum) -> String {
         // construction de l'entête
         let csvHeaderBuilderVisitor = CsvBalanceSheetHeaderVisitor()
         balanceSheetArray.accept(csvHeaderBuilderVisitor)
 
         // construction de la table
-        let csvTableBuilderVisitor = CsvBalanceSheetTableVisitor(withMode: mode)
+        let csvTableBuilderVisitor = CsvBalanceSheetTableVisitor(using: model, withMode: mode)
         balanceSheetArray.accept(csvTableBuilderVisitor)
 
         return String(describing: csvHeaderBuilderVisitor) + "\n" + String(describing: csvTableBuilderVisitor) + "\n"

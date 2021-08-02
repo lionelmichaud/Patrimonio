@@ -7,11 +7,14 @@
 //
 
 import Foundation
+import Persistable
 import AppFoundation
+import FileAndFolder
 
-// MARK: - SINGLETON: Modèle d'indemnité de licenciement et de Chomage
-public struct Unemployment {
-    
+// MARK: - Modèle d'indemnité de licenciement et de Chomage
+
+public struct Unemployment: PersistableModel {
+      
     // MARK: - Nested types
 
     public enum Cause: String, PickableEnum, Codable {
@@ -28,27 +31,39 @@ public struct Unemployment {
         }
     }
     
-    public struct Model: JsonCodableToBundleP {
-        public static var defaultFileName : String = "UnemploymentModelConfig.json"
-        public var indemniteLicenciement  : LayoffCompensation
-        public var allocationChomage      : UnemploymentCompensation
+    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable {
+        public var indemniteLicenciement : LayoffCompensation
+        public var allocationChomage     : UnemploymentCompensation
+
+        public func initialized() -> Unemployment.Model {
+            return self
+        }
     }
     
     // MARK: - Static Properties
 
-    public static var model: Model = Model(fromFile: Model.defaultFileName)
-    
+    public static var defaultFileName: String = "UnemploymentModelConfig.json"
+
     // MARK: - Static Methods
 
-    /// Indique si la personne à droit à une allocation et une indemnité
+    /// Indique si une personne à droit à une allocation et une indemnité
     /// - Parameter cause: cause de la cessation d'activité
     /// - Returns: vrai si a droit
     public static func canReceiveAllocation(for cause: Cause) -> Bool {
         cause != .demission
     }
 
+    // MARK: - Properties
+    
+    public var model         : Model?
+    public var persistenceSM : PersistenceStateMachine
+    
     // MARK: - Initializer
     
-    private init() {
+    /// Initialize seulement la StateMachine.
+    /// L'objet ainsi obtenu n'est pas utilisable en l'état car le modèle n'est pas initialiser.
+    /// Pour pouvoir obtenir un objet utilisable il faut utiliser initialiser le model.
+    public init() {
+        self.persistenceSM = PersistenceStateMachine()
     }
 }

@@ -178,20 +178,11 @@ struct RealEstateDetailedView: View {
                         }
                     })
                     .capsuleButtonStyle()
-                    .disabled((index == nil) || changeOccured())
+                    .disabled((index == nil) || changeOccured)
             }
             ToolbarItem(placement: .automatic) {
-                Button(
-                    action : applyChanges,
-                    label  : {
-                        HStack {
-                            Image(systemName: "externaldrive.fill")
-                                .imageScale(.large)
-                            Text("Enregistrer")
-                        }
-                    })
-                    .capsuleButtonStyle()
-                    .disabled(!changeOccured())
+                SaveToFolderButton(action : applyChanges)
+                    .disabled(!changeOccured)
             }
         }
         .alert(item: $alertItem, content: myAlert)
@@ -240,7 +231,7 @@ struct RealEstateDetailedView: View {
     // sauvegarder les changements
     private func applyChanges() {
         // validation avant sauvegarde
-        guard self.isValid() else { return }
+        guard self.isValid else { return }
 
         // mettre à jour l'item à partir du ViewModel
         assetVM.update(thisAsset: &localItem)
@@ -261,7 +252,7 @@ struct RealEstateDetailedView: View {
         resetSimulation()
     }
     
-    private func isValid() -> Bool { // swiftlint:disable:this cyclomatic_complexity
+    private var isValid: Bool {
         /// vérifier que toutes les dates sont définies
         guard assetVM.buyingYearVM.year != nil else {
             self.alertItem = AlertItem(title         : Text("La date d'achat doit être définie"),
@@ -348,7 +339,7 @@ struct RealEstateDetailedView: View {
         return true
     }
 
-    private func changeOccured() -> Bool {
+    private var changeOccured: Bool {
         if localItem != originalItem {
             return true
         } else {

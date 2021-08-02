@@ -98,13 +98,13 @@ public struct InheritanceDonation: Codable {
     public struct Model: JsonCodableToBundleP, Versionable {
         public static var defaultFileName: String = "InheritanceDonationModel.json"
         
-        public var version              : Version
-        var gridDonationConjoint : RateGrid
-        var abatConjoint         : Double //  80_724€
-        var gridLigneDirecte     : RateGrid
-        var abatLigneDirecte     : Double // 100_000€
-        let fraisFunéraires      : Double //   1_500€
-        public let decoteResidence      : Double // 20% // %
+        public var version         : Version
+        var gridDonationConjoint   : RateGrid
+        var abatConjoint           : Double //  80_724€
+        var gridLigneDirecte       : RateGrid
+        var abatLigneDirecte       : Double // 100_000€
+        let fraisFunéraires        : Double //   1_500€
+        public let decoteResidence : Double // 20% // %
     }
     
     // MARK: - Properties

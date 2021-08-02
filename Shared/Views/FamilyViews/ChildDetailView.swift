@@ -7,12 +7,14 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 // MARK: - MemberDetailView / ChildDetailView
 
 struct ChildDetailView: View {
-    @EnvironmentObject var member: Person
-    
+    @EnvironmentObject private var member : Person
+    @EnvironmentObject private var model  : Model
+
     var body: some View {
         let child = member as! Child
         return Section(header: Text("SCENARIO").font(.subheadline)) {
@@ -31,7 +33,7 @@ struct ChildDetailView: View {
                 Spacer()
                 Text("\(child.ageOfIndependence) ans en \(String(child.dateOfIndependence.year))")
             }
-            NavigationLink(destination: PersonLifeLineView(from: self.member)) {
+            NavigationLink(destination: PersonLifeLineView(from: self.member, using: model)) {
                 Text("Ligne de vie").foregroundColor(.blue)
             }
         }
@@ -40,6 +42,7 @@ struct ChildDetailView: View {
 
 struct ChildDetailView_Previews: PreviewProvider {
     static var family  = Family()
+    static var model   = Model(fromBundle: Bundle.main)
     static var anAdult = family.members.items.first!
     static var aChild  = family.members.items.last!
     
@@ -48,6 +51,7 @@ struct ChildDetailView_Previews: PreviewProvider {
         Form {
             ChildDetailView()
                 .environmentObject(aChild)
+                .environmentObject(model)
         }
     }
 }

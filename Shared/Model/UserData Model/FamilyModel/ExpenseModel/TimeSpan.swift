@@ -66,40 +66,40 @@ enum TimeSpan: Hashable {
                 return true
             
             case .periodic (let from, let period, let to):
-                guard to.year != nil && from.year != nil else {
+                guard let toYear = to.year, let fromYear = from.year else {
                     customLog.log(level: .info, "contains: to.year = nil or from.year = nil")
                     return false
                 }
-                guard from.year! < to.year! else {
+                guard fromYear < toYear else {
 //                    customLog.log(level: .info, "contains: from.year \(from.year!) > to.year \(to.year!)")
                     return false
                 }
-                return (from.year!..<to.year!).contains {
+                return (fromYear ..< toYear).contains {
                     let includesYear = $0 == year
-                    return includesYear && (($0 - from.year!) % period == 0)
+                    return includesYear && (($0 - fromYear) % period == 0)
             }
             
             case .starting (let from):
-                guard from.year != nil else {
+                guard let fromYear = from.year else {
                     customLog.log(level: .info, "contains: from.year = nil")
                     return false
                 }
-                return from.year! <= year
+                return fromYear <= year
             
             case .ending (let to):
-                guard to.year != nil else {
+                guard let toYear = to.year else {
                     customLog.log(level: .info, "contains: to.year = nil")
                     return false
                 }
-                return year < to.year!
+                return year < toYear
             
             case .spanning (let from, let to):
-                guard to.year != nil && from.year != nil else {
+                guard let toYear = to.year, let fromYear = from.year else {
                     customLog.log(level: .info, "contains: to.year = nil or from.year = nil")
                     return false
                 }
-                if from.year! > to.year! { return false }
-                return (from.year!..<to.year!).contains(year)
+                if fromYear > toYear { return false }
+                return (fromYear ..< toYear).contains(year)
             
             case .exceptional(let inYear):
                 return year == inYear

@@ -10,6 +10,8 @@ import SwiftUI
 import AppFoundation
 import EconomyModel
 import SocioEconomyModel
+import ModelEnvironment
+import Persistence
 
 struct GridsView: View {
     @EnvironmentObject var uiState    : UIState
@@ -30,10 +32,11 @@ struct GridsView: View {
 }
 
 struct ShortGridView: View {
-    @EnvironmentObject var dataStore  : Store
-    @EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var family     : Family
-    @EnvironmentObject var patrimoine : Patrimoin
+    @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var simulation : Simulation
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var patrimoine : Patrimoin
     @State private var filter         : RunFilterEnum       = .all
     @State private var sortCriteria   : KpiSortCriteriaEnum = .byRunNumber
     @State private var sortOrder      : SortingOrder        = .ascending
@@ -126,7 +129,7 @@ struct ShortGridView: View {
                             if busySaveWheelAnimate {
                                 ProgressView()
                             }
-                            Label("Enregistrer", systemImage: "square.and.arrow.up")
+                            Label("Enregistrer", systemImage: "externaldrive.fill")
                         }
                     }
                     .disabled(dataStore.activeDossier == nil)
@@ -184,7 +187,8 @@ struct ShortGridView: View {
         // rejouer le run unique
         simulation.replay(thisRun        : thisRun,
                           withFamily     : family,
-                          withPatrimoine : patrimoine)
+                          withPatrimoine : patrimoine,
+                          using          : model)
     }
 }
 
@@ -324,6 +328,7 @@ struct ShortGridLineView : View {
 }
 
 struct ShortGridView_Previews: PreviewProvider {
+    static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var dataStore  = Store()
     static var simulation = Simulation()
@@ -331,7 +336,8 @@ struct ShortGridView_Previews: PreviewProvider {
     static var patrimoine = Patrimoin()
     
     static var previews: some View {
-        simulation.compute(nbOfYears      : 25,
+        simulation.compute(using          : model,
+                           nbOfYears      : 25,
                            nbOfRuns       : 10,
                            withFamily     : family,
                            withPatrimoine : patrimoine)
@@ -340,6 +346,7 @@ struct ShortGridView_Previews: PreviewProvider {
                 NavigationLink(destination: ShortGridView()
                                 .environmentObject(uiState)
                                 .environmentObject(dataStore)
+                                .environmentObject(model)
                                 .environmentObject(family)
                                 .environmentObject(patrimoine)
                                 .environmentObject(simulation)

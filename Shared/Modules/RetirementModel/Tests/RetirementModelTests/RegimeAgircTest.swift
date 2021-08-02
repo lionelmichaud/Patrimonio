@@ -14,24 +14,28 @@ import SocioEconomyModel
 
 class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
     
-    static var regimeAgirc  : RegimeAgirc!
+    static var regimeAgirc: RegimeAgirc!
     
     // MARK: Helpers
     
     override class func setUp() {
         super.setUp()
-        let model = RegimeAgirc.Model(fromBundle: Bundle.module)
+        let model = RegimeAgirc.Model(fromFile   : "RegimeAgircModel.json",
+                                      fromBundle : Bundle.module)
         RegimeAgircTest.regimeAgirc = RegimeAgirc(model: model)
         
         // inject dependency for tests
-        RegimeAgirc.setPensionDevaluationRateProvider(
-            SocioEconomy.Model(fromBundle: Bundle.module)
+        RegimeAgircTest.regimeAgirc.setPensionDevaluationRateProvider(
+            SocioEconomy.Model(fromFile   : "SocioEconomyModelConfig.json",
+                               fromBundle : Bundle.module)
                 .initialized())
-        RegimeAgirc.setFiscalModel(
-            Fiscal.Model(fromBundle: Bundle.module)
+        RegimeAgircTest.regimeAgirc.setFiscalModel(
+            Fiscal.Model(fromFile   : "FiscalModelConfig.json",
+                         fromBundle : Bundle.module)
                 .initialized())
         RegimeAgircTest.regimeAgirc.setRegimeGeneral(
-            RegimeGeneral(model: RegimeGeneral.Model(fromBundle: Bundle.module)))
+            RegimeGeneral(model: RegimeGeneral.Model(fromFile: "RegimeGeneralModel.json",
+                                                     fromBundle: Bundle.module)))
     }
     
     func date(year: Int, month: Int, day: Int) -> Date {
@@ -43,23 +47,29 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
     }
     
     // MARK: Tests
-    
-    func test_saving_to_test_bundle() throws {
-        RegimeAgircTest.regimeAgirc.saveToBundle(toBundle             : Bundle.module,
-                                                 dateEncodingStrategy : .iso8601,
-                                                 keyEncodingStrategy  : .useDefaultKeys)
+    func test_loading_from_module_bundle() {
+        XCTAssertNoThrow(RegimeAgirc.Model(fromFile   : "RegimeAgircModel.json",
+                                           fromBundle : Bundle.module),
+                         "Failed to read RegimeAgirc.Model from Main Bundle \(String(describing: Bundle.module.resourcePath))")
+    }
+
+    func test_saving_model_to_test_bundle() throws {
+        RegimeAgircTest.regimeAgirc.saveAsJSON(toFile               : "RegimeAgircModel.json",
+                                               toBundle             : Bundle.module,
+                                               dateEncodingStrategy : .iso8601,
+                                               keyEncodingStrategy  : .useDefaultKeys)
     }
     
     func test_pension_devaluation_rate() {
-        XCTAssertEqual(2.0, RegimeAgirc.devaluationRate)
+        XCTAssertEqual(2.0, RegimeAgircTest.regimeAgirc.devaluationRate)
     }
     
     func test_calcul_revaluation_Coef() {
         let dateOfPensionLiquid : Date! = 10.years.ago
         let thisYear = Date.now.year
         
-        let coef = RegimeAgirc.revaluationCoef(during: thisYear,
-                                               dateOfPensionLiquid: dateOfPensionLiquid)
+        let coef = RegimeAgircTest.regimeAgirc.revaluationCoef(during              : thisYear,
+                                                               dateOfPensionLiquid : dateOfPensionLiquid)
         XCTAssertEqual(pow((1.0 + -2.0/100.0), 10.0), coef)
     }
     

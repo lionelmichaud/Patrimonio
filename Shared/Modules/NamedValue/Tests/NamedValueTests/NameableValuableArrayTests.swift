@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Persistable
 @testable import NamedValue
 
 class NameableValuableArrayTests: XCTestCase {
@@ -29,6 +30,12 @@ class NameableValuableArrayTests: XCTestCase {
     }
     
     struct TableOfItems: NameableValuableArray {
+        private enum CodingKeys: String, CodingKey { // swiftlint:disable:this nesting
+            case items
+        }
+
+       var persistenceSM = PersistenceStateMachine(initialState : .created)
+
         var items: [Item]
         var description: String {
             items.description

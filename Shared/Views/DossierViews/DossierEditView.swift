@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Persistence
 
 struct DossierEditView: View {
     @EnvironmentObject private var dataStore: Store

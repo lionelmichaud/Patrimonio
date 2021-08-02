@@ -14,7 +14,6 @@ public protocol PersistableP {
     var persistenceSM    : PersistenceStateMachine { get set }
     var persistenceState : PersistenceState { get }
     var isModified       : Bool { get }
-
 }
 
 public extension PersistableP {

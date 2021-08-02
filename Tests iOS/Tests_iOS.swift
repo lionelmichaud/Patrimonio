@@ -36,11 +36,11 @@ class Tests_iOS: XCTestCase { // swiftlint:disable:this type_name
 //        let app = XCUIApplication()
 //        app.launch()
 
-        let components: [CsvVisitable] = [ConcreteComponentA(), ConcreteComponentB()]
+//        let components: [CsvVisitable] = [ConcreteComponentA(), ConcreteComponentB()]
 //
-        print("The client code works with all visitors via the base Visitor interface:\n")
-        let cvsBuilderVisitor = CvsBuilderVisitor()
-        CsvBuilder.buildBalanceSheetArrayCSV(components: components, visitor: cvsBuilderVisitor)
+//        print("The client code works with all visitors via the base Visitor interface:\n")
+//        let cvsBuilderVisitor = CvsBuilderVisitor()
+//        CsvBuilder.buildBalanceSheetArrayCSV(components: components, visitor: cvsBuilderVisitor)
 //
 //        print(csvVisitor.description)
         // Use recording to get started writing UI tests.

@@ -9,7 +9,6 @@
 import XCTest
 @testable import UnemployementModel
 import FiscalModel
-import Numerics
 
 class UnemploymentCompensationTests: XCTestCase {
     
@@ -19,10 +18,14 @@ class UnemploymentCompensationTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        let model = UnemploymentCompensation.Model(fromBundle: Bundle.module)
+        let model = UnemploymentCompensation.Model(fromFile   : UnemploymentCompensation.Model.defaultFileName,
+                                                   fromBundle : Bundle.module)
         UnemploymentCompensationTests.unemploymentCompensation = UnemploymentCompensation(model: model)
         // injection de dépendance
-        UnemploymentCompensation.setFiscalModel(Fiscal.Model(fromBundle: Bundle.module).initialized())
+        let fiscalModel =
+            Fiscal.Model(fromFile: Fiscal.Model.defaultFileName, fromBundle: Bundle.module)
+            .initialized()
+        UnemploymentCompensationTests.unemploymentCompensation.setFiscalModel(fiscalModel)
     }
     
     func date(year: Int, month: Int, day: Int) -> Date {

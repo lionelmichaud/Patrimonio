@@ -2,6 +2,7 @@ import Foundation
 import FiscalModel
 import Files
 import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
+import ModelEnvironment
 
 // MARK: - Class Family: la Famille, ses membres, leurs actifs et leurs revenus
 
@@ -84,9 +85,13 @@ final class Family: ObservableObject {
 
     // MARK: - Methodes
 
-    func loadFromJSON(fromFolder folder: Folder) throws {
+    /// lire à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    func loadFromJSON(fromFolder folder : Folder,
+                      using model  : Model) throws {
         expenses = try LifeExpensesDic(fromFolder : folder)
-        members  = try PersistableArrayOfPerson(fromFolder: folder)
+        members  = try PersistableArrayOfPerson(fromFolder: folder,
+                                                using     : model)
     }
 
     func saveAsJSON(toFolder folder: Folder) throws {
@@ -168,12 +173,15 @@ final class Family: ObservableObject {
     /// Pensions de retraite cumulées de la famille durant l'année
     /// - Parameter year: année
     /// - Returns: Pensions de retraite cumulées brutes
-    func pension(during year: Int, withReversion: Bool = true) -> Double {
+    func pension(during year   : Int,
+                 withReversion : Bool = true,
+                 using model   : Model) -> Double {
         var pension = 0.0
         for person in members.items {
             if let adult = person as? Adult {
                 pension += adult.pension(during        : year,
-                                         withReversion : withReversion).brut
+                                         withReversion : withReversion,
+                                         using         : model).brut
             }
         }
         return pension
@@ -186,6 +194,28 @@ final class Family: ObservableObject {
                 adult.gaveBirthTo(children: nbOfChildren) // mettre à jour le nombre d'enfant
             }
         }
+    }
+
+    /// Actualiser les propriétés d'une personne à partir des valeurs modifiées
+    /// des paramètres du modèle (valeur déterministes modifiées par l'utilisateur).
+    /// Mémoriser l'existence d'une modification pour ne sauvegarde ultérieure.
+    func updateMembersDterministicValues(
+        _ menLifeExpectation    : Int,
+        _ womenLifeExpectation  : Int,
+        _ nbOfYearsOfdependency : Int,
+        _ ageMinimumLegal       : Int,
+        _ ageMinimumAGIRC       : Int
+    ) {
+        members.items.forEach { member in
+            member.updateMembersDterministicValues(
+                menLifeExpectation,
+                womenLifeExpectation,
+                nbOfYearsOfdependency,
+                ageMinimumLegal,
+                ageMinimumAGIRC)
+        }
+        // exécuter la transition
+        members.persistenceSM.process(event: .modify)
     }
     
     /// Trouver le membre de la famille avec le displayName recherché
@@ -214,22 +244,22 @@ final class Family: ObservableObject {
     }
     
     func moveMembers(from indexes: IndexSet, to destination: Int) {
-        self.members.items.move(fromOffsets: indexes, toOffset: destination)
+        self.members.move(from: indexes, to: destination)
     }
     
-    func aMemberIsUpdated() {
-        // exécuter la transition
-        members.persistenceSM.process(event: .modify)
-        
+    func aMemberIsModified() {
         // mettre à jour le nombre d'enfant de chaque parent de la famille
         self.updateChildrenNumber()
+        
+        // exécuter la transition
+        members.persistenceSM.process(event: .modify)
     }
     
     /// Réinitialiser les prioriétés aléatoires des membres et des dépenses
-    func nextRandomProperties() {
+    func nextRandomProperties(using model: Model) {
         // Réinitialiser les prioriété aléatoires des membres
         members.items.forEach {
-            $0.nextRandomProperties()
+            $0.nextRandomProperties(using: model)
         }
     }
 
@@ -245,10 +275,10 @@ final class Family: ObservableObject {
 
     }
 
-    func nextRun() -> DictionaryOfAdultRandomProperties {
+    func nextRun(using model: Model) -> DictionaryOfAdultRandomProperties {
         // Réinitialiser les prioriété aléatoires des membres
         members.items.forEach {
-            $0.nextRandomProperties()
+            $0.nextRandomProperties(using: model)
         }
         return currentRandomProperties()
     }

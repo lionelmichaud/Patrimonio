@@ -9,16 +9,19 @@
 import SwiftUI
 import RetirementModel
 import Files
+import ModelEnvironment
+import Persistence
 
 struct ComputationView: View {
-    @EnvironmentObject var uiState          : UIState
-    @EnvironmentObject var dataStore        : Store
-    @EnvironmentObject var family           : Family
-    @EnvironmentObject var patrimoine       : Patrimoin
-    @EnvironmentObject var simulation       : Simulation
-    @State private var busySaveWheelAnimate : Bool = false
-    @State private var busyCompWheelAnimate : Bool = false
-    @State private var alertItem            : AlertItem?
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var uiState    : UIState
+    @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var simulation : Simulation
+    @State private var busySaveWheelAnimate   : Bool = false
+    @State private var busyCompWheelAnimate   : Bool = false
+    @State private var alertItem              : AlertItem?
 //    @Environment(\.presentationMode) var presentationMode
 
     struct ComputationForm: View {
@@ -187,13 +190,15 @@ struct ComputationView: View {
         // DispatchQueue.global(qos: .userInitiated).async {
         switch simulation.mode {
             case .deterministic:
-                simulation.compute(nbOfYears      : Int(uiState.computationState.nbYears),
+                simulation.compute(using          : model,
+                                   nbOfYears      : Int(uiState.computationState.nbYears),
                                    nbOfRuns       : 1,
                                    withFamily     : family,
                                    withPatrimoine : patrimoine)
                 
             case .random:
-                simulation.compute(nbOfYears      : Int(uiState.computationState.nbYears),
+                simulation.compute(using          : model,
+                                   nbOfYears      : Int(uiState.computationState.nbYears),
                                    nbOfRuns       : Int(uiState.computationState.nbRuns),
                                    withFamily     : family,
                                    withPatrimoine : patrimoine)
@@ -217,7 +222,7 @@ struct ComputationView: View {
     
     /// Exporter les résultats de la simulation
     private func exportSimulationResults() {
-        let dicoOfCsv = simulation.simulationResultsCSV()
+        let dicoOfCsv = simulation.simulationResultsCSV(using: model)
 
         // executer l'enregistrement en tâche de fond
         saveSimulationToDocumentsDirectory(dicoOfCSV: dicoOfCsv)
@@ -301,6 +306,7 @@ struct ComputationView: View {
 }
 
 struct ComputationView_Previews: PreviewProvider {
+    static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var dataStore  = Store()
     static var family     = Family()
@@ -312,6 +318,7 @@ struct ComputationView_Previews: PreviewProvider {
             List {
                 // calcul de simulation
                 NavigationLink(destination : ComputationView()
+                                .environmentObject(model)
                                 .environmentObject(uiState)
                                 .environmentObject(dataStore)
                                 .environmentObject(family)

@@ -8,18 +8,20 @@
 
 import Foundation
 import os
+import Persistable
 import AppFoundation
 import Statistics
+import FileAndFolder
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Economy")
 
 // MARK: - DI: Protocol InflationProviderProtocol
 
-public protocol InflationProviderProtocol {
+public protocol InflationProviderP {
     func inflation(withMode simulationMode: SimulationModeEnum) -> Double
 }
 
-public protocol FinancialRatesProviderProtocol {
+public protocol FinancialRatesProviderP {
     func rates(in year            : Int,
                withMode mode      : SimulationModeEnum,
                simulateVolatility : Bool)
@@ -31,11 +33,11 @@ public protocol FinancialRatesProviderProtocol {
         stockRate   : Double)
 }
 
-public typealias EconomyModelProviderProtocol = InflationProviderProtocol & FinancialRatesProviderProtocol
+public typealias EconomyModelProviderP = InflationProviderP & FinancialRatesProviderP
 
 // MARK: - SINGLETON: Economy Model
 
-public struct Economy {
+public struct Economy: PersistableModel {
     
     // MARK: - Nested Types
     
@@ -56,15 +58,13 @@ public struct Economy {
     public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
     // MARK: - Modèles statistiques de générateurs aléatoires
-    public struct RandomizersModel: JsonCodableToBundleP {
-        public static var defaultFileName : String = "EconomyModelConfig.json"
+    public struct RandomizersModel: Codable {
         
         // MARK: - Properties
         
         public var inflation   : ModelRandomizer<BetaRandomGenerator>
         public var securedRate : ModelRandomizer<BetaRandomGenerator> // moyenne annuelle
         public var stockRate   : ModelRandomizer<BetaRandomGenerator> // moyenne annuelle
-        //var simulateVolatility: Bool = false
         public var securedVolatility : Double // % [0, 100]
         public var stockVolatility   : Double // % [0, 100]
         
@@ -96,7 +96,7 @@ public struct Economy {
             dicoOfRandomVariable[.stockRate]   = stockRate.next()
             return dicoOfRandomVariable
         }
-
+        
         fileprivate func current(withMode mode : SimulationModeEnum) -> DictionaryOfRandomVariable {
             var dicoOfRandomVariable           = DictionaryOfRandomVariable()
             dicoOfRandomVariable[.inflation]   = inflation.value(withMode: mode)
@@ -132,8 +132,10 @@ public struct Economy {
     }
     
     // MARK: - Modèles statistiques de générateurs aléatoires + échantillons tirés pour une simulation
-    public class Model: EconomyModelProviderProtocol {
-        
+    public class Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable, EconomyModelProviderP {
+        enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
+            case randomizers
+        }
         // MARK: - Properties
         
         public var randomizers : RandomizersModel // les modèles de générateurs aléatoires
@@ -144,29 +146,32 @@ public struct Economy {
         
         // MARK: - Methods
         
-        init() {
-            self.randomizers = RandomizersModel(fromFile: RandomizersModel.defaultFileName).initialized()
+        /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
+        public final func initialized() -> Self {
+            randomizers = randomizers.initialized()
+            return self
         }
         
-        /// A utiliser uniquement pour les Tests Unitaires
-        /// - Parameter fromBundle: le Bundle dans lequel chercher le fichier de configuration JSON
-        init(fromBundle: Bundle) {
-            self.randomizers = RandomizersModel(fromFile: RandomizersModel.defaultFileName,
-                                                fromBundle: fromBundle).initialized()
+        /// Remettre à zéro les historiques des tirages aléatoires
+        /// - Note : Appeler avant de lancer une simulation
+        public final func resetRandomHistory() {
+            randomizers.resetRandomHistory()
         }
-
-        // MARK: - Methods
+        
+        public final func currentRandomizersValues(withMode: SimulationModeEnum) -> DictionaryOfRandomVariable {
+            return randomizers.current(withMode: withMode)
+        }
         
         /// Retourne les taux pour une année donnée
         /// - Parameters:
         ///   - year: année
         ///   - mode: mode de simulation : Monté-Carlo ou Détermnisite
-        /// - Returns: Taux Oblig / Taux Action
+        /// - Returns: Taux Oblig / Taux Action [0%, 100%]
         /// - Important: Les taux changent d'une année à l'autre seuelement en mode Monté-Carlo
         ///             et si la ‘volatilité‘ à été activée dans le fichier de conf
-        public func rates(in year            : Int,
-                          withMode mode      : SimulationModeEnum,
-                          simulateVolatility : Bool)
+        public final func rates(in year            : Int,
+                                withMode mode      : SimulationModeEnum,
+                                simulateVolatility : Bool)
         -> (securedRate : Double,
             stockRate   : Double) {
             if mode == .random && simulateVolatility {
@@ -180,12 +185,12 @@ public struct Economy {
                         stockRate   : randomizers.stockRate.value(withMode: mode))
             }
         }
-
+        
         /// Retourne les taux moyen pour toute la durée de la simulation
         /// - Parameters:
         ///   - mode: mode de simulation : Monté-Carlo ou Détermnisite
-        /// - Returns: Taux Oblig / Taux Action
-        public func rates(withMode mode : SimulationModeEnum)
+        /// - Returns: Taux Oblig / Taux Action [0%, 100%]
+        public final func rates(withMode mode : SimulationModeEnum)
         -> (securedRate : Double,
             stockRate   : Double) {
             (securedRate : randomizers.securedRate.value(withMode: mode),
@@ -194,14 +199,16 @@ public struct Economy {
         
         /// Tirer au hazard les taux pour chaque année
         /// - Parameters:
+        ///   - simulateVolatility: true = simuler la volatilité en faisant un tirage différent pour chaque année
+        ///   - averageMode: détermine quelle sera la valeure moyenne retenue (déterministe ou aléatoire).
+        ///                   Utilisé seulement si `simulateVolatility`= true
         ///   - firstYear: première année
         ///   - lastYear: dernière année
-        ///   - withMode: mode de simulation qui détermine quelle sera la valeure moyenne retenue
         /// - Note: comportement différent selon que la volatilité doit être prise en compte ou pas
-        private func generateRandomSamples(withMode           : SimulationModeEnum,
-                                           simulateVolatility : Bool,
-                                           firstYear          : Int,
-                                           lastYear           : Int) throws {
+        private final func generateRandomSamples(averageMode        : SimulationModeEnum,
+                                                 simulateVolatility : Bool,
+                                                 firstYear          : Int,
+                                                 lastYear           : Int) throws {
             guard lastYear >= firstYear else {
                 customLog.log(level: .fault, "generateRandomSamples: lastYear < firstYear")
                 throw ModelError.outOfBounds
@@ -209,81 +216,127 @@ public struct Economy {
             firstYearSampled        = firstYear
             securedRateSamples      = []
             stockRateSamples        = []
-            if withMode == .random && simulateVolatility {
+            if simulateVolatility {
                 for _ in firstYear...lastYear {
-                    securedRateSamples.append(Random.default.normal.next(mu   : randomizers.securedRate.value(withMode: withMode),
-                                                                         sigma: randomizers.securedVolatility))
-                    stockRateSamples.append(Random.default.normal.next(mu   : randomizers.stockRate.value(withMode: withMode),
-                                                                       sigma: randomizers.stockVolatility))
+                    securedRateSamples
+                        .append(Random.default.normal.next(mu   : randomizers.securedRate.value(withMode: averageMode),
+                                                           sigma: randomizers.securedVolatility))
+                    stockRateSamples
+                        .append(Random.default.normal.next(mu   : randomizers.stockRate.value(withMode: averageMode),
+                                                           sigma: randomizers.stockVolatility))
                 }
             }
         }
         
-        /// Remettre à zéro les historiques des tirages aléatoires
-        /// - Note : Appeler avant de lancer une simulation
-        public func resetRandomHistory() {
-            randomizers.resetRandomHistory()
-        }
-        
         /// Générer les nombres aléatoires suivants et retourner leur valeur pour historisation
         /// - Parameters:
+        ///   - simulateVolatility: true = simuler la volatilité en faisant un tirage différent pour chaque année
         ///   - firstYear: première année
         ///   - lastYear: dernière année
         /// - Returns: dictionnaire des échantillon de valeurs moyennes pour le prochain Run
-        /// - Note : Appeler avant de lancer un Run de simulation
-        public func nextRun(withMode           : SimulationModeEnum,
-                            simulateVolatility : Bool,
-                            firstYear          : Int,
-                            lastYear           : Int) throws -> DictionaryOfRandomVariable {
-            guard lastYear >= firstYear else {
-                customLog.log(level: .fault, "nextRun: lastYear < firstYear")
-                throw ModelError.outOfBounds
-            }
+        /// - Note :
+        ///   - Appeler avant de lancer un Run de simulation
+        ///   - Comportement différent selon que la volatilité doit être prise en compte ou pas
+        /// - Throws:
+        @discardableResult
+        public final func nextRun(simulateVolatility : Bool,
+                                  firstYear          : Int,
+                                  lastYear           : Int) throws -> DictionaryOfRandomVariable {
             // tirer au hazard une nouvelle valeure moyenne pour le prochain run
             let dico = randomizers.next()
             // à partir de la nouvelle valeure moyenne, tirer au hazard une valeur pour chaque année
-            try generateRandomSamples(withMode           : withMode,
+            try generateRandomSamples(averageMode        : .random,
                                       simulateVolatility : simulateVolatility,
                                       firstYear          : firstYear,
                                       lastYear           : lastYear)
             return dico
         }
-
-        public func currentRandomizersValues(withMode: SimulationModeEnum) -> DictionaryOfRandomVariable {
-            return randomizers.current(withMode: withMode)
-        }
         
         /// Définir une valeur pour chaque variable aléatoire avant un rejeu
         /// - Parameters:
-        ///   - value: nouvelle valeure à rejouer
+        ///   - values: nouvelles valeure sà rejouer
+        ///   - simulateVolatility: true = simuler la volatilité en faisant un tirage différent pour chaque année
         ///   - firstYear: première année
         ///   - lastYear: dernière année
-        /// - Note : Appeler avant de rejouer un Run de simulation
-        public func setRandomValue(to values          : DictionaryOfRandomVariable,
-                                   withMode           : SimulationModeEnum,
-                                   simulateVolatility : Bool,
-                                   firstYear          : Int,
-                                   lastYear           : Int) throws {
+        /// - Note :
+        ///   - Appeler avant de rejouer un Run de simulation
+        ///   - Comportement différent selon que la volatilité doit être prise en compte ou pas
+        /// - Throws:
+        public final func setRandomValue(to values          : DictionaryOfRandomVariable,
+                                         simulateVolatility : Bool,
+                                         firstYear          : Int,
+                                         lastYear           : Int) throws {
             // Définir une valeur pour chaque variable aléatoire avant un rejeu
             randomizers.setRandomValue(to: values)
             // à partir de la nouvelle valeure moyenne, tirer au hazard une valeur pour chaque année
-            try generateRandomSamples(withMode           : withMode,
+            try generateRandomSamples(averageMode        : .random,
                                       simulateVolatility : simulateVolatility,
                                       firstYear          : firstYear,
                                       lastYear           : lastYear)
         }
         
-        public func inflation(withMode simulationMode: SimulationModeEnum) -> Double {
+        public final func inflation(withMode simulationMode: SimulationModeEnum) -> Double {
             randomizers.inflation.value(withMode: simulationMode)
         }
     }
     
     // MARK: - Static Properties
     
-    public static var model: Model = Model()
+    public static var defaultFileName: String = "EconomyModelConfig.json"
+    
+    // MARK: - Properties
+    
+    public var model         : Model?
+    public var persistenceSM : PersistenceStateMachine
+    
+    public var inflation: Double { // [0%, 100%]
+        get { model!.randomizers.inflation.value(withMode: .deterministic) }
+        set {
+            model?.randomizers.inflation.defaultValue = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+    public var securedRate: Double { // [0%, 100%]
+        get { model!.randomizers.securedRate.value(withMode: .deterministic) }
+        set {
+            model?.randomizers.securedRate.defaultValue = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+    public var stockRate: Double { // [0%, 100%]
+        get { model!.randomizers.stockRate.value(withMode: .deterministic) }
+        set {
+            model?.randomizers.stockRate.defaultValue = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+    public var securedVolatility: Double { // [0%, 100%]
+        get { model!.randomizers.securedVolatility }
+        set {
+            model?.randomizers.securedVolatility = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+    public var stockVolatility: Double { // [0%, 100%]
+        get { model!.randomizers.stockVolatility }
+        set {
+            model?.randomizers.stockVolatility = newValue
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
     
     // MARK: - Initializer
     
-    private init() {
+    /// Initialize seulement la StateMachine.
+    /// L'objet ainsi obtenu n'est pas utilisable en l'état car le modèle n'est pas initialiser.
+    /// Pour pouvoir obtenir un objet utilisable il faut utiliser un des autres init().
+    /// Cet init() n'est utile que pour pouvoir créer un StateObject dans App.main()
+    public init() {
+        self.persistenceSM = PersistenceStateMachine()
     }
 }

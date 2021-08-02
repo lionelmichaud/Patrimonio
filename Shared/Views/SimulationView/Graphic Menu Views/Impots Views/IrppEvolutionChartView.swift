@@ -11,6 +11,8 @@ import SwiftUI
 import AppFoundation
 import Charts // https://github.com/danielgindi/Charts.git
 import Files
+import ModelEnvironment
+import Persistence
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.IrppEvolutionChartView")
 
@@ -287,6 +289,7 @@ struct IrppTranchesLineChartView: UIViewRepresentable {
 }
 
 struct IrppView_Previews: PreviewProvider {
+    static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var dataStore  = Store()
     static var family     = Family()
@@ -294,8 +297,11 @@ struct IrppView_Previews: PreviewProvider {
     static var simulation = Simulation()
 
     static var previews: some View {
-        simulation.compute(nbOfYears: 40, nbOfRuns: 1,
-                           withFamily: family, withPatrimoine: patrimoine)
+        simulation.compute(using          : model,
+                           nbOfYears      : 40,
+                           nbOfRuns       : 1,
+                           withFamily     : family,
+                           withPatrimoine : patrimoine)
         return NavigationView {
             List {
                 // calcul de simulation

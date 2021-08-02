@@ -8,11 +8,13 @@
 
 import Foundation
 import FiscalModel
+import ModelEnvironment
 
 extension CashFlowLine {
     /// Populate Ages and Work incomes
     /// - Parameter family: de la famille
-    mutating func populateIncomes(of family: Family) {
+    mutating func populateIncomes(of family        : Family,
+                                  using model : Model) {
         var totalPensionDiscount = 0.0
         
         // pour chaque membre de la famille
@@ -34,7 +36,7 @@ extension CashFlowLine {
                              value: workIncome.taxableIrpp.rounded()))
                 
                 /// pension de retraite
-                let pension  = adult.pension(during: year)
+                let pension  = adult.pension(during: year, using: model)
                 // pension inscrit en compte avant IRPP (net de charges sociales)
                 adultsRevenues.perCategory[.pensions]?.credits.namedValues
                     .append((name: name,
@@ -56,7 +58,7 @@ extension CashFlowLine {
                 totalPensionDiscount += discount
                 
                 /// indemnité de licenciement
-                let compensation = adult.layoffCompensation(during: year)
+                let compensation = adult.layoffCompensation(during: year, using: model)
                 adultsRevenues.perCategory[.layoffCompensation]?.credits.namedValues
                     .append((name: name,
                              value: compensation.net.rounded()))
@@ -64,7 +66,7 @@ extension CashFlowLine {
                     .append((name: name,
                              value: compensation.taxable.rounded()))
                 /// allocation chomage
-                let alocation = adult.unemployementAllocation(during: year)
+                let alocation = adult.unemployementAllocation(during: year, using: model)
                 adultsRevenues.perCategory[.unemployAlloc]?.credits.namedValues
                     .append((name: name, value: alocation.net.rounded()))
                 adultsRevenues.perCategory[.unemployAlloc]?.taxablesIrpp.namedValues

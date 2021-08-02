@@ -20,15 +20,18 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
     
     override class func setUp() {
         super.setUp()
-        let model = RegimeGeneral.Model(fromBundle: Bundle.module)
+        let model = RegimeGeneral.Model(fromFile   : "RegimeGeneralModel.json",
+                                        fromBundle : Bundle.module)
         RegimeGeneralTest.regimeGeneral = RegimeGeneral(model: model)
         
         // inject dependency for tests
-        RegimeGeneral.setSocioEconomyModel(
-            SocioEconomy.Model(fromBundle: Bundle.module)
+        RegimeGeneralTest.regimeGeneral.setSocioEconomyModel(
+            SocioEconomy.Model(fromFile   : "SocioEconomyModelConfig.json",
+                               fromBundle : Bundle.module)
                 .initialized())
-        RegimeGeneral.setFiscalModel(
-            Fiscal.Model(fromBundle: Bundle.module)
+        RegimeGeneralTest.regimeGeneral.setFiscalModel(
+            Fiscal.Model(fromFile   : "FiscalModelConfig.json",
+                         fromBundle : Bundle.module)
                 .initialized())
     }
     
@@ -43,25 +46,26 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
     // MARK: Tests
     
     func test_saving_to_test_bundle() throws {
-        RegimeGeneralTest.regimeGeneral.saveToBundle(toBundle             : Bundle.module,
-                                                     dateEncodingStrategy : .iso8601,
-                                                     keyEncodingStrategy  : .useDefaultKeys)
+        RegimeGeneralTest.regimeGeneral.saveAsJSON(toFile               : "RegimeGeneralModel.json",
+                                                   toBundle             : Bundle.module,
+                                                   dateEncodingStrategy : .iso8601,
+                                                   keyEncodingStrategy  : .useDefaultKeys)
     }
     
     func test_pension_devaluation_rate() {
-        XCTAssertEqual(2.0, RegimeGeneral.devaluationRate)
+        XCTAssertEqual(2.0, RegimeGeneralTest.regimeGeneral.devaluationRate)
     }
     
     func test_nb_Trim_Additional() {
-        XCTAssertEqual(4, RegimeGeneral.nbTrimAdditional)
+        XCTAssertEqual(4, RegimeGeneralTest.regimeGeneral.nbTrimAdditional)
     }
     
     func test_calcul_revaluation_Coef() {
         let dateOfPensionLiquid : Date! = 10.years.ago
         let thisYear = Date.now.year
         
-        let coef = RegimeGeneral.revaluationCoef(during: thisYear,
-                                                 dateOfPensionLiquid: dateOfPensionLiquid)
+        let coef = RegimeGeneralTest.regimeGeneral.revaluationCoef(during: thisYear,
+                                                                   dateOfPensionLiquid: dateOfPensionLiquid)
         XCTAssertEqual(pow((1.0 + -2.0/100.0), 10.0), coef)
     }
     

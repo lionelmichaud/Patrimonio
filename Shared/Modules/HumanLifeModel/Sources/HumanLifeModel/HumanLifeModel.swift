@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import Persistable
 import AppFoundation
 import Statistics
+import FileAndFolder
 
-// MARK: - SINGLETON: Human Life Model
+// MARK: - Human Life Model
 
-public struct HumanLife {
+public struct HumanLife: PersistableModel {
     
     // MARK: - Nested Types
     
@@ -26,16 +28,15 @@ public struct HumanLife {
         }
     }
     
-    public struct Model: JsonCodableToBundleP {
-        public static var defaultFileName : String = "HumanLifeModelConfig.json"
+    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable {
         public var menLifeExpectation    : ModelRandomizer<DiscreteRandomGenerator>
         public var womenLifeExpectation  : ModelRandomizer<DiscreteRandomGenerator>
         public var nbOfYearsOfdependency : ModelRandomizer<DiscreteRandomGenerator>
         public let minAgeUniversity      : Int
         public let minAgeIndependance    : Int
-
+        
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
-        func initialized() -> Model {
+        public func initialized() -> Self {
             var model = self
             model.menLifeExpectation.rndGenerator.initialize()
             model.womenLifeExpectation.rndGenerator.initialize()
@@ -66,15 +67,50 @@ public struct HumanLife {
                 }
             }
             return dico
-        }    
+        }
     }
     
     // MARK: - Static Properties
     
-    public static var model: Model = Model(fromFile: Model.defaultFileName).initialized()
-
-    // MARK: - Initializer
+    public static var defaultFileName: String = "HumanLifeModelConfig.json"
     
-    private init() {
+    // MARK: - Properties
+    
+    public var model         : Model?
+    public var persistenceSM : PersistenceStateMachine
+    
+    public var menLifeExpectationDeterministic: Int {
+        get { Int(model!.menLifeExpectation.defaultValue.rounded()) }
+        set {
+            model?.menLifeExpectation.defaultValue = newValue.double()
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+    public var womenLifeExpectationDeterministic: Int {
+        get { Int(model!.womenLifeExpectation.defaultValue.rounded()) }
+        set {
+            model?.womenLifeExpectation.defaultValue = newValue.double()
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+    public var nbOfYearsOfdependencyDeterministic: Int {
+        get { Int(model!.nbOfYearsOfdependency.defaultValue.rounded()) }
+        set {
+            model?.nbOfYearsOfdependency.defaultValue = newValue.double()
+            // mémoriser la modification
+            persistenceSM.process(event: .modify)
+        }
+    }
+
+    // MARK: - Initializers
+
+    /// Initialize seulement la StateMachine.
+    /// L'objet ainsi obtenu n'est pas utilisable en l'état car le modèle n'est pas initialiser.
+    /// Pour pouvoir obtenir un objet utilisable il faut utiliser un des autres init().
+    /// Cet init() n'est utile que pour pouvoir créer un StateObject dans App.main()
+    public init() {
+        self.persistenceSM = PersistenceStateMachine()
     }
 }

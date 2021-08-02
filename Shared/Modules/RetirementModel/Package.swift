@@ -16,6 +16,8 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(path: "../AppFoundation"),
+        .package(path: "../Persistable"),
+        .package(path: "../FileAndFolder"),
         .package(path: "../Statistics"),
         .package(path: "../SocioEconomyModel"),
         .package(path: "../FiscalModel") // pour les tests uniquement
@@ -28,6 +30,8 @@ let package = Package(
             dependencies:
                 [
                     "AppFoundation",
+                    "Persistable",
+                    "FileAndFolder",
                     "Statistics",
                     "SocioEconomyModel"
                 ]),

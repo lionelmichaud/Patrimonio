@@ -11,6 +11,7 @@ import FiscalModel
 import HumanLifeModel
 import RetirementModel
 import UnemployementModel
+import ModelEnvironment
 
 struct BrutNetTaxable {
     var brut    : Double
@@ -118,16 +119,6 @@ final class Adult: Person {
     @Published var ageOfAgircPensionLiquidComp: DateComponents = DateComponents(calendar: Date.calendar, year: 62, month: 0, day: 1)
     @Published var lastKnownAgircPensionSituation = RegimeAgircSituation()
     
-    /// RETRAITE: pension évaluée l'année de la liquidation de la pension (non révaluée)
-    var pension: BrutNetTaxable { // computed
-        let pensionGeneral = pensionRegimeGeneral
-        let pensionAgirc   = pensionRegimeAgirc
-        let brut           = pensionGeneral.brut + pensionAgirc.brut
-        let net            = pensionGeneral.net  + pensionAgirc.net
-        let taxable        = try! Fiscal.model.pensionTaxes.taxable(brut: brut, net:net)
-        return BrutNetTaxable(brut: brut, net: net, taxable: taxable)
-    } // computed
-    
     /// DEPENDANCE
     @Published var nbOfYearOfDependency : Int = 0
     var ageOfDependency                 : Int {
@@ -139,14 +130,16 @@ final class Adult: Person {
     override var description: String {
         return super.description +
         """
-        - age of retirement:  \(ageOfRetirementComp)
-        - date of retirement: \(dateOfRetirement.stringMediumDate)
-        - age of AGIRC pension liquidation:  \(ageOfAgircPensionLiquidComp)
-        - date of AGIRC pension liquidation: \(dateOfAgircPensionLiquid.stringMediumDate)
-        - age of pension liquidation:  \(ageOfPensionLiquidComp)
-        - date of pension liquidation: \(dateOfPensionLiquid.stringMediumDate)
-        - number of children: \(nbOfChildBirth)
-        - taxable income: \(workTaxableIncome.€String)
+        - Nombre d'années de dépendance: \(nbOfYearOfDependency)
+        - Cessation d'activité - age :  \(ageOfRetirementComp)
+        - Cessation d'activité - date: \(displayDateOfRetirement)
+        - AGIRC pension liquidation - age :  \(ageOfAgircPensionLiquidComp)
+        - AGIRC pension liquidation - date: \(dateOfAgircPensionLiquid.stringMediumDate)
+        - Pension liquidation - age :  \(ageOfPensionLiquidComp)
+        - Pension liquidation - date: \(dateOfPensionLiquid.stringMediumDate)
+        - Nombre d'enfants: \(nbOfChildBirth)
+        - Option fiscale à la succession: \(String(describing: fiscalOption))
+        - Revenu taxable: \(workTaxableIncome.€String)
         - Revenu:\(workIncome?.description.withPrefixedSplittedLines("  ") ?? "aucun")
           - Imposable: \(workLivingIncome.€String) (après abattement)\n
         """
@@ -154,6 +147,7 @@ final class Adult: Person {
     
     // MARK: - initialization
     
+    // reads from JSON
     required init(from decoder: Decoder) throws {
         // Get our container for this subclass' coding keys
         let container =
@@ -185,7 +179,6 @@ final class Adult: Person {
             try container.decode(RegimeAgircSituation.self,
                                  forKey: .regime_Agirc_Situation)
         // initialiser avec la valeur moyenne déterministe
-        nbOfYearOfDependency = Int(HumanLife.model.nbOfYearsOfdependency.value(withMode: .deterministic))
         workIncome =
             try container.decode(WorkIncomeType.self,
                                  forKey: .work_Income)
@@ -193,7 +186,7 @@ final class Adult: Person {
         try super.init(from: decoder)
 
         // pas de dépendance avant l'âge de 65 ans
-        nbOfYearOfDependency = min(nbOfYearOfDependency, zeroOrPositive(ageOfDeath - 65))
+        nbOfYearOfDependency = zeroOrPositive(ageOfDeath - 65)
     }
     
     override init(sexe       : Sexe,
@@ -221,6 +214,16 @@ final class Adult: Person {
         try container.encode(lastKnownAgircPensionSituation, forKey: .regime_Agirc_Situation)
 //        try container.encode(nbOfYearOfDependency, forKey: .nb_Of_Year_Of_Dependency)
         try container.encode(workIncome, forKey: .work_Income)
+    }
+    
+    /// Initialise les propriétés qui ne peuvent pas l'être à la création
+    /// quand le modèle n'est pas encore créé
+    /// - Parameter model: modèle à utiliser
+    override func initialize(using model: Model) {
+        //super.initialize(using: model)
+        
+        // initialiser le nombre d'années de dépendence
+        setRandomPropertiesDeterministicaly(using: model)
     }
     
     /// Année ou a lieu l'événement recherché
@@ -303,15 +306,63 @@ final class Adult: Person {
                 taxableIrpp : workTaxableIncome * nbWeeks / 52)
     }
     
-    /// Réinitialiser les prioriétés aléatoires des membres
-    override func nextRandomProperties() {
-        super.nextRandomProperties()
+    /// Réinitialiser les prioriétés variables des membres de manière aléatoires
+    override func nextRandomProperties(using model: Model) {
+        super.nextRandomProperties(using: model)
         
         // générer une nouvelle valeure aléatoire
         // réinitialiser la durée de dépendance
-        nbOfYearOfDependency = Int(HumanLife.model.nbOfYearsOfdependency.next())
+        nbOfYearOfDependency = Int(model.humanLife.model!.nbOfYearsOfdependency.next())
         
         // pas de dépendance avant l'âge de 65 ans
         nbOfYearOfDependency = min(nbOfYearOfDependency, zeroOrPositive(ageOfDeath - 65))
+    }
+    
+    /// Réinitialiser les prioriétés variables des membres de manière déterministe
+    override func setRandomPropertiesDeterministicaly(using model: Model) {
+        super.setRandomPropertiesDeterministicaly(using: model)
+        
+        // initialiser le nombre d'années de dépendence
+        // initialiser avec la valeur moyenne déterministe
+        let modelValue = Int(model.humanLifeModel.nbOfYearsOfdependency.value(withMode: .deterministic))
+        nbOfYearOfDependency =
+            min(modelValue, zeroOrPositive(self.ageOfDeath - 65)) // pas de dépendance avant l'âge de 65 ans
+    }
+    
+    /// RETRAITE: pension évaluée l'année de la liquidation de la pension (non révaluée)
+    func pension(using model: Model) -> BrutNetTaxable { // computed
+        let pensionGeneral = pensionRegimeGeneral(using: model)
+        let pensionAgirc   = pensionRegimeAgirc(using: model)
+        let brut           = pensionGeneral.brut + pensionAgirc.brut
+        let net            = pensionGeneral.net  + pensionAgirc.net
+        let taxable        = try! Fiscal.model.pensionTaxes.taxable(brut: brut, net:net)
+        return BrutNetTaxable(brut: brut, net: net, taxable: taxable)
+    }
+
+    /// Actualiser les propriétés d'une personne à partir des valeurs modifiées
+    /// des paramètres du modèle (valeur déterministes modifiées par l'utilisateur).
+    override func updateMembersDterministicValues(
+        _ menLifeExpectation    : Int,
+        _ womenLifeExpectation  : Int,
+        _ nbOfYearsOfdependency : Int,
+        _ ageMinimumLegal       : Int,
+        _ ageMinimumAGIRC       : Int
+    ) {
+        super.updateMembersDterministicValues(
+            menLifeExpectation,
+            womenLifeExpectation,
+            nbOfYearsOfdependency,
+            ageMinimumLegal,
+            ageMinimumAGIRC)
+        
+        nbOfYearOfDependency = nbOfYearsOfdependency
+
+        var ageLiquidationPension = max(ageOfPensionLiquidComp.year!, ageMinimumLegal)
+        ageOfPensionLiquidComp = DateComponents(calendar: Date.calendar,
+                                                year: ageLiquidationPension, month: 0, day: 1)
+
+        ageLiquidationPension = max(ageOfAgircPensionLiquidComp.year!, ageMinimumAGIRC)
+        ageOfAgircPensionLiquidComp = DateComponents(calendar: Date.calendar,
+                                                year: ageLiquidationPension, month: 0, day: 1)
     }
 }

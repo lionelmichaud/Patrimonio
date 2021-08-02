@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import ModelEnvironment
+import Persistence
 
 @main
 struct AppMain: App {
@@ -16,12 +18,14 @@ struct AppMain: App {
     // initializer family avant les autres car il injecte sa propre @
     // dans une propriété statique des autres Classes pendant son initialisation
     @StateObject private var dataStore  = Store()
+    @StateObject private var model      = Model()
     @StateObject private var family     = Family()
     @StateObject private var patrimoine = Patrimoin()
     @StateObject private var simulation = Simulation()
 
     var body: some Scene {
         MainScene(dataStore  : dataStore,
+                  model      : model,
                   family     : family,
                   patrimoine : patrimoine,
                   simulation : simulation)
@@ -36,6 +40,6 @@ struct AppMain: App {
 
     init() {
         /// Coordonne les diffférents singletons du modèle en terme de dépendance
-        _ = Coordinator.shared
+//        _ = Coordinator.shared
     }
 }

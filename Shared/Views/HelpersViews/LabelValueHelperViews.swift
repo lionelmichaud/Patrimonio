@@ -66,17 +66,17 @@ struct LabeledValueRowView: View {
 struct AmountEditView: View {
     let label            : String
     @Binding var amount  : Double
-    @State var textAmount: String
-    
+
     var body: some View {
+        let numberFormatter = NumberFormatter()
         let textValueBinding = Binding<String>(
             get: {
-                self.textAmount
+                String(Int(amount))
             },
             set: {
-                self.textAmount = $0
-                // actualiser la valeur numérique
-                self.amount = Double($0) ?? 0
+                if let value = numberFormatter.number(from: $0) {
+                    self.amount = value.doubleValue
+                }
             })
         
         return HStack {
@@ -88,35 +88,23 @@ struct AmountEditView: View {
                 .frame(maxWidth: 88)
                 .numbersAndPunctuationKeyboardType()
                 .multilineTextAlignment(.trailing)
-                .onChange(of: textAmount) { newValue in
-                    // FIXME: ne filtre pas correctement
-                    // filtrer les caractères non numériques
-                    var filtered = newValue.filter { "-0123456789".contains($0) }
-                    // filtrer `-` s'il n'est pas le premier caractère
-                    filtered = filtered.replacingOccurrences(of: "-",
-                                                             with: "",
-                                                             range: filtered.index(filtered.startIndex, offsetBy: 1)..<filtered.endIndex)
-                    if filtered != newValue {
-                        self.textAmount = filtered
-                    }
-                }
             Text("€")
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
     }
     
-    init(label: String, amount: Binding<Double>) {
-        self.label  = label
-        _amount     = amount
-        _textAmount = State(initialValue: amount.wrappedValue.roundedString)
+    init(label  : String,
+         amount : Binding<Double>) {
+        self.label   = label
+        self._amount = amount
     }
-    
 }
 
 // MARK: - Affichage d'un montant en €
 struct AmountView: View {
     let label   : String
     let amount  : Double
+    let digit   : Int
     let weight  : Font.Weight
     let comment : String?
     
@@ -126,15 +114,20 @@ struct AmountView: View {
                 .fontWeight(weight)
             Spacer()
             if comment != nil { Text(comment!).foregroundColor(.secondary) }
-            Text(value€Formatter.string(from: amount as NSNumber) ?? "")
+            Text(amount.€String(digit: digit))
                 .fontWeight(weight)
                 .frame(maxWidth: 100, alignment: .trailing)
         }
     }
     
-    init(label: String, amount: Double, weight: Font.Weight = .regular, comment: String? = nil) {
+    init(label   : String,
+         amount  : Double,
+         digit   : Int         = 0,
+         weight  : Font.Weight = .regular,
+         comment : String?     = nil) {
         self.label   = label
         self.amount  = amount
+        self.digit   = digit
         self.weight  = weight
         self.comment = comment
     }
@@ -144,18 +137,20 @@ struct AmountView: View {
 struct IntegerEditView: View {
     let label            : String
     @Binding var integer : Int
-    @State var textAmount: String
     
     var body: some View {
-        let textValueBinding = Binding<String>(get: {
-            self.textAmount
-        }, set: {
-            self.textAmount = $0
-            // actualiser la valeur numérique
-            self.integer = Int($0) ?? 0
-        })
+        let numberFormatter = NumberFormatter()
+        let textValueBinding = Binding<String>(
+            get: {
+                String(integer)
+            },
+            set: {
+                if let value = numberFormatter.number(from: $0) {
+                    self.integer = value.intValue
+                }
+            })
         
-        return HStack {
+        HStack {
             Text(label)
             Spacer()
             TextField("entier",
@@ -164,18 +159,6 @@ struct IntegerEditView: View {
                 .frame(maxWidth: 88)
                 .numbersAndPunctuationKeyboardType()
                 .multilineTextAlignment(.trailing)
-                .onChange(of: textAmount) { newValue in
-                    // FIXME: ne filtre pas correctement
-                    // filtrer les caractères non numériques
-                    var filtered = newValue.filter { "-0123456789".contains($0) }
-                    // filtrer `-` s'il n'est pas le premier caractère
-                    filtered = filtered.replacingOccurrences(of: "-",
-                                                             with: "",
-                                                             range: filtered.index(filtered.startIndex, offsetBy: 1)..<filtered.endIndex)
-                    if filtered != newValue {
-                        self.textAmount = filtered
-                    }
-                }
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
     }
@@ -183,9 +166,7 @@ struct IntegerEditView: View {
     init(label: String, integer: Binding<Int>) {
         self.label  = label
         _integer    = integer
-        _textAmount = State(initialValue: String(integer.wrappedValue))
     }
-    
 }
 
 // MARK: - Affichage d'un Integer
@@ -218,17 +199,19 @@ struct IntegerView: View {
 // MARK: - Saisie d'un pourcentage %
 struct PercentEditView: View {
     private let label     : String
-    @Binding var percent  : Double
+    @Binding var percent  : Double // [0% ... 100%]
     @State var textPercent: String
     
     var body: some View {
-        let textValueBinding = Binding<String>(get: {
-            self.textPercent
-        }, set: {
-            self.textPercent = $0
-            // actualiser la valeur numérique
-            self.percent = Double($0.replacingOccurrences(of: ",", with: ".")) ?? 0
-        })
+        let textValueBinding = Binding<String>(
+            get: {
+                self.textPercent
+            },
+            set: {
+                self.textPercent = $0
+                // actualiser la valeur numérique
+                self.percent = Double($0.replacingOccurrences(of: ",", with: ".")) ?? 0
+            })
         
         return HStack {
             Text(label)
@@ -243,9 +226,11 @@ struct PercentEditView: View {
                     // filtrer les caractères non numériques
                     var filtered = newValue.filter { ",-0123456789".contains($0) }
                     // filtrer `-` s'il n'est pas le premier caractère
-                    filtered = filtered.replacingOccurrences(of: "-",
-                                                             with: "",
-                                                             range: filtered.index(filtered.startIndex, offsetBy: 1)..<filtered.endIndex)
+                    if filtered.count > 0 {
+                        filtered = filtered.replacingOccurrences(of: "-",
+                                                                 with: "",
+                                                                 range: filtered.index(filtered.startIndex, offsetBy: 1)..<filtered.endIndex)
+                    }
                     if filtered != newValue {
                         self.textPercent = filtered
                     }
@@ -265,7 +250,7 @@ struct PercentEditView: View {
 // MARK: - Affichage d'un pourcentage %
 struct PercentView: View {
     let label   : String
-    let percent : Double
+    let percent : Double // [0.0 ... 1.0]
     let comment : String?
     
     var body: some View {

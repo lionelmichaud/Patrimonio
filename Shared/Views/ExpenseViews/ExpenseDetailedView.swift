@@ -109,20 +109,11 @@ struct ExpenseDetailedView: View {
                         }
                     })
                     .capsuleButtonStyle()
-                    .disabled((index == nil) || changeOccured())
+                    .disabled((index == nil) || changeOccured)
             }
             ToolbarItem(placement: .automatic) {
-                Button(
-                    action : applyChanges,
-                    label  : {
-                        HStack {
-                            Image(systemName: "externaldrive.fill")
-                                .imageScale(.large)
-                            Text("Enregistrer")
-                        }
-                    })
-                    .capsuleButtonStyle()
-                    .disabled(!changeOccured())
+                SaveToFolderButton(action : applyChanges)
+                    .disabled(!changeOccured)
             }
         }
         .alert(item: $alertItem, content: myAlert)
@@ -220,7 +211,7 @@ struct ExpenseDetailedView: View {
         self.presentationMode.wrappedValue.dismiss()
     }
     
-    private func changeOccured() -> Bool {
+    private var changeOccured: Bool {
         if originalItem == nil {
             return true
         } else {

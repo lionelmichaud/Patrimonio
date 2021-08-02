@@ -7,9 +7,13 @@
 //
 
 import SwiftUI
+import ModelEnvironment
+import Persistence
 
 struct ModelsView: View {
-    @EnvironmentObject private var uiState: UIState
+    @EnvironmentObject private var dataStore : Store
+    @EnvironmentObject private var model     : Model
+    @EnvironmentObject private var uiState   : UIState
     
     enum PushedItem {
         case deterministicModel, humanModel, economyModel, sociologyModel, statisticsAssistant
@@ -19,14 +23,18 @@ struct ModelsView: View {
         NavigationView {
             /// Primary view
             List {
-                // Modèle Déterministique
-                DeterministicSectionView()
-                
-                // Modèle Statistique
-                StatisticSectionView()
-                
-                // Assistant modèle statistique
-                RandomizerAssistantSectionView()
+                if dataStore.activeDossier != nil {
+                    // Modèle Déterministique
+                    DeterministicSectionView()
+                    
+                    // Modèle Statistique
+                    StatisticSectionView()
+                    
+                    // Assistant modèle statistique
+                    RandomizerAssistantSectionView()
+                } else {
+                    Text("Modèles")
+                }
             }
             //.defaultSideBarListStyle()
             .listStyle(SidebarListStyle())
@@ -34,7 +42,11 @@ struct ModelsView: View {
             .navigationTitle("Modèles")
             
             /// vue par défaut
-            ModelDeterministicView()
+            if dataStore.activeDossier != nil {
+                ModelDeterministicView(using: model)
+            } else {
+                NoLoadedDossierView()
+            }
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
@@ -42,14 +54,17 @@ struct ModelsView: View {
 
 struct ModelsView_Previews: PreviewProvider {
     static let dataStore  = Store()
+    static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var family     = Family()
     static var patrimoine = Patrimoin()
     static var simulation = Simulation()
     
     static var previews: some View {
-        ModelsView()
+        dataStore.activate(dossierAtIndex: 0)
+        return ModelsView()
             .environmentObject(dataStore)
+            .environmentObject(model)
             .environmentObject(uiState)
             .environmentObject(family)
             .environmentObject(patrimoine)

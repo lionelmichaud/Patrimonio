@@ -7,9 +7,12 @@
 
 import SwiftUI
 import Files
+import ModelEnvironment
+import Persistence
 
 struct DossierSummaryView: View {
     @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
     @State private var alertItem: AlertItem?
@@ -25,17 +28,8 @@ struct DossierSummaryView: View {
             .toolbar {
                 /// Bouton: Sauvegarder
                 ToolbarItem(placement: .automatic) {
-                    Button(
-                        action : { save(activeDossier) },
-                        label  : {
-                            HStack {
-                                Image(systemName: "externaldrive.fill")
-                                    .imageScale(.large)
-                                Text("Enregistrer")
-                            }
-                        })
-                        .capsuleButtonStyle()
-                        .disabled(!savable())
+                    SaveToDiskButton { save(activeDossier) }
+                        .disabled(!savable)
                 }
             }
         } else {
@@ -43,14 +37,18 @@ struct DossierSummaryView: View {
         }
     }
     
-    private func savable() -> Bool {
-        family.isModified || patrimoine.isModified
+    /// True si le dossier a été modifié
+    private var savable: Bool {
+        family.isModified || patrimoine.isModified || model.isModified
     }
+
+    // MARK: - Methods
 
     /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
     private func save(_ dossier: Dossier) {
         do {
             try dossier.saveDossierContentAsJSON { folder in
+                try model.saveAsJSON(toFolder: folder)
                 try family.saveAsJSON(toFolder: folder)
                 try patrimoine.saveAsJSON(toFolder: folder)
                 // forcer la vue à se rafraichir
@@ -66,17 +64,16 @@ struct DossierSummaryView: View {
 
 struct DossierSummaryView_Previews: PreviewProvider {
     static let dataStore  = Store()
-    static var uiState    = UIState()
+    static var model      = Model(fromBundle: Bundle.main)
     static var family     = Family()
     static var patrimoine = Patrimoin()
-    static var simulation = Simulation()
 
     static var previews: some View {
-        DossierSummaryView()
+        dataStore.activate(dossierAtIndex: 0)
+        return DossierSummaryView()
             .environmentObject(dataStore)
-            .environmentObject(uiState)
+            .environmentObject(model)
             .environmentObject(family)
             .environmentObject(patrimoine)
-            .environmentObject(simulation)
     }
 }

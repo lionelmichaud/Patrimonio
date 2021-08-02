@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 import AVFoundation
 import AppFoundation
 import Statistics
@@ -13,6 +14,10 @@ import EconomyModel
 import SocioEconomyModel
 import HumanLifeModel
 import Files
+import ModelEnvironment
+import Persistence
+
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Simulation")
 
 protocol CanResetSimulation {
     func reset()
@@ -131,35 +136,36 @@ final class Simulation: ObservableObject, CanResetSimulation {
     }
 
     /// remettre à zéro les historiques des tirages aléatoires avant le lancement d'un MontéCarlo
-    private func resetAllRandomHistories() {
-        HumanLife.model.resetRandomHistory()
-        Economy.model.resetRandomHistory()
-        SocioEconomy.model.resetRandomHistory()
+    private func resetAllRandomHistories(using model: Model) {
+        model.humanLife.model!.resetRandomHistory()
+        model.economy.model!.resetRandomHistory()
+        model.socioEconomy.model!.resetRandomHistory()
     }
 
-    private func currentRandomProperties(_ family                            : Family,
+    private func currentRandomProperties(using model: Model,
+                                         _ family                            : Family,
                                          _ dicoOfAdultsRandomProperties      : inout DictionaryOfAdultRandomProperties,
                                          _ dicoOfEconomyRandomVariables      : inout Economy.DictionaryOfRandomVariable,
                                          _ dicoOfSocioEconomyRandomVariables : inout SocioEconomy.DictionaryOfRandomVariable) {
         dicoOfAdultsRandomProperties      = family.currentRandomProperties()
-        dicoOfEconomyRandomVariables      = Economy.model.currentRandomizersValues(withMode           : mode)
-        dicoOfSocioEconomyRandomVariables = SocioEconomy.model.currentRandomizersValues(withMode : mode)
+        dicoOfEconomyRandomVariables      = model.economyModel.currentRandomizersValues(withMode: mode)
+        dicoOfSocioEconomyRandomVariables = model.socioEconomyModel.currentRandomizersValues(withMode: mode)
     }
 
-    private func nextRandomProperties(_ family                            : Family,
+    private func nextRandomProperties(using model                         : Model,
+                                      _ family                            : Family,
                                       _ dicoOfAdultsRandomProperties      : inout DictionaryOfAdultRandomProperties,
                                       _ dicoOfEconomyRandomVariables      : inout Economy.DictionaryOfRandomVariable,
                                       _ dicoOfSocioEconomyRandomVariables : inout SocioEconomy.DictionaryOfRandomVariable) {
         // re-générer les propriétés aléatoires de la famille
-        dicoOfAdultsRandomProperties = family.nextRun()
+        dicoOfAdultsRandomProperties = family.nextRun(using: model)
 
         // re-générer les propriétés aléatoires du modèle macro économique
-        dicoOfEconomyRandomVariables = try! Economy.model.nextRun(withMode           : mode,
-                                                                  simulateVolatility : UserSettings.shared.simulateVolatility,
-                                                                  firstYear          : firstYear!,
-                                                                  lastYear           : lastYear!)
+        dicoOfEconomyRandomVariables = try! model.economyModel.nextRun(simulateVolatility : UserSettings.shared.simulateVolatility,
+                                                                       firstYear          : firstYear!,
+                                                                       lastYear           : lastYear!)
         // re-générer les propriétés aléatoires du modèle socio économique
-        dicoOfSocioEconomyRandomVariables = SocioEconomy.model.nextRun()
+        dicoOfSocioEconomyRandomVariables = model.socioEconomyModel.nextRun()
     }
 
     /// Exécuter une simulation Déterministe ou Aléatoire
@@ -168,7 +174,8 @@ final class Simulation: ObservableObject, CanResetSimulation {
     ///   - nbOfRuns: nombre de run à calculer (> 1: mode aléatoire)
     ///   - family: la famille
     ///   - patrimoine: le patrimoine
-    func compute(nbOfYears                 : Int,
+    func compute(using model               : Model,
+                 nbOfYears                 : Int,
                  nbOfRuns                  : Int,
                  withFamily family         : Family,
                  withPatrimoine patrimoine : Patrimoin) {
@@ -186,13 +193,18 @@ final class Simulation: ObservableObject, CanResetSimulation {
 //        } // DispatchQueue.main.async
 
         let monteCarlo = nbOfRuns > 1
+        if monteCarlo && mode != .random {
+            customLog.log(level: .fault, "monteCarlo && mode != .random")
+            fatalError()
+        }
+        
         var dicoOfAdultsRandomProperties      = DictionaryOfAdultRandomProperties()
         var dicoOfEconomyRandomVariables      = Economy.DictionaryOfRandomVariable()
         var dicoOfSocioEconomyRandomVariables = SocioEconomy.DictionaryOfRandomVariable()
 
         if monteCarlo {
             // remettre à zéro les historiques des tirages aléatoires
-            resetAllRandomHistories()
+            resetAllRandomHistories(using: model)
             // remettre à zéro la table de résultat
             monteCarloResultTable = SimulationResultTable()
         }
@@ -211,12 +223,14 @@ final class Simulation: ObservableObject, CanResetSimulation {
 
             // re-générer les propriétés aléatoires à chaque run si on est en mode Aléatoire
             if monteCarlo {
-                nextRandomProperties(family,
+                nextRandomProperties(using: model,
+                                     family,
                                      &dicoOfAdultsRandomProperties,
                                      &dicoOfEconomyRandomVariables,
                                      &dicoOfSocioEconomyRandomVariables)
             } else {
-                currentRandomProperties(family,
+                currentRandomProperties(using: model,
+                                        family,
                                         &dicoOfAdultsRandomProperties,
                                         &dicoOfEconomyRandomVariables,
                                         &dicoOfSocioEconomyRandomVariables)
@@ -231,7 +245,8 @@ final class Simulation: ObservableObject, CanResetSimulation {
                                                         withFamily     : family,
                                                         withPatrimoine : patrimoine,
                                                         withKPIs       : &kpis,
-                                                        withMode       : mode)
+                                                        withMode       : mode,
+                                                        using          : model)
             // Synthèse du Run de Simulation
             currentRunResults = SimulationResultLine(runNumber                         : run,
                                                      dicoOfAdultsRandomProperties      : dicoOfAdultsRandomProperties,
@@ -260,7 +275,8 @@ final class Simulation: ObservableObject, CanResetSimulation {
     ///   - thisRun: paramètres du run à rejouer
     func replay(thisRun                   : SimulationResultLine,
                 withFamily family         : Family,
-                withPatrimoine patrimoine : Patrimoin) {
+                withPatrimoine patrimoine : Patrimoin,
+                using model               : Model) {
         defer {
             // jouer le son à la fin de la simulation
             Simulation.playSound()
@@ -279,12 +295,11 @@ final class Simulation: ObservableObject, CanResetSimulation {
                                     message  : "Début : \(firstYear!)")
 
         // fixer tous les paramètres du run à rejouer
-        try! Economy.model.setRandomValue(to                 : thisRun.dicoOfEconomyRandomVariables,
-                                          withMode           : mode,
-                                          simulateVolatility : UserSettings.shared.simulateVolatility,
-                                          firstYear          : firstYear!,
-                                          lastYear           : lastYear!)
-        SocioEconomy.model.setRandomValue(to: thisRun.dicoOfSocioEconomyRandomVariables)
+        try! model.economyModel.setRandomValue(to                 : thisRun.dicoOfEconomyRandomVariables,
+                                               simulateVolatility : UserSettings.shared.simulateVolatility,
+                                               firstYear          : firstYear!,
+                                               lastYear           : lastYear!)
+        model.socioEconomyModel.setRandomValue(to: thisRun.dicoOfSocioEconomyRandomVariables)
         family.members.items.forEach { person in
             if let adult = person as? Adult {
                 adult.ageOfDeath           = thisRun.dicoOfAdultsRandomProperties[adult.displayName]!.ageOfDeath
@@ -301,7 +316,8 @@ final class Simulation: ObservableObject, CanResetSimulation {
                                  withFamily     : family,
                                  withPatrimoine : patrimoine,
                                  withKPIs       : &kpis,
-                                 withMode       : mode)
+                                 withMode       : mode,
+                                 using          : model)
         patrimoine.restoreState()
 
         isComputed  = true
@@ -318,11 +334,11 @@ final class Simulation: ObservableObject, CanResetSimulation {
     ///
     /// - Parameter mode: mode de simulation utilisé lors de la dernière simulation
     /// - Returns: dictionnaire [Nom de fichier : CSV string]
-    func simulationResultsCSV() -> [String:String] {
+    func simulationResultsCSV(using model: Model) -> [String:String] {
         /// - un fichier pour le Cash Flow
         /// - un fichier pour le Bilan
         /// - un fichier pour les Successions
-        var dicoOfCsv = socialAccounts.lastSimulationResultCsvStrings(withMode: mode)
+        var dicoOfCsv = socialAccounts.lastSimulationResultCsvStrings(using: model, withMode: mode)
         
         /// - un fichier pour le tableau de résultat de Monté-Carlo
         var runResultCsvString: String

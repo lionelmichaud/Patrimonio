@@ -24,24 +24,24 @@ struct SCPI: Identifiable, JsonCodableToBundleP, Ownable {
     
     static var defaultFileName : String = "SCPI.json"
 
-    private static var saleCommission    : Double                    = 10.0 // %
-    private static var simulationMode    : SimulationModeEnum        = .deterministic
+    private static var saleCommission    : Double             = 10.0 // %
+    private static var simulationMode    : SimulationModeEnum = .deterministic
     // dependencies
-    private static var inflationProvider : InflationProviderProtocol = Economy.model
-    private static var fiscalModel       : Fiscal.Model              = Fiscal.model
+    private static var inflationProvider : InflationProviderP!
+    private static var fiscalModel       : Fiscal.Model!
 
-    // tous ces actifs sont dépréciés de l'inflation
+    // tous ces revenus sont dépréciés de l'inflation
     private static var inflation: Double { // %
-        SCPI.inflationProvider.inflation(withMode: simulationMode)
+        SCPI.inflationProvider!.inflation(withMode: simulationMode)
     }
     
     // MARK: - Static Methods
     
     /// Dependency Injection: Setter Injection
-    static func setInflationProvider(_ inflationProvider : InflationProviderProtocol) {
+    static func setInflationProvider(_ inflationProvider : InflationProviderP) {
         SCPI.inflationProvider = inflationProvider
     }
-
+    
     /// Dependency Injection: Setter Injection
     static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
         SCPI.fiscalModel = fiscalModel
