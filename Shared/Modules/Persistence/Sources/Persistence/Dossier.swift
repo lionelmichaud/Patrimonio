@@ -50,7 +50,7 @@ public struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
     
     private static let defaultFileName = FileNameCst.kDossierDescriptorFileName
     
-    // le dossier contenant les template à utiilser pour créer un nouveau dossier
+    // le dossier contenant les template à utiliser pour créer un nouveau dossier
     public static let templates : Dossier? = {
         do {
             let templateFolder = try PersistenceManager.importTemplatesFromApp()
