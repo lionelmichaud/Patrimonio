@@ -8,6 +8,7 @@
 
 import SwiftUI
 import ModelEnvironment
+import Persistence
 
 struct ModelsView: View {
     @EnvironmentObject private var dataStore : Store

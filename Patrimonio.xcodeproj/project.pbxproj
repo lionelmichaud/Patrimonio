@@ -109,8 +109,6 @@
 		7920DC94262C721400536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC93262C721400536B03 /* AppFoundation */; };
 		79281A09262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */; };
 		79281A0A262F50FA00E58A34 /* LifeInsuranceClause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */; };
-		792DE958264C8DBF004DA53D /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DE957264C8DBF004DA53D /* PersistenceManager.swift */; };
-		792DE959264C8DBF004DA53D /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DE957264C8DBF004DA53D /* PersistenceManager.swift */; };
 		7935FFD726541AAB00AC1715 /* DossiersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935FFD626541AAB00AC1715 /* DossiersView.swift */; };
 		7935FFD92654204200AC1715 /* DossierSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935FFD82654204200AC1715 /* DossierSummaryView.swift */; };
 		7935FFDB265420FF00AC1715 /* DossierBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */; };
@@ -145,10 +143,6 @@
 		7956995E262F90310015AF34 /* NamedValue in Frameworks */ = {isa = PBXBuildFile; productRef = 7956995D262F90310015AF34 /* NamedValue */; };
 		7960D820266642FB00ABA5EE /* PersonArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960D81F266642FB00ABA5EE /* PersonArray.swift */; };
 		7960D821266642FB00ABA5EE /* PersonArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960D81F266642FB00ABA5EE /* PersonArray.swift */; };
-		796503C62655682A0093F10E /* Dossier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796503C52655682A0093F10E /* Dossier.swift */; };
-		796503C72655682A0093F10E /* Dossier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796503C52655682A0093F10E /* Dossier.swift */; };
-		796503CC265581E40093F10E /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796503CB265581E40093F10E /* Store.swift */; };
-		796503CD265581E40093F10E /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796503CB265581E40093F10E /* Store.swift */; };
 		796503CF265596E50093F10E /* DossierDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796503CE265596E50093F10E /* DossierDetailView.swift */; };
 		796503D0265596E50093F10E /* DossierDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796503CE265596E50093F10E /* DossierDetailView.swift */; };
 		796506C2264085830036E466 /* LiabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796506C1264085830036E466 /* LiabilityView.swift */; };
@@ -182,8 +176,6 @@
 		7974156426AB51FA00683A3A /* Persistable in Frameworks */ = {isa = PBXBuildFile; productRef = 7974156326AB51FA00683A3A /* Persistable */; };
 		7977FE5B262E302F005A1CB1 /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE5A262E302F005A1CB1 /* Family.swift */; };
 		7977FE5C262E302F005A1CB1 /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE5A262E302F005A1CB1 /* Family.swift */; };
-		7977FE62262E3375005A1CB1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE61262E3375005A1CB1 /* Constants.swift */; };
-		7977FE63262E3375005A1CB1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE61262E3375005A1CB1 /* Constants.swift */; };
 		7977FE7A262E4FA3005A1CB1 /* TimeSpan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE79262E4FA3005A1CB1 /* TimeSpan.swift */; };
 		7977FE7B262E4FA3005A1CB1 /* TimeSpan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE79262E4FA3005A1CB1 /* TimeSpan.swift */; };
 		7977FE85262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE84262E50C5005A1CB1 /* LifeExpenseCategory.swift */; };
@@ -282,6 +274,8 @@
 		7990D8E5264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990D8E4264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift */; };
 		7990D8E6264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990D8E4264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift */; };
 		7990D8E7264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990D8E4264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift */; };
+		799604CC26B847E700309EE5 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799604CB26B847E700309EE5 /* AppVersion.swift */; };
+		799604CD26B847E700309EE5 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799604CB26B847E700309EE5 /* AppVersion.swift */; };
 		7998E158262DB2FD00DA4A12 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E157262DB2FD00DA4A12 /* Person.swift */; };
 		7998E159262DB2FD00DA4A12 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E157262DB2FD00DA4A12 /* Person.swift */; };
 		7998E15F262DB31400DA4A12 /* Sex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7998E15E262DB31400DA4A12 /* Sex.swift */; };
@@ -408,8 +402,8 @@
 		79B2727B2634D68E00298E5D /* BoundaryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B272792634D68E00298E5D /* BoundaryEditView.swift */; };
 		79B272812634D77D00298E5D /* LabelValueHelperViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B272802634D77D00298E5D /* LabelValueHelperViews.swift */; };
 		79B272822634D77D00298E5D /* LabelValueHelperViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B272802634D77D00298E5D /* LabelValueHelperViews.swift */; };
-		79B2728C2634DBEB00298E5D /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2728B2634DBEB00298E5D /* Themes.swift */; };
-		79B2728D2634DBEB00298E5D /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2728B2634DBEB00298E5D /* Themes.swift */; };
+		79B2728C2634DBEB00298E5D /* AppThemes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2728B2634DBEB00298E5D /* AppThemes.swift */; };
+		79B2728D2634DBEB00298E5D /* AppThemes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2728B2634DBEB00298E5D /* AppThemes.swift */; };
 		79B272932634E16800298E5D /* TimeSpanEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B272922634E16800298E5D /* TimeSpanEditView.swift */; };
 		79B272942634E16800298E5D /* TimeSpanEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B272922634E16800298E5D /* TimeSpanEditView.swift */; };
 		79B2729B2634E80C00298E5D /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2729A2634E80C00298E5D /* Charts */; };
@@ -562,8 +556,6 @@
 		79FA8CF62630684F009FEA00 /* FinancialEnvelop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CE02630684F009FEA00 /* FinancialEnvelop.swift */; };
 		79FC3D3B262C760A00A6184B /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC3D3A262C760A00A6184B /* Statistics */; };
 		79FC3D3D262C761400A6184B /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC3D3C262C761400A6184B /* Statistics */; };
-		79FC72092632F7A9004F3BD2 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC72082632F7A9004F3BD2 /* AppVersion.swift */; };
-		79FC720A2632F7A9004F3BD2 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC72082632F7A9004F3BD2 /* AppVersion.swift */; };
 		79FC722326330D2C004F3BD2 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC722226330D2C004F3BD2 /* AppCommands.swift */; };
 		79FC722426330D2C004F3BD2 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC722226330D2C004F3BD2 /* AppCommands.swift */; };
 		79FC723726331A9D004F3BD2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC723526331A9D004F3BD2 /* SettingsView.swift */; };
@@ -577,13 +569,13 @@
 		79FC726026333350004F3BD2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC725F26333350004F3BD2 /* SettingsView.swift */; };
 		79FC726A263336C3004F3BD2 /* UIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC7269263336C3004F3BD2 /* UIState.swift */; };
 		79FC726B263336C3004F3BD2 /* UIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC7269263336C3004F3BD2 /* UIState.swift */; };
-		79FC727726333858004F3BD2 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC727626333858004F3BD2 /* AppSettings.swift */; };
-		79FC727826333858004F3BD2 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC727626333858004F3BD2 /* AppSettings.swift */; };
 		79FC727E2633387F004F3BD2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC727D2633387F004F3BD2 /* ContentView.swift */; };
 		79FC728C26333A27004F3BD2 /* MainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC728B26333A27004F3BD2 /* MainScene.swift */; };
 		79FC728D26333A27004F3BD2 /* MainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC728B26333A27004F3BD2 /* MainScene.swift */; };
 		79FDC1A7269C4C520092452D /* CashFlowLine+manageSuccession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FDC1A6269C4C520092452D /* CashFlowLine+manageSuccession.swift */; };
 		79FDC1A8269C4C520092452D /* CashFlowLine+manageSuccession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FDC1A6269C4C520092452D /* CashFlowLine+manageSuccession.swift */; };
+		79FFC12726B84BC8005DEC8D /* Persistence in Frameworks */ = {isa = PBXBuildFile; productRef = 79FFC12626B84BC8005DEC8D /* Persistence */; };
+		79FFC12926B84BD2005DEC8D /* Persistence in Frameworks */ = {isa = PBXBuildFile; productRef = 79FFC12826B84BD2005DEC8D /* Persistence */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -657,7 +649,6 @@
 		7920DC70262C700500536B03 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		7920DC72262C700500536B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		79281A08262F50FA00E58A34 /* LifeInsuranceClause.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeInsuranceClause.swift; sourceTree = "<group>"; };
-		792DE957264C8DBF004DA53D /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		7935FFD626541AAB00AC1715 /* DossiersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DossiersView.swift; sourceTree = "<group>"; };
 		7935FFD82654204200AC1715 /* DossierSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierSummaryView.swift; sourceTree = "<group>"; };
 		7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierBrowserView.swift; sourceTree = "<group>"; };
@@ -674,8 +665,6 @@
 		79569944262F885B0015AF34 /* Ownership+TransferLifeInsurance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ownership+TransferLifeInsurance.swift"; sourceTree = "<group>"; };
 		7956994B262F8B5C0015AF34 /* Ownable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ownable.swift; sourceTree = "<group>"; };
 		7960D81F266642FB00ABA5EE /* PersonArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonArray.swift; sourceTree = "<group>"; };
-		796503C52655682A0093F10E /* Dossier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dossier.swift; sourceTree = "<group>"; };
-		796503CB265581E40093F10E /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		796503CE265596E50093F10E /* DossierDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierDetailView.swift; sourceTree = "<group>"; };
 		796506C1264085830036E466 /* LiabilityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiabilityView.swift; sourceTree = "<group>"; };
 		796506C52640866F0036E466 /* PeriodicInvestDetailedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodicInvestDetailedView.swift; sourceTree = "<group>"; };
@@ -689,7 +678,6 @@
 		79735EE8263242FA00CD952F /* AppMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppMain.swift; sourceTree = "<group>"; };
 		79735EE9263242FA00CD952F /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7977FE5A262E302F005A1CB1 /* Family.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Family.swift; sourceTree = "<group>"; };
-		7977FE61262E3375005A1CB1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7977FE79262E4FA3005A1CB1 /* TimeSpan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeSpan.swift; sourceTree = "<group>"; };
 		7977FE84262E50C5005A1CB1 /* LifeExpenseCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeExpenseCategory.swift; sourceTree = "<group>"; };
 		7977FE8B262E5282005A1CB1 /* LifeExpense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeExpense.swift; sourceTree = "<group>"; };
@@ -733,6 +721,7 @@
 		7990D8DC264F0A6800078CB6 /* LineChartCashFlowVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartCashFlowVisitor.swift; sourceTree = "<group>"; };
 		7990D8E0264F1C4000078CB6 /* BarChartCashFlowVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartCashFlowVisitor.swift; sourceTree = "<group>"; };
 		7990D8E4264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBarChartCashFlowVisitor.swift; sourceTree = "<group>"; };
+		799604CB26B847E700309EE5 /* AppVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		7998E157262DB2FD00DA4A12 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		7998E15E262DB31400DA4A12 /* Sex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sex.swift; sourceTree = "<group>"; };
 		7998E16C262DB38700DA4A12 /* Seniority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Seniority.swift; sourceTree = "<group>"; };
@@ -790,7 +779,7 @@
 		79B2726D2634CC0000298E5D /* PersonPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonPickerView.swift; sourceTree = "<group>"; };
 		79B272792634D68E00298E5D /* BoundaryEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundaryEditView.swift; sourceTree = "<group>"; };
 		79B272802634D77D00298E5D /* LabelValueHelperViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelValueHelperViews.swift; sourceTree = "<group>"; };
-		79B2728B2634DBEB00298E5D /* Themes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
+		79B2728B2634DBEB00298E5D /* AppThemes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppThemes.swift; sourceTree = "<group>"; };
 		79B272922634E16800298E5D /* TimeSpanEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeSpanEditView.swift; sourceTree = "<group>"; };
 		79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = MonteCarlo.csv; sourceTree = "<group>"; };
 		79BBE8E52646E9170045E524 /* BS Detailed ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BS Detailed ChartView.swift"; sourceTree = "<group>"; };
@@ -857,7 +846,6 @@
 		79FA8CDE2630684F009FEA00 /* AssetsCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetsCategory.swift; sourceTree = "<group>"; };
 		79FA8CDF2630684F009FEA00 /* ValuedAssets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValuedAssets.swift; sourceTree = "<group>"; };
 		79FA8CE02630684F009FEA00 /* FinancialEnvelop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinancialEnvelop.swift; sourceTree = "<group>"; };
-		79FC72082632F7A9004F3BD2 /* AppVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		79FC722226330D2C004F3BD2 /* AppCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
 		79FC723526331A9D004F3BD2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		79FC723D26331C69004F3BD2 /* SimulationUserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationUserSettingsView.swift; sourceTree = "<group>"; };
@@ -866,7 +854,6 @@
 		79FC7258263320BE004F3BD2 /* AppVersionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionView.swift; sourceTree = "<group>"; };
 		79FC725F26333350004F3BD2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		79FC7269263336C3004F3BD2 /* UIState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIState.swift; sourceTree = "<group>"; };
-		79FC727626333858004F3BD2 /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		79FC727D2633387F004F3BD2 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		79FC728B26333A27004F3BD2 /* MainScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScene.swift; sourceTree = "<group>"; };
 		79FDC1A6269C4C520092452D /* CashFlowLine+manageSuccession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CashFlowLine+manageSuccession.swift"; sourceTree = "<group>"; };
@@ -880,6 +867,7 @@
 				79657B5126B758520044D62C /* Numerics in Frameworks */,
 				796F2F92262C855A002D20D1 /* HumanLifeModel in Frameworks */,
 				79EF7E68262C8A3600E9C0FF /* FiscalModel in Frameworks */,
+				79FFC12726B84BC8005DEC8D /* Persistence in Frameworks */,
 				79EC47A726307BC90006EE44 /* Foil in Frameworks */,
 				7974156226AB51E300683A3A /* Persistable in Frameworks */,
 				79058371262C79050061F296 /* SocioEconomyModel in Frameworks */,
@@ -922,6 +910,7 @@
 				79B272A12634E82700298E5D /* Charts in Frameworks */,
 				79B2FE2C262C7DF900EBFF56 /* RetirementModel in Frameworks */,
 				791ED0ED263A0A2800701202 /* StepperView in Frameworks */,
+				79FFC12926B84BD2005DEC8D /* Persistence in Frameworks */,
 				7920DC94262C721400536B03 /* AppFoundation in Frameworks */,
 				79FC3D3D262C761400A6184B /* Statistics in Frameworks */,
 				79E713EC262C9886000FD625 /* EconomyModel in Frameworks */,
@@ -1125,7 +1114,7 @@
 				79FC728B26333A27004F3BD2 /* MainScene.swift */,
 				798E7838264209AD0094534F /* Resources */,
 				79AB53F0263241CF00FADBA7 /* ConfigurationFiles */,
-				7998E13B262D6A0000DA4A12 /* AppEnvironment */,
+				7998E13B262D6A0000DA4A12 /* AppEnvir */,
 				7998E13A262D6A0000DA4A12 /* Model */,
 				79FC723C26331C0E004F3BD2 /* Views */,
 				7920DC4C262C700500536B03 /* Assets.xcassets */,
@@ -1237,17 +1226,6 @@
 				79AB53F3263241CF00FADBA7 /* persons.json */,
 			);
 			path = Family;
-			sourceTree = "<group>";
-		};
-		79569952262F8DA30015AF34 /* Persistence */ = {
-			isa = PBXGroup;
-			children = (
-				7977FE61262E3375005A1CB1 /* Constants.swift */,
-				796503CB265581E40093F10E /* Store.swift */,
-				796503C52655682A0093F10E /* Dossier.swift */,
-				792DE957264C8DBF004DA53D /* PersistenceManager.swift */,
-			);
-			path = Persistence;
 			sourceTree = "<group>";
 		};
 		796506C42640866F0036E466 /* AssetDetailedViews */ = {
@@ -1373,18 +1351,16 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		7998E13B262D6A0000DA4A12 /* AppEnvironment */ = {
+		7998E13B262D6A0000DA4A12 /* AppEnvir */ = {
 			isa = PBXGroup;
 			children = (
-				79FC72082632F7A9004F3BD2 /* AppVersion.swift */,
-				79FC727626333858004F3BD2 /* AppSettings.swift */,
+				799604CB26B847E700309EE5 /* AppVersion.swift */,
 				79FC722226330D2C004F3BD2 /* AppCommands.swift */,
+				79B2728B2634DBEB00298E5D /* AppThemes.swift */,
 				79EC479826307B260006EE44 /* UserSettings.swift */,
 				79FC7269263336C3004F3BD2 /* UIState.swift */,
-				79B2728B2634DBEB00298E5D /* Themes.swift */,
-				79569952262F8DA30015AF34 /* Persistence */,
 			);
-			path = AppEnvironment;
+			path = AppEnvir;
 			sourceTree = "<group>";
 		};
 		7998E154262DB27500DA4A12 /* UserData Model */ = {
@@ -1857,6 +1833,7 @@
 				7985C11826B75B43005C2138 /* RealModule */,
 				7985C11A26B75B4B005C2138 /* ComplexModule */,
 				79B9E4F426B75E1E00577C0B /* ModelEnvironment */,
+				79FFC12626B84BC8005DEC8D /* Persistence */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -1896,6 +1873,7 @@
 				7974156326AB51FA00683A3A /* Persistable */,
 				79657B5226B758680044D62C /* Numerics */,
 				79B9E4F626B75E2A00577C0B /* ModelEnvironment */,
+				79FFC12826B84BD2005DEC8D /* Persistence */,
 			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
@@ -2173,7 +2151,6 @@
 				79C8382D2641DCBC008B29BF /* ChartLimitLine+Extension.swift in Sources */,
 				79BE4A862651CE7800BBF46C /* ModelSociologyView.swift in Sources */,
 				79AA5D762650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */,
-				7977FE62262E3375005A1CB1 /* Constants.swift in Sources */,
 				7998E15F262DB31400DA4A12 /* Sex.swift in Sources */,
 				791ED12E263A2DC300701202 /* RevenueCategory.swift in Sources */,
 				791ED115263A28BC00701202 /* SciCashFlowLine.swift in Sources */,
@@ -2190,7 +2167,6 @@
 				7990D8E5264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift in Sources */,
 				79EF934E2637636D00C1BE5B /* ChartsFormaters.swift in Sources */,
 				790FF33D264850E6001B2653 /* CsvBalanceSheetVisitor.swift in Sources */,
-				792DE958264C8DBF004DA53D /* PersistenceManager.swift in Sources */,
 				79EC47F7263095C20006EE44 /* NetCashFlowManager.swift in Sources */,
 				798DE8C02635CD3C00C0C3B5 /* AlertView.swift in Sources */,
 				79D7C41626B6EFCA0057E343 /* ModelDeterministicViewModel.swift in Sources */,
@@ -2204,7 +2180,7 @@
 				79A9AA76264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */,
 				79EC5E712640037400FF8263 /* Coordinator.swift in Sources */,
 				799DE8402654199600E96CF6 /* NoLoadedDossierView.swift in Sources */,
-				79B2728C2634DBEB00298E5D /* Themes.swift in Sources */,
+				79B2728C2634DBEB00298E5D /* AppThemes.swift in Sources */,
 				79C838272641DB80008B29BF /* Charts+AxisFormatter.swift in Sources */,
 				79B164842651DD7200D0603C /* ScenarioSummaryView.swift in Sources */,
 				791ED104263A20F600701202 /* SuccessorListView.swift in Sources */,
@@ -2221,7 +2197,6 @@
 				79EC47B626307C910006EE44 /* Debt.swift in Sources */,
 				7960D820266642FB00ABA5EE /* PersonArray.swift in Sources */,
 				7998E18A262DB5FB00DA4A12 /* Family+Protocols.swift in Sources */,
-				79FC727726333858004F3BD2 /* AppSettings.swift in Sources */,
 				799025AF2641F60300ED53D4 /* IrppSliceView.swift in Sources */,
 				798DE8AB2635CA7100C0C3B5 /* ExpenseDetailedView.swift in Sources */,
 				797901272640AF0400104C1A /* PatrimoineSummaryView.swift in Sources */,
@@ -2273,6 +2248,7 @@
 				79F222F2265ACC9F005EE0B9 /* DossierEditView.swift in Sources */,
 				79C838342641E04C008B29BF /* PopOverContentView.swift in Sources */,
 				79EF935926376D1100C1BE5B /* Simulation.swift in Sources */,
+				799604CC26B847E700309EE5 /* AppVersion.swift in Sources */,
 				797931A226416E8C000F8599 /* KPI.swift in Sources */,
 				794346452641D3F700374F99 /* CashFlowArray.swift in Sources */,
 				791ED0F8263A1D8A00701202 /* FamilySectionView.swift in Sources */,
@@ -2281,12 +2257,10 @@
 				79FDC1A7269C4C520092452D /* CashFlowLine+manageSuccession.swift in Sources */,
 				79FA8CE72630684F009FEA00 /* FreeInvestment.swift in Sources */,
 				7956993E262F884C0015AF34 /* Ownership+TransferFullOwnership.swift in Sources */,
-				796503C62655682A0093F10E /* Dossier.swift in Sources */,
 				79B164872651DD7200D0603C /* ModelsView.swift in Sources */,
 				79C838372641E092008B29BF /* CheckBoxStyles.swift in Sources */,
 				7901CF872652954E007DF85B /* SuccessionCsvVisitorP.swift in Sources */,
 				7971B9C62638CAF3009CF0F7 /* NSUIViewRepresentable.swift in Sources */,
-				79FC72092632F7A9004F3BD2 /* AppVersion.swift in Sources */,
 				7956994C262F8B5C0015AF34 /* Ownable.swift in Sources */,
 				7998E178262DB46800DA4A12 /* PersonCoderPreservingType.swift in Sources */,
 				79A9BE97265185AF00170A01 /* UniformDistributionView.swift in Sources */,
@@ -2346,7 +2320,6 @@
 				7977FE8C262E5282005A1CB1 /* LifeExpense.swift in Sources */,
 				799025B72641F60300ED53D4 /* BS Global ChartView.swift in Sources */,
 				7998E191262DB8E800DA4A12 /* DateBoundary.swift in Sources */,
-				796503CC265581E40093F10E /* Store.swift in Sources */,
 				799025A12641F60300ED53D4 /* GridsView.swift in Sources */,
 				791ED112263A285300701202 /* CashFlowLine.swift in Sources */,
 				799025C42642007300ED53D4 /* ProgressViews.swift in Sources */,
@@ -2372,14 +2345,13 @@
 				79AA5D732650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift in Sources */,
 				79FA8CE62630684F009FEA00 /* InterestRateKind.swift in Sources */,
 				79FA8CE22630684F009FEA00 /* PeriodicInvestment.swift in Sources */,
+				799604CD26B847E700309EE5 /* AppVersion.swift in Sources */,
 				79B2726F2634CC0000298E5D /* PersonPickerView.swift in Sources */,
 				791ED0FC263A1EB700701202 /* PersonDetailView.swift in Sources */,
-				796503C72655682A0093F10E /* Dossier.swift in Sources */,
 				79735EEB263242FA00CD952F /* AppMain.swift in Sources */,
 				79EC482026309EFC0006EE44 /* LifeInsuranceSuccessionManager.swift in Sources */,
 				7971B9C72638CAF3009CF0F7 /* NSUIViewRepresentable.swift in Sources */,
 				799025BE2641F60300ED53D4 /* SuccessionsView.swift in Sources */,
-				7977FE63262E3375005A1CB1 /* Constants.swift in Sources */,
 				790FF34926485BDE001B2653 /* CvsBuilder.swift in Sources */,
 				7998E160262DB31400DA4A12 /* Sex.swift in Sources */,
 				791ED0E1263A049900701202 /* PersonViewModel.swift in Sources */,
@@ -2407,11 +2379,10 @@
 				79735EED263242FA00CD952F /* ContentView.swift in Sources */,
 				79F222F3265ACC9F005EE0B9 /* DossierEditView.swift in Sources */,
 				79FC722426330D2C004F3BD2 /* AppCommands.swift in Sources */,
-				79B2728D2634DBEB00298E5D /* Themes.swift in Sources */,
+				79B2728D2634DBEB00298E5D /* AppThemes.swift in Sources */,
 				791ED119263A2CBD00701202 /* CashFlowLine+populateIncomes.swift in Sources */,
 				799025B22641F60300ED53D4 /* IrppEvolutionChartView.swift in Sources */,
 				791ED0F3263A188900701202 /* PersonEditView.swift in Sources */,
-				796503CD265581E40093F10E /* Store.swift in Sources */,
 				790C6171266AA5A80032A35E /* ExportSettingsView.swift in Sources */,
 				79EC5EAB26406FD900FF8263 /* OwnerGroupBox.swift in Sources */,
 				7990D8E2264F1C4000078CB6 /* BarChartCashFlowVisitor.swift in Sources */,
@@ -2445,7 +2416,6 @@
 				7960D821266642FB00ABA5EE /* PersonArray.swift in Sources */,
 				797931AA26416EA1000F8599 /* SimulationResultTable.swift in Sources */,
 				799025C22641F60300ED53D4 /* SimulationView.swift in Sources */,
-				79FC727826333858004F3BD2 /* AppSettings.swift in Sources */,
 				79C838252641DA3F008B29BF /* ChartView+Extensions.swift in Sources */,
 				79C838382641E092008B29BF /* CheckBoxStyles.swift in Sources */,
 				79EC5E722640037400FF8263 /* Coordinator.swift in Sources */,
@@ -2479,7 +2449,6 @@
 				791ED0D72639FBFD00701202 /* UnemployementDetailView.swift in Sources */,
 				79569938262F86C60015AF34 /* Ownership+TransferBareOwnership.swift in Sources */,
 				799025B02641F60300ED53D4 /* IrppSliceView.swift in Sources */,
-				792DE959264C8DBF004DA53D /* PersistenceManager.swift in Sources */,
 				79A9BE9A265186A700170A01 /* DiscreteDistributionView.swift in Sources */,
 				79EC480A263098340006EE44 /* OwnershipManager.swift in Sources */,
 				79C8382B2641DC02008B29BF /* LineChartDataSet+Extension.swift in Sources */,
@@ -2491,7 +2460,6 @@
 				791ED122263A2D3B00701202 /* CashFlowLine+managePeriodicInvest.swift in Sources */,
 				79C09D93269F38B0003213EA /* Ownership+TransferUsufruct.swift in Sources */,
 				791ED100263A1EF800701202 /* AdultDetailView.swift in Sources */,
-				79FC720A2632F7A9004F3BD2 /* AppVersion.swift in Sources */,
 				79BE4A812651CE7800BBF46C /* DiscreteRandomizerView.swift in Sources */,
 				7901CF882652954E007DF85B /* SuccessionCsvVisitorP.swift in Sources */,
 				791ED0DE2639FE2700701202 /* RetirementEditView.swift in Sources */,
@@ -3236,6 +3204,14 @@
 		79FC3D3C262C761400A6184B /* Statistics */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Statistics;
+		};
+		79FFC12626B84BC8005DEC8D /* Persistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Persistence;
+		};
+		79FFC12826B84BD2005DEC8D /* Persistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Persistence;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

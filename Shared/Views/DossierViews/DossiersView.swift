@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Persistence
 
 struct DossiersView: View {
     @EnvironmentObject var uiState   : UIState

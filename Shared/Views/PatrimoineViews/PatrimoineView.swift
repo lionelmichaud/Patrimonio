@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Persistence
 
 struct PatrimoineView: View {
     @EnvironmentObject private var uiState    : UIState

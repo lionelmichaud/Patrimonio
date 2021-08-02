@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ModelEnvironment
+import Persistence
 
 @main
 struct AppMain: App {

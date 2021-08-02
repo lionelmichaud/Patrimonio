@@ -12,6 +12,7 @@ import HumanLifeModel
 import EconomyModel
 import SocioEconomyModel
 import ModelEnvironment
+import Persistence
 
 // MARK: - Deterministic View
 

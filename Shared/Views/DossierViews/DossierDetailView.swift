@@ -8,6 +8,7 @@
 import SwiftUI
 import FiscalModel
 import ModelEnvironment
+import Persistence
 
 struct DossierDetailView: View {
     @EnvironmentObject private var dataStore  : Store

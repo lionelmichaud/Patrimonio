@@ -8,6 +8,7 @@
 import SwiftUI
 import Files
 import ModelEnvironment
+import Persistence
 
 struct DossierSummaryView: View {
     @EnvironmentObject private var dataStore  : Store

@@ -11,6 +11,7 @@ import AppFoundation
 import EconomyModel
 import SocioEconomyModel
 import ModelEnvironment
+import Persistence
 
 struct GridsView: View {
     @EnvironmentObject var uiState    : UIState

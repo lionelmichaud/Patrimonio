@@ -16,9 +16,9 @@ private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
 
 // MARK: - Liste de DOSSIERs contenant tous les fichiers d'entrée et de sortie
 
-typealias DossierArray = [Dossier]
+public typealias DossierArray = [Dossier]
 extension DossierArray {
-    mutating func load() throws {
+    public mutating func load() throws {
         self = DossierArray()
         try PersistenceManager.forEachUserFolder { folder in
             let decodedDossier = try Dossier(fromFile             : FileNameCst.kDossierDescriptorFileName,
@@ -35,7 +35,7 @@ extension DossierArray {
 
 // MARK: - DOSSIER contenant tous les fichiers d'entrée et de sortie
 
-enum DossierError: String, Error {
+public enum DossierError: String, Error {
     case failedToDeleteDossier         = "Impossible de supprimer le Dossier"
     case failedToFindFolder            = "Impossible de trouver le répertoire associé au Dossier"
     case failedToSaveDossierDescriptor = "Echec de l'enregistrement du descripteur de dossier"
@@ -44,14 +44,14 @@ enum DossierError: String, Error {
     case inconsistencyOwnerFolderName  = "Incohérence entre le nom du directory et le type de propriétaire du Dossier"
 }
 
-struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
+public struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
     
     // MARK: - Static Properties
     
-    static let defaultFileName = FileNameCst.kDossierDescriptorFileName
+    private static let defaultFileName = FileNameCst.kDossierDescriptorFileName
     
     // le dossier contenant les template à utiilser pour créer un nouveau dossier
-    static let templates : Dossier? = {
+    public static let templates : Dossier? = {
         do {
             let templateFolder = try PersistenceManager.importTemplatesFromApp()
             return Dossier()
@@ -65,9 +65,9 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
     
     // MARK: - Properties
     
-    var id                      = UUID()
-    var folder                  : Folder?
-    var isActive                = false
+    public var id                      = UUID()
+    public var folder                  : Folder?
+    public var isActive                = false
     private var _name           : String?
     private var _note           : String?
     private var _dateCreation   : Date?
@@ -75,15 +75,15 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
 
     // MARK: - Computed Properties
     
-    var name: String {
+    public var name: String {
         get { _name ?? "nil" }
         set { _name = newValue}
     }
-    var note: String {
+    public var note: String {
         get { _note ?? "" }
         set { _note = newValue }
     }
-    var dateCreationStr: String {
+    public var dateCreationStr: String {
         _dateCreation.stringShortDate
     }
     private var dateModification: Date? {
@@ -98,30 +98,30 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
             return nil
         }
     }
-    var dateModificationStr: String {
+    public var dateModificationStr: String {
         if let dateModif = self.dateModification {
             return dateModif.stringShortDate
         } else {
             return "nil"
         }
     }
-    var hourModificationStr: String {
+    public var hourModificationStr: String {
         if let dateModif = self.dateModification {
             return dateModif.stringTime
         } else {
             return "nil"
         }
     }
-    var folderName : String { folder?.name ?? "No folder" }
+    public var folderName : String { folder?.name ?? "No folder" }
     
     // MARK: - Initializers
     
-    init(id                          : UUID     = UUID(),
-         pointingTo folder           : Folder?  = nil,
-         with name                   : String?  = nil,
-         annotatedBy note            : String?  = nil,
-         createdOn dateCreation      : Date?    = nil,
-         isUserDossier               : Bool     = true) {
+    public init(id                          : UUID     = UUID(),
+                pointingTo folder           : Folder?  = nil,
+                with name                   : String?  = nil,
+                annotatedBy note            : String?  = nil,
+                createdOn dateCreation      : Date?    = nil,
+                isUserDossier               : Bool     = true) {
         self.id                = id
         self.folder            = folder
         self._dateCreation     = dateCreation
@@ -134,8 +134,8 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
     /// - Parameters:
     ///   - name: nom du nouveau Dossier
     ///   - note: note du nouveau Dossier
-    init(name : String,
-         note : String) throws {
+    public init(name : String,
+                note : String) throws {
         let newID = UUID()
         
         // créer le directory associé
@@ -148,7 +148,7 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
                   annotatedBy   : note,
                   createdOn     : Date.now,
                   isUserDossier : true)
-
+        
         // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier
         do {
             try saveAsJSON(toFile               : Dossier.defaultFileName,
@@ -162,55 +162,55 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
         
     // MARK: - Builder methods
     
-    func identifiedBy(_ id: UUID) -> Dossier {
+    public func identifiedBy(_ id: UUID) -> Dossier {
         var _dossier = self
         _dossier.id = id
         return _dossier
     }
     
-    func pointingTo(_ folder: Folder) -> Dossier {
+    public func pointingTo(_ folder: Folder) -> Dossier {
         var _dossier = self
         _dossier.folder = folder
         return _dossier
     }
     
-    func namedAs(_ name: String) -> Dossier {
+    public func namedAs(_ name: String) -> Dossier {
         var _dossier = self
         _dossier._name = name
         return _dossier
     }
     
-    func createdOn(_ date: Date = Date.now) -> Dossier {
+    public func createdOn(_ date: Date = Date.now) -> Dossier {
         var _dossier = self
         _dossier._dateCreation = date
         return _dossier
     }
     
-    func annotatedBy(_ note: String) -> Dossier {
+    public func annotatedBy(_ note: String) -> Dossier {
         var _dossier = self
         _dossier._note = note
         return _dossier
     }
     
-    func ownedByUser() -> Dossier {
+    public func ownedByUser() -> Dossier {
         var _dossier = self
         _dossier._isUserDossier = true
         return _dossier
     }
     
-    func ownedByApp() -> Dossier {
+    public func ownedByApp() -> Dossier {
         var _dossier = self
         _dossier._isUserDossier = false
         return _dossier
     }
     
-    func activated() -> Dossier {
+    public func activated() -> Dossier {
         var _dossier = self
         _dossier.isActive = true
         return _dossier
     }
     
-    func deActivated() -> Dossier {
+    public func deActivated() -> Dossier {
         var _dossier = self
         _dossier.isActive = false
         return _dossier
@@ -247,7 +247,7 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
     }
 
     /// Enregistrer le descripteur de Dossier
-    func saveAsJSON() throws {
+    public func saveAsJSON() throws {
         try saveAsJSON(toFile               : Dossier.defaultFileName,
                        toFolder             : self.folder!,
                        dateEncodingStrategy : .iso8601)
@@ -255,7 +255,7 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
 
     /// Enregistrer le contenu du Dossier
     /// - Parameter saveDossierContentTo: closure
-    func saveDossierContentAsJSON(saveDossierContentTo: (Folder) throws -> Void) throws {
+    public func saveDossierContentAsJSON(saveDossierContentTo: (Folder) throws -> Void) throws {
         // vérifier l'existence du Folder associé au Dossier
         guard let folder = self.folder else {
             customLog.log(level: .error,
@@ -284,7 +284,7 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
 
     /// Charger le contenu du Dossier
     /// - Parameter loadDossierContentTo: closure
-    func loadDossierContentAsJSON(loadDossierContentFrom: (Folder) throws -> Void) throws {
+    public func loadDossierContentAsJSON(loadDossierContentFrom: (Folder) throws -> Void) throws {
         // vérifier l'existence du Folder associé au Dossier
         guard let folder = self.folder else {
             customLog.log(level: .error,
@@ -304,7 +304,7 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
 
     /// Supprimer le contenu du directory et le dossier associé
     /// - Throws: DossierError.failedToDeleteDossier
-    func delete() throws {
+    public func delete() throws {
         do {
             if let folder = self.folder {
                 try PersistenceManager.deleteUserFolder(folderName: folder.name)
@@ -318,7 +318,7 @@ struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
 }
 
 extension Dossier: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         return
             """
             Dossier: \(name)

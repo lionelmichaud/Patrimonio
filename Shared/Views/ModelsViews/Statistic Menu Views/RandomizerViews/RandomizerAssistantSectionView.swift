@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Persistence
 
 struct RandomizerAssistantSectionView: View {
     @EnvironmentObject private var uiState: UIState

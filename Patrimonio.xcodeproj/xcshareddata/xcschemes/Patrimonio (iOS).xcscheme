@@ -55,6 +55,26 @@
                ReferencedContainer = "container:Shared/Modules/ModelEnvironment">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PersistenceTests"
+               BuildableName = "PersistenceTests"
+               BlueprintName = "PersistenceTests"
+               ReferencedContainer = "container:Shared/Modules/Persistence">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ModelEnvironmentTests"
+               BuildableName = "ModelEnvironmentTests"
+               BlueprintName = "ModelEnvironmentTests"
+               ReferencedContainer = "container:Shared/Modules/ModelEnvironment">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

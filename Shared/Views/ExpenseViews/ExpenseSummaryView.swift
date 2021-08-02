@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Persistence
 import Charts // https://github.com/danielgindi/Charts.git
 
 struct ExpenseSummaryView: View {

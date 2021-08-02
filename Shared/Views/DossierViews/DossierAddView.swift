@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppFoundation
+import Persistence
 
 // MARK: - Création du nouveau DOSSIER
 

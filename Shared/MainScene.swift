@@ -8,6 +8,7 @@
 
 import SwiftUI
 import ModelEnvironment
+import Persistence
 
 /// Defines the main scene of the App
 struct MainScene: Scene {

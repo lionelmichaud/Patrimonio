@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Persistence
 
 struct StatisticSectionView: View {
     @EnvironmentObject private var simulation : Simulation
