@@ -31,14 +31,17 @@ let package = Package(
             .target(
                 name: "Statistics",
                 dependencies:
-                    [.product(name: "Numerics", package: "swift-numerics"),
-                     .product(name: "SigmaSwiftStatistics", package: "SigmaSwiftStatistics"),
-                     "AppFoundation"
+                    [
+                        .product(name: "Numerics", package: "swift-numerics"),
+                        .product(name: "SigmaSwiftStatistics", package: "SigmaSwiftStatistics"),
+                        "AppFoundation"
                     ],
                 path: "Sources"),
             .testTarget(
                 name: "StatisticsTests",
-                dependencies: ["Statistics"])
+                dependencies: [
+                    "Statistics"
+                ])
         ]
 )
 

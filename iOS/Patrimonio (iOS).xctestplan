@@ -17,7 +17,6 @@
   },
   "testTargets" : [
     {
-      "enabled" : false,
       "skippedTests" : [
         "Tests_iOS\/testExample()",
         "Tests_iOS\/testLaunchPerformance()",
@@ -114,6 +113,21 @@
         "containerPath" : "container:Shared\/Modules\/UnemployementModel",
         "identifier" : "UnemployementModelTests",
         "name" : "UnemployementModelTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/ModelEnvironment",
+        "identifier" : "ModelEnvironmentTests",
+        "name" : "ModelEnvironmentTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/Statistics",
+        "identifier" : "StatisticsTests",
+        "name" : "StatisticsTests"
       }
     }
   ],
