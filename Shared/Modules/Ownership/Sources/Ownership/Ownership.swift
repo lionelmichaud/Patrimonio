@@ -12,28 +12,28 @@ import FiscalModel
 let customLogOwnership = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Ownership")
 
 // MARK: - Méthode d'évaluation d'un Patrmoine (régles fiscales à appliquer)
-enum EvaluationMethod: String, PickableEnum {
+public enum EvaluationMethod: String, PickableEnum {
     case ifi                     = "IFI"
     case isf                     = "ISF"
     case legalSuccession         = "Succession Légale"
     case lifeInsuranceSuccession = "Succession Assurance Vie"
     case patrimoine              = "Patrimoniale"
     
-    var pickerString: String {
+    public var pickerString: String {
         return self.rawValue
     }
 }
 
 // MARK: - La répartition des droits de propriété d'un bien entre personnes
 
-enum OwnershipError: Error {
+public enum OwnershipError: Error {
     case tryingToDismemberUnUndismemberedAsset
     case invalidOwnership
 }
 
 // MARK: - Struct définissant les droits de propriété d'un bien
 
-struct Ownership {
+public struct Ownership {
     
     // MARK: - Static Properties
     
@@ -44,15 +44,15 @@ struct Ownership {
     static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
         Ownership.fiscalModel = fiscalModel
     }
-
+    
     // MARK: - Properties
-
-    var fullOwners     : Owners = []
-    var bareOwners     : Owners = []
-    var usufructOwners : Owners = []
+    
+    public var fullOwners     : Owners = []
+    public var bareOwners     : Owners = []
+    public var usufructOwners : Owners = []
     // fonction qui donne l'age d'une personne à la fin d'une année donnée
     var ageOf          : ((_ name: String, _ year: Int) -> Int)?
-    var isDismembered  : Bool   = false {
+    public var isDismembered  : Bool   = false {
         didSet {
             if isDismembered {
                 usufructOwners = fullOwners
@@ -60,7 +60,7 @@ struct Ownership {
             }
         }
     }
-    var isValid        : Bool {
+    public var isValid        : Bool {
         if isDismembered {
             return (bareOwners.isNotEmpty && bareOwners.isvalid) &&
                 (usufructOwners.isNotEmpty && usufructOwners.isvalid)
@@ -68,18 +68,18 @@ struct Ownership {
             return fullOwners.isNotEmpty && fullOwners.isvalid
         }
     }
-
+    
     // MARK: - Initializers
     
-    init(ageOf: @escaping (_ name: String, _ year: Int) -> Int) {
+    public init(ageOf: @escaping (_ name: String, _ year: Int) -> Int) {
         self.ageOf = ageOf
     }
     
-    init() {    }
+    public init() {    }
     
     // MARK: - Methods
     
-    mutating func setDelegateForAgeOf(delegate: ((_ name: String, _ year: Int) -> Int)?) {
+    public mutating func setDelegateForAgeOf(delegate: ((_ name: String, _ year: Int) -> Int)?) {
         ageOf = delegate
     }
     
@@ -127,21 +127,21 @@ struct Ownership {
     
     /// Idem demembrement mais sous forme de % entre UF et NP en fonction de la date d'évaluation
     /// et donc en fonction de l'age du propréiatire du bien à démembrer
-    func demembrementPercentage(atEndOf year: Int) throws
+    public func demembrementPercentage(atEndOf year: Int) throws
     -> (usufructPercent  : Double,
         bareValuePercent : Double) {
         let dem = try demembrement(ofValue: 100.0, atEndOf: year)
         return (usufructPercent : dem.usufructValue,
                 bareValuePercent: dem.bareValue)
     }
-
+    
     /// Calcule la part d'un revenu qui revient à une personne donnée en fonction de ses droits de propriété sur le bien.
     /// - Note:
     ///     Pour une personne et un bien donné Part =
     ///     * Bien non démembré = part de la valeur actuelle détenue en PP par la personne
     ///     * Bien démembré        = part de la valeur actuelle détenue en UF par la personne
-    func ownedRevenue(by ownerName           : String,
-                      ofRevenue totalRevenue : Double) -> Double {
+    public func ownedRevenue(by ownerName           : String,
+                             ofRevenue totalRevenue : Double) -> Double {
         if isDismembered {
             // part de la valeur actuelle détenue en UF par la personne
             return usufructOwners[ownerName]?.ownedValue(from: totalRevenue) ?? 0
@@ -165,7 +165,7 @@ struct Ownership {
             return fullOwners[ownerName]?.fraction ?? 0
         }
     }
-    func ownedRevenueFraction(by adultsName: [String]) -> Double {
+    public func ownedRevenueFraction(by adultsName: [String]) -> Double {
         adultsName.reduce(0.0) { result, name in
             result + ownedRevenueFraction(by: name)
         }
@@ -176,7 +176,7 @@ struct Ownership {
     //                // la personne est à la fois UF et NP
     //                fullyOwnedRevenue = min(usufructRevenue, bareRevenue)
     //            }
-
+    
     /// Calcule la valeur d'un bien possédée par un personne donnée à une date donnée
     /// selon la régle générale ou selon la règle de l'IFI, de l'ISF, de la succession...
     /// - Parameters:
@@ -185,16 +185,16 @@ struct Ownership {
     ///   - year: date d'évaluation
     ///   - evaluationMethod: règles fiscales à utiliser pour le calcul
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
-    func ownedValue(by ownerName       : String,
-                    ofValue totalValue : Double,
-                    atEndOf year       : Int,
-                    evaluationMethod   : EvaluationMethod) -> Double {
+    public func ownedValue(by ownerName       : String,
+                           ofValue totalValue : Double,
+                           atEndOf year       : Int,
+                           evaluationMethod   : EvaluationMethod) -> Double {
         if isDismembered {
             switch evaluationMethod {
                 case .ifi, .isf :
                     // calcul de la part de pleine-propiété détenue
                     return usufructOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
-
+                    
                 case .legalSuccession, .lifeInsuranceSuccession, .patrimoine:
                     // démembrement
                     var usufructValue : Double = 0.0
@@ -212,7 +212,7 @@ struct Ownership {
                         usufructValue += usuFruit
                         bareValue     += nueProp
                     }
-
+                    
                     // calcul de la part de nue-propriété détenue
                     if let owner = bareOwners[ownerName] {
                         // on a trouvé un nue-propriétaire
@@ -233,16 +233,16 @@ struct Ownership {
                     }
                     return value
             }
-
+            
         } else {
             // pleine propriété
             return fullOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
         }
     }
     
-    func ownedValues(ofValue totalValue : Double,
-                     atEndOf year       : Int,
-                     evaluationMethod   : EvaluationMethod) -> [String : Double] {
+    public func ownedValues(ofValue totalValue : Double,
+                            atEndOf year       : Int,
+                            evaluationMethod   : EvaluationMethod) -> [String : Double] {
         var dico: [String : Double] = [:]
         if isDismembered {
             for owner in bareOwners {
@@ -269,7 +269,7 @@ struct Ownership {
         }
         return dico
     }
-
+    
     /// Factoriser les parts des usufuitier et les nue-propriétaires si nécessaire
     mutating func groupShares() {
         if isDismembered {
@@ -302,10 +302,10 @@ struct Ownership {
     /// - Warning: Ne donne pas le bon résultat pour un bien indivis.
     /// - Throws:
     ///   - OwnershipError.invalidOwnership: le ownership avant ou après n'est pas valide
-    mutating func transferOwnershipOf(decedentName       : String, // swiftlint:disable:this cyclomatic_complexity
-                                      chidrenNames       : [String]?,
-                                      spouseName         : String?,
-                                      spouseFiscalOption : InheritanceFiscalOption?) throws {
+    public mutating func transferOwnershipOf(decedentName       : String, // swiftlint:disable:this cyclomatic_complexity
+                                             chidrenNames       : [String]?,
+                                             spouseName         : String?,
+                                             spouseFiscalOption : InheritanceFiscalOption?) throws {
         guard isValid else {
             customLogOwnership.log(level: .error, "Tentative de transfert de propriéta avec 'ownership' invalide")
             throw OwnershipError.invalidOwnership
@@ -336,7 +336,7 @@ struct Ownership {
                         // cad que les nues-propriétaires deviennent PP
                         transferUsufruct(of         : decedentName,
                                          toChildren : chidrenNames)
-
+                        
                     }
                 } else if bareOwners.contains(ownerName: decedentName) {
                     // (b) le défunt était seulement nue-propriétaire
@@ -347,9 +347,9 @@ struct Ownership {
                                           toSpouse           : spouseName,
                                           toChildren         : chidrenNames,
                                           spouseFiscalOption : spouseFiscalOption)
-
+                    
                 } // (c) sinon on ne fait rien
-
+                
             } else if let chidrenNames = chidrenNames {
                 // (2) il n'y a pas de conjoint survivant
                 //     mais il y a des enfants survivants
@@ -393,32 +393,32 @@ struct Ownership {
     
     /// Retourne true si la personne est un des usufruitiers du bien
     /// - Parameter name: nom de la personne
-    func hasAnUsufructOwner(named name: String) -> Bool {
+    public func hasAnUsufructOwner(named name: String) -> Bool {
         isDismembered && usufructOwners.contains(where: { $0.name == name })
     }
     
     /// Retourne true si la personne est un des nupropriétaires du bien
     /// - Parameter name: nom de la personne
-    func hasABareOwner(named name: String) -> Bool {
+    public func hasABareOwner(named name: String) -> Bool {
         isDismembered && bareOwners.contains(where: { $0.name == name })
     }
     
     /// Retourne true si la personne est un des détenteurs du bien en pleine propriété
     /// - Parameter name: nom de la personne
-    func hasAFullOwner(named name: String) -> Bool {
+    public func hasAFullOwner(named name: String) -> Bool {
         !isDismembered && fullOwners.contains(where: { $0.name == name })
     }
     
     /// Retourne true si la personne est le seul détenteur du bien en pleine propriété
     /// - Parameter name: nom de la personne
-    func hasAUniqueFullOwner(named name: String) -> Bool {
+    public func hasAUniqueFullOwner(named name: String) -> Bool {
         !isDismembered && fullOwners.contains(where: { $0.name == name })
             && fullOwners.count == 1
     }
     
     /// Retourne true si la personne perçoit des revenus du bien
     /// - Parameter name: nom de la personne
-    func providesRevenue(to name: String) -> Bool {
+    public func providesRevenue(to name: String) -> Bool {
         hasAFullOwner(named: name) || hasAnUsufructOwner(named: name)
     }
 }
@@ -426,7 +426,7 @@ struct Ownership {
 // MARK: - Extensions
 
 extension Ownership: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         let header = """
          - Valide:   \(isValid.frenchString)
          - Démembré: \(isDismembered.frenchString)
@@ -455,7 +455,7 @@ extension Ownership: Codable {
 }
 
 extension Ownership: Equatable {
-    static func == (lhs: Ownership, rhs: Ownership) -> Bool {
+    public static func == (lhs: Ownership, rhs: Ownership) -> Bool {
         lhs.isDismembered  == rhs.isDismembered &&
             lhs.fullOwners     == rhs.fullOwners &&
             lhs.bareOwners     == rhs.bareOwners &&

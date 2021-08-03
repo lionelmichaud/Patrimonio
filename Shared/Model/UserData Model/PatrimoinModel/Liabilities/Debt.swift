@@ -8,6 +8,7 @@
 
 import Foundation
 import NamedValue
+import Ownership
 
 typealias DebtArray = ArrayOfNameableValuable<Debt>
 

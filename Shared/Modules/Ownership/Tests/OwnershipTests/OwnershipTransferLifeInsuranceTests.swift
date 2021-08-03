@@ -7,7 +7,8 @@
 //
 
 import XCTest
-@testable import Patrimoine
+import FiscalModel
+@testable import Ownership
 
 class OwnershipTransferLifeInsuranceTests: XCTestCase {
     
@@ -40,15 +41,12 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
     override class func setUp() {
         super.setUp()
         Ownership.setFiscalModelProvider(
-            Fiscal.Model(for: FiscalModelTests.self,
-                         from                 : nil,
-                         dateDecodingStrategy : .iso8601,
-                         keyDecodingStrategy  : .useDefaultKeys)
-                .initialized())
+            Fiscal.Model(fromFile: Fiscal.Model.defaultFileName,
+                         fromBundle: Bundle.module).initialized())
     }
     
     func test_transfer_Life_Insurance_non_demembrée () throws {
-        var ownership = Ownership(ageOf: OwnershipTests.ageOf)
+        var ownership = Ownership(ageOf: OwnershipTransferLifeInsuranceTests.ageOf)
         var clause = LifeInsuranceClause()
         
         // (B) le capital de l'assurance vie n'est pas démembré
@@ -161,7 +159,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
     }
     
     func test_transfer_Life_Insurance_demembrée () throws {
-        var ownership = Ownership(ageOf: OwnershipTests.ageOf)
+        var ownership = Ownership(ageOf: OwnershipTransferLifeInsuranceTests.ageOf)
         let clause = LifeInsuranceClause()
         
         // (A) le capital de l'assurane vie est démembré

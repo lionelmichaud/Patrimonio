@@ -13,6 +13,7 @@ import Statistics
 import FiscalModel
 import EconomyModel
 import NamedValue
+import Ownership
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.FreeInvestement")
 

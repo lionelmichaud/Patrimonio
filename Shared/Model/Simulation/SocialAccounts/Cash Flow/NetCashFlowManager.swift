@@ -11,6 +11,7 @@ import Foundation
 import os
 import AppFoundation
 import NamedValue
+import Ownership
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.NetCashFlowManager")
 

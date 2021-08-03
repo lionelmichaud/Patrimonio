@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Patrimoine
+@testable import Ownership
 
 class LifeInsuranceClauseTests: XCTestCase {
 

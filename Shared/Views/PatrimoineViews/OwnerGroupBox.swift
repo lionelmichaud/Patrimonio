@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Ownership
 
 struct OwnerGroupBox: View {
     private let title        : String

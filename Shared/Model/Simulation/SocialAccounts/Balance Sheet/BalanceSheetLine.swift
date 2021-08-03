@@ -8,6 +8,7 @@
 import Foundation
 import NamedValue
 import Persistence
+import Ownership
 
 // MARK: - Ligne de Bilan annuel
 

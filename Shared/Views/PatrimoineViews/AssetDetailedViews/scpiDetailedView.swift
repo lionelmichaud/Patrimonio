@@ -8,6 +8,7 @@
 
 import SwiftUI
 import FiscalModel
+import Ownership
 
 struct ScpiDetailedView: View {
     @EnvironmentObject var family     : Family

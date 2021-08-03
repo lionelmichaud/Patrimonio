@@ -10,6 +10,7 @@ import Foundation
 import AppFoundation
 import FiscalModel
 import NamedValue
+import Ownership
 
 typealias RealEstateArray = ArrayOfNameableValuable<RealEstateAsset>
 

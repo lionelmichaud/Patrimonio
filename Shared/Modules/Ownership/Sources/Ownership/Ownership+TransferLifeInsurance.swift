@@ -35,7 +35,7 @@ extension Ownership {
     ///   - le cas de plusieurs usufruitiers bénéficiaires n'est pas traité
     ///   - le cas de parts non égales entre bénéficiaires en PP n'est pas traité
     ///
-    mutating func transferLifeInsuranceUsufructAndBareOwnership(clause: LifeInsuranceClause) {
+    public mutating func transferLifeInsuranceUsufructAndBareOwnership(clause: LifeInsuranceClause) {
         guard clause.bareRecipients.isNotEmpty else {
             fatalError("transferLifeInsuranceUsufructAndBareOwnership: Aucun nue-propriétaire désigné dans la clause bénéficiaire démembrée de l'assurance vie")
         }
@@ -67,7 +67,7 @@ extension Ownership {
     ///
     /// - Warning: le cas de parts non égales entre bénéficiaires en PP n'est pas traité
     ///
-    mutating func transferLifeInsuranceFullOwnership(clause: LifeInsuranceClause) {
+    public mutating func transferLifeInsuranceFullOwnership(clause: LifeInsuranceClause) {
         guard clause.fullRecipients.isNotEmpty else {
             fatalError("Aucun bénéficiaire dans la clause bénéficiaire de l'assurance vie")
         }
@@ -103,8 +103,8 @@ extension Ownership {
     ///
     /// - Throws:
     ///   - OwnershipError.invalidOwnership: le ownership avant ou après n'est pas valide
-    mutating func transferLifeInsuranceOfDecedent(of decedentName    : String,
-                                                  accordingTo clause : LifeInsuranceClause) throws {
+    public mutating func transferLifeInsuranceOfDecedent(of decedentName    : String,
+                                                         accordingTo clause : LifeInsuranceClause) throws {
         guard isValid else {
             customLogOwnership.log(level: .error, "'transferOwnershipOf' a généré un 'ownership' invalide")
             throw OwnershipError.invalidOwnership

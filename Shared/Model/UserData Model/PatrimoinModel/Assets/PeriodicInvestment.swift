@@ -12,6 +12,7 @@ import Statistics
 import FiscalModel
 import EconomyModel
 import NamedValue
+import Ownership
 
 typealias PeriodicInvestementArray = ArrayOfNameableValuable<PeriodicInvestement>
 

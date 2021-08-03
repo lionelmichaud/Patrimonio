@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Ownership
 
 struct OwnershipView: View {
     @EnvironmentObject var family : Family
@@ -24,7 +25,8 @@ struct OwnershipView: View {
                 /// démembrement de propriété
                 Group {
                     NavigationLink(destination: OwnersListView(title  : usufruitierStr,
-                                                               owners : $ownership.usufructOwners).environmentObject(family)) {
+                                                               owners : $ownership.usufructOwners)
+                                    .environmentObject(family)) {
                         if ownership.isValid {
                             AmountView(label   : usufruitierStr+"s",
                                        amount  : (try! ownership.demembrementPercentage(atEndOf : Date.now.year).usufructPercent / 100.0) * totalValue,
@@ -39,7 +41,8 @@ struct OwnershipView: View {
                         }
                     }
                     NavigationLink(destination: OwnersListView(title  : nuPropStr,
-                                                               owners : $ownership.bareOwners).environmentObject(family)) {
+                                                               owners : $ownership.bareOwners)
+                                    .environmentObject(family)) {
                         if ownership.isValid {
                             AmountView(label   : nuPropStr+"s",
                                        amount  : (try! ownership.demembrementPercentage(atEndOf : Date.now.year).bareValuePercent / 100.0) * totalValue,

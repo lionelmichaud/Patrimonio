@@ -8,6 +8,7 @@
 
 import Foundation
 import AppFoundation
+import Ownership
 
 // MARK: - Type d'investissement
 

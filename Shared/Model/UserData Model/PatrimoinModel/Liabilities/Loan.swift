@@ -9,6 +9,7 @@
 import Foundation
 import AppFoundation
 import NamedValue
+import Ownership
 
 typealias LoanArray = ArrayOfNameableValuable<Loan>
 

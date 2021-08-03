@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import Ownership
 
 struct OwnersListView: View {
-    @EnvironmentObject var family: Family
     let title                    : String
     @Binding var owners          : Owners
+    @EnvironmentObject var family: Family
     @State private var alertItem : AlertItem?
     @State private var name      : String = ""
     

@@ -11,7 +11,7 @@ import NamedValue
 
 // MARK: Protocol d'Item qui peut être Possédé, Valuable et Nameable
 
-protocol Ownable: NameableValuable {
+public protocol Ownable: NameableValuable {
     var ownership: Ownership { get set }
     
     /// Calcule la valeur d'un bien possédée par un personne donnée à une date donnée
@@ -53,7 +53,7 @@ protocol Ownable: NameableValuable {
     func ownedValues(ofValue totalValue : Double,
                      atEndOf year       : Int,
                      evaluationMethod   : EvaluationMethod) -> [String : Double]
-
+    
     /// True si une des personnes listées perçoit des revenus de ce bien.
     /// Cad si elle est une des UF ou une des PP
     /// - Parameter names: liste de noms de membres de la famille
@@ -69,7 +69,7 @@ protocol Ownable: NameableValuable {
     func isPartOfPatrimoine(of names: [String]) -> Bool
 }
 
-extension Ownable {
+public extension Ownable {
     // implémentation par défaut
     func ownedValue(by ownerName     : String,
                     atEndOf year     : Int,
@@ -131,7 +131,7 @@ extension Ownable {
         }
         return dico
     }
-
+    
     func ownedValues(ofValue totalValue : Double,
                      atEndOf year       : Int,
                      evaluationMethod   : EvaluationMethod) -> [String : Double] {
@@ -206,9 +206,9 @@ extension Array where Element: Ownable {
     ///   - year: date d'évaluation
     ///   - evaluationMethod: méthode d'évaluation de la valeure des bien
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
-    func sumOfOwnedValues (by ownerName     : String,
-                           atEndOf year     : Int,
-                           evaluationMethod : EvaluationMethod) -> Double {
+    public func sumOfOwnedValues (by ownerName     : String,
+                                  atEndOf year     : Int,
+                                  evaluationMethod : EvaluationMethod) -> Double {
         return reduce(.zero, {result, element in
             return result + element.ownedValue(by               : ownerName,
                                                atEndOf          : year,

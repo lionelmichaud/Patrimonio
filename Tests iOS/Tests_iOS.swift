@@ -7,7 +7,8 @@
 
 import XCTest
 import Numerics
-//@testable import Patrimonio
+import _NumericsShims
+@testable import Patrimonio
 
 class Tests_iOS: XCTestCase { // swiftlint:disable:this type_name
 //    static let data: NamedValueArray =

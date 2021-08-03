@@ -8,12 +8,6 @@
 
 import Foundation
 
-// MARK: - DI: Protocol de service de fourniture de l'age d'une personne
-
-protocol PersonAgeProvider {
-    func ageOf(_ name: String, _ year: Int) -> Int
-}
-
 // MARK: - DI: Protocol de service de fourniture de l'année d'un événement de vie d'une personne
 
 protocol PersonEventYearProvider {

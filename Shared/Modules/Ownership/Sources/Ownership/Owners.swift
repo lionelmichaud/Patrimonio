@@ -7,21 +7,28 @@
 //
 
 import Foundation
+import Numerics
 
 // MARK: - Les droits de propriété d'un Owner
 
-struct Owner : Codable, Hashable {
-
+public struct Owner : Codable, Hashable {
     // MARK: - Properties
-
-    var name     : String = ""
-    var fraction : Double = 0.0 // % [0, 100] part de propriété
+    
+    public var name     : String = ""
+    public var fraction : Double = 0.0 // % [0, 100] part de propriété
     var isValid  : Bool {
         name != ""
     }
+    
+    // MARK: - Initializer
 
+    public init(name: String = "", fraction: Double = 0.0) {
+        self.name = name
+        self.fraction = fraction
+    }
+    
     // MARK: - Methods
-
+    
     /// Calculer la quote part de valeur possédée
     /// - Parameter totalValue: Valeure totale du bien
     func ownedValue(from totalValue: Double) -> Double {
@@ -30,14 +37,14 @@ struct Owner : Codable, Hashable {
 }
 
 extension Owner: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         "(\(name), \(fraction) %) "
     }
 }
 
 // MARK: - Un tableau de Owner
 
-typealias Owners = [Owner]
+public typealias Owners = [Owner]
 
 enum OwnersError: Error {
     case ownerDoesNotExist
@@ -45,16 +52,16 @@ enum OwnersError: Error {
 }
 
 extension Owners {
-
+    
     // MARK: - Computed Properties
-
-    var sumOfOwnedFractions: Double {
+    
+    public var sumOfOwnedFractions: Double {
         self.sum(for: \.fraction)
     }
-    var percentageOk: Bool {
+    public var percentageOk: Bool {
         sumOfOwnedFractions.isApproximatelyEqual(to: 100.0, absoluteTolerance: 0.0001)
     }
-    var isvalid: Bool {
+    public var isvalid: Bool {
         // il la liste est vide alors elle est valide
         guard !self.isEmpty else {
             return true
@@ -65,14 +72,14 @@ extension Owners {
         validity = validity && percentageOk
         return validity
     }
-
+    
     // MARK: - Methods
-
-    subscript(ownerName: String) -> Owner? {
+    
+    public subscript(ownerName: String) -> Owner? {
         self.first(where: { ownerName == $0.name })
     }
-
-    static func == (lhs: Owners, rhs: Owners) -> Bool {
+    
+    public static func == (lhs: Owners, rhs: Owners) -> Bool {
         for owner in lhs {
             guard let found = rhs[owner.name] else { return false }
             if !found.fraction.isApproximatelyEqual(to: owner.fraction,
@@ -85,15 +92,15 @@ extension Owners {
         }
         return true
     }
-
+    
     func contains(ownerName: String) -> Bool {
         self[ownerName] != nil
     }
-
+    
     func ownerIdx(ownerName: String) -> Int? {
         self.firstIndex(where: { ownerName == $0.name })
     }
-
+    
     /// Transérer la propriété d'un Owner vers plusieurs autres par parts égales
     /// - Parameters:
     ///   - thisOwner: celui qui sort
@@ -104,7 +111,7 @@ extension Owners {
     mutating func replace(thisOwner           : String,
                           with theseNewOwners : [String]) throws {
         guard theseNewOwners.count != 0 else { throw OwnersError.noNewOwners }
-
+        
         if let ownerIdx = self.ownerIdx(ownerName: thisOwner) {
             // part à redistribuer
             let ownerShare = self[ownerIdx].fraction
@@ -120,7 +127,7 @@ extension Owners {
             throw OwnersError.ownerDoesNotExist
         }
     }
-
+    
     /// Factoriser les parts des owners si nécessaire
     mutating func groupShares() {
         // identifer les owners et compter les occurences de chaque owner dans le tableau
@@ -139,5 +146,5 @@ extension Owners {
         // retirer les owners ayant une part nulle
         self = newTable.filter { $0.fraction != 0 }
     }
-
+    
 }

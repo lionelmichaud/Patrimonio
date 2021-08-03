@@ -10,7 +10,7 @@ import Stateful
 import Files
 import NamedValue
 
-extension ArrayOfNameableValuable where E: Ownable {
+public extension ArrayOfNameableValuable where E: Ownable {
     // MARK: - Initializers
     
     init(fileNamePrefix         : String = "",

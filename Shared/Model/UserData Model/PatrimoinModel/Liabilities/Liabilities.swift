@@ -9,6 +9,7 @@
 import Foundation
 import FiscalModel
 import Files
+import Ownership
 
 struct Liabilities {
     

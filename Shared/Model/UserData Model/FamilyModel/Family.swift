@@ -3,6 +3,7 @@ import FiscalModel
 import Files
 import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
 import ModelEnvironment
+import Ownership
 
 // MARK: - Class Family: la Famille, ses membres, leurs actifs et leurs revenus
 

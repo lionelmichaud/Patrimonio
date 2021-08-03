@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Ownership
 
 // MARK: - Saisie du type d'investissement
 

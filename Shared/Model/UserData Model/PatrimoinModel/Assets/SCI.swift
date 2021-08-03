@@ -9,6 +9,7 @@
 import Foundation
 import FiscalModel
 import Files
+import Ownership
 
 // MARK: - Société Civile Immobilière (SCI)
 struct SCI {

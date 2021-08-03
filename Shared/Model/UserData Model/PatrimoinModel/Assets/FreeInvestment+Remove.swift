@@ -7,6 +7,7 @@
 
 import Foundation
 import os
+import Ownership
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.FreeInvestement.remove")
 

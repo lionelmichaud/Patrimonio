@@ -7,7 +7,9 @@
 //
 
 import XCTest
-@testable import Patrimoine
+import FiscalModel
+import AppFoundation
+@testable import Ownership
 
 class OwnableTests: XCTestCase {
     
@@ -41,17 +43,14 @@ class OwnableTests: XCTestCase {
     override class func setUp() {
         super.setUp()
         Ownership.setFiscalModelProvider(
-            Fiscal.Model(for: FiscalModelTests.self,
-                         from                 : nil,
-                         dateDecodingStrategy : .iso8601,
-                         keyDecodingStrategy  : .useDefaultKeys)
-                .initialized())
+            Fiscal.Model(fromFile: Fiscal.Model.defaultFileName,
+                         fromBundle: Bundle.module).initialized())
     }
     
     // MARK: - Tests
     
     func test_owned_value() throws {
-        var ownership = Ownership(ageOf: OwnershipTests.ageOf)
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
         ownership.isDismembered = true
         
         // un seul usufruitier + un seul nupropriétaire
@@ -119,7 +118,7 @@ class OwnableTests: XCTestCase {
     }
     
     func test_owned_values() throws {
-        var ownership = Ownership(ageOf: OwnershipTests.ageOf)
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
         ownership.isDismembered = true
         
         // un seul usufruitier + un seul nupropriétaire

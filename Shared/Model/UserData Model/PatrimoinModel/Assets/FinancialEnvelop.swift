@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Ownership
 
 // MARK: Protocol d'enveloppe financière
 

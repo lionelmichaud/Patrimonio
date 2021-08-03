@@ -7,7 +7,8 @@
 //
 
 import XCTest
-@testable import Patrimoine
+import FiscalModel
+@testable import Ownership
 
 class OwnershipTransferTests: XCTestCase {
     static var fullOwner1     : Owner!
@@ -39,46 +40,43 @@ class OwnershipTransferTests: XCTestCase {
     override class func setUp() {
         super.setUp()
         Ownership.setFiscalModelProvider(
-            Fiscal.Model(for: FiscalModelTests.self,
-                         from                 : nil,
-                         dateDecodingStrategy : .iso8601,
-                         keyDecodingStrategy  : .useDefaultKeys)
-                .initialized())
+            Fiscal.Model(fromFile: Fiscal.Model.defaultFileName,
+                         fromBundle: Bundle.module).initialized())
     }
     
     override func setUpWithError() throws {
-        OwnershipTests.fullOwner1 = Owner(name     : "Owner1 de 65 ans en 2020",
-                                          fraction : 20)
-        OwnershipTests.fullOwner2 = Owner(name     : "Owner2 de 55 ans en 2020",
-                                          fraction : 80)
-        OwnershipTests.fullOwners = [OwnershipTests.fullOwner1,
-                                     OwnershipTests.fullOwner2]
+        OwnershipTransferTests.fullOwner1 = Owner(name     : "Owner1 de 65 ans en 2020",
+                                                  fraction : 20)
+        OwnershipTransferTests.fullOwner2 = Owner(name     : "Owner2 de 55 ans en 2020",
+                                                  fraction : 80)
+        OwnershipTransferTests.fullOwners = [OwnershipTransferTests.fullOwner1,
+                                             OwnershipTransferTests.fullOwner2]
         
-        OwnershipTests.bareOwner1 = Owner(name     : "bareOwner1",
-                                          fraction : 10)
-        OwnershipTests.bareOwner2 = Owner(name     : "bareOwner2",
-                                          fraction : 90)
-        OwnershipTests.bareOwners = [OwnershipTests.bareOwner1,
-                                     OwnershipTests.bareOwner2]
+        OwnershipTransferTests.bareOwner1 = Owner(name     : "bareOwner1",
+                                                  fraction : 10)
+        OwnershipTransferTests.bareOwner2 = Owner(name     : "bareOwner2",
+                                                  fraction : 90)
+        OwnershipTransferTests.bareOwners = [OwnershipTransferTests.bareOwner1,
+                                             OwnershipTransferTests.bareOwner2]
         
-        OwnershipTests.usufructOwner1 = Owner(name     : "usufructOwner1",
-                                              fraction : 30)
-        OwnershipTests.usufructOwner2 = Owner(name     : "usufructOwner2",
-                                              fraction : 70)
-        OwnershipTests.usufructOwners = [OwnershipTests.usufructOwner1,
-                                         OwnershipTests.usufructOwner2]
+        OwnershipTransferTests.usufructOwner1 = Owner(name     : "usufructOwner1",
+                                                      fraction : 30)
+        OwnershipTransferTests.usufructOwner2 = Owner(name     : "usufructOwner2",
+                                                      fraction : 70)
+        OwnershipTransferTests.usufructOwners = [OwnershipTransferTests.usufructOwner1,
+                                                 OwnershipTransferTests.usufructOwner2]
         
-        OwnershipTests.ownership.fullOwners = OwnershipTests.fullOwners
-        OwnershipTests.ownership.bareOwners = OwnershipTests.bareOwners
-        OwnershipTests.ownership.usufructOwners = OwnershipTests.usufructOwners
-        OwnershipTests.ownership.isDismembered = false
-        OwnershipTests.ownership.setDelegateForAgeOf(delegate: OwnershipTests.ageOf)
+        OwnershipTransferTests.ownership.fullOwners = OwnershipTransferTests.fullOwners
+        OwnershipTransferTests.ownership.bareOwners = OwnershipTransferTests.bareOwners
+        OwnershipTransferTests.ownership.usufructOwners = OwnershipTransferTests.usufructOwners
+        OwnershipTransferTests.ownership.isDismembered = false
+        OwnershipTransferTests.ownership.setDelegateForAgeOf(delegate: OwnershipTransferTests.ageOf)
     }
     
     func test_transfert_bien_démembré_avec_conjoint_avec_enfants() throws {
         let ownershipModelIsBuggy = true
         
-        var ownership = Ownership(ageOf: OwnershipTests.ageOf)
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
         
         // (A) le bien est démembré
         ownership.isDismembered = true
@@ -175,7 +173,7 @@ class OwnershipTransferTests: XCTestCase {
     }
     
     func test_transfert_bien_démembré_sans_conjoint_avec_enfants() throws {
-        var ownership = Ownership(ageOf: OwnershipTests.ageOf)
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
         
         // (A) le bien est démembré
         ownership.isDismembered = true
@@ -220,7 +218,7 @@ class OwnershipTransferTests: XCTestCase {
     }
     
     func test_transfert_bien_non_démembré() throws {
-        var ownership = Ownership(ageOf: OwnershipTests.ageOf)
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
         
         // (B) le bien n'est pas démembré
         ownership.isDismembered = false
