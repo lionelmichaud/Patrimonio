@@ -62,7 +62,7 @@ class OwnableTests: XCTestCase {
         
         // cas .legalSuccession d'un Nu-propriétaire
         var value = ownership.ownedValue(by               : "Nupropriétaire",
-                                         ofValue          : asset.value(atEndOf          : 2020),
+                                         ofValue          : asset.value(atEndOf: 2020),
                                          atEndOf          : 2020,
                                          evaluationMethod : EvaluationMethod.legalSuccession)
         var ownedValue = asset.ownedValue(by               : "Nupropriétaire",

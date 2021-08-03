@@ -192,22 +192,8 @@ struct DossierDetailView: View {
         }
         
         /// gérer les dépendances entre le Modèle et les objets applicatifs
-        // Injection de Fiscal
-        //   récupérer une copie du singleton
-        let fiscalModel = Fiscal.model
-        //   l'injecter dans les objets qui en dépendent
-        SCPI.setFiscalModelProvider(fiscalModel)
-        PeriodicInvestement.setFiscalModelProvider(fiscalModel)
-        FreeInvestement.setFiscalModelProvider(fiscalModel)
+        Coordinator.manageDependencies(to: model)
         
-        // Injection de SocioEconomy
-        LifeExpense.setExpensesUnderEvaluationRateProvider(model.socioEconomyModel)
-        
-        // Injection de Economy
-        SCPI.setInflationProvider(model.economyModel)
-        PeriodicInvestement.setEconomyModelProvider(model.economyModel)
-        FreeInvestement.setEconomyModelProvider(model.economyModel)
-
         /// rendre le Dossier actif seulement si tout c'est bien passé
         dataStore.activate(dossierAtIndex: dossierIndex)
         

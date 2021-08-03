@@ -9,10 +9,18 @@
 import Foundation
 import AppFoundation
 
+// MARK: - DI: Protocol DemembrementProviderP
+
+public protocol DemembrementProviderP {
+    func demembrement(of assetValue   : Double,
+                      usufructuaryAge : Int) throws -> (usufructValue : Double,
+                                                        bareValue     : Double)
+}
+
 // MARK: - Démembrement de propriété
 
 ///  - Note: [Reference](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006310173/)
-public struct DemembrementModel: Codable {
+public struct DemembrementModel: Codable, DemembrementProviderP {
 
     // MARK: - Nested types
 

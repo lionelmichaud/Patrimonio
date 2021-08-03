@@ -38,11 +38,11 @@ public struct Ownership {
     // MARK: - Static Properties
     
     // dependencies
-    private static var fiscalModel : Fiscal.Model = Fiscal.model
+    private static var demembrementProviderP : DemembrementProviderP!
     
     /// Dependency Injection: Setter Injection
-    static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
-        Ownership.fiscalModel = fiscalModel
+    public static func setDemembrementProviderP(_ demembrementProviderP : DemembrementProviderP) {
+        Ownership.demembrementProviderP = demembrementProviderP
     }
     
     // MARK: - Properties
@@ -117,8 +117,10 @@ public struct Ownership {
             let usufruiterAge = ageOf!(usufruitier.name, year)
             
             let (usuFruit, nueProp) =
-                try! Ownership.fiscalModel.demembrement.demembrement(of              : ownedValue,
-                                                                     usufructuaryAge : usufruiterAge)
+                try! Ownership
+                .demembrementProviderP
+                .demembrement(of              : ownedValue,
+                              usufructuaryAge : usufruiterAge)
             usufructValue += usuFruit
             bareValue     += nueProp
         }
@@ -207,8 +209,10 @@ public struct Ownership {
                         // valeur de son usufuit
                         let usufruiterAge = ageOf!(usufruitier.name, year)
                         let (usuFruit, nueProp) =
-                            try! Ownership.fiscalModel.demembrement.demembrement(of              : ownedValue,
-                                                                                 usufructuaryAge : usufruiterAge)
+                            try! Ownership
+                            .demembrementProviderP
+                            .demembrement(of              : ownedValue,
+                                          usufructuaryAge : usufruiterAge)
                         usufructValue += usuFruit
                         bareValue     += nueProp
                     }
@@ -227,7 +231,8 @@ public struct Ownership {
                         // valeur de son usufuit
                         let usufruiterAge = ageOf!(owner.name, year)
                         
-                        value += try! Ownership.fiscalModel.demembrement
+                        value += try! Ownership
+                            .demembrementProviderP
                             .demembrement(of              : ownedValue,
                                           usufructuaryAge : usufruiterAge).usufructValue
                     }

@@ -8,19 +8,28 @@
 
 import Foundation
 import FiscalModel
-import RetirementModel
-import UnemployementModel
-import EconomyModel
-import SocioEconomyModel
+import ModelEnvironment
+import Ownership
 
-/// - Warning: Attention on fait des copies des Singletons ce qui suppose que ceux-ci
-///   sont 'stateless' car les originaux et les copies ne seront PAS synchronisées.
-///   A moins que les Singleton soient des Class.
+/// Injecte les dépendance dans les différents objets du modèle utilisateur qui en ont besoin
 struct Coordinator {
-    static let shared = Coordinator()
-    
-    /// Coordonne les diffférents singletons du modèle en terme de dépendance
-    /// - Warning: Doit être appelé avant l'utilisation du Modèle
-    init() {
+    /// gérer les dépendances entre le Modèle et les objets applicatifs
+    static func manageDependencies(to model: Model) {
+        // Injection de Fiscal
+        //   récupérer une copie du singleton
+        let fiscalModel = Fiscal.model
+        //   l'injecter dans les objets qui en dépendent
+        SCPI.setFiscalModelProvider(fiscalModel)
+        PeriodicInvestement.setFiscalModelProvider(fiscalModel)
+        FreeInvestement.setFiscalModelProvider(fiscalModel)
+        Ownership.setDemembrementProviderP(fiscalModel.demembrement)
+
+        // Injection de SocioEconomy
+        LifeExpense.setExpensesUnderEvaluationRateProvider(model.socioEconomyModel)
+        
+        // Injection de Economy
+        SCPI.setInflationProvider(model.economyModel)
+        PeriodicInvestement.setEconomyModelProvider(model.economyModel)
+        FreeInvestement.setEconomyModelProvider(model.economyModel)
     }
 }
