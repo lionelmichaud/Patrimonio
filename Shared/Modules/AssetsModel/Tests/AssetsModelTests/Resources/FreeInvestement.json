@@ -15,7 +15,7 @@
         "nue_propriétaires"   : [ ],
         "usufruitiers"        : [ ]
     },
-    "initialState" : {
+    "lastKnownState" : {
         "year"       : 2020,
         "interest"   : 0,
         "investment" : 100

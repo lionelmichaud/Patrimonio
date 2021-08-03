@@ -14,30 +14,31 @@ import FiscalModel
 import EconomyModel
 import NamedValue
 import Ownership
+import Persistence
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.FreeInvestement")
 
-enum FreeInvestementError: Error {
+public enum FreeInvestementError: Error {
     case IlegalOperation
 }
 
-typealias FreeInvestmentArray = ArrayOfNameableValuable<FreeInvestement>
+public typealias FreeInvestmentArray = ArrayOfNameableValuable<FreeInvestement>
 
 // MARK: - Placement à versement et retrait variable et à taux fixe
 
 /// Placement à versement et retrait libres et à taux fixe
 /// Les intérêts sont capitalisés lors de l'appel à capitalize()
-// conformité à BundleCodable nécessaire pour les TU; sinon Codable suffit
-struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
+// conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
+public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP {
     
     // nested types
     
     /// Situation annuelle de l'investissement
-    struct State: Codable, Equatable {
-        var year       : Int
-        var interest   : Double // portion of interests included in the Value
-        var investment : Double // portion of investment included in the Value
-        var value      : Double { interest + investment } // valeur totale
+    public struct State: Codable, Equatable {
+        public var year       : Int
+        public var interest   : Double // portion of interests included in the Value
+        public var investment : Double // portion of investment included in the Value
+        public var value      : Double { interest + investment } // valeur totale
     }
     
     // MARK: - Static Properties
@@ -48,7 +49,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
     // dependencies
     private static var economyModel : EconomyModelProviderP!
     public static var fiscalModel   : Fiscal.Model!
-
+    
     // tous ces actifs sont dépréciés de l'inflation
     private static var inflation: Double { // %
         FreeInvestement.economyModel.inflation(withMode: simulationMode)
@@ -64,16 +65,16 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
     // MARK: - Static Methods
     
     /// Dependency Injection: Setter Injection
-    static func setEconomyModelProvider(_ economyModel : EconomyModelProviderP) {
+    public static func setEconomyModelProvider(_ economyModel : EconomyModelProviderP) {
         FreeInvestement.economyModel = economyModel
     }
     
     /// Dependency Injection: Setter Injection
-    static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
+    public static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
         FreeInvestement.fiscalModel = fiscalModel
     }
     
-    static func setSimulationMode(to thisMode: SimulationModeEnum) {
+    public static func setSimulationMode(to thisMode: SimulationModeEnum) {
         FreeInvestement.simulationMode = thisMode
     }
     
@@ -84,25 +85,25 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
                                            withMode           : simulationMode,
                                            simulateVolatility : UserSettings.shared.simulateVolatility)
     }
-
+    
     // MARK: - Properties
-
-    var id    = UUID()
-    var name  : String
-    var note  : String
+    
+    public var id    = UUID()
+    public var name  : String
+    public var note  : String
     // propriétaires
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
-    var ownership: Ownership = Ownership()
-
+    public var ownership: Ownership = Ownership()
+    
     /// Type de l'investissement
-    var type: InvestementKind
-
+    public var type: InvestementKind
+    
     /// Type de taux de rendement
-    var interestRateType: InterestRateKind
-
+    public var interestRateType: InterestRateKind
+    
     /// Rendement en % avant charges sociales si prélevées à la source annuellement [0, 100%]
-    var averageInterestRate  : Double {
+    public var averageInterestRate  : Double {
         switch interestRateType {
             case .contractualRate(let fixedRate):
                 // taux contractuel fixe
@@ -118,9 +119,9 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
                 return rate - FreeInvestement.inflation
         }
     }
-
+    
     /// Rendement en % après charges sociales si prélevées à la source annuellement [0, 100%]
-    var averageInterestRateNet: Double {
+    public var averageInterestRateNet: Double {
         switch type {
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
@@ -132,39 +133,39 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
                 return averageInterestRate
         }
     }
-
+    
     /// Dernière constitution du capital connue (relevé bancaire)
-    var lastKnownState: State {
+    public var lastKnownState: State {
         didSet {
             resetCurrentState()
         }
     }
-
+    
     /// Constitution du capital à l'instant présent
     var currentState: State
-
+    
     /// Intérêts cumulés au cours du temps depuis la transmission de l'usufruit jusqu'à l'instant présent
     var currentInterestsAfterTransmission: State?
-
+    
     /// Intérêts cumulés au cours du temps depuis la transmission de l'usufruit jusqu'à l'instant présent
     var cumulatedInterestsAfterSuccession: Double? {
         currentInterestsAfterTransmission?.interest
     }
-
+    
     /// Intérêts cumulés au cours du temps depuis l'origine jusqu'à l'instant présent
     private var cumulatedInterests: Double {
         currentState.interest
     }
     
     // MARK: - Initialization
-
-    init(year             : Int,
-         name             : String,
-         note             : String,
-         type             : InvestementKind,
-         interestRateType : InterestRateKind,
-         initialValue     : Double = 0.0,
-         initialInterest  : Double = 0.0) {
+    
+    public init(year             : Int,
+                name             : String,
+                note             : String,
+                type             : InvestementKind,
+                interestRateType : InterestRateKind,
+                initialValue     : Double = 0.0,
+                initialInterest  : Double = 0.0) {
         self.name             = name
         self.note             = note
         self.type             = type
@@ -176,7 +177,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
     }
     
     // MARK: - Methods
-
+    
     /// Taux d'intérêt annuel en % net de  charges sociales si prélevées à la source annuellement
     /// - Parameter idx: [0, nb d'années simulées - 1]
     /// - Returns: Taux d'intérêt annuel en % [0, 100%]
@@ -212,7 +213,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
     }
     
     /// somme des versements + somme des intérêts
-    func value(atEndOf year: Int) -> Double {
+    public func value(atEndOf year: Int) -> Double {
         guard year == self.currentState.year else {
             // extrapoler la valeur à partir de la situation initiale avec un taux constant moyen
             return try! futurValue(payement     : 0,
@@ -232,9 +233,9 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
     ///   - evaluationMethod: méthode d'évaluation de la valeure des bien
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
     /// - Warning: les assurance vie ne sont pas inclues car hors succession
-    func ownedValue(by ownerName     : String,
-                    atEndOf year     : Int,
-                    evaluationMethod : EvaluationMethod) -> Double {
+    public func ownedValue(by ownerName     : String,
+                           atEndOf year     : Int,
+                           evaluationMethod : EvaluationMethod) -> Double {
         // cas particuliers
         switch evaluationMethod {
             case .legalSuccession:
@@ -243,7 +244,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
                     case .lifeInsurance:
                         // les assurance vie ne sont pas inclues car hors succession légale
                         return 0
-
+                        
                     default:
                         // le défunt est-il usufruitier ?
                         if ownership.hasAnUsufructOwner(named: ownerName) {
@@ -254,7 +255,7 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
                         // pas de décote
                         ()
                 }
-
+                
             case .lifeInsuranceSuccession:
                 // le bien est-il une assurance vie ?
                 switch type {
@@ -271,11 +272,11 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
                 // pas de décote
                 ()
         }
-
+        
         // cas général
         // prendre la valeur totale du bien sans aucune décote
         let evaluatedValue = value(atEndOf: year)
-
+        
         // calculer la part de propriété
         let value = evaluatedValue == 0 ? 0 : ownership.ownedValue(by               : ownerName,
                                                                    ofValue          : evaluatedValue,
@@ -286,28 +287,28 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
     
     /// Réaliser un versement
     /// - Parameter amount: montant du versement
-    mutating func add(_ amount: Double) {
+    public mutating func add(_ amount: Double) {
         currentState.investment += amount
     }
     
     /// Capitaliser les intérêts d'une année: à faire une fois par an et apparaissent dans l'année courante
     /// - Note: Si la volatilité est prise en compte dans le modèle économique alors le taux change chaque année
-    mutating func capitalize(atEndOf year: Int) throws {
+    public mutating func capitalize(atEndOf year: Int) throws {
         guard year == currentState.year + 1 else {
             customLog.log(level: .error,
                           "FreeInvestementError.capitalize: capitalisation sur un nombre d'année différent de 1")
             throw FreeInvestementError.IlegalOperation
         }
         let interests = yearlyInterest(in: year)
-
+        
         currentState.interest += interests
         currentState.year = year
-
+        
         currentInterestsAfterTransmission?.interest += interests
     }
     
     /// Remettre la valeur courante à la date de fin d'année passée
-    mutating func resetCurrentState() {
+    public mutating func resetCurrentState() {
         currentInterestsAfterTransmission = nil
         
         // calculer la valeur de currentState à la date de fin d'année passée
@@ -337,8 +338,8 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
             }
         }
     }
-
-    mutating func initializeCurrentInterestsAfterTransmission(yearOfTransmission: Int) {
+    
+    public mutating func initializeCurrentInterestsAfterTransmission(yearOfTransmission: Int) {
         currentInterestsAfterTransmission =
             State(year       : yearOfTransmission,
                   interest   : 0,
@@ -348,13 +349,13 @@ struct FreeInvestement: Identifiable, Codable, FinancialEnvelopP {
 
 // MARK: Extensions
 extension FreeInvestement: Comparable {
-    static func < (lhs: FreeInvestement, rhs: FreeInvestement) -> Bool {
+    public static func < (lhs: FreeInvestement, rhs: FreeInvestement) -> Bool {
         return (lhs.name < rhs.name)
     }
 }
 
 extension FreeInvestement: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         """
 
         INVESTISSEMENT LIBRE: \(name)

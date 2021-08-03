@@ -8,6 +8,7 @@
 
 import Foundation
 import NamedValue
+import AssetsModel
 
 // MARK: - agrégat des Actifs
 

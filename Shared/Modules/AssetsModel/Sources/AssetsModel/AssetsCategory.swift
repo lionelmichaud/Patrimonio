@@ -12,7 +12,7 @@ import AppFoundation
 // MARK: - Catégories de Actifs
 
 /// Catégories de dépenses
-enum AssetsCategory: String, PickableEnumP, Codable {
+public enum AssetsCategory: String, PickableEnumP, Codable {
     case periodicInvests = "Invest. périodique"
     case freeInvests     = "Invest. libre"
     case realEstates     = "Immobilier"
@@ -21,7 +21,7 @@ enum AssetsCategory: String, PickableEnumP, Codable {
     
     // properties
     
-    var pickerString: String {
+    public var pickerString: String {
         return self.rawValue
     }
 }

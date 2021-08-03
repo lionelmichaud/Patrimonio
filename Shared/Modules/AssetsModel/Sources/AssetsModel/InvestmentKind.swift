@@ -12,20 +12,20 @@ import Ownership
 
 // MARK: - Type d'investissement
 
-enum InvestementKind {
+public enum InvestementKind {
     case lifeInsurance (periodicSocialTaxes: Bool = true,
                         clause: LifeInsuranceClause = LifeInsuranceClause())
     case pea
     case other
     
-    static var allCases: [InvestementKind] {
+    public static var allCases: [InvestementKind] {
         return [.lifeInsurance(), .pea, .other]
     }
     
     @available(*, unavailable)
     case all
     
-    var rawValue: Int {
+    public var rawValue: Int {
         rawValueGeneric(of: self)
     }
 }
@@ -33,13 +33,13 @@ enum InvestementKind {
 // MARK: - Extensions
 
 extension InvestementKind: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         switch self {
             case .lifeInsurance(let periodicSocialTaxes, let clause):
                 return
                     """
                     Assurance Vie:
-                    - Prélèvement périodique des contributions sociales: \(periodicSocialTaxes)
+                    - Prélèvement périodique des contributions sociales: \(periodicSocialTaxes.frenchString)
                     - Clause bénéficiaire:
                     \(clause.description.withPrefixedSplittedLines("  "))
                     """
@@ -50,11 +50,11 @@ extension InvestementKind: CustomStringConvertible {
 }
 
 extension InvestementKind: PickableIdentifiableEnumP {
-    var id: Int {
+    public var id: Int {
         return self.rawValue
     }
     
-    var pickerString: String {
+    public var pickerString: String {
         switch self {
             case .lifeInsurance:
                 return "Assurance Vie"
@@ -78,13 +78,13 @@ extension InvestementKind: Codable {
     }
     
     // decode
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         // decode .lifeInsurance
         if let valueTaxes = try? values.decode(Bool.self, forKey: .lifeInsurance_taxes) {
             if let valueClause = try? values.decode(LifeInsuranceClause.self, forKey: .lifeInsurance_clause) {
                 self = .lifeInsurance(periodicSocialTaxes: valueTaxes, clause: valueClause)
-            return
+                return
             }
         }
         
@@ -104,7 +104,7 @@ extension InvestementKind: Codable {
     }
     
     // encode
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
         switch self {

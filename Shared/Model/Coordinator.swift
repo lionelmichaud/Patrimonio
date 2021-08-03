@@ -10,6 +10,7 @@ import Foundation
 import FiscalModel
 import ModelEnvironment
 import Ownership
+import AssetsModel
 
 /// Injecte les dépendance dans les différents objets du modèle utilisateur qui en ont besoin
 struct Coordinator {
@@ -20,6 +21,7 @@ struct Coordinator {
         let fiscalModel = Fiscal.model
         //   l'injecter dans les objets qui en dépendent
         SCPI.setFiscalModelProvider(fiscalModel)
+        RealEstateAsset.setFiscalModelProvider(fiscalModel)
         PeriodicInvestement.setFiscalModelProvider(fiscalModel)
         FreeInvestement.setFiscalModelProvider(fiscalModel)
         Ownership.setDemembrementProviderP(fiscalModel.demembrement)

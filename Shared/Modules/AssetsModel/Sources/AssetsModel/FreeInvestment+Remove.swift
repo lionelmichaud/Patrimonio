@@ -108,8 +108,8 @@ extension FreeInvestement {
     /// - Parameters:
     ///   - netAmount: retrait net de charges sociales souhaité
     ///   - name: nom du débiteur ou nil
-    mutating func remove(netAmount : Double,
-                         for name  : String = "")
+    public mutating func remove(netAmount : Double,
+                                for name  : String = "")
     -> (revenue          : Double,
         interests        : Double,
         netInterests     : Double,

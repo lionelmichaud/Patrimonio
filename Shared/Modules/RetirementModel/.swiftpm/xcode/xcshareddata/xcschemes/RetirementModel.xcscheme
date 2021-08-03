@@ -30,113 +30,14 @@
       codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "RetirementModelTests"
                BuildableName = "RetirementModelTests"
                BlueprintName = "RetirementModelTests"
                ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "StatefulTests"
-               BuildableName = "StatefulTests"
-               BlueprintName = "StatefulTests"
-               ReferencedContainer = "container:../Stateful">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "SocioEconomyModelTests"
-               BuildableName = "SocioEconomyModelTests"
-               BlueprintName = "SocioEconomyModelTests"
-               ReferencedContainer = "container:../SocioEconomyModel">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "PersistableTests"
-               BuildableName = "PersistableTests"
-               BlueprintName = "PersistableTests"
-               ReferencedContainer = "container:../Persistable">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "NamedValueTests"
-               BuildableName = "NamedValueTests"
-               BlueprintName = "NamedValueTests"
-               ReferencedContainer = "container:../NamedValue">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "HumanLifeModelTests"
-               BuildableName = "HumanLifeModelTests"
-               BlueprintName = "HumanLifeModelTests"
-               ReferencedContainer = "container:../HumanLifeModel">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FiscalModelTests"
-               BuildableName = "FiscalModelTests"
-               BlueprintName = "FiscalModelTests"
-               ReferencedContainer = "container:../FiscalModel">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FileAndFolderTests"
-               BuildableName = "FileAndFolderTests"
-               BlueprintName = "FileAndFolderTests"
-               ReferencedContainer = "container:../FileAndFolder">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EconomyModelTests"
-               BuildableName = "EconomyModelTests"
-               BlueprintName = "EconomyModelTests"
-               ReferencedContainer = "container:../EconomyModel">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AppFoundationTests"
-               BuildableName = "AppFoundationTests"
-               BlueprintName = "AppFoundationTests"
-               ReferencedContainer = "container:../AppFoundation">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "UnemployementModelTests"
-               BuildableName = "UnemployementModelTests"
-               BlueprintName = "UnemployementModelTests"
-               ReferencedContainer = "container:../UnemployementModel">
             </BuildableReference>
          </TestableReference>
       </Testables>

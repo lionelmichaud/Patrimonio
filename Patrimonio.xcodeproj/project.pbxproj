@@ -113,10 +113,12 @@
 		7935FFDC265420FF00AC1715 /* DossierBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */; };
 		7935FFDD265420FF00AC1715 /* DossierBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */; };
 		7935FFE52654492500AC1715 /* Files in Frameworks */ = {isa = PBXBuildFile; productRef = 7935FFE42654492500AC1715 /* Files */; };
-		793A0B3E26ADCD1400957CCE /* FreeInvestment+Remove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793A0B3D26ADCD1400957CCE /* FreeInvestment+Remove.swift */; };
-		793A0B3F26ADCD1400957CCE /* FreeInvestment+Remove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793A0B3D26ADCD1400957CCE /* FreeInvestment+Remove.swift */; };
 		794346452641D3F700374F99 /* CashFlowArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794346442641D3F700374F99 /* CashFlowArray.swift */; };
 		794346462641D3F700374F99 /* CashFlowArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794346442641D3F700374F99 /* CashFlowArray.swift */; };
+		794B014E26B9BE4300882684 /* ValuedAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B014D26B9BE4300882684 /* ValuedAssets.swift */; };
+		794B014F26B9BE4300882684 /* ValuedAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B014D26B9BE4300882684 /* ValuedAssets.swift */; };
+		794B016126B9C12400882684 /* AssetsModel in Frameworks */ = {isa = PBXBuildFile; productRef = 794B016026B9C12400882684 /* AssetsModel */; };
+		794B016326B9C12C00882684 /* AssetsModel in Frameworks */ = {isa = PBXBuildFile; productRef = 794B016226B9C12C00882684 /* AssetsModel */; };
 		795049EC2667897A000AAEF0 /* ComputationSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795049EB2667897A000AAEF0 /* ComputationSectionView.swift */; };
 		795049ED2667897A000AAEF0 /* ComputationSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795049EB2667897A000AAEF0 /* ComputationSectionView.swift */; };
 		795049F3266792C2000AAEF0 /* DeterministicSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795049F2266792C2000AAEF0 /* DeterministicSectionView.swift */; };
@@ -154,16 +156,9 @@
 		79683FB926B891D000F838BE /* ModelEnvironment in Frameworks */ = {isa = PBXBuildFile; productRef = 79683FB826B891D000F838BE /* ModelEnvironment */; };
 		79683FBB26B891DD00F838BE /* ModelEnvironment in Frameworks */ = {isa = PBXBuildFile; productRef = 79683FBA26B891DD00F838BE /* ModelEnvironment */; };
 		79683FEB26B8995900F838BE /* LiabilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79683FD426B8995900F838BE /* LiabilitiesTests.swift */; };
-		79683FF226B8995900F838BE /* FinancialEnvelopTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79683FDC26B8995900F838BE /* FinancialEnvelopTests.swift */; };
 		79683FF326B8995900F838BE /* PatrimoinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79683FDD26B8995900F838BE /* PatrimoinTests.swift */; };
-		79683FF426B8995900F838BE /* InvestementTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79683FDE26B8995900F838BE /* InvestementTypeTests.swift */; };
-		79683FF526B8995900F838BE /* PeriodicInvestmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79683FE026B8995900F838BE /* PeriodicInvestmentTests.swift */; };
-		79683FF626B8995900F838BE /* RealEstateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79683FE126B8995900F838BE /* RealEstateTests.swift */; };
-		79683FF726B8995900F838BE /* SCPItests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79683FE226B8995900F838BE /* SCPItests.swift */; };
 		79683FF826B8995900F838BE /* SciTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79683FE326B8995900F838BE /* SciTests.swift */; };
-		79683FF926B8995900F838BE /* FreeInvestementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79683FE426B8995900F838BE /* FreeInvestementTests.swift */; };
 		79683FFA26B8995900F838BE /* AssetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79683FE526B8995900F838BE /* AssetsTests.swift */; };
-		79683FFB26B8995900F838BE /* InterestRateTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79683FE626B8995900F838BE /* InterestRateTypeTests.swift */; };
 		7968402426B8999000F838BE /* RegimeAgircModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968400726B8999000F838BE /* RegimeAgircModel.json */; };
 		7968402526B8999000F838BE /* test_futurValue.xlsx in Resources */ = {isa = PBXBuildFile; fileRef = 7968400826B8999000F838BE /* test_futurValue.xlsx */; };
 		7968402626B8999000F838BE /* FiscalModelConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968400926B8999000F838BE /* FiscalModelConfig.json */; };
@@ -175,14 +170,11 @@
 		7968402C26B8999000F838BE /* TurnoverTaxesModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968400F26B8999000F838BE /* TurnoverTaxesModel.json */; };
 		7968402D26B8999000F838BE /* IncomeTaxesModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401026B8999000F838BE /* IncomeTaxesModel.json */; };
 		7968402E26B8999000F838BE /* EconomyModelConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401126B8999000F838BE /* EconomyModelConfig.json */; };
-		7968402F26B8999000F838BE /* FreeInvestement.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401226B8999000F838BE /* FreeInvestement.json */; };
 		7968403026B8999000F838BE /* CompanyProfitTaxesModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401326B8999000F838BE /* CompanyProfitTaxesModel.json */; };
 		7968403126B8999000F838BE /* UnemploymentCompensationModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401426B8999000F838BE /* UnemploymentCompensationModel.json */; };
 		7968403226B8999000F838BE /* LayoffCompensationModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401526B8999000F838BE /* LayoffCompensationModel.json */; };
-		7968403326B8999000F838BE /* SCPI.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401626B8999000F838BE /* SCPI.json */; };
 		7968403426B8999000F838BE /* InheritanceDonationModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401726B8999000F838BE /* InheritanceDonationModel.json */; };
 		7968403526B8999000F838BE /* FinancialRevenuTaxesModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401826B8999000F838BE /* FinancialRevenuTaxesModel.json */; };
-		7968403626B8999000F838BE /* PeriodicInvestement.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401926B8999000F838BE /* PeriodicInvestement.json */; };
 		7968403726B8999000F838BE /* UnemploymentModelConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401A26B8999000F838BE /* UnemploymentModelConfig.json */; };
 		7968403826B8999000F838BE /* PensionReversionModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401B26B8999000F838BE /* PensionReversionModel.json */; };
 		7968403926B8999000F838BE /* IsfModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401C26B8999000F838BE /* IsfModel.json */; };
@@ -191,7 +183,6 @@
 		7968403C26B8999000F838BE /* RetirementModelConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968401F26B8999000F838BE /* RetirementModelConfig.json */; };
 		7968403D26B8999000F838BE /* RealEstateCapitalGainIrppModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968402026B8999000F838BE /* RealEstateCapitalGainIrppModel.json */; };
 		7968403E26B8999000F838BE /* RealEstateCapitalGainTaxesModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968402126B8999000F838BE /* RealEstateCapitalGainTaxesModel.json */; };
-		7968403F26B8999000F838BE /* RealEstateAsset.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968402226B8999000F838BE /* RealEstateAsset.json */; };
 		7968404026B8999000F838BE /* PensionTaxesModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 7968402326B8999000F838BE /* PensionTaxesModel.json */; };
 		7968405F26B8A8CC00F838BE /* Ownership in Frameworks */ = {isa = PBXBuildFile; productRef = 7968405E26B8A8CC00F838BE /* Ownership */; };
 		7968406126B8A8D500F838BE /* Ownership in Frameworks */ = {isa = PBXBuildFile; productRef = 7968406026B8A8D500F838BE /* Ownership */; };
@@ -494,8 +485,6 @@
 		79D7C41626B6EFCA0057E343 /* ModelDeterministicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D7C41526B6EFCA0057E343 /* ModelDeterministicViewModel.swift */; };
 		79E713EC262C9886000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713EB262C9886000FD625 /* EconomyModel */; };
 		79E713EE262C9891000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713ED262C9891000FD625 /* EconomyModel */; };
-		79EC479926307B260006EE44 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC479826307B260006EE44 /* UserSettings.swift */; };
-		79EC479A26307B260006EE44 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC479826307B260006EE44 /* UserSettings.swift */; };
 		79EC47A126307B8C0006EE44 /* Foil in Frameworks */ = {isa = PBXBuildFile; productRef = 79EC47A026307B8C0006EE44 /* Foil */; };
 		79EC47A726307BC90006EE44 /* Foil in Frameworks */ = {isa = PBXBuildFile; productRef = 79EC47A626307BC90006EE44 /* Foil */; };
 		79EC47B626307C910006EE44 /* Debt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC47B126307C910006EE44 /* Debt.swift */; };
@@ -552,28 +541,10 @@
 		79F222F6265AD0B9005EE0B9 /* DossierViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F222F4265AD0B9005EE0B9 /* DossierViewModel.swift */; };
 		79F4D12326B03D62009D91B9 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F4D12226B03D62009D91B9 /* Buttons.swift */; };
 		79F4D12426B03D62009D91B9 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F4D12226B03D62009D91B9 /* Buttons.swift */; };
-		79FA8CE12630684F009FEA00 /* PeriodicInvestment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD62630684F009FEA00 /* PeriodicInvestment.swift */; };
-		79FA8CE22630684F009FEA00 /* PeriodicInvestment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD62630684F009FEA00 /* PeriodicInvestment.swift */; };
 		79FA8CE32630684F009FEA00 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD72630684F009FEA00 /* Assets.swift */; };
 		79FA8CE42630684F009FEA00 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD72630684F009FEA00 /* Assets.swift */; };
-		79FA8CE52630684F009FEA00 /* InterestRateKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD82630684F009FEA00 /* InterestRateKind.swift */; };
-		79FA8CE62630684F009FEA00 /* InterestRateKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD82630684F009FEA00 /* InterestRateKind.swift */; };
-		79FA8CE72630684F009FEA00 /* FreeInvestment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD92630684F009FEA00 /* FreeInvestment.swift */; };
-		79FA8CE82630684F009FEA00 /* FreeInvestment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD92630684F009FEA00 /* FreeInvestment.swift */; };
-		79FA8CE92630684F009FEA00 /* RealEstate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDA2630684F009FEA00 /* RealEstate.swift */; };
-		79FA8CEA2630684F009FEA00 /* RealEstate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDA2630684F009FEA00 /* RealEstate.swift */; };
-		79FA8CEB2630684F009FEA00 /* SCPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDB2630684F009FEA00 /* SCPI.swift */; };
-		79FA8CEC2630684F009FEA00 /* SCPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDB2630684F009FEA00 /* SCPI.swift */; };
-		79FA8CED2630684F009FEA00 /* InvestmentKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDC2630684F009FEA00 /* InvestmentKind.swift */; };
-		79FA8CEE2630684F009FEA00 /* InvestmentKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDC2630684F009FEA00 /* InvestmentKind.swift */; };
 		79FA8CEF2630684F009FEA00 /* SCI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDD2630684F009FEA00 /* SCI.swift */; };
 		79FA8CF02630684F009FEA00 /* SCI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDD2630684F009FEA00 /* SCI.swift */; };
-		79FA8CF12630684F009FEA00 /* AssetsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDE2630684F009FEA00 /* AssetsCategory.swift */; };
-		79FA8CF22630684F009FEA00 /* AssetsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDE2630684F009FEA00 /* AssetsCategory.swift */; };
-		79FA8CF32630684F009FEA00 /* ValuedAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDF2630684F009FEA00 /* ValuedAssets.swift */; };
-		79FA8CF42630684F009FEA00 /* ValuedAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDF2630684F009FEA00 /* ValuedAssets.swift */; };
-		79FA8CF52630684F009FEA00 /* FinancialEnvelopP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CE02630684F009FEA00 /* FinancialEnvelopP.swift */; };
-		79FA8CF62630684F009FEA00 /* FinancialEnvelopP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CE02630684F009FEA00 /* FinancialEnvelopP.swift */; };
 		79FC3D3B262C760A00A6184B /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC3D3A262C760A00A6184B /* Statistics */; };
 		79FC3D3D262C761400A6184B /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC3D3C262C761400A6184B /* Statistics */; };
 		79FC722326330D2C004F3BD2 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC722226330D2C004F3BD2 /* AppCommands.swift */; };
@@ -671,8 +642,8 @@
 		7935FFD626541AAB00AC1715 /* DossiersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DossiersView.swift; sourceTree = "<group>"; };
 		7935FFD82654204200AC1715 /* DossierSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierSummaryView.swift; sourceTree = "<group>"; };
 		7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierBrowserView.swift; sourceTree = "<group>"; };
-		793A0B3D26ADCD1400957CCE /* FreeInvestment+Remove.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FreeInvestment+Remove.swift"; sourceTree = "<group>"; };
 		794346442641D3F700374F99 /* CashFlowArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CashFlowArray.swift; sourceTree = "<group>"; };
+		794B014D26B9BE4300882684 /* ValuedAssets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValuedAssets.swift; sourceTree = "<group>"; };
 		795049EB2667897A000AAEF0 /* ComputationSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputationSectionView.swift; sourceTree = "<group>"; };
 		795049F2266792C2000AAEF0 /* DeterministicSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeterministicSectionView.swift; sourceTree = "<group>"; };
 		795049FD26679347000AAEF0 /* StatisticSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticSectionView.swift; sourceTree = "<group>"; };
@@ -688,16 +659,9 @@
 		796506CA2640866F0036E466 /* scpiDetailedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = scpiDetailedView.swift; sourceTree = "<group>"; };
 		796506D7264094B00036E466 /* AssetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetView.swift; sourceTree = "<group>"; };
 		79683FD426B8995900F838BE /* LiabilitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiabilitiesTests.swift; sourceTree = "<group>"; };
-		79683FDC26B8995900F838BE /* FinancialEnvelopTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinancialEnvelopTests.swift; sourceTree = "<group>"; };
 		79683FDD26B8995900F838BE /* PatrimoinTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatrimoinTests.swift; sourceTree = "<group>"; };
-		79683FDE26B8995900F838BE /* InvestementTypeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvestementTypeTests.swift; sourceTree = "<group>"; };
-		79683FE026B8995900F838BE /* PeriodicInvestmentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodicInvestmentTests.swift; sourceTree = "<group>"; };
-		79683FE126B8995900F838BE /* RealEstateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealEstateTests.swift; sourceTree = "<group>"; };
-		79683FE226B8995900F838BE /* SCPItests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCPItests.swift; sourceTree = "<group>"; };
 		79683FE326B8995900F838BE /* SciTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SciTests.swift; sourceTree = "<group>"; };
-		79683FE426B8995900F838BE /* FreeInvestementTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FreeInvestementTests.swift; sourceTree = "<group>"; };
 		79683FE526B8995900F838BE /* AssetsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetsTests.swift; sourceTree = "<group>"; };
-		79683FE626B8995900F838BE /* InterestRateTypeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterestRateTypeTests.swift; sourceTree = "<group>"; };
 		7968400726B8999000F838BE /* RegimeAgircModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RegimeAgircModel.json; sourceTree = "<group>"; };
 		7968400826B8999000F838BE /* test_futurValue.xlsx */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_futurValue.xlsx; sourceTree = "<group>"; };
 		7968400926B8999000F838BE /* FiscalModelConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = FiscalModelConfig.json; sourceTree = "<group>"; };
@@ -709,14 +673,11 @@
 		7968400F26B8999000F838BE /* TurnoverTaxesModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TurnoverTaxesModel.json; sourceTree = "<group>"; };
 		7968401026B8999000F838BE /* IncomeTaxesModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = IncomeTaxesModel.json; sourceTree = "<group>"; };
 		7968401126B8999000F838BE /* EconomyModelConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = EconomyModelConfig.json; sourceTree = "<group>"; };
-		7968401226B8999000F838BE /* FreeInvestement.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = FreeInvestement.json; sourceTree = "<group>"; };
 		7968401326B8999000F838BE /* CompanyProfitTaxesModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CompanyProfitTaxesModel.json; sourceTree = "<group>"; };
 		7968401426B8999000F838BE /* UnemploymentCompensationModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = UnemploymentCompensationModel.json; sourceTree = "<group>"; };
 		7968401526B8999000F838BE /* LayoffCompensationModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = LayoffCompensationModel.json; sourceTree = "<group>"; };
-		7968401626B8999000F838BE /* SCPI.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = SCPI.json; sourceTree = "<group>"; };
 		7968401726B8999000F838BE /* InheritanceDonationModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = InheritanceDonationModel.json; sourceTree = "<group>"; };
 		7968401826B8999000F838BE /* FinancialRevenuTaxesModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = FinancialRevenuTaxesModel.json; sourceTree = "<group>"; };
-		7968401926B8999000F838BE /* PeriodicInvestement.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PeriodicInvestement.json; sourceTree = "<group>"; };
 		7968401A26B8999000F838BE /* UnemploymentModelConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = UnemploymentModelConfig.json; sourceTree = "<group>"; };
 		7968401B26B8999000F838BE /* PensionReversionModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PensionReversionModel.json; sourceTree = "<group>"; };
 		7968401C26B8999000F838BE /* IsfModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = IsfModel.json; sourceTree = "<group>"; };
@@ -725,7 +686,6 @@
 		7968401F26B8999000F838BE /* RetirementModelConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RetirementModelConfig.json; sourceTree = "<group>"; };
 		7968402026B8999000F838BE /* RealEstateCapitalGainIrppModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RealEstateCapitalGainIrppModel.json; sourceTree = "<group>"; };
 		7968402126B8999000F838BE /* RealEstateCapitalGainTaxesModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RealEstateCapitalGainTaxesModel.json; sourceTree = "<group>"; };
-		7968402226B8999000F838BE /* RealEstateAsset.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RealEstateAsset.json; sourceTree = "<group>"; };
 		7968402326B8999000F838BE /* PensionTaxesModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PensionTaxesModel.json; sourceTree = "<group>"; };
 		7971B9C52638CAF3009CF0F7 /* NSUIViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSUIViewRepresentable.swift; sourceTree = "<group>"; };
 		79735EE8263242FA00CD952F /* AppMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppMain.swift; sourceTree = "<group>"; };
@@ -855,7 +815,6 @@
 		79CB2C86264D723100B3E493 /* MonteCarloVisitorP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonteCarloVisitorP.swift; sourceTree = "<group>"; };
 		79CB2C88264D731900B3E493 /* CsvMonteCarloVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvMonteCarloVisitor.swift; sourceTree = "<group>"; };
 		79D7C41526B6EFCA0057E343 /* ModelDeterministicViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDeterministicViewModel.swift; sourceTree = "<group>"; };
-		79EC479826307B260006EE44 /* UserSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		79EC47B126307C910006EE44 /* Debt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debt.swift; sourceTree = "<group>"; };
 		79EC47B226307C910006EE44 /* Loan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Loan.swift; sourceTree = "<group>"; };
 		79EC47B326307C910006EE44 /* ValuedLiabilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValuedLiabilities.swift; sourceTree = "<group>"; };
@@ -883,17 +842,8 @@
 		79F222F1265ACC9F005EE0B9 /* DossierEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierEditView.swift; sourceTree = "<group>"; };
 		79F222F4265AD0B9005EE0B9 /* DossierViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierViewModel.swift; sourceTree = "<group>"; };
 		79F4D12226B03D62009D91B9 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
-		79FA8CD62630684F009FEA00 /* PeriodicInvestment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodicInvestment.swift; sourceTree = "<group>"; };
 		79FA8CD72630684F009FEA00 /* Assets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
-		79FA8CD82630684F009FEA00 /* InterestRateKind.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterestRateKind.swift; sourceTree = "<group>"; };
-		79FA8CD92630684F009FEA00 /* FreeInvestment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FreeInvestment.swift; sourceTree = "<group>"; };
-		79FA8CDA2630684F009FEA00 /* RealEstate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealEstate.swift; sourceTree = "<group>"; };
-		79FA8CDB2630684F009FEA00 /* SCPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCPI.swift; sourceTree = "<group>"; };
-		79FA8CDC2630684F009FEA00 /* InvestmentKind.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvestmentKind.swift; sourceTree = "<group>"; };
 		79FA8CDD2630684F009FEA00 /* SCI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCI.swift; sourceTree = "<group>"; };
-		79FA8CDE2630684F009FEA00 /* AssetsCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetsCategory.swift; sourceTree = "<group>"; };
-		79FA8CDF2630684F009FEA00 /* ValuedAssets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValuedAssets.swift; sourceTree = "<group>"; };
-		79FA8CE02630684F009FEA00 /* FinancialEnvelopP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinancialEnvelopP.swift; sourceTree = "<group>"; };
 		79FC722226330D2C004F3BD2 /* AppCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
 		79FC723526331A9D004F3BD2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		79FC723D26331C69004F3BD2 /* SimulationUserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationUserSettingsView.swift; sourceTree = "<group>"; };
@@ -937,6 +887,7 @@
 				7935FFE52654492500AC1715 /* Files in Frameworks */,
 				79FC3D3B262C760A00A6184B /* Statistics in Frameworks */,
 				79E713EE262C9891000FD625 /* EconomyModel in Frameworks */,
+				794B016126B9C12400882684 /* AssetsModel in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -953,6 +904,7 @@
 				79706281262C7B82009A18F0 /* UnemployementModel in Frameworks */,
 				799074262660524C00F224F7 /* FileAndFolder in Frameworks */,
 				797931BB26416F86000F8599 /* Disk in Frameworks */,
+				794B016326B9C12C00882684 /* AssetsModel in Frameworks */,
 				7956995E262F90310015AF34 /* NamedValue in Frameworks */,
 				79657B5326B758680044D62C /* Numerics in Frameworks */,
 				7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
@@ -1283,9 +1235,6 @@
 			isa = PBXGroup;
 			children = (
 				79683FDD26B8995900F838BE /* PatrimoinTests.swift */,
-				79683FDC26B8995900F838BE /* FinancialEnvelopTests.swift */,
-				79683FDE26B8995900F838BE /* InvestementTypeTests.swift */,
-				79683FE626B8995900F838BE /* InterestRateTypeTests.swift */,
 				79683FD326B8995900F838BE /* Liabilities */,
 				79683FDF26B8995900F838BE /* Assets */,
 			);
@@ -1303,11 +1252,7 @@
 		79683FDF26B8995900F838BE /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				79683FE026B8995900F838BE /* PeriodicInvestmentTests.swift */,
-				79683FE126B8995900F838BE /* RealEstateTests.swift */,
-				79683FE226B8995900F838BE /* SCPItests.swift */,
 				79683FE326B8995900F838BE /* SciTests.swift */,
-				79683FE426B8995900F838BE /* FreeInvestementTests.swift */,
 				79683FE526B8995900F838BE /* AssetsTests.swift */,
 			);
 			path = Assets;
@@ -1327,14 +1272,11 @@
 				7968400F26B8999000F838BE /* TurnoverTaxesModel.json */,
 				7968401026B8999000F838BE /* IncomeTaxesModel.json */,
 				7968401126B8999000F838BE /* EconomyModelConfig.json */,
-				7968401226B8999000F838BE /* FreeInvestement.json */,
 				7968401326B8999000F838BE /* CompanyProfitTaxesModel.json */,
 				7968401426B8999000F838BE /* UnemploymentCompensationModel.json */,
 				7968401526B8999000F838BE /* LayoffCompensationModel.json */,
-				7968401626B8999000F838BE /* SCPI.json */,
 				7968401726B8999000F838BE /* InheritanceDonationModel.json */,
 				7968401826B8999000F838BE /* FinancialRevenuTaxesModel.json */,
-				7968401926B8999000F838BE /* PeriodicInvestement.json */,
 				7968401A26B8999000F838BE /* UnemploymentModelConfig.json */,
 				7968401B26B8999000F838BE /* PensionReversionModel.json */,
 				7968401C26B8999000F838BE /* IsfModel.json */,
@@ -1343,7 +1285,6 @@
 				7968401F26B8999000F838BE /* RetirementModelConfig.json */,
 				7968402026B8999000F838BE /* RealEstateCapitalGainIrppModel.json */,
 				7968402126B8999000F838BE /* RealEstateCapitalGainTaxesModel.json */,
-				7968402226B8999000F838BE /* RealEstateAsset.json */,
 				7968402326B8999000F838BE /* PensionTaxesModel.json */,
 			);
 			path = Ressources;
@@ -1463,7 +1404,6 @@
 				799604CB26B847E700309EE5 /* AppVersion.swift */,
 				79FC722226330D2C004F3BD2 /* AppCommands.swift */,
 				79B2728B2634DBEB00298E5D /* AppThemes.swift */,
-				79EC479826307B260006EE44 /* UserSettings.swift */,
 				79FC7269263336C3004F3BD2 /* UIState.swift */,
 			);
 			path = AppEnvir;
@@ -1822,17 +1762,8 @@
 			isa = PBXGroup;
 			children = (
 				79FA8CD72630684F009FEA00 /* Assets.swift */,
-				79FA8CDE2630684F009FEA00 /* AssetsCategory.swift */,
-				79FA8CDF2630684F009FEA00 /* ValuedAssets.swift */,
-				79FA8CD62630684F009FEA00 /* PeriodicInvestment.swift */,
-				79FA8CD92630684F009FEA00 /* FreeInvestment.swift */,
-				793A0B3D26ADCD1400957CCE /* FreeInvestment+Remove.swift */,
-				79FA8CDA2630684F009FEA00 /* RealEstate.swift */,
-				79FA8CDB2630684F009FEA00 /* SCPI.swift */,
+				794B014D26B9BE4300882684 /* ValuedAssets.swift */,
 				79FA8CDD2630684F009FEA00 /* SCI.swift */,
-				79FA8CE02630684F009FEA00 /* FinancialEnvelopP.swift */,
-				79FA8CD82630684F009FEA00 /* InterestRateKind.swift */,
-				79FA8CDC2630684F009FEA00 /* InvestmentKind.swift */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -1940,6 +1871,7 @@
 				79683FB826B891D000F838BE /* ModelEnvironment */,
 				7968405E26B8A8CC00F838BE /* Ownership */,
 				795F8AF426B9815D00E44A66 /* DateBoundary */,
+				794B016026B9C12400882684 /* AssetsModel */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -1982,6 +1914,7 @@
 				79683FBA26B891DD00F838BE /* ModelEnvironment */,
 				7968406026B8A8D500F838BE /* Ownership */,
 				795F8AF226B9815500E44A66 /* DateBoundary */,
+				794B016226B9C12C00882684 /* AssetsModel */,
 			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
@@ -2180,7 +2113,6 @@
 				7968403926B8999000F838BE /* IsfModel.json in Resources */,
 				7968403126B8999000F838BE /* UnemploymentCompensationModel.json in Resources */,
 				7968403726B8999000F838BE /* UnemploymentModelConfig.json in Resources */,
-				7968403326B8999000F838BE /* SCPI.json in Resources */,
 				7968403226B8999000F838BE /* LayoffCompensationModel.json in Resources */,
 				7968403526B8999000F838BE /* FinancialRevenuTaxesModel.json in Resources */,
 				7901CF912652A04D007DF85B /* Successions.csv in Resources */,
@@ -2188,17 +2120,14 @@
 				7968403D26B8999000F838BE /* RealEstateCapitalGainIrppModel.json in Resources */,
 				7968402926B8999000F838BE /* LayOffTaxesModel.json in Resources */,
 				7968403826B8999000F838BE /* PensionReversionModel.json in Resources */,
-				7968403F26B8999000F838BE /* RealEstateAsset.json in Resources */,
 				7968402B26B8999000F838BE /* SocioEconomyModelConfig.json in Resources */,
 				7968402426B8999000F838BE /* RegimeAgircModel.json in Resources */,
 				7968403C26B8999000F838BE /* RetirementModelConfig.json in Resources */,
-				7968403626B8999000F838BE /* PeriodicInvestement.json in Resources */,
 				7968402E26B8999000F838BE /* EconomyModelConfig.json in Resources */,
 				7968402D26B8999000F838BE /* IncomeTaxesModel.json in Resources */,
 				7968403426B8999000F838BE /* InheritanceDonationModel.json in Resources */,
 				7968402826B8999000F838BE /* DemembrementModel.json in Resources */,
 				7968402626B8999000F838BE /* FiscalModelConfig.json in Resources */,
-				7968402F26B8999000F838BE /* FreeInvestement.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2264,10 +2193,10 @@
 				799025BD2641F60300ED53D4 /* SuccessionsView.swift in Sources */,
 				799025B52641F60300ED53D4 /* ChartsSectionView.swift in Sources */,
 				790FF3502648AA07001B2653 /* BalanceSheetLine.swift in Sources */,
+				794B014E26B9BE4300882684 /* ValuedAssets.swift in Sources */,
 				791ED118263A2CBD00701202 /* CashFlowLine+populateIncomes.swift in Sources */,
 				79F222F5265AD0B9005EE0B9 /* DossierViewModel.swift in Sources */,
 				79BBE8E92646FEE70045E524 /* CF Detailed ChartView.swift in Sources */,
-				79FA8CE52630684F009FEA00 /* InterestRateKind.swift in Sources */,
 				791ED0E7263A098000701202 /* PersonLifeLineView.swift in Sources */,
 				79FC725226331E0A004F3BD2 /* PickerHelperViews.swift in Sources */,
 				791ED0DD2639FE2700701202 /* RetirementEditView.swift in Sources */,
@@ -2277,7 +2206,6 @@
 				79CB2C85264D720000B3E493 /* MonteCarloVisitableP.swift in Sources */,
 				7990D8D9264EDA0600078CB6 /* CategoryBarChartBalanceSheetVisitor.swift in Sources */,
 				797901242640AEB600104C1A /* PatrimoineView.swift in Sources */,
-				79FA8CE12630684F009FEA00 /* PeriodicInvestment.swift in Sources */,
 				799025A72641F60300ED53D4 /* KpiSectionView.swift in Sources */,
 				79BE4A6B2651A2BA00BBF46C /* HistogramVisitable.swift in Sources */,
 				799025B32641F60300ED53D4 /* StatisticsChartView.swift in Sources */,
@@ -2296,7 +2224,6 @@
 				791ED0F5263A1C5E00701202 /* ButtonStyles.swift in Sources */,
 				7998E1A4262DBE3E00DA4A12 /* Adult.swift in Sources */,
 				791ED0FF263A1EF800701202 /* AdultDetailView.swift in Sources */,
-				79FA8CED2630684F009FEA00 /* InvestmentKind.swift in Sources */,
 				79A9BE99265186A700170A01 /* DiscreteDistributionView.swift in Sources */,
 				7990D8E5264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift in Sources */,
 				79EF934E2637636D00C1BE5B /* ChartsFormaters.swift in Sources */,
@@ -2320,8 +2247,6 @@
 				791ED104263A20F600701202 /* SuccessorListView.swift in Sources */,
 				7998E1A2262DBE3E00DA4A12 /* Adult+Unemployement.swift in Sources */,
 				79F4D12326B03D62009D91B9 /* Buttons.swift in Sources */,
-				79FA8CEB2630684F009FEA00 /* SCPI.swift in Sources */,
-				79EC479926307B260006EE44 /* UserSettings.swift in Sources */,
 				79B2727A2634D68E00298E5D /* BoundaryEditView.swift in Sources */,
 				799025BF2641F60300ED53D4 /* SuccessionsSectionView.swift in Sources */,
 				791ED0EF263A173D00701202 /* PersonAddView.swift in Sources */,
@@ -2347,7 +2272,6 @@
 				7977FE85262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */,
 				796506D52640866F0036E466 /* scpiDetailedView.swift in Sources */,
 				79BE4A832651CE7800BBF46C /* BetaRandomizerView.swift in Sources */,
-				79FA8CF52630684F009FEA00 /* FinancialEnvelopP.swift in Sources */,
 				791ED0D62639FBFD00701202 /* UnemployementDetailView.swift in Sources */,
 				791D3B932649679C0024A2D8 /* CustomCsvConvertibleP.swift in Sources */,
 				799025B92641F60300ED53D4 /* isfEvolutionChartView.swift in Sources */,
@@ -2356,7 +2280,6 @@
 				79C1D9D7266932310028A729 /* ShareSheetView.swift in Sources */,
 				79FC726026333350004F3BD2 /* SettingsView.swift in Sources */,
 				79FC728C26333A27004F3BD2 /* MainScene.swift in Sources */,
-				79FA8CF32630684F009FEA00 /* ValuedAssets.swift in Sources */,
 				79FC7259263320BE004F3BD2 /* AppVersionView.swift in Sources */,
 				79EC47D7263084280006EE44 /* SimulationLogger.swift in Sources */,
 				791ED0FB263A1EB700701202 /* PersonDetailView.swift in Sources */,
@@ -2387,7 +2310,6 @@
 				799025B12641F60300ED53D4 /* IrppEvolutionChartView.swift in Sources */,
 				791ED121263A2D3B00701202 /* CashFlowLine+managePeriodicInvest.swift in Sources */,
 				79FDC1A7269C4C520092452D /* CashFlowLine+manageSuccession.swift in Sources */,
-				79FA8CE72630684F009FEA00 /* FreeInvestment.swift in Sources */,
 				79B164872651DD7200D0603C /* ModelsView.swift in Sources */,
 				79C838372641E092008B29BF /* CheckBoxStyles.swift in Sources */,
 				7901CF872652954E007DF85B /* SuccessionCsvVisitorP.swift in Sources */,
@@ -2396,9 +2318,7 @@
 				79A9BE97265185AF00170A01 /* UniformDistributionView.swift in Sources */,
 				7979012A2640B49E00104C1A /* TableView.swift in Sources */,
 				79EC4802263096200006EE44 /* TaxeCategory.swift in Sources */,
-				793A0B3E26ADCD1400957CCE /* FreeInvestment+Remove.swift in Sources */,
 				79EC482126309EFC0006EE44 /* LegalSuccessionManager.swift in Sources */,
-				79FA8CE92630684F009FEA00 /* RealEstate.swift in Sources */,
 				791ED0F2263A188900701202 /* PersonEditView.swift in Sources */,
 				79EC47BA26307C910006EE44 /* ValuedLiabilities.swift in Sources */,
 				7990D8D1264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift in Sources */,
@@ -2439,7 +2359,6 @@
 				799025BB2641F60300ED53D4 /* CF Global ChartView.swift in Sources */,
 				79AA5D6A26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */,
 				7998E1A0262DBE3E00DA4A12 /* Adult+Pension.swift in Sources */,
-				79FA8CF12630684F009FEA00 /* AssetsCategory.swift in Sources */,
 				7998E1AB262DBE4600DA4A12 /* Child.swift in Sources */,
 				791ED101263A1EF800701202 /* ChildDetailView.swift in Sources */,
 				791ED10A263A275800701202 /* FamilyView.swift in Sources */,
@@ -2466,8 +2385,6 @@
 				791D3B942649679C0024A2D8 /* CustomCsvConvertibleP.swift in Sources */,
 				794346462641D3F700374F99 /* CashFlowArray.swift in Sources */,
 				79AA5D732650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift in Sources */,
-				79FA8CE62630684F009FEA00 /* InterestRateKind.swift in Sources */,
-				79FA8CE22630684F009FEA00 /* PeriodicInvestment.swift in Sources */,
 				799604CD26B847E700309EE5 /* AppVersion.swift in Sources */,
 				79B2726F2634CC0000298E5D /* PersonPickerView.swift in Sources */,
 				791ED0FC263A1EB700701202 /* PersonDetailView.swift in Sources */,
@@ -2486,7 +2403,6 @@
 				798DE8A526357CF500C0C3B5 /* SwiftUIconditional.swift in Sources */,
 				7901CF7F26528399007DF85B /* ScenarioSectionView.swift in Sources */,
 				791ED11F263A2D2E00701202 /* CashFlowLine+manageSCPI.swift in Sources */,
-				79FA8CEE2630684F009FEA00 /* InvestmentKind.swift in Sources */,
 				79BE4A6F2651A2C100BBF46C /* HistogramVisitor.swift in Sources */,
 				791ED0F6263A1C5E00701202 /* ButtonStyles.swift in Sources */,
 				79EC47F8263095C20006EE44 /* NetCashFlowManager.swift in Sources */,
@@ -2510,7 +2426,6 @@
 				7990D8E2264F1C4000078CB6 /* BarChartCashFlowVisitor.swift in Sources */,
 				79F4D12426B03D62009D91B9 /* Buttons.swift in Sources */,
 				7998E1A3262DBE3E00DA4A12 /* Adult+Unemployement.swift in Sources */,
-				79FA8CEC2630684F009FEA00 /* SCPI.swift in Sources */,
 				791ED0F0263A173D00701202 /* PersonAddView.swift in Sources */,
 				7990D8DE264F0A6800078CB6 /* LineChartCashFlowVisitor.swift in Sources */,
 				799025AC2641F60300ED53D4 /* ComputationView.swift in Sources */,
@@ -2519,7 +2434,6 @@
 				79EC5E9926406ADA00FF8263 /* OwnershipView.swift in Sources */,
 				79FC724A26331CCD004F3BD2 /* GraphicUserSettings.swift in Sources */,
 				79AA5D772650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */,
-				79EC479A26307B260006EE44 /* UserSettings.swift in Sources */,
 				7990D8D6264EBDB700078CB6 /* BarChartBalanceSheetVisitor.swift in Sources */,
 				791ED105263A20F600701202 /* SuccessorListView.swift in Sources */,
 				791ED0F9263A1D8A00701202 /* FamilySectionView.swift in Sources */,
@@ -2551,6 +2465,7 @@
 				79C838352641E04C008B29BF /* PopOverContentView.swift in Sources */,
 				791ED11C263A2CE900701202 /* CashFlowLine+manageRealEstate.swift in Sources */,
 				79FA8CE42630684F009FEA00 /* Assets.swift in Sources */,
+				794B014F26B9BE4300882684 /* ValuedAssets.swift in Sources */,
 				791ED113263A285300701202 /* CashFlowLine.swift in Sources */,
 				7998E16E262DB38700DA4A12 /* Seniority.swift in Sources */,
 				7977FE86262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */,
@@ -2558,14 +2473,11 @@
 				79FC728D26333A27004F3BD2 /* MainScene.swift in Sources */,
 				796506D62640866F0036E466 /* scpiDetailedView.swift in Sources */,
 				796503D0265596E50093F10E /* DossierDetailView.swift in Sources */,
-				793A0B3F26ADCD1400957CCE /* FreeInvestment+Remove.swift in Sources */,
 				79F222F6265AD0B9005EE0B9 /* DossierViewModel.swift in Sources */,
-				79FA8CF62630684F009FEA00 /* FinancialEnvelopP.swift in Sources */,
 				799025A42641F60300ED53D4 /* HistogramView.swift in Sources */,
 				791D3BA12649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,
 				79C1D9D8266932310028A729 /* ShareSheetView.swift in Sources */,
 				791ED116263A28BC00701202 /* SciCashFlowLine.swift in Sources */,
-				79FA8CF42630684F009FEA00 /* ValuedAssets.swift in Sources */,
 				79EC47D8263084280006EE44 /* SimulationLogger.swift in Sources */,
 				791ED0D72639FBFD00701202 /* UnemployementDetailView.swift in Sources */,
 				799025B02641F60300ED53D4 /* IrppSliceView.swift in Sources */,
@@ -2573,7 +2485,6 @@
 				79EC480A263098340006EE44 /* OwnershipManager.swift in Sources */,
 				79C8382B2641DC02008B29BF /* LineChartDataSet+Extension.swift in Sources */,
 				79A9BE9E265186EE00170A01 /* BetaDistributionView.swift in Sources */,
-				79FA8CE82630684F009FEA00 /* FreeInvestment.swift in Sources */,
 				7906AB762641BCF100A398E9 /* SocialAccounts.swift in Sources */,
 				79EF935A26376D1100C1BE5B /* Simulation.swift in Sources */,
 				791ED122263A2D3B00701202 /* CashFlowLine+managePeriodicInvest.swift in Sources */,
@@ -2591,7 +2502,6 @@
 				7998E179262DB46800DA4A12 /* PersonCoderPreservingType.swift in Sources */,
 				79EC4803263096200006EE44 /* TaxeCategory.swift in Sources */,
 				79EC482226309EFC0006EE44 /* LegalSuccessionManager.swift in Sources */,
-				79FA8CEA2630684F009FEA00 /* RealEstate.swift in Sources */,
 				79EC47BB26307C910006EE44 /* ValuedLiabilities.swift in Sources */,
 				79C838322641E02B008B29BF /* MenuCollapsable.swift in Sources */,
 				79A9AA77264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */,
@@ -2631,7 +2541,6 @@
 				795049ED2667897A000AAEF0 /* ComputationSectionView.swift in Sources */,
 				79BE4A7E2651CE7800BBF46C /* ModelHumanView.swift in Sources */,
 				797931A326416E8C000F8599 /* KPI.swift in Sources */,
-				79FA8CF22630684F009FEA00 /* AssetsCategory.swift in Sources */,
 				7998E1AC262DBE4600DA4A12 /* Child.swift in Sources */,
 				79BBE8EA2646FEE70045E524 /* CF Detailed ChartView.swift in Sources */,
 				7935FFDC265420FF00AC1715 /* DossierBrowserView.swift in Sources */,
@@ -2658,14 +2567,10 @@
 				7935FFDD265420FF00AC1715 /* DossierBrowserView.swift in Sources */,
 				7901CF8D2652956A007DF85B /* CsvSuccessionVisitor.swift in Sources */,
 				79BE4A822651CE7800BBF46C /* DiscreteRandomizerView.swift in Sources */,
-				79683FF526B8995900F838BE /* PeriodicInvestmentTests.swift in Sources */,
 				7990D8DB264EDA0600078CB6 /* CategoryBarChartBalanceSheetVisitor.swift in Sources */,
 				7990D8D7264EBDB700078CB6 /* BarChartBalanceSheetVisitor.swift in Sources */,
 				79EC5E822640647A00FF8263 /* ExampleTests.swift in Sources */,
 				791D3B952649679C0024A2D8 /* CustomCsvConvertibleP.swift in Sources */,
-				79683FF626B8995900F838BE /* RealEstateTests.swift in Sources */,
-				79683FF726B8995900F838BE /* SCPItests.swift in Sources */,
-				79683FFB26B8995900F838BE /* InterestRateTypeTests.swift in Sources */,
 				79A9BE9F265186EE00170A01 /* BetaDistributionView.swift in Sources */,
 				79AA5D782650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */,
 				7901CF852652953E007DF85B /* SuccessionCsvVisitableP.swift in Sources */,
@@ -2688,13 +2593,11 @@
 				7990D8DF264F0A6800078CB6 /* LineChartCashFlowVisitor.swift in Sources */,
 				7990D8D3264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift in Sources */,
 				79683FF326B8995900F838BE /* PatrimoinTests.swift in Sources */,
-				79683FF426B8995900F838BE /* InvestementTypeTests.swift in Sources */,
 				79AA5D742650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift in Sources */,
 				79BE4A8B2651CE7800BBF46C /* ModelEconomyView.swift in Sources */,
 				79AA5D7026507E9800B26D2C /* IrppChartCashFlowVisitor.swift in Sources */,
 				79BE4A882651CE7800BBF46C /* ModelSociologyView.swift in Sources */,
 				79683FF826B8995900F838BE /* SciTests.swift in Sources */,
-				79683FF926B8995900F838BE /* FreeInvestementTests.swift in Sources */,
 				791D3BA22649C0200024A2D8 /* BalanceSheetCsvVisitableP.swift in Sources */,
 				7990D8E7264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift in Sources */,
 				79AA5D6C26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */,
@@ -2702,7 +2605,6 @@
 				79B164892651DD7200D0603C /* ModelsView.swift in Sources */,
 				790FF3532648AD38001B2653 /* BalanceSheetLine.swift in Sources */,
 				79A9AA78264AFA290036732F /* CashFlowCsvVisitableP.swift in Sources */,
-				79683FF226B8995900F838BE /* FinancialEnvelopTests.swift in Sources */,
 				7920DC66262C700500536B03 /* Tests_iOS.swift in Sources */,
 				79BE4A702651A2C200BBF46C /* HistogramVisitor.swift in Sources */,
 				79BE4A852651CE7800BBF46C /* BetaRandomizerView.swift in Sources */,
@@ -3182,6 +3084,14 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7935FFE32654492500AC1715 /* XCRemoteSwiftPackageReference "Files" */;
 			productName = Files;
+		};
+		794B016026B9C12400882684 /* AssetsModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AssetsModel;
+		};
+		794B016226B9C12C00882684 /* AssetsModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AssetsModel;
 		};
 		7956995B262F90250015AF34 /* NamedValue */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -12,16 +12,17 @@ import Statistics
 import FiscalModel
 import EconomyModel
 import NamedValue
+import Persistence
 import Ownership
 
-typealias PeriodicInvestementArray = ArrayOfNameableValuable<PeriodicInvestement>
+public typealias PeriodicInvestementArray = ArrayOfNameableValuable<PeriodicInvestement>
 
 // MARK: - Placement à versements périodiques, fixes, annuels et à taux fixe
 
 /// Placement à versements périodiques, fixes, annuels et à taux fixe
 /// Tous les intérêts sont capitalisés
-// conformité à BundleCodable nécessaire pour les TU; sinon Codable suffit
-struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP {
+// conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
+public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP {
     
     // MARK: - Static Properties
     
@@ -47,16 +48,16 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
     // MARK: - Static Methods
     
     /// Dependency Injection: Setter Injection
-    static func setEconomyModelProvider(_ economyModel : EconomyModelProviderP) {
+    public static func setEconomyModelProvider(_ economyModel : EconomyModelProviderP) {
         PeriodicInvestement.economyModel = economyModel
     }
     
     /// Dependency Injection: Setter Injection
-    static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
+    public static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
         PeriodicInvestement.fiscalModel = fiscalModel
     }
     
-    static func setSimulationMode(to thisMode: SimulationModeEnum) {
+    public static func setSimulationMode(to thisMode: SimulationModeEnum) {
         PeriodicInvestement.simulationMode = thisMode
     }
     
@@ -70,23 +71,23 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
     
     // MARK: - Properties
     
-    var id              = UUID()
-    var name            : String
-    var note            : String = ""
+    public var id              = UUID()
+    public var name            : String
+    public var note            : String = ""
     // propriétaires
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
-    var ownership       : Ownership = Ownership()
-    var type            : InvestementKind
-    var yearlyPayement  : Double = 0.0 // versements nets de frais
-    var yearlyCost      : Double = 0.0 // Frais sur versements
+    public var ownership       : Ownership = Ownership()
+    public var type            : InvestementKind
+    public var yearlyPayement  : Double = 0.0 // versements nets de frais
+    public var yearlyCost      : Double = 0.0 // Frais sur versements
     // Ouverture
-    var firstYear       : Int // au 31 décembre
-    var initialValue    : Double = 0.0
-    var initialInterest : Double = 0.0 // portion of interests included in the initialValue
+    public var firstYear       : Int // au 31 décembre
+    public var initialValue    : Double = 0.0
+    public var initialInterest : Double = 0.0 // portion of interests included in the initialValue
     // rendement
-    var interestRateType       : InterestRateKind // type de taux de rendement
-    var averageInterestRate    : Double {// % avant charges sociales si prélevées à la source annuellement
+    public var interestRateType       : InterestRateKind // type de taux de rendement
+    public var averageInterestRate    : Double {// % avant charges sociales si prélevées à la source annuellement
         switch interestRateType {
             case .contractualRate( let fixedRate):
                 // taux contractuel fixe
@@ -100,7 +101,7 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
                 return rate - PeriodicInvestement.inflation
         }
     }
-    var averageInterestRateNet : Double { // % fixe après charges sociales si prélevées à la source annuellement
+    public var averageInterestRateNet : Double { // % fixe après charges sociales si prélevées à la source annuellement
         switch type {
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
@@ -113,20 +114,20 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
         }
     }
     // liquidation
-    var lastYear        : Int // au 31 décembre
-
+    public var lastYear        : Int // au 31 décembre
+    
     // MARK: - Initializers
     
-    init(name             : String,
-         note             : String,
-         type             : InvestementKind,
-         firstYear        : Int,
-         lastYear         : Int,
-         interestRateType : InterestRateKind,
-         initialValue     : Double = 0.0,
-         initialInterest  : Double = 0.0,
-         yearlyPayement   : Double = 0.0,
-         yearlyCost       : Double = 0.0) {
+    public init(name             : String,
+                note             : String,
+                type             : InvestementKind,
+                firstYear        : Int,
+                lastYear         : Int,
+                interestRateType : InterestRateKind,
+                initialValue     : Double = 0.0,
+                initialInterest  : Double = 0.0,
+                yearlyPayement   : Double = 0.0,
+                yearlyCost       : Double = 0.0) {
         self.name             = name
         self.note             = note
         self.type             = type
@@ -145,7 +146,7 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
     /// - Parameter year: année
     /// - Returns: versement, frais de versement inclus
     /// - Note: Les première et dernière années sont inclues
-    func yearlyTotalPayement(atEndOf year: Int) -> Double {
+    public func yearlyTotalPayement(atEndOf year: Int) -> Double {
         guard (firstYear...lastYear).contains(year) else {
             return 0
         }
@@ -155,7 +156,7 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
     /// Valeur capitalisée à la date spécifiée
     /// - Parameter year: fin de l'année
     /// - Note: Les première et dernière années sont inclues
-    func value (atEndOf year: Int) -> Double {
+    public func value (atEndOf year: Int) -> Double {
         guard (firstYear...lastYear).contains(year) else {
             return 0.0
         }
@@ -174,11 +175,11 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
     /// - Warning: les assurance vie ne sont pas inclues car hors succession
     /// - Note: Les première et dernière années sont inclues
-    func ownedValue(by ownerName     : String,
-                    atEndOf year     : Int,
-                    evaluationMethod : EvaluationMethod) -> Double {
+    public func ownedValue(by ownerName     : String,
+                           atEndOf year     : Int,
+                           evaluationMethod : EvaluationMethod) -> Double {
         var evaluatedValue : Double
-
+        
         // cas particuliers
         switch evaluationMethod {
             case .legalSuccession:
@@ -226,7 +227,7 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
     /// Intérêts capitalisés à la date spécifiée
     /// - Parameter year: fin de l'année
     /// - Note: Les première et dernière années sont inclues
-    func cumulatedInterests(atEndOf year: Int) -> Double {
+    public func cumulatedInterests(atEndOf year: Int) -> Double {
         guard (firstYear...lastYear).contains(year) else {
             return 0.0
         }
@@ -242,7 +243,7 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
     ///   - taxableInterests : intérêts nets de prélèvements sociaux et taxables à l'IRPP
     ///   - socialTaxes : prélèvements sociaux
     /// - Note: Les première et dernière années sont inclues
-    func liquidatedValue (atEndOf year: Int)
+    public func liquidatedValue (atEndOf year: Int)
     -> (revenue              : Double,
         interests            : Double,
         netInterests         : Double,
@@ -277,13 +278,13 @@ struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelop
 // MARK: - Extensions
 
 extension PeriodicInvestement: Comparable {
-    static func < (lhs: PeriodicInvestement, rhs: PeriodicInvestement) -> Bool {
+    public static func < (lhs: PeriodicInvestement, rhs: PeriodicInvestement) -> Bool {
         return (lhs.name < rhs.name)
     }
 }
 
 extension PeriodicInvestement: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         """
         INVESTISSEMENT PERIODIQUE: \(name)
         - Note:

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppFoundation
+import Persistence
 
 struct GraphicUserSettings: View {
     @EnvironmentObject var patrimoine : Patrimoin

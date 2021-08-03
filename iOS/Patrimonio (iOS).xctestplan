@@ -17,18 +17,6 @@
   },
   "testTargets" : [
     {
-      "skippedTests" : [
-        "Tests_iOS\/testExample()",
-        "Tests_iOS\/testLaunchPerformance()",
-        "Tests_iOS\/test_truc()"
-      ],
-      "target" : {
-        "containerPath" : "container:Patrimonio.xcodeproj",
-        "identifier" : "7920DC60262C700500536B03",
-        "name" : "Tests iOS"
-      }
-    },
-    {
       "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/AppFoundation",
@@ -45,6 +33,7 @@
       }
     },
     {
+      "enabled" : false,
       "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/FileAndFolder",
@@ -131,10 +120,35 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/Ownership",
         "identifier" : "OwnershipTests",
         "name" : "OwnershipTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/AssetsModel",
+        "identifier" : "AssetsModelTests",
+        "name" : "AssetsModelTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/DateBoundary",
+        "identifier" : "DateBoundaryTests",
+        "name" : "DateBoundaryTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/Persistence",
+        "identifier" : "PersistenceTests",
+        "name" : "PersistenceTests"
       }
     }
   ],

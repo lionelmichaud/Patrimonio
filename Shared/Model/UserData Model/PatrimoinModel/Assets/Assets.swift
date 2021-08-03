@@ -12,6 +12,7 @@ import Statistics
 import FiscalModel
 import Files
 import Ownership
+import AssetsModel
 
 // MARK: - Actifs de la famille
 

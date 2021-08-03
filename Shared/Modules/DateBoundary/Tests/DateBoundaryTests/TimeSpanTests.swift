@@ -22,28 +22,35 @@ class TimeSpanTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func test_CuctomString() throws {
+    func test_description() throws {
         print("Test de TimeSpan.description")
 
         var ts = TimeSpan.permanent
-        print(ts)
+        var str: String = String(describing: ts).withPrefixedSplittedLines("  ")
+        print(str)
 
         ts = TimeSpan.periodic(from   : TimeSpanTests.db2020,
                                period : 2,
                                to     : TimeSpanTests.db2024)
-        print(ts)
+        str = String(describing: ts).withPrefixedSplittedLines("  ")
+        print(str)
 
         ts = TimeSpan.starting(from: TimeSpanTests.db2020)
-        print(ts)
+        str = String(describing: ts).withPrefixedSplittedLines("  ")
+        print(str)
 
         ts = TimeSpan.ending(to: TimeSpanTests.db2020)
-        print(ts)
-        
+        str = String(describing: ts).withPrefixedSplittedLines("  ")
+        print(str)
+
         ts = TimeSpan.spanning(from   : TimeSpanTests.db2020,
                                to     : TimeSpanTests.db2024)
-        print(ts)
+        str = String(describing: ts).withPrefixedSplittedLines("  ")
+        print(str)
+        
         ts = TimeSpan.exceptional(inYear: 2022)
-        print(ts)
+        str = String(describing: ts).withPrefixedSplittedLines("  ")
+        print(str)
     }
     
     func test_starting() {

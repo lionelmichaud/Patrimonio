@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AssetsModel
 
 struct InterestRateTypeEditView : View {
     @Binding var rateType         : InterestRateKind

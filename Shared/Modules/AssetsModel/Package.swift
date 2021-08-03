@@ -4,37 +4,48 @@
 import PackageDescription
 
 let package = Package(
-    name: "Persistence",
+    name: "AssetsModel",
     platforms: [.macOS(.v11), .iOS(.v14)], // Our minimum deployment target is 12
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "Persistence",
-            targets: ["Persistence"])
+            name: "AssetsModel",
+            targets: ["AssetsModel"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/jessesquires/Foil.git", .upToNextMajor(from: "1.0.0")),
         .package(path: "../AppFoundation"),
+        .package(path: "../Statistics"),
+        .package(path: "../FiscalModel"),
+        .package(path: "../EconomyModel"),
         .package(path: "../NamedValue"),
-        .package(path: "../FileAndFolder")
+        .package(path: "../Persistence"),
+        .package(path: "../DateBoundary"),
+        .package(path: "../Ownership")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "Persistence",
-            dependencies:
-                [
-                    .product(name: "Foil", package: "Foil"),
-                    "AppFoundation",
-                    "NamedValue",
-                    "FileAndFolder"
-                ]),
+            name: "AssetsModel",
+            dependencies: [
+                "AppFoundation",
+                "Statistics",
+                "FiscalModel",
+                "EconomyModel",
+                "NamedValue",
+                "Persistence",
+                "DateBoundary",
+                "Ownership"
+            ]
+        ),
         .testTarget(
-            name: "PersistenceTests",
-            dependencies: ["Persistence"]
+            name: "AssetsModelTests",
+            dependencies: ["AssetsModel"],
+            resources: [
+                .process("Resources") // We will store out assets here
+            ]
         )
     ]
 )

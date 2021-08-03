@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Ownership
+import AssetsModel
 
 // MARK: - Saisie du type d'investissement
 

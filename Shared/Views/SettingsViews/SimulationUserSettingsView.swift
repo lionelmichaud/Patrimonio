@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Persistence
 
 struct SimulationUserSettingsView: View {
     @EnvironmentObject var simulation : Simulation

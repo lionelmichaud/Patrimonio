@@ -95,6 +95,26 @@
                ReferencedContainer = "container:Shared/Modules/Ownership">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AssetsModelTests"
+               BuildableName = "AssetsModelTests"
+               BlueprintName = "AssetsModelTests"
+               ReferencedContainer = "container:Shared/Modules/AssetsModel">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DateBoundaryTests"
+               BuildableName = "DateBoundaryTests"
+               BlueprintName = "DateBoundaryTests"
+               ReferencedContainer = "container:Shared/Modules/DateBoundary">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

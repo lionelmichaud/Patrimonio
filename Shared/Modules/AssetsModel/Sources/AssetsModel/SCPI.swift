@@ -14,12 +14,12 @@ import EconomyModel
 import NamedValue
 import Ownership
 
-typealias ScpiArray = ArrayOfNameableValuable<SCPI>
+public typealias ScpiArray = ArrayOfNameableValuable<SCPI>
 
 // MARK: - SCPI à revenus périodiques, annuels et fixes
 
-// conformité à BundleCodable nécessaire pour les TU; sinon Codable suffit
-struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
+// conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
+public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
     
     // MARK: - Static Properties
     
@@ -39,38 +39,62 @@ struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
     // MARK: - Static Methods
     
     /// Dependency Injection: Setter Injection
-    static func setInflationProvider(_ inflationProvider : InflationProviderP) {
+    public static func setInflationProvider(_ inflationProvider : InflationProviderP) {
         SCPI.inflationProvider = inflationProvider
     }
     
     /// Dependency Injection: Setter Injection
-    static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
+    public static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
         SCPI.fiscalModel = fiscalModel
     }
 
-    static func setSimulationMode(to thisMode: SimulationModeEnum) {
+    public static func setSimulationMode(to thisMode: SimulationModeEnum) {
         SCPI.simulationMode = thisMode
     }
 
     // MARK: - Properties
     
-    var id           = UUID()
-    var name         : String
-    var note         : String = ""
+    public var id           = UUID()
+    public var name         : String
+    public var note         : String = ""
     // propriétaires
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
-    var ownership    : Ownership = Ownership()
+    public var ownership    : Ownership = Ownership()
     // achat
-    var buyingDate   : Date
-    var buyingPrice  : Double = 0.0
+    public var buyingDate   : Date
+    public var buyingPrice  : Double = 0.0
     // rendement
-    var interestRate : Double = 0.0 // %
-    var revaluatRate : Double = 0.0 // %
+    public var interestRate : Double = 0.0 // %
+    public var revaluatRate : Double = 0.0 // %
     // vente
-    var willBeSold   : Bool = false
-    var sellingDate  : Date = 100.years.fromNow!
+    public var willBeSold   : Bool = false
+    public var sellingDate  : Date = 100.years.fromNow!
 
+    // MARK: - Initializer
+    
+    public init(id           : UUID      = UUID(),
+                name         : String,
+                note         : String    = "",
+                ownership    : Ownership = Ownership(),
+                buyingDate   : Date,
+                buyingPrice  : Double    = 0.0,
+                interestRate : Double    = 0.0,
+                revaluatRate : Double    = 0.0,
+                willBeSold   : Bool      = false,
+                sellingDate  : Date      = 100.years.fromNow!) {
+        self.id = id
+        self.name = name
+        self.note = note
+        self.ownership = ownership
+        self.buyingDate = buyingDate
+        self.buyingPrice = buyingPrice
+        self.interestRate = interestRate
+        self.revaluatRate = revaluatRate
+        self.willBeSold = willBeSold
+        self.sellingDate = sellingDate
+    }
+    
     // MARK: - Methods
 
     /// Valeur du bien à la date spécifiée.
@@ -83,7 +107,7 @@ struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
     ///
     /// - Parameter year: fin de l'année
     /// - Returns: Valeur actualisé du bien, non déflatée de l'inflation, mais commission de vente (frais d'agence) de 10% déduite.
-    func value(atEndOf year: Int) -> Double {
+    public func value(atEndOf year: Int) -> Double {
         if isOwned(during: year) {
             return try! futurValue(payement     : 0,
                                    interestRate : revaluatRate / 100.0,
@@ -106,7 +130,7 @@ struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
     ///   - revenue: revenus inscrit en compte courant avant prélèvements sociaux et IRPP (ou IS) mais net d'inflation
     ///   - taxableIrpp: part des revenus inscrit en compte courant imposable à l'IRPP (après charges sociales)
     ///   - socialTaxes: charges sociales (si imposable à l'IRPP)
-    func yearlyRevenue(during year: Int)
+    public func yearlyRevenue(during year: Int)
     -> (revenue    : Double,
         taxableIrpp: Double,
         socialTaxes: Double) {
@@ -151,7 +175,7 @@ struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
     ///   - `socialTaxes`: charges sociales payées sur sur la plus-value
     ///   - `irpp`: impôt sur le revenu dû sur la plus-value
     ///   - `netRevenue`: produit de la vente net de charges sociales `socialTaxes` et d'impôt sur la plus-value `irpp`
-    func liquidatedValueIRPP (_ year: Int)
+    public func liquidatedValueIRPP (_ year: Int)
     -> (revenue    : Double,
         capitalGain: Double,
         netRevenue : Double,
@@ -186,7 +210,7 @@ struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
     ///   - `capitalGain`: plus-value réalisée lors de la vente
     ///   - `IS`: IS dû sur sur la plus-value
     ///   - `netRevenue`: produit de la vente net d'`IS` sur la plus-value
-    func liquidatedValueIS (_ year: Int)
+    public func liquidatedValueIS (_ year: Int)
     -> (revenue    : Double,
         capitalGain: Double,
         netRevenue : Double,
@@ -206,13 +230,13 @@ struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
 
 // MARK: Extensions
 extension SCPI: Comparable {
-    static func < (lhs: SCPI, rhs: SCPI) -> Bool {
+    public static func < (lhs: SCPI, rhs: SCPI) -> Bool {
         return (lhs.name < rhs.name)
     }
 }
 
 extension SCPI: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         """
         SCPI: \(name)
         - Note:

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AssetsModel
 
 struct PeriodicInvestDetailedView: View {
     @EnvironmentObject var family     : Family

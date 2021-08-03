@@ -30,7 +30,10 @@ class NamedValueTableTests: XCTestCase {
     func test_description() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        print(NamedValueTableTests.namedValueTable.description)
+        print("Test de NamedValueTable.description")
+        
+        let str: String = String(describing: NamedValueTableTests.namedValueTable).withPrefixedSplittedLines("  ")
+        print(str)
     }
     
     func test_total() {

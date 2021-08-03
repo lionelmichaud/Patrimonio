@@ -7,12 +7,13 @@
 //
 
 import XCTest
-@testable import Patrimoine
+import Ownership
+@testable import AssetsModel
 
 class FinancialEnvelopTests: XCTestCase {
 
-    struct Envelop: FinancialEnvelop {
-        var type      : InvestementType = InvestementType.other
+    struct Envelop: FinancialEnvelopP {
+        var type      : InvestementKind = InvestementKind.other
         var ownership : Ownership       = Ownership()
         var name      : String          = "Test"
         

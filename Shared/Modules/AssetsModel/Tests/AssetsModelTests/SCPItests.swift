@@ -7,13 +7,26 @@
 //
 
 import XCTest
-@testable import Patrimoine
+import Statistics
+import EconomyModel
+import FiscalModel
+@testable import AssetsModel
 
 class SCPItests: XCTestCase {
 
-    struct InflationProvider: InflationProviderProtocol {
+    struct InflationProvider: EconomyModelProviderP {
+        func rates(in year            : Int,
+                   withMode mode      : SimulationModeEnum,
+                   simulateVolatility : Bool) -> (securedRate : Double, stockRate : Double) {
+            (securedRate: Double(year) + 5.0, stockRate: Double(year) + 10.0)
+        }
+        
+        func rates(withMode mode: SimulationModeEnum) -> (securedRate: Double, stockRate: Double) {
+            (securedRate: 5.0, stockRate: 10.0)
+        }
+        
         func inflation(withMode simulationMode: SimulationModeEnum) -> Double {
-            10.0
+            2.5
         }
     }
 
@@ -24,23 +37,29 @@ class SCPItests: XCTestCase {
 
     override class func setUp() {
         super.setUp()
-        SCPItests.scpi = SCPI(for: SCPItests.self,
-                              from                 : nil,
+        SCPItests.scpi = SCPI(fromFile             : SCPI.defaultFileName,
+                              fromBundle           : Bundle.module,
                               dateDecodingStrategy : .iso8601,
                               keyDecodingStrategy  : .useDefaultKeys)
         SCPI.setSimulationMode(to: .deterministic)
         SCPI.setInflationProvider(SCPItests.inflationProvider)
         SCPI.setFiscalModelProvider(
-            Fiscal.Model(for: FiscalModelTests.self,
-                         from                 : nil,
-                         dateDecodingStrategy : .iso8601,
-                         keyDecodingStrategy  : .useDefaultKeys)
+            Fiscal.Model(fromFile   : "FiscalModelConfig.json",
+                         fromBundle : Bundle.module)
                 .initialized())
-        print(SCPItests.scpi!)
     }
 
     // MARK: Tests
 
+    func test_description() {
+        print("Test de SCPI.description")
+        
+        let str: String =
+            String(describing: SCPItests.scpi!)
+            .withPrefixedSplittedLines("  ")
+        print(str)
+    }
+    
     func test_value() {
         var currentValue = SCPItests.scpi.value(atEndOf: 2020)
         XCTAssertEqual(1000 * 0.9, currentValue)
@@ -70,17 +89,17 @@ class SCPItests: XCTestCase {
     }
 
     func test_liquidatedValue() {
-        var vente = SCPItests.scpi.liquidatedValue(2021)
+        var vente = SCPItests.scpi.liquidatedValueIS(2021)
         XCTAssertEqual(0, vente.revenue)
 
-        vente = SCPItests.scpi.liquidatedValue(2022)
-        XCTAssertEqual(1000 * 0.9, vente.revenue)
-        XCTAssertEqual(-1000 * 0.1, vente.capitalGain)
-        XCTAssertEqual(0, vente.socialTaxes)
-        XCTAssertEqual(0, vente.irpp)
-        XCTAssertEqual(vente.revenue, vente.netRevenue)
+        let venteIRPP = SCPItests.scpi.liquidatedValueIRPP(2022)
+        XCTAssertEqual(1000 * 0.9, venteIRPP.revenue)
+        XCTAssertEqual(-1000 * 0.1, venteIRPP.capitalGain)
+        XCTAssertEqual(0, venteIRPP.socialTaxes)
+        XCTAssertEqual(0, venteIRPP.irpp)
+        XCTAssertEqual(venteIRPP.revenue, venteIRPP.netRevenue)
 
-        vente = SCPItests.scpi.liquidatedValue(2023)
+        vente = SCPItests.scpi.liquidatedValueIS(2023)
         XCTAssertEqual(0, vente.revenue)
     }
 }

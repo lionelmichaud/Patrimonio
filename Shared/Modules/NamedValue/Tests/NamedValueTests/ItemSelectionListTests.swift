@@ -27,7 +27,12 @@ class ItemSelectionListTests: XCTestCase {
     func test_description() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        print(ItemSelectionListTests.itemSelectionList.description)
+        print("Test de ItemSelectionList.description")
+        
+        let str: String =
+            String(describing: ItemSelectionListTests.itemSelectionList)
+            .withPrefixedSplittedLines("  ")
+        print(str)
     }
     
     func test_contains() {

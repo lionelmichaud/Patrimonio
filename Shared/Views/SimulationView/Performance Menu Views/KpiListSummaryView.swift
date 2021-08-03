@@ -9,6 +9,7 @@
 import SwiftUI
 import AppFoundation
 import ModelEnvironment
+import Persistence
 
 struct KpiListSummaryView: View {
     @EnvironmentObject var simulation : Simulation

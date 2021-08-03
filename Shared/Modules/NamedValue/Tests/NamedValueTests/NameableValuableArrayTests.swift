@@ -11,14 +11,6 @@ import Persistable
 @testable import NamedValue
 
 class NameableValuableArrayTests: XCTestCase {
-    static let names: [String] =
-        [
-            "Item 1",
-            "Item 2",
-            "Item 3",
-            "Item 4"
-        ]
-    static var tableNV = [Item]()
     
     struct Item: NameableValuableP, Identifiable, Codable {
         var id   = UUID()
@@ -28,6 +20,15 @@ class NameableValuableArrayTests: XCTestCase {
             Double(year)
         }
     }
+    
+    static let names: [String] =
+        [
+            "Item 1",
+            "Item 2",
+            "Item 3",
+            "Item 4"
+        ]
+    static var tableNV = [Item]()
     
     struct TableOfItems: NameableValuableArrayP {
         private enum CodingKeys: String, CodingKey { // swiftlint:disable:this nesting
@@ -60,8 +61,17 @@ class NameableValuableArrayTests: XCTestCase {
     func test_description() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        print(NameableValuableArrayTests.tableNV.description)
-        print(NameableValuableArrayTests.tableOfItems.description)
+        print("Test de [NameableValuableP].description")
+        
+        var str: String =
+            String(describing: NameableValuableArrayTests.tableNV)
+            .withPrefixedSplittedLines("  ")
+        print(str)
+
+        str =
+            String(describing: NameableValuableArrayTests.tableOfItems)
+            .withPrefixedSplittedLines("  ")
+        print(str)
     }
     
     func test_sumOfValues() {

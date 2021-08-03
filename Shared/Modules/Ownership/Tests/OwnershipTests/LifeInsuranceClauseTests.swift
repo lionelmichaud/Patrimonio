@@ -12,10 +12,13 @@ import XCTest
 class LifeInsuranceClauseTests: XCTestCase {
 
     func test_description() {
-        let clause = LifeInsuranceClause()
-        print(clause)
-        print("\n")
-        let prefixed: String = clause.description.withPrefixedSplittedLines("12")
+        print("Test de LifeInsuranceClause.description")
+        
+        var clause = LifeInsuranceClause()
+        clause.isDismembered     = true
+        clause.usufructRecipient = "Conjoint"
+        clause.bareRecipients    = ["Enfant1"]
+        let prefixed: String = String(describing: clause).withPrefixedSplittedLines("  ")
         print(prefixed)
     }
 

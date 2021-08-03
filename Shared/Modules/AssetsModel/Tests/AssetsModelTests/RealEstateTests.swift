@@ -7,7 +7,8 @@
 //
 
 import XCTest
-@testable import Patrimoine
+import FiscalModel
+@testable import AssetsModel
 
 class RealEstateTests: XCTestCase {
 
@@ -16,19 +17,26 @@ class RealEstateTests: XCTestCase {
     override class func setUp() {
         super.setUp()
         RealEstateTests.re = RealEstateAsset(
-            for: RealEstateTests.self,
-            from                 : nil,
+            fromFile             : RealEstateAsset.defaultFileName,
+            fromBundle           : Bundle.module,
             dateDecodingStrategy : .iso8601,
             keyDecodingStrategy  : .useDefaultKeys)
+        
         RealEstateAsset.setFiscalModelProvider(
-            Fiscal.Model(for: FiscalModelTests.self,
-                         from                 : nil,
-                         dateDecodingStrategy : .iso8601,
-                         keyDecodingStrategy  : .useDefaultKeys)
+            Fiscal.Model(fromFile   : "FiscalModelConfig.json",
+                         fromBundle : Bundle.module)
                 .initialized())
-        print(RealEstateTests.re!)
     }
 
+    func test_description() {
+        print("Test de RealEstateAsset.description")
+        
+        let str: String =
+            String(describing: RealEstateTests.re!)
+            .withPrefixedSplittedLines("  ")
+        print(str)
+    }
+    
     func test_sellingPriceAfterTaxes() {
         var re = RealEstateTests.re
 

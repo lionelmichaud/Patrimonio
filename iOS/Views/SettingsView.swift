@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Persistence
 
 struct SettingsView: View {
     @State private var simulateVolatility      = UserSettings.shared.simulateVolatility

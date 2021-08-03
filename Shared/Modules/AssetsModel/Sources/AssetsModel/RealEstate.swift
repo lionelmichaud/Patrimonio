@@ -13,23 +13,23 @@ import NamedValue
 import Ownership
 import DateBoundary
 
-typealias RealEstateArray = ArrayOfNameableValuable<RealEstateAsset>
+public typealias RealEstateArray = ArrayOfNameableValuable<RealEstateAsset>
 
 // MARK: - Actif immobilier physique
-// conformité à BundleCodable nécessaire pour les TU; sinon Codable suffit
-struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
-    
+// conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
+public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
+      
     // MARK: - Static Properties
     
     static var defaultFileName : String = "RealEstateAsset.json"
     // dependencies
-    private static var fiscalModel: Fiscal.Model = Fiscal.model
+    private static var fiscalModel: Fiscal.Model!
     //    static var simulationMode : SimulationModeEnum = .deterministic
     
     // MARK: - Static Methods
     
     /// Dependency Injection: Setter Injection
-    static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
+    public static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
         RealEstateAsset.fiscalModel = fiscalModel
     }
     
@@ -40,25 +40,25 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     
     // MARK: - Properties
     
-    var id                   = UUID()
-    var name                 : String
-    var note                 : String = ""
+    public var id                   = UUID()
+    public var name                 : String
+    public var note                 : String = ""
     // propriétaires
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
-    var ownership            : Ownership = Ownership()
+    public var ownership            : Ownership = Ownership()
     // achat
-    var buyingYear           : DateBoundary = DateBoundary.empty // première année de possession (inclue)
-    var buyingPrice          : Double = 0.0
-    var yearlyTaxeHabitation : Double = 0.0
-    var yearlyTaxeFonciere   : Double = 0.0
+    public var buyingYear           : DateBoundary = DateBoundary.empty // première année de possession (inclue)
+    public var buyingPrice          : Double = 0.0
+    public var yearlyTaxeHabitation : Double = 0.0
+    public var yearlyTaxeFonciere   : Double = 0.0
     // valeur vénale estimée courante
-    var estimatedValue       : Double = 0.0
+    public var estimatedValue       : Double = 0.0
     // vente
-    var willBeSold              : Bool   = false
-    var sellingYear             : DateBoundary = DateBoundary.empty // dernière année de possession (inclue)
-    var sellingNetPrice         : Double = 0.0
-    var sellingPriceAfterTaxes  : Double {
+    public var willBeSold              : Bool   = false
+    public var sellingYear             : DateBoundary = DateBoundary.empty // dernière année de possession (inclue)
+    public var sellingNetPrice         : Double = 0.0
+    public var sellingPriceAfterTaxes  : Double {
         guard willBeSold else { return 0 }
         guard let sellingDate = sellingYear.year, let buyingDate = buyingYear.year else { return 0 }
         let detentionDuration = zeroOrPositive(sellingDate - buyingDate)
@@ -72,37 +72,77 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
         return self.sellingNetPrice - socialTaxes - irpp
     }
     // habitation
-    var willBeInhabited         : Bool = false
-    var inhabitedFrom           : DateBoundary = DateBoundary.empty // année inclue
-    var inhabitedTo             : DateBoundary = DateBoundary.empty // année exclue
+    public var willBeInhabited         : Bool = false
+    public var inhabitedFrom           : DateBoundary = DateBoundary.empty // année inclue
+    public var inhabitedTo             : DateBoundary = DateBoundary.empty // année exclue
     // location
-    var willBeRented            : Bool = false
-    var rentalFrom              : DateBoundary = DateBoundary.empty // année inclue
-    var rentalTo                : DateBoundary = DateBoundary.empty // année exclue
-    var monthlyRentAfterCharges : Double = 0.0 // frais agence, taxe foncière et assurance déduite
-    var yearlyRentAfterCharges  : Double {
+    public var willBeRented            : Bool = false
+    public var rentalFrom              : DateBoundary = DateBoundary.empty // année inclue
+    public var rentalTo                : DateBoundary = DateBoundary.empty // année exclue
+    public var monthlyRentAfterCharges : Double = 0.0 // frais agence, taxe foncière et assurance déduite
+    public var yearlyRentAfterCharges  : Double {
         return monthlyRentAfterCharges * 12
     }
     // même base que pour le calcul des charges sociales
-    var yearlyRentTaxableIrpp   : Double {
+    public var yearlyRentTaxableIrpp   : Double {
         return yearlyRentAfterCharges
     }
     // même base que pour le calcul de l'IRPP
-    var yearlyRentSocialTaxes   : Double {
+    public var yearlyRentSocialTaxes   : Double {
         return RealEstateAsset.fiscalModel.financialRevenuTaxes.socialTaxes(yearlyRentAfterCharges)
     }
     // profitabilité nette de charges (frais agence, taxe foncière et assurance)
-    var profitability           : Double {
+    public var profitability           : Double {
         return yearlyRentAfterCharges / (estimatedValue == 0 ? buyingPrice : estimatedValue)
     }
     
     // MARK: - Initializers
     
+    public init(id                      : UUID         = UUID(),
+                name                    : String,
+                note                    : String       = "",
+                ownership               : Ownership    = Ownership(),
+                buyingYear              : DateBoundary = DateBoundary.empty,
+                buyingPrice             : Double       = 0.0,
+                yearlyTaxeHabitation    : Double       = 0.0,
+                yearlyTaxeFonciere      : Double       = 0.0,
+                estimatedValue          : Double       = 0.0,
+                willBeSold              : Bool         = false,
+                sellingYear             : DateBoundary = DateBoundary.empty,
+                sellingNetPrice         : Double       = 0.0,
+                willBeInhabited         : Bool         = false,
+                inhabitedFrom           : DateBoundary = DateBoundary.empty,
+                inhabitedTo             : DateBoundary = DateBoundary.empty,
+                willBeRented            : Bool         = false,
+                rentalFrom              : DateBoundary = DateBoundary.empty,
+                rentalTo                : DateBoundary = DateBoundary.empty,
+                monthlyRentAfterCharges : Double       = 0.0) {
+        self.id = id
+        self.name = name
+        self.note = note
+        self.ownership = ownership
+        self.buyingYear = buyingYear
+        self.buyingPrice = buyingPrice
+        self.yearlyTaxeHabitation = yearlyTaxeHabitation
+        self.yearlyTaxeFonciere = yearlyTaxeFonciere
+        self.estimatedValue = estimatedValue
+        self.willBeSold = willBeSold
+        self.sellingYear = sellingYear
+        self.sellingNetPrice = sellingNetPrice
+        self.willBeInhabited = willBeInhabited
+        self.inhabitedFrom = inhabitedFrom
+        self.inhabitedTo = inhabitedTo
+        self.willBeRented = willBeRented
+        self.rentalFrom = rentalFrom
+        self.rentalTo = rentalTo
+        self.monthlyRentAfterCharges = monthlyRentAfterCharges
+    }
+
     // MARK: - Methods
     
     /// Valeur à la date spécifiée
     /// - Parameter year: fin de l'année
-    func value(atEndOf year: Int) -> Double {
+    public func value(atEndOf year: Int) -> Double {
         if isOwned(during: year) {
             return (estimatedValue == 0 ? buyingPrice : estimatedValue)
         } else {
@@ -116,7 +156,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     ///  - la résidence principale faire l’objet d’une décote de 30 %
     ///  - les immeubles que vous donnez en location peuvent faire l’objet d’une décote de 10 % à 30 % environ
     ///  - en indivision : dans ce cas, ils sont imposables à hauteur de votre quote-part minorée d’une décote de l’ordre de 30 % pour tenir compte des contraintes liées à l’indivision)
-    func ifiValue(atEndOf year: Int) -> Double {
+    public func ifiValue(atEndOf year: Int) -> Double {
         if !isOwned(during: year) {
             return 0.0
 
@@ -148,7 +188,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     ///
     ///  - les immeubles que vous donnez en location peuvent faire l’objet d’une décote de 10 % à 30 % environ
     ///  - en indivision : dans ce cas, ils sont imposables à hauteur de votre quote-part minorée d’une décote de l’ordre de 30 % pour tenir compte des contraintes liées à l’indivision)
-    func inheritanceValue(atEndOf year: Int) -> Double {
+    public func inheritanceValue(atEndOf year: Int) -> Double {
         if !isOwned(during: year) {
             return 0.0
 
@@ -169,9 +209,9 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     ///   - year: date d'évaluation
     ///   - evaluationMethod: méthode d'évaluation de la valeure des bien
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
-    func ownedValue(by ownerName     : String,
-                    atEndOf year     : Int,
-                    evaluationMethod : EvaluationMethod) -> Double {
+    public func ownedValue(by ownerName     : String,
+                           atEndOf year     : Int,
+                           evaluationMethod : EvaluationMethod) -> Double {
         var evaluatedValue : Double
         
         // cas particuliers
@@ -212,7 +252,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     /// - Note:
     ///   - la premièe année est inclue
     ///   - la dernière année est exclue
-    func isInhabited(during year: Int) -> Bool {
+    public func isInhabited(during year: Int) -> Bool {
         guard willBeInhabited && !isSold(before: year) else {
             return false
         }
@@ -221,7 +261,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     
     /// Impôts locaux
     /// - Parameter year: année
-    func yearlyLocalTaxes(during year: Int) -> Double {
+    public func yearlyLocalTaxes(during year: Int) -> Double {
         guard !isSold(before: year) else {
             return 0.0 // la maison est vendue
         }
@@ -238,7 +278,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     /// - Note:
     ///   - la premièe année est inclue
     ///   - la dernière année est exclue
-    func isRented(during year: Int) -> Bool {
+    public func isRented(during year: Int) -> Bool {
         guard willBeRented && !isSold(before: year) && rentalFrom.year! < rentalTo.year! else {
             return false
         }
@@ -250,7 +290,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     /// - Parameter revenue: loyer après charges déductibles (agence, assurance, taxe fonçière)
     /// - Parameter taxableIrpp: loyer imposable à l'IRPP
     /// - Parameter socialTaxes: charges sociales payées sur le loyer
-    func yearlyRent(during year: Int)
+    public func yearlyRent(during year: Int)
     -> (revenue     : Double,
         taxableIrpp : Double,
         socialTaxes : Double) {
@@ -265,7 +305,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     
     /// True si l'année est postérieure à l'année de vente
     /// - Parameter year: année
-    func isSold(before year: Int) -> Bool {
+    public func isSold(before year: Int) -> Bool {
         guard willBeSold, let sellingDate = sellingYear.year else {
             return false
         }
@@ -274,7 +314,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     
     /// True si le bien est en possession au moins un jour pendant l'année demandée
     /// - Parameter year: année
-    func isOwned(during year: Int) -> Bool {
+    public func isOwned(during year: Int) -> Bool {
         guard let buyingDate = buyingYear.year else {
             return false
         }
@@ -298,7 +338,7 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
      - Parameter socialTaxes: charges sociales payées sur sur la plus-value
      - Parameter irpp: impôt sur le revenu payé sur sur la plus-value
      **/
-    func liquidatedValue (_ year: Int) ->
+    public func liquidatedValue (_ year: Int) ->
     (revenue     : Double,
      capitalGain : Double,
      netRevenue  : Double,
@@ -325,13 +365,13 @@ struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
 
 // MARK: Extensions
 extension RealEstateAsset: Comparable {
-    static func < (lhs: RealEstateAsset, rhs: RealEstateAsset) -> Bool {
+    public static func < (lhs: RealEstateAsset, rhs: RealEstateAsset) -> Bool {
         return (lhs.name < rhs.name)
     }
 }
 
 extension RealEstateAsset: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         let s1 =
         """
         IMMOBILIER: \(name)

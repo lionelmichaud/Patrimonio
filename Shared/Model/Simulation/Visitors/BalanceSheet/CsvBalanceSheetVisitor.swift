@@ -12,6 +12,7 @@ import EconomyModel
 import Statistics
 import ModelEnvironment
 import Persistence
+import AssetsModel
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CsvBalanceSheetTableVisitor")
 

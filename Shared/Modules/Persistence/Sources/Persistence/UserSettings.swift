@@ -12,27 +12,27 @@ import Foil
 
 // MARK: - Enumération de nature d'une propriété
 
-enum OwnershipNature: String, PickableEnumP {
+public enum OwnershipNature: String, PickableEnumP {
     case generatesRevenue = "Uniquement les biens génèrant revenu/dépense (possédés en PP ou en UF au moins en partie)"
     case sellable         = "Uniquement les biens cessibles (possédés en PP au moins en partie)"
     case all              = "Tous les biens (possédés en UF, NP ou PP au moins en partie)"
     
-    var pickerString: String {
+    public var pickerString: String {
         return self.rawValue
     }
 }
 
-enum AssetEvaluationMethod: String, PickableEnumP {
+public enum AssetEvaluationMethod: String, PickableEnumP {
     case totalValue = "Valeur totale du bien"
     case ownedValue = "Valeur patrimoniale de la fraction possédée du bien"
     
-    var pickerString: String {
+    public var pickerString: String {
         return self.rawValue
     }
 }
 
-struct UserSettings {
-    static var shared = UserSettings()
+public struct UserSettings {
+    public static var shared = UserSettings()
     
     // (Key, Value) pairs
 
@@ -40,25 +40,25 @@ struct UserSettings {
     static let simulateVolatility = "simulateVolatility"
     @WrappedDefault(keyName: UserSettings.simulateVolatility,
                     defaultValue: false)
-    var simulateVolatility: Bool
+    public var simulateVolatility: Bool
     
     // paramètres de gestion de fichiers
     static let shareCsvFiles = "shareCsvFiles"
     @WrappedDefault(keyName: UserSettings.shareCsvFiles,
                     defaultValue: true)
-    var shareCsvFiles: Bool
+    public var shareCsvFiles: Bool
     
     static let shareImageFiles = "shareImageFiles"
     @WrappedDefault(keyName: UserSettings.shareImageFiles,
                     defaultValue: true)
-    var shareImageFiles: Bool
+    public var shareImageFiles: Bool
     
     // paramètres KPI
     static let ownershipKpiSelection = "ownershipKpiSelection"
     @WrappedDefault(keyName: UserSettings.ownershipKpiSelection,
                     defaultValue: OwnershipNature.sellable.rawValue)
     var ownershipKpiSelectionString: String
-    var ownershipKpiSelection: OwnershipNature {
+    public var ownershipKpiSelection: OwnershipNature {
         get {
             OwnershipNature(rawValue: ownershipKpiSelectionString) ?? OwnershipNature.sellable
         }
@@ -71,7 +71,7 @@ struct UserSettings {
     @WrappedDefault(keyName: UserSettings.assetKpiEvaluationMethod,
                     defaultValue: AssetEvaluationMethod.ownedValue.rawValue)
     var assetKpiEvaluationMethodString: String
-    var assetKpiEvaluationMethod: AssetEvaluationMethod {
+    public var assetKpiEvaluationMethod: AssetEvaluationMethod {
         get {
             AssetEvaluationMethod(rawValue: assetKpiEvaluationMethodString) ?? AssetEvaluationMethod.ownedValue
         }
@@ -85,7 +85,7 @@ struct UserSettings {
     @WrappedDefault(keyName: UserSettings.ownershipGraphicSelection,
                     defaultValue: OwnershipNature.sellable.rawValue)
     var ownershipGraphicSelectionString: String
-    var ownershipGraphicSelection: OwnershipNature {
+    public var ownershipGraphicSelection: OwnershipNature {
         get {
             OwnershipNature(rawValue: ownershipGraphicSelectionString) ?? OwnershipNature.sellable
         }
@@ -98,7 +98,7 @@ struct UserSettings {
     @WrappedDefault(keyName: UserSettings.assetGraphicEvaluationMethod,
                     defaultValue: AssetEvaluationMethod.ownedValue.rawValue)
     var assetGraphicEvaluationMethodString: String
-    var assetGraphicEvaluationMethod: AssetEvaluationMethod {
+    public var assetGraphicEvaluationMethod: AssetEvaluationMethod {
         get {
             AssetEvaluationMethod(rawValue: assetGraphicEvaluationMethodString) ?? AssetEvaluationMethod.ownedValue
         }

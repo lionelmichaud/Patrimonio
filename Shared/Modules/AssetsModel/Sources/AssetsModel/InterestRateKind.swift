@@ -11,13 +11,13 @@ import AppFoundation
 
 // MARK: - Type d'investissement
 
-enum InterestRateKind {
+public enum InterestRateKind {
     case contractualRate (fixedRate: Double)
     case marketRate (stockRatio: Double)
     
     // properties
     
-    static var allCases: [InterestRateKind] {
+    public static var allCases: [InterestRateKind] {
         return [.contractualRate(fixedRate: 0.0),
                 .marketRate(stockRatio: 0.0)]
     }
@@ -25,7 +25,7 @@ enum InterestRateKind {
     @available(*, unavailable)
     case all
     
-    var rawValue: Int {
+    public var rawValue: Int {
         rawValueGeneric(of: self)
     }
 }
@@ -33,11 +33,11 @@ enum InterestRateKind {
 // MARK: - Extensions
 
 extension InterestRateKind: PickableIdentifiableEnumP {
-    var id: Int {
+    public var id: Int {
         return self.rawValue
     }
     
-    var pickerString: String {
+    public var pickerString: String {
         switch self {
             case .contractualRate:
                 return "Taux Contractuel"
@@ -50,7 +50,7 @@ extension InterestRateKind: PickableIdentifiableEnumP {
 }
 
 extension InterestRateKind: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         switch self {
             case .contractualRate(let fixedRate):
                 return "Taux Contractuel = \(fixedRate) %"
@@ -71,7 +71,7 @@ extension InterestRateKind: Codable {
         case decoding(String)
     }
     // decode
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         // decode .contractualRate
         if let value = try? values.decode(Double.self, forKey: .contractualRate_fixedRate) {
@@ -88,7 +88,7 @@ extension InterestRateKind: Codable {
         throw InterestRateTypeCodingError.decoding("Error decoding 'InterestRateType' ! \(dump(values))")
     }
     // encode
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
         switch self {

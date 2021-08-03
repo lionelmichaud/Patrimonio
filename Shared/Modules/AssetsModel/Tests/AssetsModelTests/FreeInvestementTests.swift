@@ -7,13 +7,18 @@
 //
 
 import XCTest
-@testable import Patrimoine
+import Statistics
+import EconomyModel
+import FiscalModel
+import Ownership
+@testable import AssetsModel
 
 class FreeInvestementTests: XCTestCase {
     
-    struct EconomyModelProvider: EconomyModelProviderProtocol {
-        func rates(in year: Int,
-                   withMode mode: SimulationModeEnum) -> (securedRate: Double, stockRate: Double) {
+    struct EconomyModelProvider: EconomyModelProviderP {
+        func rates(in year            : Int,
+                   withMode mode      : SimulationModeEnum,
+                   simulateVolatility : Bool) -> (securedRate : Double, stockRate : Double) {
             (securedRate: Double(year) + 5.0, stockRate: Double(year) + 10.0)
         }
         
@@ -26,12 +31,12 @@ class FreeInvestementTests: XCTestCase {
         }
     }
 
-    static var economyModelProvider = EconomyModelProvider()
-    static var fi                : FreeInvestement!
-    static var inflation         : Double = 0.0
-    static var rates = (securedRate: 0.0, stockRate: 0.0)
-    static var rates2021 = (securedRate: 0.0, stockRate: 0.0)
-    static var averageRateTheory : Double = 0.0
+    static var economyModelProvider  = EconomyModelProvider()
+    static var fi                    : FreeInvestement!
+    static var inflation             : Double = 0.0
+    static var rates                 = (securedRate     : 0.0, stockRate     : 0.0)
+    static var rates2021             = (securedRate : 0.0, stockRate : 0.0)
+    static var averageRateTheory     : Double = 0.0
     static var averageRate2021Theory : Double = 0.0
 
     override class func setUp() {
@@ -39,37 +44,49 @@ class FreeInvestementTests: XCTestCase {
         FreeInvestement.setSimulationMode(to: .deterministic)
         FreeInvestement.setEconomyModelProvider(economyModelProvider)
         FreeInvestement.setFiscalModelProvider(
-            Fiscal.Model(for: FiscalModelTests.self,
-                         from                 : nil,
-                         dateDecodingStrategy : .iso8601,
-                         keyDecodingStrategy  : .useDefaultKeys)
+            Fiscal.Model(fromFile   : "FiscalModelConfig.json",
+                         fromBundle : Bundle.module)
                 .initialized())
         
-        FreeInvestementTests.fi = FreeInvestement(for: FreeInvestementTests.self,
-                                                  from                 : nil,
-                                                  dateDecodingStrategy : .iso8601,
-                                                  keyDecodingStrategy  : .useDefaultKeys)
+        FreeInvestementTests.fi = FreeInvestement(fromFile   : FreeInvestement.defaultFileName,
+                                                  fromBundle : Bundle.module)
         FreeInvestementTests.fi.resetCurrentState()
         print(FreeInvestementTests.fi!)
         
-        FreeInvestementTests.inflation = FreeInvestementTests.economyModelProvider.inflation(withMode: .deterministic)
+        FreeInvestementTests.inflation =
+            FreeInvestementTests
+            .economyModelProvider
+            .inflation(withMode: .deterministic)
         
-        FreeInvestementTests.rates     = FreeInvestementTests.economyModelProvider.rates(withMode: .deterministic)
+        FreeInvestementTests.rates =
+            FreeInvestementTests
+            .economyModelProvider
+            .rates(withMode: .deterministic)
         FreeInvestementTests.averageRateTheory =
             (0.75 * FreeInvestementTests.rates.stockRate + 0.25 * FreeInvestementTests.rates.securedRate)
             - FreeInvestementTests.inflation
         
-        FreeInvestementTests.rates2021 = FreeInvestementTests.economyModelProvider.rates(in: 2021, withMode: .deterministic)
+        FreeInvestementTests.rates2021 =
+            FreeInvestementTests
+            .economyModelProvider
+            .rates(in: 2021, withMode: .deterministic, simulateVolatility: false)
         FreeInvestementTests.averageRate2021Theory =
             (0.75 * FreeInvestementTests.rates2021.stockRate + 0.25 * FreeInvestementTests.rates2021.securedRate)
             - FreeInvestementTests.inflation
     }
     
+    func test_description() {
+        print("Test de FreeInvestement.description")
+        
+        let str: String =
+            String(describing: FreeInvestementTests.fi!)
+            .withPrefixedSplittedLines("  ")
+        print(str)
+    }
+    
     func test_averageInterestRate() {
-        var fi = FreeInvestement(for: FreeInvestementTests.self,
-                                 from                 : nil,
-                                 dateDecodingStrategy : .iso8601,
-                                 keyDecodingStrategy  : .useDefaultKeys)
+        var fi = FreeInvestement(fromFile   : FreeInvestement.defaultFileName,
+                                 fromBundle : Bundle.module)
         fi.resetCurrentState()
         
         XCTAssertEqual(FreeInvestementTests.averageRateTheory, fi.averageInterestRate)
@@ -79,16 +96,16 @@ class FreeInvestementTests: XCTestCase {
     }
     
     func test_averageInterestRateNet() {
-        var fi = FreeInvestement(for: FreeInvestementTests.self,
-                                 from                 : nil,
-                                 dateDecodingStrategy : .iso8601,
-                                 keyDecodingStrategy  : .useDefaultKeys)
+        var fi = FreeInvestement(fromFile   : FreeInvestement.defaultFileName,
+                                 fromBundle : Bundle.module)
         fi.resetCurrentState()
         
-        fi.type = .lifeInsurance(periodicSocialTaxes: true, clause: LifeInsuranceClause())
+        fi.type = .lifeInsurance(periodicSocialTaxes : true,
+                                 clause              : LifeInsuranceClause())
         XCTAssertGreaterThan(FreeInvestementTests.averageRateTheory, fi.averageInterestRateNet)
         
-        fi.type = .lifeInsurance(periodicSocialTaxes: false, clause: LifeInsuranceClause())
+        fi.type = .lifeInsurance(periodicSocialTaxes : false,
+                                 clause              : LifeInsuranceClause())
         XCTAssertEqual(fi.averageInterestRate, fi.averageInterestRateNet)
         
         fi.type = .pea
@@ -99,12 +116,10 @@ class FreeInvestementTests: XCTestCase {
     }
     
     func test_capitalize() throws {
-        var fi = FreeInvestement(for: FreeInvestementTests.self,
-                                 from                 : nil,
-                                 dateDecodingStrategy : .iso8601,
-                                 keyDecodingStrategy  : .useDefaultKeys)
+        var fi = FreeInvestement(fromFile   : FreeInvestement.defaultFileName,
+                                 fromBundle : Bundle.module)
         fi.resetCurrentState()
-        let interest = fi.initialState.investment * FreeInvestementTests.averageRate2021Theory / 100.0
+        let interest = fi.lastKnownState.investment * FreeInvestementTests.averageRate2021Theory / 100.0
 
         XCTAssertThrowsError(try fi.capitalize(atEndOf: 2020)) { error in
             XCTAssertEqual(error as! FreeInvestementError, FreeInvestementError.IlegalOperation)
@@ -115,14 +130,12 @@ class FreeInvestementTests: XCTestCase {
         
         try fi.capitalize(atEndOf: 2021)
         
-        XCTAssertEqual(fi.initialState.investment + interest, fi.value(atEndOf: 2021))
+        XCTAssertEqual(fi.lastKnownState.investment + interest, fi.value(atEndOf: 2021))
     }
     
     func test_ownedValue() {
-        var fi = FreeInvestement(for: FreeInvestementTests.self,
-                                 from                 : nil,
-                                 dateDecodingStrategy : .iso8601,
-                                 keyDecodingStrategy  : .useDefaultKeys)
+        var fi = FreeInvestement(fromFile   : FreeInvestement.defaultFileName,
+                                 fromBundle : Bundle.module)
         fi.resetCurrentState()
         
         // lifeInsurance + legalSuccession

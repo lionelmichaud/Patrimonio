@@ -7,17 +7,25 @@
 //
 
 import XCTest
-@testable import Patrimoine
+@testable import AssetsModel
 
 class InterestRateTypeTests: XCTestCase {
 
     func test_description() throws {
+        print("Test de InterestRateKind.description")
+        
         var inv: InterestRateKind
         
         inv = .contractualRate(fixedRate: 5.0)
-        print(inv)
+        var str: String =
+            String(describing: inv)
+            .withPrefixedSplittedLines("  ")
+        print(str)
         
         inv = .marketRate(stockRatio: 10.0)
-        print(inv)
+        str =
+            String(describing: inv)
+            .withPrefixedSplittedLines("  ")
+        print(str)
     }
 }

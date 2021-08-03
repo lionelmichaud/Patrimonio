@@ -10,6 +10,8 @@ import SwiftUI
 import EconomyModel
 import SocioEconomyModel
 import ModelEnvironment
+import Persistence
+import AssetsModel
 
 /// Affiche des valeures des modèles utilisées pour le dernier Run de simulation
 struct ScenarioSummaryView: View {

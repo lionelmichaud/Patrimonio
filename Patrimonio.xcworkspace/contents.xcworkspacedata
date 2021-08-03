@@ -50,6 +50,9 @@
       location = "group:Shared/Modules/DateBoundary">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/AssetsModel">
+   </FileRef>
+   <FileRef
       location = "container:Patrimonio.xcodeproj">
    </FileRef>
    <FileRef

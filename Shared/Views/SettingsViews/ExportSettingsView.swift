@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Persistence
 
 struct ExportSettingsView: View {
     @Binding var shareCsvFiles   : Bool
