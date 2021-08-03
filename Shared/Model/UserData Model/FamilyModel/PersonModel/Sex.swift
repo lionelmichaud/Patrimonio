@@ -9,7 +9,7 @@ import Foundation
 import AppFoundation
 
 // MARK: - Sexe
-enum Sexe: Int, PickableEnum, Codable {
+enum Sexe: Int, PickableEnumP, Codable {
     case male
     case female
     

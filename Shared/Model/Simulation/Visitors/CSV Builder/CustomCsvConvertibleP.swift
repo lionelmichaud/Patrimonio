@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol CustomCsvConvertible {
+protocol CustomCsvConvertibleP {
     var csv: String { get }
 }

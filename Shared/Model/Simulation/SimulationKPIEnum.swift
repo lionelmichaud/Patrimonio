@@ -10,7 +10,7 @@ import AppFoundation
 
 // MARK: - Enumération des KPI
 
-enum SimulationKPIEnum: Int, PickableEnum, Codable, Hashable {
+enum SimulationKPIEnum: Int, PickableEnumP, Codable, Hashable {
     case minimumAsset = 0
     case assetAt1stDeath
     case assetAt2ndtDeath

@@ -39,11 +39,11 @@ final class Adult: Person {
     
     // MARK: - Static Properties
     
-    static var adultRelativesProvider: AdultRelativesProvider!
+    static var adultRelativesProvider: AdultRelativesProviderP!
     
     // MARK: - Static Methods
     
-    static func setAdultRelativesProvider(_ adultRelativesProvider: AdultRelativesProvider) {
+    static func setAdultRelativesProvider(_ adultRelativesProvider: AdultRelativesProviderP) {
         self.adultRelativesProvider = adultRelativesProvider
     }
     

@@ -11,7 +11,7 @@ import AppFoundation
 
 // MARK: - Model aléatoire
 
-public struct ModelRandomizer<R: RandomGenerator>: Codable, Versionable
+public struct ModelRandomizer<R: RandomGeneratorP>: Codable, VersionableP
 where R: Codable,
       R.Number == Double {
 

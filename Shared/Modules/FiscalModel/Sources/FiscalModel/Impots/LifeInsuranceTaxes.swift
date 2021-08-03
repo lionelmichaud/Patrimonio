@@ -14,7 +14,7 @@ public struct LifeInsuranceTaxes: Codable {
     
     // MARK: Nested types
     
-    public struct Model: JsonCodableToBundleP, Versionable {
+    public struct Model: JsonCodableToBundleP, VersionableP {
         public static var defaultFileName : String = "LifeInsuranceTaxesModel.json"
         
         public var version        : Version

@@ -11,7 +11,7 @@ import NamedValue
 
 // MARK: - agrégat des Actifs
 
-struct ValuedAssets: DictionaryOfNamedValueTable {
+struct ValuedAssets: DictionaryOfNamedValueTableP {
     
     // MARK: - Properties
     

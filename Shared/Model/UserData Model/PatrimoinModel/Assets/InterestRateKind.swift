@@ -32,7 +32,7 @@ enum InterestRateKind {
 
 // MARK: - Extensions
 
-extension InterestRateKind: PickableIdentifiableEnum {
+extension InterestRateKind: PickableIdentifiableEnumP {
     var id: Int {
         return self.rawValue
     }

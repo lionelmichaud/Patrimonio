@@ -59,7 +59,7 @@ public class RegimeAgirc: Codable {
         var plafondMajoEnfantNe   : Double // €
     }
     
-    public struct Model: JsonCodableToBundleP, Versionable {
+    public struct Model: JsonCodableToBundleP, VersionableP {
         enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
             case version, gridAvant62, gridApres62, valeurDuPoint, ageMinimum, majorationPourEnfant
         }

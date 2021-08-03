@@ -12,7 +12,7 @@ import Charts
 
 // MARK: - Génération de graphiques - Synthèse - FISCALITE IRPP
 
-enum IrppEnum: Int, PickableEnum {
+enum IrppEnum: Int, PickableEnumP {
     case bareme
     case withChildren
     case withoutChildren

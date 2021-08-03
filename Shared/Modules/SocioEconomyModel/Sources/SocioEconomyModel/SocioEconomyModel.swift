@@ -33,11 +33,11 @@ public typealias SocioEconomyModelProviderP =
 
 // MARK: - SocioEconomic Model
 
-public struct SocioEconomy: PersistableModel {
+public struct SocioEconomy: PersistableModelP {
     
     // MARK: - Nested Types
     
-    public enum RandomVariable: String, PickableEnum {
+    public enum RandomVariable: String, PickableEnumP {
         case pensionDevaluationRate      = "Dévaluation de Pension"
         case nbTrimTauxPlein             = "Trimestres Supplémentaires"
         case expensesUnderEvaluationRate = "Sous-etimation dépenses"
@@ -49,7 +49,7 @@ public struct SocioEconomy: PersistableModel {
     
     public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
-    public class Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable, SocioEconomyModelProviderP {
+    public class Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP, SocioEconomyModelProviderP {
         public var pensionDevaluationRate     : ModelRandomizer<BetaRandomGenerator>
         public var nbTrimTauxPlein            : ModelRandomizer<DiscreteRandomGenerator>
         public var expensesUnderEvaluationRate: ModelRandomizer<BetaRandomGenerator>

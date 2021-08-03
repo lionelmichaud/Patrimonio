@@ -19,11 +19,11 @@ import Persistence
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Simulation")
 
-protocol CanResetSimulation {
+protocol CanResetSimulationP {
     func reset()
 }
 
-final class Simulation: ObservableObject, CanResetSimulation {
+final class Simulation: ObservableObject, CanResetSimulationP {
 
     //#if DEBUG
     /// URL du fichier de stockage du résultat de calcul au format CSV

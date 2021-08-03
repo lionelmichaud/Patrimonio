@@ -15,13 +15,13 @@ public struct DateBoundary: Hashable, Codable {
     
     // MARK: - Static Properties
     
-    static var personEventYearProvider: PersonEventYearProvider!
+    static var personEventYearProvider: PersonEventYearProviderP!
     public static let empty: DateBoundary = DateBoundary()
     
     // MARK: - Static Methods
     
     /// Dependency Injection: Setter Injection
-    public static func setPersonEventYearProvider(_ personEventYearProvider : PersonEventYearProvider) {
+    public static func setPersonEventYearProvider(_ personEventYearProvider : PersonEventYearProviderP) {
         DateBoundary.personEventYearProvider = personEventYearProvider
     }
     

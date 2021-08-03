@@ -49,7 +49,7 @@ extension InvestementKind: CustomStringConvertible {
     }
 }
 
-extension InvestementKind: PickableIdentifiableEnum {
+extension InvestementKind: PickableIdentifiableEnumP {
     var id: Int {
         return self.rawValue
     }

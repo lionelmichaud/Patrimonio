@@ -83,7 +83,7 @@ public extension RateGrid {
     }
 }
 
-public protocol RateGridable {
+public protocol RateGridableP {
     var grid: RateGrid { get set }
     
     /// Initialise les coefficients du barême
@@ -105,7 +105,7 @@ public protocol RateGridable {
     func tax(for taxableValue: Double) -> Double?
 }
 
-public extension RateGridable {
+public extension RateGridableP {
     mutating func initializeGrid() throws {
         try grid.initialize()
     }

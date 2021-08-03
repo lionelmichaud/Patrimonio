@@ -20,7 +20,7 @@ class NameableValuableArrayTests: XCTestCase {
         ]
     static var tableNV = [Item]()
     
-    struct Item: NameableValuable, Identifiable, Codable {
+    struct Item: NameableValuableP, Identifiable, Codable {
         var id   = UUID()
         var name : String
         
@@ -29,7 +29,7 @@ class NameableValuableArrayTests: XCTestCase {
         }
     }
     
-    struct TableOfItems: NameableValuableArray {
+    struct TableOfItems: NameableValuableArrayP {
         private enum CodingKeys: String, CodingKey { // swiftlint:disable:this nesting
             case items
         }

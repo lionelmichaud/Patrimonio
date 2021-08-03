@@ -9,7 +9,7 @@
 import Foundation
 import AppFoundation
 
-public enum SimulationModeEnum: String, PickableEnum, Codable, Hashable {
+public enum SimulationModeEnum: String, PickableEnumP, Codable, Hashable {
     case deterministic = "Déterministe"
     case random        = "Aléatoire"
     

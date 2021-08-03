@@ -9,6 +9,6 @@ import Foundation
 
 // MARK: - DI: Protocol de service de fourniture de l'age d'une personne
 
-public protocol PersonAgeProvider {
+public protocol PersonAgeProviderP {
     func ageOf(_ name: String, _ year: Int) -> Int
 }

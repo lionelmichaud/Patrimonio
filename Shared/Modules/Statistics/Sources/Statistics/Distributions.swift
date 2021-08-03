@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct BetaDistribution: Distribution {
+public struct BetaDistribution: DistributionP {
     public typealias Number = Double
     
     public static var cdfCurveSamplesNumber : Int = 1000

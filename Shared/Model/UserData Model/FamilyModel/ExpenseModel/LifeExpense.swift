@@ -15,7 +15,7 @@ import DateBoundary
 
 // MARK: - Tableau de Dépenses
 
-struct LifeExpenseArray: NameableValuableArray {
+struct LifeExpenseArray: NameableValuableArrayP {
 
     private enum CodingKeys: String, CodingKey {
         case items
@@ -41,7 +41,7 @@ extension LifeExpenseArray: CustomStringConvertible {
 
 // MARK: - Dépense de la famille
 
-struct LifeExpense: Identifiable, Codable, Hashable, NameableValuable {
+struct LifeExpense: Identifiable, Codable, Hashable, NameableValuableP {
     
     // MARK: - Static properties
     
@@ -51,7 +51,7 @@ struct LifeExpense: Identifiable, Codable, Hashable, NameableValuable {
                                        value    : 0.0)
     private static var simulationMode : SimulationModeEnum = .deterministic
     // dependencies
-    private static var membersCountProvider : MembersCountProvider!
+    private static var membersCountProvider : MembersCountProviderP!
     private static var expensesUnderEvaluationRateProvider : ExpensesUnderEvaluationRateProviderP!
 
     // MARK: - Static Methods
@@ -62,7 +62,7 @@ struct LifeExpense: Identifiable, Codable, Hashable, NameableValuable {
         LifeExpense.simulationMode = simulationMode
     }
 
-    static func setMembersCountProvider(_ membersCountProvider: MembersCountProvider) {
+    static func setMembersCountProvider(_ membersCountProvider: MembersCountProviderP) {
         LifeExpense.membersCountProvider = membersCountProvider
     }
     

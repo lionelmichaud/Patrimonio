@@ -11,7 +11,7 @@ import NamedValue
 
 // MARK: - agrégat des Passifs
 
-struct ValuedLiabilities: DictionaryOfNamedValueTable {
+struct ValuedLiabilities: DictionaryOfNamedValueTableP {
     
     // MARK: - Properties
     

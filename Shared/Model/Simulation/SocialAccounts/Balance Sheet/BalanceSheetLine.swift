@@ -60,8 +60,8 @@ struct BalanceSheetLine {
     init(year                        : Int,
          withMembersName membersName : [String],
          withAdultsName adultsName   : [String],
-         withAssets assets           : [(ownable: Ownable, category: AssetsCategory)],
-         withLiabilities liabilities : [(ownable: Ownable, category: LiabilitiesCategory)]) {
+         withAssets assets           : [(ownable: OwnableP, category: AssetsCategory)],
+         withLiabilities liabilities : [(ownable: OwnableP, category: LiabilitiesCategory)]) {
         //        autoreleasepool {
         self.year = year
         
@@ -103,7 +103,7 @@ struct BalanceSheetLine {
     fileprivate mutating func appendToAssets(_ category    : AssetsCategory,
                                              _ membersName : [String],
                                              _ adultsName  : [String],
-                                             _ asset       : Ownable,
+                                             _ asset       : OwnableP,
                                              _ year        : Int) {
         let namePrefix: String = (category == .sci ? "SCI - " : "")
         
@@ -148,7 +148,7 @@ struct BalanceSheetLine {
     fileprivate mutating func appendToLiabilities(_ category    : LiabilitiesCategory,
                                                   _ membersName : [String],
                                                   _ adultsName  : [String],
-                                                  _ liability   : Ownable,
+                                                  _ liability   : OwnableP,
                                                   _ year        : Int) {
         //  famille
         liabilities[AppSettings.shared.allPersonsLabel]!.perCategory[category]?.namedValues
@@ -192,7 +192,7 @@ struct BalanceSheetLine {
     ///   - name: le nom du de personne dont on calcule le bilan
     ///   - filter: filtre utilisé
     /// - Returns: True si le bien `ownable` satisfait au critère `filter` pour la personne nommée `name`
-    fileprivate func isSelected(ownable  : Ownable,
+    fileprivate func isSelected(ownable  : OwnableP,
                                 for name : String,
                                 filter   : OwnershipNature) -> Bool {
         switch filter {
@@ -215,7 +215,7 @@ struct BalanceSheetLine {
     ///   - name: le nom du de personne dont on calcule le bilan
     ///   - evaluationMethod: méthode d'évaluation sélectionnée
     /// - Returns: valeur de `ownable` pour la personne nommée `name` selon la méthode `evaluationMethod`
-    fileprivate func valueOf(ownable          : Ownable,
+    fileprivate func valueOf(ownable          : OwnableP,
                              for name         : String,
                              isSelected       : Bool,
                              evaluationMethod : AssetEvaluationMethod) -> Double {

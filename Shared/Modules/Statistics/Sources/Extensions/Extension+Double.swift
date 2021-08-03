@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Double: Randomizable {
+extension Double: RandomizableP {
     public static func randomized(in range: ClosedRange<Double>) -> Double {
         Double.random(in: range)
     }

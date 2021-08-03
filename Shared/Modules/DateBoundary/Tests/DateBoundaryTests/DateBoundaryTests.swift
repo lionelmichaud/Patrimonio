@@ -11,7 +11,7 @@ import XCTest
 
 class DateBoundaryTests: XCTestCase {
     
-    struct Provider: PersonEventYearProvider {
+    struct Provider: PersonEventYearProviderP {
         func yearOf(lifeEvent : LifeEvent,
                     for name  : String) -> Int? {
             if name == "M. Lionel MICHAUD" {

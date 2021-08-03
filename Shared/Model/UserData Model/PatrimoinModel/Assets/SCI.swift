@@ -38,7 +38,7 @@ struct SCI {
     internal init(fromFolder folder      : Folder,
                   name                   : String,
                   note                   : String,
-                  with personAgeProvider : PersonAgeProvider?) throws {
+                  with personAgeProvider : PersonAgeProviderP?) throws {
         self.name  = name
         self.note  = note
         try self.scpis = ScpiArray(fileNamePrefix : "SCI_",
@@ -54,7 +54,7 @@ struct SCI {
     }
     
     /// Calls the given closure on each element in the sequence in the same order as a for-in loop
-    func forEachOwnable(_ body: (Ownable) throws -> Void) rethrows {
+    func forEachOwnable(_ body: (OwnableP) throws -> Void) rethrows {
         try scpis.items.forEach(body)
     }
     

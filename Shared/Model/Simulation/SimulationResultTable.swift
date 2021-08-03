@@ -67,8 +67,8 @@ struct AdultRandomProperties: Hashable, Codable {
     var nbOfYearOfDependency : Int
 }
 typealias DictionaryOfAdultRandomProperties = [String: AdultRandomProperties]
-extension DictionaryOfAdultRandomProperties: MonteCarloVisitable {
-    func accept(_ visitor: MonteCarloVisitor) {
+extension DictionaryOfAdultRandomProperties: MonteCarloVisitableP {
+    func accept(_ visitor: MonteCarloVisitorP) {
         visitor.visit(element: self)
     }
 }
@@ -82,8 +82,8 @@ struct SimulationResultLine: Hashable {
     var dicoOfSocioEconomyRandomVariables = SocioEconomy.DictionaryOfRandomVariable()
     var dicoOfKpiResults                  = DictionaryOfKpiResults()
 }
-extension SimulationResultLine: MonteCarloVisitable {
-    func accept(_ visitor: MonteCarloVisitor) {
+extension SimulationResultLine: MonteCarloVisitableP {
+    func accept(_ visitor: MonteCarloVisitorP) {
         visitor.visit(element: self)
     }
 }
@@ -91,8 +91,8 @@ extension SimulationResultLine: MonteCarloVisitable {
 // MARK: - Tableau de Synthèse d'un Run de Simulation
 
 typealias SimulationResultTable = [SimulationResultLine]
-extension SimulationResultTable: MonteCarloVisitable {
-    func accept(_ visitor: MonteCarloVisitor) {
+extension SimulationResultTable: MonteCarloVisitableP {
+    func accept(_ visitor: MonteCarloVisitorP) {
         visitor.visit(element: self)
     }
 }

@@ -14,11 +14,11 @@ import Files
 
 // MARK: - Table d'Item Generic Valuable and Nameable
 
-public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, Versionable, PersistableP where
+public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, PersistableP where
     E: Codable,
     E: Identifiable,
     E: CustomStringConvertible,
-    E: NameableValuable {
+    E: NameableValuableP {
     
     private enum CodingKeys: String, CodingKey {
         case version, items

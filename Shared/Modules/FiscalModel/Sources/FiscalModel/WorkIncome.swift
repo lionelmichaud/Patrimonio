@@ -54,7 +54,7 @@ public enum WorkIncomeType {
 
 // MARK: - Extensions
 
-extension WorkIncomeType: PickableIdentifiableEnum {
+extension WorkIncomeType: PickableIdentifiableEnumP {
     public var id: Int {
         return self.rawValue
     }

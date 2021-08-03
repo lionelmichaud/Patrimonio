@@ -12,7 +12,7 @@ import FiscalModel
 let customLogOwnership = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Ownership")
 
 // MARK: - Méthode d'évaluation d'un Patrmoine (régles fiscales à appliquer)
-public enum EvaluationMethod: String, PickableEnum {
+public enum EvaluationMethod: String, PickableEnumP {
     case ifi                     = "IFI"
     case isf                     = "ISF"
     case legalSuccession         = "Succession Légale"

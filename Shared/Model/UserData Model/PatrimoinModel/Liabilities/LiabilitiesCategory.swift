@@ -12,7 +12,7 @@ import AppFoundation
 // MARK: - Catégories de Actifs
 
 /// Catégories de dépenses
-enum LiabilitiesCategory: String, PickableEnum, Codable {
+enum LiabilitiesCategory: String, PickableEnumP, Codable {
     case debts = "Dettes"
     case loans = "Emprunts"
     

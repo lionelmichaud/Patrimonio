@@ -128,7 +128,7 @@ final class Patrimoin: ObservableObject {
     }
     
     /// Calls the given closure on each element in the sequence in the same order as a for-in loop
-    func forEachOwnable(_ body: (Ownable) throws -> Void) rethrows {
+    func forEachOwnable(_ body: (OwnableP) throws -> Void) rethrows {
         try assets.forEachOwnable(body)
         try liabilities.forEachOwnable(body)
     }

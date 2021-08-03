@@ -13,7 +13,7 @@ import AppFoundation
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Distributions")
 
 /// Types  possibles de générateur aléatoire
-public enum RandomGeneratorEnum: String, PickableEnum {
+public enum RandomGeneratorEnum: String, PickableEnumP {
     case uniform  = "Loie Uniforme"
     case discrete = "Loie Discrete"
     case beta     = "Loie Beta"
@@ -43,7 +43,7 @@ public enum RandomGeneratorEnum: String, PickableEnum {
 ///
 /// ![Xcode icon](http://devimages.apple.com.edgekey.net/assets/elements/icons/128x128/xcode.png)
 ///
-public struct BetaRandomGenerator: RandomGenerator, Distribution, Codable {
+public struct BetaRandomGenerator: RandomGeneratorP, DistributionP, Codable {
     public typealias Number = Double
 
     // MARK: - Type Properties
@@ -103,7 +103,7 @@ public struct BetaRandomGenerator: RandomGenerator, Distribution, Codable {
 ///
 /// - Note: [Reference](https://en.wikipedia.org/wiki/Uniform_distribution_(continuous))
 ///
-public struct UniformRandomGenerator: RandomGenerator, Codable {
+public struct UniformRandomGenerator: RandomGeneratorP, Codable {
     public typealias Number = Double
     
     // MARK: - Properties
@@ -141,7 +141,7 @@ public struct UniformRandomGenerator: RandomGenerator, Codable {
 ///         let rnd = randomGenerator.next()
 ///         let sequence = randomGenerator.sequence(of: nbRandomSamples)
 ///
-public struct DiscreteRandomGenerator: RandomGenerator, Codable {
+public struct DiscreteRandomGenerator: RandomGeneratorP, Codable {
     public typealias Number = Double
     public typealias Curve  = [PointReal<Number>]
 

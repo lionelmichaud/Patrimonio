@@ -10,12 +10,12 @@ import Stateful
 import Files
 import NamedValue
 
-public extension ArrayOfNameableValuable where E: Ownable {
+public extension ArrayOfNameableValuable where E: OwnableP {
     // MARK: - Initializers
     
     init(fileNamePrefix         : String = "",
          fromFolder folder      : Folder,
-         with personAgeProvider : PersonAgeProvider?) throws {
+         with personAgeProvider : PersonAgeProviderP?) throws {
         try self.init(fileNamePrefix : fileNamePrefix,
                       fromFolder     : folder)
         // injecter le délégué pour la méthode family.ageOf qui par défaut est nil à la création de l'objet
@@ -28,7 +28,7 @@ public extension ArrayOfNameableValuable where E: Ownable {
     
     init(for aClass        : AnyClass,
          fileNamePrefix    : String = "",
-         with personAgeProvider : PersonAgeProvider?) {
+         with personAgeProvider : PersonAgeProviderP?) {
         self.init(for            : aClass,
                   fileNamePrefix : fileNamePrefix)
         // injecter le délégué pour la méthode family.ageOf qui par défaut est nil à la création de l'objet

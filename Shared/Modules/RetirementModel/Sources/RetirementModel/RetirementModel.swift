@@ -16,11 +16,11 @@ import FileAndFolder
 
 // MARK: - Modèle de pension de retraite
 
-public struct Retirement: PersistableModel {
+public struct Retirement: PersistableModelP {
     
     // MARK: - Nested types
     
-    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable {
+    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP {
         public var regimeGeneral: RegimeGeneral
         public var regimeAgirc  : RegimeAgirc
         public var reversion    : PensionReversion

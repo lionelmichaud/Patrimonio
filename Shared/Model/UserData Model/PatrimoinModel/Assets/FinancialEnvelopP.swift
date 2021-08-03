@@ -11,13 +11,13 @@ import Ownership
 
 // MARK: Protocol d'enveloppe financière
 
-protocol FinancialEnvelop: Ownable {
+protocol FinancialEnvelopP: OwnableP {
     var type            : InvestementKind { get set }
     var isLifeInsurance : Bool { get }
     var clause          : LifeInsuranceClause? { get }
 }
 
-extension FinancialEnvelop {
+extension FinancialEnvelopP {
     var isLifeInsurance: Bool {
         switch type {
             case .lifeInsurance:

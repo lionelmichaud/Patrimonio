@@ -16,7 +16,7 @@ typealias LoanArray = ArrayOfNameableValuable<Loan>
 // MARK: - Emprunt à remboursement constant, périodique, annuel et à taux fixe
 
 /// Emprunt à remboursement constant, périodique, annuel et à taux fixe
-struct Loan: Codable, Identifiable, NameableValuable, Ownable {
+struct Loan: Codable, Identifiable, NameableValuableP, OwnableP {
     
     // MARK: - Properties
 

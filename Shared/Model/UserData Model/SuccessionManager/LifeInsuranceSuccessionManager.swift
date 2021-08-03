@@ -43,7 +43,7 @@ struct LifeInsuranceSuccessionManager {
     ///   - invest: l'investissemment à analyser
     ///   - massesSuccession: (héritier, base taxable)
     fileprivate func lifeInsuranceSuccessionMasses(of decedent      : Person,
-                                                   for invest       : FinancialEnvelop,
+                                                   for invest       : FinancialEnvelopP,
                                                    atEndOf year     : Int,
                                                    massesSuccession : inout [String : Double]) {
         var _invest = invest

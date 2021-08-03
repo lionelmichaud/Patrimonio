@@ -14,11 +14,11 @@ import FileAndFolder
 
 // MARK: - Human Life Model
 
-public struct HumanLife: PersistableModel {
+public struct HumanLife: PersistableModelP {
     
     // MARK: - Nested Types
     
-    public enum RandomVariable: String, PickableEnum {
+    public enum RandomVariable: String, PickableEnumP {
         case menLifeExpectation    = "Espérance de Vie d'un Homme"
         case womenLifeExpectation  = "Espérance de Vie d'uns Femme"
         case nbOfYearsOfdependency = "Nombre d'années de Dépendance"
@@ -28,7 +28,7 @@ public struct HumanLife: PersistableModel {
         }
     }
     
-    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable {
+    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP {
         public var menLifeExpectation    : ModelRandomizer<DiscreteRandomGenerator>
         public var womenLifeExpectation  : ModelRandomizer<DiscreteRandomGenerator>
         public var nbOfYearsOfdependency : ModelRandomizer<DiscreteRandomGenerator>

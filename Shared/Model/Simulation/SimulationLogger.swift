@@ -9,7 +9,7 @@
 import Foundation
 import AppFoundation
 
-enum LogTopic: String, PickableEnum, Codable, CustomStringConvertible {
+enum LogTopic: String, PickableEnumP, Codable, CustomStringConvertible {
     case simulationEvent = "Simulation"
     case lifeEvent       = "Evénement de vie"
     case error           = "Erreur"

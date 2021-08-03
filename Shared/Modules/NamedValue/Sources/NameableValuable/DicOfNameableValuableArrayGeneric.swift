@@ -13,9 +13,9 @@ import Files
 // MARK: - Dictionnaire de [Category : Table d'Item Valuable and Namable]
 
 public struct DictionaryOfNameableValuableArray <ItemCategory, ArrayOfItems>
-where ItemCategory: PickableEnum,
+where ItemCategory: PickableEnumP,
       ItemCategory: Codable,
-      ArrayOfItems: NameableValuableArray,
+      ArrayOfItems: NameableValuableArrayP,
       ArrayOfItems: CustomStringConvertible {
 
     // MARK: - Properties

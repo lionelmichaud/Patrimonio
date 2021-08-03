@@ -12,7 +12,7 @@ import AppFoundation
 // MARK: - Catégories de Dépenses
 
 /// Catégories de dépenses
-enum LifeExpenseCategory: Int, PickableEnum, Codable {
+enum LifeExpenseCategory: Int, PickableEnumP, Codable {
     case abonnements
     case autres
     case cadeaux

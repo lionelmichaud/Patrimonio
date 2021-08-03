@@ -27,7 +27,7 @@ struct YearPicker: View {
 }
 
 // MARK: - Saisie d'un Enum
-struct CasePicker<T: PickableEnum>: View where T.AllCases: RandomAccessCollection {
+struct CasePicker<T: PickableEnumP>: View where T.AllCases: RandomAccessCollection {
     @Binding var pickedCase: T
     let label: String
     
@@ -41,7 +41,7 @@ struct CasePicker<T: PickableEnum>: View where T.AllCases: RandomAccessCollectio
 }
 
 // MARK: - Saisie d'un Enum avec Valeurs associées
-struct CaseWithAssociatedValuePicker<T: PickableIdentifiableEnum>: View where T.AllCases: RandomAccessCollection {
+struct CaseWithAssociatedValuePicker<T: PickableIdentifiableEnumP>: View where T.AllCases: RandomAccessCollection {
     @Binding var caseIndex: Int
     let label: String
     
@@ -57,7 +57,7 @@ struct CaseWithAssociatedValuePicker<T: PickableIdentifiableEnum>: View where T.
 // MARK: - Tests & Previews
 
 struct PickerHelperViews_Previews: PreviewProvider {
-    enum TestEnum: Int, PickableEnum {
+    enum TestEnum: Int, PickableEnumP {
         case un, deux, trois
         var pickerString: String {
             switch self {
@@ -89,7 +89,7 @@ struct PickerHelperViews_Previews: PreviewProvider {
 
 // swiftlint:disable type_name
 struct PickersView_Library: LibraryContentProvider {
-    enum TestEnum: Int, PickableEnum {
+    enum TestEnum: Int, PickableEnumP {
         case un, deux, trois
         var pickerString: String {
             switch self {

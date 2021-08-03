@@ -11,14 +11,14 @@ import Persistable
 import Files
 
 /// Protocol requérant une méthode d'initialisation post-création
-public protocol Initializable {
+public protocol InitializableP {
     func initialized() -> Self
 }
 
 /// Protocol de Model persistant pouvant être initializer et enregsiter à partir.vers un fichier JSON
 /// contenu soit dans un Dossier utilisateur soit dans un Bundle
-public protocol PersistableModel: PersistableP {
-    associatedtype Model: Initializable, JsonCodableToFolderP, JsonCodableToBundleP
+public protocol PersistableModelP: PersistableP {
+    associatedtype Model: InitializableP, JsonCodableToFolderP, JsonCodableToBundleP
     
     // MARK: - Static Properties
     
@@ -41,7 +41,7 @@ public protocol PersistableModel: PersistableP {
     func saveAsJSON(toBundle bundle: Bundle)
 }
 // default implementation
-public extension PersistableModel {
+public extension PersistableModelP {
     // MARK: - Initializers
     
     init(fromFolder folder: Folder) throws {

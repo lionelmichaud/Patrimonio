@@ -50,7 +50,7 @@ public class UnemploymentCompensation: Codable {
         let maxAllocationEuro  : Double // 253.14 // en €
     }
     
-    struct Model: JsonCodableToBundleP, Versionable {
+    struct Model: JsonCodableToBundleP, VersionableP {
         static var defaultFileName: String = "UnemploymentCompensationModel.json"
         
         var version      : Version

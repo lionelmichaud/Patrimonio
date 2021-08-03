@@ -180,7 +180,7 @@ public enum TimeSpan: Hashable {
 
 // MARK: - Extensions
 
-extension TimeSpan: PickableIdentifiableEnum {
+extension TimeSpan: PickableIdentifiableEnumP {
     public var id: Int {
         return self.rawValue
     }

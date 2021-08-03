@@ -10,14 +10,14 @@ import Foundation
 
 // MARK: - Protocol PickableEnum pour Picker d'un Enum
 
-public protocol PickableEnum: CaseIterable, Hashable, CustomStringConvertible {
+public protocol PickableEnumP: CaseIterable, Hashable, CustomStringConvertible {
     var pickerString  : String { get }
     var displayString : String { get }
     var description   : String { get }
 }
 
 // implémntation par défaut
-public extension PickableEnum {
+public extension PickableEnumP {
     // default implementation
     var displayString : String { pickerString }
     var description   : String { displayString }
@@ -25,4 +25,4 @@ public extension PickableEnum {
 
 // MARK: - Protocol PickableEnum & Identifiable pour Picker d'un Enum
 
-public typealias PickableIdentifiableEnum = PickableEnum & Identifiable
+public typealias PickableIdentifiableEnumP = PickableEnumP & Identifiable

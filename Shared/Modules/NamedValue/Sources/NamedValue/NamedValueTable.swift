@@ -14,7 +14,7 @@ public typealias NamedValue = (name: String, value: Double)
 
 public typealias NamedValueArray = [NamedValue]
 
-public struct NamedValueTable: HasNamedValuedTable {
+public struct NamedValueTable: HasNamedValuedTableP {
     
     // MARK: - Properties
     
@@ -41,7 +41,7 @@ extension NamedValueTable: CustomStringConvertible {
 
 // MARK: - Protocol de Table nommée de couples (nom, valeur)
 
-public protocol HasNamedValuedTable {
+public protocol HasNamedValuedTableP {
 
     // MARK: - Properties
     
@@ -73,7 +73,7 @@ public protocol HasNamedValuedTable {
     func contains(name: String) -> Bool
 }
 
-extension HasNamedValuedTable {
+extension HasNamedValuedTableP {
     public var total: Double {
         namedValues
             .reduce(.zero, {result, element in result + element.value})

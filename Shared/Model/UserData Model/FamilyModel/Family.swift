@@ -311,14 +311,14 @@ extension Family: CustomStringConvertible {
     }
 }
 
-extension Family: PersonAgeProvider {
+extension Family: PersonAgeProviderP {
     func ageOf(_ name: String, _ year: Int) -> Int {
         let person = member(withName: name)
         return person?.age(atEndOf: year) ?? -1
     }
 }
 
-extension Family: PersonEventYearProvider {
+extension Family: PersonEventYearProviderP {
     func yearOf(lifeEvent : LifeEvent,
                 for name  : String) -> Int? {
         // rechercher la personne
@@ -358,7 +358,7 @@ extension Family: PersonEventYearProvider {
     }
 }
 
-extension Family: MembersCountProvider {
+extension Family: MembersCountProviderP {
     /// Nombre d'adulte vivant à la fin de l'année
     /// - Parameter year: année
     func nbOfAdultAlive(atEndOf year: Int) -> Int {
@@ -382,7 +382,7 @@ extension Family: MembersCountProvider {
     }
 }
 
-extension Family: FiscalHouseholdSumator {
+extension Family: FiscalHouseholdSumatorP {
     func sum(atEndOf year : Int,
              memberValue  : (String) -> Double) -> Double {
         /// pour: adultes + enfants fiscalement dépendants
@@ -411,7 +411,7 @@ extension Family: FiscalHouseholdSumator {
     }
 }
 
-extension Family: AdultSpouseProvider {
+extension Family: AdultSpouseProviderP {
     /// Rend l'époux d'un adult de la famille (s'il existe), qu'il soit vivant où décédé
     /// - Parameter member: membre adult de la famille
     /// - Returns: époux  (s'il existe)
@@ -426,7 +426,7 @@ extension Family: AdultSpouseProvider {
     }
 }
 
-extension Family: MembersNameProvider {
+extension Family: MembersNameProviderP {
     var membersName: [String] {
         members.items
             .sorted(by: \.birthDate)

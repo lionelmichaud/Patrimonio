@@ -12,7 +12,7 @@ import AppFoundation
 // MARK: - Catégories de revenus
 
 /// Catégories de revenus
-enum RevenueCategory: String, PickableEnum, Codable, Hashable {
+enum RevenueCategory: String, PickableEnumP, Codable, Hashable {
     case workIncomes        = "Revenu Travail"
     case pensions           = "Pension"
     case layoffCompensation = "Indemnité de licenciement"

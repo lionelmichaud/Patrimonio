@@ -13,14 +13,14 @@ import Files
 
 // MARK: Protocol d'Item Valuable et Nameable
 
-public protocol NameableValuable {
+public protocol NameableValuableP {
     var name: String { get }
     func value(atEndOf year: Int) -> Double
 }
 
 // MARK: - Extensions de Array
 
-public extension Array where Element: NameableValuable {
+public extension Array where Element: NameableValuableP {
     /// Somme de toutes les valeurs d'un Array
     ///
     /// Usage:
@@ -39,8 +39,8 @@ public extension Array where Element: NameableValuable {
 
 // utilisé uniquement par LifeExpense
 // les autres utilisent le generic ArrayOfNameableValuable
-public protocol NameableValuableArray: JsonCodableToFolderP, PersistableP {
-    associatedtype Item: Codable, Identifiable, NameableValuable
+public protocol NameableValuableArrayP: JsonCodableToFolderP, PersistableP {
+    associatedtype Item: Codable, Identifiable, NameableValuableP
     
     // MARK: - Properties
     
@@ -93,7 +93,7 @@ public protocol NameableValuableArray: JsonCodableToFolderP, PersistableP {
 }
 
 // implémentation par défaut
-public extension NameableValuableArray {
+public extension NameableValuableArrayP {
 
     var currentValue      : Double {
         items.sumOfValues(atEndOf : Date.now.year)

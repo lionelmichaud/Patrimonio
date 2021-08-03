@@ -62,7 +62,7 @@ public class RegimeGeneral: Codable {
         var nbTrimNonIndemnise : Int
     }
     
-    public struct Model: JsonCodableToBundleP, Versionable {
+    public struct Model: JsonCodableToBundleP, VersionableP {
         enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
             case version, dureeDeReferenceGrid, nbTrimNonIndemniseGrid, ageMinimumLegal,
             nbOfYearForSAM, maxReversionRate, decoteParTrimestre, surcoteParTrimestre, maxNbTrimestreDecote

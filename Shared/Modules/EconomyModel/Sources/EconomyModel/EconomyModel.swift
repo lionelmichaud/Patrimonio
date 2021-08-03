@@ -37,7 +37,7 @@ public typealias EconomyModelProviderP = InflationProviderP & FinancialRatesProv
 
 // MARK: - SINGLETON: Economy Model
 
-public struct Economy: PersistableModel {
+public struct Economy: PersistableModelP {
     
     // MARK: - Nested Types
     
@@ -45,7 +45,7 @@ public struct Economy: PersistableModel {
         case outOfBounds
     }
     
-    public enum RandomVariable: String, PickableEnum {
+    public enum RandomVariable: String, PickableEnumP {
         case inflation   = "Inflation"
         case securedRate = "Rendements Sûrs"
         case stockRate   = "Rendements Actions"
@@ -132,7 +132,7 @@ public struct Economy: PersistableModel {
     }
     
     // MARK: - Modèles statistiques de générateurs aléatoires + échantillons tirés pour une simulation
-    public class Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable, EconomyModelProviderP {
+    public class Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP, EconomyModelProviderP {
         enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
             case randomizers
         }

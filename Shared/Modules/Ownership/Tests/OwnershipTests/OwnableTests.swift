@@ -15,7 +15,7 @@ class OwnableTests: XCTestCase {
     
     // MARK: - Helpers
     
-    struct Asset: Ownable {
+    struct Asset: OwnableP {
         var ownership: Ownership = Ownership()
         
         var name: String

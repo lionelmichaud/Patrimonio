@@ -12,7 +12,7 @@ import NamedValue
 
 // MARK: - agrégat des Taxes
 
-struct ValuedTaxes: DictionaryOfNamedValueTable {
+struct ValuedTaxes: DictionaryOfNamedValueTableP {
     
     // MARK: - Properties
     

@@ -23,7 +23,7 @@ let randomizingMethod: RandomizingMethod = .inverseTransform
 
 // MARK: - Protocol Distribution statistique entre minX et maxX
 
-public protocol Distribution {
+public protocol DistributionP {
     associatedtype Number: Real, Codable
     typealias Curve = [PointReal<Number>]
     
@@ -58,7 +58,7 @@ public protocol Distribution {
     func inverseCdf(p: Number) -> Number // impémentation par défaut
 }
 // implémentation par défaut
-public extension Distribution {
+public extension DistributionP {
     mutating func initialize() {
         
         func computedPdfMax() -> Number {
@@ -140,7 +140,7 @@ public extension Distribution {
 
 // MARK: - Protocol Générateur Aléatoire
 
-public protocol RandomGenerator {
+public protocol RandomGeneratorP {
     associatedtype Number: Real
     
     // MARK: - Methods
@@ -149,7 +149,7 @@ public protocol RandomGenerator {
     mutating func sequence(of length: Int) -> [Number] // impémentation par défaut
 }
 // implémentation par défaut
-public extension RandomGenerator {
+public extension RandomGeneratorP {
     mutating func sequence(of length: Int) -> [Number] {
         precondition(length >= 1, "RandomGenerator.sequence: length < 1")
         var seq = [Number]()
@@ -160,7 +160,7 @@ public extension RandomGenerator {
     }
 }
 // implémentation par défaut uniquement pour les RandomGenerator conformes au protocol Distribution
-public extension RandomGenerator where Self: Distribution, Number: Randomizable {
+public extension RandomGeneratorP where Self: DistributionP, Number: RandomizableP {
     
     /// Génération aléatoire par la méthode de Rejection sampling ou Inverse Transform
     /// - Returns: valeur aléatoire suivant la fonction de distribution pdf(x)
@@ -219,6 +219,6 @@ public extension RandomGenerator where Self: Distribution, Number: Randomizable 
 
 // MARK: - Protocol de service générateur aléatoire dans un interval
 
-public protocol Randomizable: Comparable {
+public protocol RandomizableP: Comparable {
     static func randomized(in range: ClosedRange<Self>) -> Self
 }

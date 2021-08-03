@@ -9,7 +9,7 @@ import Foundation
 import AppFoundation
 
 // MARK: - Seniority
-enum Seniority: Int, PickableEnum {
+enum Seniority: Int, PickableEnumP {
     case adult
     case enfant
     

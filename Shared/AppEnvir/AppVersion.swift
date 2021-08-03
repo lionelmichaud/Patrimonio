@@ -9,7 +9,7 @@
 import Foundation
 import AppFoundation
 
-struct AppVersion: Decodable, Versionable {
+struct AppVersion: Decodable, VersionableP {
     
     // MARK: - Singleton
     

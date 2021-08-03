@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - DI: Protocol de service de fourniture de dénombrement dans la famille
 
-protocol MembersCountProvider {
+protocol MembersCountProviderP {
     var nbOfChildren: Int { get }
     func nbOfAdultAlive(atEndOf year: Int) -> Int
     func nbOfFiscalChildren(during year: Int) -> Int
@@ -18,23 +18,23 @@ protocol MembersCountProvider {
 
 // MARK: - DI: Protocol de service de fourniture de l'époux d'un adulte
 
-protocol AdultSpouseProvider {
+protocol AdultSpouseProviderP {
     func spouseOf(_ member: Adult) -> Adult?
 }
 
 // MARK: - DI: Protocol de service de fourniture de la liste des noms des membres de la famille
 
-protocol MembersNameProvider {
+protocol MembersNameProviderP {
     var membersName  : [String] { get }
     var adultsName   : [String] { get }
     var childrenName : [String] { get }
 }
 
-typealias AdultRelativesProvider = MembersCountProvider & AdultSpouseProvider
+typealias AdultRelativesProviderP = MembersCountProviderP & AdultSpouseProviderP
 
 // MARK: - DI: Protocol de service d'itération sur les membres du foyer fiscal dans la famille
 
-protocol FiscalHouseholdSumator {
+protocol FiscalHouseholdSumatorP {
     func sum(atEndOf year : Int,
              memberValue  : (String) -> Double) -> Double
 }

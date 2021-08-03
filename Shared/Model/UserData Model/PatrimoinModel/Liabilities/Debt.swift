@@ -14,7 +14,7 @@ typealias DebtArray = ArrayOfNameableValuable<Debt>
 
 // MARK: - Stock de dette incrémentable ou diminuable
 /// stock de dette incrémentable ou diminuable
-struct Debt: Codable, Identifiable, NameableValuable, Ownable {
+struct Debt: Codable, Identifiable, NameableValuableP, OwnableP {
     
     // MARK: - Properties
 

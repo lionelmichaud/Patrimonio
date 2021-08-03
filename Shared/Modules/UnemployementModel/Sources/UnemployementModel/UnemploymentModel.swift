@@ -13,11 +13,11 @@ import FileAndFolder
 
 // MARK: - Modèle d'indemnité de licenciement et de Chomage
 
-public struct Unemployment: PersistableModel {
+public struct Unemployment: PersistableModelP {
       
     // MARK: - Nested types
 
-    public enum Cause: String, PickableEnum, Codable {
+    public enum Cause: String, PickableEnumP, Codable {
         case demission                          = "Démission"
         case licenciement                       = "Licenciement"
         case ruptureConventionnelleIndividuelle = "Rupture individuelle"
@@ -31,7 +31,7 @@ public struct Unemployment: PersistableModel {
         }
     }
     
-    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, Initializable {
+    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP {
         public var indemniteLicenciement : LayoffCompensation
         public var allocationChomage     : UnemploymentCompensation
 

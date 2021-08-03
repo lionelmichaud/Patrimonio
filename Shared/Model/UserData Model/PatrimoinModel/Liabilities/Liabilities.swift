@@ -17,7 +17,7 @@ struct Liabilities {
     
     var debts : DebtArray
     var loans : LoanArray
-    var allOwnableItems : [(ownable: Ownable, category: LiabilitiesCategory)] {
+    var allOwnableItems : [(ownable: OwnableP, category: LiabilitiesCategory)] {
         debts.items.sorted(by:<)
             .map { ($0, LiabilitiesCategory.debts) } +
             loans.items.sorted(by:<)
@@ -43,7 +43,7 @@ struct Liabilities {
     /// - Note: family est utilisée pour injecter dans chaque passif un délégué family.ageOf
     ///         permettant de calculer les valeurs respectives des Usufruits et Nu-Propriétés
     internal init(fromFolder folder      : Folder,
-                  with personAgeProvider : PersonAgeProvider?) throws {
+                  with personAgeProvider : PersonAgeProviderP?) throws {
         try self.debts = DebtArray(fromFolder: folder, with: personAgeProvider)
         try self.loans = LoanArray(fromFolder: folder, with: personAgeProvider)
     }
@@ -61,7 +61,7 @@ struct Liabilities {
     }
     
     /// Calls the given closure on each element in the sequence in the same order as a for-in loop
-    func forEachOwnable(_ body: (Ownable) throws -> Void) rethrows {
+    func forEachOwnable(_ body: (OwnableP) throws -> Void) rethrows {
         try loans.items.forEach(body)
         try debts.items.forEach(body)
     }
@@ -100,7 +100,7 @@ struct Liabilities {
     ///   - evaluationMethod: méthode d'évalution des biens
     /// - Returns: assiette nette fiscale calculée selon la méthode choisie
     func realEstateValue(atEndOf year        : Int,
-                         for fiscalHousehold : FiscalHouseholdSumator,
+                         for fiscalHousehold : FiscalHouseholdSumatorP,
                          evaluationMethod    : EvaluationMethod) -> Double {
         switch evaluationMethod {
             case .ifi, .isf :

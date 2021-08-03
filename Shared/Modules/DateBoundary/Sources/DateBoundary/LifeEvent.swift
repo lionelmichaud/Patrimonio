@@ -11,7 +11,7 @@ import AppFoundation
 
 // MARK: - Evénement de vie
 
-public enum LifeEvent: String, PickableEnum, Codable {
+public enum LifeEvent: String, PickableEnumP, Codable {
     case debutEtude         = "Début des études supérieurs"
     case independance       = "Indépendance financière"
     case cessationActivite  = "Fin d'activité professionnelle"
@@ -53,7 +53,7 @@ public enum LifeEvent: String, PickableEnum, Codable {
 
 // MARK: - Groupes de personnes
 
-public enum GroupOfPersons: String, PickableEnum, Codable {
+public enum GroupOfPersons: String, PickableEnumP, Codable {
     case allAdults    = "Tous les Adultes"
     case allChildrens = "Tous les Enfants"
     case allPersons   = "Toutes les Personnes"
@@ -67,7 +67,7 @@ public enum GroupOfPersons: String, PickableEnum, Codable {
 
 // MARK: - Date au plus tôt ou au plus tard
 
-public enum SoonestLatest: String, PickableEnum, Codable {
+public enum SoonestLatest: String, PickableEnumP, Codable {
     case soonest = "Date au plus tôt"
     case latest  = "Date au plus tard"
     

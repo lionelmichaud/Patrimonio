@@ -9,6 +9,6 @@ import Foundation
 
 /// The Component interface declares an `accept` method that should take the
 /// base visitor interface as an argument.
-protocol MonteCarloVisitable {
-    func accept(_ visitor: MonteCarloVisitor)
+protocol MonteCarloVisitableP {
+    func accept(_ visitor: MonteCarloVisitorP)
 }

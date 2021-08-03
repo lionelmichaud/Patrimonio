@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Protocol Versionable pour versionner des données
 
-public protocol Versionable {
+public protocol VersionableP {
     var version : Version { get set }
 }
 

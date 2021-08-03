@@ -44,8 +44,8 @@ struct Assets {
     var realEstates     : RealEstateArray
     var scpis           : ScpiArray // SCPI hors de la SCI
     var sci             : SCI
-    var allOwnableItems : [(ownable: Ownable, category: AssetsCategory)] {
-        var ownables = [(ownable: Ownable, category: AssetsCategory)]()
+    var allOwnableItems : [(ownable: OwnableP, category: AssetsCategory)] {
+        var ownables = [(ownable: OwnableP, category: AssetsCategory)]()
         
         ownables = periodicInvests.items
             .sorted(by:<)
@@ -89,7 +89,7 @@ struct Assets {
     /// - Note: personAgeProvider est utilisée pour injecter dans chaque actif un délégué personAgeProvider.ageOf
     ///         permettant de calculer les valeurs respectives des Usufruits et Nu-Propriétés
     internal init(fromFolder folder      : Folder,
-                  with personAgeProvider : PersonAgeProvider?) throws {
+                  with personAgeProvider : PersonAgeProviderP?) throws {
         try self.periodicInvests = PeriodicInvestementArray(fromFolder: folder, with: personAgeProvider)
         try self.freeInvests     = FreeInvestmentArray(fromFolder: folder, with: personAgeProvider)
         try self.realEstates     = RealEstateArray(fromFolder: folder, with: personAgeProvider)
@@ -133,7 +133,7 @@ struct Assets {
     }
     
     /// Calls the given closure on each element in the sequence in the same order as a for-in loop
-    func forEachOwnable(_ body: (Ownable) throws -> Void) rethrows {
+    func forEachOwnable(_ body: (OwnableP) throws -> Void) rethrows {
         try periodicInvests.items.forEach(body)
         try freeInvests.items.forEach(body)
         try realEstates.items.forEach(body)
@@ -232,7 +232,7 @@ struct Assets {
     ///   - evaluationMethod: méthode d'évaluation de la valeure des bien
     ///   - Returns: assiette nette fiscale calculée selon la méthode choisie
     func realEstateValue(atEndOf year        : Int,
-                         for fiscalHousehold : FiscalHouseholdSumator,
+                         for fiscalHousehold : FiscalHouseholdSumatorP,
                          evaluationMethod    : EvaluationMethod) -> Double {
         switch evaluationMethod {
             case .ifi, .isf :

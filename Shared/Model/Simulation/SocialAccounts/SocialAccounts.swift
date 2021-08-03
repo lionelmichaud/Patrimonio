@@ -9,7 +9,7 @@ import Persistence
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.SocialAccounts")
 
 /// Combinaisons possibles de séries sur le graphique de Bilan
-enum BalanceCombination: String, PickableEnum {
+enum BalanceCombination: String, PickableEnumP {
     case assets      = "Actif"
     case liabilities = "Passif"
     case both        = "Tout"
@@ -20,7 +20,7 @@ enum BalanceCombination: String, PickableEnum {
 }
 
 /// Combinaisons possibles de séries sur le graphique de CashFlow
-enum CashCombination: String, PickableEnum {
+enum CashCombination: String, PickableEnumP {
     case revenues = "Revenu"
     case expenses = "Dépense"
     case both     = "Tout"

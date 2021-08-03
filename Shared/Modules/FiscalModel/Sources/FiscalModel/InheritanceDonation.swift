@@ -16,7 +16,7 @@ public struct InheritanceSharing {
 
 // MARK: - Options fiscale du conjoint à la succession
 
-public enum InheritanceFiscalOption: String, PickableEnum, Codable {
+public enum InheritanceFiscalOption: String, PickableEnumP, Codable {
     case fullUsufruct      = "100% Usufruit"
     case quotiteDisponible = "Quotité disponible"
     case usufructPlusBare  = "1/4 PP + 3/4 UF"
@@ -95,7 +95,7 @@ public struct InheritanceDonation: Codable {
         case donationToSpouseSlicesIssue
     }
     
-    public struct Model: JsonCodableToBundleP, Versionable {
+    public struct Model: JsonCodableToBundleP, VersionableP {
         public static var defaultFileName: String = "InheritanceDonationModel.json"
         
         public var version         : Version
@@ -176,7 +176,7 @@ public struct LifeInsuranceInheritance: Codable {
         case heritageOfChildSlicesIssue
     }
     
-    struct Model: JsonCodableToBundleP, Versionable, RateGridable {
+    struct Model: JsonCodableToBundleP, VersionableP, RateGridableP {
         static var defaultFileName: String = "LifeInsuranceInheritanceModel.json"
         
         var version : Version

@@ -12,7 +12,7 @@ import Persistence
 struct ExpenseView: View {
     @EnvironmentObject private var dataStore : Store
     @EnvironmentObject private var family    : Family
-    let simulationReseter: CanResetSimulation
+    let simulationReseter: CanResetSimulationP
 
     private var categories: [(LifeExpenseCategory, LifeExpenseArray)] {
         family.expenses.perCategory.sorted(by: \.key.displayString)
@@ -93,7 +93,7 @@ struct ExpenseListInCategory: View {
     //@EnvironmentObject var simulation : Simulation
     @EnvironmentObject var patrimoine : Patrimoin
     @EnvironmentObject var uiState    : UIState
-    let simulationReseter : CanResetSimulation
+    let simulationReseter : CanResetSimulationP
     let category          : LifeExpenseCategory
     var expenses          : LifeExpenseArray
     //@State private var colapse = true
@@ -151,7 +151,7 @@ struct ExpenseListInCategory: View {
 }
 
 struct ExpenseView_Previews: PreviewProvider {
-    struct FakeSimulationReseter: CanResetSimulation {
+    struct FakeSimulationReseter: CanResetSimulationP {
         func reset() {
             print("simluation.reset")
         }
