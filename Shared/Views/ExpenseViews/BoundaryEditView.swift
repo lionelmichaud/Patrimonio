@@ -8,6 +8,7 @@
 
 import SwiftUI
 import AppFoundation
+import DateBoundary
 
 // MARK: - View Model for BoundaryEditView
 
@@ -45,15 +46,15 @@ struct DateBoundaryViewModel: Equatable {
             if isLinkedToGroup {
                 // l'événement est accroché à un groupe
                 // construire un tableau des membres du groupe
-                return DateBoundary.personEventYearProvider.yearOf(lifeEvent : event,
-                                                                   for       : group,
-                                                                   order     : order)
-
+                return DateBoundary.yearOf(lifeEvent : event,
+                                           for       : group,
+                                           order     : order)
+                
             } else {
                 // l'événement est accroché à une personne
                 // rechercher la personne
-                if let year = DateBoundary.personEventYearProvider.yearOf(lifeEvent: event,
-                                                                          for: name) {
+                if let year = DateBoundary.yearOf(lifeEvent: event,
+                                                  for: name) {
                     // rechercher l'année de l'événement pour cette personne
                     return year
                 } else {

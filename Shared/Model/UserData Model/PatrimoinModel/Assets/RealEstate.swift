@@ -11,6 +11,7 @@ import AppFoundation
 import FiscalModel
 import NamedValue
 import Ownership
+import DateBoundary
 
 typealias RealEstateArray = ArrayOfNameableValuable<RealEstateAsset>
 

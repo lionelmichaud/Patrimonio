@@ -40,9 +40,11 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        Ownership.setFiscalModelProvider(
-            Fiscal.Model(fromFile: Fiscal.Model.defaultFileName,
-                         fromBundle: Bundle.module).initialized())
+        let demembrementModel = DemembrementModel.Model(fromFile   : DemembrementModel.Model.defaultFileName,
+                                                        fromBundle : Bundle.module)
+        let demembrement = DemembrementModel(model: demembrementModel)
+        
+        Ownership.setDemembrementProviderP(demembrement)
     }
     
     func test_transfer_Life_Insurance_non_demembrée () throws {

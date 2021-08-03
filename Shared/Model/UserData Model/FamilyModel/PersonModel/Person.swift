@@ -12,6 +12,7 @@ import HumanLifeModel
 import NamedValue
 import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
 import ModelEnvironment
+import DateBoundary
 
 // MARK: - Tableau de Person
 

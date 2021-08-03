@@ -7,11 +7,11 @@
 //
 
 import XCTest
-@testable import Patrimoine
+@testable import DateBoundary
 
 class LifeEventTests: XCTestCase {
 
-    func test_dult_event() throws {
+    func test_adult_event() throws {
         XCTAssertTrue(LifeEvent.cessationActivite.isAdultEvent)
         XCTAssertFalse(LifeEvent.cessationActivite.isChildEvent)
         

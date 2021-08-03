@@ -129,6 +129,13 @@
         "identifier" : "StatisticsTests",
         "name" : "StatisticsTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/Ownership",
+        "identifier" : "OwnershipTests",
+        "name" : "OwnershipTests"
+      }
     }
   ],
   "version" : 1

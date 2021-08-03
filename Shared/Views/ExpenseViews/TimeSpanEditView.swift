@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import DateBoundary
 
 // MARK: - View Model for LifeExpenseTimeSpan
 

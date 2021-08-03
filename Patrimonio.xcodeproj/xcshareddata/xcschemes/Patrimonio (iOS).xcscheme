@@ -85,6 +85,16 @@
                ReferencedContainer = "container:Shared/Modules/ModelEnvironment">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "OwnershipTests"
+               BuildableName = "OwnershipTests"
+               BlueprintName = "OwnershipTests"
+               ReferencedContainer = "container:Shared/Modules/Ownership">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

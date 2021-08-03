@@ -14,7 +14,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 
 // MARK: - Elongation temporelle du poste de dépense
  
-enum TimeSpan: Hashable {
+public enum TimeSpan: Hashable {
     case permanent
     // l'année de début est inclue mais la date de fin n'est pas inclue
     case periodic (from: DateBoundary, period: Int, to: DateBoundary)
@@ -28,7 +28,7 @@ enum TimeSpan: Hashable {
     
     // MARK: - Static properties
 
-    static var allCases: [TimeSpan] {
+    public static var allCases: [TimeSpan] {
         return [.permanent,
                 .periodic (from: DateBoundary.empty, period: 1, to: DateBoundary.empty),
                 .starting (from: DateBoundary.empty),
@@ -39,7 +39,7 @@ enum TimeSpan: Hashable {
     
     // MARK: - Computed properties
 
-    var rawValue: Int {
+    public var rawValue: Int {
         switch self {
             case .permanent:
                 return 1
@@ -59,7 +59,7 @@ enum TimeSpan: Hashable {
     // MARK: - Methods
     
     /// True si l'année demandée est inclue dans la plage de validité
-    func contains (_ year: Int) -> Bool { // swiftlint:disable:this cyclomatic_complexity
+    public func contains (_ year: Int) -> Bool { // swiftlint:disable:this cyclomatic_complexity
         // la dernière année est exclue
         switch self {
             case .permanent:
@@ -106,7 +106,7 @@ enum TimeSpan: Hashable {
         }
     }
     
-    var firstYear: Int? { // computed
+    public var firstYear: Int? { // computed
         guard isValid else {
             return nil
         }
@@ -131,7 +131,7 @@ enum TimeSpan: Hashable {
         }
     }
     
-    var lastYear: Int? { // computed
+    public var lastYear: Int? { // computed
         guard isValid else {
             return nil
         }
@@ -156,7 +156,7 @@ enum TimeSpan: Hashable {
         }
     }
     
-    var isValid: Bool {
+    public var isValid: Bool {
         switch self {
             case .permanent:
                 return true
@@ -181,11 +181,11 @@ enum TimeSpan: Hashable {
 // MARK: - Extensions
 
 extension TimeSpan: PickableIdentifiableEnum {
-    var id: Int {
+    public var id: Int {
         return self.rawValue
     }
     
-    var pickerString: String {
+    public var pickerString: String {
         switch self {
             case .permanent:
                 return "Permanent"
@@ -210,13 +210,13 @@ extension TimeSpan: Codable {
         case starting_from, ending_to, exceptional_in
     }
     // error type
-    enum ExpenseTimeSpanError: Error {
+    enum TimeSpanError: Error {
         case decoding(String)
     }
     
     // MARK: - Decoding
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // decode .permanent
@@ -261,12 +261,12 @@ extension TimeSpan: Codable {
             return
         }
         
-        throw ExpenseTimeSpanError.decoding("Error decoding 'LifeExpenseTimeSpan' ! \(dump(container))")
+        throw TimeSpanError.decoding("Error decoding 'LifeExpenseTimeSpan' ! \(dump(container))")
     }
 
     // MARK: - Coding
 
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
         switch self {

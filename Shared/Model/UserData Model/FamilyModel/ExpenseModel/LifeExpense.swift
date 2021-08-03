@@ -11,6 +11,7 @@ import Persistable
 import Statistics
 import SocioEconomyModel
 import NamedValue
+import DateBoundary
 
 // MARK: - Tableau de Dépenses
 

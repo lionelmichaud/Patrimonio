@@ -36,12 +36,18 @@ public struct DemembrementModel: Codable, DemembrementProviderP {
         var nueProp  : Double // % [0, 1]
     }
     
-    struct Model: JsonCodableToBundleP, Versionable {
-        static var defaultFileName : String = "DemembrementModel.json"
-        var version : Version
+    public struct Model: JsonCodableToBundleP, Versionable {
+        public static var defaultFileName : String = "DemembrementModel.json"
+        public var version : Version
         var grid    : [Slice]
     }
     
+    // MARK: - Initializer
+
+    public init(model: DemembrementModel.Model) {
+        self.model = model
+    }
+
     // MARK: - Properties
 
     var model: Model

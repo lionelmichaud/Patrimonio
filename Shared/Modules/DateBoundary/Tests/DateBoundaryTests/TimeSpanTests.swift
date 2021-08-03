@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Patrimoine
+@testable import DateBoundary
 
 class TimeSpanTests: XCTestCase {
     
@@ -23,6 +23,8 @@ class TimeSpanTests: XCTestCase {
     }
 
     func test_CuctomString() throws {
+        print("Test de TimeSpan.description")
+
         var ts = TimeSpan.permanent
         print(ts)
 
@@ -47,22 +49,28 @@ class TimeSpanTests: XCTestCase {
     func test_starting() {
         let ts = TimeSpan.starting(from: DateBoundary(fixedYear: 2020))
         XCTAssertTrue(ts.isValid)
-        XCTAssertEqual(2020, ts.firstYear)
-        XCTAssertEqual(Date.now.year + 100, ts.lastYear)
+        XCTAssertEqual(ts.firstYear, 2020)
+        XCTAssertEqual(ts.lastYear, Date.now.year + 100)
+        XCTAssertTrue(ts.contains(2020))
+        XCTAssertFalse(ts.contains(2019))
     }
 
     func test_ending() {
         let datePassee = Date.now.year - 1
         var ts = TimeSpan.ending(to: DateBoundary(fixedYear: datePassee))
         XCTAssertTrue(ts.isValid)
-        XCTAssertEqual(datePassee - 1, ts.firstYear)
-        XCTAssertEqual(datePassee - 1, ts.lastYear)
-        
+        XCTAssertEqual(ts.firstYear,datePassee - 1)
+        XCTAssertEqual(ts.lastYear, datePassee - 1)
+        XCTAssertTrue(ts.contains(datePassee - 1))
+        XCTAssertFalse(ts.contains(datePassee))
+
         let dateFutur = Date.now.year + 2
         ts = TimeSpan.ending(to: DateBoundary(fixedYear: dateFutur))
         XCTAssertTrue(ts.isValid)
         XCTAssertEqual(Date.now.year, ts.firstYear)
         XCTAssertEqual(dateFutur - 1, ts.lastYear)
+        XCTAssertTrue(ts.contains(dateFutur - 1))
+        XCTAssertFalse(ts.contains(dateFutur))
     }
     
     func test_spanning() {
@@ -80,6 +88,27 @@ class TimeSpanTests: XCTestCase {
         ts = TimeSpan.spanning(from : DateBoundary(fixedYear: datePassee),
                                to   : DateBoundary(fixedYear: datePassee))
         XCTAssertFalse(ts.isValid)
+        XCTAssertFalse(ts.contains(datePassee))
+        XCTAssertNil(ts.firstYear)
+        XCTAssertNil(ts.lastYear)
+    }
+
+    func test_periodic() {
+        var ts = TimeSpan.periodic(from   : TimeSpanTests.db2020,
+                                   period : 2,
+                                   to     : TimeSpanTests.db2024)
+        XCTAssertTrue(ts.isValid)
+        XCTAssertTrue(ts.contains(2020))
+        XCTAssertTrue(ts.contains(2022))
+        XCTAssertFalse(ts.contains(2024))
+        XCTAssertEqual(2020, ts.firstYear)
+        XCTAssertEqual(2024 - 1, ts.lastYear)
+        
+        ts = TimeSpan.periodic(from   : TimeSpanTests.db2020,
+                               period : 2,
+                               to     : TimeSpanTests.db2020)
+        XCTAssertFalse(ts.isValid)
+        XCTAssertFalse(ts.contains(2020))
         XCTAssertNil(ts.firstYear)
         XCTAssertNil(ts.lastYear)
     }
