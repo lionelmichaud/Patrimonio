@@ -20,9 +20,9 @@ class AdultViewModel: ObservableObject {
     @Published var allocationSupraLegale     = 0.0
     //@Published var dateOfEndOfUnemployAlloc  = Date()
     @Published var ageAgircPension           = 0
-    @Published var trimAgircPension          = 0
+    @Published var moisAgircPension          = 0
     @Published var agePension                = 0
-    @Published var trimPension               = 0
+    @Published var moisPension               = 0
     @Published var nbYearOfDepend            = 0
     @Published var revIndex                  = 0
     @Published var revenueBrut               = 0.0
@@ -43,9 +43,9 @@ class AdultViewModel: ObservableObject {
         allocationSupraLegale     = adult.layoffCompensationBonified ?? 0.0
         nbYearOfDepend            = adult.nbOfYearOfDependency
         ageAgircPension           = adult.ageOfAgircPensionLiquidComp.year!
-        trimAgircPension          = adult.ageOfAgircPensionLiquidComp.month! / 3
+        moisAgircPension          = adult.ageOfAgircPensionLiquidComp.month!
         agePension                = adult.ageOfPensionLiquidComp.year!
-        trimPension               = adult.ageOfPensionLiquidComp.month! / 3
+        moisPension               = adult.ageOfPensionLiquidComp.month!
         lastKnownPensionSituation = adult.lastKnownPensionSituation
         lastKnownAgircSituation   = adult.lastKnownAgircPensionSituation
         switch adult.workIncome {
@@ -91,9 +91,9 @@ class AdultViewModel: ObservableObject {
         }
 
         adult.setAgeOfPensionLiquidComp(year  : agePension,
-                                        month : trimPension * 3)
+                                        month : moisPension)
         adult.setAgeOfAgircPensionLiquidComp(year  : ageAgircPension,
-                                             month : trimAgircPension * 3)
+                                             month : moisAgircPension)
         adult.lastKnownPensionSituation = lastKnownPensionSituation
         adult.lastKnownAgircPensionSituation = lastKnownAgircSituation
 

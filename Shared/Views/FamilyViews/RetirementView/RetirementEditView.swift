@@ -24,17 +24,17 @@ struct RetirementEditView: View {
                                 adultViewModel  : adultViewModel)
                 .onChange(of: adultViewModel.ageAgircPension) { newAgeAgircPension in
                     if (newAgeAgircPension > adultViewModel.agePension) ||
-                        (newAgeAgircPension == adultViewModel.agePension && adultViewModel.trimAgircPension > adultViewModel.trimPension) {
+                        (newAgeAgircPension == adultViewModel.agePension && adultViewModel.moisAgircPension > adultViewModel.moisPension) {
                         adultViewModel.ageAgircPension  = adultViewModel.agePension
-                        adultViewModel.trimAgircPension = adultViewModel.trimPension
+                        adultViewModel.moisAgircPension = adultViewModel.moisPension
                         self.alertItem = AlertItem(title         : Text("La pension complémentaire doit être liquidée avant la pension base"),
                                                    dismissButton : .default(Text("OK")))
                     }
                 }
-                .onChange(of: adultViewModel.trimAgircPension) { newTrimAgircPension in
-                    if adultViewModel.ageAgircPension == adultViewModel.agePension && newTrimAgircPension > adultViewModel.trimPension {
+                .onChange(of: adultViewModel.moisAgircPension) { newMoisAgircPension in
+                    if adultViewModel.ageAgircPension == adultViewModel.agePension && newMoisAgircPension > adultViewModel.moisPension {
                         adultViewModel.ageAgircPension  = adultViewModel.agePension
-                        adultViewModel.trimAgircPension = adultViewModel.trimPension
+                        adultViewModel.moisAgircPension = adultViewModel.moisPension
                         self.alertItem = AlertItem(title         : Text("La pension complémentaire doit être liquidée avant la pension base"),
                                                    dismissButton : .default(Text("OK")))
                     }
@@ -44,17 +44,17 @@ struct RetirementEditView: View {
                                   adultViewModel  : adultViewModel)
                 .onChange(of: adultViewModel.agePension) { newAgePension in
                     if (newAgePension < adultViewModel.ageAgircPension) ||
-                        (newAgePension == adultViewModel.ageAgircPension && adultViewModel.trimAgircPension > adultViewModel.trimPension) {
+                        (newAgePension == adultViewModel.ageAgircPension && adultViewModel.moisAgircPension > adultViewModel.moisPension) {
                         adultViewModel.agePension  = adultViewModel.ageAgircPension
-                        adultViewModel.trimPension = adultViewModel.trimAgircPension
+                        adultViewModel.moisPension = adultViewModel.moisAgircPension
                         self.alertItem = AlertItem(title         : Text("La pension complémentaire doit être liquidée avant la pension base"),
                                                    dismissButton : .default(Text("OK")))
                     }
                 }
-                .onChange(of: adultViewModel.trimPension) { newTrimPension in
-                    if adultViewModel.ageAgircPension == adultViewModel.agePension && adultViewModel.trimAgircPension > newTrimPension {
+                .onChange(of: adultViewModel.moisPension) { newMoisPension in
+                    if adultViewModel.ageAgircPension == adultViewModel.agePension && adultViewModel.moisAgircPension > newMoisPension {
                         adultViewModel.agePension  = adultViewModel.ageAgircPension
-                        adultViewModel.trimPension = adultViewModel.trimAgircPension
+                        adultViewModel.moisPension = adultViewModel.moisAgircPension
                         self.alertItem = AlertItem(title         : Text("La pension complémentaire doit être liquidée avant la pension base"),
                                                    dismissButton : .default(Text("OK")))
                     }
@@ -82,8 +82,8 @@ struct RegimeAgircEditView: View {
                         Text("\(adultViewModel.ageAgircPension) ans").foregroundColor(.secondary)
                     }
                 }
-                Stepper(value: $adultViewModel.trimAgircPension, in: 0...3) {
-                    Text("\(adultViewModel.trimAgircPension * 3) mois").foregroundColor(.secondary)
+                Stepper(value: $adultViewModel.moisAgircPension, in: 0...11) {
+                    Text("\(adultViewModel.moisAgircPension) mois").foregroundColor(.secondary)
                 }
                 .frame(width: 160)
             }
@@ -126,8 +126,8 @@ struct RegimeGeneralEditView: View {
                         Text("\(adultViewModel.agePension) ans").foregroundColor(.secondary)
                     }
                 }
-                Stepper(value: $adultViewModel.trimPension, in: 0...3) {
-                    Text("\(adultViewModel.trimPension * 3) mois").foregroundColor(.secondary)
+                Stepper(value: $adultViewModel.moisPension, in: 0...11) {
+                    Text("\(adultViewModel.moisPension) mois").foregroundColor(.secondary)
                 }
                 .frame(width: 160)
             }
