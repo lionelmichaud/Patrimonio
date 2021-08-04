@@ -120,7 +120,7 @@ extension CsvBalanceSheetTableVisitor: CustomStringConvertible {
     }
 }
 
-class CsvBalanceSheetHeaderVisitor: BalanceSheetCsvVisitorP {
+class BalanceSheetCsvHeaderVisitor: BalanceSheetCsvVisitorP {
 
     private var header0  = ""
     private var header1  = ""
@@ -221,7 +221,7 @@ class CsvBalanceSheetHeaderVisitor: BalanceSheetCsvVisitorP {
     }
 }
 
-extension CsvBalanceSheetHeaderVisitor: CustomStringConvertible {
+extension BalanceSheetCsvHeaderVisitor: CustomStringConvertible {
     public var description: String {
         header0 + "\n" + header1 + "\n" + header2
     }

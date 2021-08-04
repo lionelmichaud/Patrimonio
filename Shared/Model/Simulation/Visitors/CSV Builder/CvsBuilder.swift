@@ -27,7 +27,7 @@ class CsvBuilder {
                                 using model            : Model,
                                 withMode mode          : SimulationModeEnum) -> String {
         // construction de l'entête
-        let csvHeaderBuilderVisitor = CsvBalanceSheetHeaderVisitor()
+        let csvHeaderBuilderVisitor = BalanceSheetCsvHeaderVisitor()
         balanceSheetArray.accept(csvHeaderBuilderVisitor)
 
         // construction de la table
@@ -47,11 +47,11 @@ class CsvBuilder {
     static func cashFlowCSV(from cashFlowArray : CashFlowArray,
                             withMode mode      : SimulationModeEnum) -> String {
         // construction de l'entête
-        let csvHeaderBuilderVisitor = CsvCashFlowHeaderVisitor()
+        let csvHeaderBuilderVisitor = CashFlowCsvHeaderVisitor()
         cashFlowArray.accept(csvHeaderBuilderVisitor)
 
         // construction de la table
-        let csvTableBuilderVisitor = CsvCashFlowTableVisitor(withMode: mode)
+        let csvTableBuilderVisitor = CashFlowCsvTableVisitor(withMode: mode)
         cashFlowArray.accept(csvTableBuilderVisitor)
 
         return String(describing: csvHeaderBuilderVisitor) + "\n" + String(describing: csvTableBuilderVisitor) + "\n"
@@ -61,7 +61,7 @@ class CsvBuilder {
 
     static func monteCarloCSV(from simulationResultTable: SimulationResultTable) -> String {
         // construction de la table
-        let csvMonteCarloTableVisitor = CsvMonteCarloTableVisitor()
+        let csvMonteCarloTableVisitor = MonteCarloCsvTableVisitor()
         simulationResultTable.accept(csvMonteCarloTableVisitor)
 
         return String(describing: csvMonteCarloTableVisitor)

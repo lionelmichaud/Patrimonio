@@ -1,0 +1,20 @@
+schemes:
+- AppFoundation
+- AssetsModel
+- DateBoundary
+- EconomyModel
+- FileAndFolder
+- FiscalModel
+- HumanLifeModel
+- ModelEnvironment
+- NamedValue
+- Ownership
+- Persistable
+- Persistence
+- RetirementModel
+- SocioEconomyModel
+- Statistics
+- UnemployementModel
+targets:
+- Patrimonio (iOS)
+workspace: Patrimonio.xcworkspace

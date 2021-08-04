@@ -339,7 +339,7 @@ struct SocialAccounts {
                                    withMode : mode)
         // construction du tableau des successions
         dico[FileNameCst.kSuccessionsCSVFileName]  =
-            String(describing: CsvSuccessionsVisitor(successions: legalSuccessions + lifeInsSuccessions))
+            String(describing: SuccessionsCsvVisitor(successions: legalSuccessions + lifeInsSuccessions))
         
         return dico
     }

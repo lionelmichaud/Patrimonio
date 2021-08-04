@@ -19,7 +19,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 /// with a complex object structure, such as a Composite tree. In this case, it
 /// might be helpful to store some intermediate state of the algorithm while
 /// executing visitor's methods over various objects of the structure.
-class CsvSuccessionsVisitor: SuccessionCsvVisitorP {
+class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
 
     private var header1 = ""
     private var header2 = ""
@@ -91,7 +91,7 @@ class CsvSuccessionsVisitor: SuccessionCsvVisitorP {
         table.append(String(Int(element.net/1000)) + separator)
     }
 }
-extension CsvSuccessionsVisitor: CustomStringConvertible {
+extension SuccessionsCsvVisitor: CustomStringConvertible {
     var description: String {
         self.header1 + "\n" + self.header2 + "\n" + self.table
     }

@@ -22,7 +22,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 /// with a complex object structure, such as a Composite tree. In this case, it
 /// might be helpful to store some intermediate state of the algorithm while
 /// executing visitor's methods over various objects of the structure.
-class CsvCashFlowTableVisitor: CashFlowCsvVisitorP {
+class CashFlowCsvTableVisitor: CashFlowCsvVisitorP {
 
     private var table  = ""
     private let mode: SimulationModeEnum
@@ -185,7 +185,7 @@ class CsvCashFlowTableVisitor: CashFlowCsvVisitorP {
     }
 }
 
-extension CsvCashFlowTableVisitor: CustomStringConvertible {
+extension CashFlowCsvTableVisitor: CustomStringConvertible {
     public var description: String {
         return table
     }
@@ -193,7 +193,7 @@ extension CsvCashFlowTableVisitor: CustomStringConvertible {
 
 // MARK: - VISITOR: constructeur d'entête de table de CASH FLOW
 
-class CsvCashFlowHeaderVisitor: CashFlowCsvVisitorP {
+class CashFlowCsvHeaderVisitor: CashFlowCsvVisitorP {
 
     private var header1  = ""
     private var header2  = ""
@@ -390,7 +390,7 @@ class CsvCashFlowHeaderVisitor: CashFlowCsvVisitorP {
     }
 }
 
-extension CsvCashFlowHeaderVisitor: CustomStringConvertible {
+extension CashFlowCsvHeaderVisitor: CustomStringConvertible {
     public var description: String {
         header1 + "\n" + header2
     }
