@@ -7,9 +7,13 @@
 
 import Foundation
 
-// MARK: - Links
-// SuccessionVisitor
-// 
+// MARK: - Voir les Class suivantes:
+//  SuccessionsCsvVisitor
+//  MonteCarloCsvVisitor
+//  CashFlowCsvTableVisitor
+//  CsvBalanceSheetTableVisitor
+
+// MARK: - Dseign Pattern Example
 
 /// The Component interface declares an `accept` method that should take the
 /// base visitor interface as an argument.

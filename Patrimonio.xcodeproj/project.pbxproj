@@ -997,7 +997,7 @@
 			isa = PBXGroup;
 			children = (
 				790FF33926484D59001B2653 /* Visitor Pattern.swift */,
-				79CB2C83264D716000B3E493 /* MonteCarloResuslt */,
+				79CB2C83264D716000B3E493 /* MonteCarloRessult */,
 				79A9AA74264AF9940036732F /* CashFlow */,
 				79A9AA73264AF9840036732F /* BalanceSheet */,
 				790FF33826484D36001B2653 /* CSV Builder */,
@@ -1686,14 +1686,14 @@
 			path = "Charts+Extensions";
 			sourceTree = "<group>";
 		};
-		79CB2C83264D716000B3E493 /* MonteCarloResuslt */ = {
+		79CB2C83264D716000B3E493 /* MonteCarloRessult */ = {
 			isa = PBXGroup;
 			children = (
 				79CB2C84264D720000B3E493 /* MonteCarloVisitableP.swift */,
 				79CB2C86264D723100B3E493 /* MonteCarloVisitorP.swift */,
 				79CB2C88264D731900B3E493 /* MonteCarloCsvVisitor.swift */,
 			);
-			path = MonteCarloResuslt;
+			path = MonteCarloRessult;
 			sourceTree = "<group>";
 		};
 		79EC47B026307C910006EE44 /* Liabilities */ = {
