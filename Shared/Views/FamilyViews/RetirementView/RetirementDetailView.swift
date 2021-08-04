@@ -11,44 +11,117 @@ import AppFoundation
 import RetirementModel
 import ModelEnvironment
 
-struct RetirementDetailView: View {
+// MARK: - Retirement View Model
 
-    // MARK: - View Model
+class RetirementViewModel: ObservableObject {
     
-    class ViewModel: ObservableObject {
+    struct General {
+        var sam              : Double = 0
+        var tauxDePension    : Double = 0
+        var majorationEnfant : Double = 0
+        var dureeDeReference : Int    = 0
+        var dureeAssurance   : Int    = 0
+        var dateTauxPlein    : Date?
+        var ageTauxPlein     : DateComponents?
+        var nbTrimestreDecote: Int    = 0
+        var pensionBrute     : Double = 0
+        var pensionNette     : Double = 0
         
-        struct General { // swiftlint:disable:this nesting
-            var sam              : Double = 0
-            var tauxDePension    : Double = 0
-            var majorationEnfant : Double = 0
-            var dureeDeReference : Int    = 0
-            var dureeAssurance   : Int    = 0
-            var dateTauxPlein    : Date?
-            var ageTauxPlein     : DateComponents?
-            var nbTrimestreDecote: Int    = 0
-            var pensionBrute     : Double = 0
-            var pensionNette     : Double = 0
+        mutating func update(with model : Model,
+                             for member : Person) {
+            let adult = member as! Adult
+            guard let (tauxDePension,
+                       majorationEnfant,
+                       dureeDeReference,
+                       dureeAssurancePlafonne,
+                       dureeAssuranceDeplafonne,
+                       pensionBrute,
+                       pensionNette) =
+                    model.retirementModel.regimeGeneral.pension(
+                        birthDate                : adult.birthDate,
+                        dateOfRetirement         : adult.dateOfRetirement,
+                        dateOfEndOfUnemployAlloc : adult.dateOfEndOfUnemployementAllocation(using: model),
+                        dateOfPensionLiquid      : adult.dateOfPensionLiquid,
+                        lastKnownSituation       : adult.lastKnownPensionSituation,
+                        nbEnfant                 : 3) else {
+                return
+            }
+            guard let nbTrimestreDecote =
+                    model.retirementModel.regimeGeneral.nbTrimestreSurDecote(
+                        birthDate           : adult.birthDate,
+                        dureeAssurance      : dureeAssuranceDeplafonne,
+                        dureeDeReference    : dureeDeReference,
+                        dateOfPensionLiquid : adult.dateOfPensionLiquid) else {
+                return
+            }
+            self.dateTauxPlein     =
+                model.retirementModel.regimeGeneral.dateAgeTauxPlein(
+                    birthDate          : member.birthDate,
+                    lastKnownSituation : (member as! Adult).lastKnownPensionSituation)
+            if dateTauxPlein != nil {
+                self.ageTauxPlein  = member.age(atDate: dateTauxPlein!)
+            }
+            self.sam               = (member as! Adult).lastKnownPensionSituation.sam
+            self.majorationEnfant  = majorationEnfant / 100
+            self.tauxDePension     = tauxDePension / 100
+            self.nbTrimestreDecote = nbTrimestreDecote
+            self.dureeDeReference  = dureeDeReference
+            self.dureeAssurance    = dureeAssurancePlafonne
+            self.pensionBrute      = pensionBrute
+            self.pensionNette      = pensionNette
         }
-        
-        struct Agirc { // swiftlint:disable:this nesting
-            var projectedNbOfPoints : Int    = 0
-            var valeurDuPoint       : Double = 0
-            var coefMinoration      : Double = 0
-            var majorationEnfant    : Double = 0
-            var pensionBrute        : Double = 0
-            var pensionNette        : Double = 0
-        }
-        // régime général
-        @Published var general = General()
-        // régime complémentaire
-        @Published var agirc = Agirc()
     }
     
+    struct Agirc {
+        var projectedNbOfPoints : Int    = 0
+        var valeurDuPoint       : Double = 0
+        var coefMinoration      : Double = 0
+        var majorationEnfant    : Double = 0
+        var pensionBrute        : Double = 0
+        var pensionNette        : Double = 0
+        
+        mutating func update(with model : Model,
+                             for member : Person) {
+            let adult = member as! Adult
+            guard let pension =
+                    model.retirementModel.regimeAgirc.pension(
+                        lastAgircKnownSituation : adult.lastKnownAgircPensionSituation,
+                        birthDate               : adult.birthDate,
+                        lastKnownSituation      : adult.lastKnownPensionSituation,
+                        dateOfRetirement        : adult.dateOfRetirement,
+                        dateOfEndOfUnemployAlloc: adult.dateOfEndOfUnemployementAllocation(using: model),
+                        dateOfPensionLiquid     : adult.dateOfPensionLiquid,
+                        nbEnfantNe              : adult.nbOfChildren(),
+                        nbEnfantACharge         : adult.nbOfFiscalChildren(during: adult.dateOfPensionLiquid.year)) else { return }
+            self.projectedNbOfPoints = pension.projectedNbOfPoints
+            self.valeurDuPoint       = model.retirementModel.regimeAgirc.valeurDuPoint
+            self.coefMinoration      = pension.coefMinoration
+            self.majorationEnfant    = pension.majorationPourEnfant
+            self.pensionBrute        = pension.pensionBrute
+            self.pensionNette        = pension.pensionNette
+        }
+    }
+    // régime général
+    @Published var general = General()
+    // régime complémentaire
+    @Published var agirc = Agirc()
+    
+    func update(with model : Model,
+                for member : Person) {
+        self.general.update(with: model, for: member)
+        self.agirc.update(with: model, for: member)
+    }
+}
+
+// MARK: - RetirementDetail View
+
+struct RetirementDetailView: View {
+
     // MARK: - Properties
     
     @EnvironmentObject private var model  : Model
     @EnvironmentObject private var member : Person
-    @ObservedObject private var viewModel = ViewModel()
+    @StateObject private var viewModel    = RetirementViewModel()
     
     var body: some View {
         Form {
@@ -96,65 +169,7 @@ struct RetirementDetailView: View {
     }
     
     func onAppear() {
-        // régime général
-        let adult = member as! Adult
-        guard let (tauxDePension,
-                   majorationEnfant,
-                   dureeDeReference,
-                   dureeAssurancePlafonne,
-                   dureeAssuranceDeplafonne,
-                   pensionBrute,
-                   pensionNette) =
-                model.retirementModel.regimeGeneral.pension(
-                    birthDate                : adult.birthDate,
-                    dateOfRetirement         : adult.dateOfRetirement,
-                    dateOfEndOfUnemployAlloc : adult.dateOfEndOfUnemployementAllocation(using: model),
-                    dateOfPensionLiquid      : adult.dateOfPensionLiquid,
-                    lastKnownSituation       : adult.lastKnownPensionSituation,
-                    nbEnfant                 : 3) else {
-            return
-        }
-        guard let nbTrimestreDecote =
-                model.retirementModel.regimeGeneral.nbTrimestreSurDecote(
-                    birthDate           : adult.birthDate,
-                    dureeAssurance      : dureeAssuranceDeplafonne,
-                    dureeDeReference    : dureeDeReference,
-                    dateOfPensionLiquid : adult.dateOfPensionLiquid) else {
-            return
-        }
-        viewModel.general.dateTauxPlein     =
-            model.retirementModel.regimeGeneral.dateAgeTauxPlein(
-                birthDate          : member.birthDate,
-                lastKnownSituation : (member as! Adult).lastKnownPensionSituation)
-        if viewModel.general.dateTauxPlein != nil {
-            viewModel.general.ageTauxPlein  = member.age(atDate: viewModel.general.dateTauxPlein!)
-        }
-        viewModel.general.sam               = (member as! Adult).lastKnownPensionSituation.sam
-        viewModel.general.majorationEnfant  = majorationEnfant / 100
-        viewModel.general.tauxDePension     = tauxDePension / 100
-        viewModel.general.nbTrimestreDecote = nbTrimestreDecote
-        viewModel.general.dureeDeReference  = dureeDeReference
-        viewModel.general.dureeAssurance    = dureeAssurancePlafonne
-        viewModel.general.pensionBrute      = pensionBrute
-        viewModel.general.pensionNette      = pensionNette
-        
-        // régime complémentaire
-        guard let pension =
-                model.retirementModel.regimeAgirc.pension(
-                    lastAgircKnownSituation : adult.lastKnownAgircPensionSituation,
-                    birthDate               : adult.birthDate,
-                    lastKnownSituation      : adult.lastKnownPensionSituation,
-                    dateOfRetirement        : adult.dateOfRetirement,
-                    dateOfEndOfUnemployAlloc: adult.dateOfEndOfUnemployementAllocation(using: model),
-                    dateOfPensionLiquid     : adult.dateOfPensionLiquid,
-                    nbEnfantNe              : adult.nbOfChildren(),
-                    nbEnfantACharge         : adult.nbOfFiscalChildren(during: adult.dateOfPensionLiquid.year)) else { return }
-        viewModel.agirc.projectedNbOfPoints = pension.projectedNbOfPoints
-        viewModel.agirc.valeurDuPoint       = model.retirementModel.regimeAgirc.valeurDuPoint
-        viewModel.agirc.coefMinoration      = pension.coefMinoration
-        viewModel.agirc.majorationEnfant    = pension.majorationPourEnfant
-        viewModel.agirc.pensionBrute        = pension.pensionBrute
-        viewModel.agirc.pensionNette        = pension.pensionNette
+        viewModel.update(with: model, for: member)
     }
 }
 
