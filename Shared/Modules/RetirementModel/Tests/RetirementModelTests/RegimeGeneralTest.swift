@@ -53,11 +53,11 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
     }
     
     func test_pension_devaluation_rate() {
-        XCTAssertEqual(2.0, RegimeGeneralTest.regimeGeneral.devaluationRate)
+        XCTAssertEqual(1.0, RegimeGeneralTest.regimeGeneral.devaluationRate)
     }
     
     func test_nb_Trim_Additional() {
-        XCTAssertEqual(4, RegimeGeneralTest.regimeGeneral.nbTrimAdditional)
+        XCTAssertEqual(0, RegimeGeneralTest.regimeGeneral.nbTrimAdditional)
     }
     
     func test_calcul_revaluation_Coef() {
@@ -66,7 +66,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         
         let coef = RegimeGeneralTest.regimeGeneral.revaluationCoef(during: thisYear,
                                                                    dateOfPensionLiquid: dateOfPensionLiquid)
-        XCTAssertEqual(pow((1.0 + -2.0/100.0), 10.0), coef)
+        XCTAssertEqual(pow((1.0 + -1.0/100.0), 10.0), coef)
     }
     
     func test_recherche_nb_Trim_Acquis_Apres_Period_Chomage_Non_Indemnise() {
@@ -138,9 +138,9 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         var extrapolationDuration : Int
         
         birthDate = date(year: 1964, month: 9, day: 22)
-        lastKnownSituation = RegimeGeneralSituation(atEndOf           : 2019,
-                                                    nbTrimestreAcquis : 135,
-                                                    sam               : 0.0)
+        lastKnownSituation = RegimeGeneralSituation(atEndOf           : 2020,
+                                                    nbTrimestreAcquis : 139,
+                                                    sam               : 37054.0)
         // Cessation d'activité 6 ans après la date du dernier relevé de situation
         extrapolationDuration = 6 // ans
         dateOfRetirement = extrapolationDuration.years.from(lastDayOf(year: 2019))!

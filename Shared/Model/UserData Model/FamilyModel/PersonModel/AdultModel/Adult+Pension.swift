@@ -27,7 +27,7 @@ extension Adult {
         mediumDateFormatter.string(from: dateOfPensionLiquid)
     } // computed
     
-    // MARK: - Methods
+   // MARK: - Methods
     
     /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime général
     /// - Parameter year: première année incluant des revenus

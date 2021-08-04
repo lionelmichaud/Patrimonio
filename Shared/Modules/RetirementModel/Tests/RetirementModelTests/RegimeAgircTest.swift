@@ -61,7 +61,7 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
     }
     
     func test_pension_devaluation_rate() {
-        XCTAssertEqual(2.0, RegimeAgircTest.regimeAgirc.devaluationRate)
+        XCTAssertEqual(1.0, RegimeAgircTest.regimeAgirc.devaluationRate)
     }
     
     func test_calcul_revaluation_Coef() {
@@ -70,7 +70,7 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
         
         let coef = RegimeAgircTest.regimeAgirc.revaluationCoef(during              : thisYear,
                                                                dateOfPensionLiquid : dateOfPensionLiquid)
-        XCTAssertEqual(pow((1.0 + -2.0/100.0), 10.0), coef)
+        XCTAssertEqual(pow((1.0 + -1.0/100.0), 10.0), coef)
     }
     
     func test_date_Age_Minimum_Agirc() {

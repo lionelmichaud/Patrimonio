@@ -124,10 +124,11 @@ struct RetirementDetailView: View {
     @StateObject private var viewModel    = RetirementViewModel()
     
     var body: some View {
-        Form {
+        let adult = member as! Adult
+        return Form {
             AmountView(label: "Pension annuelle brute", amount: viewModel.general.pensionBrute + viewModel.agirc.pensionBrute)
             AmountView(label: "Pension annuelle nette", amount: viewModel.general.pensionNette + viewModel.agirc.pensionNette, weight: .bold)
-            Section(header: Text("REGIME GENERAL").font(.subheadline)) {
+            Section(header: Text("REGIME GENERAL (liquidation le: \(adult.displayDateOfPensionLiquid) à \(generalLiquidAge(adult)))").font(.subheadline)) {
                 AmountView(label: "Salaire annuel moyen", amount: viewModel.general.sam, comment: "SAM")
                 AgeDateView(label: "Date du taux plein")
                 IntegerView(label: viewModel.general.nbTrimestreDecote >= 0 ? "Nombre de trimestres de surcote" : "Nombre de trimestres de décote",
@@ -139,7 +140,7 @@ struct RetirementDetailView: View {
                 AmountView(label: "Pension annuelle brute", amount: viewModel.general.pensionBrute, comment: "Brut = SAM x Trev x (1 + Menf) x Da/Dr")
                 AmountView(label: "Pension annuelle nette", amount: viewModel.general.pensionNette, weight: .bold, comment: "Net = Brut - Prélev sociaux")
             }
-            Section(header: Text("REGIME COMPLEMENTAIRE").font(.subheadline)) {
+            Section(header: Text("REGIME COMPLEMENTAIRE (liquidation le: \(adult.displayDateOfAgircPensionLiquid) à \(agircLiquidAge(adult)))").font(.subheadline)) {
                 IntegerView(label: "Nombre de points", integer: viewModel.agirc.projectedNbOfPoints, comment: "Npt")
                 AmountView(label: "Valeur de 1000 points", amount: viewModel.agirc.valeurDuPoint * 1000, comment: "Vpt")
                 PercentView(label: "Coeficient de minoration", percent: viewModel.agirc.coefMinoration, comment: "Cmin")
@@ -154,6 +155,22 @@ struct RetirementDetailView: View {
     }
     
     // MARK: - Methods
+    
+    func generalLiquidAge(_ adult: Adult) -> String {
+        if let year = adult.ageOfPensionLiquidComp.year, let month = adult.ageOfPensionLiquidComp.month {
+            return "\(year) ans \(month) mois"
+        } else {
+            return "`nil`"
+        }
+    }
+    
+    func agircLiquidAge(_ adult: Adult) -> String {
+        if let year = adult.ageOfAgircPensionLiquidComp.year, let month = adult.ageOfAgircPensionLiquidComp.month {
+            return "\(year) ans \(month) mois"
+        } else {
+            return "`nil`"
+        }
+    }
     
     func AgeDateView(label: String) -> some View {
         return HStack {

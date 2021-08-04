@@ -19,9 +19,9 @@
         },
         "nb_Of_Child_Birth"        : 0,
         "age_Of_Pension_Liquid" : {
-            "year"  : 62,
-            "month" : 0,
-            "day"   : 1,
+            "year" : 62,
+            "month": 0,
+            "day"  : 10,
             "calendar" : {
                 "locale" : {
                     "identifier" : "fr_FR"
@@ -35,14 +35,14 @@
             },
         },
         "regime_General_Situation" : {
-            "atEndOf"           : 2019,
-            "nbTrimestreAcquis" : 135,
-            "sam"               : 36698
+            "atEndOf"           : 2020,
+            "nbTrimestreAcquis" : 139,
+            "sam"               : 37054
         },
         "age_Of_Agirc_Pension_Liquid" : {
             "year" : 62,
             "month": 0,
-            "day"  : 1,
+            "day"  : 10,
             "calendar" : {
                 "locale" : {
                     "identifier" : "fr_FR"
@@ -56,9 +56,9 @@
             },
         },
         "regime_Agirc_Situation" : {
-            "atEndOf"     : 2018,
-            "nbPoints"    : 17907,
-            "pointsParAn" : 788
+            "atEndOf"     : 2020,
+            "nbPoints"    : 19484,
+            "pointsParAn" : 789
         },
         "date_Of_Retirement"           : "2022-01-01T23:00:00+01:00",
         "cause_Retirement"             : "PSE",
@@ -84,7 +84,7 @@
         "age_Of_Pension_Liquid" : {
             "year" : 62,
             "month": 0,
-            "day"  : 1,
+            "day"  : 20,
             "calendar" : {
                 "locale" : {
                     "identifier" : "fr_FR"
@@ -100,13 +100,13 @@
         },
         "regime_General_Situation" : {
             "atEndOf"           : 2019,
-            "nbTrimestreAcquis" : 143,
+            "nbTrimestreAcquis" : 145,
             "sam"               : 31857
         },
         "age_Of_Agirc_Pension_Liquid" : {
             "year" : 62,
             "month": 0,
-            "day"  : 1,
+            "day"  : 20,
             "calendar" : {
                 "locale" : {
                     "identifier" : "fr_FR"
@@ -122,7 +122,7 @@
         },
         "regime_Agirc_Situation" : {
             "atEndOf"     : 2013,
-            "nbPoints"    : 4428,
+            "nbPoints"    : 4429,
             "pointsParAn" : 0
         },
         "date_Of_Retirement"           : "2031-01-01T22:00:00Z",
