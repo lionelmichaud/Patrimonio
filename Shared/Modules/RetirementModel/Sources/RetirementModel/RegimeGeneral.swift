@@ -117,8 +117,8 @@ public class RegimeGeneral: Codable {
         self.model.fiscal = model
     }
 
-    /// Coefficient de réévaluation de la pension en prenant comme base 1.0
-    ///  la valeur à la date de liquidation de la pension.
+    /// Coefficient de réévaluation de la pension en prenant comme base 1.0:
+    /// la valeur à la date de liquidation de la pension.
     /// - Parameters:
     ///   - year: année de calcul du coefficient
     ///   - dateOfPensionLiquid: date de liquidation de la pension
@@ -168,7 +168,7 @@ public class RegimeGeneral: Codable {
     ///   - dureeAssurance: nombre de trimestres d'assurance obtenus
     ///   - dureeDeReference: nombre de trimestres de référence pour obtenir le taux plein
     ///   - dateOfPensionLiquid: date de demande de liquidation de la pension
-    /// - Returns: taux de reversion en tenant compte d'une décote éventuelle en %
+    /// - Returns: taux de reversion en tenant compte d'une décote éventuelle en % [0%, 100%]
     /// - Note: [service-public](https://www.service-public.fr/particuliers/vosdroits/F21552)
     func tauxDePension(birthDate           : Date,
                        dureeAssurance      : Int,
@@ -481,9 +481,9 @@ public class RegimeGeneral: Codable {
         return dateTousTrimestre
     }
     
-    /// Rend le coefficient de majoration de la pension pour enfants nés
+    /// Rend la majoration de la pension pour enfants nés en %
     /// - Parameter nbEnfant: nombre d'enfants nés
-    /// - Returns: coeffcient de majoration appliqué à la pension de retraite
+    /// - Returns: coeffcient de majoration appliqué à la pension de retraite [0%, 10%]
     func coefficientMajorationEnfant(nbEnfant: Int) -> Double {
         switch nbEnfant {
             case 3...:

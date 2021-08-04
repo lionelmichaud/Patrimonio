@@ -126,8 +126,8 @@ struct RetirementDetailView: View {
     var body: some View {
         let adult = member as! Adult
         return Form {
-            AmountView(label: "Pension annuelle brute", amount: viewModel.general.pensionBrute + viewModel.agirc.pensionBrute)
-            AmountView(label: "Pension annuelle nette", amount: viewModel.general.pensionNette + viewModel.agirc.pensionNette, weight: .bold)
+            AmountView(label: "Pension annuelle brute (non dévaluée)", amount: viewModel.general.pensionBrute + viewModel.agirc.pensionBrute)
+            AmountView(label: "Pension annuelle nette (non dévaluée)", amount: viewModel.general.pensionNette + viewModel.agirc.pensionNette, weight: .bold)
             Section(header: Text("REGIME GENERAL (liquidation le: \(adult.displayDateOfPensionLiquid) à \(generalLiquidAge(adult)))").font(.subheadline)) {
                 AmountView(label: "Salaire annuel moyen", amount: viewModel.general.sam, comment: "SAM")
                 AgeDateView(label: "Date du taux plein")
@@ -137,16 +137,16 @@ struct RetirementDetailView: View {
                 AmountView(label: "Majoration pour enfants", amount: viewModel.general.majorationEnfant, comment: "Menf")
                 IntegerView(label: "Durée d'assurance (trimestres)", integer: viewModel.general.dureeAssurance, comment: "Da")
                 IntegerView(label: "Durée de référence (trimestres)", integer: viewModel.general.dureeDeReference, comment: "Dr")
-                AmountView(label: "Pension annuelle brute", amount: viewModel.general.pensionBrute, comment: "Brut = SAM x Trev x (1 + Menf) x Da/Dr")
-                AmountView(label: "Pension annuelle nette", amount: viewModel.general.pensionNette, weight: .bold, comment: "Net = Brut - Prélev sociaux")
+                AmountView(label: "Pension annuelle brute (non dévaluée)", amount: viewModel.general.pensionBrute, comment: "Brut = SAM x Trev x (1 + Menf) x Da/Dr")
+                AmountView(label: "Pension annuelle nette (non dévaluée)", amount: viewModel.general.pensionNette, weight: .bold, comment: "Net = Brut - Prélev sociaux")
             }
             Section(header: Text("REGIME COMPLEMENTAIRE (liquidation le: \(adult.displayDateOfAgircPensionLiquid) à \(agircLiquidAge(adult)))").font(.subheadline)) {
                 IntegerView(label: "Nombre de points", integer: viewModel.agirc.projectedNbOfPoints, comment: "Npt")
                 AmountView(label: "Valeur de 1000 points", amount: viewModel.agirc.valeurDuPoint * 1000, comment: "Vpt")
                 PercentView(label: "Coeficient de minoration", percent: viewModel.agirc.coefMinoration, comment: "Cmin")
                 PercentView(label: "Majoration pour enfants", percent: viewModel.agirc.majorationEnfant, comment: "Menf")
-                AmountView(label: "Pension annuelle brute", amount: viewModel.agirc.pensionBrute, comment: "Brut = Npt x Vpt x Cmin + Menf")
-                AmountView(label: "Pension annuelle nette", amount: viewModel.agirc.pensionNette, weight: .bold, comment: "Net = Brut - Prélev sociaux")
+                AmountView(label: "Pension annuelle brute (non dévaluée)", amount: viewModel.agirc.pensionBrute, comment: "Brut = Npt x Vpt x Cmin + Menf")
+                AmountView(label: "Pension annuelle nette (non dévaluée)", amount: viewModel.agirc.pensionNette, weight: .bold, comment: "Net = Brut - Prélev sociaux")
             }
         }
         .navigationTitle("Retraite de \(member.displayName)")

@@ -46,7 +46,7 @@ extension RegimeGeneral {
     ///   - lastKnownSituation: dernière situation connue pour le régime général
     ///   - nbEnfant: nb d'enfant aus sens de la retraite (pour les majorations)
     ///   - year: année de calcul
-    /// - Returns: Les données relatives à la pension de retraite ou nil
+    /// - Returns: Pension brute (en € d'aujourd'hui) et nette (dévaluée annuellement jusqu'à la date de liquidation)
     public func pension(birthDate                : Date, // swiftlint:disable:this function_parameter_count
                         dateOfRetirement         : Date,
                         dateOfEndOfUnemployAlloc : Date?,
@@ -79,8 +79,9 @@ extension RegimeGeneral {
     ///   - dateOfPensionLiquid: date de demande de liquidation de la pension
     ///   - lastKnownSituation: dernière situation connue pour le régime général
     ///   - nbEnfant: nb d'enfant aus sens de la retraite (pour les majorations)
-    ///   - year: année de calcul
-    /// - Returns: Les données relatives à la pension de retraite ou nil
+    ///   - year: année de calcul de la valeur de la pension (dévaluation annuelle si <> `nil`)
+    /// - Returns: Pension brute et nette de charges (en € d'aujourd'hui si `year` = `nil`
+    ///             ou dévaluée annuellement jusqu'à la date de liquidation sinon)
     public func pension(birthDate                : Date, // swiftlint:disable:this function_parameter_count
                         dateOfRetirement         : Date,
                         dateOfEndOfUnemployAlloc : Date?,
