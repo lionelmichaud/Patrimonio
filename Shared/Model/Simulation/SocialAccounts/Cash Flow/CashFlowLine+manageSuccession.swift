@@ -19,7 +19,7 @@ extension CashFlowLine {
             var taxe: Double = 0
             successions.forEach { succession in
                 succession.inheritances.forEach { inheritance in
-                    if inheritance.person == member {
+                    if inheritance.personName == member.displayName {
                         taxe += inheritance.tax
                     }
                 }
@@ -37,7 +37,7 @@ extension CashFlowLine {
             taxe = 0
             lifeInsSuccessions.forEach { succession in
                 succession.inheritances.forEach { inheritance in
-                    if inheritance.person == member {
+                    if inheritance.personName == member.displayName {
                         taxe += inheritance.tax
                     }
                 }

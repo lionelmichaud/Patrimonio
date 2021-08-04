@@ -45,7 +45,7 @@ struct LegalSuccessionManager {
         guard let family = Patrimoin.family else {
             return Succession(kind         : .legal,
                               yearOfDeath  : year,
-                              decedent     : decedent,
+                              decedentName : decedent.displayName,
                               taxableValue : 0,
                               inheritances : [])
         }
@@ -80,11 +80,11 @@ struct LegalSuccessionManager {
             
             //            print("  Part d'héritage de \(conjointSurvivant.displayName) = \(brut.rounded()) (\((share*100.0).rounded())%)")
             //            print("    Taxe = \(tax.rounded())")
-            inheritances.append(Inheritance(person  : conjointSurvivant,
-                                            percent : share,
-                                            brut    : brut,
-                                            net     : brut - tax,
-                                            tax     : tax))
+            inheritances.append(Inheritance(personName : conjointSurvivant.displayName,
+                                            percent    : share,
+                                            brut       : brut,
+                                            net        : brut - tax,
+                                            tax        : tax))
         } else {
             // pas de conjoint survivant, les enfants se partagent l'héritage
             if family.nbOfChildrenAlive(atEndOf: year) > 0 {
@@ -94,7 +94,7 @@ struct LegalSuccessionManager {
                 // pas d'enfant survivant
                 return Succession(kind         : .legal,
                                   yearOfDeath  : year,
-                                  decedent     : decedent,
+                                  decedentName : decedent.displayName,
                                   taxableValue : totalTaxableInheritance,
                                   inheritances : [ ])
             }
@@ -114,18 +114,18 @@ struct LegalSuccessionManager {
                     
 //                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded()) (\(share.rounded())%)")
 //                    print("    Taxe = \(inheritance.taxe.rounded())")
-                    inheritances.append(Inheritance(person  : child,
-                                                    percent : share,
-                                                    brut    : brut,
-                                                    net     : inheritance.netAmount,
-                                                    tax     : inheritance.taxe))
+                    inheritances.append(Inheritance(personName : child.displayName,
+                                                    percent    : share,
+                                                    brut       : brut,
+                                                    net        : inheritance.netAmount,
+                                                    tax        : inheritance.taxe))
                 }
             }
         }
         //        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
         return Succession(kind         : .legal,
                           yearOfDeath  : year,
-                          decedent     : decedent,
+                          decedentName : decedent.displayName,
                           taxableValue : totalTaxableInheritance,
                           inheritances : inheritances)
     }

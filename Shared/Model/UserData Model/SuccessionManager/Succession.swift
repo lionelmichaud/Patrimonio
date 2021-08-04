@@ -22,7 +22,7 @@ struct Succession: Identifiable {
     // année de la succession
     let yearOfDeath  : Int
     // personne dont on fait la succession
-    let decedent     : Person
+    let decedentName : String
     // masses successorale
     let taxableValue : Double
     // liste des héritages par héritier
@@ -31,7 +31,7 @@ struct Succession: Identifiable {
     // dictionnaire des héritages net reçu par chaque héritier dans une succession
     var successorsInheritedNetValue: [String: Double] {
         inheritances.reduce(into: [:]) { counts, inheritance in
-            counts[inheritance.person.displayName, default: 0] += inheritance.net
+            counts[inheritance.personName, default: 0] += inheritance.net
         }
     }
     
@@ -54,7 +54,7 @@ extension Succession: CustomStringConvertible {
     public var description: String {
         """
         Type de succession:  \(kind.rawValue)
-        Défunt:              \(decedent.displayName)
+        Défunt:              \(decedentName)
         Année du décès:      \(yearOfDeath)
         Masses successorale: \(taxableValue.k€String)
         Héritiers:
@@ -85,7 +85,7 @@ extension Array where Element == Succession {
 // MARK: - Héritage d'une personne
 struct Inheritance {
     // héritier
-    var person  : Person
+    var personName: String
     // fraction de la masse successorale reçue en héritage
     var percent : Double // [0, 1]
     var brut    : Double
@@ -100,7 +100,7 @@ extension Inheritance: SuccessionCsvVisitableP {
 extension Inheritance: CustomStringConvertible {
     public var description: String {
         """
-        Héritier:      \(person.displayName)
+        Héritier:      \(personName)
         Pourcentage:   \(percent) %
         Héritage Brut: \(brut.k€String)
         Héritage Net:  \(net.k€String)

@@ -62,7 +62,7 @@ class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
             firstHeritier = (idx == element.inheritances.startIndex)
             table.append(String(element.yearOfDeath) + separator)
             table.append(element.kind.rawValue + separator)
-            table.append(element.decedent.displayName + separator)
+            table.append(element.decedentName + separator)
             table.append(String(Int(element.taxableValue/1000)) + separator)
             buildCsv(element: element.inheritances[idx])
             table.append(endOfLine)
@@ -84,7 +84,7 @@ class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
             header2.append("Net(k€)" + separator)
         }
         // construire table
-        table.append(element.person.displayName + separator)
+        table.append(element.personName + separator)
         table.append(String((element.percent * 100).percentString()) + separator)
         table.append(String(Int(element.brut/1000)) + separator)
         table.append(String(Int(-element.tax/1000)) + separator)
