@@ -5,6 +5,7 @@ import Statistics
 import Files
 import ModelEnvironment
 import Persistence
+import Succession
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.SocialAccounts")
 

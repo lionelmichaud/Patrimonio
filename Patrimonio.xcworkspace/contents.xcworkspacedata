@@ -53,6 +53,9 @@
       location = "group:Shared/Modules/AssetsModel">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/Succession">
+   </FileRef>
+   <FileRef
       location = "container:Patrimonio.xcodeproj">
    </FileRef>
    <FileRef

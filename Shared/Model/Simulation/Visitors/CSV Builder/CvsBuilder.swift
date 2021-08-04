@@ -31,7 +31,7 @@ class CsvBuilder {
         balanceSheetArray.accept(csvHeaderBuilderVisitor)
 
         // construction de la table
-        let csvTableBuilderVisitor = CsvBalanceSheetTableVisitor(using: model, withMode: mode)
+        let csvTableBuilderVisitor = BalanceSheetCsvTableVisitor(using: model, withMode: mode)
         balanceSheetArray.accept(csvTableBuilderVisitor)
 
         return String(describing: csvHeaderBuilderVisitor) + "\n" + String(describing: csvTableBuilderVisitor) + "\n"

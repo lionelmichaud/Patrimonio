@@ -10,6 +10,7 @@ import Foundation
 import FiscalModel
 import Ownership
 import AssetsModel
+import Succession
 
 struct LifeInsuranceSuccessionManager {
     /// Calcule la masse totale d'assurance vie de la succession d'une personne.
@@ -116,7 +117,7 @@ struct LifeInsuranceSuccessionManager {
         guard let family = Patrimoin.family else {
             return Succession(kind         : .lifeInsurance,
                               yearOfDeath  : year,
-                              decedent     : decedent,
+                              decedentName : decedent.displayName,
                               taxableValue : 0,
                               inheritances : [])
         }
@@ -158,11 +159,11 @@ struct LifeInsuranceSuccessionManager {
                 }
                 //                print("  Part d'héritage de \(member.displayName) = \(masse.rounded()) (\((masse/totalTaxableInheritanceValue*100.0).rounded()) %)")
                 //                print("    Taxe = \(heritage.taxe.rounded())")
-                inheritances.append(Inheritance(person  : member,
-                                                percent : masse / totalTaxableInheritanceValue,
-                                                brut    : masse,
-                                                net     : heritage.netAmount,
-                                                tax     : heritage.taxe))
+                inheritances.append(Inheritance(personName : member.displayName,
+                                                percent    : masse / totalTaxableInheritanceValue,
+                                                brut       : masse,
+                                                net        : heritage.netAmount,
+                                                tax        : heritage.taxe))
             }
         }
         
@@ -170,7 +171,7 @@ struct LifeInsuranceSuccessionManager {
         //        print("  Taxe totale  = ", inheritances.sum(for: \.tax).rounded())
         return Succession(kind         : .lifeInsurance,
                           yearOfDeath  : year,
-                          decedent     : decedent,
+                          decedentName : decedent.displayName,
                           taxableValue : totalTaxableInheritanceValue,
                           inheritances : inheritances)
     }

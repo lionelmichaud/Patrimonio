@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import Succession
 
 struct SuccessorsListView: View {
     var inheritances : [Inheritance]
 
     var body: some View {
         List {
-            ForEach(inheritances, id: \.person.id) { inheritence in
+            ForEach(inheritances, id: \.personName) { inheritence in
                 SuccessorGroupBox(inheritence: inheritence)
             }
         }
@@ -24,9 +25,10 @@ struct SuccessorsListView: View {
 
 struct SuccessorGroupBox : View {
     var inheritence: Inheritance
+    @EnvironmentObject private var family: Family
 
     var body: some View {
-        GroupBox(label: groupBoxLabel(person: inheritence.person).font(.headline)) {
+        GroupBox(label: groupBoxLabel(personName: inheritence.personName).font(.headline)) {
             Group {
                 //                PercentView(label   : "Part de la succession",
                 //                            percent : inheritence.percent)
@@ -46,20 +48,17 @@ struct SuccessorGroupBox : View {
         }
     }
 
-    func groupBoxLabel(person: Person) -> some View {
+    func groupBoxLabel(personName: String) -> some View {
         HStack {
-            Text(person.displayName)
+            Text(personName)
             Spacer()
-            Text(person is Adult ? "Conjoint" : "Enfant")
+            Text(family.member(withName: personName) is Adult ? "Conjoint" : "Enfant")
         }
     }
 }
 
 struct SuccessorGroupBox_Previews: PreviewProvider {
-    static let inheritence = Inheritance(person: Person(sexe: .male,
-                                                        givenName: "Lionel",
-                                                        familyName: "Michaud",
-                                                        birthDate: Date.now),
+    static let inheritence = Inheritance(personName: "M. Lionel MICHAUD",
                                          percent: 100.0,
                                          brut: 1,
                                          net: 2,

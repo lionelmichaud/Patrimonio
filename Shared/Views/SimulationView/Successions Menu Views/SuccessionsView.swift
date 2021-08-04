@@ -8,6 +8,7 @@
 
 import SwiftUI
 import ModelEnvironment
+import Succession
 
 struct SuccessionsView: View {
     @EnvironmentObject var simulation : Simulation
@@ -83,10 +84,11 @@ struct SuccessionGroupBox: View {
     var nature: String {
         succession.kind.rawValue
     }
+    @EnvironmentObject private var family: Family
 
     var body: some View {
-        GroupBox(label: Text("Succession \(nature) de \(succession.decedent.displayName) ") +
-                    Text("à l'âge de \(succession.decedent.age(atEndOf: succession.yearOfDeath)) ans ").fontWeight(.regular) +
+        GroupBox(label: Text("Succession \(nature) de \(succession.decedentName) ") +
+                    Text("à l'âge de \(family.ageOf(succession.decedentName, succession.yearOfDeath)) ans ").fontWeight(.regular) +
                     Text("en \(String(succession.yearOfDeath))").fontWeight(.regular)) {
             Group {
                 Group {
@@ -115,7 +117,7 @@ struct SuccessorsDisclosureGroup: View {
     var body: some View {
         DisclosureGroup(
             content: {
-                ForEach(inheritances, id: \.person.id) { inheritence in
+                ForEach(inheritances, id: \.personName) { inheritence in
                     SuccessorGroupBox(inheritence: inheritence)
                 }
             },

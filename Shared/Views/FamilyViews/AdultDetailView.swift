@@ -10,6 +10,7 @@ import SwiftUI
 import AppFoundation
 import FiscalModel
 import ModelEnvironment
+import Succession
 
 // MARK: - MemberDetailView / AdultDetailView
 

@@ -19,7 +19,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 /// with a complex object structure, such as a Composite tree. In this case, it
 /// might be helpful to store some intermediate state of the algorithm while
 /// executing visitor's methods over various objects of the structure.
-class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
+public class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
 
     private var header1 = ""
     private var header2 = ""
@@ -30,7 +30,7 @@ class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
     private let separator = "; "
     private let endOfLine = "\n"
 
-    internal init(successions: [Succession]) {
+    public init(successions: [Succession]) {
         self.successions = successions
 
         // si la table est vide alors quitter
@@ -45,7 +45,7 @@ class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
         }
     }
 
-    func buildCsv(element: Succession) {
+    public func buildCsv(element: Succession) {
         if firstSuccession {
             // construire entête
             header1.append(separator)
@@ -62,14 +62,14 @@ class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
             firstHeritier = (idx == element.inheritances.startIndex)
             table.append(String(element.yearOfDeath) + separator)
             table.append(element.kind.rawValue + separator)
-            table.append(element.decedent.displayName + separator)
+            table.append(element.decedentName + separator)
             table.append(String(Int(element.taxableValue/1000)) + separator)
             buildCsv(element: element.inheritances[idx])
             table.append(endOfLine)
         }
     }
 
-    func buildCsv(element: Inheritance) {
+    public func buildCsv(element: Inheritance) {
         if firstSuccession && firstHeritier {
             // construire entête
             header1.append("Héritier" + separator)
@@ -84,7 +84,7 @@ class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
             header2.append("Net(k€)" + separator)
         }
         // construire table
-        table.append(element.person.displayName + separator)
+        table.append(element.personName + separator)
         table.append(String((element.percent * 100).percentString()) + separator)
         table.append(String(Int(element.brut/1000)) + separator)
         table.append(String(Int(-element.tax/1000)) + separator)
@@ -92,7 +92,7 @@ class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
     }
 }
 extension SuccessionsCsvVisitor: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         self.header1 + "\n" + self.header2 + "\n" + self.table
     }
 }
