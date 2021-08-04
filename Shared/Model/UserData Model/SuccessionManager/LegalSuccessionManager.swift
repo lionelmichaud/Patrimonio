@@ -9,6 +9,7 @@
 import Foundation
 import FiscalModel
 import Ownership
+import Succession
 
 struct LegalSuccessionManager {
     /// Calcule l'actif net taxable à la succession d'une personne

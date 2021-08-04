@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Succession
 
 struct SuccessorsListView: View {
     var inheritances : [Inheritance]

@@ -7,26 +7,30 @@
 //
 
 import Foundation
+import AppFoundation
 
 // MARK: - Succession d'une personne
 
-enum SuccessionKindEnum: String {
+public enum SuccessionKindEnum: String {
     case legal         = "Légale"
     case lifeInsurance = "Assurance Vie"
 }
 
-struct Succession: Identifiable {
-    let id           = UUID()
+public struct Succession: Identifiable {
+    
+    // MARK: - Propeties
+    
+    public let id           = UUID()
     // nature
-    let kind: SuccessionKindEnum
+    public let kind: SuccessionKindEnum
     // année de la succession
-    let yearOfDeath  : Int
+    public let yearOfDeath  : Int
     // personne dont on fait la succession
-    let decedentName : String
+    public let decedentName : String
     // masses successorale
-    let taxableValue : Double
+    public let taxableValue : Double
     // liste des héritages par héritier
-    let inheritances : [Inheritance]
+    public let inheritances : [Inheritance]
     
     // dictionnaire des héritages net reçu par chaque héritier dans une succession
     var successorsInheritedNetValue: [String: Double] {
@@ -36,23 +40,37 @@ struct Succession: Identifiable {
     }
     
     // somme des héritages reçus par les héritiers dans une succession
-    var net: Double {
+    public var net: Double {
         inheritances.sum(for: \.net)
     }
     
     // somme des taxes payées par les héritiers dans une succession
-    var tax: Double {
+    public var tax: Double {
         inheritances.sum(for: \.tax)
+    }
+    
+    // MARK: - Initializer
+    
+    public init(kind         : SuccessionKindEnum,
+                yearOfDeath  : Int,
+                decedentName : String,
+                taxableValue : Double,
+                inheritances : [Inheritance]) {
+        self.kind = kind
+        self.yearOfDeath = yearOfDeath
+        self.decedentName = decedentName
+        self.taxableValue = taxableValue
+        self.inheritances = inheritances
     }
 }
 extension Succession: SuccessionCsvVisitableP {
-    func accept(_ visitor: SuccessionCsvVisitorP) {
+    public func accept(_ visitor: SuccessionCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
 extension Succession: CustomStringConvertible {
     public var description: String {
-        """
+        ("""
         Type de succession:  \(kind.rawValue)
         Défunt:              \(decedentName)
         Année du décès:      \(yearOfDeath)
@@ -60,13 +78,13 @@ extension Succession: CustomStringConvertible {
         Héritiers:
 
         """
-            + String(describing: inheritances)
+            + String(describing: inheritances))
             .withPrefixedSplittedLines("  ")
     }
 }
 extension Array where Element == Succession {
     // dictionnaire des héritages net reçu par chaque héritier sur un ensemble de successions
-    var successorsInheritedNetValue: [String: Double] {
+    public var successorsInheritedNetValue: [String: Double] {
         var globalDico: [String: Double] = [:]
         self.forEach { succession in
             let dico = succession.successorsInheritedNetValue
@@ -83,17 +101,34 @@ extension Array where Element == Succession {
 }
 
 // MARK: - Héritage d'une personne
-struct Inheritance {
+public struct Inheritance {
+    
+    // MARK: - Propeties
+    
     // héritier
-    var personName: String
+    public var personName: String
     // fraction de la masse successorale reçue en héritage
-    var percent : Double // [0, 1]
-    var brut    : Double
-    var net     : Double
-    var tax     : Double
+    public var percent : Double // [0, 1]
+    public var brut    : Double
+    public var net     : Double
+    public var tax     : Double
+    
+    // MARK: - Initializer
+    
+    public init(personName : String,
+                percent    : Double,
+                brut       : Double,
+                net        : Double,
+                tax        : Double) {
+        self.personName = personName
+        self.percent = percent
+        self.brut = brut
+        self.net = net
+        self.tax = tax
+    }
 }
 extension Inheritance: SuccessionCsvVisitableP {
-    func accept(_ visitor: SuccessionCsvVisitorP) {
+    public func accept(_ visitor: SuccessionCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
@@ -101,7 +136,7 @@ extension Inheritance: CustomStringConvertible {
     public var description: String {
         """
         Héritier:      \(personName)
-        Pourcentage:   \(percent) %
+        Pourcentage:   \(percent * 100) %
         Héritage Brut: \(brut.k€String)
         Héritage Net:  \(net.k€String)
         Droits:        \(tax.k€String)

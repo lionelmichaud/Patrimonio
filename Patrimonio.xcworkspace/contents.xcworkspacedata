@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Shared/Modules/Succession">
-   </FileRef>
-   <FileRef
       location = "group:Shared/Modules/Stateful">
    </FileRef>
    <FileRef
@@ -54,6 +51,9 @@
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/AssetsModel">
+   </FileRef>
+   <FileRef
+      location = "group:Shared/Modules/Succession">
    </FileRef>
    <FileRef
       location = "container:Patrimonio.xcodeproj">

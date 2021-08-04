@@ -21,6 +21,8 @@ class EconomyModelTests: XCTestCase {
         EconomyModelTests.economy = Economy(fromBundle : Bundle.module)
     }
     
+    // MARK: Tests
+
     func test_loading_from_module_bundle() throws {
         XCTAssertNoThrow(Economy.Model(fromFile   : "EconomyModelConfig.json",
                                        fromBundle : Bundle.module),

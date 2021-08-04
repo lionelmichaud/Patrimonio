@@ -3,6 +3,7 @@ import os
 import FiscalModel
 import NamedValue
 import ModelEnvironment
+import Succession
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CashFlow")
 
