@@ -311,8 +311,8 @@ public class RegimeGeneral: Codable {
     }
     
     /// Calcul la durée d'assurance qui sera obtenue à la date au plus tard entre:
-    /// (a) la date de fin d'activité professionnelle, non suivie de période de chomage (dateOfRetirement)
-    /// (b) la date de la fin d'indemnisation chômage après une période de travail (dateOfEndOfUnemployAlloc)
+    /// (a) la date de fin d'activité professionnelle, non suivie de période de chomage `dateOfRetirement`
+    /// (b) la date de la fin d'indemnisation chômage après une période de travail `dateOfEndOfUnemployAlloc`
     ///
     /// - Parameters:
     ///   - birthDate: date de naissance
@@ -348,8 +348,8 @@ public class RegimeGeneral: Codable {
             //   - La 1re période de chômage non indemnisé, qu'elle soit continue ou non, est prise en compte dans la limite d'un an et demi (6 trimestres).
             //   - Chaque période ultérieure de chômage non indemnisé est prise en compte, dans la limite d’un an,
             //     à condition qu’elle succède sans interruption à une période de chômage indemnisé.
-            //   - Cette deuxième limite est portée à 5 ans lorsque l’assuré justifie d’une durée de cotisation d’au moins 20 ans,
-            //     est âgé d’au moins 55 ans à la date où il cesse de bénéficier du revenu de remplacement et ne relève pas à nouveau d’un régime obligatoire d’assurance vieillesse.
+            //     - Cette deuxième limite est portée à 5 ans lorsque l’assuré justifie d’une durée de cotisation d’au moins 20 ans,
+            //       est âgé d’au moins 55 ans à la date où il cesse de bénéficier du revenu de remplacement et ne relève pas à nouveau d’un régime obligatoire d’assurance vieillesse.
             
             // Calcul de l'âge à la date où il cesse de bénéficier du revenu de remplacement
             guard let age = Date.calendar.dateComponents([.year, .month, .day],

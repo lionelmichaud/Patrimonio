@@ -101,6 +101,13 @@ struct AmountEditView: View {
 }
 
 // MARK: - Affichage d'un montant en €
+/// Affichage d'une valeur numérique Double
+/// - Parameter:
+///   - label: Libellé à gauche
+///   - amount: valeure numérique à afficher à droite
+///   - digit: Nombre de digit à afficher
+///   - weight: Taille de la police utilisée pour `label` et `amount`
+///   - comment: Commentaire à afficher en grisé à gauche de la valeur
 struct AmountView: View {
     let label   : String
     let amount  : Double
@@ -120,6 +127,13 @@ struct AmountView: View {
         }
     }
     
+    /// Création de la View
+    /// - Parameters:
+    ///   - label: Libellé à gauche
+    ///   - amount: valeure numérique à afficher à droite
+    ///   - digit: Nombre de digit à afficher
+    ///   - weight: Taille de la police utilisée pour `label` et `amount`
+    ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
     init(label   : String,
          amount  : Double,
          digit   : Int         = 0,
