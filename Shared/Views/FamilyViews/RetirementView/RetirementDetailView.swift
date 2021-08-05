@@ -30,6 +30,7 @@ class RetirementViewModel: ObservableObject {
         mutating func update(with model : Model,
                              for member : Person) {
             let adult = member as! Adult
+            // TODO: - Nombre d'enfants nés codé en dur pour prendre en compte le décès d'Isaline
             guard let (tauxDePension,
                        majorationEnfant,
                        dureeDeReference,
@@ -83,6 +84,7 @@ class RetirementViewModel: ObservableObject {
         mutating func update(with model : Model,
                              for member : Person) {
             let adult = member as! Adult
+            // TODO: - Nombre d'enfants nés codé en dur pour prendre en compte le décès d'Isaline
             guard let pension =
                     model.retirementModel.regimeAgirc.pension(
                         lastAgircKnownSituation : adult.lastKnownAgircPensionSituation,
@@ -91,7 +93,7 @@ class RetirementViewModel: ObservableObject {
                         dateOfRetirement        : adult.dateOfRetirement,
                         dateOfEndOfUnemployAlloc: adult.dateOfEndOfUnemployementAllocation(using: model),
                         dateOfPensionLiquid     : adult.dateOfPensionLiquid,
-                        nbEnfantNe              : adult.nbOfChildren(),
+                        nbEnfantNe              : 3,
                         nbEnfantACharge         : adult.nbOfFiscalChildren(during: adult.dateOfPensionLiquid.year)) else { return }
             self.projectedNbOfPoints = pension.projectedNbOfPoints
             self.valeurDuPoint       = model.retirementModel.regimeAgirc.valeurDuPoint
@@ -155,12 +157,12 @@ struct RetirementDetailView: View {
             Section(header: Text("REGIME COMPLEMENTAIRE (liquidation le: \(adult.displayDateOfAgircPensionLiquid) à \(agircLiquidAge(adult)))").font(.subheadline)) {
                 IntegerView(label: "Nombre de points",
                             integer: viewModel.agirc.projectedNbOfPoints, comment: "Npt")
-                AmountView(label: "Valeur de 1000 points",
-                           amount: viewModel.agirc.valeurDuPoint * 1000, comment: "Vpt")
-                PercentView(label: "Coeficient de minoration",
+                AmountView(label: "Valeur du point",
+                           amount: viewModel.agirc.valeurDuPoint, digit: 3, comment: "Vpt")
+                PercentView(label: "Coeficient de minoration (en \(adult.dateOfPensionLiquid.year))",
                             percent: viewModel.agirc.coefMinoration, comment: "Cmin")
-                PercentView(label: "Majoration pour enfants",
-                            percent: viewModel.agirc.majorationEnfant, comment: "Menf")
+                AmountView(label: "Majoration pour enfants nés / à charge en \(adult.dateOfPensionLiquid.year)",
+                           amount: viewModel.agirc.majorationEnfant, comment: "Menf")
                 AmountView(label: "Pension annuelle brute (non dévaluée)",
                            amount: viewModel.agirc.pensionBrute, comment: "Brut = Npt x Vpt x Cmin + Menf")
                 AmountView(label: "Pension annuelle nette (non dévaluée)",

@@ -47,6 +47,7 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
     }
     
     // MARK: Tests
+    
     func test_loading_from_module_bundle() {
         XCTAssertNoThrow(RegimeAgirc.Model(fromFile   : "RegimeAgircModel.json",
                                            fromBundle : Bundle.module),
@@ -60,7 +61,23 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
                                                keyEncodingStrategy  : .useDefaultKeys)
     }
     
-    func test_pension_devaluation_rate() {
+    func test_valeur_du_point() {
+        XCTAssertEqual(1.2714, RegimeAgircTest.regimeAgirc.valeurDuPoint)
+        RegimeAgircTest.regimeAgirc.valeurDuPoint = 2.0
+        XCTAssertEqual(2.0, RegimeAgircTest.regimeAgirc.valeurDuPoint)
+        RegimeAgircTest.regimeAgirc.valeurDuPoint = 1.2714
+        XCTAssertEqual(1.2714, RegimeAgircTest.regimeAgirc.valeurDuPoint)
+    }
+    
+    func test_age_minimum() {
+        XCTAssertEqual(57, RegimeAgircTest.regimeAgirc.ageMinimum)
+        RegimeAgircTest.regimeAgirc.ageMinimum = 60
+        XCTAssertEqual(60, RegimeAgircTest.regimeAgirc.ageMinimum)
+        RegimeAgircTest.regimeAgirc.ageMinimum = 57
+        XCTAssertEqual(57, RegimeAgircTest.regimeAgirc.ageMinimum)
+    }
+    
+   func test_pension_devaluation_rate() {
         XCTAssertEqual(1.0, RegimeAgircTest.regimeAgirc.devaluationRate)
     }
     
@@ -68,17 +85,157 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
         let dateOfPensionLiquid : Date! = 10.years.ago
         let thisYear = Date.now.year
         
+        let devaluationRate = RegimeAgircTest.regimeAgirc.devaluationRate
+        XCTAssertEqual(1.0, devaluationRate)
+
+        let revaluationCoef = RegimeAgircTest.regimeAgirc.yearlyRevaluationRate
+        XCTAssertEqual(-1.0, revaluationCoef)
+        
         let coef = RegimeAgircTest.regimeAgirc.revaluationCoef(during              : thisYear,
                                                                dateOfPensionLiquid : dateOfPensionLiquid)
-        XCTAssertEqual(pow((1.0 + -1.0/100.0), 10.0), coef)
+        XCTAssertEqual(pow((1.0 + revaluationCoef/100.0), 10.0), coef)
+        
+//        XCTAssertThrowsError(RegimeAgircTest.regimeAgirc.revaluationCoef(during              : thisYear - 1,
+//                                                                         dateOfPensionLiquid : dateOfPensionLiquid))
     }
     
-    func test_date_Age_Minimum_Agirc() {
-        var birthDate           : Date
-        var date                : Date?
+    // MARK: - CAS REELS A VERIFIER AVEC MAREL
+ 
+    func test_cas_lionel_sans_chomage_62_ans() throws {
+        let birthDate = self.date(year: 1964, month: 9, day: 22)
+        let nbTrimestreAcquis = 139
+        let sam               = 37054.0
+        let atEndOf     = 2020
+        let nbPoints    = 19484
+        let pointsParAn = 789
+
+        // dernier relevé connu des caisses de retraite
+        let lastKnownSituation = RegimeGeneralSituation(atEndOf           : atEndOf,
+                                                        nbTrimestreAcquis : nbTrimestreAcquis,
+                                                        sam               : sam)
+        let lastAgircKnownSituation = RegimeAgircSituation(atEndOf : atEndOf,
+                                                           nbPoints    : nbPoints,
+                                                           pointsParAn : pointsParAn)
         
-        birthDate = self.date(year: 1964, month: 9, day: 22)
-        date = RegimeAgircTest.regimeAgirc.dateAgeMinimumAgirc(birthDate: birthDate)
+        // Cessation d'activité à 62 ans + ce qu'il faut pour acquérir le dernier trimestre plein
+        let dateOfPensionLiquid = (62.years + 10.days).from(birthDate)!
+        let dateOfRetirement    = dateOfPensionLiquid
+        
+        // valeur du point
+        let valeurDuPoint = RegimeAgircTest.regimeAgirc.valeurDuPoint
+        XCTAssertEqual(1.2714, valeurDuPoint)
+        
+        /// Projection du nombre de points Agirc sur la base du dernier relevé de points et de la prévision de carrière future
+        let projectedNumberOfPoints = try XCTUnwrap(RegimeAgircTest.regimeAgirc
+                                                        .projectedNumberOfPoints(
+                                                            lastAgircKnownSituation  : lastAgircKnownSituation,
+                                                            dateOfRetirement         : dateOfPensionLiquid,
+                                                            dateOfEndOfUnemployAlloc : nil),
+                                                    "Failed projectedNumberOfPoints")
+        let dateReleve = lastDayOf(year: atEndOf)
+        let delta = Date.calendar.dateComponents([.year, .month, .day],
+                                                 from: dateReleve,
+                                                 to  : dateOfPensionLiquid)
+        var nbPointsAdded = delta.year! * pointsParAn
+        nbPointsAdded += Int((delta.month!.double() / 12.0) * pointsParAn.double()) // mois pleins
+        let nbPointTheory = lastAgircKnownSituation.nbPoints + nbPointsAdded
+        XCTAssertEqual(nbPointTheory, projectedNumberOfPoints)
+        
+        /// Calcul le coefficient de minoration ou de majoration de la pension complémentaire selon
+        let coefMinoration = try XCTUnwrap(RegimeAgircTest.regimeAgirc
+                                            .coefMinorationMajoration(
+                                                birthDate                : birthDate,
+                                                lastKnownSituation       : lastKnownSituation,
+                                                dateOfRetirement         : dateOfRetirement,
+                                                dateOfEndOfUnemployAlloc : nil,
+                                                dateOfPensionLiquid      : dateOfPensionLiquid,
+                                                during                   : dateOfPensionLiquid.year))
+        // 0.78: 20 trim manquant pour atteindre 67 ans
+        // 0.93:  7 trim manquant pour le taux plein à 63 ans et 9 mois
+        let coefTheory = max(0.93, 0.78)
+        XCTAssertEqual(coefTheory, coefMinoration)
+        
+        // calcul pension avant majoration
+        let pensionAvantMajorationPourEnfant = projectedNumberOfPoints.double() * valeurDuPoint * coefMinoration
+        XCTAssertEqual(28401.0, pensionAvantMajorationPourEnfant.rounded())
+        print(pensionAvantMajorationPourEnfant)
+        
+        // Calcul de la majoration pour enfant nés
+        let nbEnfantNe = 3
+        let coefEnfantNe = RegimeAgircTest.regimeAgirc
+            .coefMajorationPourEnfantNe(nbEnfantNe: nbEnfantNe)
+        XCTAssertEqual(1.1, coefEnfantNe)
+
+        // Calcul de la majoration pour enfant à charge (non plafonnée)
+        let nbEnfantACharge = 2 // 3 en 2026
+        let coefEnfantACharge = RegimeAgircTest.regimeAgirc
+            .coefMajorationPourEnfantACharge(nbEnfantACharge: nbEnfantACharge)
+        XCTAssertEqual(1.1, coefEnfantACharge)
+
+        // Pension = Nombre de points X Valeurs du point X Coefficient de minoration X Coefficient de majoration enfants
+        let pensionBrute = pensionAvantMajorationPourEnfant * coefEnfantACharge
+        XCTAssertEqual(31241.0, pensionBrute.rounded())
+        
+        let during = dateOfPensionLiquid.year
+        let pension = try XCTUnwrap(RegimeAgircTest.regimeAgirc.pension(
+                                        lastAgircKnownSituation  : lastAgircKnownSituation,
+                                        birthDate                : birthDate,
+                                        lastKnownSituation       : lastKnownSituation,
+                                        dateOfRetirement         : dateOfRetirement,
+                                        dateOfEndOfUnemployAlloc : nil,
+                                        dateOfPensionLiquid      : dateOfPensionLiquid,
+                                        nbEnfantNe               : nbEnfantNe,
+                                        nbEnfantACharge          : nbEnfantACharge,
+                                        during                   : during))
+        XCTAssertEqual(pension.projectedNbOfPoints, projectedNumberOfPoints)
+        XCTAssertEqual(pension.coefMinoration, coefMinoration)
+        XCTAssertEqual(pension.majorationPourEnfant, pensionAvantMajorationPourEnfant * (coefEnfantACharge-1.0))
+        XCTAssertEqual(pension.pensionBrute, pensionBrute)
+
+        print("CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:")
+        print("  - Nombre de points projetés = \(pension.projectedNbOfPoints)")
+        print("  - Majoration pour enfants   = \(pension.majorationPourEnfant.€String)")
+        print("  - Coef de minoration        = \(coefMinoration)")
+        print("  Pension Brute annuelle  = \(pension.pensionBrute.€String)")
+        print("  Pension Brute mensuelle = \((pension.pensionBrute / 12.0).€String)")
+        print("  Pension Nette annuelle  = \(pension.pensionNette.€String)")
+        print("  Pension Nette mensuelle = \((pension.pensionNette / 12.0).€String)")
+        
+        //  CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:
+        //    - Nombre de points projetés = 24020
+        //    - Majoration pour enfants   = 2 840 €
+        //    - Coef de minoration        = 0.93
+        //  Pension Brute annuelle  = 31 241 €
+        //  Pension Brute mensuelle =  2 603 €
+        //  Pension Nette annuelle  = 28 086 €
+        //  Pension Nette mensuelle =  2 341 €
+    }
+    
+    func test_cas_lionel_avec_chomage_62_ans() throws {
+        let birthDate = self.date(year: 1964, month: 9, day: 22)
+        let nbTrimestreAcquis = 139
+        let sam               = 37054.0
+        let atEndOf     = 2020
+        let nbPoints    = 19484
+        let pointsParAn = 789
+        
+        // dernier relevé connu des caisses de retraite
+        let lastKnownSituation = RegimeGeneralSituation(atEndOf           : atEndOf,
+                                                        nbTrimestreAcquis : nbTrimestreAcquis,
+                                                        sam               : sam)
+        let lastAgircKnownSituation = RegimeAgircSituation(atEndOf : atEndOf,
+                                                           nbPoints    : nbPoints,
+                                                           pointsParAn : pointsParAn)
+        
+        // Cessation d'activité à 62 ans + ce qu'il faut pour acquérir le dernier trimestre plein
+        let dateOfPensionLiquid = (62.years + 10.days).from(birthDate)!
+    }
+
+    // MARK: - FIN CAS REELS
+    
+    func test_date_Age_Minimum_Agirc() {
+        let birthDate = self.date(year: 1964, month: 9, day: 22)
+        let date      = RegimeAgircTest.regimeAgirc.dateAgeMinimumAgirc(birthDate: birthDate)
         XCTAssertNotNil(date)
         XCTAssertEqual(1964 + 57, date!.year)
         XCTAssertEqual(9, date!.month)
@@ -117,38 +274,52 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
             nbTrimManquantPourTauxPlein : 19,
             nbTrimPostAgeLegalMin       : 8)
         XCTAssertEqual(0.88, coef)
+        // liquidation à 62 ans
+        coef = RegimeAgircTest.regimeAgirc.coefDeMinorationApresAgeLegal(
+            nbTrimManquantPourTauxPlein : 7,
+            nbTrimPostAgeLegalMin       : 0)
+        XCTAssertEqual(max(0.93, 0.78), coef)
     }
     
     func test_projected_Number_Of_Points_sans_chomage() throws {
+        let atEndOf     = 2020
+        let nbPoints    = 19484
+        let pointsParAn = 789
         var lastAgircKnownSituation  : RegimeAgircSituation
         var dateOfRetirement         : Date
         var nbPointsFuturs : Int
         var nbPointTheory  : Int
         
         // pas de période de chômage
-        lastAgircKnownSituation = RegimeAgircSituation(atEndOf     : 2018,
-                                                       nbPoints    : 135,
-                                                       pointsParAn : 788)
+        lastAgircKnownSituation = RegimeAgircSituation(atEndOf     : atEndOf,
+                                                       nbPoints    : nbPoints,
+                                                       pointsParAn : pointsParAn)
         dateOfRetirement = date(year: 2022, month: 1, day: 1)
-        nbPointsFuturs = try XCTUnwrap(RegimeAgircTest.regimeAgirc.projectedNumberOfPoints(
-                                        lastAgircKnownSituation  : lastAgircKnownSituation,
-                                        dateOfRetirement         : dateOfRetirement,
-                                        dateOfEndOfUnemployAlloc : nil))
+        nbPointsFuturs = try XCTUnwrap(RegimeAgircTest.regimeAgirc
+                                        .projectedNumberOfPoints(
+                                            lastAgircKnownSituation  : lastAgircKnownSituation,
+                                            dateOfRetirement         : dateOfRetirement,
+                                            dateOfEndOfUnemployAlloc : nil),
+                                       "Failed projectedNumberOfPoints")
         nbPointTheory = lastAgircKnownSituation.nbPoints +
-            (2021 - 2018) * lastAgircKnownSituation.pointsParAn
+            (2021 - atEndOf) * lastAgircKnownSituation.pointsParAn
         XCTAssertEqual(nbPointTheory, nbPointsFuturs)
-
+        
         // date de cessation d'activité antérieure à la date du dernier relevé de points
         dateOfRetirement = date(year: 2018, month: 1, day: 1)
-        nbPointsFuturs = try XCTUnwrap(RegimeAgircTest.regimeAgirc.projectedNumberOfPoints(
-                                        lastAgircKnownSituation  : lastAgircKnownSituation,
-                                        dateOfRetirement         : dateOfRetirement,
-                                        dateOfEndOfUnemployAlloc : nil))
+        nbPointsFuturs = try XCTUnwrap(RegimeAgircTest.regimeAgirc
+                                        .projectedNumberOfPoints(
+                                            lastAgircKnownSituation  : lastAgircKnownSituation,
+                                            dateOfRetirement         : dateOfRetirement,
+                                            dateOfEndOfUnemployAlloc : nil))
         nbPointTheory = lastAgircKnownSituation.nbPoints
         XCTAssertEqual(nbPointTheory, nbPointsFuturs)
     }
     
     func test_calcul_projected_Number_Of_Points_avec_chomage() throws {
+        let atEndOf     = 2020
+        let nbPoints    = 19484
+        let pointsParAn = 789
         var lastAgircKnownSituation  : RegimeAgircSituation
         var dateOfRetirement         : Date
         var dateOfEndOfUnemployAlloc : Date!
@@ -156,26 +327,28 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
         var nbPointTheory  : Int
         
         // avec période de chômage
-        lastAgircKnownSituation = RegimeAgircSituation(atEndOf     : 2018,
-                                                       nbPoints    : 17907,
-                                                       pointsParAn : 788)
+        lastAgircKnownSituation = RegimeAgircSituation(atEndOf     : atEndOf,
+                                                       nbPoints    : nbPoints,
+                                                       pointsParAn : pointsParAn)
         dateOfRetirement         = date(year : 2022, month : 1, day : 1)
         dateOfEndOfUnemployAlloc = 3.years.from(dateOfRetirement)!
-        nbPointsFuturs = try XCTUnwrap(RegimeAgircTest.regimeAgirc.projectedNumberOfPoints(
-                                        lastAgircKnownSituation  : lastAgircKnownSituation,
-                                        dateOfRetirement         : dateOfRetirement,
-                                        dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc))
+        nbPointsFuturs = try XCTUnwrap(RegimeAgircTest.regimeAgirc
+                                        .projectedNumberOfPoints(
+                                            lastAgircKnownSituation  : lastAgircKnownSituation,
+                                            dateOfRetirement         : dateOfRetirement,
+                                            dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc))
         nbPointTheory = lastAgircKnownSituation.nbPoints +
-            (2021 - 2018) * lastAgircKnownSituation.pointsParAn +
+            (2021 - atEndOf) * lastAgircKnownSituation.pointsParAn +
             (3) * lastAgircKnownSituation.pointsParAn
         XCTAssertEqual(nbPointTheory, nbPointsFuturs)
         
-        dateOfRetirement         = date(year : 2018, month : 1, day : 1)
+        dateOfRetirement         = date(year : atEndOf, month : 1, day : 1)
         dateOfEndOfUnemployAlloc = 3.years.from(dateOfRetirement)!
-        nbPointsFuturs = try XCTUnwrap(RegimeAgircTest.regimeAgirc.projectedNumberOfPoints(
-                                        lastAgircKnownSituation  : lastAgircKnownSituation,
-                                        dateOfRetirement         : dateOfRetirement,
-                                        dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc))
+        nbPointsFuturs = try XCTUnwrap(RegimeAgircTest.regimeAgirc
+                                        .projectedNumberOfPoints(
+                                            lastAgircKnownSituation  : lastAgircKnownSituation,
+                                            dateOfRetirement         : dateOfRetirement,
+                                            dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc))
         nbPointTheory = lastAgircKnownSituation.nbPoints +
             (3 - 1) * lastAgircKnownSituation.pointsParAn
         XCTAssertEqual(nbPointTheory, nbPointsFuturs)
@@ -183,10 +356,11 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
         // date de fin de chomage antérieure à la date du dernier relevé de points
         dateOfRetirement = date(year: 2014, month: 1, day: 1)
         dateOfEndOfUnemployAlloc = 3.years.from(dateOfRetirement)!
-        nbPointsFuturs = try XCTUnwrap(RegimeAgircTest.regimeAgirc.projectedNumberOfPoints(
-                                        lastAgircKnownSituation  : lastAgircKnownSituation,
-                                        dateOfRetirement         : dateOfRetirement,
-                                        dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc))
+        nbPointsFuturs = try XCTUnwrap(RegimeAgircTest.regimeAgirc
+                                        .projectedNumberOfPoints(
+                                            lastAgircKnownSituation  : lastAgircKnownSituation,
+                                            dateOfRetirement         : dateOfRetirement,
+                                            dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc))
         nbPointTheory = lastAgircKnownSituation.nbPoints
         XCTAssertEqual(nbPointTheory, nbPointsFuturs)
     }

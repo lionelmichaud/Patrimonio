@@ -37,6 +37,7 @@ extension Adult {
     func pensionRegimeGeneral(during year: Int, using model: Model)
     -> (brut: Double, net: Double) {
         // pension du régime général
+        // TODO: - Nombre d'enfants codé en dur pour prendre en compte le décès d'Isaline
         if let (brut, net) =
             model.retirementModel.regimeGeneral.pension(
                 birthDate                : birthDate,
@@ -53,6 +54,7 @@ extension Adult {
     }
     func pensionRegimeGeneral(using model: Model) -> (brut: Double, net: Double) {
         // pension du régime général
+        // TODO: - Nombre d'enfants codé en dur pour prendre en compte le décès d'Isaline
         if let (brut, net) =
             model.retirementModel.regimeGeneral.pension(
                 birthDate                : birthDate,

@@ -85,7 +85,7 @@
                 "date"    : "2021-01-28T23:00:00+01:00",
                 "comment" : null
             },
-            "gridAvant62" : [
+            "gridAvantAgeLegal" : [
                 {
                     "ndTrimAvantAgeLegal" : 0,
                     "coef"                : 0.78
@@ -171,7 +171,7 @@
                     "coef"                : 0.43
                 }
             ],
-            "gridApres62" : [
+            "gridApresAgelegal" : [
                 {
                     "nbTrimManquant"     : 0,
                     "ndTrimPostAgeLegal" : 20,

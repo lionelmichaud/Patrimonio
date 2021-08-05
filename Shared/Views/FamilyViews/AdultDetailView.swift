@@ -170,7 +170,6 @@ private struct RevenuSectionView: View {
                         AmountView(label : "Charges (assurance, frais bancaires, services, CFE)", amount : viewModel.insurance)
                         AmountView(label : "BNC net de prélèvements sociaux et de charges (à vivre)", amount : viewModel.revenueLiving)
                         AmountView(label : "BNC net imposable (après abattement)", amount : viewModel.revenueTaxable)
-                        
                     }
                     // allocation chomage
                     if viewModel.hasUnemployementAllocationPeriod {

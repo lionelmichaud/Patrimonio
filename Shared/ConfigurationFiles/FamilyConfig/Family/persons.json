@@ -84,7 +84,7 @@
         "age_Of_Pension_Liquid" : {
             "year" : 62,
             "month": 0,
-            "day"  : 20,
+            "day"  : 15,
             "calendar" : {
                 "locale" : {
                     "identifier" : "fr_FR"

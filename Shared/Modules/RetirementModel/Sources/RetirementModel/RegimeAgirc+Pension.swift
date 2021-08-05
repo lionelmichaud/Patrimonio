@@ -84,13 +84,14 @@ extension RegimeAgirc {
         let pensionAvantMajorationPourEnfant = projectedNumberOfPoints.double() * valeurDuPoint * coefMinoration
         
         // Calcul de la majoration pour enfant nés
-        let majorPourEnfantNe = majorationPourEnfantNe(
-            pensionBrute : pensionAvantMajorationPourEnfant,
-            nbEnfantNe   : nbEnfantNe)
+        let majorPourEnfantNe =
+            majorationPourEnfantNe(
+                pensionBrute : pensionAvantMajorationPourEnfant,
+                nbEnfantNe   : nbEnfantNe)
         
         // Calcul de la majoration pour enfant à charge (non plafonnée)
-        let coefMajorationEnfantACharge = coefMajorationPourEnfantACharge(
-            nbEnfantACharge : nbEnfantACharge)
+        let coefMajorationEnfantACharge =
+            coefMajorationPourEnfantACharge(nbEnfantACharge : nbEnfantACharge)
         let majorPourEnfantACharge =
             pensionAvantMajorationPourEnfant * (coefMajorationEnfantACharge - 1.0)
         

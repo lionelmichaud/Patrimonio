@@ -86,15 +86,18 @@ public class RegimeGeneral: Codable {
     private static var simulationMode: SimulationModeEnum = .deterministic
     // dependencies to other Models
 
-    var devaluationRate: Double { // %
+    // En % [1, 100]
+    var devaluationRate: Double {
         model.socioEconomy.pensionDevaluationRate(withMode: RegimeGeneral.simulationMode)
     }
     
-    var nbTrimAdditional: Double { // %
+    // En % [1, 100]
+    var nbTrimAdditional: Double { // % [1, 100]
         model.socioEconomy.nbTrimTauxPlein(withMode: RegimeGeneral.simulationMode)
     }
     
-    var yearlyRevaluationRate: Double { // %
+    // En % [1, 100]
+    var yearlyRevaluationRate: Double { // % [1, 100]
         // on ne tient pas compte de l'inflation car les dépenses ne sont pas inflatées
         // donc les revenus non plus s'ils sont supposés progresser comme l'inflation
         // on ne tient donc compte que du delta par rapport à l'inflation
@@ -424,7 +427,7 @@ public class RegimeGeneral: Codable {
     ///   - lastKnownSituation: dernière situation connue (année, nombre de trimestres de cotisation acquis)
     ///   - dateOfRetirement: date de cessation d'activité
     ///   - dateOfEndOfUnemployAlloc: date de la fin d'indemnisation chômage après une période de travail
-    /// - Returns: nb de trimestre manquantà la date prévisionnelle de demande de liquidation de la pension de retraite pour obtenir le taux plein
+    /// - Returns: nb de trimestre manquant à la date prévisionnelle de demande de liquidation de la pension de retraite pour obtenir le taux plein
     /// - Note: [la-retraite-en-clair](https://www.la-retraite-en-clair.fr/parcours-professionnel-regimes-retraite/periode-inactivite-retraite/chomage-retraite)
     func nbTrimManquantPourTauxPlein(birthDate                : Date,
                                      lastKnownSituation       : RegimeGeneralSituation,

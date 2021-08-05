@@ -61,12 +61,12 @@ public class RegimeAgirc: Codable {
     
     public struct Model: JsonCodableToBundleP, VersionableP {
         enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
-            case version, gridAvant62, gridApres62, valeurDuPoint, ageMinimum, majorationPourEnfant
+            case version, gridAvantAgeLegal, gridApresAgelegal, valeurDuPoint, ageMinimum, majorationPourEnfant
         }
         
         public var version       : Version
-        let gridAvant62          : [SliceAvantAgeLegal]
-        let gridApres62          : [SliceApresAgeLegal]
+        let gridAvantAgeLegal    : [SliceAvantAgeLegal]
+        let gridApresAgelegal    : [SliceApresAgeLegal]
         var valeurDuPoint        : Double // 1.2714
         var ageMinimum           : Int    // 57
         let majorationPourEnfant : MajorationPourEnfant
@@ -174,7 +174,7 @@ public class RegimeAgirc: Codable {
     /// - Parameter ndTrimAvantAgeLegal: nb de trimestres entre la date de liquidation Agirc et la date de l'age légal
     /// - Returns: coefficient de minoration de la pension
     func coefDeMinorationAvantAgeLegal(ndTrimAvantAgeLegal: Int) -> Double? {
-        model.gridAvant62.last(\.coef, where: \.ndTrimAvantAgeLegal, <=, ndTrimAvantAgeLegal)
+        model.gridAvantAgeLegal.last(\.coef, where: \.ndTrimAvantAgeLegal, <=, ndTrimAvantAgeLegal)
     }
     
     /// Calcul du coefficient de minoration de la pension Agirc si la date de liquidation est après l'age légal (62 ans)
@@ -185,13 +185,13 @@ public class RegimeAgirc: Codable {
     func coefDeMinorationApresAgeLegal(nbTrimManquantPourTauxPlein : Int,
                                        nbTrimPostAgeLegalMin       : Int) -> Double? {
         // coefficient de réduction basé sur le nb de trimestre manquants pour obtenir le taux plein
-        guard let coef1 = model.gridApres62.last(\.coef, where: \.nbTrimManquant, <=, nbTrimManquantPourTauxPlein)  else {
+        guard let coef1 = model.gridApresAgelegal.last(\.coef, where: \.nbTrimManquant, <=, nbTrimManquantPourTauxPlein)  else {
             customLog.log(level: .default, "coefDeMinorationApresAgeLegal coef1 = nil")
             return nil
         }
         
         // coefficient basé sur l'age
-        guard let coef2 = model.gridApres62.last(\.coef, where: \.ndTrimPostAgeLegal, >=, nbTrimPostAgeLegalMin)  else {
+        guard let coef2 = model.gridApresAgelegal.last(\.coef, where: \.ndTrimPostAgeLegal, >=, nbTrimPostAgeLegalMin)  else {
             customLog.log(level: .default, "coefDeMinorationApresAgeLegal coef2 = nil")
             return nil
         }
@@ -212,12 +212,8 @@ public class RegimeAgirc: Codable {
                                  dateOfEndOfUnemployAlloc : Date?) -> Int? {
         var nbPointsFuturActivite : Double
         var nbPointsFuturChomage  : Double
-        let dateRefComp = DateComponents(calendar : Date.calendar,
-                                         year     : lastAgircKnownSituation.atEndOf,
-                                         month    : 12,
-                                         day      : 31,
-                                         hour     : 23)
-        let dateRef = Date.calendar.date(from: dateRefComp)!
+        
+        let dateRef = lastDayOf(year: lastAgircKnownSituation.atEndOf)
         
         // nombre de points futurs dûs au titre de la future carrière de salarié
         if dateRef >= dateOfRetirement {
@@ -347,7 +343,7 @@ public class RegimeAgirc: Codable {
                                   dateOfEndOfUnemployAlloc : Date?,
                                   dateOfPensionLiquid      : Date,
                                   during year              : Int) -> Double? {
-        // nombre de trimestre manquant au moment de la liquidation de la pension pour pour obtenir le taux plein
+        // nombre de trimestre manquant au moment de la liquidation de la pension pour obtenir le taux plein
         guard let nbTrimAudelaDuTauxPlein =
                 -model.regimeGeneral.nbTrimManquantPourTauxPlein(
                     birthDate                : birthDate,

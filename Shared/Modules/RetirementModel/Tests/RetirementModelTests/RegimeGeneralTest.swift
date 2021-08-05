@@ -145,7 +145,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
     
     // MARK: - CAS REELS A VERIFIER AVEC MAREL
     
-    func test_cas_reel_sans_chomage_62_ans() throws {
+    func test_cas_lionel_sans_chomage_62_ans() throws {
         let birthDate         = date(year : 1964, month : 9, day : 22)
         let nbTrimestreAcquis = 139
         let atEndOf           = 2020
@@ -229,7 +229,8 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
                                                       "Cas réel sans chomage: pension failed")
         let brutTheory = lastKnownSituation.sam * (taux / 100.0) * (1.0 + majorationEnfant/100) * (dureeAssurance.plafonne.double() / dureeDeReference.double())
         XCTAssertTrue(isApproximatelyEqual(brutTheory, pensionBrut), "Cas réel sans chomage: pension failed")
-        print("CAS REEL SANS CHOMAGE JUSQU'A 62 ANS:")
+        
+        print("CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:")
         print("  - SAM                     = \(lastKnownSituation.sam.€String)")
         print("  - Taux                    = \(taux) % (minoration de \(50.0 - taux) %)")
         print("  - Majoration pour enfants = \(majorationEnfant) %")
@@ -240,19 +241,19 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         print("  Pension Nette annuelle  = \(pensionNet.€String)")
         print("  Pension Nette mensuelle = \((pensionNet / 12.0).€String)")
         
-        //  CAS REEL SANS CHOMAGE JUSQU'A 62 ANS:
+        //  CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:
         //      - SAM                     = 37 054 €
         //      - Taux                    = 45.625 % (minoration de 4.375 %)
         //      - Majoration pour enfants = 10.0 %
         //      - Durée Assurance         = 162
         //      - Durée de référence      = 169
         //  Pension Brute annuelle  = 17 826 €
-        //  Pension Brute mensuelle = 1 486 €  (M@rel = 1 551 €)
+        //  Pension Brute mensuelle =  1 486 €  (M@rel = 1 551 €)
         //  Pension Nette annuelle  = 16 204 €
-        //  Pension Nette mensuelle = 1 350 €  (M@rel = 1 410 €)
+        //  Pension Nette mensuelle =  1 350 €  (M@rel = 1 410 €)
     }
     
-    func test_cas_reel_avec_chomage_62_ans() throws {
+    func test_cas_lionel_avec_chomage_62_ans() throws {
         let birthDate         = date(year : 1964, month : 9, day : 22)
         let nbTrimestreAcquis = 139
         let atEndOf           = 2020
@@ -287,7 +288,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         
         /// Durée d'assurance
         
-        var dureeAssurance = try XCTUnwrap(RegimeGeneralTest.regimeGeneral
+        let dureeAssurance = try XCTUnwrap(RegimeGeneralTest.regimeGeneral
                                             .dureeAssurance(
                                                 birthDate                : birthDate,
                                                 lastKnownSituation       : lastKnownSituation,
@@ -350,7 +351,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         let brutTheory = lastKnownSituation.sam * (taux / 100.0) * (1.0 + majorationEnfant/100) * (dureeAssurance.plafonne.double() / dureeDeReference.double())
         print(brutTheory)
         XCTAssertTrue(isApproximatelyEqual(brutTheory, pensionBrut), "Cas réel avec chomage: pension failed")
-        print("CAS REEL AVEC 3 ANS DE CHOMAGE:")
+        print("CAS LIONEL AVEC 3 ANS DE CHOMAGE:")
         print("  - SAM                     = \(lastKnownSituation.sam.€String)")
         print("  - Taux                    = \(taux) % (minoration de \(50.0 - taux) %)")
         print("  - Majoration pour enfants = \(majorationEnfant) %")
@@ -361,7 +362,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         print("  Pension Nette annuelle  = \(pensionNet.€String)")
         print("  Pension Nette mensuelle = \((pensionNet / 12.0).€String)")
         
-        // CAS REEL AVEC 3 ANS DE CHOMAGE:
+        // CAS REEL LIONEL 3 ANS DE CHOMAGE:
         // - SAM                     = 37 054 €
         // - Taux                    = 45.0 % (minoration de 5.0 %)
         // - Majoration pour enfants = 10.0 %
@@ -372,7 +373,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         // Pension Nette annuelle  = 15 883 €
         // Pension Nette mensuelle = 1 324 €
         
-        // CAS REEL AVEC 3 ANS DE CHOMAGE
+        // CAS REEL LIONEL 3 ANS DE CHOMAGE
         // (ajout de trimestres pendant la période indemnisation seulement: 3 ans et non 5 ans):
         // - SAM                     = 37 054 €
         // - Taux                    = 41.25 % (minoration de 8.75 %)
