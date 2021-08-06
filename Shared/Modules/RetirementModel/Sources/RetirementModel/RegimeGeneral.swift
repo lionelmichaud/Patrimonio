@@ -427,7 +427,7 @@ public class RegimeGeneral: Codable {
     ///   - lastKnownSituation: dernière situation connue (année, nombre de trimestres de cotisation acquis)
     ///   - dateOfRetirement: date de cessation d'activité
     ///   - dateOfEndOfUnemployAlloc: date de la fin d'indemnisation chômage après une période de travail
-    /// - Returns: nb de trimestre manquant à la date prévisionnelle de demande de liquidation de la pension de retraite pour obtenir le taux plein
+    /// - Returns: nb de trimestre manquant à la date de fin d'activité professionnelle ou d'indemnisation, pour obtenir le taux plein
     /// - Note: [la-retraite-en-clair](https://www.la-retraite-en-clair.fr/parcours-professionnel-regimes-retraite/periode-inactivite-retraite/chomage-retraite)
     func nbTrimManquantPourTauxPlein(birthDate                : Date,
                                      lastKnownSituation       : RegimeGeneralSituation,

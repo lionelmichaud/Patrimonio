@@ -356,14 +356,15 @@ public class RegimeAgirc: Codable {
                                   dateOfEndOfUnemployAlloc : Date?,
                                   dateOfPensionLiquid      : Date,
                                   during year              : Int) -> Double? {
-        // nombre de trimestre supplémentaires au moment de la liquidation de la pension pour obtenir le taux plein
-        guard let nbTrimAudelaDuTauxPlein =
+        // nombre de trimestres accumulés en fin de carrière et de période indemnisée
+        // au delà de celui nécessaire pour obtenir le taux plein an au régime général
+        guard let nbTrimSupplementaire =
                 -model.regimeGeneral.nbTrimManquantPourTauxPlein(
                     birthDate                : birthDate,
                     lastKnownSituation       : lastKnownSituation,
                     dateOfRetirement         : dateOfRetirement,
                     dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc) else {
-            customLog.log(level: .default, "nbTrimManquantPourTauxPlein = nil")
+            customLog.log(level: .default, "nbTrimSupplementaire = nil")
             return nil
         }
         //customLog.log(level: .info, "nb Trim Au-delà du Taux Plein = \(nbTrimAudelaDuTauxPlein, privacy: .public)")
@@ -389,77 +390,92 @@ public class RegimeAgirc: Codable {
             return nil
         }
         
-        switch nbTrimAudelaDuTauxPlein {
+        guard let dateAgeMinimumLegal = model.regimeGeneral.dateAgeMinimumLegal(birthDate: birthDate) else {
+            customLog.log(level: .error,
+                          "coefMinorationMajoration:dateAgeMinimumLegal = nil")
+            fatalError("coefMinorationMajoration:dateAgeMinimumLegal = nil")
+        }
+        
+        switch nbTrimSupplementaire {
             case ...(-1):
                 // Liquidation de la pension AVANT l'obtention du taux plein
-                guard let dateAgeMinimumLegal = model.regimeGeneral.dateAgeMinimumLegal(birthDate: birthDate) else {
-                    customLog.log(level: .error,
-                                  "coefMinorationMajoration:dateAgeMinimumLegal = nil")
-                    fatalError("coefMinorationMajoration:dateAgeMinimumLegal = nil")
-                }
+                //   => coefficient de minoration définitif
                 return coefMinorationMajorationAvantTauxPlein(dateOfPensionLiquid,
-                                                             dateAgeMinimumLegal,
-                                                             nbTrimAudelaDuTauxPlein)
+                                                              dateAgeMinimumLegal,
+                                                              nbTrimSupplementaire)
+            case 0...:
+                // Liquidation de la pension APRES l'obtention du taux plein
+                //   Calculer le délai écoulé entre la date d'obtention du taux plein (ou la date de l'age minimum légal)
+                //   et la date de liquidation de la pension
                 
-            // Liquidation de la pension APRES l'obtention du taux plein
-            case 0...3:
-                // (1) Liquidation dans l'année date d'obtention du taux plein au régime général
-                if age >= ageTauxPleinLegal {
-                    // (2) on a dépassé l'âge d'obtention du taux plein légal
-                    //     => taux plein
-                    return 1.0
-                } else {
-                    // (2) les 3 années suivant la date d'obtention du taux plein légal (et avant 67 ans)
-                    //     => minoration de 10% pendant 3 ans s’applique au montant de votre retraite complémentaire
-                    return delayAfterPensionLiquidation <= 3 ? 0.9 : 1.0
+                let delaiDepuisAgeMinLegal = Date.calendar.dateComponents([.year, .month, .day],
+                                                                                from: dateAgeMinimumLegal,
+                                                                                to  : dateOfPensionLiquid)
+                let nbTrimDepuisAgeMinLegal: Int = delaiDepuisAgeMinLegal.year! * 4 + delaiDepuisAgeMinLegal.month! / 3
+                let nbTrimDepassantTauxPlein = min(nbTrimSupplementaire, nbTrimDepuisAgeMinLegal)
+                switch nbTrimDepassantTauxPlein {
+                    case 0...3:
+                        // (1) Liquidation dans l'année date d'obtention du taux plein au régime général
+                        if age >= ageTauxPleinLegal {
+                            // (2) on a dépassé l'âge d'obtention du taux plein légal
+                            //     => taux plein
+                            return 1.0
+                        } else {
+                            // (2) les 3 années suivant la date d'obtention du taux plein légal (et avant 67 ans)
+                            //     => minoration de 10% pendant 3 ans s’applique au montant de votre retraite complémentaire
+                            return delayAfterPensionLiquidation <= 3 ? 0.9 : 1.0
+                        }
+                        
+                    case 4...7:
+                        // (1) Liquidation dans l'année date d'obtention du taux plein au régime général + 1 an
+                        //     => taux plein
+                        return 1.0
+                        
+                    case 8...11:
+                        // (1) Liquidation dans l'année date d'obtention du taux plein au régime général + 2 ans
+                        if age >= ageTauxPleinLegal {
+                            // (2) on a dépassé l'âge d'obtention du taux plein légal
+                            //     => taux plein
+                            return 1.0
+                        } else {
+                            // (2) les 3 années suivant la date d'obtention du taux plein légal (et avant 67 ans)
+                            //     => minoration de 10% pendant 3 ans s’applique au montant de votre retraite complémentaire
+                            return delayAfterPensionLiquidation <= 1 ? 1.1 : 1.0
+                        }
+                        
+                    case 12...15:
+                        // (1) Liquidation dans l'année date d'obtention du taux plein au régime général + 3 ans
+                        if age >= ageTauxPleinLegal {
+                            // (2) on a dépassé l'âge d'obtention du taux plein légal
+                            //     => taux plein
+                            return 1.0
+                        } else {
+                            // (2) les 3 années suivant la date d'obtention du taux plein légal (et avant 67 ans)
+                            //     => minoration de 10% pendant 3 ans s’applique au montant de votre retraite complémentaire
+                            return delayAfterPensionLiquidation <= 1 ? 1.2 : 1.0
+                        }
+                        
+                    case 16...19:
+                        // (1) Liquidation dans l'année date d'obtention du taux plein au régime général + 4 ans
+                        if age >= ageTauxPleinLegal {
+                            // (2) on a dépassé l'âge d'obtention du taux plein légal
+                            //     => taux plein
+                            return 1.0
+                        } else {
+                            // (2) les 3 années suivant la date d'obtention du taux plein légal (et avant 67 ans)
+                            //     => minoration de 10% pendant 3 ans s’applique au montant de votre retraite complémentaire
+                            return delayAfterPensionLiquidation <= 1 ? 1.3 : 1.0
+                        }
+                        
+                    case 20...:
+                        // ce cas ne devrait pas se produire car (67-62) * 4 = 20
+                        return 1.0
+                        
+                    default:
+                        return nil
                 }
                 
-            case 4...7:
-                // (1) Liquidation dans l'année date d'obtention du taux plein au régime général + 1 an
-                //     => taux plein
-                return 1.0
-                
-            case 8...11:
-                // (1) Liquidation dans l'année date d'obtention du taux plein au régime général + 2 ans
-                if age >= ageTauxPleinLegal {
-                    // (2) on a dépassé l'âge d'obtention du taux plein légal
-                    //     => taux plein
-                    return 1.0
-                } else {
-                    // (2) les 3 années suivant la date d'obtention du taux plein légal (et avant 67 ans)
-                    //     => minoration de 10% pendant 3 ans s’applique au montant de votre retraite complémentaire
-                    return delayAfterPensionLiquidation <= 1 ? 1.1 : 1.0
-                }
-                
-            case 12...15:
-                // (1) Liquidation dans l'année date d'obtention du taux plein au régime général + 3 ans
-                if age >= ageTauxPleinLegal {
-                    // (2) on a dépassé l'âge d'obtention du taux plein légal
-                    //     => taux plein
-                    return 1.0
-                } else {
-                    // (2) les 3 années suivant la date d'obtention du taux plein légal (et avant 67 ans)
-                    //     => minoration de 10% pendant 3 ans s’applique au montant de votre retraite complémentaire
-                    return delayAfterPensionLiquidation <= 1 ? 1.2 : 1.0
-                }
-                
-            case 16...19:
-                // (1) Liquidation dans l'année date d'obtention du taux plein au régime général + 4 ans
-                if age >= ageTauxPleinLegal {
-                    // (2) on a dépassé l'âge d'obtention du taux plein légal
-                    //     => taux plein
-                    return 1.0
-                } else {
-                    // (2) les 3 années suivant la date d'obtention du taux plein légal (et avant 67 ans)
-                    //     => minoration de 10% pendant 3 ans s’applique au montant de votre retraite complémentaire
-                    return delayAfterPensionLiquidation <= 1 ? 1.3 : 1.0
-                }
-                
-            case 20...:
-                // ce cas ne devrait pas se produire car (67-62) * 4 = 20
-                return 1.0
-                
-           default:
+            default:
                 return nil
         }
     }
