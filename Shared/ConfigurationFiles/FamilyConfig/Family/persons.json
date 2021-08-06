@@ -7,7 +7,7 @@
             "namePrefix" : "M.",
             "givenName"  : "Lionel"
         },
-        "sexe"                 : 0,
+        "sexe"          : 0,
         "birth_Date"    : "1964-09-22T23:00:00+01:00",
         "fiscal_option" : "Quotité disponible",
         "work_Income"   : {
@@ -17,7 +17,7 @@
             "salary_fromDate"        : "2001-11-19T23:00:00+01:00",
             "salary_healthInsurance" : 700
         },
-        "nb_Of_Child_Birth"        : 0,
+        "nb_Of_Child_Birth" : 3,
         "age_Of_Pension_Liquid" : {
             "year" : 62,
             "month": 0,
@@ -80,7 +80,7 @@
             "turnOver_BNC" : 48000,
             "turnOver_incomeLossInsurance" : 4046
         },
-        "nb_Of_Child_Birth"       : 2,
+        "nb_Of_Child_Birth" : 3,
         "age_Of_Pension_Liquid" : {
             "year" : 62,
             "month": 0,
@@ -99,7 +99,7 @@
             "month" : 0
         },
         "regime_General_Situation" : {
-            "atEndOf"           : 2019,
+            "atEndOf"           : 2020,
             "nbTrimestreAcquis" : 145,
             "sam"               : 31857
         },
@@ -154,6 +154,20 @@
         },
         "sexe" : 0,
         "birth_Date" : "2005-09-30T23:00:00+01:00",
+        "age_Of_University"   : 21,
+        "age_Of_Independence" : 24
+    },
+    
+    {
+        "__type_preserving_strategy" : 0,
+        "__preserved_type" : "Child.Type",
+        "name" : {
+            "familyName" : "MICHAUD",
+            "namePrefix" : "M.",
+            "givenName" : "Isaline"
+        },
+        "sexe" : 1,
+        "birth_Date" : "1920-03-29T23:00:00+01:00",
         "age_Of_University"   : 21,
         "age_Of_Independence" : 24
     }

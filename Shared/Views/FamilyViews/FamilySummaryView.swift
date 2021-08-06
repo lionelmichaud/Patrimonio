@@ -66,7 +66,7 @@ struct FamilySummarySection: View {
             IntegerView(label   : "• Nombre d'adultes",
                         integer : family.nbOfAdults)
             IntegerView(label   : "• Nombre d'enfants",
-                        integer : family.nbOfChildren)
+                        integer : family.nbOfBornChildren)
         }
     }
 }

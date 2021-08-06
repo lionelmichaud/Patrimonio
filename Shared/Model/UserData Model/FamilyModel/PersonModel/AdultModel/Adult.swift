@@ -256,19 +256,20 @@ final class Adult: Person {
     }
     
     func gaveBirthTo(children : Int) {
-        if sexe == .female {nbOfChildBirth = children}
+        nbOfChildBirth = children
     }
     func addChild() {
-        if sexe == .female {nbOfChildBirth += 1}
+        nbOfChildBirth += 1
     }
     func removeChild() {
-        if sexe == .female {nbOfChildBirth -= 1}
+        nbOfChildBirth -= 1
     }
     func nbOfFiscalChildren(during year: Int) -> Int {
         Adult.adultRelativesProvider.nbOfFiscalChildren(during: year)
     }
-    func nbOfChildren() -> Int {
-        Adult.adultRelativesProvider.nbOfChildren
+    func nbOfBornChildren() -> Int {
+        // TODO: - àremplacer par un accès directe à self.nbOfChildBirth
+        Adult.adultRelativesProvider.nbOfBornChildren
     }
     func setAgeOfPensionLiquidComp(year: Int, month: Int = 0, day: Int = 0) {
         ageOfPensionLiquidComp = DateComponents(calendar: Date.calendar, year: year, month: month, day: day)

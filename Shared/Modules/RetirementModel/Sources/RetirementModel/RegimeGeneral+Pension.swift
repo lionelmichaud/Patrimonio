@@ -44,7 +44,7 @@ extension RegimeGeneral {
     ///   - dateOfEndOfUnemployAlloc: date de fin de perception des allocations chomage
     ///   - dateOfPensionLiquid: date de demande de liquidation de la pension
     ///   - lastKnownSituation: dernière situation connue pour le régime général
-    ///   - nbEnfant: nb d'enfant aus sens de la retraite (pour les majorations)
+    ///   - nbEnfantNe: nb d'enfant aus sens de la retraite (pour les majorations)
     ///   - year: année de calcul
     /// - Returns: Pension brute (en € d'aujourd'hui) et nette (dévaluée annuellement jusqu'à la date de liquidation)
     public func pension(birthDate                : Date, // swiftlint:disable:this function_parameter_count
@@ -52,7 +52,7 @@ extension RegimeGeneral {
                         dateOfEndOfUnemployAlloc : Date?,
                         dateOfPensionLiquid      : Date,
                         lastKnownSituation       : RegimeGeneralSituation,
-                        nbEnfant                 : Int,
+                        nbEnfantNe               : Int,
                         during year              : Int? = nil)
     -> (brut : Double,
         net  : Double)? {
@@ -62,7 +62,7 @@ extension RegimeGeneral {
             dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc,
             dateOfPensionLiquid      : dateOfPensionLiquid,
             lastKnownSituation       : lastKnownSituation,
-            nbEnfant                 : nbEnfant,
+            nbEnfantNe               : nbEnfantNe,
             during                   : year) {
             return (brut : pensionBrute,
                     net  : pensionNette)
@@ -78,7 +78,7 @@ extension RegimeGeneral {
     ///   - dateOfEndOfUnemployAlloc: date de la fin d'indemnisation chômage après une période de travail
     ///   - dateOfPensionLiquid: date de demande de liquidation de la pension
     ///   - lastKnownSituation: dernière situation connue pour le régime général
-    ///   - nbEnfant: nb d'enfant aus sens de la retraite (pour les majorations)
+    ///   - nbEnfantNe: nb d'enfant nés au sens de la retraite (pour les majorations).
     ///   - year: année de calcul de la valeur de la pension (dévaluation annuelle si <> `nil`)
     /// - Returns: Pension brute et nette de charges (en € d'aujourd'hui si `year` = `nil`
     ///             ou dévaluée annuellement jusqu'à la date de liquidation sinon)
@@ -87,7 +87,7 @@ extension RegimeGeneral {
                         dateOfEndOfUnemployAlloc : Date?,
                         dateOfPensionLiquid      : Date,
                         lastKnownSituation       : RegimeGeneralSituation,
-                        nbEnfant                 : Int,
+                        nbEnfantNe                 : Int,
                         during year              : Int? = nil) ->
     (tauxDePension            : Double,
      majorationEnfant         : Double,
@@ -118,11 +118,11 @@ extension RegimeGeneral {
             return nil
         }
         
-        let majorationEnfant = self.coefficientMajorationEnfant(nbEnfant: nbEnfant)
+        let majorationEnfantNe = self.coefficientMajorationEnfant(nbEnfant: nbEnfantNe)
         
         var pensionBrute = pension(sam              : lastKnownSituation.sam,
                                    tauxDePension    : tauxDePension,
-                                   majorationEnfant : majorationEnfant,
+                                   majorationEnfant : majorationEnfantNe,
                                    dureeAssurance   : dureeAssurance.plafonne,
                                    dureeDeReference : dureeDeReference)
         
@@ -139,7 +139,7 @@ extension RegimeGeneral {
         let pensionNette = model.fiscal.pensionTaxes.netRegimeGeneral(pensionBrute)
         
         return (tauxDePension            : tauxDePension,
-                majorationEnfant         : majorationEnfant,
+                majorationEnfant         : majorationEnfantNe,
                 dureeDeReference         : dureeDeReference,
                 dureeAssurancePlafonne   : dureeAssurance.plafonne,
                 dureeAssuranceDeplafonne : dureeAssurance.deplafonne,

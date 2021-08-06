@@ -334,7 +334,20 @@ public class RegimeAgirc: Codable {
     ///   - dateOfPensionLiquid: date de demande de liquidation de la pension
     ///   - year: année de calcul
     /// - Returns: Coefficient de minoration ou de majoration [0, 1]
-    /// - Note: 
+    /// - Note:
+    ///  - Age de départ à taux plein:
+    ///     - Plusieurs situations se présentent:
+    ///        - le salarié demande sa retraite complémentaire à la date à laquelle il bénéficie du taux plein dans le régime de base. Il subira une minoration de 10 % pendant 3 ans du montant de sa retraite complémentaire, et au maximum jusqu’à l’âge de 67 ans.
+    ///        - le salarié demande sa retraite complémentaire 1 an après la date à laquelle il bénéficie du taux plein dans le régime de base. Il ne subira pas de coefficient de solidarité.
+    ///        - le salarié demande sa retraite complémentaire 2 ans après la date à laquelle il bénéficie du taux plein dans le régime de base. Il bénéficie alors d’un bonus et sa pension de retraite complémentaire est alors majorée pendant 1 an de 10 %.
+    ///        - s’il décale la liquidation de 3 ans, la majoration est de 20 %.
+    ///        - s’il décale la liquidation de 4 ans, la majoration atteindra 30 %.
+    ///  - Age de départ à taux minoré défintif:
+    ///     - Vous pouvez aussi obtenir votre retraite complémentaire sans que les conditions ci-dessus soient remplies, sous réserve que vous ayez au minimum 57 ans.
+    ///       Dans ce cas, le montant de votre retraite complémentaire sera diminué selon un coefficient de minoration, et cela de manière définitive.
+    ///       La minoration dépend de l'âge que vous avez atteint au moment du départ à la retraite.
+    ///       Si vous avez obtenu votre retraite de base à taux minoré et qu’il vous manque au minimum 20 trimestres pour bénéficier de la retraite de base à taux plein, la minoration appliquée est déterminée en fonction de votre âge ou du nombre de trimestres manquants.
+    ///       La solution la plus favorable pour vous sera choisie.
     ///  - [www.agirc-arrco.fr](https://www.agirc-arrco.fr/particuliers/demander-retraite/conditions-pour-la-retraite/)
     ///  - [www.retraite.com](https://www.retraite.com/calcul-retraite/calcul-retraite-complementaire.html)
     func coefMinorationMajoration(birthDate                : Date, // swiftlint:disable:this function_parameter_count cyclomatic_complexity
@@ -343,7 +356,7 @@ public class RegimeAgirc: Codable {
                                   dateOfEndOfUnemployAlloc : Date?,
                                   dateOfPensionLiquid      : Date,
                                   during year              : Int) -> Double? {
-        // nombre de trimestre manquant au moment de la liquidation de la pension pour obtenir le taux plein
+        // nombre de trimestre supplémentaires au moment de la liquidation de la pension pour obtenir le taux plein
         guard let nbTrimAudelaDuTauxPlein =
                 -model.regimeGeneral.nbTrimManquantPourTauxPlein(
                     birthDate                : birthDate,
@@ -363,7 +376,7 @@ public class RegimeAgirc: Codable {
             return nil
         }
         
-        // délai écoulé depuis la date de liqudation de la pension
+        // délai écoulé depuis la date de liquidation de la pension
         let dateAtEndOfYear = lastDayOf(year: year)
         guard let delayAfterPensionLiquidation = Date.calendar.dateComponents([.year, .month, .day],
                                                        from: dateOfPensionLiquid,
