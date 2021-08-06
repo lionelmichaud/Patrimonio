@@ -11,7 +11,7 @@ import Foundation
 // MARK: - DI: Protocol de service de fourniture de dénombrement dans la famille
 
 protocol MembersCountProviderP {
-    var nbOfChildren: Int { get }
+    var nbOfBornChildren: Int { get }
     func nbOfAdultAlive(atEndOf year: Int) -> Int
     func nbOfFiscalChildren(during year: Int) -> Int
 }

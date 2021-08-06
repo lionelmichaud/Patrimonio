@@ -224,7 +224,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
                                                             dateOfEndOfUnemployAlloc : nil,
                                                             dateOfPensionLiquid      : dateOfPensionLiquid,
                                                             lastKnownSituation       : lastKnownSituation,
-                                                            nbEnfant                 : 3,
+                                                            nbEnfantNe               : 3,
                                                             during                   : nil),
                                                       "Cas réel sans chomage: pension failed")
         let brutTheory = lastKnownSituation.sam * (taux / 100.0) * (1.0 + majorationEnfant/100) * (dureeAssurance.plafonne.double() / dureeDeReference.double())
@@ -345,7 +345,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
                                                             dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc,
                                                             dateOfPensionLiquid      : dateAgeMinimumLegal,
                                                             lastKnownSituation       : lastKnownSituation,
-                                                            nbEnfant                 : 3,
+                                                            nbEnfantNe               : 3,
                                                             during                   : nil),
                                                       "Cas réel avec chomage: pension failed")
         let brutTheory = lastKnownSituation.sam * (taux / 100.0) * (1.0 + majorationEnfant/100) * (dureeAssurance.plafonne.double() / dureeDeReference.double())
@@ -773,7 +773,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
                     dateOfEndOfUnemployAlloc : nil,
                     dateOfPensionLiquid      : dateOfPensionLiquid,
                     lastKnownSituation       : lastKnownSituation,
-                    nbEnfant                 : nbEnfant,
+                    nbEnfantNe               : nbEnfant,
                     during                   : nil) {
             
             XCTAssertEqual(10.0, majorationEnfant)
@@ -796,7 +796,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
                     dateOfEndOfUnemployAlloc : nil,
                     dateOfPensionLiquid      : dateOfPensionLiquid,
                     lastKnownSituation       : lastKnownSituation,
-                    nbEnfant                 : nbEnfant,
+                    nbEnfantNe               : nbEnfant,
                     during                   : nil) {
             XCTAssertEqual(theory, pensionBrute)
         } else {
@@ -818,7 +818,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
                     dateOfEndOfUnemployAlloc : nil,
                     dateOfPensionLiquid      : dateOfPensionLiquid,
                     lastKnownSituation       : lastKnownSituation,
-                    nbEnfant                 : nbEnfant,
+                    nbEnfantNe               : nbEnfant,
                     during                   : nil) {
             
             XCTAssertEqual(10.0, majorationEnfant)
@@ -843,7 +843,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
                     dateOfEndOfUnemployAlloc : nil,
                     dateOfPensionLiquid      : dateOfPensionLiquid,
                     lastKnownSituation       : lastKnownSituation,
-                    nbEnfant                 : nbEnfant,
+                    nbEnfantNe               : nbEnfant,
                     during                   : nil) {
             XCTAssertEqual(theory, pensionBrute)
         } else {
@@ -865,7 +865,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
                     dateOfEndOfUnemployAlloc : nil,
                     dateOfPensionLiquid      : dateOfPensionLiquid,
                     lastKnownSituation       : lastKnownSituation,
-                    nbEnfant                 : nbEnfant,
+                    nbEnfantNe               : nbEnfant,
                     during                   : nil) {
             
             XCTAssertEqual(10.0, majorationEnfant)
@@ -888,7 +888,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
                     dateOfEndOfUnemployAlloc : nil,
                     dateOfPensionLiquid      : dateOfPensionLiquid,
                     lastKnownSituation       : lastKnownSituation,
-                    nbEnfant                 : nbEnfant,
+                    nbEnfantNe               : nbEnfant,
                     during                   : nil) {
             XCTAssertEqual(theory, pensionBrute)
         } else {
@@ -933,7 +933,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
                     dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc,
                     dateOfPensionLiquid      : dateOfPensionLiquid,
                     lastKnownSituation       : lastKnownSituation,
-                    nbEnfant                 : nbEnfant,
+                    nbEnfantNe               : nbEnfant,
                     during                   : nil) {
             
             XCTAssertEqual(10.0, majorationEnfant)
@@ -960,7 +960,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
                     dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc,
                     dateOfPensionLiquid      : dateOfPensionLiquid,
                     lastKnownSituation       : lastKnownSituation,
-                    nbEnfant                 : nbEnfant,
+                    nbEnfantNe               : nbEnfant,
                     during                   : nil) {
             XCTAssertEqual(theory, pensionBrute)
         } else {

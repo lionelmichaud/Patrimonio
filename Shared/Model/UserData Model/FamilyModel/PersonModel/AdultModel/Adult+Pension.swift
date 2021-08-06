@@ -45,7 +45,7 @@ extension Adult {
                 dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation(using: model),
                 dateOfPensionLiquid      : dateOfPensionLiquid,
                 lastKnownSituation       : lastKnownPensionSituation,
-                nbEnfant                 : 3,
+                nbEnfantNe               : nbOfBornChildren(),
                 during                   : year) {
             return (brut, net)
         } else {
@@ -62,7 +62,7 @@ extension Adult {
                 dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation(using: model),
                 dateOfPensionLiquid      : dateOfPensionLiquid,
                 lastKnownSituation       : lastKnownPensionSituation,
-                nbEnfant                 : 3) {
+                nbEnfantNe               : nbOfBornChildren()) {
             return (brut, net)
         } else {
             return (0, 0)
@@ -104,7 +104,7 @@ extension Adult {
                 dateOfRetirement         : dateOfRetirement,
                 dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation(using: model),
                 dateOfPensionLiquid      : dateOfAgircPensionLiquid,
-                nbEnfantNe               : nbOfChildren(),
+                nbEnfantNe               : nbOfBornChildren(),
                 nbEnfantACharge          : nbOfFiscalChildren(during: year),
                 during                   : year) {
             return (pensionAgirc.pensionBrute,
@@ -122,8 +122,8 @@ extension Adult {
                 dateOfRetirement         : dateOfRetirement,
                 dateOfEndOfUnemployAlloc : dateOfEndOfUnemployementAllocation(using: model),
                 dateOfPensionLiquid      : dateOfAgircPensionLiquid,
-                nbEnfantNe               : Adult.adultRelativesProvider.nbOfChildren,
-                nbEnfantACharge          : Adult.adultRelativesProvider.nbOfFiscalChildren(during: dateOfAgircPensionLiquid.year)) {
+                nbEnfantNe               : nbOfBornChildren(),
+                nbEnfantACharge          : nbOfFiscalChildren(during: dateOfAgircPensionLiquid.year)) {
             return (pensionAgirc.pensionBrute,
                     pensionAgirc.pensionNette)
         } else {
