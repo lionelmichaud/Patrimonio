@@ -10,7 +10,7 @@ import Foundation
 import NamedValue
 import Persistence
 
-class UIState: ObservableObject {
+final class UIState: ObservableObject {
     enum Tab: Int, Hashable {
         case userSettings, dossier, family, expense, asset, scenario, simulation
     }

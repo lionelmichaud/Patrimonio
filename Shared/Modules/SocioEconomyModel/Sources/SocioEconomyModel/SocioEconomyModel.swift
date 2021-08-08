@@ -49,7 +49,7 @@ public struct SocioEconomy: PersistableModelP {
     
     public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
-    public class Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP, SocioEconomyModelProviderP {
+    public final class Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP, SocioEconomyModelProviderP {
         public var pensionDevaluationRate     : ModelRandomizer<BetaRandomGenerator>
         public var nbTrimTauxPlein            : ModelRandomizer<DiscreteRandomGenerator>
         public var expensesUnderEvaluationRate: ModelRandomizer<BetaRandomGenerator>

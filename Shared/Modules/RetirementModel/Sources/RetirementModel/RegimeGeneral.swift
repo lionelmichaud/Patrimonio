@@ -37,7 +37,7 @@ public struct RegimeGeneralSituation: Codable {
     
 }
 
-public class RegimeGeneral: Codable {
+public final class RegimeGeneral: Codable {
     
     // MARK: - Nested types
     

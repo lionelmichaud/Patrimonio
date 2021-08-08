@@ -10,7 +10,7 @@ import os
 
 // MARK: - STORE
 
-public class Store: ObservableObject {
+public final class Store: ObservableObject {
     @Published public var dossiers                     : DossierArray
     @Published public var failedToLoadDossiers         : Bool
     @Published public var failedToUpdateTemplateFolder : Bool

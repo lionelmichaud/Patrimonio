@@ -28,7 +28,7 @@ enum LogTopic: String, PickableEnumP, Codable, CustomStringConvertible {
 
 /// The Singleton class defines the `shared` field that lets clients access the
 /// unique singleton instance.
-class SimulationLogger {
+final class SimulationLogger {
     static var activ = true
     
     /// The static field that controls the access to the singleton instance.

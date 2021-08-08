@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ExcelFormulas {
+final class ExcelFormulas {
     /// calcule le remboursement d’un emprunt sur la base de remboursements et d’un taux d’intérêt constants
     /// - Parameters:
     ///   - rate: Représente le taux d’intérêt de l’emprunt

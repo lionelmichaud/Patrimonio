@@ -101,12 +101,12 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
     ///
     /// Le bien est revalorisé annuellement de `revaluatRate` % depuis sa date d'acquisition mais il n'est pas déflaté en valeur.
     ///
-    /// La valeur du bien est décrémentée de la commission de vente (frais d'agence) de 10%.
+    /// La valeur du bien est décrémentée de la commission d'achat (frais d'acquisition).
     ///
     /// Ce sont ses revenus qui sont déflatés de l'inflation.
     ///
     /// - Parameter year: fin de l'année
-    /// - Returns: Valeur actualisé du bien, non déflatée de l'inflation, mais commission de vente (frais d'agence) de 10% déduite.
+    /// - Returns: Valeur actualisé du bien, non déflatée de l'inflation, mais commission d'achat (frais d'acquisition)  déduite.
     public func value(atEndOf year: Int) -> Double {
         if isOwned(during: year) {
             return try! futurValue(payement     : 0,
@@ -220,7 +220,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
         }
         let projectedSaleRevenue = value(atEndOf: sellingDate.year)
         let capitalGain          = projectedSaleRevenue - buyingPrice
-        let IS                   = Fiscal.model.companyProfitTaxes.IS(zeroOrPositive(capitalGain))
+        let IS                   = SCPI.fiscalModel.companyProfitTaxes.IS(zeroOrPositive(capitalGain))
         return (revenue     : projectedSaleRevenue,
                 capitalGain : capitalGain,
                 netRevenue  : projectedSaleRevenue - IS,

@@ -17,7 +17,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 // https://www.juritravail.com/Actualite/respecter-salaire-minimum/Id/221441
 // https://www.service-public.fr/particuliers/vosdroits/F408
 // https://www.service-public.fr/particuliers/vosdroits/F987
-public class LayoffCompensation: Codable {
+public final class LayoffCompensation: Codable {
     
     // MARK: - Nested types
 

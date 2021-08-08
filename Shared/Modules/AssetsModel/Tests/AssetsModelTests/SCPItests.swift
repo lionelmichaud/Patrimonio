@@ -14,25 +14,28 @@ import FiscalModel
 
 class SCPItests: XCTestCase {
 
-    struct InflationProvider: EconomyModelProviderP {
-        func rates(in year            : Int,
-                   withMode mode      : SimulationModeEnum,
-                   simulateVolatility : Bool) -> (securedRate : Double, stockRate : Double) {
-            (securedRate: Double(year) + 5.0, stockRate: Double(year) + 10.0)
-        }
-        
-        func rates(withMode mode: SimulationModeEnum) -> (securedRate: Double, stockRate: Double) {
-            (securedRate: 5.0, stockRate: 10.0)
-        }
-        
+    struct InflationProvider: InflationProviderP {
         func inflation(withMode simulationMode: SimulationModeEnum) -> Double {
-            2.5
+            switch simulationMode {
+                case .deterministic:
+                    return 2.5
+                case .random:
+                    return 5.0
+            }
         }
     }
 
     static var scpi: SCPI!
     static var inflationProvider = InflationProvider()
 
+    func isApproximatelyEqual(_ x: Double, _ y: Double) -> Bool {
+        if x == 0 {
+            return abs((x-y)) < 0.0001
+        } else {
+            return abs((x-y)) / x < 0.0001
+        }
+    }
+    
     // MARK: Helpers
 
     override class func setUp() {
@@ -62,21 +65,34 @@ class SCPItests: XCTestCase {
     
     func test_value() {
         var currentValue = SCPItests.scpi.value(atEndOf: 2020)
-        XCTAssertEqual(1000 * 0.9, currentValue)
+        XCTAssertTrue(isApproximatelyEqual((1000 * 0.9)*(1.1), currentValue))
 
         currentValue = SCPItests.scpi.value(atEndOf: 2022)
-        XCTAssertEqual(1000 * 0.9, currentValue)
+        XCTAssertTrue(isApproximatelyEqual((1000 * 0.9)*pow(1.1,3), currentValue))
 
         currentValue = SCPItests.scpi.value(atEndOf: 2023)
         XCTAssertEqual(0, currentValue)
     }
 
     func test_revenue() {
+        // deterministic
+        SCPI.setSimulationMode(to: .deterministic)
         var revenue = SCPItests.scpi.yearlyRevenue(during: 2020)
-        XCTAssertEqual(1000.0 * (3.56 - 10.0) / 100.0, revenue.revenue)
+        XCTAssertEqual(1000.0 * (3.56 - 2.5) / 100.0, revenue.revenue)
 
         revenue = SCPItests.scpi.yearlyRevenue(during: 2022)
-        XCTAssertEqual(1000.0 * (3.56 - 10.0) / 100.0, revenue.revenue)
+        XCTAssertEqual(1000.0 * (3.56 - 2.5) / 100.0, revenue.revenue)
+
+        revenue = SCPItests.scpi.yearlyRevenue(during: 2023)
+        XCTAssertEqual(0.0, revenue.revenue)
+        
+        // random
+        SCPI.setSimulationMode(to: .random)
+        revenue = SCPItests.scpi.yearlyRevenue(during: 2020)
+        XCTAssertEqual(1000.0 * (3.56 - 5.0) / 100.0, revenue.revenue)
+
+        revenue = SCPItests.scpi.yearlyRevenue(during: 2022)
+        XCTAssertEqual(1000.0 * (3.56 - 5.0) / 100.0, revenue.revenue)
 
         revenue = SCPItests.scpi.yearlyRevenue(during: 2023)
         XCTAssertEqual(0.0, revenue.revenue)
@@ -88,18 +104,34 @@ class SCPItests: XCTestCase {
         XCTAssertFalse(SCPItests.scpi.isOwned(during: 2023))
     }
 
-    func test_liquidatedValue() {
-        var vente = SCPItests.scpi.liquidatedValueIS(2021)
-        XCTAssertEqual(0, vente.revenue)
+    func test_liquidatedValueIRPP() {
+        var venteIRPP = SCPItests.scpi.liquidatedValueIRPP(2021)
+        XCTAssertEqual(0, venteIRPP.revenue)
 
-        let venteIRPP = SCPItests.scpi.liquidatedValueIRPP(2022)
-        XCTAssertEqual(1000 * 0.9, venteIRPP.revenue)
-        XCTAssertEqual(-1000 * 0.1, venteIRPP.capitalGain)
-        XCTAssertEqual(0, venteIRPP.socialTaxes)
-        XCTAssertEqual(0, venteIRPP.irpp)
-        XCTAssertEqual(venteIRPP.revenue, venteIRPP.netRevenue)
+        venteIRPP = SCPItests.scpi.liquidatedValueIRPP(2022)
+        let venteTherory = (1000 * 0.9) * pow(1.1, 3)
+        XCTAssertEqual(venteTherory.rounded(), venteIRPP.revenue.rounded())
+        XCTAssertEqual((venteTherory-1000).rounded(), venteIRPP.capitalGain.rounded())
+        XCTAssertEqual(venteIRPP.revenue-venteIRPP.irpp-venteIRPP.socialTaxes,
+                       venteIRPP.netRevenue)
 
-        vente = SCPItests.scpi.liquidatedValueIS(2023)
-        XCTAssertEqual(0, vente.revenue)
+        venteIRPP = SCPItests.scpi.liquidatedValueIRPP(2023)
+        XCTAssertEqual(0, venteIRPP.revenue)
     }
+
+    func test_liquidatedValueIS() {
+        var venteIS = SCPItests.scpi.liquidatedValueIS(2021)
+        XCTAssertEqual(0, venteIS.revenue)
+
+        venteIS = SCPItests.scpi.liquidatedValueIS(2022)
+        let venteTherory = (1000 * 0.9) * pow(1.1, 3)
+        XCTAssertEqual(venteTherory.rounded(), venteIS.revenue.rounded())
+        XCTAssertEqual((venteTherory-1000).rounded(), venteIS.capitalGain.rounded())
+        XCTAssertEqual(venteIS.revenue-venteIS.IS,
+                       venteIS.netRevenue)
+
+        venteIS = SCPItests.scpi.liquidatedValueIS(2023)
+        XCTAssertEqual(0, venteIS.revenue)
+    }
+
 }

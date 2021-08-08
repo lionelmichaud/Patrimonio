@@ -132,7 +132,7 @@ public struct Economy: PersistableModelP {
     }
     
     // MARK: - Modèles statistiques de générateurs aléatoires + échantillons tirés pour une simulation
-    public class Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP, EconomyModelProviderP {
+    public final class Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP, EconomyModelProviderP {
         enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
             case randomizers
         }

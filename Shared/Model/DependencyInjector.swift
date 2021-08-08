@@ -13,7 +13,7 @@ import Ownership
 import AssetsModel
 
 /// Injecte les dépendance dans les différents objets du modèle utilisateur qui en ont besoin
-struct Coordinator {
+struct DependencyInjector {
     /// gérer les dépendances entre le Modèle et les objets applicatifs
     static func manageDependencies(to model: Model) {
         // Injection de Fiscal

@@ -503,8 +503,8 @@
 		79EC482026309EFC0006EE44 /* LifeInsuranceSuccessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC481D26309EFB0006EE44 /* LifeInsuranceSuccessionManager.swift */; };
 		79EC482126309EFC0006EE44 /* LegalSuccessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC481E26309EFB0006EE44 /* LegalSuccessionManager.swift */; };
 		79EC482226309EFC0006EE44 /* LegalSuccessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC481E26309EFB0006EE44 /* LegalSuccessionManager.swift */; };
-		79EC5E712640037400FF8263 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC5E702640037400FF8263 /* Coordinator.swift */; };
-		79EC5E722640037400FF8263 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC5E702640037400FF8263 /* Coordinator.swift */; };
+		79EC5E712640037400FF8263 /* DependencyInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC5E702640037400FF8263 /* DependencyInjector.swift */; };
+		79EC5E722640037400FF8263 /* DependencyInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC5E702640037400FF8263 /* DependencyInjector.swift */; };
 		79EC5E822640647A00FF8263 /* ExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC5E812640647900FF8263 /* ExampleTests.swift */; };
 		79EC5E8F26406AAD00FF8263 /* DebtDetailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC5E8D26406AAD00FF8263 /* DebtDetailedView.swift */; };
 		79EC5E9026406AAD00FF8263 /* DebtDetailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC5E8D26406AAD00FF8263 /* DebtDetailedView.swift */; };
@@ -812,7 +812,7 @@
 		79EC4808263098340006EE44 /* OwnershipManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnershipManager.swift; sourceTree = "<group>"; };
 		79EC481D26309EFB0006EE44 /* LifeInsuranceSuccessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeInsuranceSuccessionManager.swift; sourceTree = "<group>"; };
 		79EC481E26309EFB0006EE44 /* LegalSuccessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegalSuccessionManager.swift; sourceTree = "<group>"; };
-		79EC5E702640037400FF8263 /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		79EC5E702640037400FF8263 /* DependencyInjector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyInjector.swift; sourceTree = "<group>"; };
 		79EC5E812640647900FF8263 /* ExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleTests.swift; sourceTree = "<group>"; };
 		79EC5E8D26406AAD00FF8263 /* DebtDetailedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebtDetailedView.swift; sourceTree = "<group>"; };
 		79EC5E8E26406AAD00FF8263 /* LoanDetailedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoanDetailedView.swift; sourceTree = "<group>"; };
@@ -1364,7 +1364,7 @@
 		7998E13A262D6A0000DA4A12 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				79EC5E702640037400FF8263 /* Coordinator.swift */,
+				79EC5E702640037400FF8263 /* DependencyInjector.swift */,
 				7998E154262DB27500DA4A12 /* UserData Model */,
 				79FC7270263337CA004F3BD2 /* Simulation */,
 			);
@@ -2213,7 +2213,7 @@
 				79FC722326330D2C004F3BD2 /* AppCommands.swift in Sources */,
 				7935FFD726541AAB00AC1715 /* DossiersView.swift in Sources */,
 				79A9AA76264AFA290036732F /* CashFlowVisitableP.swift in Sources */,
-				79EC5E712640037400FF8263 /* Coordinator.swift in Sources */,
+				79EC5E712640037400FF8263 /* DependencyInjector.swift in Sources */,
 				799DE8402654199600E96CF6 /* NoLoadedDossierView.swift in Sources */,
 				79B2728C2634DBEB00298E5D /* AppThemes.swift in Sources */,
 				79C838272641DB80008B29BF /* Charts+AxisFormatter.swift in Sources */,
@@ -2422,7 +2422,7 @@
 				799025C22641F60300ED53D4 /* SimulationView.swift in Sources */,
 				79C838252641DA3F008B29BF /* ChartView+Extensions.swift in Sources */,
 				79C838382641E092008B29BF /* CheckBoxStyles.swift in Sources */,
-				79EC5E722640037400FF8263 /* Coordinator.swift in Sources */,
+				79EC5E722640037400FF8263 /* DependencyInjector.swift in Sources */,
 				791ED0E8263A098000701202 /* PersonLifeLineView.swift in Sources */,
 				791ED12D263A2DC300701202 /* ValuedRevenues.swift in Sources */,
 				79B272942634E16800298E5D /* TimeSpanEditView.swift in Sources */,

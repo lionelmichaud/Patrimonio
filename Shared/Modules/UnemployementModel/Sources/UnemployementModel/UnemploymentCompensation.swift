@@ -22,7 +22,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 // https://www.cadremploi.fr/editorial/conseils/droit-du-travail/detail/article/ce-que-les-cadres-doivent-savoir-sur-la-nouvelle-convention-dassurance-chomage0.html
 // https://www.cadremploi.fr/editorial/conseils/droit-du-travail/detail/article/allocations-chomage-combien-toucheriez-vous.html
 
-public class UnemploymentCompensation: Codable {
+public final class UnemploymentCompensation: Codable {
     
     // MARK: - Nested types
 
