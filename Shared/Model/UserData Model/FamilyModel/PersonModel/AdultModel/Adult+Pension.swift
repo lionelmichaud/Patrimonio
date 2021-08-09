@@ -8,7 +8,6 @@
 
 import Foundation
 import AppFoundation
-import FiscalModel
 import RetirementModel
 import ModelEnvironment
 
@@ -170,7 +169,7 @@ extension Adult {
                 net  += pensionReversion.net
             }
         }
-        let taxable = try! Fiscal.model.pensionTaxes.taxable(brut: brut, net: net)
+        let taxable = try! model.fiscalModel.pensionTaxes.taxable(brut: brut, net: net)
         return BrutNetTaxable(brut: brut, net: net, taxable: taxable)
     }
     

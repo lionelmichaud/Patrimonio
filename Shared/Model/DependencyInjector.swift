@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import FiscalModel
 import ModelEnvironment
 import Ownership
 import AssetsModel
@@ -17,14 +16,11 @@ struct DependencyInjector {
     /// gérer les dépendances entre le Modèle et les objets applicatifs
     static func manageDependencies(to model: Model) {
         // Injection de Fiscal
-        //   récupérer une copie du singleton
-        let fiscalModel = Fiscal.model
-        //   l'injecter dans les objets qui en dépendent
-        SCPI.setFiscalModelProvider(fiscalModel)
-        RealEstateAsset.setFiscalModelProvider(fiscalModel)
-        PeriodicInvestement.setFiscalModelProvider(fiscalModel)
-        FreeInvestement.setFiscalModelProvider(fiscalModel)
-        Ownership.setDemembrementProviderP(fiscalModel.demembrement)
+        RealEstateAsset.setFiscalModelProvider(model.fiscalModel)
+        SCPI.setFiscalModelProvider(model.fiscalModel)
+        PeriodicInvestement.setFiscalModelProvider(model.fiscalModel)
+        FreeInvestement.setFiscalModelProvider(model.fiscalModel)
+        Ownership.setDemembrementProviderP(model.fiscalModel.demembrement)
 
         // Injection de SocioEconomy
         LifeExpense.setExpensesUnderEvaluationRateProvider(model.socioEconomyModel)

@@ -9,10 +9,17 @@
 import Foundation
 import AppFoundation
 
+public protocol LayOffTaxesProviderP {
+    func net(compensationConventional : Double,
+             compensationBrut         : Double,
+             compensationTaxable      : inout Double,
+             irppDiscount             : Double) -> Double
+}
+
 // MARK: - Charges sociales sur l'indemnité de licenciement
 // https://www.service-public.fr/particuliers/vosdroits/F987
 
-public struct LayOffTaxes: Codable {
+public struct LayOffTaxes: Codable, LayOffTaxesProviderP {
     
     // MARK: - Nested types
 

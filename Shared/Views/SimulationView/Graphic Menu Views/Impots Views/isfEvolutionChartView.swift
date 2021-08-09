@@ -9,7 +9,6 @@
 import os
 import SwiftUI
 import AppFoundation
-import FiscalModel
 import Charts // https://github.com/danielgindi/Charts.git
 import Files
 import ModelEnvironment
@@ -20,6 +19,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", catego
 // MARK: - Evolution de la Fiscalité dans le temps Charts Views
 
 struct IsfEvolutionChartView: View {
+    @EnvironmentObject var model     : Model
     @EnvironmentObject var dataStore : Store
     @EnvironmentObject var simulation: Simulation
     @State private var showInfoPopover = false
@@ -33,7 +33,8 @@ struct IsfEvolutionChartView: View {
 
     var body: some View {
         IsfLineChartView(socialAccounts : $simulation.socialAccounts,
-                         title          : simulation.title)
+                         title          : simulation.title,
+                         model          : model)
             .padding(.trailing, 4)
             .navigationTitle("Evolution de l'Impôt sur la Fortune")
             .navigationBarTitleDisplayMode(.inline)
@@ -73,12 +74,16 @@ struct IsfLineChartView: UIViewRepresentable {
     // MARK: - Properties
 
     @Binding var socialAccounts : SocialAccounts
+    let model                   : Model
 
     // MARK: - Initializer
 
-    internal init(socialAccounts : Binding<SocialAccounts>, title: String) {
+    internal init(socialAccounts : Binding<SocialAccounts>,
+                  title          : String,
+                  model          : Model) {
         IsfLineChartView.titleStatic = title
         self._socialAccounts         = socialAccounts
+        self.model                   = model
     }
     
     // MARK: - Type methods
@@ -138,7 +143,7 @@ struct IsfLineChartView: UIViewRepresentable {
         data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
 
         // seuil d'imposition à l'ISF
-        let ll1 = ChartLimitLine(limit: Fiscal.model.isf.model.seuil, label: "Seuil d'imposition")
+        let ll1 = ChartLimitLine(limit: model.fiscalModel.isf.model.seuil, label: "Seuil d'imposition")
         ll1.lineWidth       = 2
         ll1.lineDashLengths = [10, 10]
         ll1.labelPosition   = .bottomLeft

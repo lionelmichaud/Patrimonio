@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import FiscalModel
 import ModelEnvironment
 import Persistence
 

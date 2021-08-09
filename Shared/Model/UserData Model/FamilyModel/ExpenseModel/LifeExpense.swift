@@ -141,7 +141,7 @@ extension LifeExpense: CustomStringConvertible {
         - Note:
         \(note.withPrefixedSplittedLines("    "))
         - Montant: \(value.€String)
-        - Proportionnel aux nombre de membres de la famille: \(proportional.frenchString)
+        - Proportionnel au nombre de membres de la famille: \(proportional.frenchString)
         - Période: \(timeSpan.description.withPrefixedSplittedLines("  "))
         """
     }

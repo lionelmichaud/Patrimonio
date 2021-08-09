@@ -68,17 +68,17 @@ public final class RegimeGeneral: Codable {
             nbOfYearForSAM, maxReversionRate, decoteParTrimestre, surcoteParTrimestre, maxNbTrimestreDecote
         }
         
-        public var version         : Version
-        let dureeDeReferenceGrid   : [SliceRegimeLegal]
-        let nbTrimNonIndemniseGrid : [SliceUnemployement]
-        var ageMinimumLegal        : Int    // 62
-        let nbOfYearForSAM         : Int    // 25 pour le calcul du SAM
-        let maxReversionRate       : Double // 50.0 // % du SAM
-        let decoteParTrimestre     : Double // 0.625 // % par trimestre
-        let surcoteParTrimestre    : Double // 1.25  // % par trimestre
-        let maxNbTrimestreDecote   : Int    // 20 // plafond
-        var fiscal                 : Fiscal.Model!
-        var socioEconomy           : SocioEconomyModelProviderP!
+        public var version           : Version
+        let dureeDeReferenceGrid     : [SliceRegimeLegal]
+        let nbTrimNonIndemniseGrid   : [SliceUnemployement]
+        var ageMinimumLegal          : Int    // 62
+        let nbOfYearForSAM           : Int    // 25 pour le calcul du SAM
+        let maxReversionRate         : Double // 50.0 // % du SAM
+        let decoteParTrimestre       : Double // 0.625 // % par trimestre
+        let surcoteParTrimestre      : Double // 1.25  // % par trimestre
+        let maxNbTrimestreDecote     : Int    // 20 // plafond
+        var netRegimeGeneralProvider : NetRegimeGeneralProviderP!
+        var socioEconomy             : SocioEconomyModelProviderP!
     }
     
     // MARK: - Static Properties
@@ -116,8 +116,8 @@ public final class RegimeGeneral: Codable {
         self.model.socioEconomy = model
     }
 
-    public func setFiscalModel(_ model: Fiscal.Model) {
-        self.model.fiscal = model
+    public func setNetRegimeGeneralProvider(_ provider: NetRegimeGeneralProviderP) {
+        self.model.netRegimeGeneralProvider = provider
     }
 
     /// Coefficient de réévaluation de la pension en prenant comme base 1.0:

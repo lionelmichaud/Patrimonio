@@ -67,35 +67,7 @@ final class Adult: Person {
                 return 0
         }
     }
-    var workNetIncome     : Double { // net de feuille de paye, net de charges sociales et mutuelle obligatore
-        switch workIncome {
-            case .salary(_, _, let netSalary, _, _):
-                return netSalary
-            case .turnOver(let BNC, _):
-                return Fiscal.model.turnoverTaxes.net(BNC)
-            case .none:
-                return 0
-        }
-    }
-    var workLivingIncome  : Double { // net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
-        switch workIncome {
-            case .salary(_, _, let netSalary, _, let charge):
-                return netSalary - charge
-            case .turnOver(let BNC, let charge):
-                return Fiscal.model.turnoverTaxes.net(BNC) - charge
-            case .none:
-                return 0
-        }
-    }
-    var workTaxableIncome : Double { // taxable à l'IRPP
-        switch workIncome {
-            case .none:
-                return 0
-            default:
-                return Fiscal.model.incomeTaxes.taxableIncome(from: workIncome!)
-        }
-    }
-    
+
     /// ACTIVITE: date et cause de cessation d'activité
     @Published var causeOfRetirement: Unemployment.Cause = .demission
     @Published var dateOfRetirement : Date = Date.distantFuture
@@ -140,9 +112,7 @@ final class Adult: Person {
         - Pension liquidation - date: \(dateOfPensionLiquid.stringMediumDate)
         - Nombre d'enfants: \(nbOfChildBirth)
         - Option fiscale à la succession: \(String(describing: fiscalOption))
-        - Revenu taxable: \(workTaxableIncome.€String)
-        - Revenu:\(workIncome?.description.withPrefixedSplittedLines("  ") ?? "aucun")
-          - Imposable: \(workLivingIncome.€String) (après abattement)\n
+        - Revenu:\(workIncome?.description.withPrefixedSplittedLines("  ") ?? "aucun")\n
         """
     }
     
@@ -255,6 +225,34 @@ final class Adult: Person {
         }
     }
     
+    func workNetIncome(using model: Model) -> Double { // net de feuille de paye, net de charges sociales et mutuelle obligatore
+        switch workIncome {
+            case .salary(_, _, let netSalary, _, _):
+                return netSalary
+            case .turnOver(let BNC, _):
+                return model.fiscalModel.turnoverTaxes.net(BNC)
+            case .none:
+                return 0
+        }
+    }
+    func workLivingIncome(using model: Model) -> Double { // net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
+        switch workIncome {
+            case .salary(_, _, let netSalary, _, let charge):
+                return netSalary - charge
+            case .turnOver(let BNC, let charge):
+                return model.fiscalModel.turnoverTaxes.net(BNC) - charge
+            case .none:
+                return 0
+        }
+    }
+    func workTaxableIncome(using model: Model) -> Double { // taxable à l'IRPP
+        switch workIncome {
+            case .none:
+                return 0
+            default:
+                return model.fiscalModel.incomeTaxes.taxableIncome(from: workIncome!)
+        }
+    }
     func gaveBirthTo(children : Int) {
         nbOfChildBirth = children
     }
@@ -298,14 +296,15 @@ final class Adult: Person {
     
     /// Revenu net de charges pour vivre et revenu taxable à l'IRPP
     /// - Parameter year: année
-    func workIncome(during year: Int)
+    func workIncome(during year : Int,
+                    using model : Model)
     -> (net: Double, taxableIrpp: Double) {
         guard isActive(during: year) else {
             return (0, 0)
         }
         let nbWeeks = (dateOfRetirementComp.year == year ? dateOfRetirement.weekOfYear.double() : 52)
-        return (net         : workLivingIncome  * nbWeeks / 52,
-                taxableIrpp : workTaxableIncome * nbWeeks / 52)
+        return (net         : workLivingIncome(using: model)  * nbWeeks / 52,
+                taxableIrpp : workTaxableIncome(using: model) * nbWeeks / 52)
     }
     
     /// Réinitialiser les prioriétés variables des membres de manière aléatoires
@@ -337,7 +336,7 @@ final class Adult: Person {
         let pensionAgirc   = pensionRegimeAgirc(using: model)
         let brut           = pensionGeneral.brut + pensionAgirc.brut
         let net            = pensionGeneral.net  + pensionAgirc.net
-        let taxable        = try! Fiscal.model.pensionTaxes.taxable(brut: brut, net:net)
+        let taxable        = try! model.fiscalModel.pensionTaxes.taxable(brut: brut, net:net)
         return BrutNetTaxable(brut: brut, net: net, taxable: taxable)
     }
 

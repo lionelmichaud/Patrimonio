@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import FiscalModel
 import NamedValue
+import ModelEnvironment
 
 // ligne anuelle de cash flow de la SCI
 struct SciCashFlowLine {
@@ -106,7 +106,8 @@ struct SciCashFlowLine {
     
     init(withYear year  : Int,
          of patrimoine  : Patrimoin,
-         for adultsName : [String]) {
+         for adultsName : [String],
+         using model    : Model) {
         self.year = year
         
         // populate produit de vente, dividendes des SCPI
@@ -156,7 +157,7 @@ struct SciCashFlowLine {
         }
         
         /// calcul de l'IS de la SCI dû sur les dividendes (sur les ventes: déduis au moment de la vente)
-        IS = Fiscal.model.companyProfitTaxes.IS(revenues.scpiDividends.total)
+        IS = model.fiscalModel.companyProfitTaxes.IS(revenues.scpiDividends.total)
     }
     
     // MARK: - Methods

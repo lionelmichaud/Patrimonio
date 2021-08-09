@@ -19,6 +19,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", catego
 // MARK: - Décompositon de l'impôt par tranche Charts Views
 
 struct IrppSliceView: View {
+    @EnvironmentObject var model     : Model
     @EnvironmentObject var dataStore : Store
     @EnvironmentObject var simulation: Simulation
     @EnvironmentObject var family    : Family
@@ -47,7 +48,8 @@ struct IrppSliceView: View {
             IrppSlicesStackedBarChartView(family         : family,
                                           socialAccounts : $simulation.socialAccounts,
                                           evalYear       : uiState.fiscalChartState.evalDate,
-                                          title          : simulation.title)
+                                          title          : simulation.title,
+                                          using          : model)
         }
         .padding(.trailing, 4)
         .navigationTitle("Décomposition par tranche d'imposition")
@@ -89,17 +91,20 @@ struct IrppSlicesStackedBarChartView: UIViewRepresentable {
     @Binding var socialAccounts : SocialAccounts
     var family                  : Family
     var evalYear                : Double
+    let model                   : Model
     
     // MARK: - Initializer
 
     internal init(family         : Family,
                   socialAccounts : Binding<SocialAccounts>,
                   evalYear       : Double,
-                  title          : String) {
+                  title          : String,
+                  using model    : Model) {
         IrppSlicesStackedBarChartView.titleStatic = title
         self.family                               = family
         self.evalYear                             = evalYear
         self._socialAccounts                      = socialAccounts
+        self.model                                = model
     }
     
     // MARK: - Type methods
@@ -153,7 +158,8 @@ struct IrppSlicesStackedBarChartView: UIViewRepresentable {
         let visitor = IrppSliceChartCashFlowVisitor(element    : socialAccounts.cashFlowArray,
                                                     for        : year,
                                                     nbAdults   : family.nbOfAdultAlive(atEndOf: year),
-                                                    nbChildren : family.nbOfFiscalChildren(during: year))
+                                                    nbChildren : family.nbOfFiscalChildren(during: year),
+                                                    using      : model)
         let dataSet = visitor.dataSets
 
         // ajouter les DataSet au Chartdata

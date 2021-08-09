@@ -7,13 +7,12 @@
 //
 
 import Foundation
-import FiscalModel
 import ModelEnvironment
 
 extension CashFlowLine {
     /// Populate Ages and Work incomes
     /// - Parameter family: de la famille
-    mutating func populateIncomes(of family        : Family,
+    mutating func populateIncomes(of family   : Family,
                                   using model : Model) {
         var totalPensionDiscount = 0.0
         
@@ -25,7 +24,7 @@ extension CashFlowLine {
             // populate work, pension and unemployement incomes of family members
             if let adult = person as? Adult {
                 /// revenus du travail
-                let workIncome = adult.workIncome(during: year)
+                let workIncome = adult.workIncome(during: year, using: model)
                 // revenus du travail inscrit en compte avant IRPP (net charges sociales, de dépenses de mutuelle ou d'assurance perte d'emploi)
                 adultsRevenues.perCategory[.workIncomes]?.credits.namedValues
                     .append((name: name,
@@ -42,7 +41,7 @@ extension CashFlowLine {
                     .append((name: name,
                              value: pension.net.rounded()))
                 // part de la pension inscrite en compte qui est imposable à l'IRPP
-                let relicat = Fiscal.model.pensionTaxes.model.maxRebate - totalPensionDiscount
+                let relicat = model.fiscalModel.pensionTaxes.model.maxRebate - totalPensionDiscount
                 var discount = pension.net - pension.taxable
                 if relicat >= discount {
                     // l'abattement est suffisant pour cette personne

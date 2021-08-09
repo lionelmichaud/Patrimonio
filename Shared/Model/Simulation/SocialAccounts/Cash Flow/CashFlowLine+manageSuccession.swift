@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ModelEnvironment
 
 extension CashFlowLine {
 
@@ -67,7 +68,8 @@ extension CashFlowLine {
     ///   - patrimoine: le patrimoine de la famille
     mutating func manageSuccession(run             : Int,
                                    of family       : Family,
-                                   with patrimoine : Patrimoin) {
+                                   with patrimoine : Patrimoin,
+                                   using model     : Model) {
         // FIXME: - en fait il faudrait traiter les sucessions en séquences: calcul taxe => transmission puis calcul tax => transmission
         // identification des personnes décédées dans l'année
         let decedents = family.deceasedAdults(during: year)
@@ -82,7 +84,8 @@ extension CashFlowLine {
             let succession =
                 legalSuccessionManager.legalSuccession(in      : patrimoine,
                                                        of      : decedent,
-                                                       atEndOf : year)
+                                                       atEndOf : year,
+                                                       using   : model)
             successions.append(succession)
             
             // calculer les droits de transmission assurances vies
@@ -90,7 +93,8 @@ extension CashFlowLine {
             let liSuccession =
                 lifeInsuranceSuccessionManager.lifeInsuraceSuccession(in      : patrimoine,
                                                                       of      : decedent,
-                                                                      atEndOf : year)
+                                                                      atEndOf : year,
+                                                                      using   : model)
             lifeInsSuccessions.append(liSuccession)
             
             // transférer les biens d'un défunt vers ses héritiers

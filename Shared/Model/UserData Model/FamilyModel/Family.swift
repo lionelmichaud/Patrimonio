@@ -1,5 +1,4 @@
 import Foundation
-import FiscalModel
 import Files
 import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
 import ModelEnvironment
@@ -17,32 +16,6 @@ final class Family: ObservableObject {
     @Published private(set) var members = PersistableArrayOfPerson()
     // dépenses
     @Published var expenses = LifeExpensesDic()
-    // revenus
-    var workNetIncome    : Double { // computed
-        var netIcome : Double = 0.0
-        for person in members.items {
-            if let adult = person as? Adult {netIcome += adult.workNetIncome}
-        }
-        return netIcome
-    }
-    var workTaxableIncome: Double { // computed
-        var taxableIncome : Double = 0.0
-        for person in members.items {
-            if let adult = person as? Adult {taxableIncome += adult.workTaxableIncome}
-        }
-        return taxableIncome
-    }
-    // coefficient familial à la date du jour
-    var familyQuotient: Double { // computed
-        try! Fiscal.model.incomeTaxes.familyQuotient(nbAdults   : nbOfAdults,
-                                                     nbChildren : nbOfLivingChildren)
-    }
-    // impots à la date du jour
-    var irpp: Double { // computed
-        try! Fiscal.model.incomeTaxes.irpp(taxableIncome : workTaxableIncome,
-                                           nbAdults      : nbOfAdults,
-                                           nbChildren    : nbOfLivingChildren).amount
-    }
     // nombre d'enfant nés dans la famille
     var nbOfBornChildren: Int { // computed
         var nb = 0
@@ -112,6 +85,32 @@ final class Family: ObservableObject {
         try members.saveAsJSON(to: folder)
     }
 
+    // revenus
+    func workNetIncome(using model: Model) -> Double { // computed
+        var netIcome : Double = 0.0
+        for person in members.items {
+            if let adult = person as? Adult { netIcome += adult.workNetIncome(using: model) }
+        }
+        return netIcome
+    }
+    func workTaxableIncome(using model: Model) -> Double { // computed
+        var taxableIncome : Double = 0.0
+        for person in members.items {
+            if let adult = person as? Adult { taxableIncome += adult.workTaxableIncome(using: model) }
+        }
+        return taxableIncome
+    }
+    // coefficient familial à la date du jour
+    func familyQuotient(using model: Model) -> Double { // computed
+        try! model.fiscalModel.incomeTaxes.familyQuotient(nbAdults   : nbOfAdults,
+                                                          nbChildren : nbOfLivingChildren)
+    }
+    // impots à la date du jour
+    func irpp(using model: Model) -> Double { // computed
+        try! model.fiscalModel.incomeTaxes.irpp(taxableIncome : workTaxableIncome(using: model),
+                                                nbAdults      : nbOfAdults,
+                                                nbChildren    : nbOfLivingChildren).amount
+    }
     /// Rend la liste des enfants vivants
     /// - Parameter year: année
     /// - Warning: Vérifie que l'enfant est vivant
@@ -153,12 +152,15 @@ final class Family: ObservableObject {
     /// - Parameter year: année
     /// - Parameter netIncome: revenu net de charges et d'assurance (à vivre)
     /// - Parameter taxableIncome: Revenus du tavail cumulés imposable à l'IRPP
-    func income(during year: Int) -> (netIncome: Double, taxableIncome: Double) {
+    func income(during year : Int,
+                using model : Model)
+    -> (netIncome     : Double,
+        taxableIncome : Double) {
         var totalNetIncome     : Double = 0.0
         var totalTaxableIncome : Double = 0.0
         for person in members.items {
             if let adult = person as? Adult {
-                let income = adult.workIncome(during: year)
+                let income = adult.workIncome(during: year, using: model)
                 totalNetIncome     += income.net
                 totalTaxableIncome += income.taxableIrpp
             }
@@ -168,17 +170,19 @@ final class Family: ObservableObject {
     
     /// Quotient familiale durant l'année
     /// - Parameter year: année
-    func familyQuotient (during year: Int) -> Double {
-        try! Fiscal.model.incomeTaxes.familyQuotient(nbAdults   : nbOfAdultAlive(atEndOf: year),
+    func familyQuotient (during year : Int,
+                         using model : Model) -> Double {
+        try! model.fiscalModel.incomeTaxes.familyQuotient(nbAdults   : nbOfAdultAlive(atEndOf: year),
                                                      nbChildren : nbOfFiscalChildren(during: year))
     }
     
     /// IRPP sur les revenus du travail de la famille
     /// - Parameter year: année
-    func irpp (for year: Int) -> Double {
-        try! Fiscal.model.incomeTaxes.irpp(
+    func irpp (for year    : Int,
+               using model : Model) -> Double {
+        try! model.fiscalModel.incomeTaxes.irpp(
             // FIXME: A CORRIGER pour prendre en compte tous les revenus imposable
-            taxableIncome : income(during : year).taxableIncome, // A CORRIGER
+            taxableIncome : income(during : year, using: model).taxableIncome, // A CORRIGER
             nbAdults      : nbOfAdultAlive(atEndOf    : year),
             nbChildren    : nbOfFiscalChildren(during : year))
             .amount
@@ -306,10 +310,6 @@ extension Family: CustomStringConvertible {
         FAMILLE:
         - Nombre d'adultes dans ls famille: \(nbOfAdults)
         - Nombre d'enfants nés dans la famille: \(nbOfBornChildren)
-        - family net income:     \(workNetIncome.€String)
-        - family taxable income: \(workTaxableIncome.€String)
-        - family income tax quotient: \(familyQuotient)
-        - family income taxes: \(irpp.€String)
         - MEMBRES DE LA FAMILLE:
         """
         members.items.forEach { member in
