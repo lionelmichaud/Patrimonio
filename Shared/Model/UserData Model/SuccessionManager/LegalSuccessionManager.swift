@@ -10,6 +10,7 @@ import Foundation
 import FiscalModel
 import Ownership
 import Succession
+import ModelEnvironment
 
 struct LegalSuccessionManager {
     /// Calcule l'actif net taxable à la succession d'une personne
@@ -38,8 +39,9 @@ struct LegalSuccessionManager {
     /// - Returns: Succession légale du défunt incluant la table des héritages et droits de succession pour chaque héritier
     func legalSuccession(in patrimoine : Patrimoin,
                          of decedent   : Person,
-                         atEndOf year  : Int) -> Succession {
-        
+                         atEndOf year  : Int,
+                         using model   : Model) -> Succession {
+
         var inheritances      : [Inheritance] = []
         var inheritanceShares : (forChild: Double, forSpouse: Double) = (0, 0)
         
@@ -69,7 +71,7 @@ struct LegalSuccessionManager {
                 .fiscalOption
                 .sharedValues(nbChildren        : family.nbOfChildrenAlive(atEndOf: year),
                               spouseAge         : conjointSurvivant.age(atEndOf: year),
-                              demembrementModel : Fiscal.model.demembrement)
+                              demembrementModel : model.fiscalModel.demembrement)
             
             // calculer la part d'héritage du conjoint
             let share = inheritanceShares.forSpouse
@@ -111,7 +113,7 @@ struct LegalSuccessionManager {
                     let brut  = totalTaxableInheritance * share
                     
                     // caluler les droits de succession du conjoint
-                    let inheritance = try! Fiscal.model.inheritanceDonation.heritageOfChild(partSuccession: brut)
+                    let inheritance = try! model.fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brut)
                     
 //                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded()) (\(share.rounded())%)")
 //                    print("    Taxe = \(inheritance.taxe.rounded())")

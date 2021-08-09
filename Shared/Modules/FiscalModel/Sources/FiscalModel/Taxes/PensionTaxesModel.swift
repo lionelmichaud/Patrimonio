@@ -9,10 +9,21 @@
 import Foundation
 import AppFoundation
 
+public protocol NetRegimeGeneralProviderP {
+    func netRegimeGeneral(_ brut: Double) -> Double
+}
+
+public protocol NetRegimeAgircProviderP {
+    func netRegimeAgirc(_ brut: Double) -> Double
+}
+
+public typealias NetPensionProviderP =
+    NetRegimeGeneralProviderP & NetRegimeAgircProviderP
+
 // MARK: - Charges sociales sur pensions de retraite
 /// https://www.service-public.fr/particuliers/vosdroits/F2971
 /// Charges sociales sur pensions de retraite
-public struct PensionTaxesModel: Codable {
+public struct PensionTaxesModel: Codable, NetPensionProviderP {
     
     // MARK: - Nested types
 

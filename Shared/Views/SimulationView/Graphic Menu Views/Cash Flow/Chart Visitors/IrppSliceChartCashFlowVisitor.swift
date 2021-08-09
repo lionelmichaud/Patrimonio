@@ -7,7 +7,7 @@
 
 import Foundation
 import AppFoundation
-import FiscalModel
+import ModelEnvironment
 import Charts
 
 // MARK: - Génération de graphiques - Synthèse - FISCALITE IRPP
@@ -36,8 +36,8 @@ enum IrppEnum: Int, PickableEnumP {
 /// Dessiner un graphe à lignes : revenu imposable + irpp
 /// - Returns: tableau de LineChartDataSet
 class IrppSliceChartCashFlowVisitor: CashFlowIrppSliceVisitorP {
-
-    var dataSets: BarChartDataSet?
+    let model    : Model
+    var dataSets : BarChartDataSet?
     var slicesLimit        = [Double]()
     private var slicesSize = [Double]()
     private var _dataSets  = BarChartDataSet()
@@ -47,13 +47,15 @@ class IrppSliceChartCashFlowVisitor: CashFlowIrppSliceVisitorP {
     private var nbAdults   : Int
     private var nbChildren : Int
 
-    init(element            : CashFlowArray,
-         for year           : Int,
-         nbAdults           : Int,
-         nbChildren         : Int) {
+    init(element     : CashFlowArray,
+         for year    : Int,
+         nbAdults    : Int,
+         nbChildren  : Int,
+         using model : Model) {
         self.year       = year
         self.nbAdults   = nbAdults
         self.nbChildren = nbChildren
+        self.model      = model
         buildIrppSliceChart(element: element)
     }
 
@@ -63,7 +65,7 @@ class IrppSliceChartCashFlowVisitor: CashFlowIrppSliceVisitorP {
         // si l'année n'existe pas dans le tableau de cash flow
         guard let cfLine = element[year] else { return }
 
-        let slicedIrpp = try! Fiscal.model.incomeTaxes.slicedIrpp(taxableIncome : cfLine.adultTaxes.irpp.amount / cfLine.adultTaxes.irpp.averageRate,
+        let slicedIrpp = try! model.fiscalModel.incomeTaxes.slicedIrpp(taxableIncome : cfLine.adultTaxes.irpp.amount / cfLine.adultTaxes.irpp.averageRate,
                                                                   nbAdults      : nbAdults,
                                                                   nbChildren    : nbChildren)
         let bars = IrppEnum.allCases.map { (xLabel) -> BarChartDataEntry in

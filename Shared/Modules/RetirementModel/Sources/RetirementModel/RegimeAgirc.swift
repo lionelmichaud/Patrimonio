@@ -64,16 +64,16 @@ public final class RegimeAgirc: Codable {
             case version, gridAvantAgeLegal, gridApresAgelegal, valeurDuPoint, ageMinimum, majorationPourEnfant
         }
         
-        public var version       : Version
-        let gridAvantAgeLegal    : [SliceAvantAgeLegal]
-        let gridApresAgelegal    : [SliceApresAgeLegal]
-        var valeurDuPoint        : Double // 1.2714
-        var ageMinimum           : Int    // 57
-        let majorationPourEnfant : MajorationPourEnfant
+        public var version                 : Version
+        let gridAvantAgeLegal              : [SliceAvantAgeLegal]
+        let gridApresAgelegal              : [SliceApresAgeLegal]
+        var valeurDuPoint                  : Double // 1.2714
+        var ageMinimum                     : Int    // 57
+        let majorationPourEnfant           : MajorationPourEnfant
         // dependencies to other Models
-        var regimeGeneral        : RegimeGeneral!
-        var fiscal               : Fiscal.Model!
-        var pensionDevaluationRateProvider: PensionDevaluationRateProviderP!
+        var regimeGeneral                  : RegimeGeneral!
+        var netRegimeAgircProviderP        : NetRegimeAgircProviderP!
+        var pensionDevaluationRateProvider : PensionDevaluationRateProviderP!
     }
     
     // MARK: - Static Properties
@@ -127,8 +127,8 @@ public final class RegimeAgirc: Codable {
         model.pensionDevaluationRateProvider = provider
     }
     
-    public func setFiscalModel(_ model: Fiscal.Model) {
-        self.model.fiscal = model
+    public func setNetRegimeAgircProviderP(_ netRegimeAgircProviderP: NetRegimeAgircProviderP) {
+        self.model.netRegimeAgircProviderP = netRegimeAgircProviderP
     }
     
     func setRegimeGeneral(_ regimeGeneral: RegimeGeneral) {

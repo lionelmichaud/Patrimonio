@@ -7,10 +7,10 @@
 //
 
 import Foundation
-import FiscalModel
 import Ownership
 import AssetsModel
 import Succession
+import ModelEnvironment
 
 struct LifeInsuranceSuccessionManager {
     /// Calcule la masse totale d'assurance vie de la succession d'une personne.
@@ -110,7 +110,8 @@ struct LifeInsuranceSuccessionManager {
     /// - Returns: Succession du défunt incluant la table des héritages et droits de succession pour chaque héritier
     func lifeInsuraceSuccession(in patrimoine : Patrimoin,
                                 of decedent   : Person,
-                                atEndOf year  : Int) -> Succession {
+                                atEndOf year  : Int,
+                                using model   : Model) -> Succession {
         var inheritances     : [Inheritance]     = []
         var massesSuccession : [String : Double] = [:]
         
@@ -152,10 +153,10 @@ struct LifeInsuranceSuccessionManager {
                 var heritage = (netAmount: 0.0, taxe: 0.0)
                 if member is Adult {
                     // le conjoint
-                    heritage = Fiscal.model.lifeInsuranceInheritance.heritageToConjoint(partSuccession: masse)
+                    heritage = model.fiscalModel.lifeInsuranceInheritance.heritageToConjoint(partSuccession: masse)
                 } else {
                     // les enfants
-                    heritage = try! Fiscal.model.lifeInsuranceInheritance.heritageOfChild(partSuccession: masse)
+                    heritage = try! model.fiscalModel.lifeInsuranceInheritance.heritageOfChild(partSuccession: masse)
                 }
                 //                print("  Part d'héritage de \(member.displayName) = \(masse.rounded()) (\((masse/totalTaxableInheritanceValue*100.0).rounded()) %)")
                 //                print("    Taxe = \(heritage.taxe.rounded())")

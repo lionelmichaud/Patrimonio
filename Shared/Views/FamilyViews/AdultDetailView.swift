@@ -121,16 +121,16 @@ private struct RevenuSectionView: View {
             switch income {
                 case let .salary(_, _, _, fromDate1, healthInsurance):
                     revenueBrut    = adult.workBrutIncome
-                    revenueTaxable = adult.workTaxableIncome
-                    revenueLiving  = adult.workLivingIncome
-                    revenueNet     = adult.workNetIncome
+                    revenueTaxable = adult.workTaxableIncome(using: model)
+                    revenueLiving  = adult.workLivingIncome(using: model)
+                    revenueNet     = adult.workNetIncome(using: model)
                     fromDate       = fromDate1.stringMediumDate
                     insurance      = healthInsurance
                 case let .turnOver(_, incomeLossInsurance):
                     revenueBrut    = adult.workBrutIncome
-                    revenueTaxable = adult.workTaxableIncome
-                    revenueLiving  = adult.workLivingIncome
-                    revenueNet     = adult.workNetIncome
+                    revenueTaxable = adult.workTaxableIncome(using: model)
+                    revenueLiving  = adult.workLivingIncome(using: model)
+                    revenueNet     = adult.workNetIncome(using: model)
                     insurance      = incomeLossInsurance
                 case .none: // nil
                     revenueBrut    = 0
@@ -204,6 +204,7 @@ private struct RevenuSectionView: View {
 // MARK: - MemberDetailView / AdultDetailView / InheritanceSectionView
 
 private struct InheritanceSectionView: View {
+    @EnvironmentObject var model      : Model
     @EnvironmentObject var patrimoine : Patrimoin
     @EnvironmentObject var member     : Person
     
@@ -261,7 +262,8 @@ private struct InheritanceSectionView: View {
         let legalSuccessionManager = LegalSuccessionManager()
         let succession = legalSuccessionManager.legalSuccession(in      : patrimoine,
                                                                 of      : decedent,
-                                                                atEndOf : year)
+                                                                atEndOf : year,
+                                                                using   : model)
         let taxableInheritanceValue = legalSuccessionManager.taxableInheritanceValue(in: patrimoine,
                                                                                      of: decedent,
                                                                                      atEndOf: year)

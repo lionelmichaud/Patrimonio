@@ -46,6 +46,10 @@ public final class LayoffCompensation: Codable {
     }
     
     public struct Model: JsonCodableToBundleP, VersionableP {
+        enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
+            case version, legalGrid, metallurgieGrid, correctionAgeGrid, irppDiscount
+        }
+
         public static var defaultFileName : String = "LayoffCompensationModel.json"
         
         public var version    : Version
@@ -54,7 +58,7 @@ public final class LayoffCompensation: Codable {
         let correctionAgeGrid : [SliceCorrection]
         let irppDiscount      : IrppDiscount
         // dependencies to other Models
-        var fiscal            : Fiscal.Model!
+        var layOffTaxesProvider : LayOffTaxesProviderP!
     }
     
     // MARK: - Properties
@@ -69,8 +73,8 @@ public final class LayoffCompensation: Codable {
     
     // MARK: - Methods
 
-    public func setFiscalModel(_ model: Fiscal.Model) {
-        self.model.fiscal = model
+    public func setLayOffTaxesProvider(_ layOffTaxesProvider: LayOffTaxesProviderP) {
+        self.model.layOffTaxesProvider = layOffTaxesProvider
     }
     
     /// Calcul du nombre de mois de salaire de l'indemnité de licenciement pour une grille donnée
@@ -209,7 +213,7 @@ public final class LayoffCompensation: Codable {
         taxable = brutReel - irppDiscount
         
         // indemnité nette de charges sociales
-        let net = model.fiscal.layOffTaxes.net(
+        let net = model.layOffTaxesProvider.net(
             compensationConventional : brutConventionnel,
             compensationBrut         : brutReel,
             compensationTaxable      : &taxable,

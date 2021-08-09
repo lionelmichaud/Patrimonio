@@ -7,15 +7,17 @@
 //
 
 import Foundation
+import Persistable
 import AppFoundation
+import FileAndFolder
 
-// MARK: - SINGLETON: Modèle fiscal
+// MARK: - Fiscal Model
 
-public struct Fiscal {
+public struct Fiscal: PersistableModelP {
     
     // MARK: - Nested types
 
-    public struct Model: JsonCodableToBundleP {
+    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP {
         
         // MARK: - Static Properties
         
@@ -72,10 +74,17 @@ public struct Fiscal {
     
     // MARK: - Static Properties
     
-    public static var model: Model = Model(fromFile: Model.defaultFileName).initialized()
+    public static var defaultFileName: String = "FiscalModelConfig.json"
+    //public static var model: Model = Model(fromFile: Model.defaultFileName).initialized()
+
+    // MARK: - Properties
+
+    public var model         : Model?
+    public var persistenceSM : PersistenceStateMachine
 
     // MARK: - Initializer
     
-    private init() {
+    public init() {
+        self.persistenceSM = PersistenceStateMachine()
     }
 }

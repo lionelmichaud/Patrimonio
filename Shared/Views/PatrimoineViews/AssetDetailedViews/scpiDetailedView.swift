@@ -7,11 +7,12 @@
 //
 
 import SwiftUI
-import FiscalModel
 import Ownership
 import AssetsModel
+import ModelEnvironment
 
 struct ScpiDetailedView: View {
+    @EnvironmentObject var model      : Model
     @EnvironmentObject var family     : Family
     @EnvironmentObject var patrimoine : Patrimoin
     @EnvironmentObject var simulation : Simulation
@@ -58,7 +59,7 @@ struct ScpiDetailedView: View {
                            amount: localItem.yearlyRevenue(during: Date.now.year).taxableIrpp)
                     .foregroundColor(.secondary)
                 AmountView(label: "Revenu annuel déflaté net d'IS (si imposable à l'IS)",
-                           amount: Fiscal.model.companyProfitTaxes.net(localItem.yearlyRevenue(during: Date.now.year).revenue))
+                           amount: model.fiscalModel.companyProfitTaxes.net(localItem.yearlyRevenue(during: Date.now.year).revenue))
                     .foregroundColor(.secondary)
                 PercentEditView(label: "Taux de réévaluation annuel",
                                 percent: $localItem.revaluatRate)

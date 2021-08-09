@@ -51,6 +51,9 @@ public final class UnemploymentCompensation: Codable {
     }
     
     struct Model: JsonCodableToBundleP, VersionableP {
+        enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
+            case version, durationGrid, delayModel, amountModel
+        }
         static var defaultFileName: String = "UnemploymentCompensationModel.json"
         
         var version      : Version
@@ -58,7 +61,7 @@ public final class UnemploymentCompensation: Codable {
         let delayModel   : DelayModel
         let amountModel  : AmountModel
         // dependencies to other Models
-        var fiscal       : Fiscal.Model!
+        var allocationChomageTaxesProvider : AllocationChomageTaxesProviderP!
     }
     
     // MARK: - Initializer
@@ -73,8 +76,8 @@ public final class UnemploymentCompensation: Codable {
     
     // MARK: - Methods
 
-    public func setFiscalModel(_ model: Fiscal.Model) {
-        self.model.fiscal = model
+    public func setAllocationChomageTaxesProviderP(_ allocationChomageTaxesProvider: AllocationChomageTaxesProviderP) {
+        self.model.allocationChomageTaxesProvider = allocationChomageTaxesProvider
     }
     
     /// Durée d'indemnisation en mois
@@ -173,7 +176,7 @@ public final class UnemploymentCompensation: Codable {
                                   high : plafond)
         
         // nette de charges sociales
-        let net = try! model.fiscal.allocationChomageTaxes.net(brut : brut,
+        let net = try! model.allocationChomageTaxesProvider.net(brut : brut,
                                                                SJR  : SJR)
         return (brut : brut,
                 net  : net)

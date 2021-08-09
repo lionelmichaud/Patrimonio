@@ -136,7 +136,7 @@ extension RegimeGeneral {
                                                           dateOfPensionLiquid : dateOfPensionLiquid)
         }
         
-        let pensionNette = model.fiscal.pensionTaxes.netRegimeGeneral(pensionBrute)
+        let pensionNette = model.netRegimeGeneralProvider.netRegimeGeneral(pensionBrute)
         
         return (tauxDePension            : tauxDePension,
                 majorationEnfant         : majorationEnfantNe,

@@ -116,8 +116,7 @@ extension RegimeAgirc {
             pensionBrute *= coefReavluation
         }
         
-        let pensionNette = model.fiscal.pensionTaxes.netRegimeAgirc(pensionBrute)
-        //customLog.log(level: .info, "pension Nette = \(pensionNette, privacy: .public)")
+        let pensionNette = model.netRegimeAgircProviderP.netRegimeAgirc(pensionBrute)
         
         return (coefMinoration       : coefMinoration,
                 majorationPourEnfant : majorationPourEnfant,

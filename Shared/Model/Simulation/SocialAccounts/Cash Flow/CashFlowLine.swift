@@ -1,6 +1,5 @@
 import Foundation
 import os
-import FiscalModel
 import NamedValue
 import ModelEnvironment
 import Succession
@@ -127,24 +126,23 @@ struct CashFlowLine {
         
         /// initialize life insurance yearly rebate on taxes
         // TODO: mettre à jour le model de défiscalisation Asurance Vie
-        var lifeInsuranceRebate = Fiscal.model.lifeInsuranceTaxes.model.rebatePerPerson * family.nbOfAdultAlive(atEndOf: year).double()
+        var lifeInsuranceRebate = model.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson * family.nbOfAdultAlive(atEndOf: year).double()
         
         /// SCI: calculer le cash flow de la SCI
         sciCashFlowLine = SciCashFlowLine(withYear : year,
-                                          of  : patrimoine,
-                                          for : adultsNames)
-        
+                                          of       : patrimoine,
+                                          for      : adultsNames,
+                                          using    : model)
+
         try autoreleasepool {
             /// INCOME: populate Ages and Work incomes
             populateIncomes(of: family, using: model)
             
             /// REAL ESTATE: populate produit de vente, loyers, taxes sociales et taxes locales des bien immobiliers
-            manageRealEstateRevenues(of  : patrimoine,
-                                     for : adultsNames)
+            manageRealEstateRevenues(of: patrimoine, for: adultsNames)
             
             /// SCPI: populate produit de vente, dividendes, taxes sociales des SCPI
-            manageScpiRevenues(of  : patrimoine,
-                               for : adultsNames)
+            manageScpiRevenues(of: patrimoine, for: adultsNames)
             
             /// PERIODIC INVEST: populate revenue, des investissements financiers périodiques
             managePeriodicInvestmentRevenues(of                  : patrimoine,
@@ -155,24 +153,24 @@ struct CashFlowLine {
             // => ne génèrent des charges sociales et de l'IRPP qu'au moment des retraits ou de leur liquidation
             
             /// IRPP: calcule de l'impot sur l'ensemble des revenus
-            computeIrpp(of: family)
+            computeIrpp(of: family, using: model)
             
             /// ISF: calcule de l'impot sur la fortune
-            computeISF(with : patrimoine)
+            computeISF(with: patrimoine, using: model)
 
             /// EXPENSES: compute and populate family expenses
             lifeExpenses.namedValues = family.expenses.namedValueTable(atEndOf: year)
             
             /// LOAN: populate remboursement d'emprunts
-            manageLoanCashFlow(for : adultsNames,
-                               of  : patrimoine)
+            manageLoanCashFlow(for: adultsNames, of: patrimoine)
             
             /// SUCCESSIONS: Calcul des droits de successions légales et assurances vies + peuple les successions de l'année
             ///              Transférer les biens des personnes décédées dans l'année vers ses héritiers
-            manageSuccession(run  : run,
-                             of   : family,
-                             with : patrimoine)
-            
+            manageSuccession(run   : run,
+                             of    : family,
+                             with  : patrimoine,
+                             using : model)
+
             /// FREE INVEST: populate revenue, des investissements financiers libres et investir/retirer le solde net du cash flow de l'année
             try manageYearlyNetCashFlow(of                  : patrimoine,
                                         for                 : adultsNames,
@@ -185,18 +183,20 @@ struct CashFlowLine {
     
     // MARK: - Methods
     
-    fileprivate mutating func computeIrpp(of family: Family) {
-        adultTaxes.irpp = try! Fiscal.model.incomeTaxes.irpp(taxableIncome : adultsRevenues.totalTaxableIrpp,
-                                                             nbAdults      : family.nbOfAdultAlive(atEndOf: year),
-                                                             nbChildren    : family.nbOfFiscalChildren(during: year))
+    fileprivate mutating func computeIrpp(of family   : Family,
+                                          using model : Model) {
+        adultTaxes.irpp = try! model.fiscalModel.incomeTaxes.irpp(taxableIncome : adultsRevenues.totalTaxableIrpp,
+                                                                  nbAdults      : family.nbOfAdultAlive(atEndOf: year),
+                                                                  nbChildren    : family.nbOfFiscalChildren(during: year))
         adultTaxes.perCategory[.irpp]?.namedValues.append((name  : TaxeCategory.irpp.rawValue,
                                                            value : adultTaxes.irpp.amount.rounded()))
     }
     
-    fileprivate mutating func computeISF(with patrimoine : Patrimoin) {
+    fileprivate mutating func computeISF(with patrimoine : Patrimoin,
+                                         using model     : Model) {
         let taxableAsset = patrimoine.realEstateValue(atEndOf          : year,
                                                       evaluationMethod : .ifi)
-        adultTaxes.isf = try! Fiscal.model.isf.isf(taxableAsset: taxableAsset)
+        adultTaxes.isf = try! model.fiscalModel.isf.isf(taxableAsset: taxableAsset)
         adultTaxes.perCategory[.isf]?.namedValues.append((name  : TaxeCategory.isf.rawValue,
                                                           value : adultTaxes.isf.amount.rounded()))
     }

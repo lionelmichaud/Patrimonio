@@ -73,15 +73,16 @@ struct FamilySummarySection: View {
 
 struct RevenuSummarySection: View {
     var cashFlow : CashFlowLine?
+    @EnvironmentObject var model : Model
     @EnvironmentObject var family: Family
     
     var body: some View {
         if cashFlow == nil {
             Section(header: header("REVENUS DU TRAVAIL")) {
                 AmountView(label : "Revenu net de charges sociales et d'assurance (à vivre)",
-                           amount: family.income(during: Date.now.year).netIncome)
+                           amount: family.income(during: Date.now.year, using: model).netIncome)
                 AmountView(label : "Revenu imposable à l'IRPP",
-                           amount: family.income(during: Date.now.year).taxableIncome)
+                           amount: family.income(during: Date.now.year, using: model).taxableIncome)
             }
         } else {
             Section(header: header("REVENUS")) {
@@ -101,15 +102,16 @@ struct RevenuSummarySection: View {
 
 struct FiscalSummarySection: View {
     var cashFlow : CashFlowLine?
+    @EnvironmentObject var model : Model
     @EnvironmentObject var family: Family
-    
+
     var body: some View {
         if cashFlow == nil {
             Section(header: header("FISCALITE DES REVENUS DU TRAVAIL")) {
                 AmountView(label : "Montant de l'IRPP",
-                           amount: family.irpp(for: Date.now.year))
+                           amount: family.irpp(for: Date.now.year, using: model))
                 IntegerView(label   : "Quotient familial",
-                            integer : Int(family.familyQuotient(during: Date.now.year)))
+                            integer : Int(family.familyQuotient(during: Date.now.year, using: model)))
                     .padding(.leading)
             }
         } else {

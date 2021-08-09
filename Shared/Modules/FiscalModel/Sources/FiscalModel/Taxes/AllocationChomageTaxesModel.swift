@@ -9,8 +9,12 @@
 import Foundation
 import AppFoundation
 
+public protocol AllocationChomageTaxesProviderP {
+    func net(brut: Double, SJR: Double) throws -> Double
+}
+
 // MARK: - Charges sociales sur allocation chomage
-public struct AllocationChomageTaxesModel: Codable {
+public struct AllocationChomageTaxesModel: Codable, AllocationChomageTaxesProviderP {
     
     // MARK: Nested types
     
