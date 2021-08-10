@@ -14,13 +14,19 @@ import UnemployementModel
 import ModelEnvironment
 import DateBoundary
 
-struct BrutNetTaxable {
-    var brut    : Double
-    var net     : Double
-    var taxable : Double
+public struct BrutNetTaxable {
+    public var brut    : Double
+    public var net     : Double
+    public var taxable : Double
+
+    public init(brut: Double, net: Double, taxable: Double) {
+        self.brut = brut
+        self.net = net
+        self.taxable = taxable
+    }
 }
 
-final class Adult: Person {
+public final class Adult: Person {
     
     // MARK: - nested types
     
@@ -43,21 +49,21 @@ final class Adult: Person {
     
     // MARK: - Static Methods
     
-    static func setAdultRelativesProvider(_ adultRelativesProvider: AdultRelativesProviderP) {
+    public static func setAdultRelativesProvider(_ adultRelativesProvider: AdultRelativesProviderP) {
         self.adultRelativesProvider = adultRelativesProvider
     }
     
     // MARK: - Properties
     
     // nombre d'enfants
-    @Published var nbOfChildBirth: Int = 0
+    @Published public var nbOfChildBirth: Int = 0
     
     /// SUCCESSION: option fiscale
-    @Published var fiscalOption : InheritanceFiscalOption = .fullUsufruct
-
+    @Published public var fiscalOption : InheritanceFiscalOption = .fullUsufruct
+    
     /// ACTIVITE: revenus du travail
-    @Published var workIncome : WorkIncomeType?
-    var workBrutIncome    : Double { // avant charges sociales, dépenses de mutuelle ou d'assurance perte d'emploi
+    @Published public var workIncome : WorkIncomeType?
+    public var workBrutIncome    : Double { // avant charges sociales, dépenses de mutuelle ou d'assurance perte d'emploi
         switch workIncome {
             case .salary(let brutSalary, _, _, _, _):
                 return brutSalary
@@ -67,42 +73,42 @@ final class Adult: Person {
                 return 0
         }
     }
-
+    
     /// ACTIVITE: date et cause de cessation d'activité
-    @Published var causeOfRetirement: Unemployment.Cause = .demission
-    @Published var dateOfRetirement : Date = Date.distantFuture
-    var dateOfRetirementComp        : DateComponents { // computed
+    @Published public var causeOfRetirement: Unemployment.Cause = .demission
+    @Published public var dateOfRetirement : Date = Date.distantFuture
+    public var dateOfRetirementComp        : DateComponents { // computed
         Date.calendar.dateComponents([.year, .month, .day], from: dateOfRetirement)
     } // computed
-    var ageOfRetirementComp         : DateComponents { // computed
+    public var ageOfRetirementComp         : DateComponents { // computed
         Date.calendar.dateComponents([.year, .month, .day], from: birthDateComponents, to: dateOfRetirementComp)
     } // computed
-    var displayDateOfRetirement     : String { // computed
+    public var displayDateOfRetirement     : String { // computed
         mediumDateFormatter.string(from: dateOfRetirement)
     } // computed
     
     /// CHOMAGE
-    @Published var layoffCompensationBonified : Double? // indemnité accordée par l'entreprise > légal (supra-légale)
+    @Published public var layoffCompensationBonified : Double? // indemnité accordée par l'entreprise > légal (supra-légale)
     
     /// RETRAITE: date de demande de liquidation de pension régime général
-    @Published var ageOfPensionLiquidComp: DateComponents = DateComponents(calendar: Date.calendar, year: 62, month: 0, day: 1)
-    @Published var lastKnownPensionSituation = RegimeGeneralSituation()
+    @Published public var ageOfPensionLiquidComp: DateComponents = DateComponents(calendar: Date.calendar, year: 62, month: 0, day: 1)
+    @Published public var lastKnownPensionSituation = RegimeGeneralSituation()
     
     /// RETRAITE: date de demande de liquidation de pension complémentaire
-    @Published var ageOfAgircPensionLiquidComp: DateComponents = DateComponents(calendar: Date.calendar, year: 62, month: 0, day: 1)
-    @Published var lastKnownAgircPensionSituation = RegimeAgircSituation()
+    @Published public var ageOfAgircPensionLiquidComp: DateComponents = DateComponents(calendar: Date.calendar, year: 62, month: 0, day: 1)
+    @Published public var lastKnownAgircPensionSituation = RegimeAgircSituation()
     
     /// DEPENDANCE
-    @Published var nbOfYearOfDependency : Int = 0
-    var ageOfDependency                 : Int {
+    @Published public var nbOfYearOfDependency : Int = 0
+    public var ageOfDependency                 : Int {
         return ageOfDeath - nbOfYearOfDependency
     } // computed
-    var yearOfDependency                : Int {
+    public var yearOfDependency                : Int {
         return yearOfDeath - nbOfYearOfDependency
     } // computed
-    override var description: String {
+    public override var description: String {
         return super.description +
-        """
+            """
         - Nombre d'années de dépendance: \(nbOfYearOfDependency)
         - Cessation d'activité - age :  \(ageOfRetirementComp)
         - Cessation d'activité - date: \(displayDateOfRetirement)
@@ -155,22 +161,22 @@ final class Adult: Person {
                                  forKey: .work_Income)
         
         try super.init(from: decoder)
-
+        
         // pas de dépendance avant l'âge de 65 ans
         nbOfYearOfDependency = zeroOrPositive(ageOfDeath - 65)
     }
     
-    override init(sexe       : Sexe,
-                  givenName  : String,
-                  familyName : String,
-                  birthDate  : Date,
-                  ageOfDeath : Int = CalendarCst.forever) {
+    public override init(sexe       : Sexe,
+                         givenName  : String,
+                         familyName : String,
+                         birthDate  : Date,
+                         ageOfDeath : Int = CalendarCst.forever) {
         super.init(sexe: sexe, givenName: givenName, familyName: familyName, birthDate: birthDate, ageOfDeath: ageOfDeath)
     }
     
     // MARK: - methods
     
-    override func encode(to encoder: Encoder) throws {
+    public override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -183,14 +189,14 @@ final class Adult: Person {
         try container.encode(lastKnownPensionSituation, forKey: .regime_General_Situation)
         try container.encode(ageOfAgircPensionLiquidComp, forKey: .age_Of_Agirc_Pension_Liquid)
         try container.encode(lastKnownAgircPensionSituation, forKey: .regime_Agirc_Situation)
-//        try container.encode(nbOfYearOfDependency, forKey: .nb_Of_Year_Of_Dependency)
+        //        try container.encode(nbOfYearOfDependency, forKey: .nb_Of_Year_Of_Dependency)
         try container.encode(workIncome, forKey: .work_Income)
     }
     
     /// Initialise les propriétés qui ne peuvent pas l'être à la création
     /// quand le modèle n'est pas encore créé
     /// - Parameter model: modèle à utiliser
-    override func initialize(using model: Model) {
+    public override func initialize(using model: Model) {
         //super.initialize(using: model)
         
         // initialiser le nombre d'années de dépendence
@@ -200,7 +206,7 @@ final class Adult: Person {
     /// Année ou a lieu l'événement recherché
     /// - Parameter event: événement recherché
     /// - Returns: Année ou a lieu l'événement recherché, nil si l'événement n'existe pas
-    override func yearOf(event: LifeEvent) -> Int? {
+    public override func yearOf(event: LifeEvent) -> Int? {
         switch event {
             case .debutEtude:
                 return nil
@@ -225,7 +231,7 @@ final class Adult: Person {
         }
     }
     
-    func workNetIncome(using model: Model) -> Double { // net de feuille de paye, net de charges sociales et mutuelle obligatore
+    public func workNetIncome(using model: Model) -> Double { // net de feuille de paye, net de charges sociales et mutuelle obligatore
         switch workIncome {
             case .salary(_, _, let netSalary, _, _):
                 return netSalary
@@ -235,7 +241,7 @@ final class Adult: Person {
                 return 0
         }
     }
-    func workLivingIncome(using model: Model) -> Double { // net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
+    public func workLivingIncome(using model: Model) -> Double { // net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
         switch workIncome {
             case .salary(_, _, let netSalary, _, let charge):
                 return netSalary - charge
@@ -245,7 +251,7 @@ final class Adult: Person {
                 return 0
         }
     }
-    func workTaxableIncome(using model: Model) -> Double { // taxable à l'IRPP
+    public func workTaxableIncome(using model: Model) -> Double { // taxable à l'IRPP
         switch workIncome {
             case .none:
                 return 0
@@ -253,51 +259,51 @@ final class Adult: Person {
                 return model.fiscalModel.incomeTaxes.taxableIncome(from: workIncome!)
         }
     }
-    func gaveBirthTo(children : Int) {
+    public func gaveBirthTo(children : Int) {
         nbOfChildBirth = children
     }
-    func addChild() {
+    public func addChild() {
         nbOfChildBirth += 1
     }
-    func removeChild() {
+    public func removeChild() {
         nbOfChildBirth -= 1
     }
-    func nbOfFiscalChildren(during year: Int) -> Int {
+    public func nbOfFiscalChildren(during year: Int) -> Int {
         Adult.adultRelativesProvider.nbOfFiscalChildren(during: year)
     }
-    func nbOfBornChildren() -> Int {
+    public func nbOfBornChildren() -> Int {
         // TODO: - àremplacer par un accès directe à self.nbOfChildBirth
         Adult.adultRelativesProvider.nbOfBornChildren
     }
-    func setAgeOfPensionLiquidComp(year: Int, month: Int = 0, day: Int = 0) {
+    public func setAgeOfPensionLiquidComp(year: Int, month: Int = 0, day: Int = 0) {
         ageOfPensionLiquidComp = DateComponents(calendar: Date.calendar, year: year, month: month, day: day)
     }
-    func setAgeOfAgircPensionLiquidComp(year: Int, month: Int = 0, day: Int = 0) {
+    public func setAgeOfAgircPensionLiquidComp(year: Int, month: Int = 0, day: Int = 0) {
         ageOfAgircPensionLiquidComp = DateComponents(calendar: Date.calendar, year: year, month: month, day: day)
     }
     
     /// true si est vivant à la fin de l'année et encore en activité pendant une partie de l'année
     /// - Parameter year: année
-    func isActive(during year: Int) -> Bool {
+    public func isActive(during year: Int) -> Bool {
         isAlive(atEndOf: year) && (year <= dateOfRetirement.year)
     }
     
     /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de cessation d'activité
     /// - Parameter year: année
-    func isRetired(during year: Int) -> Bool {
+    public func isRetired(during year: Int) -> Bool {
         isAlive(atEndOf: year) && (dateOfRetirement.year <= year)
     }
     
     /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime complémentaire
     /// - Parameter year: première année incluant des revenus
-    func isDependent(during year: Int) -> Bool {
+    public func isDependent(during year: Int) -> Bool {
         isAlive(atEndOf: year) && (yearOfDependency <= year)
     }
     
     /// Revenu net de charges pour vivre et revenu taxable à l'IRPP
     /// - Parameter year: année
-    func workIncome(during year : Int,
-                    using model : Model)
+    public func workIncome(during year : Int,
+                           using model : Model)
     -> (net: Double, taxableIrpp: Double) {
         guard isActive(during: year) else {
             return (0, 0)
@@ -308,7 +314,7 @@ final class Adult: Person {
     }
     
     /// Réinitialiser les prioriétés variables des membres de manière aléatoires
-    override func nextRandomProperties(using model: Model) {
+    public override func nextRandomProperties(using model: Model) {
         super.nextRandomProperties(using: model)
         
         // générer une nouvelle valeure aléatoire
@@ -320,7 +326,7 @@ final class Adult: Person {
     }
     
     /// Réinitialiser les prioriétés variables des membres de manière déterministe
-    override func setRandomPropertiesDeterministicaly(using model: Model) {
+    public override func setRandomPropertiesDeterministicaly(using model: Model) {
         super.setRandomPropertiesDeterministicaly(using: model)
         
         // initialiser le nombre d'années de dépendence
@@ -331,7 +337,7 @@ final class Adult: Person {
     }
     
     /// RETRAITE: pension évaluée l'année de la liquidation de la pension (non révaluée)
-    func pension(using model: Model) -> BrutNetTaxable { // computed
+    public func pension(using model: Model) -> BrutNetTaxable { // computed
         let pensionGeneral = pensionRegimeGeneral(using: model)
         let pensionAgirc   = pensionRegimeAgirc(using: model)
         let brut           = pensionGeneral.brut + pensionAgirc.brut
@@ -339,10 +345,10 @@ final class Adult: Person {
         let taxable        = try! model.fiscalModel.pensionTaxes.taxable(brut: brut, net:net)
         return BrutNetTaxable(brut: brut, net: net, taxable: taxable)
     }
-
+    
     /// Actualiser les propriétés d'une personne à partir des valeurs modifiées
     /// des paramètres du modèle (valeur déterministes modifiées par l'utilisateur).
-    override func updateMembersDterministicValues(
+    public override func updateMembersDterministicValues(
         _ menLifeExpectation    : Int,
         _ womenLifeExpectation  : Int,
         _ nbOfYearsOfdependency : Int,
@@ -357,13 +363,13 @@ final class Adult: Person {
             ageMinimumAGIRC)
         
         nbOfYearOfDependency = nbOfYearsOfdependency
-
+        
         var ageLiquidationPension = max(ageOfPensionLiquidComp.year!, ageMinimumLegal)
         ageOfPensionLiquidComp = DateComponents(calendar: Date.calendar,
                                                 year: ageLiquidationPension, month: 0, day: 1)
-
+        
         ageLiquidationPension = max(ageOfAgircPensionLiquidComp.year!, ageMinimumAGIRC)
         ageOfAgircPensionLiquidComp = DateComponents(calendar: Date.calendar,
-                                                year: ageLiquidationPension, month: 0, day: 1)
+                                                     year: ageLiquidationPension, month: 0, day: 1)
     }
 }

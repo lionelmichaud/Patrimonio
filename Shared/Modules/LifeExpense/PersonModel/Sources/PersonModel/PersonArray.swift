@@ -13,8 +13,8 @@ import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserv
 import ModelEnvironment
 import Persistence
 
-typealias PersistableArrayOfPerson = PersistableArray<Person>
-extension PersistableArrayOfPerson {
+public typealias PersistableArrayOfPerson = PersistableArray<Person>
+public extension PersistableArrayOfPerson {
     /// Initialiser à partir d'un fichier JSON portant le nom `FileNameCst.kFamilyMembersFileName`
     /// contenu dans le dossier `folder` du répertoire `Documents`
     /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
@@ -62,7 +62,7 @@ extension PersistableArrayOfPerson {
     /// dans le folder nommé `folder` du répertoire `Documents`
     /// - Parameters:
     ///   - folder: nom du dossier du répertoire `Documents`
-    public func saveAsJSON(to folder: Folder) throws {
+    func saveAsJSON(to folder: Folder) throws {
         // encode to JSON file
         if let encoded: Data = try? Person.coder.encoder.encode(items.map { Wrap(wrapped: $0) }) {
             let fileName = FileNameCst.kFamilyMembersFileName

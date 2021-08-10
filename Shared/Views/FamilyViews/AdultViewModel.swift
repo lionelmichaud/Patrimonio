@@ -9,6 +9,7 @@ import SwiftUI
 import FiscalModel
 import UnemployementModel
 import RetirementModel
+import PersonModel
 
 // MARK: - Adult View Model
 

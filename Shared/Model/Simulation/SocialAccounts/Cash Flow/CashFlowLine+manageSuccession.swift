@@ -7,6 +7,7 @@
 
 import Foundation
 import ModelEnvironment
+import PersonModel
 
 extension CashFlowLine {
 

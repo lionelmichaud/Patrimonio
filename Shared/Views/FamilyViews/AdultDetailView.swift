@@ -11,6 +11,7 @@ import AppFoundation
 import FiscalModel
 import ModelEnvironment
 import Succession
+import PersonModel
 
 // MARK: - MemberDetailView / AdultDetailView
 

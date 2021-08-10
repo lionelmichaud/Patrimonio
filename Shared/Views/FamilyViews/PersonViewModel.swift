@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PersonModel
 
 // MARK: - Person View Model
 

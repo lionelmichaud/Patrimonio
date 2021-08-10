@@ -12,7 +12,7 @@ import RetirementModel
 import ModelEnvironment
 
 // MARK: - EXTENSION: Retraite Régime Général
-extension Adult {
+public extension Adult {
     // MARK: - Computed Properties
     
     var dateOfPensionLiquid              : Date { // computed
@@ -70,7 +70,7 @@ extension Adult {
 }
 
 // MARK: - EXTENSION: Retraite Régime Complémentaire
-extension Adult {
+public extension Adult {
     // MARK: - Computed Properties
     
     var dateOfAgircPensionLiquid              : Date { // computed
@@ -131,7 +131,7 @@ extension Adult {
 }
 
 // MARK: - EXTENSION: Retraite Tous Régimes
-extension Adult {
+public extension Adult {
     /// Calcul de la pension de retraite
     /// - Parameter year: année
     /// - Returns: pension brute, nette de charges sociales, taxable à l'IRPP

@@ -9,11 +9,11 @@ import Foundation
 import AppFoundation
 
 // MARK: - Sexe
-enum Sexe: Int, PickableEnumP, Codable {
+public enum Sexe: Int, PickableEnumP, Codable {
     case male
     case female
     
-    var displayString: String {
+    public var displayString: String {
         switch self {
             case .male:
                 return "M."
@@ -21,7 +21,7 @@ enum Sexe: Int, PickableEnumP, Codable {
                 return "Mme"
         }
     }
-    var pickerString: String {
+    public var pickerString: String {
         switch self {
             case .male:
                 return "Homme"

@@ -9,11 +9,11 @@ import Foundation
 import AppFoundation
 
 // MARK: - Seniority
-enum Seniority: Int, PickableEnumP {
+public enum Seniority: Int, PickableEnumP {
     case adult
     case enfant
     
-    var displayString: String {
+    public var displayString: String {
         switch self {
             case .adult:
                 return "(adulte)"
@@ -21,7 +21,7 @@ enum Seniority: Int, PickableEnumP {
                 return "(enfant)"
         }
     }
-    var pickerString: String {
+    public var pickerString: String {
         switch self {
             case .adult:
                 return "Adulte"

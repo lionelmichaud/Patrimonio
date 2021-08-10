@@ -8,6 +8,7 @@
 
 import SwiftUI
 import ModelEnvironment
+import PersonModel
 
 // MARK: - MemberDetailView / ChildDetailView
 

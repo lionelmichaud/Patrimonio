@@ -11,6 +11,7 @@ import FiscalModel
 import Ownership
 import Succession
 import ModelEnvironment
+import PersonModel
 
 struct LegalSuccessionManager {
     /// Calcule l'actif net taxable à la succession d'une personne

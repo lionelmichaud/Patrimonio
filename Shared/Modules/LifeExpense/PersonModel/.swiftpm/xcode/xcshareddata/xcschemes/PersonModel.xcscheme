@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FileAndFolder"
-               BuildableName = "FileAndFolder"
-               BlueprintName = "FileAndFolder"
+               BlueprintIdentifier = "PersonModel"
+               BuildableName = "PersonModel"
+               BlueprintName = "PersonModel"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -26,17 +26,16 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO"
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FileAndFolderTests"
-               BuildableName = "FileAndFolderTests"
-               BlueprintName = "FileAndFolderTests"
+               BlueprintIdentifier = "PersonModelTests"
+               BuildableName = "PersonModelTests"
+               BlueprintName = "PersonModelTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
@@ -62,9 +61,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FileAndFolder"
-            BuildableName = "FileAndFolder"
-            BlueprintName = "FileAndFolder"
+            BlueprintIdentifier = "PersonModel"
+            BuildableName = "PersonModel"
+            BlueprintName = "PersonModel"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>

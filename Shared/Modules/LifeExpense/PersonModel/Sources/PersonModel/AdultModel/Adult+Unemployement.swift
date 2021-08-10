@@ -12,7 +12,7 @@ import UnemployementModel
 import ModelEnvironment
 
 // MARK: - EXTENSION: Chômage
-extension Adult {
+public extension Adult {
     // MARK: - Computed Properties
 
     var SJR: Double { // computed
