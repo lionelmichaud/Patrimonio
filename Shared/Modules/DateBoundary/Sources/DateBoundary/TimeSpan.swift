@@ -304,6 +304,7 @@ extension TimeSpan: CustomStringConvertible {
             case .periodic (let from, let period, let to):
                 return
                     """
+
                     Periodique:
                     - de \(from) (inclus) à \(to) (exclu)
                     - tous les \(period) ans

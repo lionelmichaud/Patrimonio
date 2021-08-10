@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Persistence
+import LifeExpense
 
 struct ExpenseView: View {
     @EnvironmentObject private var dataStore : Store

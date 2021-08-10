@@ -12,7 +12,7 @@ import AppFoundation
 // MARK: - Catégories de Dépenses
 
 /// Catégories de dépenses
-enum LifeExpenseCategory: Int, PickableEnumP, Codable {
+public enum LifeExpenseCategory: Int, PickableEnumP, Codable {
     case abonnements
     case autres
     case cadeaux
@@ -35,7 +35,7 @@ enum LifeExpenseCategory: Int, PickableEnumP, Codable {
     
     // MARK: - Computed Properties
     
-    var pickerString: String {
+    public var pickerString: String {
         switch self {
             case .abonnements:
                 return "Abonnements"

@@ -4,6 +4,7 @@ import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserv
 import ModelEnvironment
 import Ownership
 import DateBoundary
+import LifeExpense
 
 // MARK: - Class Family: la Famille, ses membres, leurs actifs et leurs revenus
 

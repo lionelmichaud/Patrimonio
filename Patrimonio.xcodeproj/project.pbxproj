@@ -185,14 +185,10 @@
 		79735EED263242FA00CD952F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79735EE9263242FA00CD952F /* ContentView.swift */; };
 		7974156226AB51E300683A3A /* Persistable in Frameworks */ = {isa = PBXBuildFile; productRef = 7974156126AB51E300683A3A /* Persistable */; };
 		7974156426AB51FA00683A3A /* Persistable in Frameworks */ = {isa = PBXBuildFile; productRef = 7974156326AB51FA00683A3A /* Persistable */; };
+		797574AE26C13C8C00842572 /* LifeExpense in Frameworks */ = {isa = PBXBuildFile; productRef = 797574AD26C13C8C00842572 /* LifeExpense */; };
+		797574B026C13C9600842572 /* LifeExpense in Frameworks */ = {isa = PBXBuildFile; productRef = 797574AF26C13C9600842572 /* LifeExpense */; };
 		7977FE5B262E302F005A1CB1 /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE5A262E302F005A1CB1 /* Family.swift */; };
 		7977FE5C262E302F005A1CB1 /* Family.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE5A262E302F005A1CB1 /* Family.swift */; };
-		7977FE85262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE84262E50C5005A1CB1 /* LifeExpenseCategory.swift */; };
-		7977FE86262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE84262E50C5005A1CB1 /* LifeExpenseCategory.swift */; };
-		7977FE8C262E5282005A1CB1 /* LifeExpense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE8B262E5282005A1CB1 /* LifeExpense.swift */; };
-		7977FE8D262E5282005A1CB1 /* LifeExpense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE8B262E5282005A1CB1 /* LifeExpense.swift */; };
-		7977FE93262E53B5005A1CB1 /* LifeExpensesDic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE92262E53B5005A1CB1 /* LifeExpensesDic.swift */; };
-		7977FE94262E53B5005A1CB1 /* LifeExpensesDic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977FE92262E53B5005A1CB1 /* LifeExpensesDic.swift */; };
 		797901242640AEB600104C1A /* PatrimoineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797901232640AEB600104C1A /* PatrimoineView.swift */; };
 		797901252640AEB600104C1A /* PatrimoineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797901232640AEB600104C1A /* PatrimoineView.swift */; };
 		797901272640AF0400104C1A /* PatrimoineSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797901262640AF0400104C1A /* PatrimoineSummaryView.swift */; };
@@ -675,9 +671,6 @@
 		79735EE8263242FA00CD952F /* AppMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppMain.swift; sourceTree = "<group>"; };
 		79735EE9263242FA00CD952F /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7977FE5A262E302F005A1CB1 /* Family.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Family.swift; sourceTree = "<group>"; };
-		7977FE84262E50C5005A1CB1 /* LifeExpenseCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeExpenseCategory.swift; sourceTree = "<group>"; };
-		7977FE8B262E5282005A1CB1 /* LifeExpense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeExpense.swift; sourceTree = "<group>"; };
-		7977FE92262E53B5005A1CB1 /* LifeExpensesDic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeExpensesDic.swift; sourceTree = "<group>"; };
 		797901232640AEB600104C1A /* PatrimoineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatrimoineView.swift; sourceTree = "<group>"; };
 		797901262640AF0400104C1A /* PatrimoineSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatrimoineSummaryView.swift; sourceTree = "<group>"; };
 		797901292640B49E00104C1A /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
@@ -856,6 +849,7 @@
 				79058371262C79050061F296 /* SocioEconomyModel in Frameworks */,
 				7968405F26B8A8CC00F838BE /* Ownership in Frameworks */,
 				7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */,
+				797574B026C13C9600842572 /* LifeExpense in Frameworks */,
 				797931B526416F74000F8599 /* Disk in Frameworks */,
 				7985C11926B75B43005C2138 /* RealModule in Frameworks */,
 				7956995C262F90250015AF34 /* NamedValue in Frameworks */,
@@ -890,6 +884,7 @@
 				799074262660524C00F224F7 /* FileAndFolder in Frameworks */,
 				797931BB26416F86000F8599 /* Disk in Frameworks */,
 				794B016326B9C12C00882684 /* AssetsModel in Frameworks */,
+				797574AE26C13C8C00842572 /* LifeExpense in Frameworks */,
 				7956995E262F90310015AF34 /* NamedValue in Frameworks */,
 				79657B5326B758680044D62C /* Numerics in Frameworks */,
 				7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
@@ -1290,16 +1285,6 @@
 			path = "Charts-Utilities";
 			sourceTree = "<group>";
 		};
-		7977FE70262E4F72005A1CB1 /* ExpenseModel */ = {
-			isa = PBXGroup;
-			children = (
-				7977FE8B262E5282005A1CB1 /* LifeExpense.swift */,
-				7977FE92262E53B5005A1CB1 /* LifeExpensesDic.swift */,
-				7977FE84262E50C5005A1CB1 /* LifeExpenseCategory.swift */,
-			);
-			path = ExpenseModel;
-			sourceTree = "<group>";
-		};
 		798E7838264209AD0094534F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -1399,7 +1384,6 @@
 				7998E189262DB5FB00DA4A12 /* Family+Protocols.swift */,
 				7998E177262DB46800DA4A12 /* PersonCoderPreservingType.swift */,
 				7998E156262DB2E400DA4A12 /* PersonModel */,
-				7977FE70262E4F72005A1CB1 /* ExpenseModel */,
 			);
 			path = FamilyModel;
 			sourceTree = "<group>";
@@ -1845,6 +1829,7 @@
 				795F8AF426B9815D00E44A66 /* DateBoundary */,
 				794B016026B9C12400882684 /* AssetsModel */,
 				797E95B226BACC09000E1070 /* Succession */,
+				797574AF26C13C9600842572 /* LifeExpense */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -1889,6 +1874,7 @@
 				795F8AF226B9815500E44A66 /* DateBoundary */,
 				794B016226B9C12C00882684 /* AssetsModel */,
 				797E95B026BACBFB000E1070 /* Succession */,
+				797574AD26C13C8C00842572 /* LifeExpense */,
 			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
@@ -2242,7 +2228,6 @@
 				79504A05266793C1000AAEF0 /* RandomizerAssistantSectionView.swift in Sources */,
 				79FA8CE32630684F009FEA00 /* Assets.swift in Sources */,
 				7998E16D262DB38700DA4A12 /* Seniority.swift in Sources */,
-				7977FE85262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */,
 				796506D52640866F0036E466 /* scpiDetailedView.swift in Sources */,
 				79BE4A832651CE7800BBF46C /* BetaRandomizerView.swift in Sources */,
 				791ED0D62639FBFD00701202 /* UnemployementDetailView.swift in Sources */,
@@ -2293,7 +2278,6 @@
 				7990D8D1264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift in Sources */,
 				798DE8B22635CBC300C0C3B5 /* ExpenseSummaryView.swift in Sources */,
 				7977FE5B262E302F005A1CB1 /* Family.swift in Sources */,
-				7977FE93262E53B5005A1CB1 /* LifeExpensesDic.swift in Sources */,
 				79BE4A892651CE7800BBF46C /* ModelEconomyView.swift in Sources */,
 				79EC47BC26307C910006EE44 /* Liabilities.swift in Sources */,
 				79BE4A682651A2B400BBF46C /* LineChartHistogramVisitor.swift in Sources */,
@@ -2332,7 +2316,6 @@
 				791ED101263A1EF800701202 /* ChildDetailView.swift in Sources */,
 				791ED10A263A275800701202 /* FamilyView.swift in Sources */,
 				797931C1264170FE000F8599 /* SimulationKPIEnum.swift in Sources */,
-				7977FE8C262E5282005A1CB1 /* LifeExpense.swift in Sources */,
 				799025B72641F60300ED53D4 /* BS Global ChartView.swift in Sources */,
 				799025A12641F60300ED53D4 /* GridsView.swift in Sources */,
 				791ED112263A285300701202 /* CashFlowLine.swift in Sources */,
@@ -2435,7 +2418,6 @@
 				794B014F26B9BE4300882684 /* ValuedAssets.swift in Sources */,
 				791ED113263A285300701202 /* CashFlowLine.swift in Sources */,
 				7998E16E262DB38700DA4A12 /* Seniority.swift in Sources */,
-				7977FE86262E50C5005A1CB1 /* LifeExpenseCategory.swift in Sources */,
 				79BE4A872651CE7800BBF46C /* ModelSociologyView.swift in Sources */,
 				79FC728D26333A27004F3BD2 /* MainScene.swift in Sources */,
 				796506D62640866F0036E466 /* scpiDetailedView.swift in Sources */,
@@ -2477,7 +2459,6 @@
 				791ED0DC2639FE2700701202 /* RetirementDetailView.swift in Sources */,
 				791ED0E4263A04EE00701202 /* AdultViewModel.swift in Sources */,
 				7979012B2640B49E00104C1A /* TableView.swift in Sources */,
-				7977FE94262E53B5005A1CB1 /* LifeExpensesDic.swift in Sources */,
 				79EC47BD26307C910006EE44 /* Liabilities.swift in Sources */,
 				79FC725326331E0A004F3BD2 /* PickerHelperViews.swift in Sources */,
 				79B272822634D77D00298E5D /* LabelValueHelperViews.swift in Sources */,
@@ -2518,7 +2499,6 @@
 				79A8A19626565DBC00B23AD7 /* DossierAddView.swift in Sources */,
 				79CB2C8A264D731900B3E493 /* MonteCarloCsvVisitor.swift in Sources */,
 				796506C3264085830036E466 /* LiabilityView.swift in Sources */,
-				7977FE8D262E5282005A1CB1 /* LifeExpense.swift in Sources */,
 				79B164882651DD7200D0603C /* ModelsView.swift in Sources */,
 				799025A22641F60300ED53D4 /* GridsView.swift in Sources */,
 			);
@@ -3118,6 +3098,14 @@
 		7974156326AB51FA00683A3A /* Persistable */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Persistable;
+		};
+		797574AD26C13C8C00842572 /* LifeExpense */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LifeExpense;
+		};
+		797574AF26C13C9600842572 /* LifeExpense */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LifeExpense;
 		};
 		797931B426416F74000F8599 /* Disk */ = {
 			isa = XCSwiftPackageProductDependency;

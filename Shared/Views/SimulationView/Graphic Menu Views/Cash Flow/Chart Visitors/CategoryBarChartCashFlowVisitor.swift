@@ -9,6 +9,7 @@ import Foundation
 import os
 import AppFoundation
 import NamedValue
+import LifeExpense
 import Charts // https://github.com/danielgindi/Charts.git
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CategoryBarChartCashFlowVisitor")

@@ -7,14 +7,7 @@
 //
 
 import Foundation
-
-// MARK: - DI: Protocol de service de fourniture de dénombrement dans la famille
-
-protocol MembersCountProviderP {
-    var nbOfBornChildren: Int { get }
-    func nbOfAdultAlive(atEndOf year: Int) -> Int
-    func nbOfFiscalChildren(during year: Int) -> Int
-}
+import LifeExpense
 
 // MARK: - DI: Protocol de service de fourniture de l'époux d'un adulte
 

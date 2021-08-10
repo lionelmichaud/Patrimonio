@@ -11,19 +11,17 @@ import NamedValue
 
 // MARK: - Dictionnaire de Dépenses par catégorie (un tableau de dépenses par catégorie)
 
-typealias LifeExpensesDic = DictionaryOfNameableValuableArray<LifeExpenseCategory, LifeExpenseArray>
+public typealias LifeExpensesDic = DictionaryOfNameableValuableArray<LifeExpenseCategory, LifeExpenseArray>
 
-extension LifeExpensesDic {
+public extension LifeExpensesDic {
     /// Retourne un tableau des noms des dépenses dans une catégorie donnée
     func expensesNameArray(of thisCategory: LifeExpenseCategory) -> [String] {
         var table = [String]()
         // on prend une seule catégorie
-        var idx = 0
         if let expenseArray = perCategory[thisCategory] {
             let nbItem = expenseArray.items.count
-            for expIdx in 0..<nbItem {
+            for expIdx in expenseArray.items.range {
                 table.append(expenseArray[nbItem - 1 - expIdx].name)
-                idx += 1
             }
         }
         return table
@@ -44,7 +42,7 @@ extension LifeExpensesDic {
             var idx = 0
             perCategory.sortedReversed(by: \.key.displayString).forEach { (_, expenseArray) in
                 let nbItem = expenseArray.items.count
-                for expIdx in 0..<nbItem {
+                for expIdx in expenseArray.items.range {
                     if let firstYear = expenseArray[nbItem - 1 - expIdx].firstYear,
                        let lastYear  = expenseArray[nbItem - 1 - expIdx].lastYear {
                         table.append((name              : expenseArray[nbItem - 1 - expIdx].name.truncate(to: 20, addEllipsis: true),
@@ -62,7 +60,7 @@ extension LifeExpensesDic {
             var idx = 0
             if let expenseArray = perCategory[category!] {
                 let nbItem = expenseArray.items.count
-                for expIdx in 0..<nbItem {
+                for expIdx in expenseArray.items.range {
                     if let firstYear = expenseArray[nbItem - 1 - expIdx].firstYear,
                        let lastYear  = expenseArray[nbItem - 1 - expIdx].lastYear {
                         table.append((name              : expenseArray[nbItem - 1 - expIdx].name.truncate(to: 20, addEllipsis: true),
