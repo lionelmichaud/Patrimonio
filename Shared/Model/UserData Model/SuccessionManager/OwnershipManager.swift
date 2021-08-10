@@ -7,6 +7,7 @@
 
 import Foundation
 import FiscalModel
+import PersonModel
 
 struct OwnershipManager {
     // swiftlint:disable function_parameter_count

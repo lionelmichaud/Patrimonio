@@ -11,6 +11,7 @@ import Ownership
 import AssetsModel
 import Succession
 import ModelEnvironment
+import PersonModel
 
 struct LifeInsuranceSuccessionManager {
     /// Calcule la masse totale d'assurance vie de la succession d'une personne.

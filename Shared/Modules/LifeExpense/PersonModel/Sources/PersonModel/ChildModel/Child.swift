@@ -11,7 +11,7 @@ import AppFoundation
 import DateBoundary
 
 // MARK: -
-final class Child: Person {
+public final class Child: Person {
     
     // MARK: - nested types
     
@@ -21,30 +21,30 @@ final class Child: Person {
     
     // MARK: - properties
     
-    @Published var ageOfUniversity: Int = 18
-    var dateOfUniversity    : Date { // computed
+    @Published public var ageOfUniversity: Int = 18
+    public var dateOfUniversity    : Date { // computed
         dateOfUniversityComp.date!
     }
-    var dateOfUniversityComp: DateComponents { // computed
+    public var dateOfUniversityComp: DateComponents { // computed
         DateComponents(calendar : Date.calendar,
                        year     : birthDate.year + ageOfUniversity,
                        month    : 09,
                        day      : 30)
     }
     
-    @Published var ageOfIndependence: Int = 24
-    var dateOfIndependence    : Date { // computed
+    @Published public var ageOfIndependence: Int = 24
+    public var dateOfIndependence    : Date { // computed
         dateOfIndependenceComp.date!
     }
-    var dateOfIndependenceComp: DateComponents { // computed
+    public var dateOfIndependenceComp: DateComponents { // computed
         DateComponents(calendar : Date.calendar,
                        year     : birthDate.year + ageOfIndependence,
                        month    : 09,
                        day      : 30)
     }
-    override var description: String {
+    public override var description: String {
         super.description +
-        """
+            """
         - age at university:  \(ageOfUniversity) ans
         - date of university: \(mediumDateFormatter.string(from: dateOfUniversity))
         - age of independance:  \(ageOfIndependence) ans
@@ -64,12 +64,12 @@ final class Child: Person {
         //let superDecoder = try container.superDecoder()
         try super.init(from: decoder)
     }
-
-    override init(sexe       : Sexe,
-                  givenName  : String,
-                  familyName : String,
-                  birthDate  : Date,
-                  ageOfDeath : Int = CalendarCst.forever) {
+    
+    public override init(sexe       : Sexe,
+                         givenName  : String,
+                         familyName : String,
+                         birthDate  : Date,
+                         ageOfDeath : Int = CalendarCst.forever) {
         super.init(sexe       : sexe,
                    givenName  : givenName,
                    familyName : familyName,
@@ -79,7 +79,7 @@ final class Child: Person {
     
     // MARK: - methods
     
-    override func encode(to encoder: Encoder) throws {
+    public override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -89,44 +89,44 @@ final class Child: Person {
     
     /// true si l'année est postérieure à l'année d'entrée à l'université et avant indépendance financière
     /// - Parameter year: année
-    func isAtUniversity(during year: Int) -> Bool {
+    public func isAtUniversity(during year: Int) -> Bool {
         (dateOfUniversityComp.year! < year) && !isIndependant(during: year)
     }
-
+    
     /// true si l'année est postérieure à l'année d'indépendance financière
     /// - Parameter year: année
-    func isIndependant(during year: Int) -> Bool {
+    public func isIndependant(during year: Int) -> Bool {
         dateOfIndependenceComp.year! < year
     }
-
+    
     /// True si l'enfant fait encore partie du foyer fiscal pendant l'année donnée
-    func isFiscalyDependant(during year: Int) -> Bool {
+    public func isFiscalyDependant(during year: Int) -> Bool {
         let isAlive     = self.isAlive(atEndOf: year)
         let isDependant = !self.isIndependant(during: year)
         let age         = self.age(atEndOf: year - 1) // au début de l'année d'imposition
         return isAlive && ((age <= 21) || (isDependant && age <= 25))
     }
-
+    
     /// Année ou a lieu l'événement recherché
     /// - Parameter event: événement recherché
     /// - Returns: Année ou a lieu l'événement recherché, nil si l'événement n'existe pas
-    override func yearOf(event: LifeEvent) -> Int? {
+    public override func yearOf(event: LifeEvent) -> Int? {
         switch event {
             case .debutEtude:
                 return dateOfUniversity.year
-            
+                
             case .independance:
                 return dateOfIndependence.year
-            
+                
             case .dependence:
                 return nil
-            
+                
             case .deces:
                 return super.yearOf(event: event)
-            
+                
             case .cessationActivite:
                 return nil
-            
+                
             case .liquidationPension:
                 return nil
         }

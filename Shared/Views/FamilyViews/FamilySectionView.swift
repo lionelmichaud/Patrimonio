@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import PersonModel
 
 struct FamilySectionView : View {
     @EnvironmentObject var family     : Family

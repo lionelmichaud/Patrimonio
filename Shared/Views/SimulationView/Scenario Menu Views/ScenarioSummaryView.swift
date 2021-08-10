@@ -12,6 +12,7 @@ import SocioEconomyModel
 import ModelEnvironment
 import Persistence
 import AssetsModel
+import PersonModel
 
 /// Affiche des valeures des modèles utilisées pour le dernier Run de simulation
 struct ScenarioSummaryView: View {

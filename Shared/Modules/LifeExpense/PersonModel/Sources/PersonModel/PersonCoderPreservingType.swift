@@ -8,7 +8,7 @@
 import Foundation
 import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
 
-struct PersonCoderPreservingType {
+public struct PersonCoderPreservingType {
     let adapter = TypePreservingCodingAdapter()
     let encoder = JSONEncoder()
     let decoder = JSONDecoder()

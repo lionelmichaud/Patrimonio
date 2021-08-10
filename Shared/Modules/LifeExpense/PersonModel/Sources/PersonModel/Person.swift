@@ -16,13 +16,13 @@ import DateBoundary
 
 // MARK: - Tableau de Person
 
-typealias PersonArray = [Person]
+public typealias PersonArray = [Person]
 
 // MARK: - Person
-class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible {
+public class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible {
     
     // MARK: - Nested types
-
+    
     private enum CodingKeys : String, CodingKey {
         case sexe, name, birth_Date
     }
@@ -32,40 +32,40 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     static let coder = PersonCoderPreservingType()
     
     // MARK: - Properties
-
-    let id                    = UUID()
-    let sexe                  : Sexe
-    var name                  : PersonNameComponents {
+    
+    public let id                    = UUID()
+    public let sexe                  : Sexe
+    public var name                  : PersonNameComponents {
         didSet {
             displayName = personNameFormatter.string(from: name)
         }
     }
-    var birthDate             : Date {
+    public var birthDate             : Date {
         didSet {
             displayBirthDate = mediumDateFormatter.string(from: birthDate)
         }
     }
     var birthDateComponents   : DateComponents
-    @Published var ageOfDeath : Int
-    var yearOfDeath           : Int { // computed
+    @Published public var ageOfDeath : Int
+    public var yearOfDeath           : Int { // computed
         birthDateComponents.year! + ageOfDeath
     }
-    var ageComponents         : DateComponents { // computed
+    public var ageComponents         : DateComponents { // computed
         Date.calendar.dateComponents([.year, .month, .day],
                                      from: birthDateComponents,
                                      to: CalendarCst.nowComponents)
     }
-    var ageAtEndOfCurrentYear : Int { // computed
+    public var ageAtEndOfCurrentYear : Int { // computed
         Date.calendar.dateComponents([.year],
                                      from: birthDateComponents,
                                      to: CalendarCst.endOfYearComp).year!
     }
-    var displayName           : String = ""
-    var displayBirthDate      : String = ""
-
+    public var displayName           : String = ""
+    public var displayBirthDate      : String = ""
+    
     // MARK: - Conformance to CustomStringConvertible
     
-    var description: String {
+    public var description: String {
         return """
         
         NAME: \(displayName)
@@ -78,14 +78,14 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
 
         """
     }
-
+    
     // MARK: - Initialization
-
-    init(sexe       : Sexe,
-         givenName  : String,
-         familyName : String,
-         birthDate  : Date,
-         ageOfDeath : Int = CalendarCst.forever) {
+    
+    public init(sexe       : Sexe,
+                givenName  : String,
+                familyName : String,
+                birthDate  : Date,
+                ageOfDeath : Int = CalendarCst.forever) {
         self.sexe                = sexe
         self.name                = PersonNameComponents()
         self.name.namePrefix     = sexe.displayString
@@ -98,9 +98,9 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     }
     
     // MARK: - Conformance to Decodable
-
+    
     // reads from JSON
-    required init(from decoder: Decoder) throws {
+    required public init(from decoder: Decoder) throws {
         let container            = try decoder.container(keyedBy: CodingKeys.self)
         self.name                = try container.decode(PersonNameComponents.self, forKey: .name)
         displayName = personNameFormatter.string(from: name) // disSet not executed during init
@@ -112,14 +112,14 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     }
     
     // MARK: - Conformance to Encodable
-
-    func encode(to encoder: Encoder) throws {
+    
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
         try container.encode(sexe, forKey: .sexe)
         try container.encode(birthDate, forKey: .birth_Date)
     }
-
+    
     // MARK: - Methodes
     
     /// Initialise les propriétés qui ne peuvent pas l'être à la création
@@ -128,12 +128,12 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     func initialize(using model: Model) {
         setRandomPropertiesDeterministicaly(using: model)
     }
-
-    func age(atEndOf year: Int) -> Int {
+    
+    public func age(atEndOf year: Int) -> Int {
         ageAtEndOfCurrentYear + (year - CalendarCst.thisYear)
     }
     
-    func age(atDate date: Date) -> DateComponents {
+    public func age(atDate date: Date) -> DateComponents {
         let dateComp = Date.calendar.dateComponents([.year, .month, .day],
                                                     from: date)
         return Date.calendar.dateComponents([.year, .month, .day],
@@ -145,13 +145,13 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     /// - Parameter year: année
     /// - Returns: True si la personne est encore vivante
     /// - Warnings: la personne n'est pas vivante l'année du décès
-    func isAlive(atEndOf year: Int) -> Bool {
+    public func isAlive(atEndOf year: Int) -> Bool {
         year < yearOfDeath
     }
     
     /// True si la personne décède dans l'année spécifiée
     /// - Parameter year: année testée
-    func isDeceased(during year: Int) -> Bool {
+    public func isDeceased(during year: Int) -> Bool {
         let isAliveAtEndOfYear = self.isAlive(atEndOf: year)
         let wasAliveLastYear   = self.isAlive(atEndOf: year-1)
         return !isAliveAtEndOfYear && wasAliveLastYear
@@ -160,7 +160,7 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     /// Année ou a lieu l'événement recherché
     /// - Parameter event: événement recherché
     /// - Returns: Année ou a lieu l'événement recherché, nil si l'événement n'existe pas
-    func yearOf(event: LifeEvent) -> Int? {
+    public func yearOf(event: LifeEvent) -> Int? {
         switch event {
             case .deces:
                 return yearOfDeath
@@ -168,9 +168,9 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
                 return nil
         }
     }
-        
+    
     /// Réinitialiser les prioriétés variables des membres de manière aléatoires
-    func nextRandomProperties(using model: Model) {
+    public func nextRandomProperties(using model: Model) {
         switch self.sexe {
             case .male:
                 ageOfDeath = Int(model.humanLife.model!.menLifeExpectation.next())
@@ -181,9 +181,9 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
         // on ne peut mourire à un age < à celui que l'on a déjà
         ageOfDeath = max(ageOfDeath, age(atEndOf: Date.now.year))
     }
-
+    
     /// Réinitialiser les prioriétés variables des membres de manière déterministe
-    func setRandomPropertiesDeterministicaly(using model: Model) {
+    public func setRandomPropertiesDeterministicaly(using model: Model) {
         switch sexe {
             case .male:
                 ageOfDeath = Int(model.humanLifeModel.menLifeExpectation.value(withMode: .deterministic))
@@ -197,7 +197,7 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
     
     /// Actualiser les propriétés d'une personne à partir des valeurs modifiées
     /// des paramètres du modèle (valeur déterministes modifiées par l'utilisateur).
-    func updateMembersDterministicValues(
+    public func updateMembersDterministicValues(
         _ menLifeExpectation    : Int,
         _ womenLifeExpectation  : Int,
         _ nbOfYearsOfdependency : Int,
@@ -207,7 +207,7 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
         switch sexe {
             case .male:
                 ageOfDeath = menLifeExpectation
-
+                
             case .female:
                 ageOfDeath = womenLifeExpectation
         }
@@ -217,12 +217,12 @@ class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible 
 // MARK: Extensions
 
 extension Person: Comparable {
-    static func == (lhs: Person, rhs: Person) -> Bool {
+    public static func == (lhs: Person, rhs: Person) -> Bool {
         lhs.birthDate == rhs.birthDate
-
+        
     }
     
-    static func < (lhs: Person, rhs: Person) -> Bool {
+    public static func < (lhs: Person, rhs: Person) -> Bool {
         // trier par date de naissance croissante
         lhs.birthDate < rhs.birthDate
     }

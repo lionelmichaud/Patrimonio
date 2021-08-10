@@ -9,6 +9,7 @@
 import SwiftUI
 import Ownership
 import AssetsModel
+import PersonModel
 
 // MARK: - Saisie du type d'investissement
 

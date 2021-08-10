@@ -10,8 +10,8 @@ import LifeExpense
 
 // MARK: - DI: Protocol de service de fourniture de l'époux d'un adulte
 
-protocol AdultSpouseProviderP {
+public protocol AdultSpouseProviderP {
     func spouseOf(_ member: Adult) -> Adult?
 }
 
-typealias AdultRelativesProviderP = MembersCountProviderP & AdultSpouseProviderP
+public typealias AdultRelativesProviderP = MembersCountProviderP & AdultSpouseProviderP

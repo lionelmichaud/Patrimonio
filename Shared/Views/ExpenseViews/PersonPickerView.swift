@@ -9,6 +9,7 @@
 import SwiftUI
 import AppFoundation
 import DateBoundary
+import PersonModel
 
 struct PersonPickerView: View {
     @EnvironmentObject var family : Family

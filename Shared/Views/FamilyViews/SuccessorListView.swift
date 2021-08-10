@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Succession
+import PersonModel
 
 struct SuccessorsListView: View {
     var inheritances : [Inheritance]

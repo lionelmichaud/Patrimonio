@@ -59,6 +59,9 @@
       location = "group:Shared/Modules/LifeExpense">
    </FileRef>
    <FileRef
+      location = "group:/Users/lionelmichaud/Desktop/Arduino/Langage Swift/Patrimonio/Shared/Modules/LifeExpense/PersonModel">
+   </FileRef>
+   <FileRef
       location = "container:Patrimonio.xcodeproj">
    </FileRef>
    <FileRef

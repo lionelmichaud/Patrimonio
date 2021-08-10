@@ -5,6 +5,7 @@ import ModelEnvironment
 import Ownership
 import DateBoundary
 import LifeExpense
+import PersonModel
 
 // MARK: - Class Family: la Famille, ses membres, leurs actifs et leurs revenus
 

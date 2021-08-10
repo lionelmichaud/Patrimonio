@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Ownership
+import PersonModel
 
 struct OwnersListView: View {
     let title                    : String
