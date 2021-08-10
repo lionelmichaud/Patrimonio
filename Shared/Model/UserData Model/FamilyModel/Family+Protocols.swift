@@ -7,13 +7,6 @@
 //
 
 import Foundation
-import LifeExpense
-
-// MARK: - DI: Protocol de service de fourniture de l'époux d'un adulte
-
-protocol AdultSpouseProviderP {
-    func spouseOf(_ member: Adult) -> Adult?
-}
 
 // MARK: - DI: Protocol de service de fourniture de la liste des noms des membres de la famille
 
@@ -22,8 +15,6 @@ protocol MembersNameProviderP {
     var adultsName   : [String] { get }
     var childrenName : [String] { get }
 }
-
-typealias AdultRelativesProviderP = MembersCountProviderP & AdultSpouseProviderP
 
 // MARK: - DI: Protocol de service d'itération sur les membres du foyer fiscal dans la famille
 

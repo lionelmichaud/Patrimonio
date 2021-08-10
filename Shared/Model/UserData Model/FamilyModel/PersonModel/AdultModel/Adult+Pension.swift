@@ -67,7 +67,6 @@ extension Adult {
             return (0, 0)
         }
     }
-
 }
 
 // MARK: - EXTENSION: Retraite Régime Complémentaire

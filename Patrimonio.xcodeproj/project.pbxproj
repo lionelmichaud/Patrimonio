@@ -393,6 +393,8 @@
 		79AB5446263241CF00FADBA7 /* AppSettings.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB540F263241CF00FADBA7 /* AppSettings.json */; };
 		79AB5447263241CF00FADBA7 /* AppVersion.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB5410263241CF00FADBA7 /* AppVersion.json */; };
 		79AB5448263241CF00FADBA7 /* AppVersion.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB5410263241CF00FADBA7 /* AppVersion.json */; };
+		79AD69EF26C2ACDA0041AC0C /* AdultRelativesProviderP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD69EE26C2ACDA0041AC0C /* AdultRelativesProviderP.swift */; };
+		79AD69F026C2ACDA0041AC0C /* AdultRelativesProviderP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD69EE26C2ACDA0041AC0C /* AdultRelativesProviderP.swift */; };
 		79B164842651DD7200D0603C /* ScenarioSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B164812651DD7200D0603C /* ScenarioSummaryView.swift */; };
 		79B164852651DD7200D0603C /* ScenarioSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B164812651DD7200D0603C /* ScenarioSummaryView.swift */; };
 		79B164862651DD7200D0603C /* ScenarioSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B164812651DD7200D0603C /* ScenarioSummaryView.swift */; };
@@ -761,6 +763,7 @@
 		79AB540D263241CF00FADBA7 /* RetirementModelConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RetirementModelConfig.json; sourceTree = "<group>"; };
 		79AB540F263241CF00FADBA7 /* AppSettings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AppSettings.json; sourceTree = "<group>"; };
 		79AB5410263241CF00FADBA7 /* AppVersion.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AppVersion.json; sourceTree = "<group>"; };
+		79AD69EE26C2ACDA0041AC0C /* AdultRelativesProviderP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdultRelativesProviderP.swift; sourceTree = "<group>"; };
 		79B164812651DD7200D0603C /* ScenarioSummaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScenarioSummaryView.swift; sourceTree = "<group>"; };
 		79B164822651DD7200D0603C /* ModelsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelsView.swift; sourceTree = "<group>"; };
 		79B2726D2634CC0000298E5D /* PersonPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonPickerView.swift; sourceTree = "<group>"; };
@@ -1382,7 +1385,6 @@
 			children = (
 				7977FE5A262E302F005A1CB1 /* Family.swift */,
 				7998E189262DB5FB00DA4A12 /* Family+Protocols.swift */,
-				7998E177262DB46800DA4A12 /* PersonCoderPreservingType.swift */,
 				7998E156262DB2E400DA4A12 /* PersonModel */,
 			);
 			path = FamilyModel;
@@ -1391,6 +1393,8 @@
 		7998E156262DB2E400DA4A12 /* PersonModel */ = {
 			isa = PBXGroup;
 			children = (
+				7998E177262DB46800DA4A12 /* PersonCoderPreservingType.swift */,
+				79AD69EE26C2ACDA0041AC0C /* AdultRelativesProviderP.swift */,
 				7960D81F266642FB00ABA5EE /* PersonArray.swift */,
 				7998E157262DB2FD00DA4A12 /* Person.swift */,
 				7998E15E262DB31400DA4A12 /* Sex.swift */,
@@ -2311,6 +2315,7 @@
 				799025A32641F60300ED53D4 /* HistogramView.swift in Sources */,
 				799025BB2641F60300ED53D4 /* CF Global ChartView.swift in Sources */,
 				79AA5D6A26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */,
+				79AD69EF26C2ACDA0041AC0C /* AdultRelativesProviderP.swift in Sources */,
 				7998E1A0262DBE3E00DA4A12 /* Adult+Pension.swift in Sources */,
 				7998E1AB262DBE4600DA4A12 /* Child.swift in Sources */,
 				791ED101263A1EF800701202 /* ChildDetailView.swift in Sources */,
@@ -2416,6 +2421,7 @@
 				791ED11C263A2CE900701202 /* CashFlowLine+manageRealEstate.swift in Sources */,
 				79FA8CE42630684F009FEA00 /* Assets.swift in Sources */,
 				794B014F26B9BE4300882684 /* ValuedAssets.swift in Sources */,
+				79AD69F026C2ACDA0041AC0C /* AdultRelativesProviderP.swift in Sources */,
 				791ED113263A285300701202 /* CashFlowLine.swift in Sources */,
 				7998E16E262DB38700DA4A12 /* Seniority.swift in Sources */,
 				79BE4A872651CE7800BBF46C /* ModelSociologyView.swift in Sources */,
