@@ -9,6 +9,7 @@
 import Foundation
 import NamedValue
 import Persistence
+import LifeExpense
 
 final class UIState: ObservableObject {
     enum Tab: Int, Hashable {

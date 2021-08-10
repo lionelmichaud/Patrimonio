@@ -18,6 +18,7 @@ let package = Package(
             // Using 'path', we can depend on a local package that's
             // located at a given path relative to our package's folder:
             .package(path: "../AppFoundation"),
+            .package(path: "../Persistable"),
             .package(url: "https://github.com/apple/swift-numerics.git", from: "0.0.8")
         ],
     targets: [
@@ -27,7 +28,8 @@ let package = Package(
             name: "FiscalModel",
             dependencies:
                 [
-                    "AppFoundation"
+                    "AppFoundation",
+                    "Persistable"
                 ]
         ),
         .testTarget(

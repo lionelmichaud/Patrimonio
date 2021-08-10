@@ -62,7 +62,7 @@ class DateBoundaryTests: XCTestCase {
         var boundary = DateBoundary(event: LifeEvent.deces,
                                     name: "M. Lionel MICHAUD")
         print(boundary)
-
+        
         boundary = DateBoundary(event: LifeEvent.dependence,
                                 group: GroupOfPersons.allAdults,
                                 order: SoonestLatest.soonest)
@@ -78,31 +78,48 @@ class DateBoundaryTests: XCTestCase {
     }
     
     func test_fixed_year() throws {
-        let boundary = DateBoundary(fixedYear: 2020)
+        var boundary = DateBoundary(fixedYear: 2020)
+        XCTAssertEqual(2020, boundary.year)
+        
+        // builder
+        boundary =
+            DateBoundaryBuilder()
+            .fixedYear(2020)
+            .build()
         XCTAssertEqual(2020, boundary.year)
     }
     
     func test_person_event() throws {
-        var boundary = DateBoundary(event: LifeEvent.deces,
+        var boundary = DateBoundary(event: .deces,
                                     name: "M. Lionel MICHAUD")
         XCTAssertEqual(2080, boundary.year)
-        var year = DateBoundary.yearOf(lifeEvent: LifeEvent.deces,
+        var year = DateBoundary.yearOf(lifeEvent: .deces,
                                        for: "M. Lionel MICHAUD")
         XCTAssertEqual(year, 2080)
         
-        boundary = DateBoundary(event: LifeEvent.dependence,
+        boundary = DateBoundary(event: .dependence,
                                 name: "M. Lionel MICHAUD")
         XCTAssertEqual(2070, boundary.year)
-        year = DateBoundary.yearOf(lifeEvent: LifeEvent.dependence,
+        year = DateBoundary.yearOf(lifeEvent: .dependence,
                                    for: "M. Lionel MICHAUD")
         XCTAssertEqual(year, 2070)
         
-        boundary = DateBoundary(event: LifeEvent.deces,
+        boundary = DateBoundary(event: .deces,
                                 name: "M. Truc")
         XCTAssertNil(boundary.year)
         year = DateBoundary.yearOf(lifeEvent: LifeEvent.deces,
                                    for: "M. Truc")
         XCTAssertNil(year)
+        
+        // builder
+        boundary =
+            DateBoundaryBuilder()
+            .on(event: .deces, of: "M. Lionel MICHAUD")
+            .build()
+        XCTAssertEqual(2080, boundary.year)
+        year = DateBoundary.yearOf(lifeEvent: .deces,
+                                   for: "M. Lionel MICHAUD")
+        XCTAssertEqual(year, 2080)
         
     }
     
@@ -133,5 +150,16 @@ class DateBoundaryTests: XCTestCase {
                                    for       : GroupOfPersons.allChildrens,
                                    order     : SoonestLatest.latest)
         XCTAssertNil(year)
+        
+        // builder
+        boundary =
+            DateBoundaryBuilder()
+            .on(event: .deces, of: .allAdults, taking: .soonest)
+            .build()
+        XCTAssertEqual(2080, boundary.year)
+        year = DateBoundary.yearOf(lifeEvent : .deces,
+                                   for       : .allAdults,
+                                   order     : .soonest)
+        XCTAssertEqual(year, 2080)
     }
 }
