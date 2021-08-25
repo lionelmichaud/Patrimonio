@@ -30,26 +30,31 @@ public class Person : ObservableObject, Identifiable, Codable, CustomStringConve
     // MARK: - Type properties
     
     static let coder = PersonCoderPreservingType()
-    
+
     // MARK: - Properties
     
     public let id                    = UUID()
-    public let sexe                  : Sexe
-    public var name                  : PersonNameComponents {
+    public var sexe       : Sexe = .male
+    public var name       : PersonNameComponents = PersonNameComponents() {
         didSet {
             displayName = personNameFormatter.string(from: name)
         }
     }
-    public var birthDate             : Date {
+    @Published public var displayName : String = ""
+    public var birthDate              : Date = Date() {
         didSet {
             displayBirthDate = mediumDateFormatter.string(from: birthDate)
+            birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate)
         }
     }
-    var birthDateComponents   : DateComponents
-    @Published public var ageOfDeath : Int
-    public var yearOfDeath           : Int { // computed
-        birthDateComponents.year! + ageOfDeath
+    @Published public var displayBirthDate : String = ""
+    var birthDateComponents                : DateComponents
+    @Published public var ageOfDeath       : Int = CalendarCst.forever {
+        didSet {
+            yearOfDeath = birthDateComponents.year! + ageOfDeath
+        }
     }
+    public var yearOfDeath           : Int = 81
     public var ageComponents         : DateComponents { // computed
         Date.calendar.dateComponents([.year, .month, .day],
                                      from: birthDateComponents,
@@ -60,9 +65,7 @@ public class Person : ObservableObject, Identifiable, Codable, CustomStringConve
                                      from: birthDateComponents,
                                      to: CalendarCst.endOfYearComp).year!
     }
-    public var displayName           : String = ""
-    public var displayBirthDate      : String = ""
-    
+
     // MARK: - Conformance to CustomStringConvertible
     
     public var description: String {
@@ -81,6 +84,13 @@ public class Person : ObservableObject, Identifiable, Codable, CustomStringConve
     
     // MARK: - Initialization
     
+    public init() {
+        self.birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate) // disSet not executed during init
+        self.displayBirthDate    = mediumDateFormatter.string(from: birthDate) // disSet not executed during init
+        self.displayName         = personNameFormatter.string(from: name) // disSet not executed during init
+        self.yearOfDeath         = birthDateComponents.year! + ageOfDeath // disSet not executed during init
+    }
+    
     public init(sexe       : Sexe,
                 givenName  : String,
                 familyName : String,
@@ -93,8 +103,10 @@ public class Person : ObservableObject, Identifiable, Codable, CustomStringConve
         self.name.familyName     = familyName.localizedUppercase
         self.displayName         = personNameFormatter.string(from: name) // disSet not executed during init
         self.birthDate           = birthDate
-        self.birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate)
+        self.birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate) // disSet not executed during init
+        self.displayBirthDate    = mediumDateFormatter.string(from: birthDate) // disSet not executed during init
         self.ageOfDeath          = ageOfDeath
+        self.yearOfDeath         = birthDateComponents.year! + ageOfDeath // disSet not executed during init
     }
     
     // MARK: - Conformance to Decodable
@@ -103,12 +115,12 @@ public class Person : ObservableObject, Identifiable, Codable, CustomStringConve
     required public init(from decoder: Decoder) throws {
         let container            = try decoder.container(keyedBy: CodingKeys.self)
         self.name                = try container.decode(PersonNameComponents.self, forKey: .name)
-        displayName = personNameFormatter.string(from: name) // disSet not executed during init
+        self.displayName         = personNameFormatter.string(from: name) // disSet not executed during init
         self.sexe                = try container.decode(Sexe.self, forKey: .sexe)
         self.birthDate           = try container.decode(Date.self, forKey: .birth_Date)
-        displayBirthDate = mediumDateFormatter.string(from: birthDate) // disSet not executed during init
+        self.displayBirthDate    = mediumDateFormatter.string(from: birthDate) // disSet not executed during init
         self.birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate)
-        self.ageOfDeath          = 81
+        self.yearOfDeath         = birthDateComponents.year! + self.ageOfDeath // disSet not executed during init
     }
     
     // MARK: - Conformance to Encodable

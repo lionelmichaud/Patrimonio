@@ -46,7 +46,7 @@ extension LifeExpenseArray: CustomStringConvertible {
 
 public struct LifeExpense: Identifiable, Codable, Hashable, NameableValuableP {
     
-    // MARK: - Static properties
+    // MARK: - Type properties
     
     public static let prototype = LifeExpense(name     : "",
                                               note     : "",
@@ -57,7 +57,7 @@ public struct LifeExpense: Identifiable, Codable, Hashable, NameableValuableP {
     private static var membersCountProvider : MembersCountProviderP!
     private static var expensesUnderEvaluationRateProvider : ExpensesUnderEvaluationRateProviderP!
     
-    // MARK: - Static Methods
+    // MARK: - Type Methods
     
     /// Définir le mode de simulation à utiliser pour tous les calculs futurs
     /// - Parameter simulationMode: mode de simulation à utiliser

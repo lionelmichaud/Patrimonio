@@ -8,6 +8,7 @@
 import Foundation
 import DateBoundary
 
+/// Builder pour la Struct LifeExpense
 public class LifeExpenseBuilder {
     private var lifeExpense: LifeExpense = LifeExpense()
     

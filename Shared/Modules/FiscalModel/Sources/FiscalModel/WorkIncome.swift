@@ -19,7 +19,8 @@ public enum WorkIncomeType {
     case all
     
     public static var allCases: [WorkIncomeType] {
-        return [.salary(brutSalary: 0, taxableSalary: 0, netSalary: 0, fromDate: Date.now, healthInsurance: 0), .turnOver(BNC: 0, incomeLossInsurance: 0)]
+        return [.salary(brutSalary: 0, taxableSalary: 0, netSalary: 0, fromDate: Date.now, healthInsurance: 0),
+                .turnOver(BNC: 0, incomeLossInsurance: 0)]
     }
     
     public static var salaryId: Int {

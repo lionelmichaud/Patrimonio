@@ -71,10 +71,10 @@ struct MemberAgeDateView : View {
     var member    : Person
     
     var body: some View {
-        AgeDateView(ageLabel: (member.sexe == .male ? "Agé de" : "Agée de"),
-                    dateLabel: (member.sexe == .male ? "Né le" : "Née le"),
-                    age: member.ageComponents.year!,
-                    date: member.displayBirthDate)
+        AgeDateView(ageLabel  : (member.sexe == .male ? "Agé de"   : "Agée de"),
+                    dateLabel : (member.sexe == .male ? "Né le"  : "Née le"),
+                    age       : member.ageComponents.year!,
+                    date      : member.displayBirthDate)
             .foregroundColor(.secondary)
     }
 }

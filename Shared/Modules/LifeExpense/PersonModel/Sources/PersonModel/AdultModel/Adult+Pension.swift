@@ -26,7 +26,7 @@ public extension Adult {
         mediumDateFormatter.string(from: dateOfPensionLiquid)
     } // computed
     
-   // MARK: - Methods
+    // MARK: - Methods
     
     /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime général
     /// - Parameter year: première année incluant des revenus
@@ -83,16 +83,16 @@ public extension Adult {
     var displayDateOfAgircPensionLiquid       : String { // computed
         mediumDateFormatter.string(from: dateOfAgircPensionLiquid)
     } // computed
-
+    
     // MARK: - Methods
     
     /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime complémentaire
     /// - Parameter year: première année incluant des revenus
-    func isAgircPensioned(during year: Int) -> Bool {
+    final func isAgircPensioned(during year: Int) -> Bool {
         isAlive(atEndOf: year) && (dateOfAgircPensionLiquid.year <= year)
     }
-    func pensionRegimeAgirc(during year : Int,
-                            using model : Model)
+    final func pensionRegimeAgirc(during year : Int,
+                                  using model : Model)
     -> (brut: Double, net: Double) {
         if let pensionAgirc =
             model.retirementModel.regimeAgirc.pension(
@@ -111,7 +111,7 @@ public extension Adult {
             return (0, 0)
         }
     }
-    func pensionRegimeAgirc(using model: Model) -> (brut: Double, net: Double) {
+    final func pensionRegimeAgirc(using model: Model) -> (brut: Double, net: Double) {
         if let pensionAgirc =
             model.retirementModel.regimeAgirc.pension(
                 lastAgircKnownSituation  : lastKnownAgircPensionSituation,
@@ -135,9 +135,9 @@ public extension Adult {
     /// Calcul de la pension de retraite
     /// - Parameter year: année
     /// - Returns: pension brute, nette de charges sociales, taxable à l'IRPP
-    func pension(during year   : Int,
-                 withReversion : Bool = true,
-                 using model   : Model) -> BrutNetTaxable {
+    final func pension(during year   : Int,
+                       withReversion : Bool = true,
+                       using model   : Model) -> BrutNetTaxable {
         guard isAlive(atEndOf: year) else {
             return BrutNetTaxable(brut: 0, net: 0, taxable: 0)
         }
@@ -176,8 +176,8 @@ public extension Adult {
     /// - Parameter year: année
     /// - Returns: pension de réversion laissée au conjoint
     /// - Warning: pension laissée au conjoint
-    func pensionReversionForSpouse(during year : Int,
-                                   using model : Model)
+    final func pensionReversionForSpouse(during year : Int,
+                                         using model : Model)
     -> (brut: Double, net: Double)? {
         // la personne est décédée
         guard !isAlive(atEndOf: year) else {

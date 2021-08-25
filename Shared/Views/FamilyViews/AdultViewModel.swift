@@ -9,6 +9,7 @@ import SwiftUI
 import FiscalModel
 import UnemployementModel
 import RetirementModel
+import ModelEnvironment
 import PersonModel
 
 // MARK: - Adult View Model
@@ -35,6 +36,11 @@ class AdultViewModel: ObservableObject {
     @Published var lastKnownAgircSituation   = RegimeAgircSituation()
 
     // MARK: - Initializers of ViewModel from Model
+    
+    init(from model: Model) {
+        ageAgircPension = model.retirementModel.regimeAgirc.ageMinimum
+        agePension      = model.retirementModel.regimeGeneral.ageMinimumLegal
+    }
 
     init(from adult: Adult) {
         fiscalOption              = adult.fiscalOption
@@ -75,41 +81,44 @@ class AdultViewModel: ObservableObject {
     }
 
     func update(adult: Adult) {
-        adult.fiscalOption      = fiscalOption
-        adult.dateOfRetirement  = dateRetirement
-        adult.causeOfRetirement = causeOfRetirement
-        if causeOfRetirement == Unemployment.Cause.demission {
-            // pas d'indemnité de licenciement en cas de démission
-            adult.layoffCompensationBonified = nil
-        } else {
-            if hasAllocationSupraLegale {
-                // indemnité supra-légale de licenciement accordée par l'employeur
-                adult.layoffCompensationBonified = allocationSupraLegale
-            } else {
-                // pas d'indemnité supra-légale de licenciement
-                adult.layoffCompensationBonified = nil
-            }
-        }
-
-        adult.setAgeOfPensionLiquidComp(year  : agePension,
-                                        month : moisPension)
-        adult.setAgeOfAgircPensionLiquidComp(year  : ageAgircPension,
-                                             month : moisAgircPension)
-        adult.lastKnownPensionSituation = lastKnownPensionSituation
-        adult.lastKnownAgircPensionSituation = lastKnownAgircSituation
-
+        let workIncome: WorkIncomeType
         if revIndex == WorkIncomeType.salaryId {
-            adult.workIncome =
+            workIncome =
                 WorkIncomeType.salary(brutSalary      : revenueBrut,
                                       taxableSalary   : revenueTaxable,
                                       netSalary       : revenueNet,
                                       fromDate        : fromDate,
                                       healthInsurance : insurance)
         } else {
-            adult.workIncome =
+            workIncome =
                 WorkIncomeType.turnOver(BNC                 : revenueBrut,
                                         incomeLossInsurance : insurance)
         }
-        adult.nbOfYearOfDependency = nbYearOfDepend
+
+        let layoffCompensationBonified: Double?
+        if causeOfRetirement == Unemployment.Cause.demission {
+            // pas d'indemnité de licenciement en cas de démission
+            layoffCompensationBonified = nil
+        } else {
+            if hasAllocationSupraLegale {
+                // indemnité supra-légale de licenciement accordée par l'employeur
+                layoffCompensationBonified = allocationSupraLegale
+            } else {
+                // pas d'indemnité supra-légale de licenciement
+                layoffCompensationBonified = nil
+            }
+        }
+        
+        AdultBuilder(for: adult)
+            .receivesWorkIncome(workIncome)
+            .willCeaseActivities(on     : dateRetirement,
+                                 dueTo  : causeOfRetirement,
+                                 withLayoffCompensationBonified : layoffCompensationBonified)
+            .willLiquidPension(atAge: (year: agePension, month: moisPension, day:0),
+                               lastKnownSituation: lastKnownPensionSituation)
+            .willLiquidAgircPension(atAge: (year: ageAgircPension, month: moisAgircPension, day:0),
+                                    lastKnownSituation: lastKnownAgircSituation)
+            .willFaceDependencyDuring(nbYearOfDepend)
+            .adoptsSuccessionFiscalOption(fiscalOption)
     }
 }

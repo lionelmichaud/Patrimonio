@@ -14,7 +14,7 @@ import ModelEnvironment
 // MARK: - EXTENSION: Chômage
 public extension Adult {
     // MARK: - Computed Properties
-
+    
     var SJR: Double { // computed
         guard let workIncome = workIncome else {
             return 0.0
@@ -205,7 +205,7 @@ public extension Adult {
             age        : age(atDate: dateOfRetirement).year!,
             daylyAlloc : unemployementAllocation(using: model)!.brut / 365)
     }
-
+    
     /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de cessation d'activité et égale ou inférieure à l'année de fin de droit d'allocation chomage
     /// - Parameter year: année
     final func isReceivingUnemployementAllocation(during year: Int, using model: Model) -> Bool {
@@ -277,7 +277,7 @@ public extension Adult {
     /// - Parameter year: année
     /// - Returns: Indemnité de licenciement perçue dans l'année brute, nette de charges sociales, taxable à l'IRPP
     /// - Note: L'indemnité de licenciement est due m^me si le licencié est décédé pendant le préavis
-    func layoffCompensation(during year: Int, using model: Model) -> BrutNetTaxable {
+    final func layoffCompensation(during year: Int, using model: Model) -> BrutNetTaxable {
         guard year == dateOfRetirement.year else {
             return BrutNetTaxable(brut: 0, net: 0, taxable: 0)
         }

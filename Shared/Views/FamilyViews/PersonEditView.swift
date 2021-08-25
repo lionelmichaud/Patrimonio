@@ -285,14 +285,16 @@ struct ChildEditView : View {
                         }
                     }
                 }
-                Stepper(value: $ageUniversity, in: model.humanLifeModel.minAgeUniversity ... model.humanLifeModel.minAgeIndependance) {
+                Stepper(value: $ageUniversity,
+                        in: model.humanLifeModel.minAgeUniversity ... model.humanLifeModel.minAgeIndependance) {
                     HStack {
                         Text("Age d'entrée à l'université")
                         Spacer()
                         Text("\(ageUniversity) ans").foregroundColor(.secondary)
                     }
                 }
-                Stepper(value: $ageIndependance, in: model.humanLifeModel.minAgeIndependance ... 50) {
+                Stepper(value: $ageIndependance,
+                        in: model.humanLifeModel.minAgeIndependance ... 50) {
                     HStack {
                         Text("Age d'indépendance financière")
                         Spacer()

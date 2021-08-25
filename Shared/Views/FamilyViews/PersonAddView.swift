@@ -33,6 +33,7 @@ struct PersonAddView: View {
     init(using model: Model) {
         _ageUniversity   = State(initialValue: model.humanLifeModel.minAgeUniversity)
         _ageIndependance = State(initialValue: model.humanLifeModel.minAgeIndependance)
+        _adultViewModel  = StateObject(wrappedValue: AdultViewModel(from: model))
     }
     
     var body: some View {
@@ -69,17 +70,18 @@ struct PersonAddView: View {
                     .alert(item: $alertItem, content: myAlert)
 
                 if formIsValid() {
-                    if personViewModel.seniority == .adult {
-                        AdultEditView(authorizeDeathAgeModification : false,
-                                      personViewModel               : personViewModel,
-                                      adultViewModel                : adultViewModel)
-                        
-                    } else {
-                        ChildEditView(authorizeDeathAgeModification : false,
-                                      birthDate                     : personViewModel.birthDate,
-                                      deathAge                      : $personViewModel.deathAge,
-                                      ageUniversity                 : $ageUniversity,
-                                      ageIndependance               : $ageIndependance)
+                    switch personViewModel.seniority {
+                        case .adult:
+                            AdultEditView(authorizeDeathAgeModification : false,
+                                          personViewModel               : personViewModel,
+                                          adultViewModel                : adultViewModel)
+
+                        case .enfant:
+                            ChildEditView(authorizeDeathAgeModification : false,
+                                          birthDate                     : personViewModel.birthDate,
+                                          deathAge                      : $personViewModel.deathAge,
+                                          ageUniversity                 : $ageUniversity,
+                                          ageIndependance               : $ageIndependance)
                     }
                 }
             }
@@ -95,7 +97,6 @@ struct PersonAddView: View {
         
         // initialiser l'espérace de vie à partir du modèle
         let deathAge: Int
-        // creation du nouveau membre Adult
         switch personViewModel.sexe {
             case .male:
                 deathAge = Int(model.humanLife.model!.menLifeExpectation.value(withMode: .deterministic))
@@ -105,11 +106,14 @@ struct PersonAddView: View {
 
         switch personViewModel.seniority {
             case .adult  :
-                let newMember = Adult(sexe       : personViewModel.sexe,
-                                      givenName  : personViewModel.givenName,
-                                      familyName : personViewModel.familyName.uppercased(),
-                                      birthDate  : personViewModel.birthDate,
-                                      ageOfDeath : deathAge)
+                // creation du nouveau membre Adult
+                let newMember = AdultBuilder()
+                    .withSex(personViewModel.sexe)
+                    .named(givenName  : personViewModel.givenName,
+                           familyName : personViewModel.familyName.uppercased())
+                    .wasBorn(on: personViewModel.birthDate)
+                    .willDyeAtAgeOf(deathAge)
+                    .build()
                 adultViewModel.update(adult: newMember)
                 
                 // ajout du nouveau membre à la famille
@@ -117,13 +121,15 @@ struct PersonAddView: View {
             
             case .enfant :
                 // creation du nouveau membre Enfant
-                let newMember = Child(sexe       : personViewModel.sexe,
-                                      givenName  : personViewModel.givenName,
-                                      familyName : personViewModel.familyName.uppercased(),
-                                      birthDate  : personViewModel.birthDate,
-                                      ageOfDeath : deathAge)
-                newMember.ageOfUniversity = ageUniversity
-                newMember.ageOfIndependence = ageIndependance
+                let newMember = ChildBuilder()
+                    .withSex(personViewModel.sexe)
+                    .named(givenName  : personViewModel.givenName,
+                           familyName : personViewModel.familyName.uppercased())
+                    .wasBorn(on: personViewModel.birthDate)
+                    .willDyeAtAgeOf(deathAge)
+                    .entersUniversityAtAgeOf(ageUniversity)
+                    .willBeIndependantAtAgeOf(ageIndependance)
+                    .build()
                 // ajout du nouveau membre à la famille
                 family.addMember(newMember)
         }

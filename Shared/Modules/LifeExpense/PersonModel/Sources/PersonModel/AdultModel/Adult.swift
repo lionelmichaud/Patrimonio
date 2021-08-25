@@ -18,7 +18,7 @@ public struct BrutNetTaxable {
     public var brut    : Double
     public var net     : Double
     public var taxable : Double
-
+    
     public init(brut: Double, net: Double, taxable: Double) {
         self.brut = brut
         self.net = net
@@ -166,12 +166,8 @@ public final class Adult: Person {
         nbOfYearOfDependency = zeroOrPositive(ageOfDeath - 65)
     }
     
-    public override init(sexe       : Sexe,
-                         givenName  : String,
-                         familyName : String,
-                         birthDate  : Date,
-                         ageOfDeath : Int = CalendarCst.forever) {
-        super.init(sexe: sexe, givenName: givenName, familyName: familyName, birthDate: birthDate, ageOfDeath: ageOfDeath)
+    public override init() {
+        super.init()
     }
     
     // MARK: - methods
@@ -231,7 +227,7 @@ public final class Adult: Person {
         }
     }
     
-    public func workNetIncome(using model: Model) -> Double { // net de feuille de paye, net de charges sociales et mutuelle obligatore
+    public final func workNetIncome(using model: Model) -> Double { // net de feuille de paye, net de charges sociales et mutuelle obligatore
         switch workIncome {
             case .salary(_, _, let netSalary, _, _):
                 return netSalary
@@ -241,7 +237,7 @@ public final class Adult: Person {
                 return 0
         }
     }
-    public func workLivingIncome(using model: Model) -> Double { // net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
+    public final func workLivingIncome(using model: Model) -> Double { // net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
         switch workIncome {
             case .salary(_, _, let netSalary, _, let charge):
                 return netSalary - charge
@@ -251,7 +247,7 @@ public final class Adult: Person {
                 return 0
         }
     }
-    public func workTaxableIncome(using model: Model) -> Double { // taxable à l'IRPP
+    public final func workTaxableIncome(using model: Model) -> Double { // taxable à l'IRPP
         switch workIncome {
             case .none:
                 return 0
@@ -259,51 +255,51 @@ public final class Adult: Person {
                 return model.fiscalModel.incomeTaxes.taxableIncome(from: workIncome!)
         }
     }
-    public func gaveBirthTo(children : Int) {
+    public final func gaveBirthTo(children : Int) {
         nbOfChildBirth = children
     }
-    public func addChild() {
+    public final func addChild() {
         nbOfChildBirth += 1
     }
-    public func removeChild() {
+    public final func removeChild() {
         nbOfChildBirth -= 1
     }
-    public func nbOfFiscalChildren(during year: Int) -> Int {
+    public final func nbOfFiscalChildren(during year: Int) -> Int {
         Adult.adultRelativesProvider.nbOfFiscalChildren(during: year)
     }
-    public func nbOfBornChildren() -> Int {
+    public final func nbOfBornChildren() -> Int {
         // TODO: - àremplacer par un accès directe à self.nbOfChildBirth
         Adult.adultRelativesProvider.nbOfBornChildren
     }
-    public func setAgeOfPensionLiquidComp(year: Int, month: Int = 0, day: Int = 0) {
+    public final func setAgeOfPensionLiquidComp(year: Int, month: Int = 0, day: Int = 0) {
         ageOfPensionLiquidComp = DateComponents(calendar: Date.calendar, year: year, month: month, day: day)
     }
-    public func setAgeOfAgircPensionLiquidComp(year: Int, month: Int = 0, day: Int = 0) {
+    public final func setAgeOfAgircPensionLiquidComp(year: Int, month: Int = 0, day: Int = 0) {
         ageOfAgircPensionLiquidComp = DateComponents(calendar: Date.calendar, year: year, month: month, day: day)
     }
     
     /// true si est vivant à la fin de l'année et encore en activité pendant une partie de l'année
     /// - Parameter year: année
-    public func isActive(during year: Int) -> Bool {
+    public final func isActive(during year: Int) -> Bool {
         isAlive(atEndOf: year) && (year <= dateOfRetirement.year)
     }
     
     /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de cessation d'activité
     /// - Parameter year: année
-    public func isRetired(during year: Int) -> Bool {
+    public final func isRetired(during year: Int) -> Bool {
         isAlive(atEndOf: year) && (dateOfRetirement.year <= year)
     }
     
     /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime complémentaire
     /// - Parameter year: première année incluant des revenus
-    public func isDependent(during year: Int) -> Bool {
+    public final func isDependent(during year: Int) -> Bool {
         isAlive(atEndOf: year) && (yearOfDependency <= year)
     }
     
     /// Revenu net de charges pour vivre et revenu taxable à l'IRPP
     /// - Parameter year: année
-    public func workIncome(during year : Int,
-                           using model : Model)
+    public final func workIncome(during year : Int,
+                                 using model : Model)
     -> (net: Double, taxableIrpp: Double) {
         guard isActive(during: year) else {
             return (0, 0)
@@ -314,7 +310,7 @@ public final class Adult: Person {
     }
     
     /// Réinitialiser les prioriétés variables des membres de manière aléatoires
-    public override func nextRandomProperties(using model: Model) {
+    public override final func nextRandomProperties(using model: Model) {
         super.nextRandomProperties(using: model)
         
         // générer une nouvelle valeure aléatoire
@@ -326,7 +322,7 @@ public final class Adult: Person {
     }
     
     /// Réinitialiser les prioriétés variables des membres de manière déterministe
-    public override func setRandomPropertiesDeterministicaly(using model: Model) {
+    public override final func setRandomPropertiesDeterministicaly(using model: Model) {
         super.setRandomPropertiesDeterministicaly(using: model)
         
         // initialiser le nombre d'années de dépendence
@@ -337,7 +333,7 @@ public final class Adult: Person {
     }
     
     /// RETRAITE: pension évaluée l'année de la liquidation de la pension (non révaluée)
-    public func pension(using model: Model) -> BrutNetTaxable { // computed
+    public final func pension(using model: Model) -> BrutNetTaxable { // computed
         let pensionGeneral = pensionRegimeGeneral(using: model)
         let pensionAgirc   = pensionRegimeAgirc(using: model)
         let brut           = pensionGeneral.brut + pensionAgirc.brut
@@ -348,7 +344,7 @@ public final class Adult: Person {
     
     /// Actualiser les propriétés d'une personne à partir des valeurs modifiées
     /// des paramètres du modèle (valeur déterministes modifiées par l'utilisateur).
-    public override func updateMembersDterministicValues(
+    public override final func updateMembersDterministicValues(
         _ menLifeExpectation    : Int,
         _ womenLifeExpectation  : Int,
         _ nbOfYearsOfdependency : Int,
