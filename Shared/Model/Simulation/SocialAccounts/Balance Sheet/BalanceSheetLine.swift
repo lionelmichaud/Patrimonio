@@ -10,6 +10,7 @@ import NamedValue
 import Persistence
 import Ownership
 import AssetsModel
+import Liabilities
 
 // MARK: - Ligne de Bilan annuel
 

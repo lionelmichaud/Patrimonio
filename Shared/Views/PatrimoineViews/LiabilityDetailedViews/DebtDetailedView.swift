@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Liabilities
 
 struct DebtDetailedView: View {
     @EnvironmentObject var family     : Family

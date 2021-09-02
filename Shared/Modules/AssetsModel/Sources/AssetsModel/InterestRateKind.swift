@@ -46,7 +46,7 @@ extension InterestRateKind: PickableIdentifiableEnumP {
                 return "Taux de Marché"
         }
     }
-
+    
 }
 
 extension InterestRateKind: CustomStringConvertible {
@@ -84,7 +84,7 @@ extension InterestRateKind: Codable {
             self = .marketRate(stockRatio: value)
             return
         }
-
+        
         throw InterestRateTypeCodingError.decoding("Error decoding 'InterestRateType' ! \(dump(values))")
     }
     // encode

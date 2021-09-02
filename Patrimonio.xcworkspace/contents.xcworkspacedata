@@ -53,6 +53,9 @@
       location = "group:Shared/Modules/AssetsModel">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/Liabilities">
+   </FileRef>
+   <FileRef
       location = "group:Shared/Modules/Succession">
    </FileRef>
    <FileRef

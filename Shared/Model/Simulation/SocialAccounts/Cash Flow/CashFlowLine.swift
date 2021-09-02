@@ -4,6 +4,7 @@ import NamedValue
 import ModelEnvironment
 import LifeExpense
 import Succession
+import Liabilities
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CashFlow")
 
@@ -31,7 +32,9 @@ struct CashFlowLine {
     // Revenus des Parents
     
     /// Profits des Parents en report d'imposition d'une année sur l'autre
-    var taxableIrppRevenueDelayedToNextYear = Debt(name: "REVENU IMPOSABLE REPORTE A L'ANNEE SUIVANTE", note: "", value: 0)
+    var taxableIrppRevenueDelayedToNextYear = Debt(name  : "REVENU IMPOSABLE REPORTE A L'ANNEE SUIVANTE",
+                                                   note  : "",
+                                                   value : 0)
 
     /// Agrégat des Revenus annuels des Parents (hors SCI)
     var adultsRevenues = ValuedRevenues(name: "REVENUS PARENTS HORS SCI")

@@ -24,13 +24,13 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
     // MARK: - Static Properties
     
     static var defaultFileName : String = "SCPI.json"
-
+    
     private static var saleCommission    : Double             = 10.0 // %
     private static var simulationMode    : SimulationModeEnum = .deterministic
     // dependencies
     private static var inflationProvider : InflationProviderP!
     private static var fiscalModel       : Fiscal.Model!
-
+    
     // tous ces revenus sont dépréciés de l'inflation
     private static var inflation: Double { // %
         SCPI.inflationProvider!.inflation(withMode: simulationMode)
@@ -47,11 +47,11 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
     public static func setFiscalModelProvider(_ fiscalModel : Fiscal.Model) {
         SCPI.fiscalModel = fiscalModel
     }
-
+    
     public static func setSimulationMode(to thisMode: SimulationModeEnum) {
         SCPI.simulationMode = thisMode
     }
-
+    
     // MARK: - Properties
     
     public var id           = UUID()
@@ -70,7 +70,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
     // vente
     public var willBeSold   : Bool = false
     public var sellingDate  : Date = 100.years.fromNow!
-
+    
     // MARK: - Initializer
     
     public init(id           : UUID      = UUID(),
@@ -96,7 +96,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
     }
     
     // MARK: - Methods
-
+    
     /// Valeur du bien à la date spécifiée.
     ///
     /// Le bien est revalorisé annuellement de `revaluatRate` % depuis sa date d'acquisition mais il n'est pas déflaté en valeur.

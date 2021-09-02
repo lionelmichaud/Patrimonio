@@ -18,7 +18,7 @@ public typealias RealEstateArray = ArrayOfNameableValuable<RealEstateAsset>
 // MARK: - Actif immobilier physique
 // conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
 public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
-      
+    
     // MARK: - Static Properties
     
     static var defaultFileName : String = "RealEstateAsset.json"
@@ -137,7 +137,7 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
         self.rentalTo = rentalTo
         self.monthlyRentAfterCharges = monthlyRentAfterCharges
     }
-
+    
     // MARK: - Methods
     
     /// Valeur à la date spécifiée
@@ -159,7 +159,7 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     public func ifiValue(atEndOf year: Int) -> Double {
         if !isOwned(during: year) {
             return 0.0
-
+            
         } else if self.isInhabited(during: year) {
             // decote de la résidence principale
             return value(atEndOf: year) * (1.0 - RealEstateAsset.fiscalModel.isf.model.decoteResidence/100.0)
@@ -191,7 +191,7 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     public func inheritanceValue(atEndOf year: Int) -> Double {
         if !isOwned(during: year) {
             return 0.0
-
+            
         } else if self.isInhabited(during: year) {
             // decote de la résidence principale
             return value(atEndOf: year) * (1.0 - RealEstateAsset.fiscalModel.inheritanceDonation.model.decoteResidence/100.0)
@@ -373,7 +373,7 @@ extension RealEstateAsset: Comparable {
 extension RealEstateAsset: CustomStringConvertible {
     public var description: String {
         let s1 =
-        """
+            """
         IMMOBILIER: \(name)
         - Acheté en \(buyingYear) au prix de \(buyingPrice.€String)
         - Note:
@@ -385,7 +385,7 @@ extension RealEstateAsset: CustomStringConvertible {
         var s2: String = ""
         if willBeInhabited {
             s2 =
-            """
+                """
             - Habité de \(inhabitedFrom) à \(inhabitedTo)
               - Taxe d'habitation: \(yearlyTaxeHabitation.€String)
               - Taxe fonçière:     \(yearlyTaxeFonciere.€String) \n
@@ -412,7 +412,7 @@ extension RealEstateAsset: CustomStringConvertible {
                   - Produit de la vente net de taxes \(sellingPriceAfterTaxes.€String)\n
                 """
         }
-
+        
         return s1 + s2 + s3 + s4
     }
 }

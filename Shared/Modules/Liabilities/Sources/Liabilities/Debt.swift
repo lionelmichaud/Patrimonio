@@ -10,52 +10,60 @@ import Foundation
 import NamedValue
 import Ownership
 
-typealias DebtArray = ArrayOfNameableValuable<Debt>
+public typealias DebtArray = ArrayOfNameableValuable<Debt>
 
 // MARK: - Stock de dette incrémentable ou diminuable
 /// stock de dette incrémentable ou diminuable
-struct Debt: Codable, Identifiable, NameableValuableP, OwnableP {
+public struct Debt: Codable, Identifiable, NameableValuableP, OwnableP {
     
     // MARK: - Properties
-
-    var id    = UUID()
-    var name  : String = ""
-    var note  : String = ""
+    
+    public var id    = UUID()
+    public var name  : String = ""
+    public var note  : String = ""
     // propriétaires
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
-    var ownership : Ownership = Ownership()
-    var value     : Double
+    public var ownership : Ownership = Ownership()
+    public var value     : Double
     
     // MARK: - Initializers
-
-    // MARK: - Methods
-
-    /// Valeur résiduelle courante de la dette
-    /// - Parameter year: année courante
-    func value (atEndOf year: Int) -> Double {
-        return value
-    }
-    mutating func setValue(to value: Double) {
+    
+    public init(name  : String = "",
+                note  : String = "",
+                value : Double) {
+        self.name = name
+        self.note = note
         self.value = value
     }
-    mutating func increase(by thisAmount: Double) {
+    
+    // MARK: - Methods
+    
+    /// Valeur résiduelle courante de la dette
+    /// - Parameter year: année courante
+    public func value (atEndOf year: Int) -> Double {
+        return value
+    }
+    public mutating func setValue(to value: Double) {
+        self.value = value
+    }
+    public mutating func increase(by thisAmount: Double) {
         value += thisAmount
     }
-    mutating func decrease(by thisAmount: Double) {
+    public mutating func decrease(by thisAmount: Double) {
         value -= thisAmount
     }
 }
 
 // MARK: Extensions
 extension Debt: Comparable {
-    static func < (lhs: Debt, rhs: Debt) -> Bool {
+    public static func < (lhs: Debt, rhs: Debt) -> Bool {
         (lhs.name < rhs.name)
     }
 }
 
 extension Debt: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         """
         DETTE: \(name)
         - Note:

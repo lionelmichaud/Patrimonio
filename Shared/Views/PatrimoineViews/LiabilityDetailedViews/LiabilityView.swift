@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Liabilities
 
 struct LiabilityView: View {
     @EnvironmentObject var patrimoine : Patrimoin

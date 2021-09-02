@@ -8,6 +8,7 @@
 
 import Foundation
 import NamedValue
+import Liabilities
 
 // MARK: - agrégat des revenus hors SCI
 
@@ -19,7 +20,9 @@ struct ValuedRevenues {
     var perCategory: [RevenueCategory: RevenuesInCategory] = [:]
     
     /// revenus imposable de l'année précédente et reporté à l'année courante
-    var taxableIrppRevenueDelayedFromLastYear = Debt(name: "REVENU IMPOSABLE REPORTE DE L'ANNEE PRECEDENTE", note: "", value: 0)
+    var taxableIrppRevenueDelayedFromLastYear = Debt(name  : "REVENU IMPOSABLE REPORTE DE L'ANNEE PRECEDENTE",
+                                                     note  : "",
+                                                     value : 0)
     
     /// Total de tous les revenus nets de l'année versé en compte courant avant taxes et impots
     var totalRevenue: Double {

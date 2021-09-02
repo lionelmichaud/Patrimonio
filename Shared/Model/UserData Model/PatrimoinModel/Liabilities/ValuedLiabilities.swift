@@ -8,6 +8,7 @@
 
 import Foundation
 import NamedValue
+import Liabilities
 
 // MARK: - agrégat des Passifs
 

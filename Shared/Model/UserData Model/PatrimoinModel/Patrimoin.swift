@@ -13,6 +13,7 @@ import Statistics
 import Files
 import Ownership
 import AssetsModel
+import Liabilities
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Patrimoin")
 
