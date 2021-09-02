@@ -17,7 +17,10 @@ public typealias PersistableArrayOfPerson = PersistableArray<Person>
 public extension PersistableArrayOfPerson {
     /// Initialiser à partir d'un fichier JSON portant le nom `FileNameCst.kFamilyMembersFileName`
     /// contenu dans le dossier `folder` du répertoire `Documents`
-    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    /// - Parameters:
+    ///   - folder: dossier où se trouve le fichier JSON à utiliser
+    ///   - model: modèle à utiliser pour initialiser les membres de la famille
+    /// - Throws: en cas d'échec de lecture des données
     init(fromFolder folder : Folder,
          using model  : Model) throws {
         

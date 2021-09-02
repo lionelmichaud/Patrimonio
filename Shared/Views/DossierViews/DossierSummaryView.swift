@@ -8,12 +8,14 @@
 import SwiftUI
 import Files
 import ModelEnvironment
+import LifeExpense
 import Persistence
 
 struct DossierSummaryView: View {
     @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var expenses   : LifeExpensesDic
     @EnvironmentObject private var patrimoine : Patrimoin
     @State private var alertItem: AlertItem?
 
@@ -39,7 +41,7 @@ struct DossierSummaryView: View {
     
     /// True si le dossier a été modifié
     private var savable: Bool {
-        family.isModified || patrimoine.isModified || model.isModified
+        family.isModified || expenses.isModified || patrimoine.isModified || model.isModified
     }
 
     // MARK: - Methods

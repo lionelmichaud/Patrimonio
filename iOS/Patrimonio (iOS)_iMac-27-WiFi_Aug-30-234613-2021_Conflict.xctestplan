@@ -19,19 +19,13 @@
     {
       "parallelizable" : true,
       "target" : {
-        "containerPath" : "container:Shared\/Modules\/Stateful",
-        "identifier" : "StatefulTests",
-        "name" : "StatefulTests"
-      }
-    },
-    {
-      "target" : {
         "containerPath" : "container:Shared\/Modules\/AppFoundation",
         "identifier" : "AppFoundationTests",
         "name" : "AppFoundationTests"
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/EconomyModel",
         "identifier" : "EconomyModelTests",
@@ -48,6 +42,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/FiscalModel",
         "identifier" : "FiscalModelTests",
@@ -55,6 +50,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/HumanLifeModel",
         "identifier" : "HumanLifeModelTests",
@@ -91,6 +87,14 @@
         "containerPath" : "container:Shared\/Modules\/SocioEconomyModel",
         "identifier" : "SocioEconomyModelTests",
         "name" : "SocioEconomyModelTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/Stateful",
+        "identifier" : "StatefulTests",
+        "name" : "StatefulTests"
       }
     },
     {

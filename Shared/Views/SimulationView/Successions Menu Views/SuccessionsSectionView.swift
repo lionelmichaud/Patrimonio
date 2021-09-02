@@ -8,6 +8,7 @@
 
 import SwiftUI
 import ModelEnvironment
+import LifeExpense
 
 struct SuccessionsSectionView: View {
     @EnvironmentObject var simulation : Simulation
@@ -48,6 +49,7 @@ struct SimulationOthersView_Previews: PreviewProvider {
     static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var family     = Family()
+    static var expenses   = LifeExpensesDic()
     static var patrimoine = Patrimoin()
 
     static func initializedSimulation() -> Simulation {
@@ -56,6 +58,7 @@ struct SimulationOthersView_Previews: PreviewProvider {
                            nbOfYears      : 55,
                            nbOfRuns       : 1,
                            withFamily     : family,
+                           withExpenses   : expenses,
                            withPatrimoine : patrimoine)
         return simulation
     }

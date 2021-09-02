@@ -8,6 +8,8 @@
 
 import SwiftUI
 import ModelEnvironment
+import LifeExpense
+import Persistence
 
 struct KpiListView : View {
     @EnvironmentObject var simulation : Simulation
@@ -78,8 +80,9 @@ struct KpiDetailedView: View {
 struct KpiListView_Previews: PreviewProvider {
     static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
+    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromApp())
     static var simulation = Simulation()
 
     static func kpiDeter() -> KPI {
@@ -107,6 +110,7 @@ struct KpiListView_Previews: PreviewProvider {
                            nbOfYears      : 40,
                            nbOfRuns       : 1,
                            withFamily     : family,
+                           withExpenses   : expenses,
                            withPatrimoine : patrimoine)
         return Group {
             KpiDetailedView(kpi: kpiDeter())

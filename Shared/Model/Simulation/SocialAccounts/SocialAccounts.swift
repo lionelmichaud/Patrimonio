@@ -6,6 +6,7 @@ import Files
 import ModelEnvironment
 import Persistence
 import Succession
+import LifeExpense
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.SocialAccounts")
 
@@ -216,6 +217,7 @@ struct SocialAccounts {
     mutating func build(run                       : Int, // swiftlint:disable:this function_parameter_count
                         nbOfYears                 : Int,
                         withFamily family         : Family,
+                        withExpenses expenses     : LifeExpensesDic,
                         withPatrimoine patrimoine : Patrimoin,
                         withKPIs kpis             : inout KpiArray,
                         withMode simulationMode   : SimulationModeEnum,
@@ -245,6 +247,7 @@ struct SocialAccounts {
                 let newCashFlowLine = try CashFlowLine(run                                   : run,
                                                        withYear                              : year,
                                                        withFamily                            : family,
+                                                       withExpenses                          : expenses,
                                                        withPatrimoine                        : patrimoine,
                                                        taxableIrppRevenueDelayedFromLastyear : lastYearDelayedTaxableIrppRevenue,
                                                        using                                 : model)

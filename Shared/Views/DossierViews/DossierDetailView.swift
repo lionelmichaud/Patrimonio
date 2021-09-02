@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ModelEnvironment
+import LifeExpense
 import Persistence
 
 struct DossierDetailView: View {
@@ -14,6 +15,7 @@ struct DossierDetailView: View {
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var expenses   : LifeExpensesDic
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var simulation : Simulation
     var dossier: Dossier
@@ -123,7 +125,7 @@ struct DossierDetailView: View {
     /// True si le dossier est actif et a été modifié
     private var savable: Bool {
         dossier.isActive &&
-            (family.isModified || patrimoine.isModified || model.isModified)
+            (family.isModified || expenses.isModified || patrimoine.isModified || model.isModified)
     }
     
     /// si le dossier est déjà actif et a été modifié alors prévenir que les modif vont être écrasées
@@ -137,7 +139,7 @@ struct DossierDetailView: View {
                                        secondaryButton: .cancel())
         } else if let activeDossier = dataStore.activeDossier,
                   activeDossier != dossier,
-                  (family.isModified || patrimoine.isModified || model.isModified) {
+                  (family.isModified || expenses.isModified || patrimoine.isModified || model.isModified) {
             // le dossier sélectionné n'est pas encore chargé
             // et il y a déjà un autre dossier chargé avec des modifications non sauvegardées
             self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
@@ -158,6 +160,7 @@ struct DossierDetailView: View {
             try dossier.saveDossierContentAsJSON { folder in
                 try model.saveAsJSON(toFolder: folder)
                 try family.saveAsJSON(toFolder: folder)
+                try expenses.saveAsJSON(toFolder: folder)
                 try patrimoine.saveAsJSON(toFolder: folder)
                 // forcer la vue à se rafraichir
                 dataStore.objectWillChange.send()
@@ -182,6 +185,7 @@ struct DossierDetailView: View {
             try dossier.loadDossierContentAsJSON { folder in
                 try model.loadFromJSON(fromFolder: folder)
                 try patrimoine.loadFromJSON(fromFolder: folder)
+                try expenses.loadFromJSON(fromFolder: folder)
                 try family.loadFromJSON(fromFolder: folder,
                                         using     : model)
             }

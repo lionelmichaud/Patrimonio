@@ -8,6 +8,7 @@
 
 import SwiftUI
 import ModelEnvironment
+import LifeExpense
 import Persistence
 
 /// Defines the main scene of the App
@@ -22,6 +23,7 @@ struct MainScene: Scene {
     @ObservedObject var dataStore  : Store
     @ObservedObject var model      : Model
     @ObservedObject var family     : Family
+    @ObservedObject var expenses   : LifeExpensesDic
     @ObservedObject var patrimoine : Patrimoin
     @ObservedObject var simulation : Simulation
     
@@ -36,6 +38,7 @@ struct MainScene: Scene {
                 .environmentObject(model)
                 .environmentObject(uiState)
                 .environmentObject(family)
+                .environmentObject(expenses)
                 .environmentObject(patrimoine)
                 .environmentObject(simulation)
         }

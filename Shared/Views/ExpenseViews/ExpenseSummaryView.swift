@@ -13,8 +13,8 @@ import Charts // https://github.com/danielgindi/Charts.git
 
 struct ExpenseSummaryView: View {
     @EnvironmentObject private var dataStore  : Store
-    @EnvironmentObject private var family  : Family
-    @EnvironmentObject private var uiState : UIState
+    @EnvironmentObject private var expenses   : LifeExpensesDic
+    @EnvironmentObject private var uiState    : UIState
     let minDate = Date.now.year
     let maxDate = Date.now.year + 40
     @State private var showInfoPopover = false
@@ -35,7 +35,7 @@ struct ExpenseSummaryView: View {
                            step  : 1,
                            onEditingChanged: {_ in
                            })
-                    if let expenses = self.family.expenses.perCategory[uiState.expenseViewState.selectedCategory] {
+                    if let expenses = self.expenses.perCategory[uiState.expenseViewState.selectedCategory] {
                         Text(expenses.value(atEndOf: Int(self.uiState.expenseViewState.evalDate)).€String)
                     }
                 }
@@ -89,7 +89,8 @@ struct ExpenseSummaryView: View {
 // MARK: - Wrappers de UIView
 
 struct ExpenseSummaryChartView: NSUIViewRepresentable {
-    @EnvironmentObject var family : Family
+    @EnvironmentObject var family   : Family
+    @EnvironmentObject var expenses : LifeExpensesDic
     let endDate  : Double
     let evalDate : Double
     let category : LifeExpenseCategory
@@ -109,7 +110,7 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
         //  chercher le nom de la dépense
         //  chercher la position de la dépense dans le tableau des dépense
         //  chercher les dates de début et de fin
-        let namedValuedTimeFrameTable = family.expenses.namedValuedTimeFrameTable(category: category)
+        let namedValuedTimeFrameTable = expenses.namedValuedTimeFrameTable(category: category)
         
         // mettre à jour les noms des dépenses dans le formatteur de l'axe X
         formatter.names = namedValuedTimeFrameTable.map { (name, _, _, _, _) in
@@ -222,7 +223,7 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
 
 struct ExpenseSummaryView_Previews: PreviewProvider {
     static let dataStore  = Store()
-    static var family     = Family()
+    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromApp())
     static var uiState    = UIState()
     
     static var previews: some View {

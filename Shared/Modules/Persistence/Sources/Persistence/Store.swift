@@ -65,7 +65,7 @@ public final class Store: ObservableObject {
     }
 
     /// Dupliquer un Dossier
-    /// - Parameter dossier: Dossier à duspliquer
+    /// - Parameter dossier: Dossier à dupliquer
     public func duplicate(_ dossier: Dossier) throws {
         let newDossier = try dossier.duplicate()
         dossiers.append(newDossier)

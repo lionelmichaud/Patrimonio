@@ -8,6 +8,7 @@
 import SwiftUI
 import ModelEnvironment
 import Persistence
+import LifeExpense
 
 @main
 struct AppMain: App {
@@ -20,6 +21,7 @@ struct AppMain: App {
     @StateObject private var dataStore  = Store()
     @StateObject private var model      = Model()
     @StateObject private var family     = Family()
+    @StateObject private var expenses   = LifeExpensesDic()
     @StateObject private var patrimoine = Patrimoin()
     @StateObject private var simulation = Simulation()
 
@@ -27,6 +29,7 @@ struct AppMain: App {
         MainScene(dataStore  : dataStore,
                   model      : model,
                   family     : family,
+                  expenses   : expenses,
                   patrimoine : patrimoine,
                   simulation : simulation)
         .commands { AppCommands() }
@@ -39,7 +42,7 @@ struct AppMain: App {
     }
 
     init() {
-        /// Coordonne les diffférents singletons du modèle en terme de dépendance
+        /// Coordonne les diffférentes entités du modèle en terme de dépendance
 //        _ = Coordinator.shared
     }
 }

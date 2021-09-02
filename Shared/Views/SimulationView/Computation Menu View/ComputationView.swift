@@ -18,6 +18,7 @@ struct ComputationView: View {
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var expenses   : LifeExpensesDic
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var simulation : Simulation
     @State private var busySaveWheelAnimate   : Bool = false
@@ -195,6 +196,7 @@ struct ComputationView: View {
                                    nbOfYears      : Int(uiState.computationState.nbYears),
                                    nbOfRuns       : 1,
                                    withFamily     : family,
+                                   withExpenses   : expenses,
                                    withPatrimoine : patrimoine)
                 
             case .random:
@@ -202,6 +204,7 @@ struct ComputationView: View {
                                    nbOfYears      : Int(uiState.computationState.nbYears),
                                    nbOfRuns       : Int(uiState.computationState.nbRuns),
                                    withFamily     : family,
+                                   withExpenses   : expenses,
                                    withPatrimoine : patrimoine)
         }
         // mettre à jour les variables d'état dans le thread principal

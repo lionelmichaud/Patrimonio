@@ -12,11 +12,11 @@ import LifeExpense
 
 struct ExpenseView: View {
     @EnvironmentObject private var dataStore : Store
-    @EnvironmentObject private var family    : Family
+    @EnvironmentObject private var expenses  : LifeExpensesDic
     let simulationReseter: CanResetSimulationP
 
     private var categories: [(LifeExpenseCategory, LifeExpenseArray)] {
-        family.expenses.perCategory.sorted(by: \.key.displayString)
+        expenses.perCategory.sorted(by: \.key.displayString)
     }
     
     var body: some View {
@@ -33,7 +33,7 @@ struct ExpenseView: View {
                     ForEach(categories, id: \.0) { (category, expenses) in
                         ExpenseListInCategory(simulationReseter : simulationReseter,
                                               category          : category,
-                                              expenses          : expenses)
+                                              expensesInCategory: expenses)
                     }
                 }
             }
@@ -57,7 +57,7 @@ struct ExpenseView: View {
 }
 
 struct ExpenseTotalView: View {
-    @EnvironmentObject private var family    : Family
+    @EnvironmentObject private var expenses: LifeExpensesDic
 
     var body: some View {
         Section {
@@ -67,7 +67,7 @@ struct ExpenseTotalView: View {
                                       design: Font.Design.default))
                     .fontWeight(.bold)
                 Spacer()
-                Text(family.expenses.value(atEndOf: Date.now.year).€String)
+                Text(expenses.value(atEndOf: Date.now.year).€String)
                     .font(Font.system(size: 21,
                                       design: Font.Design.default))
             }
@@ -90,39 +90,38 @@ struct ExpenseHeaderView: View {
 }
 
 struct ExpenseListInCategory: View {
-    @EnvironmentObject var family     : Family
-    //@EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var uiState    : UIState
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var expenses   : LifeExpensesDic
+    @EnvironmentObject private var uiState    : UIState
     let simulationReseter : CanResetSimulationP
     let category          : LifeExpenseCategory
-    var expenses          : LifeExpenseArray
-    //@State private var colapse = true
+    var expensesInCategory: LifeExpenseArray
 
     var body: some View {
         Section {
             LabeledValueRowView(colapse     : $uiState.expenseViewState.colapseCategories[category.rawValue],
                                 label       : category.displayString,
-                                value       : family.expenses.perCategory[category]?.value(atEndOf: Date.now.year) ?? 0,
+                                value       : expenses.perCategory[category]?.value(atEndOf: Date.now.year) ?? 0,
                                 indentLevel : 0,
                                 header      : true)
             if !uiState.expenseViewState.colapseCategories[category.rawValue] {
                 // ajouter un nouvel item à liste des items
-                NavigationLink(destination: ExpenseDetailedView(category: category,
-                                                                item    : nil,
-                                                                family  : family,
-                                                                simulationReseter: simulationReseter)) {
+                NavigationLink(destination: ExpenseDetailedView(category          : category,
+                                                                item              : nil,
+                                                                expenses          : expenses,
+                                                                simulationReseter : simulationReseter)) {
                     Label(title: { Text("Ajouter un élément...") },
                           icon : { Image(systemName: "plus.circle.fill").imageScale(.large) })
                         .foregroundColor(.accentColor)
                 }
                 
                 // liste des items existants
-                ForEach(expenses.items) { expense in
-                    NavigationLink(destination: ExpenseDetailedView(category: self.category,
-                                                                    item    : expense,
-                                                                    family  : self.family,
-                                                                    simulationReseter: simulationReseter)) {
+                ForEach(expensesInCategory.items) { expense in
+                    NavigationLink(destination: ExpenseDetailedView(category          : category,
+                                                                    item              : expense,
+                                                                    expenses          : expenses,
+                                                                    simulationReseter : simulationReseter)) {
                         LabeledValueRowView(colapse     : .constant(true),
                                             label       : expense.name,
                                             value       : expense.value(atEndOf: Date.now.year),
@@ -142,12 +141,12 @@ struct ExpenseListInCategory: View {
         simulationReseter.reset()
         uiState.reset()
         // supprimer la dépense
-        family.expenses.perCategory[self.category]?.delete(at: offsets)
+        expenses.perCategory[self.category]?.delete(at: offsets)
     }
     
     func move(from source    : IndexSet, to destination : Int) {
-        family.expenses.perCategory[self.category]?.move(from : source,
-                                                         to   : destination)
+        expenses.perCategory[self.category]?.move(from : source,
+                                                  to   : destination)
     }
 }
 
@@ -159,8 +158,9 @@ struct ExpenseView_Previews: PreviewProvider {
     }
     static var simulationReseter = FakeSimulationReseter()
     static let dataStore  = Store()
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
+    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromApp())
     static var uiState    = UIState()
 
     static var previews: some View {
@@ -168,6 +168,7 @@ struct ExpenseView_Previews: PreviewProvider {
             ExpenseView(simulationReseter: simulationReseter)
                 .environmentObject(dataStore)
                 .environmentObject(family)
+                .environmentObject(expenses)
                 .environmentObject(patrimoine)
                 .environmentObject(uiState)
         }

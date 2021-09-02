@@ -12,6 +12,7 @@ import EconomyModel
 import SocioEconomyModel
 import ModelEnvironment
 import Persistence
+import LifeExpense
 
 struct GridsView: View {
     @EnvironmentObject var uiState    : UIState
@@ -36,6 +37,7 @@ struct ShortGridView: View {
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var simulation : Simulation
     @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var expenses   : LifeExpensesDic
     @EnvironmentObject private var patrimoine : Patrimoin
     @State private var filter         : RunFilterEnum       = .all
     @State private var sortCriteria   : KpiSortCriteriaEnum = .byRunNumber
@@ -187,6 +189,7 @@ struct ShortGridView: View {
         // rejouer le run unique
         simulation.replay(thisRun        : thisRun,
                           withFamily     : family,
+                          withExpenses   : expenses,
                           withPatrimoine : patrimoine,
                           using          : model)
     }
@@ -332,14 +335,16 @@ struct ShortGridView_Previews: PreviewProvider {
     static var uiState    = UIState()
     static var dataStore  = Store()
     static var simulation = Simulation()
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-    
+    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+
     static var previews: some View {
         simulation.compute(using          : model,
                            nbOfYears      : 25,
                            nbOfRuns       : 10,
                            withFamily     : family,
+                           withExpenses   : expenses,
                            withPatrimoine : patrimoine)
         return
             NavigationView {

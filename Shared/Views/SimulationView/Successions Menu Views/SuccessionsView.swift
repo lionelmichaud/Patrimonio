@@ -9,6 +9,8 @@
 import SwiftUI
 import ModelEnvironment
 import Succession
+import LifeExpense
+import Persistence
 
 struct SuccessionsView: View {
     @EnvironmentObject var simulation : Simulation
@@ -130,8 +132,9 @@ struct SuccessorsDisclosureGroup: View {
 struct SuccessionsView_Previews: PreviewProvider {
     static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
+    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromApp())
 
     static func initializedSimulation() -> Simulation {
         let simulation = Simulation()
@@ -139,6 +142,7 @@ struct SuccessionsView_Previews: PreviewProvider {
                            nbOfYears      : 55,
                            nbOfRuns       : 1,
                            withFamily     : family,
+                           withExpenses   : expenses,
                            withPatrimoine : patrimoine)
         return simulation
     }

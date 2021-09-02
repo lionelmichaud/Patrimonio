@@ -22,11 +22,6 @@ enum CashFlowError: Error {
 // MARK: - Patrimoine constitué d'un Actif et d'un Passif
 final class Patrimoin: ObservableObject {
     
-    // MARK: - Static properties
-    
-    // doit être injecté depuis l'extérieur avant toute instanciation de la classe
-    static var family: Family?
-    
     // MARK: - Nested Type
     
     struct Memento {
@@ -39,7 +34,12 @@ final class Patrimoin: ObservableObject {
         }
     }
     
-    // MARK: - Static Methods
+    // MARK: - Type Properties
+    
+    // doit être injecté depuis l'extérieur avant toute instanciation de la classe
+    static var family: Family?
+    
+    // MARK: - Type Methods
     
     /// Définir le mode de simulation à utiliser pour tous les calculs futurs
     /// - Parameter simulationMode: mode de simulation à utiliser

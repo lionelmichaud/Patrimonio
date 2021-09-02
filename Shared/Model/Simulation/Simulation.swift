@@ -17,6 +17,7 @@ import Files
 import ModelEnvironment
 import Persistence
 import Succession
+import LifeExpense
 import PersonModel
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Simulation")
@@ -180,6 +181,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
                  nbOfYears                 : Int,
                  nbOfRuns                  : Int,
                  withFamily family         : Family,
+                 withExpenses expenses     : LifeExpensesDic,
                  withPatrimoine patrimoine : Patrimoin) {
 
         defer {
@@ -245,6 +247,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
             let dicoOfKpiResults = socialAccounts.build(run            : run,
                                                         nbOfYears      : nbOfYears,
                                                         withFamily     : family,
+                                                        withExpenses   : expenses,
                                                         withPatrimoine : patrimoine,
                                                         withKPIs       : &kpis,
                                                         withMode       : mode,
@@ -277,6 +280,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     ///   - thisRun: paramètres du run à rejouer
     func replay(thisRun                   : SimulationResultLine,
                 withFamily family         : Family,
+                withExpenses expenses     : LifeExpensesDic,
                 withPatrimoine patrimoine : Patrimoin,
                 using model               : Model) {
         defer {
@@ -316,6 +320,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         _ = socialAccounts.build(run            : currentRunNb,
                                  nbOfYears      : nbOfYears,
                                  withFamily     : family,
+                                 withExpenses   : expenses,
                                  withPatrimoine : patrimoine,
                                  withKPIs       : &kpis,
                                  withMode       : mode,

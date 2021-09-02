@@ -13,6 +13,7 @@ import Charts // https://github.com/danielgindi/Charts.git
 import Files
 import ModelEnvironment
 import Persistence
+import LifeExpense
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.IsfEvolutionChartView")
 
@@ -193,8 +194,9 @@ struct IsfView_Previews: PreviewProvider {
     static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var dataStore  = Store()
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
+    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromApp())
     static var simulation = Simulation()
 
     static var previews: some View {
@@ -202,6 +204,7 @@ struct IsfView_Previews: PreviewProvider {
                            nbOfYears      : 40,
                            nbOfRuns       : 1,
                            withFamily     : family,
+                           withExpenses   : expenses,
                            withPatrimoine : patrimoine)
         return NavigationView {
             List {

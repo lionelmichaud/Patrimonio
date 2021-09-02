@@ -12,7 +12,7 @@ import Files
 
 // MARK: - Dictionnaire de [Category : Table d'Item Valuable and Namable]
 
-public struct DictionaryOfNameableValuableArray <ItemCategory, ArrayOfItems>
+public class DictionaryOfNameableValuableArray <ItemCategory, ArrayOfItems>: ObservableObject
 where ItemCategory: PickableEnumP,
       ItemCategory: Codable,
       ArrayOfItems: NameableValuableArrayP,
@@ -20,7 +20,7 @@ where ItemCategory: PickableEnumP,
 
     // MARK: - Properties
 
-    public var perCategory = [ItemCategory: ArrayOfItems]()
+    @Published public var perCategory = [ItemCategory: ArrayOfItems]()
 
     // MARK: - Computed Properties
     
@@ -46,20 +46,33 @@ where ItemCategory: PickableEnumP,
     // MARK: - Initializers
 
     /// Initialiser à vide
+    /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été séelctionné
     public init() {
     }
 
     /// Lire toutes les dépenses dans des fichiers au format JSON.
     /// Un fichier par catégorie de dépense.
     /// nom du fichier "Category_LifeExpense.json"
+    /// - Note: Utilisé seulement pour les Tests
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    /// - Throws: en cas d'échec de lecture des données
     public init(fromFolder folder: Folder) throws {
+        try loadFromJSON(fromFolder: folder)
+    }
+
+    /// Lire toutes les dépenses dans des fichiers au format JSON.
+    /// Un fichier par catégorie de dépense.
+    /// nom du fichier "Category_LifeExpense.json"
+    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    /// - Throws: en cas d'échec de lecture des données
+    public func loadFromJSON(fromFolder folder: Folder) throws {
         for category in ItemCategory.allCases {
             // charger les Items de cette catégorie à partir du fichier JSON associé à cette catégorie
             perCategory[category] = try ArrayOfItems(fileNamePrefix : category.pickerString + "_",
                                                      fromFolder     : folder)
         }
     }
-
+    
     // MARK: - Methods
 
     /// Enregistrer toutes les dépenses dans des fichiers au format JSON..

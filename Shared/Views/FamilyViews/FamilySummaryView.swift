@@ -8,12 +8,14 @@
 
 import SwiftUI
 import ModelEnvironment
+import LifeExpense
 import Persistence
 
 struct FamilySummaryView: View {
     @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var expenses   : LifeExpensesDic
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var simulation : Simulation
     @State private var cashFlow : CashFlowLine?
@@ -24,8 +26,9 @@ struct FamilySummaryView: View {
         //simulation.reset(withPatrimoine: patrimoine)
         self.cashFlow = try? CashFlowLine(run           : 0,
                                           withYear      : Date.now.year,
-                                          withFamily    : self.family,
-                                          withPatrimoine: self.patrimoine,
+                                          withFamily    : family,
+                                          withExpenses  : expenses,
+                                          withPatrimoine: patrimoine,
                                           taxableIrppRevenueDelayedFromLastyear : 0,
                                           using         : model)
         patrimoine.restoreState()

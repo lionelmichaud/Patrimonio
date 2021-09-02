@@ -12,6 +12,7 @@ import AppFoundation
 import Charts // https://github.com/danielgindi/Charts.git
 import Files
 import ModelEnvironment
+import LifeExpense
 import Persistence
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.FiscalSliceView")
@@ -226,6 +227,7 @@ struct IrppSliceView_Previews: PreviewProvider {
     static var uiState    = UIState()
     static var dataStore  = Store()
     static var family     = Family()
+    static var expenses   = LifeExpensesDic()
     static var patrimoine = Patrimoin()
     static var simulation = Simulation()
 
@@ -234,6 +236,7 @@ struct IrppSliceView_Previews: PreviewProvider {
                            nbOfYears      : 40,
                            nbOfRuns       : 1,
                            withFamily     : family,
+                           withExpenses   : expenses,
                            withPatrimoine : patrimoine)
         return NavigationView {
             List {

@@ -2,6 +2,7 @@ import Foundation
 import os
 import NamedValue
 import ModelEnvironment
+import LifeExpense
 import Succession
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CashFlow")
@@ -115,6 +116,7 @@ struct CashFlowLine {
     init(run                                   : Int,
          withYear       year                   : Int,
          withFamily     family                 : Family,
+         withExpenses   expenses               : LifeExpensesDic,
          withPatrimoine patrimoine             : Patrimoin,
          taxableIrppRevenueDelayedFromLastyear : Double,
          using model                           : Model) throws {
@@ -159,7 +161,7 @@ struct CashFlowLine {
             computeISF(with: patrimoine, using: model)
 
             /// EXPENSES: compute and populate family expenses
-            lifeExpenses.namedValues = family.expenses.namedValueTable(atEndOf: year)
+            lifeExpenses.namedValues = expenses.namedValueTable(atEndOf: year)
             
             /// LOAN: populate remboursement d'emprunts
             manageLoanCashFlow(for: adultsNames, of: patrimoine)

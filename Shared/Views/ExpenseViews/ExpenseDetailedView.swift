@@ -61,10 +61,10 @@ class LifeExpenseViewModel: ObservableObject {
 // MARK: - View
 
 struct ExpenseDetailedView: View {
-    @EnvironmentObject var family     : Family
+    @EnvironmentObject var expenses    : LifeExpensesDic
     //@EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var uiState    : UIState
+    @EnvironmentObject var patrimoine  : Patrimoin
+    @EnvironmentObject var uiState     : UIState
     @Environment(\.presentationMode) var presentationMode
     private let simulationReseter      : CanResetSimulationP
     private var originalItem           : LifeExpense?
@@ -124,7 +124,7 @@ struct ExpenseDetailedView: View {
     
     init(category          : LifeExpenseCategory,
          item              : LifeExpense?,
-         family            : Family,
+         expenses          : LifeExpensesDic,
          simulationReseter : CanResetSimulationP) {
         self.originalItem = item
         self.category     = category
@@ -132,7 +132,7 @@ struct ExpenseDetailedView: View {
         if let initialItemValue = item {
             // modification d'un élément existant
             _expenseVM = StateObject(wrappedValue: LifeExpenseViewModel(from: initialItemValue))
-            _index     = State(initialValue: family.expenses.perCategory[category]?.items.firstIndex(of: initialItemValue))
+            _index     = State(initialValue: expenses.perCategory[category]?.items.firstIndex(of: initialItemValue))
         } else {
             // création d'un nouvel élément
             _expenseVM = StateObject(wrappedValue: LifeExpenseViewModel(from: LifeExpense.prototype))
@@ -154,7 +154,7 @@ struct ExpenseDetailedView: View {
         localItem.id = UUID()
         localItem.name += "-copie"
         // ajouter la copie créée
-        family.expenses.perCategory[self.category]?.add(localItem)
+        expenses.perCategory[self.category]?.add(localItem)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
@@ -163,7 +163,7 @@ struct ExpenseDetailedView: View {
     private func applyChanges() {
         /// vérifier que le nom ne fait pas doublon si l'élément est nouveau ou si le nom a été modifié
         if (originalItem == nil) || (expenseVM.name != originalItem?.name) {
-            let nameAlreadyExists = family.expenses.perCategory.values.contains { arrayOfExpenses in
+            let nameAlreadyExists = expenses.perCategory.values.contains { arrayOfExpenses in
                 return arrayOfExpenses.items.contains { expense in
                     return expense.name == expenseVM.name
                 }
@@ -199,11 +199,11 @@ struct ExpenseDetailedView: View {
         // tous les tests sont OK
         if let index = index {
             // modifier un éléménet existant
-            family.expenses.perCategory[self.category]?.update(with : expenseVM.lifeExpense,
+            expenses.perCategory[self.category]?.update(with : expenseVM.lifeExpense,
                                                                at   : index)
         } else {
             // créer un nouvel élément
-            family.expenses.perCategory[self.category]?.add(expenseVM.lifeExpense)
+            expenses.perCategory[self.category]?.add(expenseVM.lifeExpense)
         }
         
         // remettre à zéro la simulation et sa vue
@@ -228,7 +228,7 @@ struct ExpenseDetailedView_Previews: PreviewProvider {
         }
     }
     static var simulationReseter = FakeSimulationReseter()
-    static var family     = Family()
+    static var expenses   = LifeExpensesDic()
     static var simulation = Simulation()
     static var patrimoine = Patrimoin()
     static var uiState    = UIState()
@@ -239,9 +239,9 @@ struct ExpenseDetailedView_Previews: PreviewProvider {
                                                    note    : "une note",
                                                    timeSpan: .permanent,
                                                    value   : 1234.0),
-                            family   : family,
+                            expenses : expenses,
                             simulationReseter: simulationReseter)
-            .environmentObject(family)
+            .environmentObject(expenses)
             .environmentObject(simulation)
             .environmentObject(patrimoine)
             .environmentObject(uiState)

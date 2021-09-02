@@ -16,8 +16,6 @@ final class Family: ObservableObject {
     
     // structure de la famille
     @Published private(set) var members = PersistableArrayOfPerson()
-    // dépenses
-    @Published var expenses = LifeExpensesDic()
     // nombre d'enfant nés dans la famille
     var nbOfBornChildren: Int { // computed
         var nb = 0
@@ -46,12 +44,13 @@ final class Family: ObservableObject {
     }
 
     var isModified: Bool {
-        expenses.isModified || members.isModified
+        members.isModified
     }
 
     // MARK: - Initializers
 
     /// Initialiser à vide
+    /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été séelctionné
     init() {
         // injection de family dans la propriété statique de DateBoundary pour lier les évenements à des personnes
         DateBoundary.setPersonEventYearProvider(self)
@@ -64,26 +63,28 @@ final class Family: ObservableObject {
     }
 
     /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Note: Utilisé seulement pour les Tests
     /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    /// - Throws: en cas d'échec de lecture des données
     convenience init(fromFolder folder: Folder) throws {
         self.init()
-        try self.expenses = LifeExpensesDic(fromFolder: folder)
-        try self.members  = PersistableArrayOfPerson(fromFolder: folder)
+        members  = try PersistableArrayOfPerson(fromFolder: folder)
     }
 
     // MARK: - Methodes
 
     /// lire à partir d'un fichier JSON contenu dans le dossier `fromFolder`
-    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
+    /// - Parameters:
+    ///   - folder: dossier où se trouve le fichier JSON à utiliser
+    ///   - model: modèle à utiliser pour initialiser les membres de la famille
+    /// - Throws: en cas d'échec de lecture des données
     func loadFromJSON(fromFolder folder : Folder,
-                      using model  : Model) throws {
-        expenses = try LifeExpensesDic(fromFolder : folder)
+                      using model       : Model) throws {
         members  = try PersistableArrayOfPerson(fromFolder: folder,
                                                 using     : model)
     }
 
     func saveAsJSON(toFolder folder: Folder) throws {
-        try expenses.saveAsJSON(toFolder: folder)
         try members.saveAsJSON(to: folder)
     }
 
@@ -318,9 +319,7 @@ extension Family: CustomStringConvertible {
             desc += String(describing: member).withPrefixedSplittedLines("  ")
         }
         desc += "\n"
-        desc += "- DEPENSES:\n"
-        desc += String(describing: expenses).withPrefixedSplittedLines("  ")
-        
+
         return desc
     }
 }

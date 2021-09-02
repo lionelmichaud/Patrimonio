@@ -23,6 +23,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", catego
 struct CashFlowDetailedChartView: View {
     @EnvironmentObject var dataStore  : Store
     @EnvironmentObject var family     : Family
+    @EnvironmentObject var expenses   : LifeExpensesDic
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
     @State private var lifeEventChatIsPresented = false
@@ -65,7 +66,7 @@ struct CashFlowDetailedChartView: View {
                                                 title         : self.simulation.title,
                                                 combination   : self.uiState.cfChartState.combination,
                                                 itemSelection : self.uiState.cfChartState.itemSelection,
-                                                expenses      : family.expenses,
+                                                expenses      : expenses,
                                                 selectedExpenseCategory: self.uiState.cfChartState.selectedExpenseCategory)
                         .padding(.trailing, 4)
 
@@ -265,7 +266,8 @@ struct CashFlowDetailedChartView_Previews: PreviewProvider {
     static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var dataStore  = Store()
-    static var family     = Family()
+    static var family     = Family( )
+    static var expenses   = LifeExpensesDic()
     static var patrimoine = Patrimoin()
     static var simulation = Simulation()
 
@@ -275,6 +277,7 @@ struct CashFlowDetailedChartView_Previews: PreviewProvider {
                            nbOfYears      : 40,
                            nbOfRuns       : 1,
                            withFamily     : family,
+                           withExpenses   : expenses,
                            withPatrimoine : patrimoine)
         return NavigationView {
             List {

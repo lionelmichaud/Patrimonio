@@ -33,7 +33,8 @@ let package = Package(
                     "Persistable",
                     "FileAndFolder",
                     "Statistics",
-                    "SocioEconomyModel"
+                    "SocioEconomyModel",
+                    "FiscalModel"
                 ]),
         .testTarget(
             name: "RetirementModelTests",

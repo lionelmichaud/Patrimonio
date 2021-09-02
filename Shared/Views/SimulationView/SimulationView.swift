@@ -9,6 +9,7 @@
 import SwiftUI
 import ModelEnvironment
 import Persistence
+import LifeExpense
 
 struct SimulationView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -61,6 +62,7 @@ struct SimulationView_Previews: PreviewProvider {
     static let dataStore  = Store()
     static var uiState    = UIState()
     static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromApp())
     static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromApp())
     static var simulation = Simulation()
 
@@ -69,6 +71,7 @@ struct SimulationView_Previews: PreviewProvider {
                            nbOfYears      : 5,
                            nbOfRuns       : 1,
                            withFamily     : family,
+                           withExpenses   : expenses,
                            withPatrimoine : patrimoine)
         return
             SimulationView()
