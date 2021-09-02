@@ -21,7 +21,7 @@ struct SCI {
     var note        : String
     var scpis       : ScpiArray
     var bankAccount : Double
-    var isModified      : Bool {
+    var isModified  : Bool {
         return scpis.persistenceState == .modified
     }
     // MARK: - Initializers

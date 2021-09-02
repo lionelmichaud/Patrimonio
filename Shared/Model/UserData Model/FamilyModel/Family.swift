@@ -36,31 +36,22 @@ final class Family: ObservableObject {
         return nb
     }
     
-    var adults  : [Person] {
+    var adults  : [Person] { // computed
         members.items.filter {$0 is Adult}
     }
-    var children: [Person] {
+    var children: [Person] { // computed
         members.items.filter {$0 is Child}
     }
 
-    var isModified: Bool {
+    var isModified: Bool { // computed
         members.isModified
     }
 
     // MARK: - Initializers
 
     /// Initialiser à vide
-    /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été séelctionné
-    init() {
-        // injection de family dans la propriété statique de DateBoundary pour lier les évenements à des personnes
-        DateBoundary.setPersonEventYearProvider(self)
-        // injection de family dans la propriété statique de Expense
-        LifeExpense.setMembersCountProvider(self)
-        // injection de family dans la propriété statique de Adult
-        Adult.setAdultRelativesProvider(self)
-        // injection de family dans la propriété statique de Patrimoin
-        Patrimoin.family = self
-    }
+    /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été sélectionné
+    init() {    }
 
     /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
     /// - Note: Utilisé seulement pour les Tests

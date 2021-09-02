@@ -46,7 +46,7 @@ where ItemCategory: PickableEnumP,
     // MARK: - Initializers
 
     /// Initialiser à vide
-    /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été séelctionné
+    /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été sélectionné
     public init() {
     }
 

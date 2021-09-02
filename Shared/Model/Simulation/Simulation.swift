@@ -33,11 +33,11 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     //    static let monteCarloFileUrl = Bundle.main.url(forResource: "Monté-Carlo Kpi.csv", withExtension: nil)
     //#endif
 
-    // MARK: - Static Properties
+    // MARK: - Type Properties
 
     static var player: AVPlayer { AVPlayer.sharedDingPlayer }
 
-    // MARK: - Static Methods
+    // MARK: - Type Methods
 
     static func playSound() {
         // jouer le son à la fin de la simulation
@@ -77,8 +77,9 @@ final class Simulation: ObservableObject, CanResetSimulationP {
 
     // MARK: - Initializers
 
+    /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été séelctionné
     init() {
-        /// initialiser les KPI
+        /// création et initialisation des KPI
         let kpiMinimumCash = KPI(name            : SimulationKPIEnum.minimumAsset.displayString,
                                  note            : SimulationKPIEnum.minimumAsset.note,
                                  objective       : 200_000.0,

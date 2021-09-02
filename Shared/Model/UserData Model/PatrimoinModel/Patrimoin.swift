@@ -67,6 +67,7 @@ final class Patrimoin: ObservableObject {
     // MARK: - Initializers
     
     /// Initialiser à vide
+    /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été sélectionné
     init() {
         // mettre à jour la propriété comme si elle était calculée à l'aide de Combine
 //        let assetsIsModified: ((Assets) -> Bool) = { assets in
@@ -76,6 +77,7 @@ final class Patrimoin: ObservableObject {
     }
     
     /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Note: Utilisé seulement pour les Tests
     /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
     convenience init(fromFolder folder: Folder) throws {
         self.init()
@@ -85,6 +87,11 @@ final class Patrimoin: ObservableObject {
     
     // MARK: - Methods
     
+    /// lire à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameters:
+    ///   - folder: dossier où se trouve le fichier JSON à utiliser
+    ///   - model: modèle à utiliser pour initialiser les membres de la famille
+    /// - Throws: en cas d'échec de lecture des données
     func loadFromJSON(fromFolder folder: Folder) throws {
         assets      = try Assets(fromFolder : folder,      with : Patrimoin.family)
         liabilities = try Liabilities(fromFolder : folder, with : Patrimoin.family)

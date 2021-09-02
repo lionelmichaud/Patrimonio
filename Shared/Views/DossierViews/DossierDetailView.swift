@@ -8,6 +8,8 @@
 import SwiftUI
 import ModelEnvironment
 import LifeExpense
+import PersonModel
+import DateBoundary
 import Persistence
 
 struct DossierDetailView: View {
@@ -183,6 +185,15 @@ struct DossierDetailView: View {
         /// charger les fichiers JSON
         do {
             try dossier.loadDossierContentAsJSON { folder in
+                // injection de family dans la propriété statique de DateBoundary pour lier les évenements à des personnes
+                DateBoundary.setPersonEventYearProvider(family)
+                // injection de family dans la propriété statique de Expense
+                LifeExpense.setMembersCountProvider(family)
+                // injection de family dans la propriété statique de Adult
+                Adult.setAdultRelativesProvider(family)
+                // injection de family dans la propriété statique de Patrimoin
+                Patrimoin.family = family
+
                 try model.loadFromJSON(fromFolder: folder)
                 try patrimoine.loadFromJSON(fromFolder: folder)
                 try expenses.loadFromJSON(fromFolder: folder)

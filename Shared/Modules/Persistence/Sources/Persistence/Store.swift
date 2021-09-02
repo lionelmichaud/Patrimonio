@@ -21,6 +21,7 @@ public final class Store: ObservableObject {
 
     /// Charger la liste des Dossiers utilisateur et
     /// mettre à jour le répertoire des templates à partir du Bundle App Main
+    /// - Note: Nécessaire pour une initialization dans AppMain au lancement de l'application
     public init() {
         // charger tous les dossiers utilisateur
         do {
