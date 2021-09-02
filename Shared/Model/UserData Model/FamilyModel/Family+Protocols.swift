@@ -15,10 +15,3 @@ protocol MembersNameProviderP {
     var adultsName   : [String] { get }
     var childrenName : [String] { get }
 }
-
-// MARK: - DI: Protocol de service d'itération sur les membres du foyer fiscal dans la famille
-
-protocol FiscalHouseholdSumatorP {
-    func sum(atEndOf year : Int,
-             memberValue  : (String) -> Double) -> Double
-}

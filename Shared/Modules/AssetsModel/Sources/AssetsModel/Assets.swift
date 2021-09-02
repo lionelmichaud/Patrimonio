@@ -12,19 +12,18 @@ import Statistics
 import FiscalModel
 import Files
 import Ownership
-import AssetsModel
 
 // MARK: - Actifs de la famille
 
 //typealias Assets = DictionaryOfItemArray<AssetsCategory,
 
-struct Assets {
-
+public struct Assets {
+    
     // MARK: - Static Methods
     
     /// Définir le mode de simulation à utiliser pour tous les calculs futurs
     /// - Parameter simulationMode: mode de simulation à utiliser
-    static func setSimulationMode(to thisMode : SimulationModeEnum) {
+    public static func setSimulationMode(to thisMode : SimulationModeEnum) {
         // injecter l'inflation dans les Types d'investissements procurant
         // un rendement non réévalué de l'inflation chaque année
         SCPI.setSimulationMode(to: thisMode)
@@ -40,12 +39,12 @@ struct Assets {
     
     // MARK: - Properties
     
-    var periodicInvests : PeriodicInvestementArray
-    var freeInvests     : FreeInvestmentArray
-    var realEstates     : RealEstateArray
-    var scpis           : ScpiArray // SCPI hors de la SCI
-    var sci             : SCI
-    var allOwnableItems : [(ownable: OwnableP, category: AssetsCategory)] {
+    public var periodicInvests : PeriodicInvestementArray
+    public var freeInvests     : FreeInvestmentArray
+    public var realEstates     : RealEstateArray
+    public var scpis           : ScpiArray // SCPI hors de la SCI
+    public var sci             : SCI
+    public var allOwnableItems : [(ownable: OwnableP, category: AssetsCategory)] {
         var ownables = [(ownable: OwnableP, category: AssetsCategory)]()
         
         ownables = periodicInvests.items
@@ -65,7 +64,7 @@ struct Assets {
             .map { ($0, AssetsCategory.sci) }
         return ownables
     }
-    var isModified      : Bool {
+    public var isModified      : Bool {
         return
             periodicInvests.isModified ||
             freeInvests.isModified ||
@@ -76,7 +75,7 @@ struct Assets {
     // MARK: - Initializers
     
     /// Initialiser à vide
-    init() {
+    public init() {
         self.periodicInvests = PeriodicInvestementArray()
         self.freeInvests     = FreeInvestmentArray()
         self.realEstates     = RealEstateArray()
@@ -91,8 +90,8 @@ struct Assets {
     ///   - folder: dossier où se trouve le fichier JSON à utiliser
     ///   - personAgeProvider: forunit l'age d'une personne à partir de son nom
     /// - Throws: en cas d'échec de lecture des données
-    internal init(fromFolder folder      : Folder,
-                  with personAgeProvider : PersonAgeProviderP?) throws {
+    public init(fromFolder folder      : Folder,
+                with personAgeProvider : PersonAgeProviderP?) throws {
         try self.periodicInvests = PeriodicInvestementArray(fromFolder: folder, with: personAgeProvider)
         try self.freeInvests     = FreeInvestmentArray(fromFolder: folder, with: personAgeProvider)
         try self.realEstates     = RealEstateArray(fromFolder: folder, with: personAgeProvider)
@@ -107,26 +106,26 @@ struct Assets {
     }
     
     // MARK: - Methods
-
-    func saveAsJSON(toFolder folder: Folder) throws {
+    
+    public func saveAsJSON(toFolder folder: Folder) throws {
         try periodicInvests.saveAsJSON(toFolder: folder)
         try freeInvests.saveAsJSON(toFolder: folder)
         try realEstates.saveAsJSON(toFolder: folder)
         try scpis.saveAsJSON(toFolder: folder)
         try sci.saveAsJSON(toFolder: folder)
     }
-
+    
     /// Réinitialiser les valeurs courantes des investissements libres
     /// - Warning:
     ///   - Doit être appelée après le chargement d'un objet FreeInvestement depuis le fichier JSON
     ///   - Doit être appelée après toute simulation ayant affectée le Patrimoine (succession)
-    mutating func initializeFreeInvestementCurrentValue() {
+    public mutating func initializeFreeInvestementCurrentValue() {
         for idx in freeInvests.items.range {
             freeInvests[idx].resetCurrentState()
         }
     }
     
-    func value(atEndOf year: Int) -> Double {
+    public func value(atEndOf year: Int) -> Double {
         var sum = realEstates.value(atEndOf: year)
         sum += scpis.value(atEndOf: year)
         sum += periodicInvests.value(atEndOf: year)
@@ -136,7 +135,7 @@ struct Assets {
     }
     
     /// Calls the given closure on each element in the sequence in the same order as a for-in loop
-    func forEachOwnable(_ body: (OwnableP) throws -> Void) rethrows {
+    public func forEachOwnable(_ body: (OwnableP) throws -> Void) rethrows {
         try periodicInvests.items.forEach(body)
         try freeInvests.items.forEach(body)
         try realEstates.items.forEach(body)
@@ -151,11 +150,11 @@ struct Assets {
     ///   - chidrenNames: noms des enfants héritiers survivant éventuels
     ///   - spouseName: nom du conjoint survivant éventuel
     ///   - spouseFiscalOption: option fiscale du conjoint survivant éventuel
-    mutating func transferOwnershipOf(decedentName       : String,
-                                      chidrenNames       : [String]?,
-                                      spouseName         : String?,
-                                      spouseFiscalOption : InheritanceFiscalOption?,
-                                      atEndOf year       : Int) {
+    public mutating func transferOwnershipOf(decedentName       : String,
+                                             chidrenNames       : [String]?,
+                                             spouseName         : String?,
+                                             spouseFiscalOption : InheritanceFiscalOption?,
+                                             atEndOf year       : Int) {
         for idx in periodicInvests.items.range where periodicInvests.items[idx].value(atEndOf: year) > 0 {
             switch periodicInvests[idx].type {
                 case .lifeInsurance(_, let clause):
@@ -234,9 +233,9 @@ struct Assets {
     ///   - year: année d'évaluation
     ///   - evaluationMethod: méthode d'évaluation de la valeure des bien
     ///   - Returns: assiette nette fiscale calculée selon la méthode choisie
-    func realEstateValue(atEndOf year        : Int,
-                         for fiscalHousehold : FiscalHouseholdSumatorP,
-                         evaluationMethod    : EvaluationMethod) -> Double {
+    public func realEstateValue(atEndOf year        : Int,
+                                for fiscalHousehold : FiscalHouseholdSumatorP,
+                                evaluationMethod    : EvaluationMethod) -> Double {
         switch evaluationMethod {
             case .ifi, .isf :
                 /// on prend la valeure IFI des biens immobiliers
@@ -268,7 +267,7 @@ struct Assets {
 }
 
 extension Assets: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         """
         ACTIF:
         \(periodicInvests.description.withPrefixedSplittedLines("  "))

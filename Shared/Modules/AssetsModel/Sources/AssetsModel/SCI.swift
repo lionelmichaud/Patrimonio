@@ -16,8 +16,8 @@ public struct SCI {
     
     // MARK: - Properties
     
-    var name        : String
-    var note        : String
+    public var name        : String
+    public var note        : String
     public var scpis       : ScpiArray
     public var bankAccount : Double
     public var isModified  : Bool {

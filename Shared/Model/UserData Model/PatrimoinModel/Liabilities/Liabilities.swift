@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppFoundation
 import FiscalModel
 import Files
 import Ownership

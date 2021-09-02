@@ -1,4 +1,5 @@
 import Foundation
+import AppFoundation
 import Files
 import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
 import ModelEnvironment
