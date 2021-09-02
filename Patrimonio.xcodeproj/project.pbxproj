@@ -511,8 +511,6 @@
 		79F4D12426B03D62009D91B9 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F4D12226B03D62009D91B9 /* Buttons.swift */; };
 		79FA8CE32630684F009FEA00 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD72630684F009FEA00 /* Assets.swift */; };
 		79FA8CE42630684F009FEA00 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CD72630684F009FEA00 /* Assets.swift */; };
-		79FA8CEF2630684F009FEA00 /* SCI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDD2630684F009FEA00 /* SCI.swift */; };
-		79FA8CF02630684F009FEA00 /* SCI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA8CDD2630684F009FEA00 /* SCI.swift */; };
 		79FC3D3B262C760A00A6184B /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC3D3A262C760A00A6184B /* Statistics */; };
 		79FC3D3D262C761400A6184B /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC3D3C262C761400A6184B /* Statistics */; };
 		79FC722326330D2C004F3BD2 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC722226330D2C004F3BD2 /* AppCommands.swift */; };
@@ -794,7 +792,6 @@
 		79F222F4265AD0B9005EE0B9 /* DossierViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierViewModel.swift; sourceTree = "<group>"; };
 		79F4D12226B03D62009D91B9 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		79FA8CD72630684F009FEA00 /* Assets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
-		79FA8CDD2630684F009FEA00 /* SCI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCI.swift; sourceTree = "<group>"; };
 		79FC722226330D2C004F3BD2 /* AppCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
 		79FC723526331A9D004F3BD2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		79FC723D26331C69004F3BD2 /* SimulationUserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationUserSettingsView.swift; sourceTree = "<group>"; };
@@ -1663,7 +1660,6 @@
 			children = (
 				79FA8CD72630684F009FEA00 /* Assets.swift */,
 				794B014D26B9BE4300882684 /* ValuedAssets.swift */,
-				79FA8CDD2630684F009FEA00 /* SCI.swift */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -2233,7 +2229,6 @@
 				79EC5E9826406ADA00FF8263 /* OwnershipView.swift in Sources */,
 				79CB2C87264D723100B3E493 /* MonteCarloVisitorP.swift in Sources */,
 				7935FFDB265420FF00AC1715 /* DossierBrowserView.swift in Sources */,
-				79FA8CEF2630684F009FEA00 /* SCI.swift in Sources */,
 				79EC47D0263081FD0006EE44 /* Patrimoin.swift in Sources */,
 				791ED0E3263A04EE00701202 /* AdultViewModel.swift in Sources */,
 				79EC5E9126406AAD00FF8263 /* LoanDetailedView.swift in Sources */,
@@ -2400,7 +2395,6 @@
 				79FDC1A8269C4C520092452D /* CashFlowLine+manageSuccession.swift in Sources */,
 				79EC47BF26307C910006EE44 /* LiabilitiesCategory.swift in Sources */,
 				79EC47B926307C910006EE44 /* Loan.swift in Sources */,
-				79FA8CF02630684F009FEA00 /* SCI.swift in Sources */,
 				79A9AA7F264AFFC20036732F /* CashFlowVisitorP.swift in Sources */,
 				79EC47D1263081FD0006EE44 /* Patrimoin.swift in Sources */,
 				796506CE2640866F0036E466 /* TypeInvestEditView.swift in Sources */,

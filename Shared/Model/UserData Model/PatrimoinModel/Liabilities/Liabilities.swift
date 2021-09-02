@@ -38,10 +38,12 @@ struct Liabilities {
     }
     
     /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
-    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
-    /// - Parameter family: famille à laquelle associer le patrimoine
     /// - Note: family est utilisée pour injecter dans chaque passif un délégué family.ageOf
     ///         permettant de calculer les valeurs respectives des Usufruits et Nu-Propriétés
+    /// - Parameters:
+    ///   - folder: dossier où se trouve le fichier JSON à utiliser
+    ///   - personAgeProvider: forunit l'age d'une personne à partir de son nom
+    /// - Throws: en cas d'échec de lecture des données
     internal init(fromFolder folder      : Folder,
                   with personAgeProvider : PersonAgeProviderP?) throws {
         try self.debts = DebtArray(fromFolder: folder, with: personAgeProvider)

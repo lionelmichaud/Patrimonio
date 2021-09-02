@@ -85,10 +85,12 @@ struct Assets {
     }
     
     /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
-    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
-    /// - Parameter personAgeProvider: famille à laquelle associer le patrimoine
     /// - Note: personAgeProvider est utilisée pour injecter dans chaque actif un délégué personAgeProvider.ageOf
     ///         permettant de calculer les valeurs respectives des Usufruits et Nu-Propriétés
+    /// - Parameters:
+    ///   - folder: dossier où se trouve le fichier JSON à utiliser
+    ///   - personAgeProvider: forunit l'age d'une personne à partir de son nom
+    /// - Throws: en cas d'échec de lecture des données
     internal init(fromFolder folder      : Folder,
                   with personAgeProvider : PersonAgeProviderP?) throws {
         try self.periodicInvests = PeriodicInvestementArray(fromFolder: folder, with: personAgeProvider)

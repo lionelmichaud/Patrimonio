@@ -10,24 +10,23 @@ import Foundation
 import FiscalModel
 import Files
 import Ownership
-import AssetsModel
 
 // MARK: - Société Civile Immobilière (SCI)
-struct SCI {
+public struct SCI {
     
     // MARK: - Properties
-
+    
     var name        : String
     var note        : String
-    var scpis       : ScpiArray
-    var bankAccount : Double
-    var isModified  : Bool {
+    public var scpis       : ScpiArray
+    public var bankAccount : Double
+    public var isModified  : Bool {
         return scpis.persistenceState == .modified
     }
     // MARK: - Initializers
     
     /// Initialiser à vide
-    init() {
+    public init() {
         self.name        = ""
         self.note        = ""
         self.bankAccount = 0
@@ -35,11 +34,19 @@ struct SCI {
     }
     
     /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
-    /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
-    internal init(fromFolder folder      : Folder,
-                  name                   : String,
-                  note                   : String,
-                  with personAgeProvider : PersonAgeProviderP?) throws {
+    /// - Throws: en cas d'échec de lecture des données
+    /// - Note: personAgeProvider est utilisée pour injecter dans chaque actif un délégué personAgeProvider.ageOf
+    ///         permettant de calculer les valeurs respectives des Usufruits et Nu-Propriétés
+    /// - Parameters:
+    ///   - folder: dossier où se trouve le fichier JSON à utiliser
+    ///   - name: nom de la SCI
+    ///   - note: note associée à la SCI
+    ///   - personAgeProvider: forunit l'age d'une personne à partir de son nom
+    /// - Throws: en cas d'échec de lecture des données
+    public init(fromFolder folder      : Folder,
+                name                   : String,
+                note                   : String,
+                with personAgeProvider : PersonAgeProviderP?) throws {
         self.name  = name
         self.note  = note
         try self.scpis = ScpiArray(fileNamePrefix : "SCI_",
@@ -49,13 +56,13 @@ struct SCI {
     }
     
     // MARK: - Methods
-
-    func saveAsJSON(toFolder folder: Folder) throws {
+    
+    public func saveAsJSON(toFolder folder: Folder) throws {
         try scpis.saveAsJSON(toFolder: folder)
     }
     
     /// Calls the given closure on each element in the sequence in the same order as a for-in loop
-    func forEachOwnable(_ body: (OwnableP) throws -> Void) rethrows {
+    public func forEachOwnable(_ body: (OwnableP) throws -> Void) rethrows {
         try scpis.items.forEach(body)
     }
     
@@ -66,11 +73,11 @@ struct SCI {
     ///   - chidrenNames: noms des enfants héritiers survivant éventuels
     ///   - spouseName: nom du conjoint survivant éventuel
     ///   - spouseFiscalOption: option fiscale du conjoint survivant éventuel
-    mutating func transferOwnershipOf(decedentName       : String,
-                                      chidrenNames       : [String]?,
-                                      spouseName         : String?,
-                                      spouseFiscalOption : InheritanceFiscalOption?,
-                                      atEndOf year       : Int) {
+    public mutating func transferOwnershipOf(decedentName       : String,
+                                             chidrenNames       : [String]?,
+                                             spouseName         : String?,
+                                             spouseFiscalOption : InheritanceFiscalOption?,
+                                             atEndOf year       : Int) {
         for idx in scpis.items.range where scpis.items[idx].value(atEndOf: year) > 0 {
             try! scpis.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
@@ -82,7 +89,7 @@ struct SCI {
 }
 
 extension SCI: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         """
         SCI: \(name)
         - Note:
