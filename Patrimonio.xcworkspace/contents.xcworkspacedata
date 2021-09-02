@@ -68,6 +68,9 @@
       location = "group:Shared/Modules/PersonModel">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/FamilyModel">
+   </FileRef>
+   <FileRef
       location = "container:Patrimonio.xcodeproj">
    </FileRef>
    <FileRef

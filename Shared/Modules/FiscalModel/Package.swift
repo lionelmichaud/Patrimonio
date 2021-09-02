@@ -19,6 +19,7 @@ let package = Package(
             // located at a given path relative to our package's folder:
             .package(path: "../AppFoundation"),
             .package(path: "../Persistable"),
+            .package(path: "../FileAndFolder"),
             .package(url: "https://github.com/apple/swift-numerics.git", from: "0.0.8")
         ],
     targets: [
@@ -29,7 +30,8 @@ let package = Package(
             dependencies:
                 [
                     "AppFoundation",
-                    "Persistable"
+                    "Persistable",
+                    "FileAndFolder"
                 ]
         ),
         .testTarget(

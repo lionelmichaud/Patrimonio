@@ -8,6 +8,7 @@
 import SwiftUI
 import Persistence
 import PatrimoineModel
+import FamilyModel
 
 struct PatrimoineSummaryView: View {
     @EnvironmentObject private var dataStore  : Store

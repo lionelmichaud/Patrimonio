@@ -11,6 +11,7 @@ import Ownership
 import AssetsModel
 import ModelEnvironment
 import PatrimoineModel
+import FamilyModel
 
 struct ScpiDetailedView: View {
     @EnvironmentObject var model      : Model

@@ -10,6 +10,7 @@ import SwiftUI
 import StepperView
 import ModelEnvironment
 import PersonModel
+import FamilyModel
 
 struct PersonLifeLineView: View {
    

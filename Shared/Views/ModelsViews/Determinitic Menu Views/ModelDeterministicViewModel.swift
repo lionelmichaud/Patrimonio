@@ -7,6 +7,7 @@
 
 import Foundation
 import ModelEnvironment
+import FamilyModel
 
 // MARK: - Deterministic View Model
 

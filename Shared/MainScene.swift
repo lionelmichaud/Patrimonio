@@ -11,6 +11,7 @@ import ModelEnvironment
 import LifeExpense
 import Persistence
 import PatrimoineModel
+import FamilyModel
 
 /// Defines the main scene of the App
 struct MainScene: Scene {

@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import PatrimoineModel
+import FamilyModel
 
 struct DeterministicSectionView: View {
     @EnvironmentObject private var model      : Model

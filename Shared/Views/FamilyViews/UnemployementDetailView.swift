@@ -9,6 +9,7 @@
 import SwiftUI
 import ModelEnvironment
 import PersonModel
+import FamilyModel
 
 struct UnemployementDetailView: View {
 

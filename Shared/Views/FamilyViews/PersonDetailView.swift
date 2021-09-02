@@ -10,6 +10,7 @@ import SwiftUI
 import ModelEnvironment
 import PersonModel
 import PatrimoineModel
+import FamilyModel
 
 // MARK: - Afficher les détails d'un membre de la famille
 

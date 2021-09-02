@@ -11,6 +11,7 @@ import AppFoundation
 import RetirementModel
 import ModelEnvironment
 import PersonModel
+import FamilyModel
 
 // MARK: - Retirement View Model
 

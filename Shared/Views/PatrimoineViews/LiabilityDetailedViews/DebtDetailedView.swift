@@ -9,6 +9,7 @@
 import SwiftUI
 import Liabilities
 import PatrimoineModel
+import FamilyModel
 
 struct DebtDetailedView: View {
     @EnvironmentObject var family     : Family

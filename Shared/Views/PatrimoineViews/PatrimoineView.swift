@@ -9,6 +9,7 @@
 import SwiftUI
 import Persistence
 import PatrimoineModel
+import FamilyModel
 
 struct PatrimoineView: View {
     @EnvironmentObject private var uiState    : UIState

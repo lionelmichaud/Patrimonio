@@ -11,6 +11,7 @@ import HumanLifeModel
 import ModelEnvironment
 import PersonModel
 import PatrimoineModel
+import FamilyModel
 
 // MARK: - Saisie du nouveau membre de la famille
 

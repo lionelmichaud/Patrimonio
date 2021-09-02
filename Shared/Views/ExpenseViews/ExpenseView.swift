@@ -10,6 +10,7 @@ import SwiftUI
 import Persistence
 import LifeExpense
 import PatrimoineModel
+import FamilyModel
 
 struct ExpenseView: View {
     @EnvironmentObject private var dataStore : Store

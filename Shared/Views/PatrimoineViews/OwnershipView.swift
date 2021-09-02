@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Ownership
+import FamilyModel
 
 struct OwnershipView: View {
     @EnvironmentObject var family : Family

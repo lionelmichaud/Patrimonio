@@ -12,6 +12,7 @@ import EconomyModel
 import SocioEconomyModel
 import Files
 import Persistence
+import FamilyModel
 
 // MARK: - KPI results
 
@@ -62,11 +63,6 @@ enum RunFilterEnum: String, Codable {
 
 // MARK: - Propriétés aléatoires d'un Adult
 
-struct AdultRandomProperties: Hashable, Codable {
-    var ageOfDeath           : Int
-    var nbOfYearOfDependency : Int
-}
-typealias DictionaryOfAdultRandomProperties = [String: AdultRandomProperties]
 extension DictionaryOfAdultRandomProperties: MonteCarloVisitableP {
     func accept(_ visitor: MonteCarloVisitorP) {
         visitor.visit(element: self)

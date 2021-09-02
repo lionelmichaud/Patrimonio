@@ -9,6 +9,7 @@
 import SwiftUI
 import Liabilities
 import PatrimoineModel
+import FamilyModel
 
 struct LiabilityView: View {
     @EnvironmentObject var patrimoine : Patrimoin

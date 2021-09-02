@@ -15,6 +15,7 @@ import ModelEnvironment
 import Persistence
 import LifeExpense
 import PatrimoineModel
+import FamilyModel
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.BalanceSheetDetailedChartView")
 

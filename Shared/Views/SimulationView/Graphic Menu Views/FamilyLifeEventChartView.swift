@@ -9,6 +9,7 @@
 import SwiftUI
 import Charts // https://github.com/danielgindi/Charts.git
 import DateBoundary
+import FamilyModel
 
 // MARK: - Wrappers de UIView
 

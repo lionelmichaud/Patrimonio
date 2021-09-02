@@ -13,6 +13,7 @@ import EconomyModel
 import SocioEconomyModel
 import ModelEnvironment
 import Persistence
+import FamilyModel
 
 // MARK: - Deterministic View
 

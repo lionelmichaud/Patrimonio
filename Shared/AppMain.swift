@@ -10,6 +10,7 @@ import ModelEnvironment
 import Persistence
 import LifeExpense
 import PatrimoineModel
+import FamilyModel
 
 @main
 struct AppMain: App {

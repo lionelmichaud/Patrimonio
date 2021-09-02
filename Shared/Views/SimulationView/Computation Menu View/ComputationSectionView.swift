@@ -8,6 +8,7 @@
 import SwiftUI
 import Persistence
 import PatrimoineModel
+import FamilyModel
 
 struct ComputationSectionView: View {
     @EnvironmentObject private var simulation : Simulation

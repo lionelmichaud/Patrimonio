@@ -9,6 +9,7 @@
 import SwiftUI
 import PersonModel
 import PatrimoineModel
+import FamilyModel
 
 struct FamilySectionView : View {
     @EnvironmentObject var family     : Family

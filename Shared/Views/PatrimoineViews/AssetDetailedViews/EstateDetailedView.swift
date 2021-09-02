@@ -9,6 +9,7 @@
 import SwiftUI
 import AssetsModel
 import PatrimoineModel
+import FamilyModel
 
 // MARK: - View Model for RealEstateAsset
 

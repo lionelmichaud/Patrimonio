@@ -14,6 +14,7 @@ import ModelEnvironment
 import Persistence
 import LifeExpense
 import PatrimoineModel
+import FamilyModel
 
 struct GridsView: View {
     @EnvironmentObject var uiState    : UIState

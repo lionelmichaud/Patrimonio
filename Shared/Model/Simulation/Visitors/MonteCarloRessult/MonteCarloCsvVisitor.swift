@@ -9,6 +9,7 @@ import Foundation
 import os
 import EconomyModel
 import SocioEconomyModel
+import FamilyModel
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CsvMonteCarloTableVisitor")
 

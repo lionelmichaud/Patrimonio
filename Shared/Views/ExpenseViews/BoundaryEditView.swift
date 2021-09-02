@@ -9,6 +9,7 @@
 import SwiftUI
 import AppFoundation
 import DateBoundary
+import FamilyModel
 
 // MARK: - View Model for BoundaryEditView
 
