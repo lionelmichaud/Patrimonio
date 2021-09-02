@@ -174,6 +174,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         dicoOfSocioEconomyRandomVariables = model.socioEconomyModel.nextRun()
     }
 
+    // swiftlint:disable function_parameter_count
     /// Exécuter une simulation Déterministe ou Aléatoire
     /// - Parameters:
     ///   - nbOfYears: nombre d'années à construire
@@ -277,6 +278,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         isComputed  = true
         isSaved     = false
     }
+    // swiftlint:enable function_parameter_count
 
     /// Rejouer un run
     /// - Parameters:

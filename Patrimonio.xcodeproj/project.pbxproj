@@ -1325,17 +1325,9 @@
 		7998E154262DB27500DA4A12 /* UserData Model */ = {
 			isa = PBXGroup;
 			children = (
-				7998E155262DB2D300DA4A12 /* FamilyModel */,
 				79EC47EB263089140006EE44 /* SuccessionManager */,
 			);
 			path = "UserData Model";
-			sourceTree = "<group>";
-		};
-		7998E155262DB2D300DA4A12 /* FamilyModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = FamilyModel;
 			sourceTree = "<group>";
 		};
 		799DE83C2654145000E96CF6 /* DossierViews */ = {

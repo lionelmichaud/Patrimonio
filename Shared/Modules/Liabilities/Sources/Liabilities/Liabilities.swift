@@ -69,34 +69,6 @@ public struct Liabilities {
         try debts.items.forEach(body)
     }
     
-    /// Transférer la propriété d'un bien d'un défunt vers ses héritiers en fonction de l'option
-    ///  fiscale du conjoint survivant éventuel
-    /// - Parameters:
-    ///   - decedentName: défunt
-    ///   - chidrenNames: noms des enfants héritiers survivant éventuels
-    ///   - spouseName: nom du conjoint survivant éventuel
-    ///   - spouseFiscalOption: option fiscale du conjoint survivant éventuel
-    public mutating func transferOwnershipOf(decedentName       : String,
-                                             chidrenNames       : [String]?,
-                                             spouseName         : String?,
-                                             spouseFiscalOption : InheritanceFiscalOption?,
-                                             atEndOf year       : Int) {
-        for idx in loans.items.range where loans.items[idx].value(atEndOf: year) > 0 {
-            try! loans.items[idx].ownership.transferOwnershipOf(
-                decedentName       : decedentName,
-                chidrenNames       : chidrenNames,
-                spouseName         : spouseName,
-                spouseFiscalOption : spouseFiscalOption)
-        }
-        for idx in debts.items.range {
-            try! debts.items[idx].ownership.transferOwnershipOf(
-                decedentName       : decedentName,
-                chidrenNames       : chidrenNames,
-                spouseName         : spouseName,
-                spouseFiscalOption : spouseFiscalOption)
-        }
-    }
-    
     /// Calcule  la valeur du patrimoine immobilier de la famille selon la méthode de calcul choisie
     /// - Parameters:
     ///   - year: année d'évaluation

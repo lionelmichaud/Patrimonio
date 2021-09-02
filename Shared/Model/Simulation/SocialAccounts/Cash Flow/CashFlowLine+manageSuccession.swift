@@ -102,9 +102,9 @@ extension CashFlowLine {
             
             // transférer les biens d'un défunt vers ses héritiers
             let ownershipManager = OwnershipManager()
-            ownershipManager.transferOwnershipOf(of       : patrimoine,
-                                                 decedent : decedent,
-                                                 atEndOf  : year)
+            ownershipManager.transferOwnershipOf(patrimoine,
+                                                 of      : decedent,
+                                                 atEndOf : year)
         }
         
         // mettre à jour les taxes de l'année avec les droits de successions de l'année
