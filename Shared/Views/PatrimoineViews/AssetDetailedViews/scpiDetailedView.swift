@@ -10,6 +10,7 @@ import SwiftUI
 import Ownership
 import AssetsModel
 import ModelEnvironment
+import PatrimoineModel
 
 struct ScpiDetailedView: View {
     @EnvironmentObject var model      : Model

@@ -8,6 +8,7 @@
 import Foundation
 import FiscalModel
 import PersonModel
+import PatrimoineModel
 
 struct OwnershipManager {
     // swiftlint:disable function_parameter_count
@@ -42,7 +43,7 @@ struct OwnershipManager {
     func transferOwnershipOf(of patrimoine : Patrimoin,
                              decedent      : Person,
                              atEndOf year  : Int) {
-        guard let family = Patrimoin.family else {
+        guard let family = Patrimoin.familyProvider else {
             fatalError("La famille n'est pas définie dans Patrimoin.transferOwnershipOf")
         }
         // rechercher un conjont survivant
@@ -55,7 +56,7 @@ struct OwnershipManager {
             }
         }
         // rechercher des enfants héritiers vivants
-        let chidrenNames = family.chidldrenAlive(atEndOf: year)?.map { $0.displayName }
+        let chidrenNames = family.childrenAliveName(atEndOf: year)
         
         // leur transférer la propriété de tous les biens détenus par le défunt
         transferOwnershipOf(of                 : patrimoine,

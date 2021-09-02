@@ -8,6 +8,7 @@
 
 import SwiftUI
 import LifeExpense
+import PatrimoineModel
 
 // MARK: - View Model for LifeExpense
 

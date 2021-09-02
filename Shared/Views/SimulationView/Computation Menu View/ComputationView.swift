@@ -12,6 +12,7 @@ import Files
 import ModelEnvironment
 import Persistence
 import LifeExpense
+import PatrimoineModel
 
 struct ComputationView: View {
     @EnvironmentObject private var model      : Model

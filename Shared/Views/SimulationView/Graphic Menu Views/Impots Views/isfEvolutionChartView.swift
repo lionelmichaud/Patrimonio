@@ -14,6 +14,7 @@ import Files
 import ModelEnvironment
 import Persistence
 import LifeExpense
+import PatrimoineModel
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.IsfEvolutionChartView")
 

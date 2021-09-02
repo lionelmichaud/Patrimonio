@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PatrimoineModel
 
 extension CashFlowLine {
     /// Populate produit de vente, dividendes, taxes sociales des SCPI hors de la SCI

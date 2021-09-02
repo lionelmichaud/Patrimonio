@@ -75,14 +75,12 @@ struct ScenarioSummaryView: View {
 struct ScenarioSummaryViewView_Previews: PreviewProvider {
     static var uiState    = UIState()
     static var family     = Family()
-    static var patrimoine = Patrimoin()
     static var simulation = Simulation()
 
     static var previews: some View {
             ScenarioSummaryView()
                 .environmentObject(uiState)
                 .environmentObject(family)
-                .environmentObject(patrimoine)
                 .environmentObject(simulation)
                 .previewLayout(.sizeThatFits)
     }

@@ -13,6 +13,7 @@ import SocioEconomyModel
 import ModelEnvironment
 import Persistence
 import LifeExpense
+import PatrimoineModel
 
 struct GridsView: View {
     @EnvironmentObject var uiState    : UIState

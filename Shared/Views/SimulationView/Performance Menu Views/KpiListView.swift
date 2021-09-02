@@ -10,6 +10,7 @@ import SwiftUI
 import ModelEnvironment
 import LifeExpense
 import Persistence
+import PatrimoineModel
 
 struct KpiListView : View {
     @EnvironmentObject var simulation : Simulation

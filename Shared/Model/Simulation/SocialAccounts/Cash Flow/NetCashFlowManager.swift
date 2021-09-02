@@ -13,6 +13,7 @@ import AppFoundation
 import NamedValue
 import Ownership
 import PersonModel
+import PatrimoineModel
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.NetCashFlowManager")
 
@@ -37,7 +38,7 @@ struct NetCashFlowManager {
                        atEndOf year  : Int) {
         ownedCapitals.forEach { (name, capital) in
             if capital != 0,
-               let adult = Patrimoin.family?.member(withName: name) as? Adult,
+               let adult = Patrimoin.familyProvider?.member(withName: name) as? Adult,
                adult.isAlive(atEndOf: year) {
                 
                 // investir en priorité dans une assurance vie

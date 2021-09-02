@@ -10,6 +10,7 @@ import SwiftUI
 import ModelEnvironment
 import LifeExpense
 import Persistence
+import PatrimoineModel
 
 /// Defines the main scene of the App
 struct MainScene: Scene {

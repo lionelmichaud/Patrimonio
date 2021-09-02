@@ -9,6 +9,7 @@
 import SwiftUI
 import ModelEnvironment
 import LifeExpense
+import PatrimoineModel
 
 struct SuccessionsSectionView: View {
     @EnvironmentObject var simulation : Simulation

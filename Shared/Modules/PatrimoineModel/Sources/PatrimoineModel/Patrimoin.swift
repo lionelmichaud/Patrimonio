@@ -12,17 +12,26 @@ import AppFoundation
 import Statistics
 import Files
 import Ownership
+import PersonModel
 import AssetsModel
 import Liabilities
+import LifeExpense
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Patrimoin")
 
-enum CashFlowError: Error {
+public typealias FamilyProviderP =
+    FiscalHouseholdSumatorP
+    & PersonAgeProviderP
+    & AdultRelativesProviderP
+    & MembersProviderP
+    & MembersNameProviderP
+
+public enum CashFlowError: Error {
     case notEnoughCash(missingCash: Double)
 }
 
 // MARK: - Patrimoine constitué d'un Actif et d'un Passif
-final class Patrimoin: ObservableObject {
+public final class Patrimoin: ObservableObject {
     
     // MARK: - Nested Type
     
@@ -39,52 +48,52 @@ final class Patrimoin: ObservableObject {
     // MARK: - Type Properties
     
     // doit être injecté depuis l'extérieur avant toute instanciation de la classe
-    static var family: Family?
+    public static var familyProvider: FamilyProviderP?
     
     // MARK: - Type Methods
     
     /// Définir le mode de simulation à utiliser pour tous les calculs futurs
     /// - Parameter simulationMode: mode de simulation à utiliser
-    static func setSimulationMode(to simulationMode : SimulationModeEnum) {
+    public static func setSimulationMode(to simulationMode : SimulationModeEnum) {
         Assets.setSimulationMode(to: simulationMode)
     }
     
     // MARK: - Properties
     
-    @Published var assets      = Assets()
-    @Published var liabilities = Liabilities()
-//    @Published var isModified  = false
+    @Published public var assets      = Assets()
+    @Published public var liabilities = Liabilities()
+    //    @Published var isModified  = false
     var memento: Memento?
-
-//    private var subscriptions = Set<AnyCancellable>()
-
+    
+    //    private var subscriptions = Set<AnyCancellable>()
+    
     // MARK: - Computed Properties
-
-    var isModified: Bool {
+    
+    public var isModified: Bool {
         return
             assets.isModified ||
             liabilities.isModified
     }
-
+    
     // MARK: - Initializers
     
     /// Initialiser à vide
     /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été sélectionné
-    init() {
+    public init() {
         // mettre à jour la propriété comme si elle était calculée à l'aide de Combine
-//        let assetsIsModified: ((Assets) -> Bool) = { assets in
-//            return assets.isModified || self.liabilities.isModified
-//        }
-//        self.$assets.map(assetsIsModified).assign(to: \.isModified, on: self).store(in: &subscriptions)
+        //        let assetsIsModified: ((Assets) -> Bool) = { assets in
+        //            return assets.isModified || self.liabilities.isModified
+        //        }
+        //        self.$assets.map(assetsIsModified).assign(to: \.isModified, on: self).store(in: &subscriptions)
     }
     
     /// Initiliser à partir d'un fichier JSON contenu dans le dossier `fromFolder`
     /// - Note: Utilisé seulement pour les Tests
     /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
-    convenience init(fromFolder folder: Folder) throws {
+    public convenience init(fromFolder folder: Folder) throws {
         self.init()
-        try self.assets      = Assets(fromFolder : folder,      with: Patrimoin.family)
-        try self.liabilities = Liabilities(fromFolder : folder, with: Patrimoin.family)
+        try self.assets      = Assets(fromFolder : folder,      with: Patrimoin.familyProvider)
+        try self.liabilities = Liabilities(fromFolder : folder, with: Patrimoin.familyProvider)
     }
     
     // MARK: - Methods
@@ -94,18 +103,18 @@ final class Patrimoin: ObservableObject {
     ///   - folder: dossier où se trouve le fichier JSON à utiliser
     ///   - model: modèle à utiliser pour initialiser les membres de la famille
     /// - Throws: en cas d'échec de lecture des données
-    func loadFromJSON(fromFolder folder: Folder) throws {
-        assets      = try Assets(fromFolder : folder,      with : Patrimoin.family)
-        liabilities = try Liabilities(fromFolder : folder, with : Patrimoin.family)
+    public func loadFromJSON(fromFolder folder: Folder) throws {
+        assets      = try Assets(fromFolder : folder,      with : Patrimoin.familyProvider)
+        liabilities = try Liabilities(fromFolder : folder, with : Patrimoin.familyProvider)
         memento     = nil
     }
     
-    func saveAsJSON(toFolder folder: Folder) throws {
+    public func saveAsJSON(toFolder folder: Folder) throws {
         try assets.saveAsJSON(toFolder: folder)
         try liabilities.saveAsJSON(toFolder: folder)
     }
     
-    func value(atEndOf year: Int) -> Double {
+    public func value(atEndOf year: Int) -> Double {
         assets.value(atEndOf: year) +
             liabilities.value(atEndOf: year)
     }
@@ -114,20 +123,20 @@ final class Patrimoin: ObservableObject {
     /// - Warning:
     ///   - Doit être appelée après le chargement d'un objet FreeInvestement depuis le fichier JSON
     ///   - Doit être appelée après toute simulation ayant affectée le Patrimoine (succession)
-    func resetFreeInvestementCurrentValue() {
+    public func resetFreeInvestementCurrentValue() {
         assets.initializeFreeInvestementCurrentValue()
     }
     
     /// Sauvegarder l'état courant du Patrimoine
     /// - Warning: Doit être appelée avant toute simulation pouvant affecter le Patrimoine (succession)
-    func saveState() {
+    public func saveState() {
         memento = Memento(assets      : assets,
                           liabilities : liabilities)
     }
     
     /// Recharger les actifs et passifs à partir  de la dernière sauvegarde pour repartir d'une situation initiale sans aucune modification
     /// - Warning: Doit être appelée après toute simulation ayant affectée le Patrimoine (succession)
-    func restoreState() {
+    public func restoreState() {
         guard let memento = memento else {
             customLog.log(level: .fault, "patrimoine.restore: tentative de restauration d'un patrimoine non sauvegardé")
             fatalError("patrimoine.restore: tentative de restauration d'un patrimoine non sauvegardé")
@@ -137,11 +146,11 @@ final class Patrimoin: ObservableObject {
     }
     
     /// Calls the given closure on each element in the sequence in the same order as a for-in loop
-    func forEachOwnable(_ body: (OwnableP) throws -> Void) rethrows {
+    public func forEachOwnable(_ body: (OwnableP) throws -> Void) rethrows {
         try assets.forEachOwnable(body)
         try liabilities.forEachOwnable(body)
     }
-
+    
     /// Calcule  la valeur nette taxable du patrimoine immobilier de la famille selon la méthode de calcul choisie
     ///  - Note:
     ///  Pour l'IFI:
@@ -164,19 +173,19 @@ final class Patrimoin: ObservableObject {
     ///   - year: année d'évaluation
     ///   - evaluationMethod: méthode d'évalution des biens
     /// - Returns: assiette nette fiscale calculée selon la méthode choisie
-    func realEstateValue(atEndOf year     : Int,
-                         evaluationMethod : EvaluationMethod) -> Double {
+    public func realEstateValue(atEndOf year     : Int,
+                                evaluationMethod : EvaluationMethod) -> Double {
         assets.realEstateValue(atEndOf          : year,
-                               for              : Patrimoin.family!,
+                               for              : Patrimoin.familyProvider!,
                                evaluationMethod : evaluationMethod) +
             liabilities.realEstateValue(atEndOf          : year,
-                                        for              : Patrimoin.family!,
+                                        for              : Patrimoin.familyProvider!,
                                         evaluationMethod : evaluationMethod)
     }
 }
 
 extension Patrimoin: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         """
 
         PATRIMOINE:

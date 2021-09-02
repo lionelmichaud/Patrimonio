@@ -11,6 +11,7 @@ import ModelEnvironment
 import Succession
 import LifeExpense
 import Persistence
+import PatrimoineModel
 
 struct SuccessionsView: View {
     @EnvironmentObject var simulation : Simulation

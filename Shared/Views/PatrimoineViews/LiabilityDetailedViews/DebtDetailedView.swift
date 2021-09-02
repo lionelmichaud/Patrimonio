@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Liabilities
+import PatrimoineModel
 
 struct DebtDetailedView: View {
     @EnvironmentObject var family     : Family

@@ -19,6 +19,7 @@ import Persistence
 import Succession
 import LifeExpense
 import PersonModel
+import PatrimoineModel
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Simulation")
 

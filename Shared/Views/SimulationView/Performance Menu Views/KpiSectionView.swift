@@ -9,6 +9,7 @@
 import SwiftUI
 import ModelEnvironment
 import LifeExpense
+import PatrimoineModel
 
 struct KpiSectionView: View {
     @EnvironmentObject var simulation : Simulation

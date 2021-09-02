@@ -8,6 +8,7 @@
 import SwiftUI
 import ModelEnvironment
 import LifeExpense
+import PatrimoineModel
 import Persistence
 
 struct DossierPropertiesView: View {

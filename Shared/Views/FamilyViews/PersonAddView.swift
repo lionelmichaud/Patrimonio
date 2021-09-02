@@ -10,6 +10,7 @@ import SwiftUI
 import HumanLifeModel
 import ModelEnvironment
 import PersonModel
+import PatrimoineModel
 
 // MARK: - Saisie du nouveau membre de la famille
 

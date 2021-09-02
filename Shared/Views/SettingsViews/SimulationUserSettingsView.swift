@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Persistence
+import PatrimoineModel
 
 struct SimulationUserSettingsView: View {
     @EnvironmentObject var simulation : Simulation

@@ -14,6 +14,7 @@ import Files
 import ModelEnvironment
 import LifeExpense
 import Persistence
+import PatrimoineModel
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.FiscalSliceView")
 

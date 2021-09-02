@@ -10,6 +10,7 @@ import Files
 import ModelEnvironment
 import LifeExpense
 import Persistence
+import PatrimoineModel
 
 struct DossierSummaryView: View {
     @EnvironmentObject private var dataStore  : Store

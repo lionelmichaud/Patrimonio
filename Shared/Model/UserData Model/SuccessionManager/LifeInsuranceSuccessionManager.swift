@@ -12,6 +12,7 @@ import AssetsModel
 import Succession
 import ModelEnvironment
 import PersonModel
+import PatrimoineModel
 
 struct LifeInsuranceSuccessionManager {
     /// Calcule la masse totale d'assurance vie de la succession d'une personne.
@@ -116,7 +117,7 @@ struct LifeInsuranceSuccessionManager {
         var inheritances     : [Inheritance]     = []
         var massesSuccession : [String : Double] = [:]
         
-        guard let family = Patrimoin.family else {
+        guard let family = Patrimoin.familyProvider else {
             return Succession(kind         : .lifeInsurance,
                               yearOfDeath  : year,
                               decedentName : decedent.displayName,

@@ -11,6 +11,8 @@ import Foundation
 
 public protocol MembersCountProviderP {
     var nbOfBornChildren: Int { get }
+    var nbOfAdults: Int { get }
     func nbOfAdultAlive(atEndOf year: Int) -> Int
+    func nbOfChildrenAlive(atEndOf year: Int) -> Int
     func nbOfFiscalChildren(during year: Int) -> Int
 }

@@ -5,6 +5,7 @@ import ModelEnvironment
 import LifeExpense
 import Succession
 import Liabilities
+import PatrimoineModel
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CashFlow")
 

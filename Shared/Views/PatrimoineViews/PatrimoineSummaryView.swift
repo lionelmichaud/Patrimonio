@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Persistence
+import PatrimoineModel
 
 struct PatrimoineSummaryView: View {
     @EnvironmentObject private var dataStore  : Store

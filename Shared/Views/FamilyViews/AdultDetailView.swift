@@ -12,6 +12,7 @@ import FiscalModel
 import ModelEnvironment
 import Succession
 import PersonModel
+import PatrimoineModel
 
 // MARK: - MemberDetailView / AdultDetailView
 

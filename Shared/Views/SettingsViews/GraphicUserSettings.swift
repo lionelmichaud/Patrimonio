@@ -8,6 +8,7 @@
 import SwiftUI
 import AppFoundation
 import Persistence
+import PatrimoineModel
 
 struct GraphicUserSettings: View {
     @EnvironmentObject var patrimoine : Patrimoin

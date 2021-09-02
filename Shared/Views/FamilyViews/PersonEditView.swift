@@ -12,6 +12,7 @@ import HumanLifeModel
 import UnemployementModel
 import ModelEnvironment
 import PersonModel
+import PatrimoineModel
 
 struct PersonEditView: View {
     @EnvironmentObject var family     : Family

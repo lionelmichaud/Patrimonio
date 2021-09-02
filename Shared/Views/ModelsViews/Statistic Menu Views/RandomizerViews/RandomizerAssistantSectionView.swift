@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Persistence
+import PatrimoineModel
 
 struct RandomizerAssistantSectionView: View {
     @EnvironmentObject private var uiState: UIState

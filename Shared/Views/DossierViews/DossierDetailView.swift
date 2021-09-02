@@ -11,6 +11,7 @@ import LifeExpense
 import PersonModel
 import DateBoundary
 import Persistence
+import PatrimoineModel
 
 struct DossierDetailView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -192,7 +193,7 @@ struct DossierDetailView: View {
                 // injection de family dans la propriété statique de Adult
                 Adult.setAdultRelativesProvider(family)
                 // injection de family dans la propriété statique de Patrimoin
-                Patrimoin.family = family
+                Patrimoin.familyProvider = family
 
                 try model.loadFromJSON(fromFolder: folder)
                 try patrimoine.loadFromJSON(fromFolder: folder)

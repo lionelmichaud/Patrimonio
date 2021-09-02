@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import LifeExpense
+import PatrimoineModel
 
 @main
 struct AppMain: App {

@@ -7,6 +7,7 @@ import Ownership
 import DateBoundary
 import LifeExpense
 import PersonModel
+import PatrimoineModel
 
 // MARK: - Class Family: la Famille, ses membres, leurs actifs et leurs revenus
 
@@ -17,12 +18,6 @@ final class Family: ObservableObject {
     
     // structure de la famille
     @Published private(set) var members = PersistableArrayOfPerson()
-    // nombre d'enfant nés dans la famille
-    var nbOfBornChildren: Int { // computed
-        var nb = 0
-        for person in members.items where person is Child {nb += 1}
-        return nb
-    }
     // nombre d'enfant encore en vie dans la famille à la date du jour
     var nbOfLivingChildren: Int { // computed
         var nb = 0
@@ -31,12 +26,6 @@ final class Family: ObservableObject {
         }
         return nb
     }
-    var nbOfAdults: Int { // computed
-        var nb = 0
-        for person in members.items where person is Adult {nb += 1}
-        return nb
-    }
-    
     var adults  : [Person] { // computed
         members.items.filter {$0 is Adult}
     }
@@ -116,15 +105,6 @@ final class Family: ObservableObject {
             }
             .map { person in
                 person as! Child
-            }
-    }
-    
-    /// Nombre d'enfant vivant à la fin de l'année
-    /// - Parameter year: année considérée
-    func nbOfChildrenAlive(atEndOf year: Int) -> Int {
-        members.items
-            .reduce(0) { (result, person) in
-                result + ((person is Child && person.isAlive(atEndOf: year)) ? 1 : 0)
             }
     }
     
@@ -229,13 +209,6 @@ final class Family: ObservableObject {
         }
         // exécuter la transition
         members.persistenceSM.process(event: .modify)
-    }
-    
-    /// Trouver le membre de la famille avec le displayName recherché
-    /// - Parameter name: displayName recherché
-    /// - Returns: membre de la famille trouvé ou nil
-    func member(withName name: String) -> Person? {
-        self.members.items.first(where: { $0.displayName == name })
     }
     
     /// Ajouter un membre à la famille
@@ -364,6 +337,19 @@ extension Family: PersonEventYearProviderP {
 }
 
 extension Family: MembersCountProviderP {
+    // nombre d'enfant nés dans la famille
+    var nbOfBornChildren: Int { // computed
+        var nb = 0
+        for person in members.items where person is Child {nb += 1}
+        return nb
+    }
+
+    var nbOfAdults: Int { // computed
+        var nb = 0
+        for person in members.items where person is Adult {nb += 1}
+        return nb
+    }
+    
     /// Nombre d'adulte vivant à la fin de l'année
     /// - Parameter year: année
     func nbOfAdultAlive(atEndOf year: Int) -> Int {
@@ -372,6 +358,15 @@ extension Family: MembersCountProviderP {
         }
     }
 
+    /// Nombre d'enfant vivant à la fin de l'année
+    /// - Parameter year: année considérée
+    func nbOfChildrenAlive(atEndOf year: Int) -> Int {
+        members.items
+            .reduce(0) { (result, person) in
+                result + ((person is Child && person.isAlive(atEndOf: year)) ? 1 : 0)
+            }
+    }
+    
     /// Nombre d'enfant dans le foyer fiscal
     /// - Parameter year: année d'imposition
     /// - Note: [service-public.fr](https://www.service-public.fr/particuliers/vosdroits/F3085)
@@ -447,4 +442,17 @@ extension Family: MembersNameProviderP {
             .sorted(by: \.birthDate)
             .map { $0.displayName }
     }
+    func childrenAliveName(atEndOf year: Int) -> [String]? {
+        chidldrenAlive(atEndOf: year)?.map { $0.displayName }
+    }
+}
+
+extension Family: MembersProviderP {
+    /// Trouver le membre de la famille avec le displayName recherché
+    /// - Parameter name: displayName recherché
+    /// - Returns: membre de la famille trouvé ou nil
+    func member(withName name: String) -> Person? {
+        self.members.items.first(where: { $0.displayName == name })
+    }
+
 }

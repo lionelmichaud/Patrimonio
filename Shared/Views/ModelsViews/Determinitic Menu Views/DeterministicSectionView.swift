@@ -8,6 +8,7 @@
 import SwiftUI
 import ModelEnvironment
 import Persistence
+import PatrimoineModel
 
 struct DeterministicSectionView: View {
     @EnvironmentObject private var model      : Model

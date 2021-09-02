@@ -8,6 +8,7 @@
 
 import Foundation
 import AppFoundation
+import PatrimoineModel
 
 extension CashFlowLine {
     /// Gère le produit de la vente des investissements financiers périodiques + les versements périodiques à réaliser

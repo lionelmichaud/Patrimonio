@@ -12,6 +12,7 @@ import Ownership
 import Succession
 import ModelEnvironment
 import PersonModel
+import PatrimoineModel
 
 struct LegalSuccessionManager {
     /// Calcule l'actif net taxable à la succession d'une personne
@@ -46,7 +47,7 @@ struct LegalSuccessionManager {
         var inheritances      : [Inheritance] = []
         var inheritanceShares : (forChild: Double, forSpouse: Double) = (0, 0)
         
-        guard let family = Patrimoin.family else {
+        guard let family = Patrimoin.familyProvider else {
             return Succession(kind         : .legal,
                               yearOfDeath  : year,
                               decedentName : decedent.displayName,

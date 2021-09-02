@@ -9,6 +9,7 @@
 import Foundation
 import NamedValue
 import ModelEnvironment
+import PatrimoineModel
 
 // ligne anuelle de cash flow de la SCI
 struct SciCashFlowLine {

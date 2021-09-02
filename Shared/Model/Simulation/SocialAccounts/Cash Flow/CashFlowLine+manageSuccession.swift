@@ -8,6 +8,7 @@
 import Foundation
 import ModelEnvironment
 import PersonModel
+import PatrimoineModel
 
 extension CashFlowLine {
 

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PatrimoineModel
 
 extension CashFlowLine {
     /// Populate loyers, produit de la vente et impots locaux des biens immobiliers
