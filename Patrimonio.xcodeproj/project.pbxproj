@@ -402,6 +402,8 @@
 		79BBE8E72646E9170045E524 /* BS Detailed ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BBE8E52646E9170045E524 /* BS Detailed ChartView.swift */; };
 		79BBE8E92646FEE70045E524 /* CF Detailed ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BBE8E82646FEE70045E524 /* CF Detailed ChartView.swift */; };
 		79BBE8EA2646FEE70045E524 /* CF Detailed ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BBE8E82646FEE70045E524 /* CF Detailed ChartView.swift */; };
+		79BDBF5526E1475A00C6A2AD /* SuccessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDBF5426E1475A00C6A2AD /* SuccessionManager.swift */; };
+		79BDBF5626E1475A00C6A2AD /* SuccessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDBF5426E1475A00C6A2AD /* SuccessionManager.swift */; };
 		79BE4A682651A2B400BBF46C /* LineChartHistogramVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A672651A2B400BBF46C /* LineChartHistogramVisitor.swift */; };
 		79BE4A692651A2B400BBF46C /* LineChartHistogramVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A672651A2B400BBF46C /* LineChartHistogramVisitor.swift */; };
 		79BE4A6A2651A2B400BBF46C /* LineChartHistogramVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A672651A2B400BBF46C /* LineChartHistogramVisitor.swift */; };
@@ -733,6 +735,7 @@
 		79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = MonteCarlo.csv; sourceTree = "<group>"; };
 		79BBE8E52646E9170045E524 /* BS Detailed ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BS Detailed ChartView.swift"; sourceTree = "<group>"; };
 		79BBE8E82646FEE70045E524 /* CF Detailed ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CF Detailed ChartView.swift"; sourceTree = "<group>"; };
+		79BDBF5426E1475A00C6A2AD /* SuccessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessionManager.swift; sourceTree = "<group>"; };
 		79BE4A6526519FED00BBF46C /* HistogramVisitable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramVisitable.swift; sourceTree = "<group>"; };
 		79BE4A6626519FED00BBF46C /* HistogramVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramVisitor.swift; sourceTree = "<group>"; };
 		79BE4A672651A2B400BBF46C /* LineChartHistogramVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartHistogramVisitor.swift; sourceTree = "<group>"; };
@@ -1573,6 +1576,7 @@
 		79EC47EB263089140006EE44 /* SuccessionManager */ = {
 			isa = PBXGroup;
 			children = (
+				79BDBF5426E1475A00C6A2AD /* SuccessionManager.swift */,
 				79EC4808263098340006EE44 /* OwnershipManager.swift */,
 				79EC481E26309EFB0006EE44 /* LegalSuccessionManager.swift */,
 				79EC481D26309EFB0006EE44 /* LifeInsuranceSuccessionManager.swift */,
@@ -2120,6 +2124,7 @@
 				79BE4A832651CE7800BBF46C /* BetaRandomizerView.swift in Sources */,
 				791ED0D62639FBFD00701202 /* UnemployementDetailView.swift in Sources */,
 				799025B92641F60300ED53D4 /* isfEvolutionChartView.swift in Sources */,
+				79BDBF5526E1475A00C6A2AD /* SuccessionManager.swift in Sources */,
 				799025AB2641F60300ED53D4 /* ComputationView.swift in Sources */,
 				79C1D9D7266932310028A729 /* ShareSheetView.swift in Sources */,
 				79FC726026333350004F3BD2 /* SettingsView.swift in Sources */,
@@ -2275,6 +2280,7 @@
 				797901252640AEB600104C1A /* PatrimoineView.swift in Sources */,
 				798DE8AC2635CA7100C0C3B5 /* ExpenseDetailedView.swift in Sources */,
 				797931AA26416EA1000F8599 /* SimulationResultTable.swift in Sources */,
+				79BDBF5626E1475A00C6A2AD /* SuccessionManager.swift in Sources */,
 				799025C22641F60300ED53D4 /* SimulationView.swift in Sources */,
 				79C838252641DA3F008B29BF /* ChartView+Extensions.swift in Sources */,
 				79C838382641E092008B29BF /* CheckBoxStyles.swift in Sources */,

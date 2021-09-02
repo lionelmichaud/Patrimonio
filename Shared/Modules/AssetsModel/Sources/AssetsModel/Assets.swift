@@ -19,7 +19,7 @@ import Ownership
 
 public struct Assets {
     
-    // MARK: - Static Methods
+    // MARK: - Type Methods
     
     /// Définir le mode de simulation à utiliser pour tous les calculs futurs
     /// - Parameter simulationMode: mode de simulation à utiliser

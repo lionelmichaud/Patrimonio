@@ -15,29 +15,13 @@ import PersonModel
 import PatrimoineModel
 
 struct LegalSuccessionManager {
-    /// Calcule l'actif net taxable à la succession d'une personne
-    /// - Note: [Reference](https://www.service-public.fr/particuliers/vosdroits/F14198)
+    /// Calcule la succession légale d'un défunt `decedent`et retourne
+    /// une table des héritages et droits de succession pour chaque héritier
     /// - Parameters:
-    ///   - year: année du décès - 1
-    ///   - decedent: défunt
-    /// - Returns: Masse successorale nette taxable du défunt
-    /// - WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
-    func taxableInheritanceValue(in patrimoine : Patrimoin,
-                                 of decedent   : Person,
-                                 atEndOf year  : Int) -> Double {
-        var taxable: Double = 0
-        patrimoine.forEachOwnable { ownable in
-            taxable += ownable.ownedValue(by               : decedent.displayName,
-                                          atEndOf          : year,
-                                          evaluationMethod : .legalSuccession)
-        }
-        return taxable
-    }
-    
-    /// Calcule la succession légale d'un défunt et retourne une table des héritages et droits de succession pour chaque héritier
-    /// - Parameters:
+    ///   - patrimoine: patrimoine
     ///   - decedent: défunt
     ///   - year: année du décès
+    ///   - model: modèle d'envrionment à utiliser
     /// - Returns: Succession légale du défunt incluant la table des héritages et droits de succession pour chaque héritier
     func legalSuccession(in patrimoine : Patrimoin,
                          of decedent   : Person,
@@ -135,4 +119,23 @@ struct LegalSuccessionManager {
                           inheritances : inheritances)
     }
     
+    /// Calcule l'actif net taxable d'un `patrimoine` à la succession d'un défunt `decedent`
+    /// - Note: [Reference](https://www.service-public.fr/particuliers/vosdroits/F14198)
+    /// - Parameters:
+    ///   - patrimoine: patrimoine
+    ///   - decedent: défunt
+    ///   - year: année du décès - 1
+    /// - Returns: Masse successorale nette taxable du défunt
+    /// - WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
+    func taxableInheritanceValue(in patrimoine : Patrimoin,
+                                 of decedent   : Person,
+                                 atEndOf year  : Int) -> Double {
+        var taxable: Double = 0
+        patrimoine.forEachOwnable { ownable in
+            taxable += ownable.ownedValue(by               : decedent.displayName,
+                                          atEndOf          : year,
+                                          evaluationMethod : .legalSuccession)
+        }
+        return taxable
+    }
 }
