@@ -10,6 +10,7 @@ import ModelEnvironment
 import PersonModel
 import PatrimoineModel
 import FamilyModel
+import SuccessionManager
 
 extension CashFlowLine {
 
@@ -37,10 +38,10 @@ extension CashFlowLine {
                                            using   : model,
                                            atEndOf : year)
 
-        successions        += successionManager.legalSuccessions
+        legalSuccessions        += successionManager.legalSuccessions
         lifeInsSuccessions += successionManager.lifeInsSuccessions
 
-        adultTaxes.perCategory[.succession]?.namedValues   += successionManager.legalSuccessionstaxes
-        adultTaxes.perCategory[.liSuccession]?.namedValues += successionManager.lifeInsSuccessionstaxes
+        adultTaxes.perCategory[.succession]?.namedValues   += successionManager.legalSuccessionsTaxes
+        adultTaxes.perCategory[.liSuccession]?.namedValues += successionManager.lifeInsSuccessionsTaxes
     }
 }

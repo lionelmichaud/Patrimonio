@@ -21,6 +21,7 @@ import LifeExpense
 import PersonModel
 import PatrimoineModel
 import FamilyModel
+import SimulationLogger
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Simulation")
 

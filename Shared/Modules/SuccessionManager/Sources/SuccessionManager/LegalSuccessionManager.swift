@@ -14,7 +14,14 @@ import ModelEnvironment
 import PersonModel
 import PatrimoineModel
 
-struct LegalSuccessionManager {
+public struct LegalSuccessionManager {
+    
+    // MARK: - Initializers
+
+    public init() {    }
+
+    // MARK: - Methods
+
     /// Calcule la succession légale d'un défunt `decedent`et retourne
     /// une table des héritages et droits de succession pour chaque héritier
     /// - Parameters:
@@ -23,10 +30,10 @@ struct LegalSuccessionManager {
     ///   - year: année du décès
     ///   - model: modèle d'envrionment à utiliser
     /// - Returns: Succession légale du défunt incluant la table des héritages et droits de succession pour chaque héritier
-    func legalSuccession(in patrimoine : Patrimoin,
-                         of decedent   : Person,
-                         atEndOf year  : Int,
-                         using model   : Model) -> Succession {
+    public func legalSuccession(in patrimoine : Patrimoin,
+                                of decedent   : Person,
+                                atEndOf year  : Int,
+                                using model   : Model) -> Succession {
 
         var inheritances      : [Inheritance] = []
         var inheritanceShares : (forChild: Double, forSpouse: Double) = (0, 0)
@@ -101,8 +108,8 @@ struct LegalSuccessionManager {
                     // caluler les droits de succession du conjoint
                     let inheritance = try! model.fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brut)
                     
-//                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded()) (\(share.rounded())%)")
-//                    print("    Taxe = \(inheritance.taxe.rounded())")
+                    //                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded()) (\(share.rounded())%)")
+                    //                    print("    Taxe = \(inheritance.taxe.rounded())")
                     inheritances.append(Inheritance(personName : child.displayName,
                                                     percent    : share,
                                                     brut       : brut,
@@ -127,9 +134,9 @@ struct LegalSuccessionManager {
     ///   - year: année du décès - 1
     /// - Returns: Masse successorale nette taxable du défunt
     /// - WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
-    func taxableInheritanceValue(in patrimoine : Patrimoin,
-                                 of decedent   : Person,
-                                 atEndOf year  : Int) -> Double {
+    public func taxableInheritanceValue(in patrimoine : Patrimoin,
+                                        of decedent   : Person,
+                                        atEndOf year  : Int) -> Double {
         var taxable: Double = 0
         patrimoine.forEachOwnable { ownable in
             taxable += ownable.ownedValue(by               : decedent.displayName,

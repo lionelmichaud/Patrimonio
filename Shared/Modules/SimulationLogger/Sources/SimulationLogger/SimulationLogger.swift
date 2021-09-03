@@ -9,7 +9,7 @@
 import Foundation
 import AppFoundation
 
-enum LogTopic: String, PickableEnumP, Codable, CustomStringConvertible {
+public enum LogTopic: String, PickableEnumP, Codable, CustomStringConvertible {
     case simulationEvent = "Simulation"
     case lifeEvent       = "Evénement de vie"
     case error           = "Erreur"
@@ -17,25 +17,25 @@ enum LogTopic: String, PickableEnumP, Codable, CustomStringConvertible {
     
     // MARK: - Computed Properties
     
-    var pickerString: String {
+    public var pickerString: String {
         return self.rawValue
     }
     
-    var description: String {
+    public var description: String {
         pickerString
     }
 }
 
 /// The Singleton class defines the `shared` field that lets clients access the
 /// unique singleton instance.
-final class SimulationLogger {
+public final class SimulationLogger {
     static var activ = true
     
     /// The static field that controls the access to the singleton instance.
     ///
     /// This implementation let you extend the Singleton class while keeping
     /// just one instance of each subclass around.
-    static var shared: SimulationLogger = {
+    public static var shared: SimulationLogger = {
         let instance = SimulationLogger()
         // ... configure the instance
         // ...
@@ -48,9 +48,9 @@ final class SimulationLogger {
     
     /// Finally, any singleton should define some business logic, which can be
     /// executed on its instance.
-    func log(run      : Int = 0,
-             logTopic : LogTopic,
-             message  : String) {
+    public func log(run      : Int = 0,
+                    logTopic : LogTopic,
+                    message  : String) {
         guard SimulationLogger.activ else { return }
         print("Run: \(run) | \(logTopic.description) | \(message)")
     }
@@ -59,7 +59,7 @@ final class SimulationLogger {
 /// Singletons should not be cloneable.
 extension SimulationLogger: NSCopying {
     
-    func copy(with zone: NSZone? = nil) -> Any {
+    public func copy(with zone: NSZone? = nil) -> Any {
         return self
     }
 }

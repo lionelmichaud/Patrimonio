@@ -50,6 +50,9 @@
       location = "group:Shared/Modules/DateBoundary">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/Succession">
+   </FileRef>
+   <FileRef
       location = "group:Shared/Modules/AssetsModel">
    </FileRef>
    <FileRef
@@ -59,9 +62,6 @@
       location = "group:Shared/Modules/PatrimoineModel">
    </FileRef>
    <FileRef
-      location = "group:Shared/Modules/Succession">
-   </FileRef>
-   <FileRef
       location = "group:Shared/Modules/LifeExpense">
    </FileRef>
    <FileRef
@@ -69,6 +69,12 @@
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/FamilyModel">
+   </FileRef>
+   <FileRef
+      location = "group:Shared/Modules/SimulationLogger">
+   </FileRef>
+   <FileRef
+      location = "group:Shared/Modules/SuccessionManager">
    </FileRef>
    <FileRef
       location = "container:Patrimonio.xcodeproj">

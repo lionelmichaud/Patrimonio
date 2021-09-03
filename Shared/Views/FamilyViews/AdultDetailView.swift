@@ -14,6 +14,7 @@ import Succession
 import PersonModel
 import PatrimoineModel
 import FamilyModel
+import SuccessionManager
 
 // MARK: - MemberDetailView / AdultDetailView
 

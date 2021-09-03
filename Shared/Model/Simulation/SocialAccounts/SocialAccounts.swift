@@ -9,6 +9,7 @@ import Succession
 import LifeExpense
 import PatrimoineModel
 import FamilyModel
+import SimulationLogger
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.SocialAccounts")
 
@@ -255,7 +256,7 @@ struct SocialAccounts {
                                                        using                                 : model)
                 cashFlowArray.append(newCashFlowLine)
                 // ajouter les éventuelles successions survenues pendant l'année à la liste globale
-                legalSuccessions   += newCashFlowLine.successions
+                legalSuccessions   += newCashFlowLine.legalSuccessions
                 // ajouter les éventuelles transmissions d'assurance vie survenues pendant l'année à la liste globale
                 lifeInsSuccessions += newCashFlowLine.lifeInsSuccessions
             } catch {

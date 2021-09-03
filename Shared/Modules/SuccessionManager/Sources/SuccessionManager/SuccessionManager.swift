@@ -6,31 +6,36 @@
 //
 
 import Foundation
-import FamilyModel
-import PatrimoineModel
 import ModelEnvironment
 import Succession
 import NamedValue
+import PatrimoineModel
 import PersonModel
+import FamilyModel
+import SimulationLogger
 
-struct SuccessionManager {
+public struct SuccessionManager {
     
     // MARK: - Properties
     
-    let legalSuccessionManager         = LegalSuccessionManager()
-    let lifeInsuranceSuccessionManager = LifeInsuranceSuccessionManager()
-    let ownershipManager               = OwnershipManager()
+    private let legalSuccessionManager         = LegalSuccessionManager()
+    private let lifeInsuranceSuccessionManager = LifeInsuranceSuccessionManager()
+    private let ownershipManager               = OwnershipManager()
 
     /// Les successions légales et assurances vie survenues dans l'année
-    var legalSuccessions   : [Succession] = []
-    var lifeInsSuccessions : [Succession] = []
+    public var legalSuccessions   : [Succession] = []
+    public var lifeInsSuccessions : [Succession] = []
 
     /// Taxes sur les successions légales et assurances vie survenues dans l'année
-    var legalSuccessionstaxes   = NamedValueArray()
-    var lifeInsSuccessionstaxes = NamedValueArray()
+    public var legalSuccessionsTaxes   = NamedValueArray()
+    public var lifeInsSuccessionsTaxes = NamedValueArray()
+
+    // MARK: - Initializers
+
+    public init() {    }
 
     // MARK: - Methods
-    
+
     /// Ajoute les droits de succession  aux taxes de l'année de succession.
     ///
     /// On traite séparément les droits de succession dûs par les parents et par les enfants.
@@ -48,7 +53,7 @@ struct SuccessionManager {
             }
             // on ne prend en compte que les droits de succession des adultes dans leur CashFlow commun
             if member is Adult {
-                legalSuccessionstaxes
+                legalSuccessionsTaxes
                     .append((name  : member.displayName,
                              value : taxe))
             } else {
@@ -66,7 +71,7 @@ struct SuccessionManager {
             }
             // on ne prend en compte que les droits de succession des adultes dans leur CashFlow commun
             if member is Adult {
-                lifeInsSuccessionstaxes
+                lifeInsSuccessionsTaxes
                     .append((name  : member.displayName,
                              value : taxe))
             } else {
@@ -87,20 +92,20 @@ struct SuccessionManager {
     ///   - run: numéro du run en cours de calcul
     ///   - family: la famille dont il faut faire le bilan
     ///   - patrimoine: le patrimoine de la famille
-    mutating func manageSuccession(run             : Int,
-                                   of family       : Family,
-                                   with patrimoine : Patrimoin,
-                                   using model     : Model,
-                                   atEndOf year    : Int) {
+    public mutating func manageSuccession(run             : Int,
+                                          of family       : Family,
+                                          with patrimoine : Patrimoin,
+                                          using model     : Model,
+                                          atEndOf year    : Int) {
         // FIXME: - en fait il faudrait traiter les sucessions en séquences: calcul taxe => transmission puis calcul tax => transmission
         // identification des personnes décédées dans l'année
         let decedents = family.deceasedAdults(during: year)
         
         // pour chaque défunt
         decedents.forEach { decedent in
-            SimulationLogger.shared.log(run: run,
-                                        logTopic: .lifeEvent,
-                                        message: "Décès de \(decedent.displayName) en \(year)")
+            SimulationLogger.shared.log(run      : run,
+                                        logTopic : .lifeEvent,
+                                        message  : "Décès de \(decedent.displayName) en \(year)")
             // calculer les droits de successions légales
             let legalSuccession =
                 legalSuccessionManager.legalSuccession(in      : patrimoine,

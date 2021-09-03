@@ -103,7 +103,7 @@ struct CashFlowLine {
     // Successions survenus dans l'année
     
     /// Les successions légales survenues dans l'année
-    var successions        : [Succession] = []
+    var legalSuccessions   : [Succession] = []
     
     /// Les transmissions d'assurances vie survenues dans l'année
     var lifeInsSuccessions : [Succession] = []

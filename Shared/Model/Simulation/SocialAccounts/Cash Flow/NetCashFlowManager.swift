@@ -14,6 +14,7 @@ import NamedValue
 import Ownership
 import PersonModel
 import PatrimoineModel
+import SimulationLogger
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.NetCashFlowManager")
 
