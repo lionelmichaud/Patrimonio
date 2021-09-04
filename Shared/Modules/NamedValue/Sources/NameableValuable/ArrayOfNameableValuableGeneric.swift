@@ -69,7 +69,7 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, Pe
         self.fileNamePrefix = fileNamePrefix
 
         // exécuter la transition
-        persistenceSM.process(event: .load)
+        persistenceSM.process(event: .onLoad)
    }
     
     public init(for aClass     : AnyClass,
@@ -82,7 +82,7 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, Pe
         self.fileNamePrefix = fileNamePrefix
 
         // exécuter la transition
-        persistenceSM.process(event: .load)
+        persistenceSM.process(event: .onLoad)
     }
     
     // MARK: - Methods
@@ -94,7 +94,7 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, Pe
                        dateEncodingStrategy : .iso8601,
                        keyEncodingStrategy  : .useDefaultKeys)
         // exécuter la transition
-        persistenceSM.process(event: .save)
+        persistenceSM.process(event: .onSave)
     }
     
     func storeItemsToBundleOf(aClass: AnyClass) {
@@ -105,7 +105,7 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, Pe
                           dateEncodingStrategy : .iso8601,
                           keyEncodingStrategy  : .useDefaultKeys)
         // exécuter la transition
-        persistenceSM.process(event: .save)
+        persistenceSM.process(event: .onSave)
     }
     
     public mutating func move(from indexes   : IndexSet,
@@ -116,20 +116,20 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, Pe
     public mutating func delete(at offsets: IndexSet) {
         items.remove(atOffsets: offsets)
         // exécuter la transition
-        persistenceSM.process(event: .modify)
+        persistenceSM.process(event: .onModify)
     }
     
     public mutating func add(_ item: E) {
         items.append(item)
         // exécuter la transition
-        persistenceSM.process(event: .modify)
+        persistenceSM.process(event: .onModify)
     }
     
     public mutating func update(with item : E,
                                 at index  : Int) {
         items[index] = item
         // exécuter la transition
-        persistenceSM.process(event: .modify)
+        persistenceSM.process(event: .onModify)
     }
     
     public func value(atEndOf: Int) -> Double {

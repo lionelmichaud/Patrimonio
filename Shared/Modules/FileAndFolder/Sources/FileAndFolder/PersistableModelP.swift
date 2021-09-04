@@ -53,7 +53,7 @@ public extension PersistableModelP {
                       keyDecodingStrategy  : .useDefaultKeys)
             .initialized()
         // exécuter la transition
-        self.persistenceSM.process(event: .load)
+        self.persistenceSM.process(event: .onLoad)
     }
     
     /// Charger le modèle à partir d'un fichier JSON contenu dans le fichier `defaultFileName`
@@ -69,7 +69,7 @@ public extension PersistableModelP {
                                 keyDecodingStrategy  : .useDefaultKeys)
             .initialized()
         // exécuter la transition
-        self.persistenceSM.process(event: .load)
+        self.persistenceSM.process(event: .onLoad)
     }
     
     // MARK: - Methods
@@ -85,7 +85,7 @@ public extension PersistableModelP {
                               dateEncodingStrategy : .iso8601,
                               keyEncodingStrategy  : .useDefaultKeys)
         // exécuter la transition
-        persistenceSM.process(event: .save)
+        persistenceSM.process(event: .onSave)
     }
     
     /// Enregistrer le modèle au format JSON dans un fichier nommé `defaultFileName`
@@ -98,6 +98,6 @@ public extension PersistableModelP {
                           dateEncodingStrategy : .iso8601,
                           keyEncodingStrategy  : .useDefaultKeys)
         // exécuter la transition
-        persistenceSM.process(event: .save)
+        persistenceSM.process(event: .onSave)
     }
 }

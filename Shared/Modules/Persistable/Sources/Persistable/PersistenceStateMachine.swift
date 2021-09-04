@@ -11,14 +11,14 @@ import Stateful
 // MARK: - State Machine de gestion de la persistence
 
 public enum PersistenceEvent {
-    case load
-    case modify
-    case save
+    case onLoad
+    case onModify
+    case onSave
 }
 
 public enum PersistenceState: String {
     case created  = "Créé"
-    case synced   = "Synchronisé"
+    case synced   = "Synchronisé" // avec le dossier local
     case modified = "Modifié"
 }
 
@@ -30,15 +30,15 @@ extension PersistenceStateMachine {
         self.init(initialState: .created)
         
         // initialiser la StateMachine
-        let transition1 = PersistenceTransition(with : .load,
+        let transition1 = PersistenceTransition(with : .onLoad,
                                                 from : .created,
                                                 to   : .synced)
         self.add(transition: transition1)
-        let transition2 = PersistenceTransition(with : .modify,
+        let transition2 = PersistenceTransition(with : .onModify,
                                                 from : .synced,
                                                 to   : .modified)
         self.add(transition: transition2)
-        let transition3 = PersistenceTransition(with : .save,
+        let transition3 = PersistenceTransition(with : .onSave,
                                                 from : .modified,
                                                 to   : .synced)
         self.add(transition: transition3)

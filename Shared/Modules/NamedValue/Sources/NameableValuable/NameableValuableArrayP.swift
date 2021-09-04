@@ -111,7 +111,7 @@ public extension NameableValuableArrayP {
         persistenceSM = PersistenceStateMachine()
 
         // exécuter la transition
-        persistenceSM.process(event: .load)
+        persistenceSM.process(event: .onLoad)
     }
 
     // used for Unit Testing
@@ -127,7 +127,7 @@ public extension NameableValuableArrayP {
         persistenceSM = PersistenceStateMachine()
 
         // exécuter la transition
-        persistenceSM.process(event: .load)
+        persistenceSM.process(event: .onLoad)
     }
     
     subscript(idx: Int) -> Item {
@@ -149,7 +149,7 @@ public extension NameableValuableArrayP {
                        dateEncodingStrategy : .iso8601,
                        keyEncodingStrategy  : .useDefaultKeys)
         // exécuter la transition
-        persistenceSM.process(event: .save)
+        persistenceSM.process(event: .onSave)
     }
 
     mutating func move(from indexes   : IndexSet,
@@ -160,20 +160,20 @@ public extension NameableValuableArrayP {
     mutating func delete(at offsets : IndexSet) {
         items.remove(atOffsets: offsets)
         // exécuter la transition
-        persistenceSM.process(event: .modify)
+        persistenceSM.process(event: .onModify)
     }
     
     mutating func add(_ item : Item) {
         items.append(item)
         // exécuter la transition
-        persistenceSM.process(event: .modify)
+        persistenceSM.process(event: .onModify)
     }
     
     mutating func update(with item : Item,
                          at index  : Int) {
         items[index] = item
         // exécuter la transition
-        persistenceSM.process(event: .modify)
+        persistenceSM.process(event: .onModify)
     }
     
     func value(atEndOf: Int) -> Double {

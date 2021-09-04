@@ -59,10 +59,8 @@ final class Simulation: ObservableObject, CanResetSimulationP {
 
     // vecteur d'état de la simulation
     @Published var currentRunNb   : Int = 0
-    @Published var isComputed     = false
-    @Published var isSaved        = false
-    //    @Published var isComputing    = false
-
+    private var computationSM     = SimulationComputationStateMachine()
+    private var persistenceSM     = SimulationPersistenceStateMachine()
     // résultats de la simulation
     @Published var socialAccounts        = SocialAccounts()
     @Published var kpis                  = KpiArray()
@@ -70,6 +68,19 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     @Published var currentRunResults     = SimulationResultLine()
 
     // MARK: - Computed Properties
+
+    var computationState : SimulationComputationState {
+        computationSM.currentState
+    }
+    var persistenceState : SimulationPersistenceState {
+        persistenceSM.currentState
+    }
+    var isComputed     : Bool {
+        computationState == .completed
+    }
+    var isSavable      : Bool {
+        persistenceState == .savable
+    }
 
     var occuredLegalSuccessions: [Succession] {
         socialAccounts.legalSuccessions
@@ -106,6 +117,13 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     }
 
     // MARK: - Methods
+    
+    /// Traiter un événement
+    /// - Parameter event: événement à traiter
+    func process(event: SimulationEvent) {
+        computationSM.process(event: event)
+        persistenceSM.process(event: event)
+    }
 
     /// Réinitialiser la simulation quand un des paramètres qui influe sur la simulation à changé
     /// Paramètres qui influe sur la simulation:
@@ -114,8 +132,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     ///  Patrimoine
     func reset() {
         socialAccounts = SocialAccounts()
-        isComputed     = false
-        isSaved        = false
+        process(event: .onComputationInputsModification)
     }
 
     /// Réinitialiser la simulation quand un des paramètres qui influe sur la simulation à changé
@@ -200,6 +217,8 @@ final class Simulation: ObservableObject, CanResetSimulationP {
             Simulation.playSound()
         }
 
+        process(event: .onComputationTrigger)
+        
         //propriétés indépendantes du nombre de run
         // mettre à jour les variables d'état dans le thread principal
 //        DispatchQueue.main.async {
@@ -282,8 +301,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
             patrimoine.restoreState()
         }
 
-        isComputed  = true
-        isSaved     = false
+        process(event: .onComputationCompletion)
     }
     // swiftlint:enable function_parameter_count
 
@@ -299,6 +317,8 @@ final class Simulation: ObservableObject, CanResetSimulationP {
             // jouer le son à la fin de la simulation
             Simulation.playSound()
         }
+
+        process(event: .onComputationTrigger)
 
         // propriétés indépendantes du nombre de run
         guard let nbOfYears = lastYear - firstYear + 1 else {
@@ -339,8 +359,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
                                  using          : model)
         patrimoine.restoreState()
 
-        isComputed  = true
-        isSaved     = false
+        process(event: .onComputationCompletion)
     }
 
     /// Générer les String au format CSV à partir des résultats de la dernière simulation réalisée

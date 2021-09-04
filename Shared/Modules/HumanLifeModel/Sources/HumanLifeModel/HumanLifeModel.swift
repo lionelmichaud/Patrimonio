@@ -84,7 +84,7 @@ public struct HumanLife: PersistableModelP {
         set {
             model?.menLifeExpectation.defaultValue = newValue.double()
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
     public var womenLifeExpectationDeterministic: Int {
@@ -92,7 +92,7 @@ public struct HumanLife: PersistableModelP {
         set {
             model?.womenLifeExpectation.defaultValue = newValue.double()
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
     public var nbOfYearsOfdependencyDeterministic: Int {
@@ -100,7 +100,7 @@ public struct HumanLife: PersistableModelP {
         set {
             model?.nbOfYearsOfdependency.defaultValue = newValue.double()
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
 

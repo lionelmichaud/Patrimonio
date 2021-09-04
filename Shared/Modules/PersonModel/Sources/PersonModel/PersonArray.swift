@@ -58,7 +58,7 @@ public extension PersistableArrayOfPerson {
         }
         
         // exécuter la transition
-        persistenceSM.process(event: .load)
+        persistenceSM.process(event: .onLoad)
     }
     
     /// Enregistrer au format JSON dans un fichier portant le nom  `FileNameCst.kFamilyMembersFileName`
@@ -91,6 +91,6 @@ public extension PersistableArrayOfPerson {
             fatalError("Failed to encode 'family.members' to JSON format.")
         }
         // exécuter la transition
-        persistenceSM.process(event: .save)
+        persistenceSM.process(event: .onSave)
     }
 }

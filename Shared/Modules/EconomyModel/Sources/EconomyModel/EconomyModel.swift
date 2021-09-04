@@ -294,7 +294,7 @@ public struct Economy: PersistableModelP {
         set {
             model?.randomizers.inflation.defaultValue = newValue
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
     public var securedRate: Double { // [0%, 100%]
@@ -302,7 +302,7 @@ public struct Economy: PersistableModelP {
         set {
             model?.randomizers.securedRate.defaultValue = newValue
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
     public var stockRate: Double { // [0%, 100%]
@@ -310,7 +310,7 @@ public struct Economy: PersistableModelP {
         set {
             model?.randomizers.stockRate.defaultValue = newValue
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
     public var securedVolatility: Double { // [0%, 100%]
@@ -318,7 +318,7 @@ public struct Economy: PersistableModelP {
         set {
             model?.randomizers.securedVolatility = newValue
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
     public var stockVolatility: Double { // [0%, 100%]
@@ -326,7 +326,7 @@ public struct Economy: PersistableModelP {
         set {
             model?.randomizers.stockVolatility = newValue
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
     
