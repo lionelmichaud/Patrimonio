@@ -184,7 +184,7 @@ struct ComputationView: View {
     }
     
     private func savingIsPossible() -> Bool {
-        simulation.isComputed // && !simulation.isSaved
+        simulation.isSavable // && !simulation.isSaved
     }
     
     /// Exécuter la simulation
@@ -228,6 +228,8 @@ struct ComputationView: View {
     
     /// Exporter les résultats de la simulation
     private func exportSimulationResults() {
+        busySaveWheelAnimate.toggle()
+
         let dicoOfCsv = simulation.simulationResultsCSV(using: model)
 
         // Enregistrer les fichier CSV en tâche de fond dans le dossier `Document` de l'application
@@ -237,6 +239,8 @@ struct ComputationView: View {
         if UserSettings.shared.shareCsvFiles || UserSettings.shared.shareImageFiles {
             shareSimulationResults()
         }
+        
+        self.busySaveWheelAnimate.toggle()
     }
     
     /// Partager les fichiers CSV et Image
@@ -282,32 +286,21 @@ struct ComputationView: View {
                                        dismissButton : .default(Text("OK")))
             return
         }
-        busySaveWheelAnimate.toggle()
-//        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                for (name, csv) in dicoOfCSV {
-                    try PersistenceManager.saveToCsvPath(to              : folder,
-                                                         fileName        : name,
-                                                         simulationTitle : simulation.title,
-                                                         csvString       : csv)
-                }
-                // mettre à jour les variables d'état dans le thread principal
-//                DispatchQueue.main.async {
-                    self.busySaveWheelAnimate.toggle()
-                    self.simulation.isSaved = true
-                    Simulation.playSound()
-//                } // DispatchQueue
-            } catch {
-                // mettre à jour les variables d'état dans le thread principal
-//                DispatchQueue.main.async {
-                    self.busySaveWheelAnimate.toggle()
-                    self.simulation.isSaved = false
-                    self.alertItem = AlertItem(title         : Text("La sauvegarde locale a échouée"),
-                                               dismissButton : .default(Text("OK")))
-                    //                    self.presentationMode.wrappedValue.dismiss()
-//                } // DispatchQueue
+        do {
+            for (name, csv) in dicoOfCSV {
+                try PersistenceManager.saveToCsvPath(to              : folder,
+                                                     fileName        : name,
+                                                     simulationTitle : simulation.title,
+                                                     csvString       : csv)
             }
-//        } // DispatchQueue
+            // mettre à jour les variables d'état dans le thread principal
+            self.simulation.process(event: .onSaveSuccessfulCompletion)
+            Simulation.playSound()
+        } catch {
+            // mettre à jour les variables d'état dans le thread principal
+            self.alertItem = AlertItem(title         : Text("La sauvegarde locale a échouée"),
+                                       dismissButton : .default(Text("OK")))
+        }
     }
 }
 

@@ -208,7 +208,7 @@ public final class Family: ObservableObject {
                 ageMinimumAGIRC)
         }
         // exécuter la transition
-        members.persistenceSM.process(event: .modify)
+        members.persistenceSM.process(event: .onModify)
     }
     
     /// Ajouter un membre à la famille
@@ -238,7 +238,7 @@ public final class Family: ObservableObject {
         self.updateChildrenNumber()
         
         // exécuter la transition
-        members.persistenceSM.process(event: .modify)
+        members.persistenceSM.process(event: .onModify)
     }
     
     /// Réinitialiser les prioriétés aléatoires des membres et des dépenses

@@ -59,7 +59,7 @@ public struct Retirement: PersistableModelP {
         set {
             model?.regimeGeneral.ageMinimumLegal = newValue
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
 
@@ -68,7 +68,7 @@ public struct Retirement: PersistableModelP {
         set {
             model?.regimeAgirc.valeurDuPoint = newValue
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
 
@@ -77,7 +77,7 @@ public struct Retirement: PersistableModelP {
         set {
             model?.regimeAgirc.ageMinimum = newValue
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
 

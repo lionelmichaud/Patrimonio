@@ -139,7 +139,7 @@ public struct SocioEconomy: PersistableModelP {
         set {
             model?.pensionDevaluationRate.defaultValue = newValue
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
     public var nbTrimTauxPleinDeterministic: Int {
@@ -147,7 +147,7 @@ public struct SocioEconomy: PersistableModelP {
         set {
             model?.nbTrimTauxPlein.defaultValue = newValue.double()
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
     public var expensesUnderEvaluationRateDeterministic: Double {
@@ -155,7 +155,7 @@ public struct SocioEconomy: PersistableModelP {
         set {
             model?.expensesUnderEvaluationRate.defaultValue = newValue
             // mémoriser la modification
-            persistenceSM.process(event: .modify)
+            persistenceSM.process(event: .onModify)
         }
     }
     // MARK: - Initializer
