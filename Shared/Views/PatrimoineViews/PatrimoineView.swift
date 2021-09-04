@@ -25,7 +25,7 @@ struct PatrimoineView: View {
                 PatrimoineHeaderView()
                 
                 if dataStore.activeDossier != nil {
-                    Button("Réinitialiser",
+                    Button("Réinitialiser à partir du dossier",
                            action: reinitialize)
                         //.capsuleButtonStyle()
                         .disabled(dataStore.activeDossier!.folder == nil)

@@ -230,10 +230,10 @@ struct ComputationView: View {
     private func exportSimulationResults() {
         let dicoOfCsv = simulation.simulationResultsCSV(using: model)
 
-        // executer l'enregistrement en tâche de fond
+        // Enregistrer les fichier CSV en tâche de fond dans le dossier `Document` de l'application
         saveSimulationToDocumentsDirectory(dicoOfCSV: dicoOfCsv)
         
-        // paratager les fichiers CSV
+        // Paratager les fichiers CSV et Image
         if UserSettings.shared.shareCsvFiles || UserSettings.shared.shareImageFiles {
             shareSimulationResults()
         }
@@ -274,7 +274,7 @@ struct ComputationView: View {
         Patrimonio.share(items: urls)
     }
     
-    /// Enregistrer les fichier CSV en tâche de fond
+    /// Enregistrer les fichier CSV en tâche de fond dans le dossier `Document` de l'application
     private func saveSimulationToDocumentsDirectory(dicoOfCSV: [String:String]) {
         // folder du dossier actif
         guard let folder = dataStore.activeDossier?.folder else {
@@ -302,7 +302,7 @@ struct ComputationView: View {
 //                DispatchQueue.main.async {
                     self.busySaveWheelAnimate.toggle()
                     self.simulation.isSaved = false
-                    self.alertItem = AlertItem(title         : Text("La sauvegarde a échouée"),
+                    self.alertItem = AlertItem(title         : Text("La sauvegarde locale a échouée"),
                                                dismissButton : .default(Text("OK")))
                     //                    self.presentationMode.wrappedValue.dismiss()
 //                } // DispatchQueue

@@ -40,13 +40,6 @@ extension DictionaryOfKpiResults {
     }
 }
 
-enum KpiSortCriteriaEnum: String, Codable {
-    case byRunNumber
-    case byKpi1
-    case byKpi2
-    case byKpi3
-}
-
 // MARK: - Runs results
 
 enum RunResult: String, Codable {
@@ -61,7 +54,7 @@ enum RunFilterEnum: String, Codable {
     case somUnknown
 }
 
-// MARK: - Propriétés aléatoires d'un Adult
+// MARK: - VISITOR de Propriétés aléatoires d'un Adult
 
 extension DictionaryOfAdultRandomProperties: MonteCarloVisitableP {
     func accept(_ visitor: MonteCarloVisitorP) {
@@ -86,12 +79,15 @@ extension SimulationResultLine: MonteCarloVisitableP {
 
 // MARK: - Tableau de Synthèse d'un Run de Simulation
 
-typealias SimulationResultTable = [SimulationResultLine]
-extension SimulationResultTable: MonteCarloVisitableP {
-    func accept(_ visitor: MonteCarloVisitorP) {
-        visitor.visit(element: self)
-    }
+enum KpiSortCriteriaEnum: String, Codable {
+    case byRunNumber
+    case byKpi1
+    case byKpi2
+    case byKpi3
 }
+
+typealias SimulationResultTable = [SimulationResultLine]
+
 extension SimulationResultTable {
     func filtered(with filter: RunFilterEnum = .all) -> SimulationResultTable {
         switch filter {
@@ -103,6 +99,7 @@ extension SimulationResultTable {
                 return self.filter { $0.dicoOfKpiResults.runResult() == .someObjectiveUndefined }
         }
     }
+    
     // swiftlint:disable:next cyclomatic_complexity
     func sorted(by criteria    : KpiSortCriteriaEnum,
                 with sortOrder : SortingOrder = .ascending) -> SimulationResultTable {
@@ -145,7 +142,7 @@ extension SimulationResultTable {
                 })
         }
     }
-    
+
     func save(to folder       : Folder,
               simulationTitle : String) throws {
         let csvString = CsvBuilder.monteCarloCSV(from: self)
@@ -157,5 +154,13 @@ extension SimulationResultTable {
         } catch {
             throw FileError.failedToSaveMonteCarloCsv
         }
+    }
+}
+
+// MARK: - VISITOR de Tableau de Synthèse d'un Run de Simulation
+
+extension SimulationResultTable: MonteCarloVisitableP {
+    func accept(_ visitor: MonteCarloVisitorP) {
+        visitor.visit(element: self)
     }
 }

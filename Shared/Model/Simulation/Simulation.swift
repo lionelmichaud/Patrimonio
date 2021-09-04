@@ -83,26 +83,40 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été séelctionné
     init() {
         /// création et initialisation des KPI
-        let kpiMinimumCash = KPI(name            : SimulationKPIEnum.minimumAsset.displayString,
-                                 note            : SimulationKPIEnum.minimumAsset.note,
-                                 objective       : 200_000.0,
-                                 withProbability : 0.98)
-        kpis.append(kpiMinimumCash)
+        let kpiMinimumAsset =
+            KPI(name            : SimulationKPIEnum.minimumAsset.displayString,
+                note            : SimulationKPIEnum.minimumAsset.note,
+                objective       : 200_000.0,
+                withProbability : 0.98)
+        kpis.append(kpiMinimumAsset)
 
-        let kpiAssetsAtFirstDeath = KPI(name            : SimulationKPIEnum.assetAt1stDeath.displayString,
-                                        note            : SimulationKPIEnum.assetAt1stDeath.note,
-                                        objective       : 200_000.0,
-                                        withProbability : 0.98)
+        let kpiAssetsAtFirstDeath =
+            KPI(name            : SimulationKPIEnum.assetAt1stDeath.displayString,
+                note            : SimulationKPIEnum.assetAt1stDeath.note,
+                objective       : 200_000.0,
+                withProbability : 0.98)
         kpis.append(kpiAssetsAtFirstDeath)
 
-        let kpiAssetsAtLastDeath = KPI(name            : SimulationKPIEnum.assetAt2ndtDeath.displayString,
-                                       note            : SimulationKPIEnum.assetAt2ndtDeath.note,
-                                       objective       : 200_000.0,
-                                       withProbability : 0.98)
+        let kpiAssetsAtLastDeath =
+            KPI(name            : SimulationKPIEnum.assetAt2ndtDeath.displayString,
+                note            : SimulationKPIEnum.assetAt2ndtDeath.note,
+                objective       : 200_000.0,
+                withProbability : 0.98)
         kpis.append(kpiAssetsAtLastDeath)
     }
 
     // MARK: - Methods
+
+    /// Réinitialiser la simulation quand un des paramètres qui influe sur la simulation à changé
+    /// Paramètres qui influe sur la simulation:
+    ///  Famille,
+    ///  Dépenses,
+    ///  Patrimoine
+    func reset() {
+        socialAccounts = SocialAccounts()
+        isComputed     = false
+        isSaved        = false
+    }
 
     /// Réinitialiser la simulation quand un des paramètres qui influe sur la simulation à changé
     /// Paramètres qui influe sur la simulation:
@@ -116,20 +130,12 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     ///   - les successions sont réinitilisées
     ///   - les KPI peuvent être réinitialisés
     ///
-    /// - Parameters:
-    ///   - patrimoine: le patrimoine
-    ///   - includingKPIs: réinitialiser les KPI (seulement sur le premier run)
+    ///   Remettre à zéro l'historique des KPI (Histogramme)
+    ///   - au début d'un MontéCarlo seulement
+    ///   - mais pas à chaque Run
     ///
-    func reset() {
-        // réinitialiser les comptes sociaux du patrimoine de la famille
-        socialAccounts = SocialAccounts()
-        isComputed     = false
-        isSaved        = false
-    }
-
-    /// remettre à zéro l'historique des KPI (Histogramme)
-    /// - au début d'un MontéCarlo seulement
-    /// - mais pas à chaque Run
+    /// - Parameters:
+    ///   - includingKPIs: réinitialiser les KPI (seulement sur le premier run)
     private func reset(includingKPIs: Bool = true) {
         // réinitialiser les comptes sociaux du patrimoine de la famille
         reset()
@@ -142,7 +148,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         }
     }
 
-    /// remettre à zéro les historiques des tirages aléatoires avant le lancement d'un MontéCarlo
+    /// Remettre à zéro les historiques des tirages aléatoires avant le lancement d'un MontéCarlo
     private func resetAllRandomHistories(using model: Model) {
         model.humanLife.model!.resetRandomHistory()
         model.economy.model!.resetRandomHistory()
@@ -197,9 +203,9 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         //propriétés indépendantes du nombre de run
         // mettre à jour les variables d'état dans le thread principal
 //        DispatchQueue.main.async {
-        self.firstYear   = Date.now.year
-        self.lastYear    = self.firstYear + nbOfYears - 1
-//        } // DispatchQueue.main.async
+        self.firstYear = Date.now.year
+        self.lastYear  = self.firstYear + nbOfYears - 1
+//        } // Dispatcheue.main.async
 
         let monteCarlo = nbOfRuns > 1
         if monteCarlo && mode != .random {
@@ -248,7 +254,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
             // Réinitialiser la simulation
             reset(includingKPIs: run == 1 ? true : false)
 
-            // construire les comptes sociaux du patrimoine de la famille
+            // Exécuter la simulation: construire les comptes sociaux du patrimoine de la famille
             let dicoOfKpiResults = socialAccounts.build(run            : run,
                                                         nbOfYears      : nbOfYears,
                                                         withFamily     : family,
@@ -337,8 +343,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         isSaved     = false
     }
 
-    /// Générer les String au format CSV à partir des résultats
-    /// de la dernière simulation réalisée
+    /// Générer les String au format CSV à partir des résultats de la dernière simulation réalisée
     ///
     /// - un fichier pour le Cash Flow
     /// - un fichier pour le Bilan
