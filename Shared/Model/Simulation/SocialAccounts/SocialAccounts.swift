@@ -99,18 +99,18 @@ struct SocialAccounts {
     ///   - kpiDefinitions: les KPI à utiliser
     ///   - currentRunKpiResults: valeur des KPIs pour le run courant
     ///   - simulationMode: mode de simluation en cours
-    ///   - withbalanceSheetLine: <#withbalanceSheetLine description#>
+    ///   - withbalanceSheetLine: bilan de l'année
     fileprivate func computeKpisAtZeroCashAvailable // swiftlint:disable:this function_parameter_count
     (year                    : Int,
      withFamily family       : Family,
      withKPIs kpiDefinitions : inout KpiArray,
      currentRunKpiResults    : inout DictionaryOfKpiResults,
      withMode simulationMode : SimulationModeEnum,
-     withbalanceSheetLine    : BalanceSheetLine?) {
+     withBalanceSheetLine    : BalanceSheetLine?) {
         customLog.log(level: .info, "Arrêt de la construction de la table en \(year, privacy: .public) de Comptes sociaux: à court de cash dans \(Self.self, privacy: .public)")
 
         // Actif Net (hors immobilier physique)
-        let netFinancialAssets = withbalanceSheetLine?.netAdultsFinancialAssets ?? 0
+        let netFinancialAssets = withBalanceSheetLine?.netAdultsFinancialAssets ?? 0
         customLog.log(level: .info, "netFinancialAssets: \(netFinancialAssets.k€String, privacy: .public)")
 
         // mémoriser le montant de l'Actif financier Net (hors immobilier physique)
@@ -158,8 +158,8 @@ struct SocialAccounts {
     ///   - kpiDefinitions: les KPI à utiliser
     ///   - currentRunKpiResults: valeur des KPIs pour le run courant
     ///   - simulationMode: mode de simluation en cours
-    ///   - balanceSheetLineBeforeTransmission: <#balanceSheetLineBeforeTransmission description#>
-    ///   - balanceSheetLineAfterTransmission: <#balanceSheetLineAfterTransmission description#>
+    ///   - balanceSheetLineBeforeTransmission: dernier Bilan avant transmissions
+    ///   - balanceSheetLineAfterTransmission: Bilan après transmissions
     fileprivate func computeKpisAtDeath (year                               : Int, // swiftlint:disable:this function_parameter_count
                                          withFamily family                  : Family,
                                          withKPIs kpiDefinitions            : inout KpiArray,
@@ -277,7 +277,7 @@ struct SocialAccounts {
                                                withKPIs             : &kpis,
                                                currentRunKpiResults           : &currentRunKpiResults,
                                                withMode             : simulationMode,
-                                               withbalanceSheetLine : balanceArray.last)
+                                               withBalanceSheetLine : balanceArray.last)
                 SimulationLogger.shared.log(run      : run,
                                             logTopic : LogTopic.simulationEvent,
                                             message  : "Fin du run: à cours de cash en \(year)")
