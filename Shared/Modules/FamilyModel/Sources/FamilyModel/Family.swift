@@ -26,11 +26,11 @@ public final class Family: ObservableObject {
         }
         return nb
     }
-    public var adults  : [Person] { // computed
-        members.items.filter {$0 is Adult}
+    public var adults  : [Adult] { // computed
+        members.items.compactMap {$0 as? Adult}
     }
-    public var children: [Person] { // computed
-        members.items.filter {$0 is Child}
+    public var children: [Child] { // computed
+        members.items.compactMap {$0 as? Child}
     }
     
     public var isModified: Bool { // computed

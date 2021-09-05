@@ -1644,11 +1644,11 @@
 			children = (
 				790FF33726484D23001B2653 /* Visitors */,
 				79EF935826376D1100C1BE5B /* Simulation.swift */,
+				794570CF26E38E3700EE9C61 /* SimulationSateMachines.swift */,
 				797931C0264170FE000F8599 /* SimulationKPIEnum.swift */,
 				797931A126416E8B000F8599 /* KPI.swift */,
 				797931A826416EA1000F8599 /* SimulationResultTable.swift */,
 				791ED10C263A27E400701202 /* SocialAccounts */,
-				794570CF26E38E3700EE9C61 /* SimulationSateMachines.swift */,
 			);
 			path = Simulation;
 			sourceTree = "<group>";

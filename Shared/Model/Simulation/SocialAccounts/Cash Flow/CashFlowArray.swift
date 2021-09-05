@@ -25,7 +25,7 @@ extension CashFlowArray {
             line.year == year
         }
     }
-
+    
     /// Construction de la légende du graphique
     /// - Parameter combination: sélection de la catégories de séries à afficher
     /// - Returns: tableau des libéllés des sries des catégories sélectionnées
@@ -34,17 +34,32 @@ extension CashFlowArray {
         switch combination {
             case .revenues:
                 // libellés des revenus famille + revenus SCI
-                let revenuesLegend = firstLine.adultsRevenues.summary.namedValues.map({(label    : $0.name,
-                                                                                  selected : true)})
+                let revenuesLegend =
+                    firstLine
+                    .adultsRevenues
+                    .summary
+                    .namedValues
+                    .map({(label    : $0.name,
+                           selected : true)})
                 // Résumé seulement
-                let sciLegend = firstLine.sciCashFlowLine.summary.namedValues.map({(label    : $0.name,
-                                                                                    selected : true)})
+                let sciLegend =
+                    firstLine
+                    .sciCashFlowLine
+                    .summary
+                    .namedValues
+                    .map {(label    : $0.name,
+                           selected : true)}
                 return revenuesLegend + sciLegend
-
+                
             case .expenses:
                 // à plat
-                let taxesLegend    = firstLine.adultTaxes.summary.namedValues.map({(label: $0.name,
-                                                                               selected: true)})
+                let taxesLegend =
+                    firstLine
+                    .adultTaxes
+                    .summary
+                    .namedValues
+                    .map {(label: $0.name,
+                           selected: true)}
                 // Résumé seulement
                 let expenseLegend = (label    : firstLine.lifeExpenses.tableName,
                                      selected : true)
@@ -55,12 +70,11 @@ extension CashFlowArray {
                 let investsLegend = (label    : firstLine.investPayements.tableName,
                                      selected : true)
                 return [expenseLegend] + taxesLegend + [debtsLegend, investsLegend]
-
+                
             case .both:
                 return getCashFlowLegend(.revenues) + getCashFlowLegend(.expenses)
         }
     }
-
 }
 
 // MARK: - Extensions for VISITORS

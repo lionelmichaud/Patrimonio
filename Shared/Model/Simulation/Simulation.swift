@@ -178,10 +178,12 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     // swiftlint:disable function_parameter_count
     /// Exécuter une simulation Déterministe ou Aléatoire
     /// - Parameters:
+    ///   - model: modèle à utiliser
     ///   - nbOfYears: nombre d'années à construire
     ///   - nbOfRuns: nombre de run à calculer (> 1: mode aléatoire)
     ///   - family: la famille
-    ///   - patrimoine: le patrimoine
+    ///   - expenses: les dépenses de la famille
+    ///   - patrimoine: le patrimoine de la famille
     func compute(using model               : Model,
                  nbOfYears                 : Int,
                  nbOfRuns                  : Int,
@@ -205,8 +207,8 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         //propriétés indépendantes du nombre de run
         // mettre à jour les variables d'état dans le thread principal
 //        DispatchQueue.main.async {
-        self.firstYear = Date.now.year
-        self.lastYear  = self.firstYear + nbOfYears - 1
+        firstYear = Date.now.year
+        lastYear  = firstYear + nbOfYears - 1
 //        } // Dispatcheue.main.async
 
         var dicoOfAdultsRandomProperties      = DictionaryOfAdultRandomProperties()
@@ -256,25 +258,27 @@ final class Simulation: ObservableObject, CanResetSimulationP {
             if run == 1 {
                 resetKPIs()
             }
-
+            
             // Exécuter la simulation: construire les comptes sociaux du patrimoine de la famille
-            let dicoOfKpiResults = socialAccounts.build(run            : run,
-                                                        nbOfYears      : nbOfYears,
-                                                        withFamily     : family,
-                                                        withExpenses   : expenses,
-                                                        withPatrimoine : patrimoine,
-                                                        withKPIs       : &kpis,
-                                                        withMode       : mode,
-                                                        using          : model)
+            let dicoOfKpiResults =
+                socialAccounts.build(run            : run,
+                                     nbOfYears      : nbOfYears,
+                                     withFamily     : family,
+                                     withExpenses   : expenses,
+                                     withPatrimoine : patrimoine,
+                                     withKPIs       : &kpis,
+                                     withMode       : mode,
+                                     using          : model)
             // Synthèse du Run de Simulation
-            currentRunResults = SimulationResultLine(runNumber                         : run,
-                                                     dicoOfAdultsRandomProperties      : dicoOfAdultsRandomProperties,
-                                                     dicoOfEconomyRandomVariables      : dicoOfEconomyRandomVariables,
-                                                     dicoOfSocioEconomyRandomVariables : dicoOfSocioEconomyRandomVariables,
-                                                     dicoOfKpiResults                  : dicoOfKpiResults)
+            currentRunResults =
+                SimulationResultLine(runNumber                         : run,
+                                     dicoOfAdultsRandomProperties      : dicoOfAdultsRandomProperties,
+                                     dicoOfEconomyRandomVariables      : dicoOfEconomyRandomVariables,
+                                     dicoOfSocioEconomyRandomVariables : dicoOfSocioEconomyRandomVariables,
+                                     dicoOfKpiResults                  : dicoOfKpiResults)
             if monteCarlo {
                 monteCarloResultTable.append(currentRunResults)
-
+                
                 // Dernier run, créer les histogrammes et y ranger
                 // les échantillons de KPIs si on est en mode Aléatoire
                 if run == nbOfRuns {
@@ -309,8 +313,8 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         process(event: .onComputationTrigger)
 
         // propriétés indépendantes du nombre de run
-        firstYear   = Date.now.year
-        lastYear    = firstYear + nbOfYears - 1
+        firstYear = Date.now.year
+        lastYear  = firstYear + nbOfYears - 1
 
         currentRunNb = 1
         SimulationLogger.shared.log(run      : currentRunNb,
@@ -323,13 +327,11 @@ final class Simulation: ObservableObject, CanResetSimulationP {
                                                firstYear          : firstYear!,
                                                lastYear           : lastYear!)
         model.socioEconomyModel.setRandomValue(to: thisRun.dicoOfSocioEconomyRandomVariables)
-        family.members.items.forEach { person in
-            if let adult = person as? Adult {
-                adult.ageOfDeath           = thisRun.dicoOfAdultsRandomProperties[adult.displayName]!.ageOfDeath
-                adult.nbOfYearOfDependency = thisRun.dicoOfAdultsRandomProperties[adult.displayName]!.nbOfYearOfDependency
-            }
+        family.adults.forEach { adult in
+            adult.ageOfDeath           = thisRun.dicoOfAdultsRandomProperties[adult.displayName]!.ageOfDeath
+            adult.nbOfYearOfDependency = thisRun.dicoOfAdultsRandomProperties[adult.displayName]!.nbOfYearOfDependency
         }
-
+        
         // Réinitialiser les comptes sociaux
         socialAccounts = SocialAccounts()
 
@@ -345,32 +347,5 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         patrimoine.restoreState()
 
         process(event: .onComputationCompletion)
-    }
-
-    /// Générer les String au format CSV à partir des résultats de la dernière simulation réalisée
-    ///
-    /// - un fichier pour le Cash Flow
-    /// - un fichier pour le Bilan
-    /// - un fichier pour les Successions
-    /// - un fichier pour le tableau de résultat de Monté-Carlo
-    ///
-    /// - Parameter mode: mode de simulation utilisé lors de la dernière simulation
-    /// - Returns: dictionnaire [Nom de fichier : CSV string]
-    func simulationResultsCSV(using model: Model) -> [String:String] {
-        /// - un fichier pour le Cash Flow
-        /// - un fichier pour le Bilan
-        /// - un fichier pour les Successions
-        var dicoOfCsv = socialAccounts.lastSimulationResultCsvStrings(using: model, withMode: mode)
-        
-        /// - un fichier pour le tableau de résultat de Monté-Carlo
-        var runResultCsvString: String
-        if mode == .deterministic {
-            runResultCsvString = CsvBuilder.monteCarloCSV(from: [currentRunResults])
-        } else {
-            runResultCsvString = CsvBuilder.monteCarloCSV(from: monteCarloResultTable)
-        }
-        dicoOfCsv[FileNameCst.kMonteCarloCSVFileName] = runResultCsvString
-        
-        return dicoOfCsv
     }
 }

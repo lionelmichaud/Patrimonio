@@ -230,7 +230,8 @@ struct ComputationView: View {
     private func exportSimulationResults() {
         busySaveWheelAnimate.toggle()
 
-        let dicoOfCsv = simulation.simulationResultsCSV(using: model)
+        let dicoOfCsv = CsvBuilder.simulationResultsCSV(from  : simulation,
+                                                        using : model)
 
         // Enregistrer les fichier CSV en tâche de fond dans le dossier `Document` de l'application
         saveSimulationToDocumentsDirectory(dicoOfCSV: dicoOfCsv)

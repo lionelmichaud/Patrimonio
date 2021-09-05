@@ -4,7 +4,6 @@ import AppFoundation
 import Statistics
 import Files
 import ModelEnvironment
-import Persistence
 import Succession
 import LifeExpense
 import PatrimoineModel
@@ -216,6 +215,8 @@ struct SocialAccounts {
     ///   - patrimoine: le patrimoine de la famille
     ///   - kpis: les KPI à utiliser et à dont il faut mettre à jour l'histogramme pendant le run
     ///   - simulationMode: mode de simluation en cours
+    ///   - expenses: les dépenses de la famille
+    ///   - model: modèle à utiliser
     /// - Returns: Résultats obtenus pour les KPI
     mutating func build(run                       : Int, // swiftlint:disable:this function_parameter_count
                         nbOfYears                 : Int,
@@ -318,36 +319,5 @@ struct SocialAccounts {
                                     logTopic : LogTopic.simulationEvent,
                                     message  : "Fin du run: date de fin de run atteinte en \(lastYear)")
         return kpiResults
-    }
-    
-    /// Générer les String au format CSV à partir des résultats
-    /// de la dernière simulation réalisée
-    ///
-    /// - un fichier pour le Cash Flow
-    /// - un fichier pour le Bilan
-    /// - un fichier pour les Successions
-    ///
-    /// - Parameter mode: mode de simulation utilisé lors de la dernière simulation
-    /// - Returns: dictionnaire [Nom de fichier : CSV string]
-    func lastSimulationResultCsvStrings(using model  : Model,
-                                        withMode mode: SimulationModeEnum) -> [String:String] {
-        //    (balanceSheetCSV : String,
-        //     cashFlowCSV     : String,
-        //     successionsCSV  : String) {
-        var dico = [String:String]()
-        // construction du tableau de bilans annnuels au format CSV
-        dico[FileNameCst.kBalanceSheetCSVFileName] =
-            CsvBuilder.balanceSheetCSV(from     : balanceArray,
-                                       using    : model,
-                                       withMode : mode)
-        // construction du tableau de cash flow annnuels au format CSV
-        dico[FileNameCst.kCashFlowCSVFileName] =
-            CsvBuilder.cashFlowCSV(from     : cashFlowArray,
-                                   withMode : mode)
-        // construction du tableau des successions
-        dico[FileNameCst.kSuccessionsCSVFileName]  =
-            String(describing: SuccessionsCsvVisitor(successions: legalSuccessions + lifeInsSuccessions))
-        
-        return dico
     }
 }
