@@ -318,12 +318,13 @@ final class Simulation: ObservableObject, CanResetSimulationP {
             Simulation.playSound()
         }
 
-        process(event: .onComputationTrigger)
-
-        // propriétés indépendantes du nombre de run
         guard let nbOfYears = lastYear - firstYear + 1 else {
             fatalError()
         }
+        
+        process(event: .onComputationTrigger)
+
+        // propriétés indépendantes du nombre de run
         firstYear   = Date.now.year
         lastYear    = firstYear + nbOfYears - 1
 
