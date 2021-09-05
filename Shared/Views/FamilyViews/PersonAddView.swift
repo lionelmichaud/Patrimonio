@@ -94,8 +94,8 @@ struct PersonAddView: View {
     /// Création du nouveau membre et ajout à la famille
     func addMember() {
         // remettre à zéro la simulation et sa vue
-        simulation.reset()
-        uiState.reset()
+        simulation.notifyComputationInputsModification()
+        uiState.resetSimulationView()
         
         // initialiser l'espérace de vie à partir du modèle
         let deathAge: Int

@@ -141,8 +141,8 @@ struct ScpiDetailedView: View {
     
     private func resetSimulation() {
         // remettre à zéro la simulation et sa vue
-        simulation.reset()
-        uiState.reset()
+        simulation.notifyComputationInputsModification()
+        uiState.resetSimulationView()
     }
     
     private func duplicate() {

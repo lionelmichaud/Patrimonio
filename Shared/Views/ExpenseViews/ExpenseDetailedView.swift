@@ -145,8 +145,8 @@ struct ExpenseDetailedView: View {
     
     private func resetSimulation() {
         // remettre à zéro la simulation et sa vue
-        simulationReseter.reset()
-        uiState.reset()
+        simulationReseter.notifyComputationInputsModification()
+        uiState.resetSimulationView()
     }
     
     private func duplicate() {
@@ -224,7 +224,7 @@ struct ExpenseDetailedView: View {
 
 struct ExpenseDetailedView_Previews: PreviewProvider {
     struct FakeSimulationReseter: CanResetSimulationP {
-        func reset() {
+        func notifyComputationInputsModification() {
             print("simluation.reset")
         }
     }

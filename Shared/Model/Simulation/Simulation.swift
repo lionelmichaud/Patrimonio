@@ -26,7 +26,7 @@ import SimulationLogger
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Simulation")
 
 protocol CanResetSimulationP {
-    func reset()
+    func notifyComputationInputsModification()
 }
 
 final class Simulation: ObservableObject, CanResetSimulationP {
@@ -130,63 +130,40 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     ///  Famille,
     ///  Dépenses,
     ///  Patrimoine
-    func reset() {
+    func notifyComputationInputsModification() {
         socialAccounts = SocialAccounts()
         process(event: .onComputationInputsModification)
     }
-
-    /// Réinitialiser la simulation quand un des paramètres qui influe sur la simulation à changé
-    /// Paramètres qui influe sur la simulation:
-    ///  Famille,
-    ///  Dépenses,
-    ///  Patrimoine
-    ///
-    /// - Note:
-    ///   - les comptes sociaux sont réinitialisés
-    ///   - les années de début et fin sont réinitialisées à nil
-    ///   - les successions sont réinitilisées
-    ///   - les KPI peuvent être réinitialisés
-    ///
-    ///   Remettre à zéro l'historique des KPI (Histogramme)
-    ///   - au début d'un MontéCarlo seulement
-    ///   - mais pas à chaque Run
-    ///
-    /// - Parameters:
-    ///   - includingKPIs: réinitialiser les KPI (seulement sur le premier run)
-    private func reset(includingKPIs: Bool = true) {
-        // réinitialiser les comptes sociaux du patrimoine de la famille
-        reset()
-
-        // remettre à zéro l'historique des KPI (Histogramme)
-        //  - au début d'un MontéCarlo seulement
-        //  - mais pas à chaque Run
-        if includingKPIs {
-            KpiArray.reset(theseKPIs: &kpis, withMode: mode)
-        }
+    
+    /// Remettre à zéro l'historique des KPI (Histogramme)
+    ///  - au début d'un MontéCarlo seulement
+    ///  - mais pas à chaque Run
+    private func resetKPIs() {
+        KpiArray.reset(theseKPIs: &kpis, withMode: mode)
     }
-
+    
     /// Remettre à zéro les historiques des tirages aléatoires avant le lancement d'un MontéCarlo
     private func resetAllRandomHistories(using model: Model) {
         model.humanLife.model!.resetRandomHistory()
         model.economy.model!.resetRandomHistory()
         model.socioEconomy.model!.resetRandomHistory()
     }
-
-    private func currentRandomProperties(using model: Model,
-                                         _ family                            : Family,
-                                         _ dicoOfAdultsRandomProperties      : inout DictionaryOfAdultRandomProperties,
-                                         _ dicoOfEconomyRandomVariables      : inout Economy.DictionaryOfRandomVariable,
-                                         _ dicoOfSocioEconomyRandomVariables : inout SocioEconomy.DictionaryOfRandomVariable) {
+    
+    private func getCurrentRandomProperties(using model: Model,
+                                            _ family                            : Family,
+                                            _ dicoOfAdultsRandomProperties      : inout DictionaryOfAdultRandomProperties,
+                                            _ dicoOfEconomyRandomVariables      : inout Economy.DictionaryOfRandomVariable,
+                                            _ dicoOfSocioEconomyRandomVariables : inout SocioEconomy.DictionaryOfRandomVariable) {
         dicoOfAdultsRandomProperties      = family.currentRandomProperties()
         dicoOfEconomyRandomVariables      = model.economyModel.currentRandomizersValues(withMode: mode)
         dicoOfSocioEconomyRandomVariables = model.socioEconomyModel.currentRandomizersValues(withMode: mode)
     }
 
-    private func nextRandomProperties(using model                         : Model,
-                                      _ family                            : Family,
-                                      _ dicoOfAdultsRandomProperties      : inout DictionaryOfAdultRandomProperties,
-                                      _ dicoOfEconomyRandomVariables      : inout Economy.DictionaryOfRandomVariable,
-                                      _ dicoOfSocioEconomyRandomVariables : inout SocioEconomy.DictionaryOfRandomVariable) {
+    private func getNextRandomProperties(using model                         : Model,
+                                         _ family                            : Family,
+                                         _ dicoOfAdultsRandomProperties      : inout DictionaryOfAdultRandomProperties,
+                                         _ dicoOfEconomyRandomVariables      : inout Economy.DictionaryOfRandomVariable,
+                                         _ dicoOfSocioEconomyRandomVariables : inout SocioEconomy.DictionaryOfRandomVariable) {
         // re-générer les propriétés aléatoires de la famille
         dicoOfAdultsRandomProperties = family.nextRun(using: model)
 
@@ -216,7 +193,13 @@ final class Simulation: ObservableObject, CanResetSimulationP {
             // jouer le son à la fin de la simulation
             Simulation.playSound()
         }
-
+        
+        let monteCarlo = nbOfRuns > 1
+        if monteCarlo && mode != .random {
+            customLog.log(level: .fault, "monteCarlo && mode != .random")
+            fatalError()
+        }
+        
         process(event: .onComputationTrigger)
         
         //propriétés indépendantes du nombre de run
@@ -226,12 +209,6 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         self.lastYear  = self.firstYear + nbOfYears - 1
 //        } // Dispatcheue.main.async
 
-        let monteCarlo = nbOfRuns > 1
-        if monteCarlo && mode != .random {
-            customLog.log(level: .fault, "monteCarlo && mode != .random")
-            fatalError()
-        }
-        
         var dicoOfAdultsRandomProperties      = DictionaryOfAdultRandomProperties()
         var dicoOfEconomyRandomVariables      = Economy.DictionaryOfRandomVariable()
         var dicoOfSocioEconomyRandomVariables = SocioEconomy.DictionaryOfRandomVariable()
@@ -254,24 +231,31 @@ final class Simulation: ObservableObject, CanResetSimulationP {
             SimulationLogger.shared.log(run      : currentRunNb,
                                         logTopic : LogTopic.simulationEvent,
                                         message  : "Début : \(firstYear!)")
-
-            // re-générer les propriétés aléatoires à chaque run si on est en mode Aléatoire
+            // récupérer les propriétés aléatoires
             if monteCarlo {
-                nextRandomProperties(using: model,
-                                     family,
-                                     &dicoOfAdultsRandomProperties,
-                                     &dicoOfEconomyRandomVariables,
-                                     &dicoOfSocioEconomyRandomVariables)
-            } else {
-                currentRandomProperties(using: model,
+                // re-générer les propriétés aléatoires à chaque run si on est en mode Aléatoire
+                getNextRandomProperties(using: model,
                                         family,
                                         &dicoOfAdultsRandomProperties,
                                         &dicoOfEconomyRandomVariables,
                                         &dicoOfSocioEconomyRandomVariables)
+            } else {
+                // récupérer les propriétés aléatoires courantes en mode Déterministe
+                getCurrentRandomProperties(using: model,
+                                           family,
+                                           &dicoOfAdultsRandomProperties,
+                                           &dicoOfEconomyRandomVariables,
+                                           &dicoOfSocioEconomyRandomVariables)
             }
-
-            // Réinitialiser la simulation
-            reset(includingKPIs: run == 1 ? true : false)
+            
+            // Réinitialiser les comptes sociaux
+            socialAccounts = SocialAccounts()
+            // Remettre à zéro l'historique des KPI (Histogramme)
+            // - au début d'un MontéCarlo seulement
+            // - mais pas à chaque Run
+            if run == 1 {
+                resetKPIs()
+            }
 
             // Exécuter la simulation: construire les comptes sociaux du patrimoine de la famille
             let dicoOfKpiResults = socialAccounts.build(run            : run,
@@ -346,8 +330,8 @@ final class Simulation: ObservableObject, CanResetSimulationP {
             }
         }
 
-        // Réinitialiser la simulation
-        self.reset(includingKPIs: false)
+        // Réinitialiser les comptes sociaux
+        socialAccounts = SocialAccounts()
 
         // construire les comptes sociaux du patrimoine de la famille
         _ = socialAccounts.build(run            : currentRunNb,

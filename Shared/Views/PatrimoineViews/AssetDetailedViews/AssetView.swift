@@ -69,8 +69,8 @@ struct RealEstateView: View {
 
     func removeItems(at offsets: IndexSet) {
         // remettre à zéro la simulation et sa vue
-        simulation.reset()
-        uiState.reset()
+        simulation.notifyComputationInputsModification()
+        uiState.resetSimulationView()
 
         patrimoine.assets.realEstates.delete(at: offsets)
     }
@@ -128,8 +128,8 @@ struct ScpiView: View {
 
     func removeItems(at offsets: IndexSet) {
         // remettre à zéro la simulation et sa vue
-        simulation.reset()
-        uiState.reset()
+        simulation.notifyComputationInputsModification()
+        uiState.resetSimulationView()
 
         patrimoine.assets.scpis.delete(at: offsets)
     }
@@ -200,8 +200,8 @@ struct PeriodicInvestView: View {
 
     func removeItems(at offsets: IndexSet) {
         // remettre à zéro la simulation et sa vue
-        simulation.reset()
-        uiState.reset()
+        simulation.notifyComputationInputsModification()
+        uiState.resetSimulationView()
 
         patrimoine.assets.periodicInvests.delete(at: offsets)
     }
@@ -260,8 +260,8 @@ struct FreeInvestView: View {
 
     func removeItems(at offsets: IndexSet) {
         // remettre à zéro la simulation et sa vue
-        simulation.reset()
-        uiState.reset()
+        simulation.notifyComputationInputsModification()
+        uiState.resetSimulationView()
 
         patrimoine.assets.freeInvests.delete(at: offsets)
     }
@@ -321,8 +321,8 @@ struct SciScpiView: View {
 
     func removeItems(at offsets: IndexSet) {
         // remettre à zéro la simulation et sa vue
-        simulation.reset()
-        uiState.reset()
+        simulation.notifyComputationInputsModification()
+        uiState.resetSimulationView()
 
         patrimoine.assets.sci.scpis.delete(at: offsets)
     }

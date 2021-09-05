@@ -112,7 +112,7 @@ final class UIState: ObservableObject {
         }
     }
 
-    func reset() {
+    func resetSimulationView() {
         simulationViewState.selectedItem = .computationView
     }
 }

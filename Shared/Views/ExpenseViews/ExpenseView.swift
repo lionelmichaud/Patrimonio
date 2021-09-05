@@ -140,8 +140,8 @@ struct ExpenseListInCategory: View {
     
     func removeItems(at offsets: IndexSet) {
         // remettre à zéro la simulation et sa vue
-        simulationReseter.reset()
-        uiState.reset()
+        simulationReseter.notifyComputationInputsModification()
+        uiState.resetSimulationView()
         // supprimer la dépense
         expenses.perCategory[self.category]?.delete(at: offsets)
     }
@@ -154,7 +154,7 @@ struct ExpenseListInCategory: View {
 
 struct ExpenseView_Previews: PreviewProvider {
     struct FakeSimulationReseter: CanResetSimulationP {
-        func reset() {
+        func notifyComputationInputsModification() {
             print("simluation.reset")
         }
     }

@@ -41,8 +41,8 @@ struct LoanView: View {
         patrimoine.liabilities.loans.delete(at: offsets)
         
         // remettre à zéro la simulation et sa vue
-        simulation.reset()
-        uiState.reset()
+        simulation.notifyComputationInputsModification()
+        uiState.resetSimulationView()
     }
     
     func move(from source: IndexSet, to destination: Int) {
@@ -102,8 +102,8 @@ struct DebtView: View {
         patrimoine.liabilities.debts.delete(at: offsets)
 
         // remettre à zéro la simulation et sa vue
-        simulation.reset()
-        uiState.reset()
+        simulation.notifyComputationInputsModification()
+        uiState.resetSimulationView()
     }
     
     func move(from source: IndexSet, to destination: Int) {

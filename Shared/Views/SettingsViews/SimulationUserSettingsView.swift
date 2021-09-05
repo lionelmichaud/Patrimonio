@@ -28,8 +28,8 @@ struct SimulationUserSettingsView: View {
                               perform: { newValue in
                                 UserSettings.shared.simulateVolatility = newValue
                                 // remettre à zéro la simulation et sa vue
-                                simulation.reset()
-                                uiState.reset()
+                                simulation.notifyComputationInputsModification()
+                                uiState.resetSimulationView()
                               })
             }
             

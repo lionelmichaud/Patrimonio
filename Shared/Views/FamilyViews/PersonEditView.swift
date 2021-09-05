@@ -121,8 +121,8 @@ struct PersonEditView: View {
         family.aMemberIsModified()
         
         // remettre à zéro la simulation et sa vue
-        simulation.reset()
-        uiState.reset()
+        simulation.notifyComputationInputsModification()
+        uiState.resetSimulationView()
         
         self.presentationMode.wrappedValue.dismiss()
     }

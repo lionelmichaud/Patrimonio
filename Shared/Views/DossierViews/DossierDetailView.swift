@@ -214,8 +214,8 @@ struct DossierDetailView: View {
         dataStore.activate(dossierAtIndex: dossierIndex)
         
         /// remettre à zéro la simulation et sa vue
-        simulation.reset()
-        uiState.reset()
+        simulation.notifyComputationInputsModification()
+        uiState.resetSimulationView()
     }
 
     /// Dupliquer le Dossier sélectionné
