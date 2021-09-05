@@ -236,7 +236,7 @@ struct ComputationView: View {
         // Enregistrer les fichier CSV en tâche de fond dans le dossier `Document` de l'application
         saveSimulationToDocumentsDirectory(dicoOfCSV: dicoOfCsv)
         
-        // Paratager les fichiers CSV et Image
+        // Paratager les fichiers CSV et Image existants dans le dossier `Document` de l'application
         if UserSettings.shared.shareCsvFiles || UserSettings.shared.shareImageFiles {
             shareSimulationResults()
         }
@@ -244,7 +244,7 @@ struct ComputationView: View {
         self.busySaveWheelAnimate.toggle()
     }
     
-    /// Partager les fichiers CSV et Image
+    /// Partager les fichiers CSV et Image existants  dans le dossier `Document` de l'application
     private func shareSimulationResults() {
         guard let folder = dataStore.activeDossier?.folder else {
             self.alertItem = AlertItem(title         : Text("Le partage a échoué"),
