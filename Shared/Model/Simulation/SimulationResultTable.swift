@@ -117,9 +117,9 @@ extension SimulationResultTable {
                 return self.sorted(by: {
                     switch sortOrder {
                         case .ascending:
-                            return ($1.dicoOfKpiResults[.minimumAsset]?.value ?? 0) > ($0.dicoOfKpiResults[.minimumAsset]?.value ?? 0)
+                            return ($1.dicoOfKpiResults[.minimumAdultsAssetExcludinRealEstates]?.value ?? 0) > ($0.dicoOfKpiResults[.minimumAdultsAssetExcludinRealEstates]?.value ?? 0)
                         case .descending:
-                            return ($1.dicoOfKpiResults[.minimumAsset]?.value ?? 0) < ($0.dicoOfKpiResults[.minimumAsset]?.value ?? 0)
+                            return ($1.dicoOfKpiResults[.minimumAdultsAssetExcludinRealEstates]?.value ?? 0) < ($0.dicoOfKpiResults[.minimumAdultsAssetExcludinRealEstates]?.value ?? 0)
                     }
                 })
             case .byKpi2:

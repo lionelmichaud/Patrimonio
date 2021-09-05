@@ -95,8 +95,8 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     init() {
         /// création et initialisation des KPI
         let kpiMinimumAsset =
-            KPI(name            : SimulationKPIEnum.minimumAsset.displayString,
-                note            : SimulationKPIEnum.minimumAsset.note,
+            KPI(name            : SimulationKPIEnum.minimumAdultsAssetExcludinRealEstates.displayString,
+                note            : SimulationKPIEnum.minimumAdultsAssetExcludinRealEstates.note,
                 objective       : 200_000.0,
                 withProbability : 0.98)
         kpis.append(kpiMinimumAsset)
@@ -260,7 +260,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
             }
             
             // Exécuter la simulation: construire les comptes sociaux du patrimoine de la famille
-            let dicoOfKpiResults =
+            let dicoOfRunKpiResults =
                 socialAccounts.build(run            : run,
                                      nbOfYears      : nbOfYears,
                                      withFamily     : family,
@@ -275,7 +275,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
                                      dicoOfAdultsRandomProperties      : dicoOfAdultsRandomProperties,
                                      dicoOfEconomyRandomVariables      : dicoOfEconomyRandomVariables,
                                      dicoOfSocioEconomyRandomVariables : dicoOfSocioEconomyRandomVariables,
-                                     dicoOfKpiResults                  : dicoOfKpiResults)
+                                     dicoOfKpiResults                  : dicoOfRunKpiResults)
             if monteCarlo {
                 monteCarloResultTable.append(currentRunResults)
                 

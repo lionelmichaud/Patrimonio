@@ -12,7 +12,7 @@ import Persistence
 // MARK: - Enumération des KPI
 
 enum SimulationKPIEnum: Int, PickableEnumP, Codable, Hashable {
-    case minimumAsset = 0
+    case minimumAdultsAssetExcludinRealEstates = 0
     case assetAt1stDeath
     case assetAt2ndtDeath
     
@@ -24,7 +24,7 @@ enum SimulationKPIEnum: Int, PickableEnumP, Codable, Hashable {
     
     var pickerString: String {
         switch self {
-            case .minimumAsset:
+            case .minimumAdultsAssetExcludinRealEstates:
                 return "Actif Financier Minimum"
             case .assetAt1stDeath:
                 return "Actif au Premier Décès"
@@ -35,9 +35,9 @@ enum SimulationKPIEnum: Int, PickableEnumP, Codable, Hashable {
     
     var note: String {
         switch self {
-            case .minimumAsset:
+            case .minimumAdultsAssetExcludinRealEstates:
                 return """
-                    Valeur minimale atteinte dans le temps pour l'ACTIF NET (hors immobilier physique) :
+                    Valeur minimale atteinte dans le temps pour l'ACTIF NET des ADULTES (hors immobilier physique) :
                      - Biens pris en compte: <<OwnershipNature>>
                      - Méthode d'évaluation: <<AssetEvaluationMethod>>
                     """
