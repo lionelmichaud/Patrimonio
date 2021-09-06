@@ -54,7 +54,7 @@ struct BalanceSheetLine {
     ///   - Les biens sont incorporés au bilan pour leur valeur selon la méthode de calcul des préférences utilisateur
     var netAdultsFinancialAssets : Double {
         (assets[AppSettings.shared.adultsLabel]!.total + liabilities[AppSettings.shared.adultsLabel]!.total)
-        - (assets[AppSettings.shared.adultsLabel]!.perCategory[.realEstates]?.total ?? 0)
+            - (assets[AppSettings.shared.adultsLabel]!.perCategory[.realEstates]?.total ?? 0)
     }
     
     // MARK: - Initializers
@@ -127,11 +127,13 @@ struct BalanceSheetLine {
                              isSelected       : selected,
                              evaluationMethod : UserSettings.shared.assetGraphicEvaluationMethod)
         }
-        assets[AppSettings.shared.adultsLabel]!.perCategory[category]?.namedValues
+        assets[AppSettings.shared.adultsLabel]!
+            .perCategory[category]?
+            .namedValues
             .append((name  : namePrefix + asset.name,
                      value : value))
         
-        //  individus  (filtré et évalué selon préférences graphiques de l'utilisateur)
+        //  individus (filtré et évalué selon préférences graphiques de l'utilisateur)
         membersName.forEach { name in
             let selected = isSelected(ownable : asset,
                                       for     : name,
@@ -141,7 +143,9 @@ struct BalanceSheetLine {
                                 isSelected       : selected,
                                 evaluationMethod : UserSettings.shared.assetGraphicEvaluationMethod)
             
-            assets[name]!.perCategory[category]?.namedValues
+            assets[name]!
+                .perCategory[category]?
+                .namedValues
                 .append((name  : namePrefix + asset.name,
                          value : value))
         }
@@ -153,7 +157,9 @@ struct BalanceSheetLine {
                                                   _ liability   : OwnableP,
                                                   _ year        : Int) {
         //  famille
-        liabilities[AppSettings.shared.allPersonsLabel]!.perCategory[category]?.namedValues
+        liabilities[AppSettings.shared.allPersonsLabel]!
+            .perCategory[category]?
+            .namedValues
             .append((name  : liability.name,
                      value : liability.value(atEndOf: year).rounded()))
         
@@ -168,10 +174,12 @@ struct BalanceSheetLine {
                              isSelected       : selected,
                              evaluationMethod : UserSettings.shared.assetKpiEvaluationMethod)
         }
-        liabilities[AppSettings.shared.adultsLabel]!.perCategory[category]?.namedValues
+        liabilities[AppSettings.shared.adultsLabel]!
+            .perCategory[category]?
+            .namedValues
             .append((name  : liability.name,
                      value : value))
-
+        
         //  individus
         membersName.forEach { name in
             let selected = isSelected(ownable : liability,
@@ -182,7 +190,9 @@ struct BalanceSheetLine {
                                 isSelected       : selected,
                                 evaluationMethod : UserSettings.shared.assetGraphicEvaluationMethod)
             
-            liabilities[name]!.perCategory[category]?.namedValues
+            liabilities[name]!
+                .perCategory[category]?
+                .namedValues
                 .append( (name  : liability.name,
                           value : value))
         }

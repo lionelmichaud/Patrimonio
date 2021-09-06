@@ -52,10 +52,6 @@ struct SocialAccounts {
     
     // MARK: - Computed Properties
     
-    var isEmpty: Bool {
-        cashFlowArray.isEmpty || balanceArray.isEmpty
-    }
-    
     // MARK: - Methods
     
     // MARK: - Construction de la table des comptes sociaux = Bilan + CashFlow

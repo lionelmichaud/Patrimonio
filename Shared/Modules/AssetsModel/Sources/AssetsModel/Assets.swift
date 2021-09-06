@@ -47,21 +47,32 @@ public struct Assets {
     public var allOwnableItems : [(ownable: OwnableP, category: AssetsCategory)] {
         var ownables = [(ownable: OwnableP, category: AssetsCategory)]()
         
-        ownables = periodicInvests.items
+        ownables =
+            periodicInvests
+            .items
             .sorted(by:<)
-            .map { ($0, AssetsCategory.periodicInvests) }
-        ownables += freeInvests.items
+            .map { ($0, .periodicInvests) }
+        ownables +=
+            freeInvests
+            .items
             .sorted(by:<)
-            .map { ($0, AssetsCategory.freeInvests) }
-        ownables += realEstates.items
+            .map { ($0, .freeInvests) }
+        ownables +=
+            realEstates
+            .items
             .sorted(by:<)
-            .map { ($0, AssetsCategory.realEstates) }
-        ownables += scpis.items
+            .map { ($0, .realEstates) }
+        ownables +=
+            scpis
+            .items
             .sorted(by:<)
-            .map { ($0, AssetsCategory.scpis) }
-        ownables += sci.scpis.items
+            .map { ($0, .scpis) }
+        ownables +=
+            sci
+            .scpis
+            .items
             .sorted(by:<)
-            .map { ($0, AssetsCategory.sci) }
+            .map { ($0, .sci) }
         return ownables
     }
     public var isModified      : Bool {

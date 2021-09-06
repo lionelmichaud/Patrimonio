@@ -27,11 +27,19 @@ extension BalanceSheetArray {
         let firstLine   = self.first!
         switch combination {
             case .assets:
-                return firstLine.assets[AppSettings.shared.allPersonsLabel]!.summary.namedValues
+                return firstLine
+                    .assets[AppSettings.shared.allPersonsLabel]!
+                    .summary
+                    .namedValues
                     .map {($0.name, true)} // sélectionné par défaut
+            
             case .liabilities:
-                return firstLine.liabilities[AppSettings.shared.allPersonsLabel]!.summary.namedValues
+                return firstLine
+                    .liabilities[AppSettings.shared.allPersonsLabel]!
+                    .summary
+                    .namedValues
                     .map {($0.name, true)} // sélectionné par défaut
+            
             case .both:
                 return getBalanceSheetLegend(.assets) + getBalanceSheetLegend(.liabilities)
         }
