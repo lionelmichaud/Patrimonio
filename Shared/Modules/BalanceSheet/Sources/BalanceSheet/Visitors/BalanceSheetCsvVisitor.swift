@@ -26,19 +26,25 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 /// with a complex object structure, such as a Composite tree. In this case, it
 /// might be helpful to store some intermediate state of the algorithm while
 /// executing visitor's methods over various objects of the structure.
-final class BalanceSheetCsvTableVisitor: BalanceSheetCsvVisitorP {
-
+public final class BalanceSheetCsvTableVisitor: BalanceSheetCsvVisitorP {
+    
+    // MARK: - Properties
+    
     private var table = ""
     private let mode  : SimulationModeEnum
     private let model : Model
-
-    internal init(using model  : Model,
-                  withMode mode: SimulationModeEnum) {
+    
+    // MARK: - Initializers
+    
+    public init(using model  : Model,
+                withMode mode: SimulationModeEnum) {
         self.mode  = mode
         self.model = model
     }
-
-    func buildCsv(element: ValuedLiabilities) {
+    
+    // MARK: - Methods
+    
+    public func buildCsv(element: ValuedLiabilities) {
         LiabilitiesCategory.allCases.forEach { category in
             // seulement ceux de la catégorie
             guard let namedValueTable = element[category] else { return }
@@ -52,7 +58,7 @@ final class BalanceSheetCsvTableVisitor: BalanceSheetCsvVisitorP {
         }
     }
 
-    func buildCsv(element: ValuedAssets) {
+    public func buildCsv(element: ValuedAssets) {
         AssetsCategory.allCases.forEach { category in
             // seulement ceux de la catégorie
             guard let namedValueTable = element[category] else { return }
@@ -66,7 +72,7 @@ final class BalanceSheetCsvTableVisitor: BalanceSheetCsvVisitorP {
         }
     }
 
-    func buildCsv(element: BalanceSheetLine) {
+    public func buildCsv(element: BalanceSheetLine) {
         func visitAssets() {
             // visiter l'ensembles des actifs de la famille
             guard let valuedAssets = element.assets[AppSettings.shared.allPersonsLabel] else { return }
@@ -98,7 +104,7 @@ final class BalanceSheetCsvTableVisitor: BalanceSheetCsvVisitorP {
         table.append("\(element.netFamilyAssets.roundedString)")
     }
 
-    func buildCsv(element: BalanceSheetArray) {
+    public func buildCsv(element: BalanceSheetArray) {
         // si la table est vide alors quitter
         guard element.isNotEmpty else {
             customLog.log(level: .info, "Pas de bilan à exporter au format CSV \(Self.self, privacy: .public)")
@@ -121,13 +127,21 @@ extension BalanceSheetCsvTableVisitor: CustomStringConvertible {
     }
 }
 
-class BalanceSheetCsvHeaderVisitor: BalanceSheetCsvVisitorP {
+public final class BalanceSheetCsvHeaderVisitor: BalanceSheetCsvVisitorP {
+
+    // MARK: - Properties
 
     private var header0  = ""
     private var header1  = ""
     private var header2  = ""
 
-    func buildCsv(element: ValuedAssets) {
+    // MARK: - Initializers
+    
+    public init() {    }
+    
+    // MARK: - Methods
+    
+    public func buildCsv(element: ValuedAssets) {
         AssetsCategory.allCases.forEach { category in
             // seulement ceux de la catégorie
             guard let namedValueTable = element[category] else { return }
@@ -149,7 +163,7 @@ class BalanceSheetCsvHeaderVisitor: BalanceSheetCsvVisitorP {
         }
     }
 
-    func buildCsv(element: ValuedLiabilities) {
+    public func buildCsv(element: ValuedLiabilities) {
         LiabilitiesCategory.allCases.forEach { category in
             // seulement ceux de la catégorie
             guard let namedValueTable = element[category] else { return }
@@ -171,7 +185,7 @@ class BalanceSheetCsvHeaderVisitor: BalanceSheetCsvVisitorP {
         }
     }
 
-    func buildCsv(element: BalanceSheetLine) {
+    public func buildCsv(element: BalanceSheetLine) {
         func visitAssets() {
             // visiter l'ensembles des actifs de la famille
             guard let valuedAssets = element.assets[AppSettings.shared.allPersonsLabel] else { return }
@@ -210,7 +224,7 @@ class BalanceSheetCsvHeaderVisitor: BalanceSheetCsvVisitorP {
         header2.append("NET")
     }
 
-    func buildCsv(element: BalanceSheetArray) {
+    public func buildCsv(element: BalanceSheetArray) {
         // si la table est vide alors quitter
         guard element.isNotEmpty else {
             customLog.log(level: .info, "Pas de bilan à exporter au format CSV \(Self.self, privacy: .public)")

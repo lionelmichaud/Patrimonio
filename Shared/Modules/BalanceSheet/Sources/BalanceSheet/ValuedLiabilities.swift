@@ -12,38 +12,38 @@ import Liabilities
 
 // MARK: - agrégat des Passifs
 
-struct ValuedLiabilities: DictionaryOfNamedValueTableP {
+public struct ValuedLiabilities: DictionaryOfNamedValueTableP {
     
     // MARK: - Properties
     
-    var name       : String = ""
-    var perCategory: [LiabilitiesCategory: NamedValueTable] = [:]
+    public var name       : String = ""
+    public var perCategory: [LiabilitiesCategory: NamedValueTable] = [:]
     
-    init() { }
+    public init() { }
 }
 
 // MARK: - Extensions for VISITORS
 
 extension ValuedLiabilities: BalanceSheetCsvVisitableP {
-    func accept(_ visitor: BalanceSheetCsvVisitorP) {
+    public func accept(_ visitor: BalanceSheetCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
 
 extension ValuedLiabilities: BalanceSheetLineChartVisitableP {
-    func accept(_ visitor: BalanceSheetLineChartVisitorP) {
+    public func accept(_ visitor: BalanceSheetLineChartVisitorP) {
         visitor.buildLineChart(element: self)
     }
 }
 
 extension ValuedLiabilities: BalanceSheetStackedBarChartVisitableP {
-    func accept(_ visitor: BalanceSheetStackedBarChartVisitorP) {
+    public func accept(_ visitor: BalanceSheetStackedBarChartVisitorP) {
         visitor.buildStackedBarChart(element: self)
     }
 }
 
 extension ValuedLiabilities: BalanceSheetCategoryStackedBarChartVisitableP {
-    func accept(_ visitor: BalanceSheetCategoryStackedBarChartVisitorP) {
+    public func accept(_ visitor: BalanceSheetCategoryStackedBarChartVisitorP) {
         visitor.buildCategoryStackedBarChart(element: self)
     }
 }

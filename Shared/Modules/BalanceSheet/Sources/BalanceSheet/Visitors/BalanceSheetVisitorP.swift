@@ -10,7 +10,7 @@ import Foundation
 /// The Visitor Interface declares a set of visiting methods that correspond to
 /// component classes. The signature of a visiting method allows the visitor to
 /// identify the exact class of the component that it's dealing with.
-protocol BalanceSheetCsvVisitorP {
+public  protocol BalanceSheetCsvVisitorP {
     // Elements de Bilan
     func buildCsv(element: BalanceSheetArray)
     func buildCsv(element: BalanceSheetLine)
@@ -18,7 +18,7 @@ protocol BalanceSheetCsvVisitorP {
     func buildCsv(element: ValuedLiabilities)
 }
 
-protocol BalanceSheetLineChartVisitorP {
+public protocol BalanceSheetLineChartVisitorP {
     // Elements de Bilan
     func buildLineChart(element: BalanceSheetArray)
     func buildLineChart(element: BalanceSheetLine)
@@ -26,7 +26,7 @@ protocol BalanceSheetLineChartVisitorP {
     func buildLineChart(element: ValuedLiabilities)
 }
 
-protocol BalanceSheetStackedBarChartVisitorP {
+public protocol BalanceSheetStackedBarChartVisitorP {
     // Elements de Bilan
     func buildStackedBarChart(element: BalanceSheetArray)
     func buildStackedBarChart(element: BalanceSheetLine)
@@ -34,7 +34,7 @@ protocol BalanceSheetStackedBarChartVisitorP {
     func buildStackedBarChart(element: ValuedLiabilities)
 }
 
-protocol BalanceSheetCategoryStackedBarChartVisitorP {
+public protocol BalanceSheetCategoryStackedBarChartVisitorP {
     // Elements de Bilan
     func buildCategoryStackedBarChart(element: BalanceSheetArray)
     func buildCategoryStackedBarChart(element: BalanceSheetLine)

@@ -11,6 +11,7 @@ import AppFoundation
 import NamedValue
 import AssetsModel
 import Liabilities
+import BalanceSheet
 import Charts // https://github.com/danielgindi/Charts.git
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CategoryBarChartBalanceSheetVisitor")

@@ -10,6 +10,7 @@ import Statistics
 import ModelEnvironment
 import Succession
 import Persistence
+import BalanceSheet
 
 // MARK: - Constructeur de fichier d'export CSV
 
@@ -102,7 +103,8 @@ struct CsvBuilder {
         balanceSheetArray.accept(csvHeaderBuilderVisitor)
         
         // construction de la table
-        let csvTableBuilderVisitor = BalanceSheetCsvTableVisitor(using: model, withMode: mode)
+        let csvTableBuilderVisitor = BalanceSheetCsvTableVisitor(using    : model,
+                                                                 withMode : mode)
         balanceSheetArray.accept(csvTableBuilderVisitor)
         
         return String(describing: csvHeaderBuilderVisitor) + "\n" + String(describing: csvTableBuilderVisitor) + "\n"

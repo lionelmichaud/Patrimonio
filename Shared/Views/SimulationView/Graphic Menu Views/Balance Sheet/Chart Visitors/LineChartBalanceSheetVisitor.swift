@@ -7,13 +7,14 @@
 
 import Foundation
 import AppFoundation
+import BalanceSheet
 import Charts
 
 // MARK: - Génération de graphiques - Détail par catégories - BALANCE SHEET
 
 /// Dessiner un graphe à lignes : passif + actif + net
 /// - Returns: UIView
-class LineChartBalanceSheetVisitor: BalanceSheetLineChartVisitorP {
+final class LineChartBalanceSheetVisitor: BalanceSheetLineChartVisitorP {
     
     var dataSets = [LineChartDataSet]()
     //: ### ChartDataEntry
