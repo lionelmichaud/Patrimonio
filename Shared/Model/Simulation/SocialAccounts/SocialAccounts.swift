@@ -10,6 +10,7 @@ import PatrimoineModel
 import FamilyModel
 import BalanceSheet
 import SimulationLogger
+import Kpi
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.SocialAccounts")
 

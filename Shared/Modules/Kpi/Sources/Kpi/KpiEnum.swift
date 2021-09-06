@@ -11,7 +11,7 @@ import Persistence
 
 // MARK: - Enumération des KPI
 
-enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
+public enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
     case minimumAdultsAssetExcludinRealEstates = 0
     case assetAt1stDeath
     case assetAt2ndtDeath
@@ -22,7 +22,7 @@ enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
         return self.rawValue
     }
     
-    var pickerString: String {
+    public var pickerString: String {
         switch self {
             case .minimumAdultsAssetExcludinRealEstates:
                 return "Actif Financier Minimum"
@@ -33,7 +33,7 @@ enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
         }
     }
     
-    var note: String {
+    public var note: String {
         switch self {
             case .minimumAdultsAssetExcludinRealEstates:
                 return """
