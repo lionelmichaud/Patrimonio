@@ -40,7 +40,7 @@ struct KpiComputer {
     // MARK: - Methods
     
     fileprivate mutating func setKpiValue
-    (kpiEnum        : SimulationKPIEnum,
+    (kpiEnum        : KpiEnum,
      value          : Double,
      kpiDictionnary : inout KpiDictionary,
      simulationMode : SimulationModeEnum) {

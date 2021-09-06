@@ -14,32 +14,6 @@ import Files
 import Persistence
 import FamilyModel
 
-// MARK: - KPI results
-
-struct KpiResult: Hashable, Codable {
-    var value              : Double
-    var objectiveIsReached : Bool
-}
-
-typealias KpiResultsDictionary = [SimulationKPIEnum: KpiResult]
-extension KpiResultsDictionary {
-    func runResult() -> RunResult {
-        for kpi in SimulationKPIEnum.allCases {
-            if let objectiveIsReached = self[kpi]?.objectiveIsReached {
-                if !objectiveIsReached {
-                    // un résultat est défini avec un objectif non atteint
-                    return .someObjectiveMissed
-                }
-            } else {
-                // un résultat non défini
-                return .someObjectiveUndefined
-            }
-        }
-        // tous les résultats sont définis et les objectifs sont toujours atteints
-        return .allObjectivesReached
-    }
-}
-
 // MARK: - Runs results
 
 enum RunResult: String, Codable {

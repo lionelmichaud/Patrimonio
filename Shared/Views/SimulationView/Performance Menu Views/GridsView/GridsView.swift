@@ -239,7 +239,7 @@ struct GridHeaderView : View {
                 Divider()
             }
             // valeurs résultantes des KPIs
-            ForEach(SimulationKPIEnum.allCases, id: \.self) { kpiEnum in
+            ForEach(KpiEnum.allCases, id: \.self) { kpiEnum in
                 Text(kpiEnum.pickerString)
                     .lineLimit(3)
                     .frame(width: viewHeight)
@@ -301,7 +301,7 @@ struct ShortGridLineView : View {
                     Divider()
                 }
                 /// valeurs résultantes des KPIs
-                ForEach(SimulationKPIEnum.allCases, id: \.self) { kpiEnum in
+                ForEach(KpiEnum.allCases, id: \.self) { kpiEnum in
                     if let kpiResult = line.dicoOfKpiResults[kpiEnum] {
                         Text(kpiResult.value.k€String)
                             .frame(width: 70)

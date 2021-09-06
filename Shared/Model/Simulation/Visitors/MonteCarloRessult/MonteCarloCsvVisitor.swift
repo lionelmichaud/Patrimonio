@@ -58,7 +58,7 @@ final class MonteCarloCsvTableVisitor: MonteCarloVisitorP {
             }
         }
         // valeurs résultantes des KPIs
-        for kpiEnum in SimulationKPIEnum.allCases {
+        for kpiEnum in KpiEnum.allCases {
             if let kpiResult = element.dicoOfKpiResults[kpiEnum] {
                 line += kpiResult.value.roundedString + separator
             } else {
@@ -85,7 +85,7 @@ final class MonteCarloCsvTableVisitor: MonteCarloVisitorP {
                 header += variableEnum.pickerString + separator
             }
             // valeurs résultantes des KPIs
-            for variableEnum in SimulationKPIEnum.allCases {
+            for variableEnum in KpiEnum.allCases {
                 header += variableEnum.pickerString + separator
             }
             return header

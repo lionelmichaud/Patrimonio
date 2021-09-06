@@ -1,5 +1,5 @@
 //
-//  SimulationKPIEnum.swift
+//  KPIEnum.swift
 //  Patrimonio
 //
 //  Created by Lionel MICHAUD on 04/05/2021.
@@ -11,7 +11,7 @@ import Persistence
 
 // MARK: - Enumération des KPI
 
-enum SimulationKPIEnum: Int, PickableEnumP, Codable, Hashable {
+enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
     case minimumAdultsAssetExcludinRealEstates = 0
     case assetAt1stDeath
     case assetAt2ndtDeath

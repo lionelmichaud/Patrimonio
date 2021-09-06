@@ -12,7 +12,7 @@ import OrderedCollections
 
 // MARK: - KpiDictionary : tableau de KPI
 
-typealias KpiDictionary = OrderedDictionary<SimulationKPIEnum, KPI>
+typealias KpiDictionary = OrderedDictionary<KpiEnum, KPI>
 extension KpiDictionary {
     /// Remettre à zéro l'historique des KPI (Histogramme)
     mutating func reset(withMode mode : SimulationModeEnum) {

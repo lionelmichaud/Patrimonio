@@ -95,7 +95,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été séelctionné
     init() {
         /// création et initialisation des KPI
-        var kpi: SimulationKPIEnum = .minimumAdultsAssetExcludinRealEstates
+        var kpi: KpiEnum = .minimumAdultsAssetExcludinRealEstates
         let kpiMinimumAsset =
             KPI(name            : kpi.displayString,
                 note            : kpi.note,
