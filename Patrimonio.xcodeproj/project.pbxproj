@@ -187,6 +187,8 @@
 		79735EEA263242FA00CD952F /* AppMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79735EE8263242FA00CD952F /* AppMain.swift */; };
 		79735EEB263242FA00CD952F /* AppMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79735EE8263242FA00CD952F /* AppMain.swift */; };
 		79735EED263242FA00CD952F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79735EE9263242FA00CD952F /* ContentView.swift */; };
+		7973C98226E56F19008D0CE2 /* KpiComputer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7973C98126E56F19008D0CE2 /* KpiComputer.swift */; };
+		7973C98326E56F19008D0CE2 /* KpiComputer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7973C98126E56F19008D0CE2 /* KpiComputer.swift */; };
 		7974156226AB51E300683A3A /* Persistable in Frameworks */ = {isa = PBXBuildFile; productRef = 7974156126AB51E300683A3A /* Persistable */; };
 		7974156426AB51FA00683A3A /* Persistable in Frameworks */ = {isa = PBXBuildFile; productRef = 7974156326AB51FA00683A3A /* Persistable */; };
 		797574AE26C13C8C00842572 /* LifeExpense in Frameworks */ = {isa = PBXBuildFile; productRef = 797574AD26C13C8C00842572 /* LifeExpense */; };
@@ -292,6 +294,9 @@
 		799604CD26B847E700309EE5 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799604CB26B847E700309EE5 /* AppVersion.swift */; };
 		7998E1C7262DC5C500DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */; };
 		7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E1CC262DC66700DA4A12 /* TypePreservingCodingAdapter */; };
+		799D7C7526E53D6100ACAED3 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 799D7C7426E53D6100ACAED3 /* OrderedCollections */; };
+		799D7C7726E53D6100ACAED3 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 799D7C7626E53D6100ACAED3 /* DequeModule */; };
+		799D7C7926E53D6100ACAED3 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 799D7C7826E53D6100ACAED3 /* Collections */; };
 		799DE8402654199600E96CF6 /* NoLoadedDossierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799DE83F2654199600E96CF6 /* NoLoadedDossierView.swift */; };
 		79A8A19526565DBC00B23AD7 /* DossierAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A8A19426565DBC00B23AD7 /* DossierAddView.swift */; };
 		79A8A19626565DBC00B23AD7 /* DossierAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A8A19426565DBC00B23AD7 /* DossierAddView.swift */; };
@@ -641,6 +646,7 @@
 		7971B9C52638CAF3009CF0F7 /* NSUIViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSUIViewRepresentable.swift; sourceTree = "<group>"; };
 		79735EE8263242FA00CD952F /* AppMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppMain.swift; sourceTree = "<group>"; };
 		79735EE9263242FA00CD952F /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7973C98126E56F19008D0CE2 /* KpiComputer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KpiComputer.swift; sourceTree = "<group>"; };
 		797901232640AEB600104C1A /* PatrimoineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatrimoineView.swift; sourceTree = "<group>"; };
 		797901262640AF0400104C1A /* PatrimoineSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatrimoineSummaryView.swift; sourceTree = "<group>"; };
 		797901292640B49E00104C1A /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
@@ -793,6 +799,8 @@
 				79EC47A726307BC90006EE44 /* Foil in Frameworks */,
 				79683FB926B891D000F838BE /* ModelEnvironment in Frameworks */,
 				7974156226AB51E300683A3A /* Persistable in Frameworks */,
+				799D7C7726E53D6100ACAED3 /* DequeModule in Frameworks */,
+				799D7C7526E53D6100ACAED3 /* OrderedCollections in Frameworks */,
 				79155AF126E115D700757981 /* PatrimoineModel in Frameworks */,
 				79EF42CC26C2B73000EC0555 /* Numerics in Frameworks */,
 				797E95B326BACC09000E1070 /* Succession in Frameworks */,
@@ -818,6 +826,7 @@
 				799074242660524200F224F7 /* FileAndFolder in Frameworks */,
 				798E844D26E1722200854003 /* SuccessionManager in Frameworks */,
 				7935FFE52654492500AC1715 /* Files in Frameworks */,
+				799D7C7926E53D6100ACAED3 /* Collections in Frameworks */,
 				79FC3D3B262C760A00A6184B /* Statistics in Frameworks */,
 				79E713EE262C9891000FD625 /* EconomyModel in Frameworks */,
 				792874F426E130A20011913B /* FamilyModel in Frameworks */,
@@ -1239,6 +1248,16 @@
 			path = "Charts-Utilities";
 			sourceTree = "<group>";
 		};
+		7973C98026E56DD1008D0CE2 /* KPI */ = {
+			isa = PBXGroup;
+			children = (
+				797931C0264170FE000F8599 /* SimulationKPIEnum.swift */,
+				797931A126416E8B000F8599 /* KPI.swift */,
+				7973C98126E56F19008D0CE2 /* KpiComputer.swift */,
+			);
+			path = KPI;
+			sourceTree = "<group>";
+		};
 		798E7838264209AD0094534F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -1645,9 +1664,8 @@
 				790FF33726484D23001B2653 /* Visitors */,
 				79EF935826376D1100C1BE5B /* Simulation.swift */,
 				794570CF26E38E3700EE9C61 /* SimulationSateMachines.swift */,
-				797931C0264170FE000F8599 /* SimulationKPIEnum.swift */,
-				797931A126416E8B000F8599 /* KPI.swift */,
 				797931A826416EA1000F8599 /* SimulationResultTable.swift */,
+				7973C98026E56DD1008D0CE2 /* KPI */,
 				791ED10C263A27E400701202 /* SocialAccounts */,
 			);
 			path = Simulation;
@@ -1705,6 +1723,9 @@
 				792874F326E130A20011913B /* FamilyModel */,
 				798E844C26E1722200854003 /* SuccessionManager */,
 				7988A96226E178E600E00861 /* SimulationLogger */,
+				799D7C7426E53D6100ACAED3 /* OrderedCollections */,
+				799D7C7626E53D6100ACAED3 /* DequeModule */,
+				799D7C7826E53D6100ACAED3 /* Collections */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -1839,6 +1860,7 @@
 				79754456263C6C9800B03CA3 /* XCRemoteSwiftPackageReference "swift-numerics" */,
 				797931B326416F74000F8599 /* XCRemoteSwiftPackageReference "Disk" */,
 				7935FFE32654492500AC1715 /* XCRemoteSwiftPackageReference "Files" */,
+				799D7C7326E53D6100ACAED3 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 7920DC52262C700500536B03 /* Products */;
 			projectDirPath = "";
@@ -2182,6 +2204,7 @@
 				799025C42642007300ED53D4 /* ProgressViews.swift in Sources */,
 				795049FE26679347000AAEF0 /* StatisticSectionView.swift in Sources */,
 				797931A926416EA1000F8599 /* SimulationResultTable.swift in Sources */,
+				7973C98226E56F19008D0CE2 /* KpiComputer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2268,6 +2291,7 @@
 				791ED11C263A2CE900701202 /* CashFlowLine+manageRealEstate.swift in Sources */,
 				794B014F26B9BE4300882684 /* ValuedAssets.swift in Sources */,
 				791ED113263A285300701202 /* CashFlowLine.swift in Sources */,
+				7973C98326E56F19008D0CE2 /* KpiComputer.swift in Sources */,
 				79BE4A872651CE7800BBF46C /* ModelSociologyView.swift in Sources */,
 				79FC728D26333A27004F3BD2 /* MainScene.swift in Sources */,
 				796506D62640866F0036E466 /* scpiDetailedView.swift in Sources */,
@@ -2815,6 +2839,14 @@
 				minimumVersion = 1.0.2;
 			};
 		};
+		799D7C7326E53D6100ACAED3 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.7;
+			};
+		};
 		79B272992634E80C00298E5D /* XCRemoteSwiftPackageReference "Charts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielgindi/Charts.git";
@@ -3023,6 +3055,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */;
 			productName = TypePreservingCodingAdapter;
+		};
+		799D7C7426E53D6100ACAED3 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 799D7C7326E53D6100ACAED3 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+		799D7C7626E53D6100ACAED3 /* DequeModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 799D7C7326E53D6100ACAED3 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = DequeModule;
+		};
+		799D7C7826E53D6100ACAED3 /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 799D7C7326E53D6100ACAED3 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
 		};
 		79B2729A2634E80C00298E5D /* Charts */ = {
 			isa = XCSwiftPackageProductDependency;

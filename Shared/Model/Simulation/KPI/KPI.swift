@@ -8,50 +8,41 @@
 
 import Foundation
 import Statistics
+import OrderedCollections
 
-// MARK: - KpiArray : tableau de KPI
+// MARK: - KpiDictionary : tableau de KPI
 
-typealias KpiArray = [KPI]
-extension KpiArray {
-    /// remettre à zéro l'historique des KPI (Histogramme)
-    static func reset(theseKPIs     : inout KpiArray,
-                      withMode mode : SimulationModeEnum) {
-        theseKPIs = theseKPIs.map {
-            var newKPI = $0
+typealias KpiDictionary = OrderedDictionary<SimulationKPIEnum, KPI>
+extension KpiDictionary {
+    /// Remettre à zéro l'historique des KPI (Histogramme)
+    mutating func reset(withMode mode : SimulationModeEnum) {
+        self = mapValues { kpi in
+            var newKPI = kpi
             newKPI.reset(withMode: mode)
             return newKPI
         }
     }
-    
+
     /// Initialise les cases de l'histogramme et range les échantillons dans les cases
     ///
-    /// - Warning: les échantillons doivent avoir été enregistrées au préalable
+    /// - Warning: Les échantillons doivent avoir été enregistrées au préalable
     ///
-    static func generateHistograms(ofTheseKPIs: inout KpiArray) {
-        ofTheseKPIs = ofTheseKPIs.map {
-            var newKPI = $0
+    mutating func generateHistograms() {
+        self = mapValues { kpi in
+            var newKPI = kpi
             newKPI.sortHistogram()
             return newKPI
         }
     }
-    
-    /// remettre à zéro l'historique des KPI (Histogramme)
-    func resetCopy(withMode mode : SimulationModeEnum) -> KpiArray {
-        self.map {
-            var newKPI = $0
-            newKPI.reset(withMode: mode)
-            return newKPI
-        }
-    }
-    
+
     /// Est-ce que tous les objectifs sont atteints ?
     /// - Warning:
-    ///     Retourne nil si au moins une des valeurs n'est pas définie
+    ///     - Retourne nil si au moins une des valeurs n'est pas définie
+    ///     - Ne doit être appelées qu'après la fin du dernier Run
     ///
-    ///     Ne doit être appelées qu'après la fin du dernier Run
     func allObjectivesAreReached(withMode mode : SimulationModeEnum) -> Bool? {
         var result = true
-        for kpi in self {
+        for (_, kpi) in self {
             if let objectiveIsReached = kpi.objectiveIsReached(withMode: mode) {
                 result = result && objectiveIsReached
             } else {

@@ -17,7 +17,7 @@ struct KpiListView : View {
     @EnvironmentObject var simulation : Simulation
     
     var body: some View {
-        ForEach(simulation.kpis) { kpi in
+        ForEach(simulation.kpis.values) { kpi in
             NavigationLink(destination : KpiDetailedView(kpi: kpi)) {
                 if let objectiveIsReached = kpi.objectiveIsReached(withMode: simulation.mode) {
                     Image(systemName: objectiveIsReached ? "checkmark.circle.fill" : "multiply.circle.fill")

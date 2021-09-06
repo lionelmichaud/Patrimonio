@@ -22,6 +22,7 @@ import PersonModel
 import PatrimoineModel
 import FamilyModel
 import SimulationLogger
+import OrderedCollections
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Simulation")
 
@@ -63,7 +64,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     private var persistenceSM     = SimulationPersistenceStateMachine()
     // résultats de la simulation
     @Published var socialAccounts        = SocialAccounts()
-    @Published var kpis                  = KpiArray()
+    @Published var kpis                  = KpiDictionary()
     @Published var monteCarloResultTable = SimulationResultTable()
     @Published var currentRunResults     = SimulationResultLine()
 
@@ -94,26 +95,29 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été séelctionné
     init() {
         /// création et initialisation des KPI
+        var kpi: SimulationKPIEnum = .minimumAdultsAssetExcludinRealEstates
         let kpiMinimumAsset =
-            KPI(name            : SimulationKPIEnum.minimumAdultsAssetExcludinRealEstates.displayString,
-                note            : SimulationKPIEnum.minimumAdultsAssetExcludinRealEstates.note,
+            KPI(name            : kpi.displayString,
+                note            : kpi.note,
                 objective       : 200_000.0,
                 withProbability : 0.98)
-        kpis.append(kpiMinimumAsset)
+        kpis[kpi] = kpiMinimumAsset
 
+        kpi = .assetAt1stDeath
         let kpiAssetsAtFirstDeath =
-            KPI(name            : SimulationKPIEnum.assetAt1stDeath.displayString,
-                note            : SimulationKPIEnum.assetAt1stDeath.note,
+            KPI(name            : kpi.displayString,
+                note            : kpi.note,
                 objective       : 200_000.0,
                 withProbability : 0.98)
-        kpis.append(kpiAssetsAtFirstDeath)
+        kpis[kpi] = kpiAssetsAtFirstDeath
 
+        kpi = .assetAt2ndtDeath
         let kpiAssetsAtLastDeath =
-            KPI(name            : SimulationKPIEnum.assetAt2ndtDeath.displayString,
-                note            : SimulationKPIEnum.assetAt2ndtDeath.note,
+            KPI(name            : kpi.displayString,
+                note            : kpi.note,
                 objective       : 200_000.0,
                 withProbability : 0.98)
-        kpis.append(kpiAssetsAtLastDeath)
+        kpis[kpi] = kpiAssetsAtLastDeath
     }
 
     // MARK: - Methods
@@ -139,7 +143,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     ///  - au début d'un MontéCarlo seulement
     ///  - mais pas à chaque Run
     private func resetKPIs() {
-        KpiArray.reset(theseKPIs: &kpis, withMode: mode)
+        kpis.reset(withMode: mode)
     }
     
     /// Remettre à zéro les historiques des tirages aléatoires avant le lancement d'un MontéCarlo
@@ -282,7 +286,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
                 // Dernier run, créer les histogrammes et y ranger
                 // les échantillons de KPIs si on est en mode Aléatoire
                 if run == nbOfRuns {
-                    KpiArray.generateHistograms(ofTheseKPIs: &self.kpis)
+                    kpis.generateHistograms()
                 }
             }
 

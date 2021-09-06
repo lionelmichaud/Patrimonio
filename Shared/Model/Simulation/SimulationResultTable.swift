@@ -21,8 +21,8 @@ struct KpiResult: Hashable, Codable {
     var objectiveIsReached : Bool
 }
 
-typealias DictionaryOfKpiResults = [SimulationKPIEnum: KpiResult]
-extension DictionaryOfKpiResults {
+typealias KpiResultsDictionary = [SimulationKPIEnum: KpiResult]
+extension KpiResultsDictionary {
     func runResult() -> RunResult {
         for kpi in SimulationKPIEnum.allCases {
             if let objectiveIsReached = self[kpi]?.objectiveIsReached {
@@ -69,7 +69,7 @@ struct SimulationResultLine: Hashable {
     var dicoOfAdultsRandomProperties      = DictionaryOfAdultRandomProperties()
     var dicoOfEconomyRandomVariables      = Economy.DictionaryOfRandomVariable()
     var dicoOfSocioEconomyRandomVariables = SocioEconomy.DictionaryOfRandomVariable()
-    var dicoOfKpiResults                  = DictionaryOfKpiResults()
+    var dicoOfKpiResults                  = KpiResultsDictionary()
 }
 extension SimulationResultLine: MonteCarloVisitableP {
     func accept(_ visitor: MonteCarloVisitorP) {
