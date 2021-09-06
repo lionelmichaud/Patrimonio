@@ -105,7 +105,7 @@ struct ComputationView: View {
         var kpiView: some View {
             Group {
                 if simulation.isComputed {
-                    ForEach(simulation.kpis) { kpi in
+                    ForEach(simulation.kpis.values) { kpi in
                         Section(header: Text(kpi.name)) {
                             if kpi.value(withMode: simulation.mode) != nil {
                                 KpiSummaryView(kpi         : kpi,

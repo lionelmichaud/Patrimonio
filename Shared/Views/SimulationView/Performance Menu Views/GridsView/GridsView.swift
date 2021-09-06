@@ -319,7 +319,7 @@ struct ShortGridLineView : View {
         }
     }
     
-    func colorOfRun(withTheseKpis kpis: DictionaryOfKpiResults) -> Color {
+    func colorOfRun(withTheseKpis kpis: KpiResultsDictionary) -> Color {
         let runResult = kpis.runResult()
         switch runResult {
             case .allObjectivesReached:
