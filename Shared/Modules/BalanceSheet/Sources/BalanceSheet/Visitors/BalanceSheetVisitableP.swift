@@ -9,18 +9,18 @@ import Foundation
 
 /// The Component interface declares an `accept` method that should take the
 /// base visitor interface as an argument.
-protocol BalanceSheetCsvVisitableP {
+public protocol BalanceSheetCsvVisitableP {
     func accept(_ visitor: BalanceSheetCsvVisitorP)
 }
 
-protocol BalanceSheetLineChartVisitableP {
+public protocol BalanceSheetLineChartVisitableP {
     func accept(_ visitor: BalanceSheetLineChartVisitorP)
 }
 
-protocol BalanceSheetStackedBarChartVisitableP {
+public protocol BalanceSheetStackedBarChartVisitableP {
     func accept(_ visitor: BalanceSheetStackedBarChartVisitorP)
 }
 
-protocol BalanceSheetCategoryStackedBarChartVisitableP {
+public protocol BalanceSheetCategoryStackedBarChartVisitableP {
     func accept(_ visitor: BalanceSheetCategoryStackedBarChartVisitorP)
 }

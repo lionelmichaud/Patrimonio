@@ -14,24 +14,24 @@ import Liabilities
 
 // MARK: - Ligne de Bilan annuel
 
-struct BalanceSheetLine {
+public struct BalanceSheetLine {
     
     // MARK: - Properties
     
     /// Année pour laquelle le Bilan est calculé
-    var year: Int = 0
+    public var year: Int = 0
     
     /// Actifs pour la Famille au global et pour chaque membre de la famille
     /// - Note:
     ///   - Pour la Famille, tous les actifs sont incorporés au bilan pour leur valeur globale
     ///   - Pour une personne, les actifs  incorporés sont incorporé (ou pas) et valorisés selon les chois des préférences utilisateur (graphique)
-    var assets: [String : ValuedAssets]
+    public var assets: [String : ValuedAssets]
     
     /// Passifs pour la Famille au global et pour chaque membre de la famille
     /// - Note:
     ///   - Pour la Famille, tous les passifs sont incorporés au bilan pour leur valeur globale
     ///   - Pour une personne, les passifs  incorporés sont incorporé (ou pas) et valorisés selon les chois des préférences utilisateur (graphique)
-    var liabilities: [String : ValuedLiabilities]
+    public var liabilities: [String : ValuedLiabilities]
     
     /// Actifs Nets de la Famille entière
     /// - Note:
@@ -52,18 +52,18 @@ struct BalanceSheetLine {
     /// Actifs Nets des Adults EXCLUANT l'immobilier physique
     /// - Note:
     ///   - Les biens sont incorporés au bilan pour leur valeur selon la méthode de calcul des préférences utilisateur
-    var netAdultsFinancialAssets : Double {
+    public var netAdultsFinancialAssets : Double {
         (assets[AppSettings.shared.adultsLabel]!.total + liabilities[AppSettings.shared.adultsLabel]!.total)
             - (assets[AppSettings.shared.adultsLabel]!.perCategory[.realEstates]?.total ?? 0)
     }
     
     // MARK: - Initializers
     
-    init(year                        : Int,
-         withMembersName membersName : [String],
-         withAdultsName adultsName   : [String],
-         withAssets assets           : [(ownable: OwnableP, category: AssetsCategory)],
-         withLiabilities liabilities : [(ownable: OwnableP, category: LiabilitiesCategory)]) {
+    public init(year                        : Int,
+                withMembersName membersName : [String],
+                withAdultsName adultsName   : [String],
+                withAssets assets           : [(ownable: OwnableP, category: AssetsCategory)],
+                withLiabilities liabilities : [(ownable: OwnableP, category: LiabilitiesCategory)]) {
         //        autoreleasepool {
         self.year = year
         
@@ -250,25 +250,25 @@ struct BalanceSheetLine {
 // MARK: - BalanceSheetLine extensions for VISITORS
 
 extension BalanceSheetLine: BalanceSheetCsvVisitableP {
-    func accept(_ visitor: BalanceSheetCsvVisitorP) {
+    public func accept(_ visitor: BalanceSheetCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
 
 extension BalanceSheetLine: BalanceSheetLineChartVisitableP {
-    func accept(_ visitor: BalanceSheetLineChartVisitorP) {
+    public func accept(_ visitor: BalanceSheetLineChartVisitorP) {
         visitor.buildLineChart(element: self)
     }
 }
 
 extension BalanceSheetLine: BalanceSheetStackedBarChartVisitableP {
-    func accept(_ visitor: BalanceSheetStackedBarChartVisitorP) {
+    public func accept(_ visitor: BalanceSheetStackedBarChartVisitorP) {
         visitor.buildStackedBarChart(element: self)
     }
 }
 
 extension BalanceSheetLine: BalanceSheetCategoryStackedBarChartVisitableP {
-    func accept(_ visitor: BalanceSheetCategoryStackedBarChartVisitorP) {
+    public func accept(_ visitor: BalanceSheetCategoryStackedBarChartVisitorP) {
         visitor.buildCategoryStackedBarChart(element: self)
     }
 }

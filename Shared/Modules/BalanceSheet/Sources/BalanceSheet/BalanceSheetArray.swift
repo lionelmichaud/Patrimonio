@@ -7,9 +7,9 @@ import Persistence
 
 // MARK: - BalanceSheetArray: Table des Bilans annuels
 
-typealias BalanceSheetArray = [BalanceSheetLine]
+public typealias BalanceSheetArray = [BalanceSheetLine]
 
-extension BalanceSheetArray {
+public extension BalanceSheetArray {
     /// Rend la ligne de Cash Flow pour une année donnée
     /// - Parameter year: l'année recherchée
     /// - Returns: le cash flow de l'année
@@ -49,25 +49,25 @@ extension BalanceSheetArray {
 // MARK: - Extensions for VISITORS
 
 extension BalanceSheetArray: BalanceSheetCsvVisitableP {
-     func accept(_ visitor: BalanceSheetCsvVisitorP) {
+     public func accept(_ visitor: BalanceSheetCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
 
 extension BalanceSheetArray: BalanceSheetLineChartVisitableP {
-    func accept(_ visitor: BalanceSheetLineChartVisitorP) {
+    public func accept(_ visitor: BalanceSheetLineChartVisitorP) {
         visitor.buildLineChart(element: self)
     }
 }
 
 extension BalanceSheetArray: BalanceSheetStackedBarChartVisitableP {
-    func accept(_ visitor: BalanceSheetStackedBarChartVisitorP) {
+    public func accept(_ visitor: BalanceSheetStackedBarChartVisitorP) {
         visitor.buildStackedBarChart(element: self)
     }
 }
 
 extension BalanceSheetArray: BalanceSheetCategoryStackedBarChartVisitableP {
-    func accept(_ visitor: BalanceSheetCategoryStackedBarChartVisitorP) {
+    public func accept(_ visitor: BalanceSheetCategoryStackedBarChartVisitorP) {
         visitor.buildCategoryStackedBarChart(element: self)
     }
 }

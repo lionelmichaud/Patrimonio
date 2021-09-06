@@ -280,43 +280,43 @@ struct CashFlowLine {
 // MARK: - CashFlowLine extensions for VISITORS
 
 extension CashFlowLine: CashFlowCsvVisitableP {
-    func accept(_ visitor: CashFlowCsvVisitorP) {
+    public func accept(_ visitor: CashFlowCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
 
 extension CashFlowLine: CashFlowLineChartVisitableP {
-    func accept(_ visitor: CashFlowLineChartVisitorP) {
+    public func accept(_ visitor: CashFlowLineChartVisitorP) {
         visitor.buildLineChart(element: self)
     }
 }
 
 extension CashFlowLine: CashFlowStackedBarChartVisitableP {
-    func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
+    public func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
         visitor.buildStackedBarChart(element: self)
     }
 }
 
 extension CashFlowLine: CashFlowCategoryStackedBarChartVisitableP {
-    func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
+    public func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
         visitor.buildCategoryStackedBarChart(element: self)
     }
 }
 
 extension CashFlowLine: CashFlowIrppVisitableP {
-    func accept(_ visitor: CashFlowIrppVisitorP) {
+    public func accept(_ visitor: CashFlowIrppVisitorP) {
         visitor.buildIrppChart(element: self)
     }
 }
 
 extension CashFlowLine: CashFlowIrppRateVisitableP {
-    func accept(_ visitor: CashFlowIrppRateVisitorP) {
+    public func accept(_ visitor: CashFlowIrppRateVisitorP) {
         visitor.buildIrppRateChart(element: self)
     }
 }
 
 extension CashFlowLine: CashFlowIsfVisitableP {
-    func accept(_ visitor: CashFlowIsfVisitorP) {
+    public func accept(_ visitor: CashFlowIsfVisitorP) {
         visitor.buildIsfChart(element: self)
     }
 }

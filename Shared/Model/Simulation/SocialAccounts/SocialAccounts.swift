@@ -8,20 +8,10 @@ import Succession
 import LifeExpense
 import PatrimoineModel
 import FamilyModel
+import BalanceSheet
 import SimulationLogger
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.SocialAccounts")
-
-/// Combinaisons possibles de séries sur le graphique de Bilan
-enum BalanceCombination: String, PickableEnumP {
-    case assets      = "Actif"
-    case liabilities = "Passif"
-    case both        = "Tout"
-    
-    var pickerString: String {
-        return self.rawValue
-    }
-}
 
 /// Combinaisons possibles de séries sur le graphique de CashFlow
 enum CashCombination: String, PickableEnumP {

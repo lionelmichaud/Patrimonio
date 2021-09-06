@@ -12,38 +12,38 @@ import AssetsModel
 
 // MARK: - agrégat des Actifs
 
-struct ValuedAssets: DictionaryOfNamedValueTableP {
+public struct ValuedAssets: DictionaryOfNamedValueTableP {
     
     // MARK: - Properties
     
-    var name       : String = ""
-    var perCategory: [AssetsCategory: NamedValueTable] = [:]
+    public var name       : String = ""
+    public var perCategory: [AssetsCategory: NamedValueTable] = [:]
 
-    init() { }
+    public init() { }
 }
 
 // MARK: - Extensions for VISITORS
 
 extension ValuedAssets: BalanceSheetCsvVisitableP {
-    func accept(_ visitor: BalanceSheetCsvVisitorP) {
+    public func accept(_ visitor: BalanceSheetCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
 
 extension ValuedAssets: BalanceSheetLineChartVisitableP {
-    func accept(_ visitor: BalanceSheetLineChartVisitorP) {
+    public func accept(_ visitor: BalanceSheetLineChartVisitorP) {
         visitor.buildLineChart(element: self)
     }
 }
 
 extension ValuedAssets: BalanceSheetStackedBarChartVisitableP {
-    func accept(_ visitor: BalanceSheetStackedBarChartVisitorP) {
+    public func accept(_ visitor: BalanceSheetStackedBarChartVisitorP) {
         visitor.buildStackedBarChart(element: self)
     }
 }
 
 extension ValuedAssets: BalanceSheetCategoryStackedBarChartVisitableP {
-    func accept(_ visitor: BalanceSheetCategoryStackedBarChartVisitorP) {
+    public func accept(_ visitor: BalanceSheetCategoryStackedBarChartVisitorP) {
         visitor.buildCategoryStackedBarChart(element: self)
     }
 }
