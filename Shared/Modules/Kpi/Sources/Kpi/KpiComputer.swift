@@ -14,7 +14,7 @@ import BalanceSheet
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.KpiComputer")
 
-struct KpiComputer {
+public struct KpiComputer {
     
     // MARK: - Properties
     
@@ -23,15 +23,15 @@ struct KpiComputer {
     private let model          : Model
     private let family         : Family
     private var kpiResults     = KpiResultsDictionary()
-    var currentRunKpiResults : KpiResultsDictionary {
+    public var currentRunKpiResults : KpiResultsDictionary {
         kpiResults
     }
 
     // MARK: - Initializer
     
-    internal init(simulationMode : SimulationModeEnum,
-                  model          : Model,
-                  family         : Family) {
+    public init(simulationMode : SimulationModeEnum,
+                model          : Model,
+                family         : Family) {
         self.simulationMode = simulationMode
         self.model          = model
         self.family         = family
@@ -57,7 +57,7 @@ struct KpiComputer {
     ///   - kpiDictionnary: les KPI à utiliser
     ///   - balanceArray: les bilans annuels
     ///   - currentRunKpiResults: valeur des KPIs pour le run courant
-    mutating func computeMinimumAssetKpiValue
+    public mutating func computeMinimumAssetKpiValue
     (withKPIs kpiDictionnary       : inout KpiDictionary,
      withBalanceArray balanceArray : BalanceSheetArray) {
         let minBalanceSheetLine = balanceArray.min { a, b in
@@ -78,7 +78,7 @@ struct KpiComputer {
     ///   - kpiDictionnary: les KPI à utiliser
     ///   - currentRunKpiResults: valeur des KPIs pour le run courant
     ///   - withbalanceSheetLine: bilan de l'année
-    mutating func computeKpisAtZeroCashAvailable
+    public mutating func computeKpisAtZeroCashAvailable
     (year                    : Int,
      withKPIs kpiDictionnary : inout KpiDictionary,
      withBalanceSheetLine    : BalanceSheetLine?) {
@@ -132,7 +132,7 @@ struct KpiComputer {
     ///   - currentRunKpiResults: valeur des KPIs pour le run courant
     ///   - balanceArray: les bilans annuels
     ///   - balanceSheetLineAfterTransmission: Bilan après transmissions
-    mutating func computeKpisAtDeath
+    public mutating func computeKpisAtDeath
     (year                               : Int,
      withKPIs kpiDictionnary            : inout KpiDictionary,
      withBalanceArray balanceArray      : BalanceSheetArray,

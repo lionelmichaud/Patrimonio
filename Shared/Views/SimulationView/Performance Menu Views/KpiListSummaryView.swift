@@ -13,6 +13,7 @@ import Persistence
 import LifeExpense
 import PatrimoineModel
 import FamilyModel
+import Kpi
 
 struct KpiListSummaryView: View {
     @EnvironmentObject var simulation : Simulation

@@ -15,6 +15,7 @@ import Persistence
 import LifeExpense
 import PatrimoineModel
 import FamilyModel
+import Kpi
 
 struct GridsView: View {
     @EnvironmentObject var uiState    : UIState

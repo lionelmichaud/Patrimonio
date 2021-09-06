@@ -23,6 +23,7 @@ import PatrimoineModel
 import FamilyModel
 import SimulationLogger
 import OrderedCollections
+import Kpi
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Simulation")
 

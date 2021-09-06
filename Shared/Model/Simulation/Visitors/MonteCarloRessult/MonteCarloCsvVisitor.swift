@@ -10,6 +10,7 @@ import os
 import EconomyModel
 import SocioEconomyModel
 import FamilyModel
+import Kpi
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CsvMonteCarloTableVisitor")
 

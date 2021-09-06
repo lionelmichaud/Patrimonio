@@ -77,7 +77,7 @@
       location = "group:Shared/Modules/SuccessionManager">
    </FileRef>
    <FileRef
-      location = "group:Shared/Modules/BalanceSheet">
+      location = "group:Shared/Modules/Kpi">
    </FileRef>
    <FileRef
       location = "container:Patrimonio.xcodeproj">

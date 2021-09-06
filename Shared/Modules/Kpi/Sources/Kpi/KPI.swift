@@ -12,8 +12,8 @@ import OrderedCollections
 
 // MARK: - KpiDictionary : tableau de KPI
 
-typealias KpiDictionary = OrderedDictionary<KpiEnum, KPI>
-extension KpiDictionary {
+public typealias KpiDictionary = OrderedDictionary<KpiEnum, KPI>
+public extension KpiDictionary {
     /// Remettre à zéro l'historique des KPI (Histogramme)
     mutating func reset(withMode mode : SimulationModeEnum) {
         self = mapValues { kpi in
@@ -86,32 +86,32 @@ extension KpiDictionary {
 ///       kpi.reset()
 /// ```
 ///
-struct KPI: Identifiable, Codable {
-    
+public struct KPI: Identifiable, Codable {
+
     // MARK: - Static Properties
     
     static let nbBucketsInHistograms = 50
     
     // MARK: - Properties
     
-    var id = UUID()
-    var name            : String
-    var note            : String
+    public var id = UUID()
+    public var name            : String
+    public var note            : String
     // objectif à atteindre
-    var objective       : Double
+    public var objective       : Double
     // probability d'atteindre l'objectif
-    var probaObjective  : Double
+    public var probaObjective  : Double
     // valeur déterministe
     private var valueKPI: Double?
     // histogramme des valeurs du KPI
-    var histogram: Histogram
+    public var histogram: Histogram
     
     // MARK: - Initializers
     
-    internal init(name            : String,
-                  note            : String = "",
-                  objective       : Double,
-                  withProbability : Double) {
+    public init(name            : String,
+                note            : String = "",
+                objective       : Double,
+                withProbability : Double) {
         self.name           = name
         self.note           = note
         self.objective      = objective
@@ -122,8 +122,8 @@ struct KPI: Identifiable, Codable {
     
     // MARK: - Methods
     
-    mutating func record(_ value       : Double,
-                         withMode mode: SimulationModeEnum) {
+    public mutating func record(_ value       : Double,
+                                withMode mode : SimulationModeEnum) {
         switch mode {
             case .deterministic:
                 self.valueKPI = value
@@ -134,7 +134,7 @@ struct KPI: Identifiable, Codable {
     }
     
     /// remettre à zéero l'historique du KPI (Histogramme)
-    mutating func reset(withMode mode: SimulationModeEnum) {
+    public mutating func reset(withMode mode: SimulationModeEnum) {
         switch mode {
             case .deterministic:
                 self.valueKPI = nil
@@ -156,7 +156,7 @@ struct KPI: Identifiable, Codable {
     
     /// Retourne true si la valeur du KPI a été définie au cours de la simulation (.deterministic)
     /// ou peut être calculée (.random)
-    func hasValue(for mode: SimulationModeEnum) -> Bool {
+    public func hasValue(for mode: SimulationModeEnum) -> Bool {
         value(withMode: mode) != nil
     }
     
@@ -172,7 +172,7 @@ struct KPI: Identifiable, Codable {
     ///
     ///     P(X>Objectif) = 1 - P(X<=Objectif)
     ///
-    func value(withMode mode: SimulationModeEnum) -> Double? {
+    public func value(withMode mode: SimulationModeEnum) -> Double? {
         switch mode {
             case .deterministic:
                 return valueKPI
@@ -182,7 +182,7 @@ struct KPI: Identifiable, Codable {
         }
     }
     
-    func lastValue(withMode mode: SimulationModeEnum) -> Double? {
+    public func lastValue(withMode mode: SimulationModeEnum) -> Double? {
         switch mode {
             case .deterministic:
                 return valueKPI
@@ -198,7 +198,7 @@ struct KPI: Identifiable, Codable {
     /// - Parameter probability: probabilité
     /// - Returns: x telle que P(X<x) >= probability
     /// - Warning: probability in [0, 1]
-    func percentile(for probability: Double) -> Double? {
+    public func percentile(for probability: Double) -> Double? {
         histogram.percentile(for: probability)
     }
     
@@ -206,12 +206,12 @@ struct KPI: Identifiable, Codable {
     /// - Parameter value: valeure dont il faut rechercher la probabilité
     /// - Returns: probabilité P telle que CDF(X) >= P
     /// - Warning: x in [Xmin, Xmax]
-    func probability(for value: Double) -> Double? {
+    public func probability(for value: Double) -> Double? {
         histogram.probability(for: value)
     }
 
     /// Valeur moyenne du KPI
-    func average(withMode mode: SimulationModeEnum) -> Double? {
+    public func average(withMode mode: SimulationModeEnum) -> Double? {
         switch mode {
             case .deterministic:
                 return valueKPI
@@ -222,7 +222,7 @@ struct KPI: Identifiable, Codable {
     }
     
     /// Valeur médianne du KPI
-    func median(withMode mode: SimulationModeEnum) -> Double? {
+    public func median(withMode mode: SimulationModeEnum) -> Double? {
         switch mode {
             case .deterministic:
                 return valueKPI
@@ -233,7 +233,7 @@ struct KPI: Identifiable, Codable {
     }
     
     /// Valeur min du KPI
-    func min(withMode mode: SimulationModeEnum) -> Double? {
+    public func min(withMode mode: SimulationModeEnum) -> Double? {
         switch mode {
             case .deterministic:
                 return valueKPI
@@ -244,7 +244,7 @@ struct KPI: Identifiable, Codable {
     }
     
     /// Valeur max du KPI
-    func max(withMode mode: SimulationModeEnum) -> Double? {
+    public func max(withMode mode: SimulationModeEnum) -> Double? {
         switch mode {
             case .deterministic:
                 return valueKPI
@@ -254,13 +254,13 @@ struct KPI: Identifiable, Codable {
         }
     }
     
-    func objectiveIsReached(for value: Double) -> Bool {
+    public func objectiveIsReached(for value: Double) -> Bool {
         value >= objective
     }
     
     /// Retourrne true si l'objectif de valeur est atteint lors du run unique (.deterministic)
     /// ou statistiquement sur l'ensemble des runs (.random)
-    func objectiveIsReached(withMode mode: SimulationModeEnum) -> Bool? {
+    public func objectiveIsReached(withMode mode: SimulationModeEnum) -> Bool? {
         guard let value = self.value(withMode: mode) else {
             return nil
         }
@@ -269,7 +269,7 @@ struct KPI: Identifiable, Codable {
     
     /// Retourrne true si l'objectif de valeur est atteint lors du run unique (.deterministic)
     /// ou sur le dernier run (.random)
-    func objectiveIsReachedWithLastValue(withMode mode: SimulationModeEnum) -> Bool? {
+    public func objectiveIsReachedWithLastValue(withMode mode: SimulationModeEnum) -> Bool? {
         guard let lastValue = self.lastValue(withMode: mode) else {
             return nil
         }
