@@ -73,16 +73,25 @@ extension CashFlowLine {
                 yearlyPayement = periodicInvestement.yearlyTotalPayement(atEndOf: year)
             }
             
-            adultsRevenues.perCategory[.financials]?.credits.namedValues
+            adultsRevenues
+                .perCategory[.financials]?
+                .credits
+                .namedValues
                 .append((name: name,
                          value: revenue.rounded()))
-            adultsRevenues.perCategory[.financials]?.taxablesIrpp.namedValues
+            adultsRevenues
+                .perCategory[.financials]?
+                .taxablesIrpp
+                .namedValues
                 .append((name: name,
                          value: taxablesIrpp.rounded()))
-            adultTaxes.perCategory[.socialTaxes]?.namedValues
+            adultTaxes
+                .perCategory[.socialTaxes]?
+                .namedValues
                 .append((name: name,
                          value: socialTaxes.rounded()))
-            investPayements.namedValues
+            investPayements
+                .namedValues
                 .append((name : name,
                          value: yearlyPayement.rounded()))
         }

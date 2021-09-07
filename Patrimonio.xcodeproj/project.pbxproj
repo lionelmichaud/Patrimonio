@@ -1207,13 +1207,6 @@
 			path = "Charts-Utilities";
 			sourceTree = "<group>";
 		};
-		7973C98026E56DD1008D0CE2 /* KPI */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = KPI;
-			sourceTree = "<group>";
-		};
 		798E7838264209AD0094534F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -1611,7 +1604,6 @@
 				79EF935826376D1100C1BE5B /* Simulation.swift */,
 				794570CF26E38E3700EE9C61 /* SimulationSateMachines.swift */,
 				797931A826416EA1000F8599 /* SimulationResultTable.swift */,
-				7973C98026E56DD1008D0CE2 /* KPI */,
 				791ED10C263A27E400701202 /* SocialAccounts */,
 			);
 			path = Simulation;

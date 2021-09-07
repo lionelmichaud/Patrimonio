@@ -38,13 +38,21 @@ extension CashFlowLine {
                 // prélèvements sociaux payés sur les dividendes de SCPI
                 socialTaxes = fraction / 100.0 * yearlyRevenue.socialTaxes
             }
-            adultsRevenues.perCategory[.scpis]?.credits.namedValues
+            adultsRevenues
+                .perCategory[.scpis]?
+                .credits
+                .namedValues
                 .append((name: scpiName,
                          value: revenue.rounded()))
-            adultsRevenues.perCategory[.scpis]?.taxablesIrpp.namedValues
+            adultsRevenues
+                .perCategory[.scpis]?
+                .taxablesIrpp
+                .namedValues
                 .append((name: scpiName,
                          value: taxableIrpp.rounded()))
-            adultTaxes.perCategory[.socialTaxes]?.namedValues
+            adultTaxes
+                .perCategory[.socialTaxes]?
+                .namedValues
                 .append((name: scpiName,
                          value: socialTaxes.rounded()))
             
@@ -67,7 +75,10 @@ extension CashFlowLine {
                                                  atEndOf       : year)
             }
             // pour garder le nombre de séries graphiques constant au cours du temps
-            adultsRevenues.perCategory[.scpiSale]?.credits.namedValues
+            adultsRevenues
+                .perCategory[.scpiSale]?
+                .credits
+                .namedValues
                 .append((name: scpiName,
                          value: netRevenue.rounded()))
         }

@@ -115,8 +115,10 @@ struct CashFlowLine {
     ///   - run: numéro du run en cours de calcul
     ///   - year: année
     ///   - family: la famille dont il faut faire le bilan
+    ///   - expenses: dépenses de la famille
     ///   - patrimoine: le patrimoine de la famille
     ///   - taxableIrppRevenueDelayedFromLastyear: revenus taxable à l'IRPP en report d'imposition de l'année précédente
+    ///   - model: le modèle à utiliser
     /// - Throws: Si pas assez de capital -> `CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)`
     init(run                                   : Int,
          withYear       year                   : Int,
@@ -125,6 +127,7 @@ struct CashFlowLine {
          withPatrimoine patrimoine             : Patrimoin,
          taxableIrppRevenueDelayedFromLastyear : Double,
          using model                           : Model) throws {
+
         self.year = year
         let adultsNames = family.adults.compactMap {
             $0.isAlive(atEndOf: year) ? $0.displayName : nil
@@ -195,8 +198,11 @@ struct CashFlowLine {
         adultTaxes.irpp = try! model.fiscalModel.incomeTaxes.irpp(taxableIncome : adultsRevenues.totalTaxableIrpp,
                                                                   nbAdults      : family.nbOfAdultAlive(atEndOf: year),
                                                                   nbChildren    : family.nbOfFiscalChildren(during: year))
-        adultTaxes.perCategory[.irpp]?.namedValues.append((name  : TaxeCategory.irpp.rawValue,
-                                                           value : adultTaxes.irpp.amount.rounded()))
+        adultTaxes
+            .perCategory[.irpp]?
+            .namedValues
+            .append((name  : TaxeCategory.irpp.rawValue,
+                     value : adultTaxes.irpp.amount.rounded()))
     }
     
     fileprivate mutating func computeISF(with patrimoine : Patrimoin,
@@ -204,8 +210,11 @@ struct CashFlowLine {
         let taxableAsset = patrimoine.realEstateValue(atEndOf          : year,
                                                       evaluationMethod : .ifi)
         adultTaxes.isf = try! model.fiscalModel.isf.isf(taxableAsset: taxableAsset)
-        adultTaxes.perCategory[.isf]?.namedValues.append((name  : TaxeCategory.isf.rawValue,
-                                                          value : adultTaxes.isf.amount.rounded()))
+        adultTaxes
+            .perCategory[.isf]?
+            .namedValues
+            .append((name  : TaxeCategory.isf.rawValue,
+                     value : adultTaxes.isf.amount.rounded()))
     }
     
     /// Populate remboursement d'emprunts des adultes de la famille
@@ -218,12 +227,16 @@ struct CashFlowLine {
             let name = loan.name
             if loan.isPartOfPatrimoine(of: adultsName) {
                 let yearlyPayement = -loan.yearlyPayement(year)
-                debtPayements.namedValues.append((name : name,
-                                                  value: yearlyPayement.rounded()))
+                debtPayements
+                    .namedValues
+                    .append((name : name,
+                             value: yearlyPayement.rounded()))
             } else {
                 // pour garder le nombre de séries graphiques constant au cours du temps
-                debtPayements.namedValues.append((name : name,
-                                                  value: 0))
+                debtPayements
+                    .namedValues
+                    .append((name : name,
+                             value: 0))
             }
         }
     }

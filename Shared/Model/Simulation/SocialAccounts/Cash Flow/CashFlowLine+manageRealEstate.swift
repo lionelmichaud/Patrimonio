@@ -20,7 +20,7 @@ extension CashFlowLine {
     ///   - adultsName: des adultes
     mutating func manageRealEstateRevenues(of patrimoine  : Patrimoin,
                                            for adultsName : [String]) {
-        for realEstate in patrimoine.assets.realEstates.items .sorted(by:<) {
+        for realEstate in patrimoine.assets.realEstates.items.sorted(by:<) {
             let name = realEstate.name
             
             /// Revenus
@@ -42,19 +42,29 @@ extension CashFlowLine {
                 // impôts locaux
                 yearlyLocaltaxes = fraction / 100.0 * realEstate.yearlyLocalTaxes(during: year)
             }
-            adultsRevenues.perCategory[.realEstateRents]?.credits.namedValues
+            adultsRevenues
+                .perCategory[.realEstateRents]?
+                .credits
+                .namedValues
                 .append((name: name,
                          value: revenue.rounded()))
             // part des loyers inscrit en compte courant imposable à l'IRPP - idem ci-dessus car même base
-            adultsRevenues.perCategory[.realEstateRents]?.taxablesIrpp.namedValues
+            adultsRevenues
+                .perCategory[.realEstateRents]?
+                .taxablesIrpp
+                .namedValues
                 .append((name: name,
                          value: taxableIrpp.rounded()))
             // prélèvements sociaux payés sur le loyer
-            adultTaxes.perCategory[.socialTaxes]?.namedValues
+            adultTaxes
+                .perCategory[.socialTaxes]?
+                .namedValues
                 .append((name : name,
                          value: socialTaxes.rounded()))
             // impôts locaux
-            adultTaxes.perCategory[.localTaxes]?.namedValues
+            adultTaxes
+                .perCategory[.localTaxes]?
+                .namedValues
                 .append((name: name,
                          value: yearlyLocaltaxes.rounded()))
             
@@ -77,7 +87,10 @@ extension CashFlowLine {
                                                  in            : patrimoine,
                                                  atEndOf       : year)
             }
-            adultsRevenues.perCategory[.realEstateSale]?.credits.namedValues
+            adultsRevenues
+                .perCategory[.realEstateSale]?
+                .credits
+                .namedValues
                 .append((name: name,
                          value: netRevenue.rounded()))
         }

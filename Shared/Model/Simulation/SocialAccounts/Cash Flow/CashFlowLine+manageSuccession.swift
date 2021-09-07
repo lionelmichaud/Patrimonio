@@ -38,10 +38,14 @@ extension CashFlowLine {
                                            using   : model,
                                            atEndOf : year)
 
-        legalSuccessions        += successionManager.legalSuccessions
+        legalSuccessions   += successionManager.legalSuccessions
         lifeInsSuccessions += successionManager.lifeInsSuccessions
 
-        adultTaxes.perCategory[.succession]?.namedValues   += successionManager.legalSuccessionsTaxes
-        adultTaxes.perCategory[.liSuccession]?.namedValues += successionManager.lifeInsSuccessionsTaxes
+        adultTaxes
+            .perCategory[.succession]?
+            .namedValues += successionManager.legalSuccessionsTaxes
+        adultTaxes
+            .perCategory[.liSuccession]?
+            .namedValues += successionManager.lifeInsSuccessionsTaxes
     }
 }
