@@ -60,7 +60,8 @@ public struct LegalSuccessionManager {
         }) {
             // il y a un conjoint survivant
             // % d'héritage résultants de l'option fiscale retenue par le conjoint pour chacun des héritiers
-            inheritanceShares = (conjointSurvivant as! Adult)
+            inheritanceShares =
+                (conjointSurvivant as! Adult)
                 .fiscalOption
                 .sharedValues(nbChildren        : family.nbOfChildrenAlive(atEndOf: year),
                               spouseAge         : conjointSurvivant.age(atEndOf: year),
@@ -81,19 +82,18 @@ public struct LegalSuccessionManager {
                                             brut       : brut,
                                             net        : brut - tax,
                                             tax        : tax))
+        } else if family.nbOfChildrenAlive(atEndOf: year) > 0 {
+            // pas de conjoint survivant, les enfants survivants se partagent l'héritage
+            inheritanceShares.forSpouse = 0
+            inheritanceShares.forChild  = InheritanceDonation.childShare(nbChildren: family.nbOfChildrenAlive(atEndOf: year))
+            
         } else {
-            // pas de conjoint survivant, les enfants se partagent l'héritage
-            if family.nbOfChildrenAlive(atEndOf: year) > 0 {
-                inheritanceShares.forSpouse = 0
-                inheritanceShares.forChild  = InheritanceDonation.childShare(nbChildren: family.nbOfChildrenAlive(atEndOf: year))
-            } else {
-                // pas d'enfant survivant
-                return Succession(kind         : .legal,
-                                  yearOfDeath  : year,
-                                  decedentName : decedent.displayName,
-                                  taxableValue : totalTaxableInheritance,
-                                  inheritances : [ ])
-            }
+            // pas de conjoint survivant, pas d'enfant survivant
+            return Succession(kind         : .legal,
+                              yearOfDeath  : year,
+                              decedentName : decedent.displayName,
+                              taxableValue : totalTaxableInheritance,
+                              inheritances : [])
         }
         
         if family.nbOfAdults > 0 {

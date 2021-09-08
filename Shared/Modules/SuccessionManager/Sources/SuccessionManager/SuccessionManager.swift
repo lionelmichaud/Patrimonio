@@ -82,11 +82,11 @@ public struct SuccessionManager {
     
     /// Gérer les succession de l'année.
     ///
-    /// Identifier toutes les successions de l'année.
+    /// 1 - Identifier toutes les successions de l'année.
     ///
-    /// Calculer les droits de succession des personnes décédées dans l'année.
+    /// 2 - Calculer les successions/transmissions et les droits associés des personnes décédées dans l'année.
     ///
-    /// Transférer les biens des personnes décédées dans l'année vers ses héritiers.
+    /// 3 - Transférer les biens des personnes décédées dans l'année vers ses héritiers.
     ///
     /// - Parameters:
     ///   - run: numéro du run en cours de calcul
@@ -97,7 +97,6 @@ public struct SuccessionManager {
                                           with patrimoine : Patrimoin,
                                           using model     : Model,
                                           atEndOf year    : Int) {
-        // FIXME: - en fait il faudrait traiter les sucessions en séquences: calcul taxe => transmission puis calcul tax => transmission
         // identification des personnes décédées dans l'année
         let decedents = family.deceasedAdults(during: year)
         
@@ -106,7 +105,7 @@ public struct SuccessionManager {
             SimulationLogger.shared.log(run      : run,
                                         logTopic : .lifeEvent,
                                         message  : "Décès de \(decedent.displayName) en \(year)")
-            // calculer les droits de successions légales
+            // calculer les successions et les droits de successions légales
             let legalSuccession =
                 legalSuccessionManager.legalSuccession(in      : patrimoine,
                                                        of      : decedent,
@@ -114,7 +113,7 @@ public struct SuccessionManager {
                                                        using   : model)
             legalSuccessions.append(legalSuccession)
             
-            // calculer les droits de transmission assurances vies
+            // calculer les transmissions et les droits de transmission assurances vies
             let lifeInsSuccession =
                 lifeInsuranceSuccessionManager.lifeInsuraceSuccession(in      : patrimoine,
                                                                       of      : decedent,
