@@ -10,7 +10,9 @@ import os
 import Statistics
 import ModelEnvironment
 import FamilyModel
+import PersonModel
 import BalanceSheet
+import Succession
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.KpiComputer")
 
@@ -18,11 +20,12 @@ public struct KpiComputer {
     
     // MARK: - Properties
     
-    /// simulationMode: mode de simluation en cours
-    private let simulationMode : SimulationModeEnum
-    private let model          : Model
-    private let family         : Family
-    private var kpiResults     = KpiResultsDictionary()
+    /// SimulationMode: mode de simluation en cours
+    private let simulationMode      : SimulationModeEnum
+    private let model               : Model
+    private let family              : Family
+    private var kpiResults          = KpiResultsDictionary()
+    /// Résultas du run en cours
     public var currentRunKpiResults : KpiResultsDictionary {
         kpiResults
     }
@@ -39,15 +42,46 @@ public struct KpiComputer {
     
     // MARK: - Methods
     
+    /// Enregistrer la valeur courante du KPI dans son historique du dictionnaire `kpiDictionnary`de KPIs
+    /// et dans les résultas du run en cours `kpiResults`
+    /// - Parameters:
+    ///   - kpiEnum: le KPI
+    ///   - value: sa valeur
+    ///   - kpiDictionnary: dictionnaire des KPIs contenant les historiques de chaque KPI
     fileprivate mutating func setKpiValue
     (kpiEnum        : KpiEnum,
      value          : Double,
-     kpiDictionnary : inout KpiDictionary,
-     simulationMode : SimulationModeEnum) {
+     kpiDictionnary : inout KpiDictionary) {
+        // Enregistrer la valeur courante du KPI dans son historique
         kpiDictionnary[kpiEnum]!.record(value, withMode: simulationMode)
+        // Enregistrer la valeur courante du KPI dans les résultas du run en cours
         kpiResults[kpiEnum] =
             KpiResult(value              : value,
                       objectiveIsReached : kpiDictionnary[kpiEnum]!.objectiveIsReached(for: value))
+    }
+    
+    fileprivate func successionsChildrenTaxes(for allSuccessions: [Succession]) -> Double {
+        var taxes = 0.0
+        for succession in allSuccessions {
+            for inheritance in succession.inheritances {
+                if (family.member(withName: inheritance.personName) as? Child) != nil {
+                    taxes += inheritance.tax
+                }
+            }
+        }
+        return taxes
+    }
+    
+    func netChildrenSuccession(for allSuccessions: [Succession]) -> Double {
+        var nets = 0.0
+        for succession in allSuccessions {
+            for inheritance in succession.inheritances {
+                if (family.member(withName: inheritance.personName) as? Child) != nil {
+                    nets += inheritance.net
+                }
+            }
+        }
+        return nets
     }
     
     /// Mémorise le niveau le + bas atteint par les actifs financiers NETS (hors immobilier physique) des ADULTS au cours du run
@@ -66,8 +100,7 @@ public struct KpiComputer {
         // KPI 3: mémoriser le minimum d'actif financier net des adultes au cours du temps
         setKpiValue(kpiEnum        : .minimumAdultsAssetExcludinRealEstates,
                     value          : minBalanceSheetLine!.netAdultsFinancialAssets,
-                    kpiDictionnary : &kpiDictionnary,
-                    simulationMode : simulationMode)
+                    kpiDictionnary : &kpiDictionnary)
     }
     
     /// Gérer les KPI quand il n'y a plus de Cash => on arrête la simulation et on calcule la valeur des KPIs
@@ -100,8 +133,7 @@ public struct KpiComputer {
                     // un des deux adulte est décédé cette année
                     setKpiValue(kpiEnum        : .assetAt1stDeath,
                                 value          : netFinancialAssets,
-                                kpiDictionnary : &kpiDictionnary,
-                                simulationMode : simulationMode)
+                                kpiDictionnary : &kpiDictionnary)
                 }
                 
             case 0:
@@ -119,8 +151,7 @@ public struct KpiComputer {
         // TODO: - il faudrait définir un KPI spécifique "plus assez de revenu pour survivre" au lieu de faire comme s'il ne restait plus d'actif net
         setKpiValue(kpiEnum        : .minimumAdultsAssetExcludinRealEstates,
                     value          : 0,
-                    kpiDictionnary : &kpiDictionnary,
-                    simulationMode : simulationMode)
+                    kpiDictionnary : &kpiDictionnary)
     }
     
     /// Gérer les KPI n°1, 2, 3 au décès de l'un ou des 2 conjoints
@@ -136,7 +167,8 @@ public struct KpiComputer {
     (year                               : Int,
      withKPIs kpiDictionnary            : inout KpiDictionary,
      withBalanceArray balanceArray      : BalanceSheetArray,
-     balanceSheetLineAfterTransmission  : BalanceSheetLine) {
+     balanceSheetLineAfterTransmission  : BalanceSheetLine,
+     allSuccessions                     : [Succession]) {
         // Dernier Actif Net (après transmission en cas de décès dans l'année) (hors immobilier physique)
         let netFinancialAssetsAfterTransmission = balanceSheetLineAfterTransmission.netAdultsFinancialAssets
         
@@ -144,34 +176,52 @@ public struct KpiComputer {
         let netFinancialAssetsBeforeTransmission = balanceArray.last?.netAdultsFinancialAssets ?? netFinancialAssetsAfterTransmission
         
         switch family.nbOfAdultAlive(atEndOf: year) {
-            case 1:
+            case 1: // il reste un conjoint survivant
                 /// KPI n°1: décès du premier conjoint et mémoriser la valeur du KPI
                 // mémoriser le montant de l'Actif Net (hors immobilier physique) du conjoint survivant après transmission
                 setKpiValue(kpiEnum        : .assetAt1stDeath,
                             value          : netFinancialAssetsAfterTransmission,
-                            kpiDictionnary : &kpiDictionnary,
-                            simulationMode : simulationMode)
+                            kpiDictionnary : &kpiDictionnary)
+                /// KPI n°5: décès du premier conjoint et mémoriser la valeur du KPI
+                // mémoriser le montant des droits de succession des enfants au 1er décès
+                let taxes = successionsChildrenTaxes(for: allSuccessions)
+                setKpiValue(kpiEnum        : .successionTaxesAt1stDeath,
+                            value          : taxes,
+                            kpiDictionnary : &kpiDictionnary)
                 
-            case 0:
+            case 0: // il ne reste plus de conjoint survivant
                 if family.nbOfAdultAlive(atEndOf: year-1) == 2 {
                     /// KPI n°1: décès du premier conjoint et mémoriser la valeur du KPI
                     // mémoriser le montant de l'Actif Net (hors immobilier physique) des parents avant transmission
                     setKpiValue(kpiEnum        : .assetAt1stDeath,
                                 value          : netFinancialAssetsBeforeTransmission,
-                                kpiDictionnary : &kpiDictionnary,
-                                simulationMode : simulationMode)
+                                kpiDictionnary : &kpiDictionnary)
                 }
                 /// KPI n°2: décès du second conjoint et mémoriser la valeur du KPI
                 // mémoriser le montant de l'Actif Net (hors immobilier physique) des parents avant transmission
                 setKpiValue(kpiEnum        : .assetAt2ndtDeath,
                             value          : netFinancialAssetsBeforeTransmission,
-                            kpiDictionnary : &kpiDictionnary,
-                            simulationMode : simulationMode)
+                            kpiDictionnary : &kpiDictionnary)
+                
                 /// KPI n°3 : on est arrivé à la fin de la simulation
                 // rechercher le minimum d'actif financier au cours du temps (hors immobilier physique)
                 computeMinimumAssetKpiValue(withKPIs             : &kpiDictionnary,
                                             withBalanceArray     : balanceArray)
                 
+                /// KPI n°4: décès du second conjoint et mémoriser la valeur du KPI
+                // mémoriser le montant de l'Héritage total net des enfants
+                let heritage = netChildrenSuccession(for: allSuccessions)
+                setKpiValue(kpiEnum        : .netSuccessionAt2ndDeath,
+                            value          : heritage,
+                            kpiDictionnary : &kpiDictionnary)
+
+                /// KPI n°6: décès du second conjoint et mémoriser la valeur du KPI
+                // mémoriser le montant des droits de succession des enfants au dernier décès
+                let taxes = successionsChildrenTaxes(for: allSuccessions)
+                setKpiValue(kpiEnum        : .successionTaxesAt2ndDeath,
+                            value          : taxes,
+                            kpiDictionnary : &kpiDictionnary)
+
             default:
                 // ne devrait jamais se produire
                 let nbOfAdultAlive = family.nbOfAdultAlive(atEndOf: year)
@@ -179,5 +229,4 @@ public struct KpiComputer {
                 fatalError("Nombre d'adulte survivants inattendu: \(nbOfAdultAlive) dans  \(Self.self)")
         }
     }
-    
 }

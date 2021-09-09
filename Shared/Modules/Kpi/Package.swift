@@ -19,7 +19,9 @@ let package = Package(
         .package(path: "../Statistics"),
         .package(path: "../ModelEnvironment"),
         .package(path: "../FamilyModel"),
+        .package(path: "../PersonModel"),
         .package(path: "../BalanceSheet"),
+        .package(path: "../Succession"),
         .package(path: "../Persistence")
     ],
     targets: [
@@ -32,7 +34,9 @@ let package = Package(
                 "Statistics",
                 "ModelEnvironment",
                 "FamilyModel",
+                "PersonModel",
                 "BalanceSheet",
+                "Succession",
                 "Persistence"
             ]
         ),

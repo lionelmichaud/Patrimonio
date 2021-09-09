@@ -152,7 +152,7 @@ struct SuccessionsView_Previews: PreviewProvider {
     static var previews: some View {
         let simulation = initializedSimulation()
         
-        return SuccessionsView(title       : "Successions",
+        return SuccessionsView(title       : "Successions Légales",
                                successions : simulation.occuredLegalSuccessions)
             .preferredColorScheme(.dark)
             .environmentObject(uiState)

@@ -125,12 +125,13 @@ struct SocialAccounts {
             
             if family.nbOfAdultAlive(atEndOf: year) < family.nbOfAdultAlive(atEndOf: year-1) {
                 // décès d'un adulte en cours d'année
-                // gérer les KPI n°1, 2, 3 au décès de l'un ou des 2 conjoints
+                // gérer les KPI n°1, 2, 3, 4, 5 au décès de l'un ou des 2 conjoints
                 // attention: à ce stade les transmissions de succession ont déjà été réalisées
                 kpiComputer.computeKpisAtDeath(year                               : year,
                                                withKPIs                           : &kpis,
                                                withBalanceArray                   : balanceArray,
-                                               balanceSheetLineAfterTransmission  : newBalanceSheetLine)
+                                               balanceSheetLineAfterTransmission  : newBalanceSheetLine,
+                                               allSuccessions                     : legalSuccessions + lifeInsSuccessions)
             }
             
             balanceArray.append(newBalanceSheetLine)
