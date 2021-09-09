@@ -96,29 +96,53 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été séelctionné
     init() {
         /// création et initialisation des KPI
-        var kpi: KpiEnum = .minimumAdultsAssetExcludinRealEstates
-        let kpiMinimumAsset =
-            KPI(name            : kpi.displayString,
-                note            : kpi.note,
+        var kpiType: KpiEnum = .minimumAdultsAssetExcludinRealEstates
+        var kpi =
+            KPI(name            : kpiType.displayString,
+                note            : kpiType.note,
                 objective       : 200_000.0,
                 withProbability : 0.98)
-        kpis[kpi] = kpiMinimumAsset
+        kpis[kpiType] = kpi
 
-        kpi = .assetAt1stDeath
-        let kpiAssetsAtFirstDeath =
-            KPI(name            : kpi.displayString,
-                note            : kpi.note,
+        kpiType = .assetAt1stDeath
+        kpi =
+            KPI(name            : kpiType.displayString,
+                note            : kpiType.note,
                 objective       : 200_000.0,
                 withProbability : 0.98)
-        kpis[kpi] = kpiAssetsAtFirstDeath
+        kpis[kpiType] = kpi
 
-        kpi = .assetAt2ndtDeath
-        let kpiAssetsAtLastDeath =
-            KPI(name            : kpi.displayString,
-                note            : kpi.note,
+        kpiType = .assetAt2ndtDeath
+        kpi =
+            KPI(name            : kpiType.displayString,
+                note            : kpiType.note,
                 objective       : 200_000.0,
                 withProbability : 0.98)
-        kpis[kpi] = kpiAssetsAtLastDeath
+        kpis[kpiType] = kpi
+
+        kpiType = .netSuccessionAt2ndDeath
+        kpi =
+            KPI(name            : kpiType.displayString,
+                note            : kpiType.note,
+                objective       : 200_000.0,
+                withProbability : 0.98)
+        kpis[kpiType] = kpi
+
+        kpiType = .successionTaxesAt1stDeath
+        kpi =
+            KPI(name            : kpiType.displayString,
+                note            : kpiType.note,
+                objective       : 0.0,
+                withProbability : 0.98)
+        kpis[kpiType] = kpi
+
+        kpiType = .successionTaxesAt2ndDeath
+        kpi =
+            KPI(name            : kpiType.displayString,
+                note            : kpiType.note,
+                objective       : 0.0,
+                withProbability : 0.98)
+        kpis[kpiType] = kpi
     }
 
     // MARK: - Methods

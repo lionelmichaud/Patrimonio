@@ -98,8 +98,8 @@ public struct LegalSuccessionManager {
         
         if family.nbOfAdults > 0 {
             // Calcul de la part revenant à chaque enfant compte tenu de l'option fiscale du conjoint
-            for member in family.members.items {
-                if let child = member as? Child {
+            for member in family.members.items where member is Child {
+                if member.isAlive(atEndOf: year) {
                     // un enfant
                     // calculer la part d'héritage d'un enfant
                     let share = inheritanceShares.forChild
@@ -110,7 +110,7 @@ public struct LegalSuccessionManager {
                     
                     //                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded()) (\(share.rounded())%)")
                     //                    print("    Taxe = \(inheritance.taxe.rounded())")
-                    inheritances.append(Inheritance(personName : child.displayName,
+                    inheritances.append(Inheritance(personName : member.displayName,
                                                     percent    : share,
                                                     brut       : brut,
                                                     net        : inheritance.netAmount,

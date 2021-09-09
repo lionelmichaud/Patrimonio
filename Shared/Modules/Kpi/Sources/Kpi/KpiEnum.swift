@@ -15,7 +15,10 @@ public enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
     case minimumAdultsAssetExcludinRealEstates = 0
     case assetAt1stDeath
     case assetAt2ndtDeath
-    
+    case netSuccessionAt2ndDeath
+    case successionTaxesAt1stDeath
+    case successionTaxesAt2ndDeath
+
     // properties
     
     var id: Int {
@@ -30,6 +33,12 @@ public enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
                 return "Actif au Premier Décès"
             case .assetAt2ndtDeath:
                 return "Actif au Dernier Décès"
+            case .netSuccessionAt2ndDeath: // KPI #4
+                return "Héritage net des enfants"
+            case .successionTaxesAt1stDeath:  // KPI #5
+                return "Droits suc. enfants 1er décès"
+            case .successionTaxesAt2ndDeath:  // KPI #6
+                return "Droits suc. enfants total"
         }
     }
     
@@ -52,6 +61,18 @@ public enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
                     Valeur atteinte au 2nd décès pour l'ACTIF NET (hors immobilier physique) :
                      - Biens pris en compte: <<OwnershipNature>>
                      - Méthode d'évaluation: <<AssetEvaluationMethod>>
+                    """
+            case .netSuccessionAt2ndDeath:
+                return """
+                    Héritage total net reçu par les enfants au dernier décès des parents.
+                    """
+            case .successionTaxesAt1stDeath:
+                return """
+                    Droits de succession dûs par les enfants au premier décès d'un parent.
+                    """
+            case .successionTaxesAt2ndDeath:
+                return """
+                    Droits de succession dûs par les enfants au dernier décès des parents.
                     """
         }
     }
