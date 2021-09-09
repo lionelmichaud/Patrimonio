@@ -171,20 +171,11 @@ struct RealEstateDetailedView: View {
         //.navigationBarTitleDisplayModeInline()
         .toolbar {
             ToolbarItem(placement: .automatic) {
-                Button(
-                    action : duplicate,
-                    label  : {
-                        HStack {
-                            Image(systemName: "doc.on.doc.fill")
-                                .imageScale(.medium)
-                            Text("Dupliquer")
-                        }
-                    })
-                    .capsuleButtonStyle()
+                DuplicateButton { duplicate() }
                     .disabled((index == nil) || changeOccured)
             }
             ToolbarItem(placement: .automatic) {
-                SaveToFolderButton(action : applyChanges)
+                ApplyChangesButton(action : applyChanges)
                     .disabled(!changeOccured)
             }
         }

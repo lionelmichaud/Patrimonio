@@ -101,20 +101,11 @@ struct ExpenseDetailedView: View {
         .navigationTitle(Text("Poste: " + category.displayString))
         .toolbar {
             ToolbarItem(placement: .automatic) {
-                Button(
-                    action : duplicate,
-                    label  : {
-                        HStack {
-                            Image(systemName: "doc.on.doc.fill")
-                                .imageScale(.medium)
-                            Text("Dupliquer")
-                        }
-                    })
-                    .capsuleButtonStyle()
+                DuplicateButton { duplicate() }
                     .disabled((index == nil) || changeOccured)
             }
             ToolbarItem(placement: .automatic) {
-                SaveToFolderButton(action : applyChanges)
+                ApplyChangesButton(action : applyChanges)
                     .disabled(!changeOccured)
             }
         }
@@ -196,12 +187,12 @@ struct ExpenseDetailedView: View {
                                        dismissButton : .default(Text("OK")))
             return
         }
-
+        
         // tous les tests sont OK
         if let index = index {
             // modifier un éléménet existant
             expenses.perCategory[self.category]?.update(with : expenseVM.lifeExpense,
-                                                               at   : index)
+                                                        at   : index)
         } else {
             // créer un nouvel élément
             expenses.perCategory[self.category]?.add(expenseVM.lifeExpense)

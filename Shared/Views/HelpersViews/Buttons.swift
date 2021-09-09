@@ -28,7 +28,7 @@ struct SaveToDiskButton: View {
     }
 }
 
-struct SaveToFolderButton: View {
+struct ApplyChangesButton: View {
     let action: () -> Void
     
     var body: some View {
@@ -38,7 +38,28 @@ struct SaveToFolderButton: View {
                 HStack {
                     Image(systemName: "folder.fill")
                         .imageScale(.large)
-                    Text("Sauver")
+                    Text("Appliquer")
+                }
+            })
+            .capsuleButtonStyle()
+    }
+    
+    init(action: @escaping () -> Void) {
+        self.action = action
+    }
+}
+
+struct DuplicateButton: View {
+    let action: () -> Void
+    
+    var body: some View {
+        Button(
+            action : action,
+            label  : {
+                HStack {
+                    Image(systemName: "doc.on.doc.fill")
+                        .imageScale(.medium)
+                    Text("Dupliquer")
                 }
             })
             .capsuleButtonStyle()
@@ -51,6 +72,13 @@ struct SaveToFolderButton: View {
 
 struct Buttons_Previews: PreviewProvider {
     static var previews: some View {
-        SaveToDiskButton(action: { print("saved") })
+        Group {
+            SaveToDiskButton(action: { print("saved") })
+                .previewLayout(.fixed(width: 200, height: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/))
+            ApplyChangesButton(action: { print("modified") })
+                .previewLayout(.fixed(width: 200, height: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/))
+            DuplicateButton(action: { print("duplicated") })
+                .previewLayout(.fixed(width: 200, height: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/))
+        }
     }
 }

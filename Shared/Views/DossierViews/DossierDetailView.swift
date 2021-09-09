@@ -28,16 +28,31 @@ struct DossierDetailView: View {
     
     var activeSection: some View {
         Section {
-            Label(
-                title: {
-                    Text("Dossier en cours d'utilisation")
-                        .font(.headline)
-                },
-                icon : {
-                    Image(systemName: "square.and.arrow.down")
-                        .foregroundColor(.red)
-                        .font(.title)
-                })
+            if savable {
+                Label(
+                    title: {
+                        Text("Dossier en cours d'utilisation - Modifications non sauvegardées")
+                            .foregroundColor(.red)
+                            .font(.headline)
+                    },
+                    icon : {
+                        Image(systemName: "square.and.arrow.down")
+                            .foregroundColor(.red)
+                            .font(.title)
+                    })
+            } else {
+                Label(
+                    title: {
+                        Text("Dossier en cours d'utilisation")
+                            .foregroundColor(.green)
+                            .font(.headline)
+                    },
+                    icon : {
+                        Image(systemName: "square.and.arrow.down")
+                            .foregroundColor(.green)
+                            .font(.title)
+                    })
+            }
         }
     }
     
@@ -70,12 +85,12 @@ struct DossierDetailView: View {
                                 Image(systemName: "arrowshape.turn.up.backward")
                                     .imageScale(.large)
                                 Text("Revenir")
-
+                                
                             } else {
                                 Image(systemName: "square.and.arrow.down")
                                     .imageScale(.large)
                                 Text("Charger")
-
+                                
                             }
                         }
                     })
@@ -89,16 +104,7 @@ struct DossierDetailView: View {
             }
             /// Bouton: Dupliquer
             ToolbarItem(placement: .automatic) {
-                Button(
-                    action : duplicate,
-                    label  : {
-                        HStack {
-                            Image(systemName: "doc.on.doc.fill")
-                                .imageScale(.medium)
-                            Text("Dupliquer")
-                        }
-                    })
-                    .capsuleButtonStyle()
+                DuplicateButton { duplicate() }
             }
             /// Bouton: Modifier
             ToolbarItem(placement: .automatic) {
@@ -118,9 +124,9 @@ struct DossierDetailView: View {
                     .capsuleButtonStyle()
                     .disabled(!dossier.isActive)
             }
-       }
+        }
     }
-
+    
     /// True si le dossier est inactif ou s'il est actif et à été modifié
     private var activable: Bool {
         !dossier.isActive || savable
@@ -155,7 +161,7 @@ struct DossierDetailView: View {
             load()
         }
     }
-
+    
     // MARK: - Methods
     
     /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
@@ -175,7 +181,7 @@ struct DossierDetailView: View {
                                        dismissButton : .default(Text("OK")))
         }
     }
-
+    
     /// Rendre le Dossier sélectionné actif et charger ses données dans le modèle
     private func load() {
         guard let dossierIndex = dataStore.dossiers.firstIndex(of: dossier) else {
@@ -183,7 +189,7 @@ struct DossierDetailView: View {
                                        dismissButton : .default(Text("OK")))
             return
         }
-
+        
         /// charger les fichiers JSON
         do {
             try dossier.loadDossierContentAsJSON { folder in
@@ -195,7 +201,7 @@ struct DossierDetailView: View {
                 Adult.setAdultRelativesProvider(family)
                 // injection de family dans la propriété statique de Patrimoin
                 Patrimoin.familyProvider = family
-
+                
                 try model.loadFromJSON(fromFolder: folder)
                 try patrimoine.loadFromJSON(fromFolder: folder)
                 try expenses.loadFromJSON(fromFolder: folder)
@@ -217,7 +223,7 @@ struct DossierDetailView: View {
         simulation.notifyComputationInputsModification()
         uiState.resetSimulationView()
     }
-
+    
     /// Dupliquer le Dossier sélectionné
     private func duplicate() {
         do {
@@ -236,7 +242,7 @@ struct DossierDetailView_Previews: PreviewProvider {
     static var family     = Family()
     static var patrimoine = Patrimoin()
     static var simulation = Simulation()
-
+    
     static let dossier = Dossier()
         .namedAs("Nom du dossier")
         .annotatedBy("note ligne 1\nligne 2")
@@ -247,13 +253,13 @@ struct DossierDetailView_Previews: PreviewProvider {
         NavigationView {
             List {
                 NavigationLink(destination : DossierDetailView(dossier: dossier)
-                    .previewLayout(.sizeThatFits)
-                    .environmentObject(dataStore)
-                    .environmentObject(model)
-                    .environmentObject(uiState)
-                    .environmentObject(family)
-                    .environmentObject(patrimoine)
-                    .environmentObject(simulation)
+                                .previewLayout(.sizeThatFits)
+                                .environmentObject(dataStore)
+                                .environmentObject(model)
+                                .environmentObject(uiState)
+                                .environmentObject(family)
+                                .environmentObject(patrimoine)
+                                .environmentObject(simulation)
                 ) {
                     Text("DossierDetailView")
                 }

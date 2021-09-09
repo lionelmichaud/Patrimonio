@@ -43,7 +43,7 @@ struct ModelDeterministicView: View {
                 .navigationTitle("Modèle Déterministe")
                 .toolbar {
                     ToolbarItem(placement: .automatic) {
-                        SaveToFolderButton(action : applyChanges)
+                        ApplyChangesButton(action : applyChanges)
                             .disabled(!changeOccured)
                     }
                 }
@@ -74,7 +74,7 @@ struct ModelDeterministicView: View {
         // mettre à jour le modèle avec les nouvelles valeurs
         viewModel.update(model)
 
-        // mettre à jour les membres de la famille existants
+        // mettre à jour les membres de la famille existants avec les nouvelles valeurs
         viewModel.update(family)
     }
 }

@@ -7,9 +7,17 @@
 
 import SwiftUI
 import Persistence
+import ModelEnvironment
+import LifeExpense
+import PatrimoineModel
+import FamilyModel
 
 struct DossierBrowserView: View {
     @EnvironmentObject var dataStore : Store
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var expenses   : LifeExpensesDic
+    @EnvironmentObject private var patrimoine : Patrimoin
     @Binding var showingSheet        : Bool
     @State private var alertItem     : AlertItem?
 
@@ -34,7 +42,7 @@ struct DossierBrowserView: View {
                     Label(title: { DossierRowView(dossier: dossier) },
                           icon : {
                             Image(systemName: "folder.fill.badge.person.crop")
-                                .if(dossier.isActive) { $0.accentColor(.red) }
+                                .if(dossier.isActive) { $0.accentColor(savable(dossier) ? .red : .green) }
                     })
                 }
                 .isDetailLink(true)
@@ -69,6 +77,13 @@ struct DossierBrowserView: View {
     func moveDossier(from indexes: IndexSet, to destination: Int) {
         dataStore.dossiers.move(fromOffsets: indexes, toOffset: destination)
     }
+
+    /// True si le dossier est actif et a été modifié
+    func savable(_ dossier: Dossier) -> Bool {
+        dossier.isActive &&
+            (family.isModified || expenses.isModified || patrimoine.isModified || model.isModified)
+    }
+    
 }
 
 struct DossierRowView : View {
