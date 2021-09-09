@@ -36,9 +36,9 @@ public enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
             case .netSuccessionAt2ndDeath: // KPI #4
                 return "Héritage net des enfants"
             case .successionTaxesAt1stDeath:  // KPI #5
-                return "Droits succession enfants 1er décès"
+                return "Droits suc. enfants 1er décès"
             case .successionTaxesAt2ndDeath:  // KPI #6
-                return "Droits succession enfants total"
+                return "Droits suc. enfants total"
         }
     }
     
