@@ -61,8 +61,7 @@
             ],
            "pc" : null
         },
-        "defaultValue" : 82,
-        "randomValue"  : 0.0
+        "defaultValue" : 82
     },
     
     "womenLifeExpectation":
@@ -128,8 +127,7 @@
             ],
             "pc" : null
         },
-        "defaultValue" : 89,
-        "randomValue"  : 0.0
+        "defaultValue" : 89
     },
     
     "nbOfYearsOfdependency" :
@@ -151,11 +149,9 @@
                 { "x": 6, "y": 0.10 },
                 { "x": 7, "y": 0.25 },
                 { "x": 8, "y": 0.35 }
-            ],
-            "pc" : null
+            ]
         },
-        "defaultValue" : 6.0,
-        "randomValue"  : 0.0
+        "defaultValue" : 6.0
     }
 }
 

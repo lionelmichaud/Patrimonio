@@ -15,6 +15,10 @@ public struct ModelRandomizer<R: RandomGeneratorP>: Codable, VersionableP
 where R: Codable,
       R.Number == Double {
 
+    enum CodingKeys: CodingKey {
+        case version, name, rndGenerator, defaultValue
+    }
+    
     // MARK: - Properties
 
     public var version       : Version

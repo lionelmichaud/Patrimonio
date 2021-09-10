@@ -46,6 +46,10 @@ public enum RandomGeneratorEnum: String, PickableEnumP {
 public struct BetaRandomGenerator: RandomGeneratorP, DistributionP, Codable {
     public typealias Number = Double
 
+    enum CodingKeys: CodingKey {
+        case minX, maxX, alpha, beta
+    }
+    
     // MARK: - Type Properties
     
     public static var cdfCurveSamplesNumber : Int = 1000
@@ -108,8 +112,8 @@ public struct UniformRandomGenerator: RandomGeneratorP, Codable {
     
     // MARK: - Properties
     
-    var minX     : Number? // valeur minimale de X
-    var maxX     : Number? // valeur minimale de X
+    var minX : Number? // valeur minimale de X
+    var maxX : Number? // valeur minimale de X
 
     // MARK: - Initializer
 
@@ -145,14 +149,18 @@ public struct DiscreteRandomGenerator: RandomGeneratorP, Codable {
     public typealias Number = Double
     public typealias Curve  = [PointReal<Number>]
 
+    enum CodingKeys: CodingKey {
+        case pdf
+    }
+    
     // MARK: - Properties
     
-    public var pdf  : [Point]
-    var cdf  : [Double]? // probabilité cumulée d'occurence (dernier = 100%)
-    var minX : Number? { // valeur minimale de X
+    public var pdf : [Point]
+    var cdf        : [Double]? // probabilité cumulée d'occurence (dernier = 100%)
+    var minX       : Number? { // valeur minimale de X
         pdf.min(by: { return ($0.x < $1.x) })?.x
     }
-    var maxX         : Number? { // valeur minimale de X
+    var maxX       : Number? { // valeur minimale de X
         pdf.max(by: { return ($0.x > $1.x) })?.x
     }
     public var cdfCurve : Curve? { // courbe CDF mémorisée au premier appel de initialize()
