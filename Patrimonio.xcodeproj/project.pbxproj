@@ -90,6 +90,12 @@
 		7920DC94262C721400536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC93262C721400536B03 /* AppFoundation */; };
 		792874F426E130A20011913B /* FamilyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 792874F326E130A20011913B /* FamilyModel */; };
 		792874FA26E130BD0011913B /* FamilyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 792874F926E130BD0011913B /* FamilyModel */; };
+		792B29ED26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792B29EC26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift */; };
+		792B29EE26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792B29EC26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift */; };
+		792B29F826EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792B29F726EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift */; };
+		792B29F926EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792B29F726EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift */; };
+		792B29FF26EBC455005AFE29 /* ModelDeterministicRetirementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792B29FE26EBC455005AFE29 /* ModelDeterministicRetirementView.swift */; };
+		792B2A0026EBC455005AFE29 /* ModelDeterministicRetirementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792B29FE26EBC455005AFE29 /* ModelDeterministicRetirementView.swift */; };
 		7935FFD726541AAB00AC1715 /* DossiersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935FFD626541AAB00AC1715 /* DossiersView.swift */; };
 		7935FFD92654204200AC1715 /* DossierSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935FFD82654204200AC1715 /* DossierSummaryView.swift */; };
 		7935FFDB265420FF00AC1715 /* DossierBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */; };
@@ -389,6 +395,8 @@
 		79B2DB81264CA51800EFCAF9 /* MonteCarlo.csv in Resources */ = {isa = PBXBuildFile; fileRef = 79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */; };
 		79B2FE2C262C7DF900EBFF56 /* RetirementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2FE2B262C7DF900EBFF56 /* RetirementModel */; };
 		79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2FE2D262C7E0000EBFF56 /* RetirementModel */; };
+		79B5E8CA26EBBDB400C5EB21 /* ModelDeterministicHumanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B5E8C926EBBDB400C5EB21 /* ModelDeterministicHumanView.swift */; };
+		79B5E8CB26EBBDB400C5EB21 /* ModelDeterministicHumanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B5E8C926EBBDB400C5EB21 /* ModelDeterministicHumanView.swift */; };
 		79BBE8E62646E9170045E524 /* BS Detailed ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BBE8E52646E9170045E524 /* BS Detailed ChartView.swift */; };
 		79BBE8E72646E9170045E524 /* BS Detailed ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BBE8E52646E9170045E524 /* BS Detailed ChartView.swift */; };
 		79BBE8E92646FEE70045E524 /* CF Detailed ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BBE8E82646FEE70045E524 /* CF Detailed ChartView.swift */; };
@@ -570,6 +578,9 @@
 		7920DC6C262C700500536B03 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7920DC70262C700500536B03 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		7920DC72262C700500536B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		792B29EC26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDeterministicEconomyView.swift; sourceTree = "<group>"; };
+		792B29F726EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDeterministicSociologyView.swift; sourceTree = "<group>"; };
+		792B29FE26EBC455005AFE29 /* ModelDeterministicRetirementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDeterministicRetirementView.swift; sourceTree = "<group>"; };
 		7935FFD626541AAB00AC1715 /* DossiersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DossiersView.swift; sourceTree = "<group>"; };
 		7935FFD82654204200AC1715 /* DossierSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierSummaryView.swift; sourceTree = "<group>"; };
 		7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierBrowserView.swift; sourceTree = "<group>"; };
@@ -705,6 +716,7 @@
 		79B2728B2634DBEB00298E5D /* AppThemes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppThemes.swift; sourceTree = "<group>"; };
 		79B272922634E16800298E5D /* TimeSpanEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeSpanEditView.swift; sourceTree = "<group>"; };
 		79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = MonteCarlo.csv; sourceTree = "<group>"; };
+		79B5E8C926EBBDB400C5EB21 /* ModelDeterministicHumanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDeterministicHumanView.swift; sourceTree = "<group>"; };
 		79BBE8E52646E9170045E524 /* BS Detailed ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BS Detailed ChartView.swift"; sourceTree = "<group>"; };
 		79BBE8E82646FEE70045E524 /* CF Detailed ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CF Detailed ChartView.swift"; sourceTree = "<group>"; };
 		79BE4A6526519FED00BBF46C /* HistogramVisitable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramVisitable.swift; sourceTree = "<group>"; };
@@ -864,9 +876,13 @@
 		7901CF7926527AF5007DF85B /* Determinitic Menu Views */ = {
 			isa = PBXGroup;
 			children = (
+				79D7C41526B6EFCA0057E343 /* ModelDeterministicViewModel.swift */,
 				795049F2266792C2000AAEF0 /* DeterministicSectionView.swift */,
 				79BE4A722651CE7800BBF46C /* ModelDeterministicView.swift */,
-				79D7C41526B6EFCA0057E343 /* ModelDeterministicViewModel.swift */,
+				79B5E8C926EBBDB400C5EB21 /* ModelDeterministicHumanView.swift */,
+				792B29EC26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift */,
+				792B29F726EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift */,
+				792B29FE26EBC455005AFE29 /* ModelDeterministicRetirementView.swift */,
 			);
 			path = "Determinitic Menu Views";
 			sourceTree = "<group>";
@@ -2004,15 +2020,18 @@
 				79FC725226331E0A004F3BD2 /* PickerHelperViews.swift in Sources */,
 				791ED0DD2639FE2700701202 /* RetirementEditView.swift in Sources */,
 				796506CD2640866F0036E466 /* TypeInvestEditView.swift in Sources */,
+				79B5E8CA26EBBDB400C5EB21 /* ModelDeterministicHumanView.swift in Sources */,
 				79C8382A2641DC02008B29BF /* LineChartDataSet+Extension.swift in Sources */,
 				79B2726E2634CC0000298E5D /* PersonPickerView.swift in Sources */,
 				79CB2C85264D720000B3E493 /* MonteCarloVisitableP.swift in Sources */,
 				7990D8D9264EDA0600078CB6 /* CategoryBarChartBalanceSheetVisitor.swift in Sources */,
 				797901242640AEB600104C1A /* PatrimoineView.swift in Sources */,
+				792B29ED26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift in Sources */,
 				799025A72641F60300ED53D4 /* KpiSectionView.swift in Sources */,
 				79BE4A6B2651A2BA00BBF46C /* HistogramVisitable.swift in Sources */,
 				799025B32641F60300ED53D4 /* StatisticsChartView.swift in Sources */,
 				79735EEA263242FA00CD952F /* AppMain.swift in Sources */,
+				792B29FF26EBC455005AFE29 /* ModelDeterministicRetirementView.swift in Sources */,
 				79C8382D2641DCBC008B29BF /* ChartLimitLine+Extension.swift in Sources */,
 				79BE4A862651CE7800BBF46C /* ModelSociologyView.swift in Sources */,
 				79AA5D762650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */,
@@ -2094,6 +2113,7 @@
 				791ED121263A2D3B00701202 /* CashFlowLine+managePeriodicInvest.swift in Sources */,
 				79FDC1A7269C4C520092452D /* CashFlowLine+manageSuccession.swift in Sources */,
 				79B164872651DD7200D0603C /* ModelsView.swift in Sources */,
+				792B29F826EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift in Sources */,
 				79C838372641E092008B29BF /* CheckBoxStyles.swift in Sources */,
 				7971B9C62638CAF3009CF0F7 /* NSUIViewRepresentable.swift in Sources */,
 				79A9BE97265185AF00170A01 /* UniformDistributionView.swift in Sources */,
@@ -2165,6 +2185,7 @@
 				7901CF7F26528399007DF85B /* ScenarioSectionView.swift in Sources */,
 				791ED11F263A2D2E00701202 /* CashFlowLine+manageSCPI.swift in Sources */,
 				79BE4A6F2651A2C100BBF46C /* HistogramVisitor.swift in Sources */,
+				79B5E8CB26EBBDB400C5EB21 /* ModelDeterministicHumanView.swift in Sources */,
 				791ED0F6263A1C5E00701202 /* ButtonStyles.swift in Sources */,
 				79EC47F8263095C20006EE44 /* NetCashFlowManager.swift in Sources */,
 				799025BC2641F60300ED53D4 /* CF Global ChartView.swift in Sources */,
@@ -2177,6 +2198,7 @@
 				798DE8C12635CD3C00C0C3B5 /* AlertView.swift in Sources */,
 				79735EED263242FA00CD952F /* ContentView.swift in Sources */,
 				79F222F3265ACC9F005EE0B9 /* DossierEditView.swift in Sources */,
+				792B2A0026EBC455005AFE29 /* ModelDeterministicRetirementView.swift in Sources */,
 				79FC722426330D2C004F3BD2 /* AppCommands.swift in Sources */,
 				79B2728D2634DBEB00298E5D /* AppThemes.swift in Sources */,
 				791ED119263A2CBD00701202 /* CashFlowLine+populateIncomes.swift in Sources */,
@@ -2234,6 +2256,7 @@
 				79A9BE9A265186A700170A01 /* DiscreteDistributionView.swift in Sources */,
 				79C8382B2641DC02008B29BF /* LineChartDataSet+Extension.swift in Sources */,
 				79A9BE9E265186EE00170A01 /* BetaDistributionView.swift in Sources */,
+				792B29F926EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift in Sources */,
 				7906AB762641BCF100A398E9 /* SocialAccounts.swift in Sources */,
 				79EF935A26376D1100C1BE5B /* Simulation.swift in Sources */,
 				791ED122263A2D3B00701202 /* CashFlowLine+managePeriodicInvest.swift in Sources */,
@@ -2254,6 +2277,7 @@
 				791ED0E4263A04EE00701202 /* AdultViewModel.swift in Sources */,
 				7979012B2640B49E00104C1A /* TableView.swift in Sources */,
 				79FC725326331E0A004F3BD2 /* PickerHelperViews.swift in Sources */,
+				792B29EE26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift in Sources */,
 				79B272822634D77D00298E5D /* LabelValueHelperViews.swift in Sources */,
 				799025A62641F60300ED53D4 /* KpiListView.swift in Sources */,
 				796506D22640866F0036E466 /* InterestRateTypeView.swift in Sources */,

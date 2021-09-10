@@ -23,6 +23,7 @@ struct ModelDeterministicView: View {
     @EnvironmentObject private var model     : Model
     @EnvironmentObject private var family    : Family
     @StateObject private var viewModel       : DeterministicViewModel
+    @State private var alertItem             : AlertItem?
 
     var body: some View {
         if dataStore.activeDossier != nil {
@@ -32,7 +33,7 @@ struct ModelDeterministicView: View {
                     ModelDeterministicHumanView(viewModel: viewModel)
                     
                     // modèle écnonomie
-                    ModelDeterministicEconomyModel(viewModel: viewModel)
+                    ModelDeterministicEconomyView(viewModel: viewModel)
                     
                     // modèle sociologie
                     ModelDeterministicSociologyView(viewModel: viewModel)
@@ -41,7 +42,11 @@ struct ModelDeterministicView: View {
                     ModelDeterministicRetirementView(viewModel: viewModel)
                 }
                 .navigationTitle("Modèle Déterministe")
+                .alert(item: $alertItem, content: myAlert)
                 .toolbar {
+                    ToolbarItem(placement: .automatic) {
+                        SaveToDiskButton(text: "Modifier template", action: applyChangesToTemplate)
+                    }
                     ToolbarItem(placement: .automatic) {
                         ApplyChangesButton(action : applyChanges)
                             .disabled(!changeOccured)
@@ -70,151 +75,35 @@ struct ModelDeterministicView: View {
     
     // MARK: - Methods
     
+    /// Appliquer la modification au projet ouvert (en mémoire)
     func applyChanges() {
         // mettre à jour le modèle avec les nouvelles valeurs
         viewModel.update(model)
-
+        
         // mettre à jour les membres de la famille existants avec les nouvelles valeurs
         viewModel.update(family)
     }
-}
-
-// MARK: - Deterministic HumanLife View
-
-struct ModelDeterministicHumanView: View {
-    @ObservedObject var viewModel: DeterministicViewModel
-
-    var body: some View {
-        Section(header: Text("Modèle Humain")) {
-            Stepper(value : $viewModel.menLifeExpectation,
-                    in    : 50 ... 100) {
-                HStack {
-                    Text("Espérance de vie d'un Homme")
-                    Spacer()
-                    Text("\(viewModel.menLifeExpectation) ans").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.menLifeExpectation) { _ in viewModel.isModified = true }
-            
-            Stepper(value : $viewModel.womenLifeExpectation,
-                    in    : 50 ... 100) {
-                HStack {
-                    Text("Espérance de vie d'une Femme")
-                    Spacer()
-                    Text("\(viewModel.womenLifeExpectation) ans").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.womenLifeExpectation) { _ in viewModel.isModified = true }
-            
-            Stepper(value : $viewModel.nbOfYearsOfdependency,
-                    in    : 0 ... 10) {
-                HStack {
-                    Text("Nombre d'années de dépendance")
-                    Spacer()
-                    Text("\(viewModel.nbOfYearsOfdependency) ans").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.nbOfYearsOfdependency) { _ in viewModel.isModified = true }
-        }
-    }
-}
-
-// MARK: - Deterministic Economy View
-
-struct ModelDeterministicEconomyModel: View {
-    @ObservedObject var viewModel: DeterministicViewModel
     
-    var body: some View {
-        return Section(header: Text("Modèle Economique")) {
-            PercentEditView(label   : "Inflation",
-                            percent : $viewModel.inflation)
-            Stepper(value : $viewModel.inflation,
-                    in    : 0 ... 12,
-                    step  : 0.1) {
-                HStack {
-                    Text("Inflation")
-                    Spacer()
-                    Text("\(viewModel.inflation.percentString(digit: 1)) %").foregroundColor(.secondary)
-                }
-            }
-            .onChange(of: viewModel.inflation) { _ in viewModel.isModified = true }
-            
-            PercentEditView(label   : "Rendement sans Risque",
-                            percent : $viewModel.securedRate)
-                .onChange(of: viewModel.securedRate) { _ in viewModel.isModified = true }
-            
-            PercentEditView(label   : "Rendement des Actions",
-                            percent : $viewModel.stockRate)
-                .onChange(of: viewModel.stockRate) { _ in viewModel.isModified = true }
+    /// Enregistrer la modification dans le répertoire Template (sur disque)
+    func applyChangesToTemplate() {
+        guard let templateFolder = PersistenceManager.templateFolder() else {
+            alertItem =
+                AlertItem(title         : Text("Echec"),
+                          dismissButton : .default(Text("OK")))
+            return
         }
-    }
-}
-
-// MARK: - Deterministic SocioEconomy View
-
-struct ModelDeterministicSociologyView: View {
-    @ObservedObject var viewModel: DeterministicViewModel
-    
-    var body: some View {
-        Section(header: Text("Modèle Sociologique")) {
-            PercentEditView(label   : "Dévaluation anuelle des pensions par rapport à l'inflation",
-                            percent : $viewModel.pensionDevaluationRate)
-                .onChange(of: viewModel.pensionDevaluationRate) { _ in viewModel.isModified = true }
-            
-            Stepper(value : $viewModel.nbTrimTauxPlein,
-                    in    : 0 ... 12) {
-                HStack {
-                    Text("Nombre de trimestres additionels pour obtenir le taux plein")
-                    Spacer()
-                    Text("\(viewModel.nbTrimTauxPlein) ans").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.menLifeExpectation) { _ in viewModel.isModified = true }
-            
-            PercentEditView(label   : "Pénalisation des dépenses",
-                            percent : $viewModel.expensesUnderEvaluationRate)
-                .onChange(of: viewModel.expensesUnderEvaluationRate) { _ in viewModel.isModified = true }
-        }
-    }
-}
-
-// MARK: - Deterministic Retirement View
-
-struct ModelDeterministicRetirementView: View {
-    @ObservedObject var viewModel: DeterministicViewModel
-    @State private var isExpanded: Bool = true
-
-    var body: some View {
-        Section(header: Text("Modèle Retraite")) {
-            DisclosureGroup("Régime Général",
-                            isExpanded: $isExpanded) {
-                Stepper(value : $viewModel.ageMinimumLegal,
-                        in    : 50 ... 100) {
-                    HStack {
-                        Text("Age minimum légal de liquidation")
-                        Spacer()
-                        Text("\(viewModel.ageMinimumLegal) ans").foregroundColor(.secondary)
-                    }
-                }.onChange(of: viewModel.ageMinimumLegal) { _ in viewModel.isModified = true }
-            }
-
-            DisclosureGroup("Régime Complémentaire",
-                            isExpanded: $isExpanded) {
-                Stepper(value : $viewModel.ageMinimumAGIRC,
-                        in    : 50 ... 100) {
-                    HStack {
-                        Text("Age minimum de liquidation")
-                        Spacer()
-                        Text("\(viewModel.ageMinimumAGIRC) ans").foregroundColor(.secondary)
-                    }
-                }.onChange(of: viewModel.ageMinimumAGIRC) { _ in viewModel.isModified = true }
-
-                AmountView(label  : "Valeur du point",
-                           amount : viewModel.valeurDuPointAGIRC,
-                           digit: 4)
-            }
+        do {
+            try model.saveAsJSON(toFolder: templateFolder)
+        } catch {
+            alertItem =
+                AlertItem(title         : Text("Echec"),
+                          dismissButton : .default(Text("OK")))
         }
     }
 }
 
 struct ModelDeterministicView_Previews: PreviewProvider {
-    static let dataStore = Store()
+    static var dataStore = Store()
     static var model     = Model(fromBundle : Bundle.main)
     static var family    = Family()
 

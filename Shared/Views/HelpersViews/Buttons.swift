@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct SaveToDiskButton: View {
-    let action: () -> Void
-    
+    let action    : () -> Void
+    let butonText : String
+
     var body: some View {
         Button(
             action : action,
@@ -17,19 +18,22 @@ struct SaveToDiskButton: View {
                 HStack {
                     Image(systemName: "externaldrive.fill")
                         .imageScale(.large)
-                    Text("Enregistrer")
+                    Text(butonText)
                 }
             })
             .capsuleButtonStyle()
     }
     
-    init(action: @escaping () -> Void) {
-        self.action = action
+    init(text   : String = "Enregistrer",
+         action : @escaping () -> Void) {
+        self.action    = action
+        self.butonText = text
     }
 }
 
 struct ApplyChangesButton: View {
-    let action: () -> Void
+    let action    : () -> Void
+    let butonText : String
     
     var body: some View {
         Button(
@@ -38,14 +42,16 @@ struct ApplyChangesButton: View {
                 HStack {
                     Image(systemName: "folder.fill")
                         .imageScale(.large)
-                    Text("Appliquer")
+                    Text(butonText)
                 }
             })
             .capsuleButtonStyle()
     }
     
-    init(action: @escaping () -> Void) {
-        self.action = action
+    init(text   : String = "Appliquer",
+         action : @escaping () -> Void) {
+        self.action    = action
+        self.butonText = text
     }
 }
 

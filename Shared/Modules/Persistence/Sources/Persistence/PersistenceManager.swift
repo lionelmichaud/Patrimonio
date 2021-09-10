@@ -200,7 +200,7 @@ public struct PersistenceManager {
     /// Retourne le directory contenant les templates: dans le répertoire `Library/template`.
     /// Créer le directorty au besoin.
     /// - Returns: Folder pointant sur le directory contenant les templates ou 'nil' si le dossier n'est pas trouvé
-    static func templateFolder() -> Folder? {
+    public static func templateFolder() -> Folder? {
         /// rechercher le dossier 'Library' de l'utilisateur
         guard let libraryFolder = Folder.library else {
             customLog.log(level: .fault,
