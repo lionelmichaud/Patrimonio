@@ -14,6 +14,7 @@ import FamilyModel
 class DeterministicViewModel: ObservableObject {
     
     // MARK: - Properties
+
     @Published var isModified : Bool
     // model: HumanLife
     @Published var menLifeExpectation    : Int
@@ -74,15 +75,22 @@ class DeterministicViewModel: ObservableObject {
         model.humanLife.menLifeExpectationDeterministic    = menLifeExpectation
         model.humanLife.womenLifeExpectationDeterministic  = womenLifeExpectation
         model.humanLife.nbOfYearsOfdependencyDeterministic = nbOfYearsOfdependency
+        model.humanLife.persistenceSM.process(event: .onModify)
+
         model.retirement.ageMinimumLegal    = ageMinimumLegal
         model.retirement.ageMinimumAGIRC    = ageMinimumAGIRC
         model.retirement.valeurDuPointAGIRC = valeurDuPointAGIRC
+        model.retirement.persistenceSM.process(event: .onModify)
+
         model.economy.inflation         = inflation
         model.economy.securedRate       = securedRate
         model.economy.stockRate         = stockRate
+        model.economy.persistenceSM.process(event: .onModify)
+
         model.socioEconomy.pensionDevaluationRateDeterministic      = pensionDevaluationRate
         model.socioEconomy.nbTrimTauxPleinDeterministic             = nbTrimTauxPlein
         model.socioEconomy.expensesUnderEvaluationRateDeterministic = expensesUnderEvaluationRate
+        model.socioEconomy.persistenceSM.process(event: .onModify)
 
         isModified = false
     }

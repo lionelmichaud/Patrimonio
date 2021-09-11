@@ -24,7 +24,7 @@ where R: Codable,
     public var version       : Version
     public var name          : String
     public var rndGenerator  : R
-    public var defaultValue : Double = 0 // valeur par defaut déterministe
+    public var defaultValue  : Double = 0 // valeur par defaut déterministe
     private var randomValue  : Double = 0 // dernière valeur randomisée
     public var randomHistory : [Double]? // historique des tirages aléatoires
 

@@ -102,6 +102,8 @@
 		7935FFDC265420FF00AC1715 /* DossierBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */; };
 		7935FFDD265420FF00AC1715 /* DossierBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */; };
 		7935FFE52654492500AC1715 /* Files in Frameworks */ = {isa = PBXBuildFile; productRef = 7935FFE42654492500AC1715 /* Files */; };
+		793FACA026EBE94E0033626E /* BetaRandomizerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FAC9F26EBE94E0033626E /* BetaRandomizerEditView.swift */; };
+		793FACA126EBE94E0033626E /* BetaRandomizerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FAC9F26EBE94E0033626E /* BetaRandomizerEditView.swift */; };
 		794346452641D3F700374F99 /* CashFlowArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794346442641D3F700374F99 /* CashFlowArray.swift */; };
 		794346462641D3F700374F99 /* CashFlowArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794346442641D3F700374F99 /* CashFlowArray.swift */; };
 		794570D026E38E3700EE9C61 /* SimulationSateMachines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794570CF26E38E3700EE9C61 /* SimulationSateMachines.swift */; };
@@ -474,6 +476,7 @@
 		79EC5EA026406F5200FF8263 /* OwnersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC5E9E26406F5200FF8263 /* OwnersListView.swift */; };
 		79EC5EAA26406FD900FF8263 /* OwnerGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC5EA926406FD900FF8263 /* OwnerGroupBox.swift */; };
 		79EC5EAB26406FD900FF8263 /* OwnerGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC5EA926406FD900FF8263 /* OwnerGroupBox.swift */; };
+		79EC7A1C26ECFFBB00C9C719 /* ModelDeterministicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D7C41526B6EFCA0057E343 /* ModelDeterministicViewModel.swift */; };
 		79EF42CC26C2B73000EC0555 /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF42CB26C2B73000EC0555 /* Numerics */; };
 		79EF42D226C2B74900EC0555 /* HumanLifeModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF42D126C2B74900EC0555 /* HumanLifeModel */; };
 		79EF42DC26C2B97500EC0555 /* PersonModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF42DB26C2B97500EC0555 /* PersonModel */; };
@@ -584,6 +587,7 @@
 		7935FFD626541AAB00AC1715 /* DossiersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DossiersView.swift; sourceTree = "<group>"; };
 		7935FFD82654204200AC1715 /* DossierSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierSummaryView.swift; sourceTree = "<group>"; };
 		7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierBrowserView.swift; sourceTree = "<group>"; };
+		793FAC9F26EBE94E0033626E /* BetaRandomizerEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetaRandomizerEditView.swift; sourceTree = "<group>"; };
 		794346442641D3F700374F99 /* CashFlowArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CashFlowArray.swift; sourceTree = "<group>"; };
 		794570CF26E38E3700EE9C61 /* SimulationSateMachines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationSateMachines.swift; sourceTree = "<group>"; };
 		795049EB2667897A000AAEF0 /* ComputationSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputationSectionView.swift; sourceTree = "<group>"; };
@@ -890,11 +894,11 @@
 		7901CF7A26527B0D007DF85B /* Statistic Menu Views */ = {
 			isa = PBXGroup;
 			children = (
+				795049FD26679347000AAEF0 /* StatisticSectionView.swift */,
 				79BE4A732651CE7800BBF46C /* ModelHumanView.swift */,
 				79BE4A772651CE7800BBF46C /* ModelSociologyView.swift */,
 				79BE4A782651CE7800BBF46C /* ModelEconomyView.swift */,
 				79BE4A742651CE7800BBF46C /* RandomizerViews */,
-				795049FD26679347000AAEF0 /* StatisticSectionView.swift */,
 			);
 			path = "Statistic Menu Views";
 			sourceTree = "<group>";
@@ -1506,6 +1510,7 @@
 			isa = PBXGroup;
 			children = (
 				79BE4A752651CE7800BBF46C /* DiscreteRandomizerView.swift */,
+				793FAC9F26EBE94E0033626E /* BetaRandomizerEditView.swift */,
 				79BE4A762651CE7800BBF46C /* BetaRandomizerView.swift */,
 				79504A04266793C1000AAEF0 /* RandomizerAssistantSectionView.swift */,
 			);
@@ -2029,6 +2034,7 @@
 				792B29ED26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift in Sources */,
 				799025A72641F60300ED53D4 /* KpiSectionView.swift in Sources */,
 				79BE4A6B2651A2BA00BBF46C /* HistogramVisitable.swift in Sources */,
+				793FACA026EBE94E0033626E /* BetaRandomizerEditView.swift in Sources */,
 				799025B32641F60300ED53D4 /* StatisticsChartView.swift in Sources */,
 				79735EEA263242FA00CD952F /* AppMain.swift in Sources */,
 				792B29FF26EBC455005AFE29 /* ModelDeterministicRetirementView.swift in Sources */,
@@ -2259,6 +2265,8 @@
 				792B29F926EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift in Sources */,
 				7906AB762641BCF100A398E9 /* SocialAccounts.swift in Sources */,
 				79EF935A26376D1100C1BE5B /* Simulation.swift in Sources */,
+				79EC7A1C26ECFFBB00C9C719 /* ModelDeterministicViewModel.swift in Sources */,
+				793FACA126EBE94E0033626E /* BetaRandomizerEditView.swift in Sources */,
 				791ED122263A2D3B00701202 /* CashFlowLine+managePeriodicInvest.swift in Sources */,
 				791ED100263A1EF800701202 /* AdultDetailView.swift in Sources */,
 				79BE4A812651CE7800BBF46C /* DiscreteRandomizerView.swift in Sources */,

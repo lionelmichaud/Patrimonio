@@ -45,7 +45,7 @@ struct ModelDeterministicView: View {
                 .alert(item: $alertItem, content: myAlert)
                 .toolbar {
                     ToolbarItem(placement: .automatic) {
-                        SaveToDiskButton(text: "Modifier template", action: applyChangesToTemplate)
+                        SaveToDiskButton(text: "Template", action: applyChangesToTemplate)
                     }
                     ToolbarItem(placement: .automatic) {
                         ApplyChangesButton(action : applyChanges)
@@ -92,6 +92,7 @@ struct ModelDeterministicView: View {
                           dismissButton : .default(Text("OK")))
             return
         }
+        applyChanges()
         do {
             try model.saveAsJSON(toFolder: templateFolder)
         } catch {

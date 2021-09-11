@@ -128,7 +128,7 @@ struct BetaRandomizerView: UIViewRepresentable {
 }
 
 struct BetaRandomizerView_Previews: PreviewProvider {
-    static var model      = Model(fromBundle: Bundle.main)
+    static var model = Model(fromBundle: Bundle.main)
 
     static var previews: some View {
         BetaRandomizerView(randomizer: model.economyModel.randomizers.inflation)
