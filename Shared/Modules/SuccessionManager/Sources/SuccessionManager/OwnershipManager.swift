@@ -27,27 +27,20 @@ struct OwnershipManager {
     ///   - taxes: les droits de succession à payer par les enfants
     ///   - year: l'année du décès
     func modifyLifeInsuranceClause
-    (of decedent     : Adult,
-     conjoint        : Adult,
-     in family       : Family,
-     with patrimoine : Patrimoin,
-     toPayFor taxes  : Double,
-     atEndOf year    : Int) {
-        // simuler les transmisssions pour calculer ce que les enfants
-        // hériterons en PP sans modifier aucune clause d'AV
-        var assetsCopy      = patrimoine.assets
-        var liabilitiesCopy = patrimoine.liabilities
-        transferOwnershipOf(assets      : &assetsCopy,
-                            liabilities : &liabilitiesCopy,
-                            of          : decedent,
-                            atEndOf     : year)
-        
+    (of decedent                 : Adult,
+     conjoint                    : Adult,
+     in family                   : Family,
+     withAssets assets           : inout Assets,
+     withLiabilities liabilities : Liabilities,
+     toPayFor taxes              : Double,
+     atEndOf year                : Int) {
         // cumuler les actifs nets dont les enfants sont les seuls PP après transmission
         let childrenSellableCapital =
-            childrenNetSellableAssets(in              : family,
-                                      withAssets      : assetsCopy,
-                                      withLiabilities : liabilitiesCopy,
-                                      atEndOf         : year)
+            childrenSellableInheritedCapital(receivedFrom    : decedent,
+                                             inFamily        : family,
+                                             withAssets      : assets,
+                                             withLiabilities : liabilities,
+                                             atEndOf         : year)
         print(">Capital cessible détenu par les enfants après succession: \(childrenSellableCapital.k€String)")
         
         // calculer les capitaux manquants aux enfants pour pouvoir payer les droits de succession
@@ -59,21 +52,23 @@ struct OwnershipManager {
         }
         
         // prendre les valeurs à la fin de l'année précédente
-        patrimoine.assets.freeInvests.items.sort {
-            $0.ownedValue(by: decedent.displayName, atEndOf: year-1, evaluationContext: .patrimoine) >
-            $1.ownedValue(by: decedent.displayName, atEndOf: year-1, evaluationContext: .patrimoine)
-        }
+        assets
+            .freeInvests
+            .items
+            .sort {
+                $0.ownedValue(by: decedent.displayName, atEndOf: year-1, evaluationContext: .patrimoine) >
+                    $1.ownedValue(by: decedent.displayName, atEndOf: year-1, evaluationContext: .patrimoine)
+            }
         //print(String(describing: patrimoine.assets.freeInvests.items))
         
-        for idx in patrimoine.assets.freeInvests.items.range {
+        for idx in assets.freeInvests.items.range {
             let ownedValue =
-                patrimoine
-                .assets
+                assets
                 .freeInvests[idx]
                 .ownedValue(by                : decedent.displayName,
                             atEndOf           : year-1,
                             evaluationContext : .patrimoine)
-            print("Assurance: \(patrimoine.assets.freeInvests[idx].name)\n Valeur possédée en \(year-1): \(ownedValue.k€String)")
+            print("Assurance: \(assets.freeInvests[idx].name)\n Valeur possédée en \(year-1): \(ownedValue.k€String)")
             guard ownedValue >= 0 else {
                 break
             }
@@ -83,6 +78,28 @@ struct OwnershipManager {
             missingCapital -= ownedValue
             if missingCapital <= 0 { break }
         }
+    }
+    
+    private func childrenSellableInheritedCapital
+    (receivedFrom decedent       : Adult,
+     inFamily family             : Family,
+     withAssets assets           : Assets,
+     withLiabilities liabilities : Liabilities,
+     atEndOf year                : Int) -> Double {
+        // simuler les transmisssions pour calculer ce que les enfants
+        // hériterons en PP sans modifier aucune clause d'AV
+        var assetsCopy      = assets
+        var liabilitiesCopy = liabilities
+        transferOwnershipOf(assets      : &assetsCopy,
+                            liabilities : &liabilitiesCopy,
+                            of          : decedent,
+                            atEndOf     : year)
+        
+        // cumuler les actifs nets dont les enfants sont les seuls PP après transmission
+        return childrenNetSellableAssets(in              : family,
+                                         withAssets      : assetsCopy,
+                                         withLiabilities : liabilitiesCopy,
+                                         atEndOf         : year)
     }
     
     /// Actif net vendable détenu par l'ensemble des enfants à la fin de l'année `year`

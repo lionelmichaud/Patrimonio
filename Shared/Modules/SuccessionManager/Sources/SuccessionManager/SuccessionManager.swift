@@ -162,12 +162,13 @@ public struct SuccessionManager {
                 print(">Adulte décédé   : \(adultDecedent.displayName)")
                 print(">Adulte survivant: \(adultSurvivor.displayName)")
                 print(">Somme des droits de succession des enfants: \(childrenInheritancesTaxe.k€String)")
-                ownershipManager.modifyLifeInsuranceClause(of       : adultDecedent,
-                                                           conjoint : adultSurvivor,
-                                                           in       : family,
-                                                           with     : patrimoine,
-                                                           toPayFor : childrenInheritancesTaxe,
-                                                           atEndOf  : year)
+                ownershipManager.modifyLifeInsuranceClause(of              : adultDecedent,
+                                                           conjoint        : adultSurvivor,
+                                                           in              : family,
+                                                           withAssets      : &patrimoine.assets,
+                                                           withLiabilities : patrimoine.liabilities,
+                                                           toPayFor        : childrenInheritancesTaxe,
+                                                           atEndOf         : year)
             }
             
             // transférer les biens d'un défunt vers ses héritiers
