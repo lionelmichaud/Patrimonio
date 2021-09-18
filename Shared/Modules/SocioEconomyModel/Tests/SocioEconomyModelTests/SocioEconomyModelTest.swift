@@ -16,17 +16,12 @@ class SocioEconomyModelTest: XCTestCase {
     // MARK: Helpers
 
     override func setUpWithError() throws {
-        super.setUp()
-        SocioEconomyModelTest.socioEconomy = SocioEconomy(fromBundle : Bundle.module)
+        XCTAssertNoThrow(SocioEconomyModelTest.socioEconomy = SocioEconomy(fromBundle : Bundle.module),
+                         "Failed to read model from Module Bundle \(String(describing: Bundle.module.resourcePath))")
     }
     
     // MARK: Tests
 
-    func test_loading_from_module_bundle() throws {
-        XCTAssertNoThrow(SocioEconomy(fromBundle : Bundle.module),
-                         "Failed to read model from Main Bundle \(String(describing: Bundle.module.resourcePath))")
-    }
-    
     func test_saving_to_module_bundle() throws {
         XCTAssertNoThrow(SocioEconomyModelTest.socioEconomy.saveAsJSON(toBundle: Bundle.module))
     }
@@ -92,4 +87,24 @@ class SocioEconomyModelTest: XCTestCase {
         XCTAssertEqual(socioEconomy.persistenceSM.currentState , .modified)
     }
 
+    func test_state_machine() {
+        var socioEconomy = SocioEconomy(fromBundle : Bundle.module)
+        
+        XCTAssertFalse(socioEconomy.isModified)
+        
+        socioEconomy.pensionDevaluationRateDeterministic = 2
+        XCTAssertTrue(socioEconomy.isModified)
+        socioEconomy.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(socioEconomy.isModified)
+        
+        socioEconomy.nbTrimTauxPleinDeterministic = 2
+        XCTAssertTrue(socioEconomy.isModified)
+        socioEconomy.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(socioEconomy.isModified)
+        
+        socioEconomy.expensesUnderEvaluationRateDeterministic = 2
+        XCTAssertTrue(socioEconomy.isModified)
+        socioEconomy.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(socioEconomy.isModified)
+    }
 }

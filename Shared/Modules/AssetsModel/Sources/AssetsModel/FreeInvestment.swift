@@ -230,14 +230,14 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     /// - Parameters:
     ///   - ownerName: nom de la personne recherchée
     ///   - year: date d'évaluation
-    ///   - evaluationMethod: méthode d'évaluation de la valeure des bien
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
     /// - Warning: les assurance vie ne sont pas inclues car hors succession
-    public func ownedValue(by ownerName     : String,
-                           atEndOf year     : Int,
-                           evaluationMethod : EvaluationMethod) -> Double {
+    public func ownedValue(by ownerName      : String,
+                           atEndOf year      : Int,
+                           evaluationContext : EvaluationContext) -> Double {
         // cas particuliers
-        switch evaluationMethod {
+        switch evaluationContext {
             case .legalSuccession:
                 // le bien est-il une assurance vie ?
                 switch type {
@@ -278,10 +278,10 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         let evaluatedValue = value(atEndOf: year)
         
         // calculer la part de propriété
-        let value = evaluatedValue == 0 ? 0 : ownership.ownedValue(by               : ownerName,
-                                                                   ofValue          : evaluatedValue,
-                                                                   atEndOf          : year,
-                                                                   evaluationMethod : evaluationMethod)
+        let value = evaluatedValue == 0 ? 0 : ownership.ownedValue(by                : ownerName,
+                                                                   ofValue           : evaluatedValue,
+                                                                   atEndOf           : year,
+                                                                   evaluationContext : evaluationContext)
         return value
     }
     

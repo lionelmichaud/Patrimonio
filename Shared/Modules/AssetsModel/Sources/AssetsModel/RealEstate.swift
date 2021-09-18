@@ -207,15 +207,15 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     /// - Parameters:
     ///   - ownerName: nom de la personne recherchée
     ///   - year: date d'évaluation
-    ///   - evaluationMethod: méthode d'évaluation de la valeure des bien
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
-    public func ownedValue(by ownerName     : String,
-                           atEndOf year     : Int,
-                           evaluationMethod : EvaluationMethod) -> Double {
+    public func ownedValue(by ownerName      : String,
+                           atEndOf year      : Int,
+                           evaluationContext : EvaluationContext) -> Double {
         var evaluatedValue : Double
         
         // cas particuliers
-        switch evaluationMethod {
+        switch evaluationContext {
             case .ifi, .isf:
                 // appliquer la décote IFI
                 evaluatedValue = ifiValue(atEndOf: year)
@@ -240,10 +240,10 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
         }
         // calculer la part de propriété
         let value = evaluatedValue == 0 ? 0 :
-            ownership.ownedValue(by               : ownerName,
-                                 ofValue          : evaluatedValue,
-                                 atEndOf          : year,
-                                 evaluationMethod : evaluationMethod)
+            ownership.ownedValue(by                : ownerName,
+                                 ofValue           : evaluatedValue,
+                                 atEndOf           : year,
+                                 evaluationContext : evaluationContext)
         return value
     }
     

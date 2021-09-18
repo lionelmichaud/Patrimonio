@@ -160,8 +160,8 @@ extension FreeInvestement {
                 updateOwnership = true
                 updateInterests = false
                 // 'name' n'est pas le seul PP du bien => il faudra actualiser sa part de propriété
-                theOwnedValues = ownedValues(atEndOf          : currentState.year,
-                                             evaluationMethod : .patrimoine)
+                theOwnedValues = ownedValues(atEndOf           : currentState.year,
+                                             evaluationContext : .patrimoine)
                 ownedValueBefore = theOwnedValues[name]!
                 maxPermitedValue = min(currentState.value,
                                        ownedValueBefore)

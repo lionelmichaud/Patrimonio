@@ -11,8 +11,30 @@ import FiscalModel
 
 let customLogOwnership = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Ownership")
 
-// MARK: - Méthode d'évaluation d'un Patrmoine (régles fiscales à appliquer)
-public enum EvaluationMethod: String, PickableEnumP {
+// MARK: - Enumération de Nature d'une propriété
+
+public enum OwnershipNature: String, PickableEnumP {
+    case generatesRevenue = "Uniquement les biens génèrant revenu/dépense (possédés en PP ou en UF au moins en partie)"
+    case sellable         = "Uniquement les biens cessibles (possédés en PP au moins en partie)"
+    case all              = "Tous les biens (possédés en UF, NP ou PP au moins en partie)"
+    
+    public var pickerString: String {
+        return self.rawValue
+    }
+}
+
+public enum EvaluatedFraction: String, PickableEnumP {
+    case totalValue = "Valeur totale du bien"
+    case ownedValue = "Valeur patrimoniale de la fraction possédée du bien"
+
+    public var pickerString: String {
+        return self.rawValue
+    }
+}
+
+// MARK: - Enumération de Contexte d'évaluation d'un Patrmoine (régles fiscales à appliquer)
+
+public enum EvaluationContext: String, PickableEnumP {
     case ifi                     = "IFI"
     case isf                     = "ISF"
     case legalSuccession         = "Succession Légale"
@@ -185,14 +207,14 @@ public struct Ownership {
     ///   - ownerName: nom de la personne recherchée
     ///   - totalValue: valeure totale du bien
     ///   - year: date d'évaluation
-    ///   - evaluationMethod: règles fiscales à utiliser pour le calcul
+    ///   - evaluationContext: règles fiscales à utiliser pour le calcul
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
     public func ownedValue(by ownerName       : String,
                            ofValue totalValue : Double,
                            atEndOf year       : Int,
-                           evaluationMethod   : EvaluationMethod) -> Double {
+                           evaluationContext  : EvaluationContext) -> Double {
         if isDismembered {
-            switch evaluationMethod {
+            switch evaluationContext {
                 case .ifi, .isf :
                     // calcul de la part de pleine-propiété détenue
                     return usufructOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
@@ -247,29 +269,29 @@ public struct Ownership {
     
     public func ownedValues(ofValue totalValue : Double,
                             atEndOf year       : Int,
-                            evaluationMethod   : EvaluationMethod) -> [String : Double] {
+                            evaluationContext  : EvaluationContext) -> [String : Double] {
         var dico: [String : Double] = [:]
         if isDismembered {
             for owner in bareOwners {
-                dico[owner.name] = ownedValue(by               : owner.name,
-                                              ofValue          : totalValue,
-                                              atEndOf          : year,
-                                              evaluationMethod : evaluationMethod)
+                dico[owner.name] = ownedValue(by                : owner.name,
+                                              ofValue           : totalValue,
+                                              atEndOf           : year,
+                                              evaluationContext : evaluationContext)
             }
             for owner in usufructOwners {
-                dico[owner.name] = ownedValue(by               : owner.name,
-                                              ofValue          : totalValue,
-                                              atEndOf          : year,
-                                              evaluationMethod : evaluationMethod)
+                dico[owner.name] = ownedValue(by                : owner.name,
+                                              ofValue           : totalValue,
+                                              atEndOf           : year,
+                                              evaluationContext : evaluationContext)
             }
             
         } else {
             // valeur en pleine propriété
             for owner in fullOwners {
-                dico[owner.name] = ownedValue(by               : owner.name,
-                                              ofValue          : totalValue,
-                                              atEndOf          : year,
-                                              evaluationMethod : evaluationMethod)
+                dico[owner.name] = ownedValue(by                : owner.name,
+                                              ofValue           : totalValue,
+                                              atEndOf           : year,
+                                              evaluationContext : evaluationContext)
             }
         }
         return dico

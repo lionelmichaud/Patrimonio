@@ -17,6 +17,7 @@ let package = Package(
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/jessesquires/Foil.git", .upToNextMajor(from: "1.0.0")),
         .package(path: "../AppFoundation"),
+        .package(path: "../Ownership"),
         .package(path: "../NamedValue"),
         .package(path: "../FileAndFolder")
     ],
@@ -29,6 +30,7 @@ let package = Package(
                 [
                     .product(name: "Foil", package: "Foil"),
                     "AppFoundation",
+                    "Ownership",
                     "NamedValue",
                     "FileAndFolder"
                 ]),

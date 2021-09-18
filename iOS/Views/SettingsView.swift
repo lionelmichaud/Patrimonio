@@ -11,10 +11,10 @@ import Persistence
 struct SettingsView: View {
     @State private var simulateVolatility      = UserSettings.shared.simulateVolatility
     @State private var kpiOwnership            = UserSettings.shared.ownershipGraphicSelection
-    @State private var kpiEvaluationMethod     = UserSettings.shared.assetGraphicEvaluationMethod
+    @State private var kpiEvaluationMethod     = UserSettings.shared.assetGraphicEvaluatedFraction
     
     @State private var graphicOwnership        = UserSettings.shared.ownershipGraphicSelection
-    @State private var graphicEvaluationMethod = UserSettings.shared.assetGraphicEvaluationMethod
+    @State private var graphicEvaluationMethod = UserSettings.shared.assetGraphicEvaluatedFraction
     
     @State private var shareCsvFiles           = UserSettings.shared.shareCsvFiles
     @State private var shareImageFiles         = UserSettings.shared.shareImageFiles
@@ -29,15 +29,14 @@ struct SettingsView: View {
                 
                 // Simulation settings
                 NavigationLink(destination: SimulationUserSettingsView(simulateVolatility: $simulateVolatility,
-                                                                       ownership         : $kpiOwnership,
-                                                                       evaluationMethod  : $kpiEvaluationMethod)) {
+                                                                       ownership         : $kpiOwnership)) {
                     Label("Simulation", systemImage: "function")
                 }
                     .isDetailLink(true)
 
                 // Graphics settings
                 NavigationLink(destination: GraphicUserSettings(ownership        : $graphicOwnership,
-                                                                evaluationMethod : $graphicEvaluationMethod)) {
+                                                                evaluatedFraction: $graphicEvaluationMethod)) {
                     Label("Graphiques", systemImage: "chart.bar.xaxis")
                 }
                     .isDetailLink(true)

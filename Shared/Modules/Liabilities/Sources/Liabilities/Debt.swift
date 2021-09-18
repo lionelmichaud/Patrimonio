@@ -41,6 +41,7 @@ public struct Debt: Codable, Identifiable, NameableValuableP, OwnableP {
     
     /// Valeur résiduelle courante de la dette
     /// - Parameter year: année courante
+    /// - Returns: valeur négative
     public func value (atEndOf year: Int) -> Double {
         return value
     }

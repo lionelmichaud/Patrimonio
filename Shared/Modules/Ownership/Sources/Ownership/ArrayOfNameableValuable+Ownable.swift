@@ -61,13 +61,13 @@ public extension ArrayOfNameableValuable where E: OwnableP {
     /// - Parameters:
     ///   - ownerName: nom de la personne recherchée
     ///   - year: date d'évaluation
-    ///   - evaluationMethod: méthode d'évaluation de la valeure des bien
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
-    func ownedValue(by ownerName     : String,
-                    atEndOf year     : Int,
-                    evaluationMethod : EvaluationMethod) -> Double {
-        items.sumOfOwnedValues(by               : ownerName,
-                               atEndOf          : year,
-                               evaluationMethod : evaluationMethod)
+    func ownedValue(by ownerName      : String,
+                    atEndOf year      : Int,
+                    evaluationContext : EvaluationContext) -> Double {
+        items.sumOfOwnedValues(by                : ownerName,
+                               atEndOf           : year,
+                               evaluationContext : evaluationContext)
     }
 }

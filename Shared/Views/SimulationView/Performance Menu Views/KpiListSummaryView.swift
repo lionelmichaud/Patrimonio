@@ -49,8 +49,8 @@ struct KpiSummaryView: View {
         substituted = substituted.replacingOccurrences(of    : "<<OwnershipNature>>",
                                                        with  : UserSettings.shared.ownershipKpiSelection.rawValue,
                                                        count : 1)
-        substituted = substituted.replacingOccurrences(of    : "<<AssetEvaluationMethod>>",
-                                                       with  : UserSettings.shared.assetKpiEvaluationMethod.rawValue,
+        substituted = substituted.replacingOccurrences(of    : "<<AssetEvaluationContext>>",
+                                                       with  : UserSettings.shared.assetKpiEvaluatedFraction.rawValue,
                                                        count : 1)
         return substituted
     }

@@ -145,6 +145,74 @@ public struct Assets {
         return sum
     }
     
+    /// Calcule la somme des valeurs des actifs détenus par un personne nommée `ownerName`
+    /// à la fin de l'année `year` selon la méthode `evaluationContext`: régle générale, règle de l'IFI, de l'ISF, de la succession...
+    ///  - Note:
+    ///  Pour l'IFI:
+    ///
+    ///  Foyer taxable:
+    ///  - adultes + enfants non indépendants
+    ///
+    ///  Patrimoine taxable à l'IFI =
+    ///  - tous les actifs immobiliers dont un propriétaire ou usufruitier
+    ///  est un membre du foyer taxable
+    ///
+    ///  Valeur retenue:
+    ///  - actif détenu en pleine-propriété: valeur de la part détenue en PP
+    ///  - actif détenu en usufuit : valeur de la part détenue en PP
+    ///  - la résidence principale faire l’objet d’une décote de 30 %
+    ///  - les immeubles que vous donnez en location peuvent faire l’objet d’une décote de 10 % à 30 % environ
+    ///  - en indivision : dans ce cas, ils sont imposables à hauteur de votre quote-part minorée d’une décote de l’ordre de 30 % pour tenir compte des contraintes liées à l’indivision)
+    ///
+    /// - Parameters:
+    ///   - ownerName: nom de la personne recherchée
+    ///   - year: date d'évaluation
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
+    /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
+    public func ownedValue(by ownerName     : String,
+                           atEndOf year     : Int,
+                           evaluationContext : EvaluationContext) -> Double {
+        var total = 0.0
+        forEachOwnable { ownable in
+            total += ownable.ownedValue(by                : ownerName,
+                                        atEndOf           : year,
+                                        evaluationContext : evaluationContext)
+        }
+        return total
+    }
+    
+    /// Calcule une fraction `evaluatedFraction` de la valeur du bien
+    /// détenu en tout ou partie par la personne nommée `ownerName` et
+    /// uniquement si la nature du bien répond au critère `withOwnershipNature`
+    /// - Note:
+    ///     - si la nature du bien ne répond PAS au critère `withOwnershipNature`
+    ///       alors retourne 0.0
+    ///     - si `ownerName` n'a AUCUNE  part de propriété dans le bien, retorune 0.0
+    /// - Parameters:
+    ///   - ownerName: nom de la personne recherchée
+    ///   - year: date d'évaluation
+    ///   - withOwnershipNature: nature de propriété sélectionnée
+    ///   - evaluatedFraction: méthode d'évaluation sélectionnée
+    /// - Returns: fraction `evaluatedFraction` de la valeur du bien
+    public func ownedValue(by ownerName        : String,
+                           atEndOf year        : Int,
+                           withOwnershipNature : OwnershipNature,
+                           evaluatedFraction   : EvaluatedFraction) -> Double {
+        var total = 0.0
+//        print("-> Owner recherché: \(ownerName)")
+//        print("-> nature de propriété sélectionnée : \(withOwnershipNature.displayString)")
+//        print("-> méthode d'évaluation sélectionnée: \(evaluatedFraction.displayString)")
+        forEachOwnable { ownable in
+            total += ownable.ownedValue(by                  : ownerName,
+                                        atEndOf             : year,
+                                        withOwnershipNature : withOwnershipNature,
+                                        evaluatedFraction   : evaluatedFraction)
+//            print("  -> Bien: \(ownable.name)")
+//            print("    -> Valeur cumulée: \(total.k€String)")
+        }
+        return total
+    }
+    
     /// Calls the given closure on each element in the sequence in the same order as a for-in loop
     public func forEachOwnable(_ body: (OwnableP) throws -> Void) rethrows {
         try periodicInvests.items.forEach(body)
@@ -174,25 +242,25 @@ public struct Assets {
     ///
     /// - Parameters:
     ///   - year: année d'évaluation
-    ///   - evaluationMethod: méthode d'évaluation de la valeure des bien
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
     ///   - Returns: assiette nette fiscale calculée selon la méthode choisie
     public func realEstateValue(atEndOf year        : Int,
                                 for fiscalHousehold : FiscalHouseholdSumatorP,
-                                evaluationMethod    : EvaluationMethod) -> Double {
-        switch evaluationMethod {
+                                evaluationContext    : EvaluationContext) -> Double {
+        switch evaluationContext {
             case .ifi, .isf :
                 /// on prend la valeure IFI des biens immobiliers
                 /// pour: le foyer fiscal
                 return fiscalHousehold.sum(atEndOf: year) { name in
-                    realEstates.ownedValue(by               : name,
-                                           atEndOf          : year,
-                                           evaluationMethod : evaluationMethod) +
-                        scpis.ownedValue(by               : name,
-                                         atEndOf          : year,
-                                         evaluationMethod : evaluationMethod) +
-                        sci.scpis.ownedValue(by               : name,
-                                             atEndOf          : year,
-                                             evaluationMethod : evaluationMethod)
+                    realEstates.ownedValue(by                : name,
+                                           atEndOf           : year,
+                                           evaluationContext : evaluationContext) +
+                        scpis.ownedValue(by                : name,
+                                         atEndOf           : year,
+                                         evaluationContext : evaluationContext) +
+                        sci.scpis.ownedValue(by                : name,
+                                             atEndOf           : year,
+                                             evaluationContext : evaluationContext)
                 }
                 
             case .legalSuccession, .patrimoine:

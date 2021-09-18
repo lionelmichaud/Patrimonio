@@ -39,9 +39,9 @@ extension CashFlowLine {
                 revenue = liquidatedValue.revenue
                 // créditer le produit de la vente sur les comptes des personnes
                 // en fonction de leur part de propriété respective
-                let ownedSaleValues = periodicInvestement.ownedValues(ofValue          : liquidatedValue.revenue,
-                                                                      atEndOf          : year,
-                                                                      evaluationMethod : .patrimoine)
+                let ownedSaleValues = periodicInvestement.ownedValues(ofValue           : liquidatedValue.revenue,
+                                                                      atEndOf           : year,
+                                                                      evaluationContext : .patrimoine)
                 let netCashFlowManager = NetCashFlowManager()
                 netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
                                                  in            : patrimoine,

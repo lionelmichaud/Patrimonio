@@ -47,20 +47,20 @@ public enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
             case .minimumAdultsAssetExcludinRealEstates:
                 return """
                     Valeur minimale atteinte dans le temps pour l'ACTIF NET des ADULTES (hors immobilier physique) :
-                     - Biens pris en compte: <<OwnershipNature>>
-                     - Méthode d'évaluation: <<AssetEvaluationMethod>>
+                     - Biens pris en compte : <<OwnershipNature>>
+                     - Contexte d'évaluation: <<AssetEvaluationContext>>
                     """
             case .assetAt1stDeath:
                 return """
                     Valeur atteinte au 1er décès pour l'ACTIF NET (hors immobilier physique) :
-                     - Biens pris en compte: <<OwnershipNature>>
-                     - Méthode d'évaluation: <<AssetEvaluationMethod>>
+                     - Biens pris en compte : <<OwnershipNature>>
+                     - Contexte d'évaluation: <<AssetEvaluationContext>>
                     """
             case .assetAt2ndtDeath:
                 return """
                     Valeur atteinte au 2nd décès pour l'ACTIF NET (hors immobilier physique) :
-                     - Biens pris en compte: <<OwnershipNature>>
-                     - Méthode d'évaluation: <<AssetEvaluationMethod>>
+                     - Biens pris en compte : <<OwnershipNature>>
+                     - Contexte d'évaluation: <<AssetEvaluationContext>>
                     """
             case .netSuccessionAt2ndDeath:
                 return """

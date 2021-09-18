@@ -63,27 +63,27 @@ class OwnableTests: XCTestCase {
                           name: "Actif")
         
         // cas .legalSuccession d'un Nu-propriétaire
-        var value = ownership.ownedValue(by               : "Nupropriétaire",
-                                         ofValue          : asset.value(atEndOf: 2020),
-                                         atEndOf          : 2020,
-                                         evaluationMethod : EvaluationMethod.legalSuccession)
-        var ownedValue = asset.ownedValue(by               : "Nupropriétaire",
-                                          atEndOf          : 2020,
-                                          evaluationMethod : EvaluationMethod.legalSuccession)
+        var value = ownership.ownedValue(by                : "Nupropriétaire",
+                                         ofValue           : asset.value(atEndOf: 2020),
+                                         atEndOf           : 2020,
+                                         evaluationContext : .legalSuccession)
+        var ownedValue = asset.ownedValue(by                : "Nupropriétaire",
+                                          atEndOf           : 2020,
+                                          evaluationContext : .legalSuccession)
         
         XCTAssertEqual(value, ownedValue)
         
         // cas .legalSuccession d'un Usufruitier
-        ownedValue = asset.ownedValue(by               : "Usufruitier",
-                                      atEndOf          : 2020,
-                                      evaluationMethod : EvaluationMethod.legalSuccession)
+        ownedValue = asset.ownedValue(by                : "Usufruitier",
+                                      atEndOf           : 2020,
+                                      evaluationContext : .legalSuccession)
         
         XCTAssertEqual(0, ownedValue)
         
         // cas .lifeInsuranceSuccession d'un Usufruitier
         ownedValue = asset.ownedValue(by               : "Usufruitier",
                                       atEndOf          : 2020,
-                                      evaluationMethod : EvaluationMethod.lifeInsuranceSuccession)
+                                      evaluationContext : .lifeInsuranceSuccession)
         
         XCTAssertEqual(0, ownedValue)
         
@@ -91,30 +91,30 @@ class OwnableTests: XCTestCase {
         value = ownership.ownedValue(by               : "Usufruitier",
                                      ofValue          : asset.value(atEndOf          : 2020),
                                      atEndOf          : 2020,
-                                     evaluationMethod : EvaluationMethod.patrimoine)
+                                     evaluationContext : .patrimoine)
         ownedValue = asset.ownedValue(by               : "Usufruitier",
                                       atEndOf          : 2020,
-                                      evaluationMethod : EvaluationMethod.patrimoine)
+                                      evaluationContext : .patrimoine)
         
         XCTAssertEqual(value, ownedValue)
         
         value = ownership.ownedValue(by               : "Usufruitier",
                                      ofValue          : asset.value(atEndOf          : 2020),
                                      atEndOf          : 2020,
-                                     evaluationMethod : EvaluationMethod.ifi)
+                                     evaluationContext : .ifi)
         ownedValue = asset.ownedValue(by               : "Usufruitier",
                                       atEndOf          : 2020,
-                                      evaluationMethod : EvaluationMethod.ifi)
+                                      evaluationContext : .ifi)
         
         XCTAssertEqual(value, ownedValue)
         
         value = ownership.ownedValue(by               : "Usufruitier",
                                      ofValue          : asset.value(atEndOf          : 2020),
                                      atEndOf          : 2020,
-                                     evaluationMethod : EvaluationMethod.isf)
+                                     evaluationContext : .isf)
         ownedValue = asset.ownedValue(by               : "Usufruitier",
                                       atEndOf          : 2020,
-                                      evaluationMethod : EvaluationMethod.isf)
+                                      evaluationContext : .isf)
         
         XCTAssertEqual(value, ownedValue)
     }
@@ -131,7 +131,7 @@ class OwnableTests: XCTestCase {
                           name: "Actif")
         
         let ownedValues = asset.ownedValues(atEndOf          : 2020,
-                                            evaluationMethod : EvaluationMethod.legalSuccession)
+                                            evaluationContext : .legalSuccession)
         print(ownedValues)
 
         XCTAssertNotNil(ownedValues["Usufruitier"])

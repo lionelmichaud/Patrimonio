@@ -267,4 +267,36 @@ class EconomyModelTests: XCTestCase {
                    simulateVolatility : true)
         XCTAssertNotEqual(random_rates.securedRate, 0.0)
         XCTAssertNotEqual(random_rates.stockRate, 0.0)
-    }}
+    }
+    
+    func test_state_machine() {
+        var economy = Economy(fromBundle : Bundle.module)
+        
+        XCTAssertFalse(economy.isModified)
+        
+        economy.inflation = 2.0
+        XCTAssertTrue(economy.isModified)
+        economy.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(economy.isModified)
+        
+        economy.securedRate = 2.0
+        XCTAssertTrue(economy.isModified)
+        economy.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(economy.isModified)
+        
+        economy.stockRate = 2.0
+        XCTAssertTrue(economy.isModified)
+        economy.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(economy.isModified)
+        
+        economy.securedVolatility = 2.0
+        XCTAssertTrue(economy.isModified)
+        economy.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(economy.isModified)
+        
+        economy.stockVolatility = 2.0
+        XCTAssertTrue(economy.isModified)
+        economy.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(economy.isModified)
+    }
+}

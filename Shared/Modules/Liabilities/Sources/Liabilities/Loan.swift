@@ -66,6 +66,7 @@ public struct Loan: Codable, Identifiable, NameableValuableP, OwnableP {
     }
     /// Montant des remboursements restants dûs
     /// - Parameter year: année courante
+    /// - Returns: valeur négative
     public func value(atEndOf year: Int) -> Double {
         ((firstYear...lastYear).contains(year) ?
             yearlyPayement * (lastYear - year).double() :

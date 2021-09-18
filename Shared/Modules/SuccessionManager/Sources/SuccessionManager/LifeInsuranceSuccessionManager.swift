@@ -119,9 +119,9 @@ struct LifeInsuranceSuccessionManager {
         
         // on a affaire à une assurance vie
         // masse successorale pour cet investissement
-        let masseDecedent = invest.ownedValue(by               : decedent.displayName,
-                                              atEndOf          : year,
-                                              evaluationMethod : .lifeInsuranceSuccession)
+        let masseDecedent = invest.ownedValue(by                : decedent.displayName,
+                                              atEndOf           : year,
+                                              evaluationContext : .lifeInsuranceSuccession)
         guard masseDecedent > 0 else { return }
         
         if invest.ownership.hasAnUsufructOwner(named: decedent.displayName) {
@@ -153,7 +153,8 @@ struct LifeInsuranceSuccessionManager {
                     // simuler localement le transfert de propriété pour connaître les masses héritées
                     _invest.ownership.transferLifeInsuranceFullOwnership(clause: clause)
                 }
-                let ownedValues = _invest.ownedValues(atEndOf: year, evaluationMethod: .lifeInsuranceSuccession)
+                let ownedValues = _invest.ownedValues(atEndOf           : year,
+                                                      evaluationContext : .lifeInsuranceSuccession)
                 ownedValues.forEach { (name, value) in
                     if massesSuccession[name] != nil {
                         // incrémenter
@@ -186,9 +187,9 @@ struct LifeInsuranceSuccessionManager {
                                                   atEndOf year  : Int) -> Double {
         var taxable                                             : Double = 0
         patrimoine.forEachOwnable { ownable in
-            taxable += ownable.ownedValue(by               : decedent.displayName,
-                                          atEndOf          : year,
-                                          evaluationMethod : .lifeInsuranceSuccession)
+            taxable += ownable.ownedValue(by                : decedent.displayName,
+                                          atEndOf           : year,
+                                          evaluationContext : .lifeInsuranceSuccession)
         }
         return taxable
     }

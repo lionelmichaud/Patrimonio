@@ -15,9 +15,7 @@
                 "minX"     : 0.0,
                 "maxX"     : 4.0,
                 "alpha"    : 2.0,
-                "beta"     : 3.0,
-                "pdfMax"   : null,
-                "cdfCurve" : null
+                "beta"     : 3.0
             },
             "defaultValue" : 1.5,
             "randomValue"  : 0.0
@@ -37,9 +35,7 @@
                 "minX"     : 1.0,
                 "maxX"     : 3.0,
                 "alpha"    : 1.5,
-                "beta"     : 2.0,
-                "pdfMax"   : null,
-                "cdfCurve" : null
+                "beta"     : 2.0
             },
             "defaultValue" : 2.0,
             "randomValue"  : 0.0
@@ -59,9 +55,7 @@
                 "minX"     : 5.0,
                 "maxX"     : 9.0,
                 "alpha"    : 2.0,
-                "beta"     : 2.5,
-                "pdfMax"   : null,
-                "cdfCurve" : null
+                "beta"     : 2.5
             },
             "defaultValue" : 7.0,
             "randomValue"  : 0.0

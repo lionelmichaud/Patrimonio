@@ -37,10 +37,12 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
             SocioEconomy.Model(fromFile   : "SocioEconomyModelConfig.json",
                                fromBundle : Bundle.module)
                 .initialized())
-        RegimeGeneralTest.regimeGeneral.setFiscalModel(
-            Fiscal.Model(fromFile   : "FiscalModelConfig.json",
-                         fromBundle : Bundle.module)
-                .initialized())
+        RegimeGeneralTest.regimeGeneral.setNetRegimeGeneralProvider(
+            Fiscal
+                .Model(fromFile   : "FiscalModelConfig.json",
+                       fromBundle : Bundle.module)
+                .initialized()
+                .pensionTaxes)
     }
     
     func date(year: Int, month: Int, day: Int) -> Date {

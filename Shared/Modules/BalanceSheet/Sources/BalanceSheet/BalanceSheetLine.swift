@@ -68,13 +68,13 @@ public struct BalanceSheetLine {
         self.year = year
         
         // initialiser les dictionnaires
-        //  famille
+        //  - toute la famille
         self.assets      = [AppSettings.shared.allPersonsLabel: ValuedAssets(name: "ACTIF")]
         self.liabilities = [AppSettings.shared.allPersonsLabel: ValuedLiabilities(name : "PASSIF")]
-        //  adultes
+        //  - ensemble des adultes
         self.assets[AppSettings.shared.adultsLabel] = ValuedAssets(name: "ACTIF")
         self.liabilities[AppSettings.shared.adultsLabel] = ValuedLiabilities(name : "PASSIF")
-        //  individus
+        //  - individuels
         membersName.forEach { name in
             self.assets[name]      = ValuedAssets(name : "ACTIF")
             self.liabilities[name] = ValuedLiabilities(name : "PASSIF")
@@ -119,13 +119,10 @@ public struct BalanceSheetLine {
         //  somme des adultes (filtré et évalué selon préférences graphiques de l'utilisateur)
         var value: Double = 0
         adultsName.forEach { name in
-            let selected = isSelected(ownable : asset,
-                                      for     : name,
-                                      filter  : UserSettings.shared.ownershipGraphicSelection)
-            value += valueOf(ownable          : asset,
-                             for              : name,
-                             isSelected       : selected,
-                             evaluationMethod : UserSettings.shared.assetGraphicEvaluationMethod)
+            value += asset.ownedValue(by                  : name,
+                                      atEndOf             : year,
+                                      withOwnershipNature : UserSettings.shared.ownershipGraphicSelection,
+                                      evaluatedFraction   : UserSettings.shared.assetGraphicEvaluatedFraction)
         }
         assets[AppSettings.shared.adultsLabel]!
             .perCategory[category]?
@@ -135,14 +132,11 @@ public struct BalanceSheetLine {
         
         //  individus (filtré et évalué selon préférences graphiques de l'utilisateur)
         membersName.forEach { name in
-            let selected = isSelected(ownable : asset,
-                                      for     : name,
-                                      filter  : UserSettings.shared.ownershipGraphicSelection)
-            let value = valueOf(ownable          : asset,
-                                for              : name,
-                                isSelected       : selected,
-                                evaluationMethod : UserSettings.shared.assetGraphicEvaluationMethod)
-            
+            let value = asset.ownedValue(by                  : name,
+                                         atEndOf             : year,
+                                         withOwnershipNature : UserSettings.shared.ownershipGraphicSelection,
+                                         evaluatedFraction   : UserSettings.shared.assetGraphicEvaluatedFraction)
+
             assets[name]!
                 .perCategory[category]?
                 .namedValues
@@ -166,13 +160,10 @@ public struct BalanceSheetLine {
         //  adultes
         var value: Double = 0
         adultsName.forEach { name in
-            let selected = isSelected(ownable : liability,
-                                      for     : name,
-                                      filter  : UserSettings.shared.ownershipKpiSelection)
-            value += valueOf(ownable          : liability,
-                             for              : name,
-                             isSelected       : selected,
-                             evaluationMethod : UserSettings.shared.assetKpiEvaluationMethod)
+            value += liability.ownedValue(by                  : name,
+                                          atEndOf             : year,
+                                          withOwnershipNature : UserSettings.shared.ownershipGraphicSelection,
+                                          evaluatedFraction   : UserSettings.shared.assetGraphicEvaluatedFraction)
         }
         liabilities[AppSettings.shared.adultsLabel]!
             .perCategory[category]?
@@ -182,67 +173,15 @@ public struct BalanceSheetLine {
         
         //  individus
         membersName.forEach { name in
-            let selected = isSelected(ownable : liability,
-                                      for     : name,
-                                      filter  : UserSettings.shared.ownershipGraphicSelection)
-            let value = valueOf(ownable          : liability,
-                                for              : name,
-                                isSelected       : selected,
-                                evaluationMethod : UserSettings.shared.assetGraphicEvaluationMethod)
-            
+            let value = liability.ownedValue(by                  : name,
+                                             atEndOf             : year,
+                                             withOwnershipNature : UserSettings.shared.ownershipGraphicSelection,
+                                             evaluatedFraction   : UserSettings.shared.assetGraphicEvaluatedFraction)
             liabilities[name]!
                 .perCategory[category]?
                 .namedValues
                 .append( (name  : liability.name,
                           value : value))
-        }
-    }
-    
-    /// True si le bien `ownable` satisfait au critère `filter` pour la personne nommée `name`
-    /// - Parameters:
-    ///   - ownable: un bien
-    ///   - name: le nom du de personne dont on calcule le bilan
-    ///   - filter: filtre utilisé
-    /// - Returns: True si le bien `ownable` satisfait au critère `filter` pour la personne nommée `name`
-    fileprivate func isSelected(ownable  : OwnableP,
-                                for name : String,
-                                filter   : OwnershipNature) -> Bool {
-        switch filter {
-            
-            case .generatesRevenue:
-                return ownable.providesRevenue(to: [name])
-                
-            case .sellable:
-                return ownable.hasAFullOwner(in: [name])
-                
-            case .all:
-                return ownable.isPartOfPatrimoine(of: [name])
-        }
-    }
-    
-    /// Calcule la valeur du bien `ownable` pour la personne nommée `name` selon la méthode `evaluationMethod`
-    /// - Parameters:
-    ///   - ownable: un bien
-    ///   - isSelected: True si le bien fait partie du type sélectionné dans les préférences utilisateur
-    ///   - name: le nom du de personne dont on calcule le bilan
-    ///   - evaluationMethod: méthode d'évaluation sélectionnée
-    /// - Returns: valeur de `ownable` pour la personne nommée `name` selon la méthode `evaluationMethod`
-    fileprivate func valueOf(ownable          : OwnableP,
-                             for name         : String,
-                             isSelected       : Bool,
-                             evaluationMethod : AssetEvaluationMethod) -> Double {
-        guard isSelected else {
-            return 0
-        }
-        switch evaluationMethod {
-            
-            case .totalValue:
-                return ownable.value(atEndOf: year).rounded()
-                
-            case .ownedValue:
-                return ownable.ownedValue(by              : name,
-                                          atEndOf         : year,
-                                          evaluationMethod: .patrimoine).rounded()
         }
     }
 }

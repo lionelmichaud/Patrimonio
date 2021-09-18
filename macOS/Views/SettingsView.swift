@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var ownership        = UserSettings.shared.ownershipSelection
-    @State private var evaluationMethod = UserSettings.shared.assetEvaluationMethod
+    @State private var ownership         = UserSettings.shared.ownershipSelection
+    @State private var evaluationContext = UserSettings.shared.assetEvaluationContext
 
     private enum Tabs: Hashable {
         case version, simulation, graphique
@@ -27,8 +27,8 @@ struct SettingsView: View {
                     Label("Simulation", systemImage: "function")
                 }
                 .tag(Tabs.simulation)
-            GraphicUserSettings(ownership        : $ownership,
-                                evaluationMethod : $evaluationMethod)
+            GraphicUserSettings(ownership         : $ownership,
+                                evaluationContext : $evaluationContext)
                 .tabItem {
                     Label("Graphiques", systemImage: "chart.bar.xaxis")
                 }

@@ -165,9 +165,9 @@ struct NetCashFlowManager {
                                                 atEndOf year  : Int) -> Double {
         patrimoine.assets.freeInvests.items.reduce(0) { result, freeInvest in
             if freeInvest.ownership.hasAFullOwner(named: name) {
-                return result + freeInvest.ownedValue(by               : name,
-                                                      atEndOf          : year,
-                                                      evaluationMethod : .patrimoine)
+                return result + freeInvest.ownedValue(by                : name,
+                                                      atEndOf           : year,
+                                                      evaluationContext : .patrimoine)
             } else {
                 return result
             }

@@ -10,6 +10,7 @@ import Foundation
 
 // MARK: - Clause bénéficiaire d'assurance vie
 
+/// Clause bénéficiaire d'assurance vie
 /// - Warning:
 ///   - le cas de plusieurs usufruitiers n'est pas traité
 ///   - le cas de parts non égales entre nue-propriétaires n'est pas traité
