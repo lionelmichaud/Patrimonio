@@ -23,7 +23,8 @@ struct OwnershipManager {
     ///   - decedent: adulte décédé
     ///   - conjoint: l'adulte survivant au décès du premier adulte
     ///   - family: la famille
-    ///   - patrimoine: son patrimoine
+    ///   - assets: Actifs de la famille
+    ///   - liabilities: Passifs de la famille
     ///   - taxes: les droits de succession à payer par les enfants
     ///   - year: l'année du décès
     func modifyLifeInsuranceClause
@@ -51,13 +52,14 @@ struct OwnershipManager {
             return
         }
         
+        // trier les actifs par valeur possédée par le défunt
         // prendre les valeurs à la fin de l'année précédente
         assets
             .freeInvests
             .items
             .sort {
-                $0.ownedValue(by: decedent.displayName, atEndOf: year-1, evaluationContext: .patrimoine) >
-                    $1.ownedValue(by: decedent.displayName, atEndOf: year-1, evaluationContext: .patrimoine)
+                $0.ownedValue(by: decedent.displayName, atEndOf: year - 1, evaluationContext: .patrimoine) >
+                    $1.ownedValue(by: decedent.displayName, atEndOf: year - 1, evaluationContext: .patrimoine)
             }
         //print(String(describing: patrimoine.assets.freeInvests.items))
         
@@ -72,6 +74,7 @@ struct OwnershipManager {
             guard ownedValue >= 0 else {
                 break
             }
+            
             // modifier la clause d'assurance vie
             
             // arrêter quand les capitaux des enfants sont suffisants pour payer
@@ -110,10 +113,11 @@ struct OwnershipManager {
     ///   - liabilities: passifs de la famille
     ///   - year: année
     /// - Returns: actif net vendable détenu par l'ensemble des enfants à la fin de l'année
-    private func childrenNetSellableAssets(in family                   : Family,
-                                           withAssets assets           : Assets,
-                                           withLiabilities liabilities : Liabilities,
-                                           atEndOf year                : Int) -> Double {
+    private func childrenNetSellableAssets
+    (in family                   : Family,
+     withAssets assets           : Assets,
+     withLiabilities liabilities : Liabilities,
+     atEndOf year                : Int) -> Double {
         var total = 0.0
         // Attention: évaluer à la fin de l'année précédente (important pour les FreeInvestment)
         family.children.forEach { child in
