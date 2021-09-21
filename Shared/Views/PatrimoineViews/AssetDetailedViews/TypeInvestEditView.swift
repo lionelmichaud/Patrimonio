@@ -20,7 +20,7 @@ struct TypeInvestEditView : View {
     @State private var typeIndex  : Int
     @State private var isPeriodic : Bool
     @State private var clause     : LifeInsuranceClause
-    let beneficiaireStr = "Bénéficiaires"
+    let beneficiaireStr = "Bénéficiaire"
     let usufruitierStr  = "Bénéficiaire de l'Usufruitier"
     let nuPropStr       = "Bénéficiaires de la Nue-Propriété"
 
@@ -70,8 +70,8 @@ struct TypeInvestEditView : View {
                     }
                 } else {
                     // bénéficiaires
-                    NavigationLink(destination: RecipientsListView(title      : beneficiaireStr,
-                                                                   recipients : $clause.fullRecipients).environmentObject(family)) {
+                    NavigationLink(destination: OwnersListView(title  : beneficiaireStr,
+                                                               owners : $clause.fullRecipients).environmentObject(family)) {
                         Text(beneficiaireStr)
                             .foregroundColor(clause.fullRecipients.isNotEmpty ? .blue : .red)
                             .padding(.leading)

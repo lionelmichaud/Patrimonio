@@ -74,7 +74,7 @@ struct OwnershipManager {
             guard ownedValue >= 0 else {
                 break
             }
-            
+
             // modifier la clause d'assurance vie
             
             // arrêter quand les capitaux des enfants sont suffisants pour payer

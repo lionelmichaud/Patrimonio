@@ -64,25 +64,15 @@ extension Ownership {
     ///
     /// - Parameters:
     ///   - clause: la clause bénéficiare de l'assurance vie
-    ///
-    /// - Warning: le cas de parts non égales entre bénéficiaires en PP n'est pas traité
-    ///
     public mutating func transferLifeInsuranceFullOwnership(clause: LifeInsuranceClause) {
         guard clause.fullRecipients.isNotEmpty else {
             fatalError("Aucun bénéficiaire dans la clause bénéficiaire de l'assurance vie")
         }
-        // TODO: - traiter le cas des parts non égales chez les donataires désignés dans une clause bénéficiaire
-        // répartition des parts entre bénéficiaires en PP
-        let nbOfRecipients = clause.fullRecipients.count
-        let share          = 100.0 / nbOfRecipients.double()
-        
         self.isDismembered  = false
         self.fullOwners     = []
         self.bareOwners     = []
         self.usufructOwners = []
-        clause.fullRecipients.forEach { recipient in
-            self.fullOwners.append(Owner(name: recipient, fraction: share))
-        }
+        self.fullOwners     = clause.fullRecipients
     }
     
     /// Transférer la NP et UF  d'une assurance vie aux donataires selon la clause bénéficiaire
@@ -138,7 +128,7 @@ extension Ownership {
                         
                     } else {
                         // (2) la clause bénéficiaire de l'assurane vie n'est pas démembrée
-                        // transférer le bien en PP aux donataires désignés dans la clause bénéficiaire par parts égales
+                        // transférer le bien en PP aux donataires désignés dans la clause bénéficiaire
                         isDismembered = false
                         transferLifeInsuranceFullOwnership(clause: clause)
                     }

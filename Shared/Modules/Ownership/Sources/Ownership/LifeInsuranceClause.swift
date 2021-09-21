@@ -14,15 +14,15 @@ import Foundation
 /// - Warning:
 ///   - le cas de plusieurs usufruitiers n'est pas traité
 ///   - le cas de parts non égales entre nue-propriétaires n'est pas traité
-///   - le cas de parts non égales entre bénéficiaires en PP n'est pas traité
 public struct LifeInsuranceClause: Codable, Hashable {
-    public var isDismembered     : Bool     = false
+    public var isOptional   : Bool = false
+    public var isDismembered: Bool = false
     // bénéficiaire en PP
-    public var fullRecipients    : [String] = [ ] // PP si la clause n'est pas démembrée
+    public var fullRecipients: Owners = [] // PP si la clause n'est pas démembrée
     // bénéficiaire en UF
-    public var usufructRecipient : String   = ""
+    public var usufructRecipient: String = ""
     // bénéficiaire en NP
-    public var bareRecipients    : [String] = [ ]
+    public var bareRecipients: [String] = [ ]
     
     public var isValid: Bool {
         if isDismembered {
@@ -32,7 +32,7 @@ public struct LifeInsuranceClause: Codable, Hashable {
         }
     }
     
-    public init() {    }
+    public init() { }
 }
 
 extension LifeInsuranceClause: CustomStringConvertible {
