@@ -39,8 +39,6 @@
       }
     },
     {
-      "enabled" : false,
-      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/FileAndFolder",
         "identifier" : "FileAndFolderTests",
@@ -108,7 +106,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/Statistics",
         "identifier" : "StatisticsTests",

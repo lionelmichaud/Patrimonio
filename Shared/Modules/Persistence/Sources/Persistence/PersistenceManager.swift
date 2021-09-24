@@ -385,11 +385,6 @@ public struct PersistenceManager {
             customLog.log(level: .info,
                           "Saving \(fileName, privacy: .public) to: \(folder.path + AppSettings.shared.imagePath(simulationTitle) + fileName, privacy: .public)")
             #endif
-//            try Disk.save(image, to: .documents, as: AppSettings.shared.imagePath(simulationTitle) + fileName)
-//            // impression debug
-//            #if DEBUG
-//            Swift.print("saving image to file: ", AppSettings.shared.imagePath(simulationTitle) + fileName)
-//            #endif
         } catch let error as NSError {
             // la création à échouée
             customLog.log(level: .fault,

@@ -52,7 +52,7 @@ class OwnableTests: XCTestCase {
     // MARK: - Tests
     
     func test_owned_value() throws {
-        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        var ownership = Ownership(ageOf: OwnableTests.ageOf)
         ownership.isDismembered = true
         
         // un seul usufruitier + un seul nupropriétaire
@@ -89,7 +89,7 @@ class OwnableTests: XCTestCase {
         
         // cas .patrimoine, .ifi, .isf d'un Usufruitier
         value = ownership.ownedValue(by               : "Usufruitier",
-                                     ofValue          : asset.value(atEndOf          : 2020),
+                                     ofValue          : asset.value(atEndOf: 2020),
                                      atEndOf          : 2020,
                                      evaluationContext : .patrimoine)
         ownedValue = asset.ownedValue(by               : "Usufruitier",
@@ -99,7 +99,7 @@ class OwnableTests: XCTestCase {
         XCTAssertEqual(value, ownedValue)
         
         value = ownership.ownedValue(by               : "Usufruitier",
-                                     ofValue          : asset.value(atEndOf          : 2020),
+                                     ofValue          : asset.value(atEndOf: 2020),
                                      atEndOf          : 2020,
                                      evaluationContext : .ifi)
         ownedValue = asset.ownedValue(by               : "Usufruitier",
@@ -109,7 +109,7 @@ class OwnableTests: XCTestCase {
         XCTAssertEqual(value, ownedValue)
         
         value = ownership.ownedValue(by               : "Usufruitier",
-                                     ofValue          : asset.value(atEndOf          : 2020),
+                                     ofValue          : asset.value(atEndOf: 2020),
                                      atEndOf          : 2020,
                                      evaluationContext : .isf)
         ownedValue = asset.ownedValue(by               : "Usufruitier",
@@ -120,7 +120,7 @@ class OwnableTests: XCTestCase {
     }
     
     func test_owned_values() throws {
-        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        var ownership = Ownership(ageOf: OwnableTests.ageOf)
         ownership.isDismembered = true
         
         // un seul usufruitier + un seul nupropriétaire

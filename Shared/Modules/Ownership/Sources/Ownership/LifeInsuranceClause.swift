@@ -25,10 +25,16 @@ public struct LifeInsuranceClause: Codable, Hashable {
     public var bareRecipients: [String] = [ ]
     
     public var isValid: Bool {
-        if isDismembered {
-            return usufructRecipient.isNotEmpty && bareRecipients.isNotEmpty
-        } else {
-            return fullRecipients.isNotEmpty
+        switch (isOptional, isDismembered) {
+            case (true, true):
+                // une clause à option ne doit pas être démembrée
+                return false
+                
+            case (_, false):
+                return fullRecipients.isNotEmpty && fullRecipients.isvalid
+                
+            case (false, true):
+                return usufructRecipient.isNotEmpty && bareRecipients.isNotEmpty
         }
     }
     
@@ -38,8 +44,9 @@ public struct LifeInsuranceClause: Codable, Hashable {
 extension LifeInsuranceClause: CustomStringConvertible {
     public var description: String {
         let header = """
-        - Valide:    \(isValid.frenchString)
-        - Démembrée: \(isDismembered.frenchString)
+        - Valide: \(isValid.frenchString)
+        - Clause à option : \(isOptional.frenchString)
+        - Clause démembrée: \(isDismembered.frenchString)
 
         """
         let fr =

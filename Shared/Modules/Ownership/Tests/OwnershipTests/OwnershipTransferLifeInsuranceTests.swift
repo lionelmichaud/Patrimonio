@@ -47,6 +47,8 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         Ownership.setDemembrementProviderP(demembrement)
     }
     
+    // MARK: - Tests
+    
     func test_transfer_Life_Insurance_non_demembrée () throws {
         var ownership = Ownership(ageOf: OwnershipTransferLifeInsuranceTests.ageOf)
         var clause = LifeInsuranceClause()
@@ -62,6 +64,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         ownership.usufructOwners = []
         ownership.bareOwners     = []
         
+        clause.isOptional        = false
         clause.isDismembered     = true
         clause.usufructRecipient = "Conjoint"
         clause.bareRecipients    = ["Enfant 1", "Enfant 2"]
@@ -69,9 +72,10 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         print("AVANT : " + ownership.description)
         print(clause)
         
-        try ownership.transferLifeInsuranceOfDecedent(
-            of          : "Défunt",
-            accordingTo : clause)
+        XCTAssertNoThrow(
+            try ownership.transferLifeInsuranceOfDecedent(
+                of          : "Défunt",
+                accordingTo : clause))
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertTrue(ownership.isDismembered)
@@ -86,6 +90,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         ownership.usufructOwners = []
         ownership.bareOwners     = []
         
+        clause.isOptional        = false
         clause.isDismembered     = true
         clause.usufructRecipient = "Conjoint"
         clause.bareRecipients    = ["Enfant 1"]
@@ -93,9 +98,10 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         print("AVANT : " + ownership.description)
         print(clause)
         
-        try ownership.transferLifeInsuranceOfDecedent(
-            of          : "Défunt",
-            accordingTo : clause)
+        XCTAssertNoThrow(
+            try ownership.transferLifeInsuranceOfDecedent(
+                of          : "Défunt",
+                accordingTo : clause))
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertTrue(ownership.isDismembered)
@@ -113,17 +119,19 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         ownership.usufructOwners = []
         ownership.bareOwners     = []
         
+        clause.isOptional        = false
         clause.isDismembered     = false
-        clause.fullRecipients    = ["Conjoint"]
+        clause.fullRecipients    = [Owner(name: "Conjoint", fraction: 100)]
         clause.usufructRecipient = ""
         clause.bareRecipients    = []
         
         print("AVANT : " + ownership.description)
         print(clause)
         
-        try ownership.transferLifeInsuranceOfDecedent(
-            of               : "Défunt",
-            accordingTo      : clause)
+        XCTAssertNoThrow(
+            try ownership.transferLifeInsuranceOfDecedent(
+                of               : "Défunt",
+                accordingTo      : clause))
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertFalse(ownership.isDismembered)
@@ -140,17 +148,19 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         ownership.usufructOwners = []
         ownership.bareOwners     = []
         
+        clause.isOptional        = false
         clause.isDismembered     = false
-        clause.fullRecipients    = ["Conjoint"]
+        clause.fullRecipients    = [Owner(name: "Conjoint", fraction : 100)]
         clause.usufructRecipient = ""
         clause.bareRecipients    = []
         
         print("AVANT : " + ownership.description)
         print(clause)
         
-        try ownership.transferLifeInsuranceOfDecedent(
-            of               : "Défunt",
-            accordingTo      : clause)
+        XCTAssertNoThrow(
+            try ownership.transferLifeInsuranceOfDecedent(
+                of               : "Défunt",
+                accordingTo      : clause))
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertFalse(ownership.isDismembered)

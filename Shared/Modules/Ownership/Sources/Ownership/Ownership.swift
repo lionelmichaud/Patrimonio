@@ -74,7 +74,7 @@ public struct Ownership {
     public var usufructOwners : Owners = []
     // fonction qui donne l'age d'une personne à la fin d'une année donnée
     var ageOf          : ((_ name: String, _ year: Int) -> Int)?
-    public var isDismembered  : Bool   = false {
+    public var isDismembered: Bool = false {
         didSet {
             if isDismembered {
                 usufructOwners = fullOwners
@@ -82,7 +82,7 @@ public struct Ownership {
             }
         }
     }
-    public var isValid        : Bool {
+    public var isValid: Bool {
         if isDismembered {
             return (bareOwners.isNotEmpty && bareOwners.isvalid) &&
                 (usufructOwners.isNotEmpty && usufructOwners.isvalid)
@@ -106,11 +106,11 @@ public struct Ownership {
     }
     
     /// Calcule les valeurs démembrées d'un bien en fonction de la date d'évaluation
-    /// et donc en fonction de l'age du propréiatire du bien à démembrer
+    /// et donc en fonction de l'age du propréitaire du bien à démembrer
     /// - Parameters:
     ///   - totalValue: valeur du bien en pleine propriété
     ///   - year: date d'évaluation
-    /// - Returns: velurs de l'usufruit et de la nue-propriété
+    /// - Returns: valeurs de l'usufruit et de la nue-propriété
     func demembrement(ofValue totalValue : Double,
                       atEndOf year       : Int) throws
     -> (usufructValue : Double,
@@ -159,11 +159,16 @@ public struct Ownership {
                 bareValuePercent: dem.bareValue)
     }
     
-    /// Calcule la part d'un revenu qui revient à une personne donnée en fonction de ses droits de propriété sur le bien.
+    /// Calcule la part d'un revenu `totalRevenue`qui revient à une personne nommée `ownerName`
+    /// en fonction de ses droits de propriété sur le bien.
     /// - Note:
     ///     Pour une personne et un bien donné Part =
     ///     * Bien non démembré = part de la valeur actuelle détenue en PP par la personne
     ///     * Bien démembré        = part de la valeur actuelle détenue en UF par la personne
+    /// - Parameters:
+    ///   - ownerName: nom de la personne
+    ///   - totalRevenue: revenu total
+    /// - Returns: part d'un revenu `totalRevenue`qui revient à une personne nommée `ownerName`
     public func ownedRevenue(by ownerName           : String,
                              ofRevenue totalRevenue : Double) -> Double {
         if isDismembered {
@@ -174,12 +179,24 @@ public struct Ownership {
             return fullOwners[ownerName]?.ownedValue(from: totalRevenue) ?? 0
         }
     }
-    func ownedRevenue(by adultsName          : [String],
+    
+    /// Calcule la part d'un revenu `totalRevenue`qui revient à un groupe de personnes
+    /// nommées `ownersName` en fonction de leur droit respectif de propriété sur le bien.
+    /// - Note:
+    ///     Pour une personne et un bien donné Part =
+    ///     * Bien non démembré = part de la valeur actuelle détenue en PP par la personne
+    ///     * Bien démembré        = part de la valeur actuelle détenue en UF par la personne
+    /// - Parameters:
+    ///   - ownersName: noms des personnes
+    ///   - totalRevenue: revenu total
+    /// - Returns: part d'un revenu `totalRevenue`qui revient à une personne nommée `ownerName`
+    func ownedRevenue(by ownersName          : [String],
                       ofRevenue totalRevenue : Double) -> Double {
-        adultsName.reduce(0.0) { result, name in
+        ownersName.reduce(0.0) { result, name in
             result + ownedRevenue(by: name, ofRevenue: totalRevenue)
         }
     }
+    
     func ownedRevenueFraction(by ownerName: String) -> Double {
         if isDismembered {
             // part de la valeur actuelle détenue en UF par la personne
@@ -189,20 +206,15 @@ public struct Ownership {
             return fullOwners[ownerName]?.fraction ?? 0
         }
     }
-    public func ownedRevenueFraction(by adultsName: [String]) -> Double {
-        adultsName.reduce(0.0) { result, name in
+    
+    public func ownedRevenueFraction(by ownersName: [String]) -> Double {
+        ownersName.reduce(0.0) { result, name in
             result + ownedRevenueFraction(by: name)
         }
     }
-    //            var fullyOwnedRevenue: Double = 0
-    //            if let usufructRevenue = usufructOwners[ownerName]?.ownedValue(from: totalRevenue),
-    //               let bareRevenue = bareOwners[ownerName]?.ownedValue(from: totalRevenue) {
-    //                // la personne est à la fois UF et NP
-    //                fullyOwnedRevenue = min(usufructRevenue, bareRevenue)
-    //            }
     
-    /// Calcule la valeur d'un bien possédée par un personne donnée à une date donnée
-    /// selon la régle générale ou selon la règle de l'IFI, de l'ISF, de la succession...
+    /// Calcule la valeur d'un bien (de valeur totale `totalValue) possédée par un personne donnée
+    /// à une date donnée `year` et selon le `evaluationContext` patrimonial, IFI, ISF, succession...
     /// - Parameters:
     ///   - ownerName: nom de la personne recherchée
     ///   - totalValue: valeure totale du bien
@@ -267,6 +279,14 @@ public struct Ownership {
         }
     }
     
+    /// Calcule la valeur d'un bien (de valeur totale `totalValue) possédée par chacun des propriétaires
+    /// à une date donnée `year` et selon le `evaluationContext` patrimonial, IFI, ISF, succession...
+    /// - Parameters:
+    ///   - ownerName: nom de la personne recherchée
+    ///   - totalValue: valeure totale du bien
+    ///   - year: date d'évaluation
+    ///   - evaluationContext: context d'évaluation à utiliser pour le calcul
+    /// - Returns: [Nom : Valeur possédée]
     public func ownedValues(ofValue totalValue : Double,
                             atEndOf year       : Int,
                             evaluationContext  : EvaluationContext) -> [String : Double] {
@@ -297,7 +317,7 @@ public struct Ownership {
         return dico
     }
     
-    /// Factoriser les parts des usufuitier et les nue-propriétaires si nécessaire
+    /// Factoriser les parts des usufuitier et des nue-propriétaires si nécessaire
     mutating func groupShares() {
         if isDismembered {
             fullOwners = [ ]
