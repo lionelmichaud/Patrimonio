@@ -105,7 +105,7 @@ public extension OwnableP {
             case .legalSuccession:
                 // cas particulier d'une succession:
                 //   le défunt est-il usufruitier ?
-                if ownership.hasAnUsufructOwner(named: ownerName) {
+                if ownership.isDismembered && ownership.hasAnUsufructOwner(named: ownerName) {
                     // si oui alors l'usufruit rejoint la nu-propriété sans droit de succession
                     // l'usufruit n'est donc pas intégré à la masse successorale du défunt
                     return 0

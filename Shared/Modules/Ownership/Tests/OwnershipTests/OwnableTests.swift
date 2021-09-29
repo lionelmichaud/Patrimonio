@@ -15,7 +15,7 @@ class OwnableTests: XCTestCase {
     
     // MARK: - Helpers
     
-    struct Asset: OwnableP {
+    struct OwnableItem: OwnableP {
         var ownership: Ownership = Ownership()
         
         var name: String
@@ -40,101 +40,226 @@ class OwnableTests: XCTestCase {
         }
     }
     
+    static var ownableItem            = OwnableItem(name: "default")
+    static var ownableItemDemembre    = OwnableItem(name: "démembré")
+    static var ownableItemNonDemembre = OwnableItem(name: "non démembré")
+    
     override class func setUp() {
         super.setUp()
         let demembrementModel = DemembrementModel.Model(fromFile   : DemembrementModel.Model.defaultFileName,
                                                         fromBundle : Bundle.module)
         let demembrement = DemembrementModel(model: demembrementModel)
-
+        
         Ownership.setDemembrementProviderP(demembrement)
+    }
+    
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        OwnableTests.ownableItem.ownership = Ownership(ageOf: OwnableTests.ageOf)
+        
+        // Démembré: un seul usufruitier + 2 nupropriétaires
+        OwnableTests.ownableItemDemembre.ownership = Ownership(ageOf: OwnableTests.ageOf)
+        OwnableTests.ownableItemDemembre.ownership.isDismembered  = true
+        OwnableTests.ownableItemDemembre.ownership.usufructOwners = [Owner(name: "Usufruitier", fraction : 100)]
+        OwnableTests.ownableItemDemembre.ownership.bareOwners     = [Owner(name: "Nupropriétaire 1", fraction : 40),
+                                                                     Owner(name: "Nupropriétaire 2", fraction : 60)]
+        
+        // Démembré: un seul usufruitier + 2 nupropriétaires
+        OwnableTests.ownableItemNonDemembre.ownership = Ownership(ageOf: OwnableTests.ageOf)
+        OwnableTests.ownableItemNonDemembre.ownership.isDismembered = false
+        OwnableTests.ownableItemNonDemembre.ownership.fullOwners = [Owner(name: "Plein propriétaire", fraction : 100)]
     }
     
     // MARK: - Tests
     
     func test_owned_value() throws {
-        var ownership = Ownership(ageOf: OwnableTests.ageOf)
-        ownership.isDismembered = true
-        
-        // un seul usufruitier + un seul nupropriétaire
-        ownership.usufructOwners = [Owner(name: "Usufruitier",    fraction : 100)]
-        ownership.bareOwners     = [Owner(name: "Nupropriétaire", fraction : 100)]
-        
-        let asset = Asset(ownership: ownership,
-                          name: "Actif")
-        
         // cas .legalSuccession d'un Nu-propriétaire
-        var value = ownership.ownedValue(by                : "Nupropriétaire",
-                                         ofValue           : asset.value(atEndOf: 2020),
-                                         atEndOf           : 2020,
-                                         evaluationContext : .legalSuccession)
-        var ownedValue = asset.ownedValue(by                : "Nupropriétaire",
-                                          atEndOf           : 2020,
-                                          evaluationContext : .legalSuccession)
+        var value = OwnableTests.ownableItemDemembre.ownership
+            .ownedValue(by                : "Nupropriétaire 1",
+                        ofValue           : OwnableTests.ownableItemDemembre.value(atEndOf: 2020),
+                        atEndOf           : 2020,
+                        evaluationContext : .legalSuccession)
+        var ownedValue = OwnableTests.ownableItemDemembre
+            .ownedValue(by                : "Nupropriétaire 1",
+                        atEndOf           : 2020,
+                        evaluationContext : .legalSuccession)
         
         XCTAssertEqual(value, ownedValue)
         
         // cas .legalSuccession d'un Usufruitier
-        ownedValue = asset.ownedValue(by                : "Usufruitier",
-                                      atEndOf           : 2020,
-                                      evaluationContext : .legalSuccession)
+        ownedValue = OwnableTests.ownableItemDemembre
+            .ownedValue(by                : "Usufruitier",
+                        atEndOf           : 2020,
+                        evaluationContext : .legalSuccession)
         
         XCTAssertEqual(0, ownedValue)
         
         // cas .lifeInsuranceSuccession d'un Usufruitier
-        ownedValue = asset.ownedValue(by               : "Usufruitier",
-                                      atEndOf          : 2020,
-                                      evaluationContext : .lifeInsuranceSuccession)
+        ownedValue = OwnableTests.ownableItemDemembre
+            .ownedValue(by                : "Usufruitier",
+                        atEndOf           : 2020,
+                        evaluationContext : .lifeInsuranceSuccession)
         
         XCTAssertEqual(0, ownedValue)
         
         // cas .patrimoine, .ifi, .isf d'un Usufruitier
-        value = ownership.ownedValue(by               : "Usufruitier",
-                                     ofValue          : asset.value(atEndOf: 2020),
-                                     atEndOf          : 2020,
-                                     evaluationContext : .patrimoine)
-        ownedValue = asset.ownedValue(by               : "Usufruitier",
-                                      atEndOf          : 2020,
-                                      evaluationContext : .patrimoine)
+        value = OwnableTests.ownableItemDemembre.ownership
+            .ownedValue(by                : "Usufruitier",
+                        ofValue           : OwnableTests.ownableItemDemembre.value(atEndOf: 2020),
+                        atEndOf           : 2020,
+                        evaluationContext : .patrimoine)
+        ownedValue = OwnableTests.ownableItemDemembre
+            .ownedValue(by                : "Usufruitier",
+                        atEndOf           : 2020,
+                        evaluationContext : .patrimoine)
         
         XCTAssertEqual(value, ownedValue)
         
-        value = ownership.ownedValue(by               : "Usufruitier",
-                                     ofValue          : asset.value(atEndOf: 2020),
-                                     atEndOf          : 2020,
-                                     evaluationContext : .ifi)
-        ownedValue = asset.ownedValue(by               : "Usufruitier",
-                                      atEndOf          : 2020,
-                                      evaluationContext : .ifi)
+        value = OwnableTests.ownableItemDemembre.ownership
+            .ownedValue(by                : "Usufruitier",
+                        ofValue           : OwnableTests.ownableItemDemembre.value(atEndOf: 2020),
+                        atEndOf           : 2020,
+                        evaluationContext : .ifi)
+        ownedValue = OwnableTests.ownableItemDemembre
+            .ownedValue(by                : "Usufruitier",
+                        atEndOf           : 2020,
+                        evaluationContext : .ifi)
         
         XCTAssertEqual(value, ownedValue)
         
-        value = ownership.ownedValue(by               : "Usufruitier",
-                                     ofValue          : asset.value(atEndOf: 2020),
-                                     atEndOf          : 2020,
-                                     evaluationContext : .isf)
-        ownedValue = asset.ownedValue(by               : "Usufruitier",
-                                      atEndOf          : 2020,
-                                      evaluationContext : .isf)
+        value = OwnableTests.ownableItemDemembre.ownership
+            .ownedValue(by               : "Usufruitier",
+                        ofValue          : OwnableTests.ownableItemDemembre.value(atEndOf: 2020),
+                        atEndOf          : 2020,
+                        evaluationContext : .isf)
+        ownedValue = OwnableTests.ownableItemDemembre
+            .ownedValue(by                : "Usufruitier",
+                        atEndOf           : 2020,
+                        evaluationContext : .isf)
         
         XCTAssertEqual(value, ownedValue)
     }
     
-    func test_owned_values() throws {
-        var ownership = Ownership(ageOf: OwnableTests.ageOf)
-        ownership.isDismembered = true
+    func test_owned_values_demembre() throws {
+        var ownedValues = OwnableTests.ownableItemDemembre
+            .ownedValues(atEndOf           : 2020,
+                         evaluationContext : .legalSuccession)
         
-        // un seul usufruitier + un seul nupropriétaire
-        ownership.usufructOwners = [Owner(name: "Usufruitier",    fraction : 100)]
-        ownership.bareOwners     = [Owner(name: "Nupropriétaire", fraction : 100)]
-        
-        let asset = Asset(ownership: ownership,
-                          name: "Actif")
-        
-        let ownedValues = asset.ownedValues(atEndOf          : 2020,
-                                            evaluationContext : .legalSuccession)
-        print(ownedValues)
-
+        XCTAssertNil(ownedValues["Plein propriétaire"])
         XCTAssertNotNil(ownedValues["Usufruitier"])
-        XCTAssertNotNil(ownedValues["Nupropriétaire"])
+        XCTAssertNotNil(ownedValues["Nupropriétaire 1"])
+        XCTAssertNotNil(ownedValues["Nupropriétaire 2"])
+        
+        ownedValues = OwnableTests.ownableItemDemembre
+            .ownedValues(ofValue           : 100.0,
+                         atEndOf           : 2020,
+                         evaluationContext : .legalSuccession)
+        
+        XCTAssertNil(ownedValues["Plein propriétaire"])
+        XCTAssertNotNil(ownedValues["Usufruitier"])
+        XCTAssertNotNil(ownedValues["Nupropriétaire 1"])
+        XCTAssertNotNil(ownedValues["Nupropriétaire 2"])
+    }
+    
+    func test_owned_values_non_demembre() throws {
+        var ownedValues = OwnableTests.ownableItemNonDemembre
+            .ownedValues(atEndOf           : 2020,
+                         evaluationContext : .legalSuccession)
+        
+        XCTAssertNotNil(ownedValues["Plein propriétaire"])
+        XCTAssertNil(ownedValues["Usufruitier"])
+        XCTAssertNil(ownedValues["Nupropriétaire 1"])
+        XCTAssertNil(ownedValues["Nupropriétaire 2"])
+
+        ownedValues = OwnableTests.ownableItemNonDemembre
+            .ownedValues(ofValue           : 100.0,
+                         atEndOf           : 2020,
+                         evaluationContext : .legalSuccession)
+        
+        XCTAssertNotNil(ownedValues["Plein propriétaire"])
+        XCTAssertNil(ownedValues["Usufruitier"])
+        XCTAssertNil(ownedValues["Nupropriétaire 1"])
+        XCTAssertNil(ownedValues["Nupropriétaire 2"])
+    }
+    
+    func test_satisfies_non_demembre() throws {
+        XCTAssertTrue(OwnableTests.ownableItemNonDemembre
+                        .satisfies(criteria: .all, for: "Plein propriétaire"))
+        XCTAssertTrue(OwnableTests.ownableItemNonDemembre
+                        .satisfies(criteria: .generatesRevenue, for: "Plein propriétaire"))
+        XCTAssertTrue(OwnableTests.ownableItemNonDemembre
+                        .satisfies(criteria: .sellable, for: "Plein propriétaire"))
+        
+        XCTAssertFalse(OwnableTests.ownableItemNonDemembre
+                        .satisfies(criteria: .all, for: "Nupropriétaire 1"))
+        XCTAssertFalse(OwnableTests.ownableItemNonDemembre
+                        .satisfies(criteria: .all, for: "Nupropriétaire 2"))
+        
+        XCTAssertFalse(OwnableTests.ownableItemNonDemembre
+                        .satisfies(criteria: .generatesRevenue, for: "Nupropriétaire 1"))
+        XCTAssertFalse(OwnableTests.ownableItemNonDemembre
+                        .satisfies(criteria: .generatesRevenue, for: "Nupropriétaire 2"))
+        
+        XCTAssertFalse(OwnableTests.ownableItemNonDemembre
+                        .satisfies(criteria: .sellable, for: "Nupropriétaire 1"))
+        XCTAssertFalse(OwnableTests.ownableItemNonDemembre
+                        .satisfies(criteria: .sellable, for: "Nupropriétaire 2"))
+    }
+
+    func test_satisfies_demembre() throws {
+        XCTAssertTrue(OwnableTests.ownableItemDemembre
+                        .satisfies(criteria: .all, for: "Usufruitier"))
+        XCTAssertTrue(OwnableTests.ownableItemDemembre
+                        .satisfies(criteria: .generatesRevenue, for: "Usufruitier"))
+        XCTAssertFalse(OwnableTests.ownableItemDemembre
+                        .satisfies(criteria: .sellable, for: "Usufruitier"))
+        
+        XCTAssertTrue(OwnableTests.ownableItemDemembre
+                        .satisfies(criteria: .all, for: "Nupropriétaire 1"))
+        XCTAssertTrue(OwnableTests.ownableItemDemembre
+                        .satisfies(criteria: .all, for: "Nupropriétaire 2"))
+        XCTAssertFalse(OwnableTests.ownableItemDemembre
+                        .satisfies(criteria: .generatesRevenue, for: "Nupropriétaire 1"))
+        XCTAssertFalse(OwnableTests.ownableItemDemembre
+                        .satisfies(criteria: .generatesRevenue, for: "Nupropriétaire 2"))
+        XCTAssertFalse(OwnableTests.ownableItemDemembre
+                        .satisfies(criteria: .sellable, for: "Nupropriétaire 1"))
+        XCTAssertFalse(OwnableTests.ownableItemDemembre
+                        .satisfies(criteria: .sellable, for: "Nupropriétaire 2"))
+    }
+    
+    func test_ownedValue_withOwnershipNature() {
+        var ownedValue = OwnableTests.ownableItemDemembre
+            .ownedValue(by                  : "Usufruitier",
+                        atEndOf             : 2020,
+                        withOwnershipNature : .generatesRevenue,
+                        evaluatedFraction   : .totalValue)
+        let totalValue = OwnableTests.ownableItemNonDemembre
+            .value(atEndOf: 2020).rounded()
+        XCTAssertEqual(ownedValue, totalValue)
+        
+        ownedValue = OwnableTests.ownableItemDemembre
+            .ownedValue(by                  : "Usufruitier",
+                        atEndOf             : 2020,
+                        withOwnershipNature : .generatesRevenue,
+                        evaluatedFraction   : .ownedValue)
+        let value = OwnableTests.ownableItemDemembre
+            .ownedValue(by               : "Usufruitier",
+                        atEndOf          : 2020,
+                        evaluationContext: .patrimoine).rounded()
+        XCTAssertEqual(ownedValue, value)
+        
+        ownedValue = OwnableTests.ownableItemDemembre
+            .ownedValue(by                  : "Nupropriétaire 1",
+                        atEndOf             : 2020,
+                        withOwnershipNature : .generatesRevenue,
+                        evaluatedFraction   : .totalValue)
+        XCTAssertEqual(ownedValue, 0.0)
+        ownedValue = OwnableTests.ownableItemDemembre
+            .ownedValue(by                  : "Nupropriétaire 1",
+                        atEndOf             : 2020,
+                        withOwnershipNature : .generatesRevenue,
+                        evaluatedFraction   : .ownedValue)
+        XCTAssertEqual(ownedValue, 0.0)
     }
 }
