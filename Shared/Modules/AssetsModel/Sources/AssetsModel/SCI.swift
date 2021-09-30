@@ -78,7 +78,7 @@ public struct SCI {
                                              spouseName         : String?,
                                              spouseFiscalOption : InheritanceFiscalOption?,
                                              atEndOf year       : Int) {
-        for idx in scpis.items.range where scpis.items[idx].value(atEndOf: year) > 0 {
+        for idx in scpis.items.indices where scpis.items[idx].value(atEndOf: year) > 0 {
             try! scpis.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,

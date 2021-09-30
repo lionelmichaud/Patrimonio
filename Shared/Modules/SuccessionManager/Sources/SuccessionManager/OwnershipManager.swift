@@ -63,7 +63,7 @@ struct OwnershipManager {
             }
         //print(String(describing: patrimoine.assets.freeInvests.items))
         
-        for idx in assets.freeInvests.items.range {
+        for idx in assets.freeInvests.items.indices {
             let ownedValue =
                 assets
                 .freeInvests[idx]
@@ -189,7 +189,7 @@ struct OwnershipManager {
                                      spouseName         : String?,
                                      spouseFiscalOption : InheritanceFiscalOption?,
                                      atEndOf year       : Int) {
-        for idx in assets.periodicInvests.items.range where assets.periodicInvests.items[idx].value(atEndOf: year) > 0 {
+        for idx in assets.periodicInvests.items.indices where assets.periodicInvests.items[idx].value(atEndOf: year) > 0 {
             switch assets.periodicInvests[idx].type {
                 case .lifeInsurance(_, let clause):
                     // régles de transmission particulières pour l'Assurance Vie
@@ -206,7 +206,7 @@ struct OwnershipManager {
                         spouseFiscalOption : spouseFiscalOption)
             }
         }
-        for idx in assets.freeInvests.items.range where assets.freeInvests.items[idx].value(atEndOf: year) > 0 {
+        for idx in assets.freeInvests.items.indices where assets.freeInvests.items[idx].value(atEndOf: year) > 0 {
             assets.freeInvests[idx].initializeCurrentInterestsAfterTransmission(yearOfTransmission: year)
             switch assets.freeInvests[idx].type {
                 case .lifeInsurance(_, let clause):
@@ -224,14 +224,14 @@ struct OwnershipManager {
                         spouseFiscalOption : spouseFiscalOption)
             }
         }
-        for idx in assets.realEstates.items.range where assets.realEstates.items[idx].value(atEndOf: year) > 0 {
+        for idx in assets.realEstates.items.indices where assets.realEstates.items[idx].value(atEndOf: year) > 0 {
             try! assets.realEstates[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,
                 spouseName         : spouseName,
                 spouseFiscalOption : spouseFiscalOption)
         }
-        for idx in assets.scpis.items.range where assets.scpis.items[idx].value(atEndOf: year) > 0 {
+        for idx in assets.scpis.items.indices where assets.scpis.items[idx].value(atEndOf: year) > 0 {
             try! assets.scpis.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,
@@ -261,7 +261,7 @@ struct OwnershipManager {
                                      spouseFiscalOption : InheritanceFiscalOption?,
                                      atEndOf year       : Int) {
         // transférer les emprunts
-        for idx in liabilities.loans.items.range where liabilities.loans.items[idx].value(atEndOf: year) > 0 {
+        for idx in liabilities.loans.items.indices where liabilities.loans.items[idx].value(atEndOf: year) > 0 {
             try! liabilities.loans.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,
@@ -269,7 +269,7 @@ struct OwnershipManager {
                 spouseFiscalOption : spouseFiscalOption)
         }
         // transférer les dettes
-        for idx in liabilities.debts.items.range {
+        for idx in liabilities.debts.items.indices {
             try! liabilities.debts.items[idx].ownership.transferOwnershipOf(
                 decedentName       : decedentName,
                 chidrenNames       : chidrenNames,

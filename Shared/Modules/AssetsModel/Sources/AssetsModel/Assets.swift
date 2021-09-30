@@ -131,7 +131,7 @@ public struct Assets {
     ///   - Doit être appelée après le chargement d'un objet FreeInvestement depuis le fichier JSON
     ///   - Doit être appelée après toute simulation ayant affectée le Patrimoine (succession)
     public mutating func initializeFreeInvestementCurrentValue() {
-        for idx in freeInvests.items.range {
+        for idx in freeInvests.items.indices {
             freeInvests[idx].resetCurrentState()
         }
     }

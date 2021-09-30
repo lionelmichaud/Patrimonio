@@ -20,7 +20,7 @@ public extension LifeExpensesDic {
         // on prend une seule catégorie
         if let expenseArray = perCategory[thisCategory] {
             let nbItem = expenseArray.items.count
-            for expIdx in expenseArray.items.range {
+            for expIdx in expenseArray.items.indices {
                 table.append(expenseArray[nbItem - 1 - expIdx].name)
             }
         }
@@ -42,7 +42,7 @@ public extension LifeExpensesDic {
             var idx = 0
             perCategory.sortedReversed(by: \.key.displayString).forEach { (_, expenseArray) in
                 let nbItem = expenseArray.items.count
-                for expIdx in expenseArray.items.range {
+                for expIdx in expenseArray.items.indices {
                     if let firstYear = expenseArray[nbItem - 1 - expIdx].firstYear,
                        let lastYear  = expenseArray[nbItem - 1 - expIdx].lastYear {
                         table.append((name              : expenseArray[nbItem - 1 - expIdx].name.truncate(to: 20, addEllipsis: true),
@@ -60,7 +60,7 @@ public extension LifeExpensesDic {
             var idx = 0
             if let expenseArray = perCategory[category!] {
                 let nbItem = expenseArray.items.count
-                for expIdx in expenseArray.items.range {
+                for expIdx in expenseArray.items.indices {
                     if let firstYear = expenseArray[nbItem - 1 - expIdx].firstYear,
                        let lastYear  = expenseArray[nbItem - 1 - expIdx].lastYear {
                         table.append((name              : expenseArray[nbItem - 1 - expIdx].name.truncate(to: 20, addEllipsis: true),

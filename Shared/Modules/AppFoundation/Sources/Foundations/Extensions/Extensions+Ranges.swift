@@ -9,8 +9,8 @@
 import Foundation
 
 public extension ClosedRange {
-    func hasIntersection(with: ClosedRange) -> Bool where Bound: Strideable, Bound.Stride: SignedInteger {
-        return self.clamped(to: with).count > 1 ||
-            with.clamped(to: self) .count > 1
+    func hasIntersection(with otherRange: ClosedRange) -> Bool where Bound: Strideable, Bound.Stride: SignedInteger {
+        return self.clamped(to: otherRange).count > 1 ||
+            otherRange.clamped(to: self) .count > 1
     }
 }

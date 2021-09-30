@@ -19,7 +19,7 @@ public extension ArrayOfNameableValuable where E: OwnableP {
         try self.init(fileNamePrefix : fileNamePrefix,
                       fromFolder     : folder)
         // injecter le délégué pour la méthode family.ageOf qui par défaut est nil à la création de l'objet
-        for idx in items.range {
+        for idx in items.indices {
             if let personAgeProvider = personAgeProvider {
                 items[idx].ownership.setDelegateForAgeOf(delegate: personAgeProvider.ageOf)
             }
@@ -32,7 +32,7 @@ public extension ArrayOfNameableValuable where E: OwnableP {
         self.init(for            : aClass,
                   fileNamePrefix : fileNamePrefix)
         // injecter le délégué pour la méthode family.ageOf qui par défaut est nil à la création de l'objet
-        for idx in items.range {
+        for idx in items.indices {
             if let personAgeProvider = personAgeProvider {
                 items[idx].ownership.setDelegateForAgeOf(delegate: personAgeProvider.ageOf)
             }
