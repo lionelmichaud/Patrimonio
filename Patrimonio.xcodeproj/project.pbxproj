@@ -176,8 +176,6 @@
 		7968406126B8A8D500F838BE /* Ownership in Frameworks */ = {isa = PBXBuildFile; productRef = 7968406026B8A8D500F838BE /* Ownership */; };
 		796A707726E6A0F500769D1E /* Kpi in Frameworks */ = {isa = PBXBuildFile; productRef = 796A707626E6A0F500769D1E /* Kpi */; };
 		796A707926E6A11D00769D1E /* Kpi in Frameworks */ = {isa = PBXBuildFile; productRef = 796A707826E6A11D00769D1E /* Kpi */; };
-		796CE07226E6863B00FF09BC /* BalanceSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 796CE07126E6863B00FF09BC /* BalanceSheet */; };
-		796CE07426E6864200FF09BC /* BalanceSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 796CE07326E6864200FF09BC /* BalanceSheet */; };
 		796F2F90262C8553002D20D1 /* HumanLifeModel in Frameworks */ = {isa = PBXBuildFile; productRef = 796F2F8F262C8553002D20D1 /* HumanLifeModel */; };
 		7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 7970627E262C7B7C009A18F0 /* UnemployementModel */; };
 		79706281262C7B82009A18F0 /* UnemployementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79706280262C7B82009A18F0 /* UnemployementModel */; };
@@ -796,7 +794,6 @@
 				7998E1C7262DC5C500DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
 				79B2729B2634E80C00298E5D /* Charts in Frameworks */,
 				79EF42D226C2B74900EC0555 /* HumanLifeModel in Frameworks */,
-				796CE07226E6863B00FF09BC /* BalanceSheet in Frameworks */,
 				79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */,
 				79EF42DC26C2B97500EC0555 /* PersonModel in Frameworks */,
 				791ED0EB263A0A1200701202 /* StepperView in Frameworks */,
@@ -832,7 +829,6 @@
 				79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */,
 				79EF42DE26C2B97E00EC0555 /* PersonModel in Frameworks */,
 				79933A0026E0F80B0081D378 /* Liabilities in Frameworks */,
-				796CE07426E6864200FF09BC /* BalanceSheet in Frameworks */,
 				79706281262C7B82009A18F0 /* UnemployementModel in Frameworks */,
 				799074262660524C00F224F7 /* FileAndFolder in Frameworks */,
 				7988A96526E1790800E00861 /* SimulationLogger in Frameworks */,
@@ -1019,7 +1015,6 @@
 				7920DC64262C700500536B03 /* Tests iOS */,
 				7920DC6F262C700500536B03 /* Tests macOS */,
 				7920DC52262C700500536B03 /* Products */,
-				7920DC90262C720D00536B03 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1092,13 +1087,6 @@
 				7920DC72262C700500536B03 /* Info.plist */,
 			);
 			path = "Tests macOS";
-			sourceTree = "<group>";
-		};
-		7920DC90262C720D00536B03 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		7935FFE6265461FA00AC1715 /* Patrimoine */ = {
@@ -1680,7 +1668,6 @@
 				799D7C7426E53D6100ACAED3 /* OrderedCollections */,
 				799D7C7626E53D6100ACAED3 /* DequeModule */,
 				799D7C7826E53D6100ACAED3 /* Collections */,
-				796CE07126E6863B00FF09BC /* BalanceSheet */,
 				796A707626E6A0F500769D1E /* Kpi */,
 			);
 			productName = "Patrimonio (iOS)";
@@ -1732,7 +1719,6 @@
 				792874F926E130BD0011913B /* FamilyModel */,
 				798E844E26E1722D00854003 /* SuccessionManager */,
 				7988A96426E1790800E00861 /* SimulationLogger */,
-				796CE07326E6864200FF09BC /* BalanceSheet */,
 				796A707826E6A11D00769D1E /* Kpi */,
 			);
 			productName = "Patrimonio (macOS)";
@@ -2902,14 +2888,6 @@
 		796A707826E6A11D00769D1E /* Kpi */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Kpi;
-		};
-		796CE07126E6863B00FF09BC /* BalanceSheet */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = BalanceSheet;
-		};
-		796CE07326E6864200FF09BC /* BalanceSheet */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = BalanceSheet;
 		};
 		796F2F8F262C8553002D20D1 /* HumanLifeModel */ = {
 			isa = XCSwiftPackageProductDependency;

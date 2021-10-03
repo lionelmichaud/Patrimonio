@@ -146,12 +146,12 @@ struct LifeInsuranceSuccessionManager {
                 if clause.isDismembered {
                     // la clause bénéficiaire de l'assurance vie est démembrée
                     // simuler localement le transfert de propriété pour connaître les masses héritées
-                    _invest.ownership.transferLifeInsuranceUsufructAndBareOwnership(clause: clause)
+                    _invest.ownership.transferUnDismemberedLifeInsToUsufructAndBareOwners(clause: clause)
                     
                 } else {
                     // la clause bénéficiaire de l'assurance vie n'est pas démembrée
                     // simuler localement le transfert de propriété pour connaître les masses héritées
-                    _invest.ownership.transferLifeInsuranceFullOwnership(clause: clause)
+                    _invest.ownership.transferUnDismemberedLifeInsFullOwnership(clause: clause)
                 }
                 let ownedValues = _invest.ownedValues(atEndOf           : year,
                                                       evaluationContext : .lifeInsuranceSuccession)

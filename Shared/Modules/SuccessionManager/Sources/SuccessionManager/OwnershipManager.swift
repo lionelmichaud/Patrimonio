@@ -193,8 +193,7 @@ struct OwnershipManager {
             switch assets.periodicInvests[idx].type {
                 case .lifeInsurance(_, let clause):
                     // régles de transmission particulières pour l'Assurance Vie
-                    // TODO: - ne transférer que ce qui n'est pas de l'assurance vie, sinon utiliser d'autres règles de transmission
-                    try! assets.periodicInvests[idx].ownership.transferLifeInsuranceOfDecedent(
+                    try! assets.periodicInvests[idx].ownership.transferLifeInsurance(
                         of          : decedentName,
                         accordingTo : clause)
                     
@@ -211,8 +210,7 @@ struct OwnershipManager {
             switch assets.freeInvests[idx].type {
                 case .lifeInsurance(_, let clause):
                     // régles de transmission particulières pour l'Assurance Vie
-                    // TODO: - ne transférer que ce qui n'est pas de l'assurance vie, sinon utiliser d'autres règles de transmission
-                    try! assets.freeInvests[idx].ownership.transferLifeInsuranceOfDecedent(
+                    try! assets.freeInvests[idx].ownership.transferLifeInsurance(
                         of          : decedentName,
                         accordingTo : clause)
                     

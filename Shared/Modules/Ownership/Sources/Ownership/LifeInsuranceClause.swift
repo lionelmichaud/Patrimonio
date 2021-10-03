@@ -12,17 +12,18 @@ import Foundation
 
 /// Clause bénéficiaire d'assurance vie
 /// - Warning:
-///   - le cas de plusieurs usufruitiers n'est pas traité
-///   - le cas de parts non égales entre nue-propriétaires n'est pas traité
+///   - le cas de plusieurs usufruitiers bénéficiaires n'est pas traité
+///   - le cas de parts non égales entre nue-propriétaires bénéficiaires n'est pas traité
 public struct LifeInsuranceClause: Codable, Hashable {
     public var isOptional   : Bool = false
     public var isDismembered: Bool = false
     // bénéficiaire en PP
     public var fullRecipients: Owners = [] // PP si la clause n'est pas démembrée
     // bénéficiaire en UF
-    public var usufructRecipient: String = ""
+    public var usufructRecipient: String = "" // UF si la clause est démembrée
     // bénéficiaire en NP
-    public var bareRecipients: [String] = [ ]
+    // TODO: - traiter le cas des parts non égales chez les NP de la clause bénéficiaire
+    public var bareRecipients: [String] = [] // NP si la clause est démembrée
     
     public var isValid: Bool {
         switch (isOptional, isDismembered) {
@@ -30,11 +31,11 @@ public struct LifeInsuranceClause: Codable, Hashable {
                 // une clause à option ne doit pas être démembrée
                 return false
                 
-            case (_, false):
-                return fullRecipients.isNotEmpty && fullRecipients.isvalid
-                
             case (false, true):
                 return usufructRecipient.isNotEmpty && bareRecipients.isNotEmpty
+                
+            case (_, false):
+                return fullRecipients.isNotEmpty && fullRecipients.isvalid
         }
     }
     

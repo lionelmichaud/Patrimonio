@@ -1,12 +1,6 @@
 {
   "configurations" : [
-    {
-      "id" : "DDB71863-5B6C-4378-BE98-BB4B88E97341",
-      "name" : "Configuration 1",
-      "options" : {
 
-      }
-    }
   ],
   "defaultOptions" : {
     "targetForVariableExpansion" : {
@@ -60,7 +54,6 @@
       }
     },
     {
-      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/NamedValue",
         "identifier" : "NamedValueTests",
@@ -68,7 +61,6 @@
       }
     },
     {
-      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/Persistable",
         "identifier" : "PersistableTests",
@@ -142,6 +134,20 @@
         "containerPath" : "container:Shared\/Modules\/Persistence",
         "identifier" : "PersistenceTests",
         "name" : "PersistenceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/LifeExpense",
+        "identifier" : "LifeExpenseTests",
+        "name" : "LifeExpenseTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/Succession",
+        "identifier" : "SuccessionTests",
+        "name" : "SuccessionTests"
       }
     }
   ],
