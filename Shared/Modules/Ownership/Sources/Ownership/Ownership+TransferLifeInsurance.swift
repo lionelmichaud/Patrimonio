@@ -121,6 +121,7 @@ extension Ownership {
             customLogOwnership.log(level: .fault, "transfertLifeInsuranceUsufruct: Aucun nue-propriétaire à qui transmettre l'usufruit de l'assurance vie")
             fatalError("transfertLifeInsuranceUsufruct: Aucun nue-propriétaire à qui transmettre l'usufruit de l'assurance vie")
         }
+        
         isDismembered = false
         fullOwners = []
         // chaque nue-propriétaire devient PP de sa propre part
@@ -153,6 +154,7 @@ extension Ownership {
         guard clause.usufructRecipient.isNotEmpty else {
             fatalError("transferUnDismemberedLifeInsToUsufructAndBareOwners: Aucun usufruitier désigné dans la clause bénéficiaire démembrée de l'assurance vie")
         }
+        
         isDismembered = true
         self.fullOwners = []
         // un seul usufruitier
@@ -189,6 +191,7 @@ extension Ownership {
             customLogOwnership.log(level: .fault, "Aucun bénéficiaire dans la clause bénéficiaire de l'assurance vie")
             fatalError("Aucun bénéficiaire dans la clause bénéficiaire de l'assurance vie")
         }
+        
         self.isDismembered  = false
         self.fullOwners     = clause.fullRecipients
         self.bareOwners     = []

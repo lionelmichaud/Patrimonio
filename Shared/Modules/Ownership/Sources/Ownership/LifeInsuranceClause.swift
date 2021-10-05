@@ -23,6 +23,7 @@ public struct LifeInsuranceClause: Codable, Hashable {
     public var usufructRecipient: String = "" // UF si la clause est démembrée
     // bénéficiaire en NP
     // TODO: - traiter le cas des parts non égales chez les NP de la clause bénéficiaire
+    // public var bareRecipients: Owners = [] // NP si la clause est démembrée
     public var bareRecipients: [String] = [] // NP si la clause est démembrée
     
     public var isValid: Bool {
@@ -34,8 +35,12 @@ public struct LifeInsuranceClause: Codable, Hashable {
             case (false, true):
                 return usufructRecipient.isNotEmpty && bareRecipients.isNotEmpty
                 
-            case (_, false):
+            case (false, false):
                 return fullRecipients.isNotEmpty && fullRecipients.isvalid
+
+            case (true, false):
+                // un seul donataire désigné en PP dans une clause à option (celui qui exerce l'option)
+                return fullRecipients.count == 1 && fullRecipients.isvalid
         }
     }
     

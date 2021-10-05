@@ -28,7 +28,7 @@ struct OwnerGroupBox: View {
                             }
                         },
                         label: {
-                            Text("Fraction détenue: ") +
+                            Text("Fraction: ") +
                                 Text(String(owner.fraction) + "%")
                                 .bold()
                                 .foregroundColor(owners.percentageOk ? .blue : .red)

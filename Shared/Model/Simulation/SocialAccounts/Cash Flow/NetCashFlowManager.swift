@@ -52,7 +52,7 @@ struct NetCashFlowManager {
                                 patrimoine.assets.freeInvests[idx].add(capital)
                                 return
                             }
-                        default: ()
+                        default: break
                     }
                 }
                 for idx in patrimoine.assets.freeInvests.items.indices {
@@ -64,7 +64,7 @@ struct NetCashFlowManager {
                                 patrimoine.assets.freeInvests[idx].add(capital)
                                 return
                             }
-                        default: ()
+                        default: break
                     }
                 }
                 
@@ -116,7 +116,7 @@ struct NetCashFlowManager {
                         patrimoine.assets.freeInvests[idx].add(amount)
                         return
                     }
-                default: ()
+                default: break
             }
         }
         for idx in patrimoine.assets.freeInvests.items.indices {
@@ -129,7 +129,7 @@ struct NetCashFlowManager {
                         patrimoine.assets.freeInvests[idx].add(amount)
                         return
                     }
-                default: ()
+                default: break
             }
         }
         
@@ -232,7 +232,7 @@ struct NetCashFlowManager {
                         return
                     }
                 default:
-                    ()
+                    break
             }
         }
         

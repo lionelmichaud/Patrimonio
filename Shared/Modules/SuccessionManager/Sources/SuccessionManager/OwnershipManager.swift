@@ -7,25 +7,26 @@
 
 import Foundation
 import FiscalModel
+import Ownership
 import PersonModel
 import FamilyModel
 import PatrimoineModel
 import AssetsModel
 import Liabilities
+import SimulationLogger
 
 struct OwnershipManager {
     
     // swiftlint:disable function_parameter_count
     
-    /// Modifie une clause d'AV pour permettre le payement des droits de successions
-    /// dûs par les enfants par ces derniers
+    /// Modifie une ou plusieur clauses d'AV pour permettre à chaque enfant de payer ses droits de succession
     /// - Parameters:
     ///   - decedent: adulte décédé
     ///   - conjoint: l'adulte survivant au décès du premier adulte
     ///   - family: la famille
     ///   - assets: Actifs de la famille
     ///   - liabilities: Passifs de la famille
-    ///   - taxes: les droits de succession à payer par les enfants
+    ///   - taxes: les droits de succession à payer par chaque enfant
     ///   - year: l'année du décès
     func modifyLifeInsuranceClause
     (of decedent                 : Adult,
@@ -33,26 +34,21 @@ struct OwnershipManager {
      in family                   : Family,
      withAssets assets           : inout Assets,
      withLiabilities liabilities : Liabilities,
-     toPayFor taxes              : Double,
-     atEndOf year                : Int) {
-        // cumuler les actifs nets dont les enfants sont les seuls PP après transmission
-        let childrenSellableCapital =
-            childrenSellableInheritedCapital(receivedFrom    : decedent,
-                                             inFamily        : family,
-                                             withAssets      : assets,
-                                             withLiabilities : liabilities,
-                                             atEndOf         : year)
-        print(">Capital cessible détenu par les enfants après succession: \(childrenSellableCapital.k€String)")
+     toPayFor taxes              : [String : Double],
+     atEndOf year                : Int,
+     run                         : Int) {
+        var missingCapitals = missingCapital(of: decedent,
+                                             in: family,
+                                             withAssets: &assets,
+                                             withLiabilities: liabilities,
+                                             toPayFor: taxes, atEndOf: year)
         
-        // calculer les capitaux manquants aux enfants pour pouvoir payer les droits de succession
-        var missingCapital  = taxes - childrenSellableCapital
-        print(">Capital manquant aux enfants pour payer les droits de succession: \(missingCapital.k€String)")
-
-        guard missingCapital > 0.0 else {
+        guard missingCapitals.values.sum() > 0.0 else {
+            // il ne manque rien à personne
             return
         }
         
-        // trier les actifs par valeur possédée par le défunt
+        // trier les AV avec clause bénéficiaire à option par valeur possédée par le défunt
         // prendre les valeurs à la fin de l'année précédente
         assets
             .freeInvests
@@ -64,31 +60,75 @@ struct OwnershipManager {
         //print(String(describing: patrimoine.assets.freeInvests.items))
         
         for idx in assets.freeInvests.items.indices {
-            let ownedValue =
-                assets
-                .freeInvests[idx]
-                .ownedValue(by                : decedent.displayName,
-                            atEndOf           : year-1,
-                            evaluationContext : .patrimoine)
-            print("Assurance: \(assets.freeInvests[idx].name)\n Valeur possédée en \(year-1): \(ownedValue.k€String)")
-            guard ownedValue >= 0 else {
-                break
-            }
-
-            // modifier la clause d'assurance vie
+            modifyClause(of           : &assets.freeInvests.items[idx],
+                         toGet        : &missingCapitals,
+                         decedentName : decedent.displayName,
+                         conjointName : conjoint.displayName,
+                         in           : family,
+                         atEndOf      : year,
+                         run)
             
-            // arrêter quand les capitaux des enfants sont suffisants pour payer
-            missingCapital -= ownedValue
-            if missingCapital <= 0 { break }
+            // arrêter quand les capitaux des enfants seront suffisants pour payer
+            if missingCapitals.values.sum() == 0.0 { break }
+        }
+        
+        if missingCapitals.values.sum() > 0 {
+            SimulationLogger.shared.log(run      : run,
+                                        logTopic : .other,
+                                        message  : "Les enfants ne peuvent pas payer les droits de succession au décès de \(decedent.displayName) en \(year)")
         }
     }
     
-    private func childrenSellableInheritedCapital
+    /// Calcule les capitaux manquant à chaque enfant pour payer ses droits de succcession `taxes`
+    /// - Parameters:
+    ///   - decedent: adulte décédé
+    ///   - family: la famille
+    ///   - assets: Actifs de la famille
+    ///   - liabilities: Passifs de la famille
+    ///   - taxes: les droits de succession à payer par chaque enfant
+    ///   - year: l'année du décès
+    /// - Returns: capitaux manquant à chaque enfant pour payer ses droits de succcession
+    private func missingCapital
+    (of decedent                 : Adult,
+     in family                   : Family,
+     withAssets assets           : inout Assets,
+     withLiabilities liabilities : Liabilities,
+     toPayFor taxes              : [String : Double],
+     atEndOf year                : Int) -> [String : Double] {
+        // cumuler les valeurs d'actif net que chaque enfant peut vendre après transmission
+        let childrenSellableCapital =
+            childrenSellableCapitalAfterInheritance(receivedFrom    : decedent,
+                                                    inFamily        : family,
+                                                    withAssets      : assets,
+                                                    withLiabilities : liabilities,
+                                                    atEndOf         : year)
+        print("> Capital cessible détenu par les enfants après succession:\n \(childrenSellableCapital) \n Total = \(childrenSellableCapital.values.sum().k€String)")
+        
+        // calculer les capitaux manquants à chaque enfants pour pouvoir payer ses droits de succession
+        var missingCapital = [String : Double]()
+        taxes.forEach { childrenName, tax in
+            let sellableCapital = childrenSellableCapital[childrenName] ?? 0.0
+            missingCapital[childrenName] = max(0.0, tax - sellableCapital)
+        }
+        print("> Capital manquant aux enfants pour payer les droits de succession:\n \(missingCapital) \n Total = \(missingCapital.values.sum().k€String)")
+        
+        return missingCapital
+    }
+    
+    /// Calcule le cumul des valeurs d'actif net que les enfants peuvent vendre après transmission
+    /// - Parameters:
+    ///   - decedent: adulte décédé
+    ///   - family: la famille
+    ///   - assets: Actifs de la famille
+    ///   - liabilities: Passifs de la famille
+    ///   - year: l'année du décès
+    /// - Returns: cumul des valeurs d'actif net que les enfants peuvent vendre après transmission
+    private func childrenSellableCapitalAfterInheritance
     (receivedFrom decedent       : Adult,
      inFamily family             : Family,
      withAssets assets           : Assets,
      withLiabilities liabilities : Liabilities,
-     atEndOf year                : Int) -> Double {
+     atEndOf year                : Int) -> [String : Double] {
         // simuler les transmisssions pour calculer ce que les enfants
         // hériterons en PP sans modifier aucune clause d'AV
         var assetsCopy      = assets
@@ -117,20 +157,99 @@ struct OwnershipManager {
     (in family                   : Family,
      withAssets assets           : Assets,
      withLiabilities liabilities : Liabilities,
-     atEndOf year                : Int) -> Double {
-        var total = 0.0
+     atEndOf year                : Int) -> [String : Double] {
+        var childrenSellableAssets = [String : Double]()
         // Attention: évaluer à la fin de l'année précédente (important pour les FreeInvestment)
-        family.children.forEach { child in
-            total += assets.ownedValue(by                  : child.displayName,
-                                       atEndOf             : year - 1,
-                                       withOwnershipNature : .sellable,
-                                       evaluatedFraction   : .ownedValue) +
-                liabilities.ownedValue(by                  : child.displayName,
+        family.childrenAliveName(atEndOf: year)?.forEach { childName in
+            childrenSellableAssets[childName] =
+                assets.ownedValue(by                  : childName,
+                                  atEndOf             : year - 1,
+                                  withOwnershipNature : .sellable,
+                                  evaluatedFraction   : .ownedValue) +
+                liabilities.ownedValue(by                  : childName,
                                        atEndOf             : year - 1,
                                        withOwnershipNature : .sellable,
                                        evaluatedFraction   : .ownedValue)
         }
-        return total
+        return childrenSellableAssets
+    }
+    
+    /// Modifie la clause d'une assurance vie `freeInvest` si nécessaire pour
+    /// que chaque enfant puisse payer ses droits de succcession.
+    /// Met à jour les `missingCapital` en conséquence.
+    /// - Parameters:
+    ///   - freeInvest: Inverstissement libre
+    ///   - missingCapital: capitaux manquant à chaque enfant pour payer ses droits de succcession
+    ///   - decedentName: nom de l'adulte décédé
+    ///   - year: l'année du décès
+    private func modifyClause(of freeInvest        : inout FreeInvestement,
+                              toGet missingCapital : inout [String : Double],
+                              decedentName         : String,
+                              conjointName         : String,
+                              in family            : Family,
+                              atEndOf year         : Int,
+                              _ run                : Int) {
+        // ne considérer que :
+        // - les assurance vie
+        // - avec clause à option
+        // - dont le défunt est le seul PP
+        var newPeriodicSocialTaxes = false
+        var newClause = LifeInsuranceClause()
+        switch freeInvest.type {
+            case let InvestementKind.lifeInsurance(periodicSocialTaxes, clause):
+                if !clause.isOptional ||
+                    !freeInvest.ownership.hasAFullOwner(named: decedentName) ||
+                    freeInvest.ownership.fullOwners.count != 1 {
+                    return
+                }
+                newPeriodicSocialTaxes = periodicSocialTaxes
+                newClause = clause
+                
+            default:
+                // pas une assurance vie
+                return
+        }
+        // capital décès
+        let decedentOwnedValue = freeInvest.ownedValue(by                : decedentName,
+                                                       atEndOf           : year - 1,
+                                                       evaluationContext : .patrimoine)
+        guard decedentOwnedValue >= 0 else {
+            return
+        }
+        
+        SimulationLogger.shared.log(run      : run,
+                                    logTopic : .other,
+                                    message  : "Exercice de la clause à option de l'assurance \"\(freeInvest.name)\" de \(decedentName) à son décès en \(year) par \(conjointName)")
+        print("Assurance: \(freeInvest.name)\n Valeur possédée en \(year-1): \(decedentOwnedValue.k€String)")
+        
+        // modifier la clause bénéficiaire d'assurance vie
+        newClause.isOptional = false
+        newClause.fullRecipients = []
+        //  - capital décès total versé aux enfants (somme)
+        let givenToChildren = min(decedentOwnedValue, missingCapital.values.sum())
+        //  - part du capital décès versée aux enfants (somme) en PP
+        let partDesEnfants = givenToChildren * 100.0 / decedentOwnedValue
+        let childrenAlive = family.childrenAliveName(atEndOf: year)
+        childrenAlive?.forEach { childrenName in
+            newClause.fullRecipients.append(Owner(name     : childrenName,
+                                                  fraction : partDesEnfants / childrenAlive!.count.double()))
+        }
+        //  - part du capital versée au conjoint en PP
+        let partDuConjoint = 100.0 - partDesEnfants
+        newClause.fullRecipients.append(Owner(name     : conjointName,
+                                              fraction : partDuConjoint))
+        
+        print("Part des enfants: \(partDesEnfants) % = \(givenToChildren.k€String)")
+        print("Part du conjoint: \(partDuConjoint) % = \((decedentOwnedValue - givenToChildren).k€String)")
+
+        freeInvest.type = .lifeInsurance(periodicSocialTaxes : newPeriodicSocialTaxes,
+                                         clause              : newClause)
+        print("Nouvelle clause:\n \(String(describing: newClause))")
+
+        // Mettre à jour les `missingCapital` en conséquence
+        for childName in missingCapital.keys {
+            missingCapital[childName]! -= givenToChildren / childrenAlive!.count.double()
+        }
     }
     
     /// Transférer la propriété d'un `patrimoine` d'un défunt `decedent` vers ses héritiers
