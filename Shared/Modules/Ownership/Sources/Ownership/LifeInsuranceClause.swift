@@ -22,8 +22,8 @@ public struct LifeInsuranceClause: Codable, Hashable {
     // bénéficiaire en UF
     public var usufructRecipient: String = "" // UF si la clause est démembrée
     // bénéficiaire en NP
-    // TODO: - traiter le cas des parts non égales chez les NP de la clause bénéficiaire
-    // public var bareRecipients: Owners = [] // NP si la clause est démembrée
+    // TODO: - traiter le cas des parts non égales chez les NP désignés dans la clause bénéficiaire
+    //   => public var bareRecipients: Owners = [] // NP si la clause est démembrée
     public var bareRecipients: [String] = [] // NP si la clause est démembrée
     
     public var isValid: Bool {

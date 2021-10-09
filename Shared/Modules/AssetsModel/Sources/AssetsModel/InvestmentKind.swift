@@ -22,11 +22,17 @@ public enum InvestementKind {
         return [.lifeInsurance(), .pea, .other]
     }
     
-    @available(*, unavailable)
-    case all
-    
     public var rawValue: Int {
         rawValueGeneric(of: self)
+    }
+    
+    public var isValid: Bool {
+        switch self {
+            case .lifeInsurance(_ , let clause):
+                return clause.isValid
+            default:
+                return true
+        }
     }
 }
 
@@ -35,7 +41,7 @@ public enum InvestementKind {
 extension InvestementKind: CustomStringConvertible {
     public var description: String {
         switch self {
-            case .lifeInsurance(let periodicSocialTaxes, let clause):
+            case let .lifeInsurance(periodicSocialTaxes, clause):
                 return
                     """
                     Assurance Vie:

@@ -287,7 +287,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     
     /// Réaliser un versement
     /// - Parameter amount: montant du versement
-    public mutating func add(_ amount: Double) {
+    public mutating func deposit(_ amount: Double) {
         currentState.investment += amount
     }
     

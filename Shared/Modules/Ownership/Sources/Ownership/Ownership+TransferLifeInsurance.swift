@@ -21,11 +21,16 @@ extension Ownership {
     ///   - le capital peut être démembré
     ///   -  la clause bénéficiare peut aussi être démembrée
     ///
-    /// - Warning:
-    ///   - Le cas du capital démembrée et le défunt est nue-propriétaire n'est pas traité
-    ///   - Le cas du capital co-détenu en PP par plusieurs personnes n'est pas traité
-    ///   - le cas de plusieurs usufruitiers bénéficiaires n'est pas traité
-    ///   - Le cas de parts non égales entre nue-propriétaires n'est pas traité
+    /// - Warning: Cas non traité:
+    ///   - Capital démembré
+    ///     - et le défunt est nue-propriétaire
+    ///   - Capital non démembré
+    ///     - et le défunt est un des PP propriétaires du capital de l'assurance vie
+    ///     - et la clause bénéficiaire de l'assurane vie est démembrée
+    ///     - et le défunt n'est pas le seul PP
+    ///   - Capital non démembré
+    ///     - et la clause bénéficiaire de l'assurane vie est démembrée
+    ///     - et parts non égales entre nue-propriétaires désignés dans la clause bénéficiaire
     ///
     /// - Throws:
     ///   - `OwnershipError.invalidOwnership`: le ownership avant ou après n'est pas valide
@@ -42,7 +47,7 @@ extension Ownership {
             
         } else {
             // (B) le capital de l'assurance vie n'est pas démembré
-            transferUnDismemberedLifeInsurance(of: decedentName, accordingTo: clause)
+            transferUndismemberedLifeInsurance(of: decedentName, accordingTo: clause)
         }
         groupShares()
         
@@ -55,68 +60,33 @@ extension Ownership {
     /// Transférer la NP et l'UF  d'une assurance vie DEMEMBRÉE d'un défunt nommé `decedentName`
     /// aux donataires selon la `clause` bénéficiaire
     ///
-    /// - Parameters:
-    ///   - decedentName: le nom du défunt
-    ///   - clause: la clause bénéficiare de l'assurance vie
-    public mutating func transferDismemberedLifeInsurance(of decedentName    : String,
-                                                          accordingTo clause : LifeInsuranceClause) {
-        // (A) le capital de l'assurane vie est démembré
-        if hasAnUsufructOwner(named: decedentName) {
-            // (1) le défunt est usufruitier
-            // l'usufruit rejoint la nue-propriété
-            transfertLifeInsuranceUsufruct()
-            
-        } else if hasABareOwner(named: decedentName) {
-            // (2) le défunt est un nue-propriétaire
-            // TODO: - traiter le cas où le capital de l'assurance vie est démembré et le défunt est nue-propriétaire
-            customLogOwnership.log(level: .fault, "transferLifeInsuranceOfDecedent: cas non traité (capital démembré et le défunt est nue-propriétaire)")
-            fatalError("transferLifeInsuranceOfDecedent: cas non traité (capital démembré et le défunt est nue-propriétaire)")
-            
-        } else {
-            // (3) le défunt n'est ni usufruitier ni nue-propriétaire => on ne fait rien
-            return
-        }
-    }
-    
-    /// Transférer la NP et l'UF  d'une assurance vie NON DEMEMBRÉE d'un défunt nommé `decedentName`
-    /// aux donataires selon la `clause` bénéficiaire
+    /// - Warning: Cas non traité:
+    ///   - le défunt est un un nue-propriétaire
     ///
     /// - Parameters:
     ///   - decedentName: le nom du défunt
     ///   - clause: la clause bénéficiare de l'assurance vie
-    public mutating func transferUnDismemberedLifeInsurance(of decedentName    : String,
-                                                            accordingTo clause : LifeInsuranceClause) {
-        // (B) le capital de l'assurance vie n'est pas démembré
-        // le défunt est-il un des PP propriétaires du capital de l'assurance vie ?
-        if hasAFullOwner(named: decedentName) {
-            // (1) le défunt est un des PP propriétaires du capital de l'assurance vie
-            if fullOwners.count == 1 {
-                // (a) le défunt est le seul PP de l'assurance vie
-                if clause.isDismembered {
-                    // (1) la clause bénéficiaire de l'assurane vie est démembrée
-                    // Transférer l'usufruit et la nue-prorpiété de l'assurance vie séparement
-                    transferUnDismemberedLifeInsToUsufructAndBareOwners(clause: clause)
-                    
-                } else {
-                    // (2) la clause bénéficiaire de l'assurane vie n'est pas démembrée
-                    // transférer le bien en PP aux donataires désignés dans la clause bénéficiaire
-                    transferUnDismemberedLifeInsFullOwnership(clause: clause)
-                }
-                
-            } else {
-                // (b)
-                // TODO: - traiter le cas où le défunt n'est pas le seul PP
-                customLogOwnership.log(level: .fault, "transferLifeInsuranceOfDecedent: cas non traité (capital co-détenu en PP par plusieurs personnes)")
-                fatalError("transferLifeInsuranceOfDecedent: cas non traité (capital co-détenu en PP par plusieurs personnes)")
-            }
-        } else {
-            // (2) sinon on ne fait rien
-            return
+    public mutating func transferDismemberedLifeInsurance
+    (of decedentName    : String,
+     accordingTo clause : LifeInsuranceClause) {
+        // (A) le capital de l'assurane vie est démembré
+        if hasAnUsufructOwner(named: decedentName) {
+            // (1) le défunt est usufruitier
+            // l'usufruit rejoint la nue-propriété
+            transfertDismemberedLifeInsuranceUsufruct()
+            
         }
+        if hasABareOwner(named: decedentName) {
+            // (2) le défunt est un nue-propriétaire
+            // TODO: - traiter le cas où le capital de l'assurance vie est démembré et le défunt est nue-propriétaire
+            customLogOwnership.log(level: .fault, "transferLifeInsuranceOfDecedent: cas non traité (capital démembré et le défunt est nue-propriétaire)")
+            fatalError("transferLifeInsuranceOfDecedent: cas non traité (capital démembré et le défunt est nue-propriétaire)")
+        }
+        // (3) le défunt n'est ni usufruitier ni nue-propriétaire => on ne fait rien
     }
     
     /// Transférer l'usufruit lorqu'il rejoint la nue-propriété
-    mutating func transfertLifeInsuranceUsufruct() {
+    mutating func transfertDismemberedLifeInsuranceUsufruct() {
         guard bareOwners.isNotEmpty else {
             customLogOwnership.log(level: .fault, "transfertLifeInsuranceUsufruct: Aucun nue-propriétaire à qui transmettre l'usufruit de l'assurance vie")
             fatalError("transfertLifeInsuranceUsufruct: Aucun nue-propriétaire à qui transmettre l'usufruit de l'assurance vie")
@@ -132,35 +102,85 @@ extension Ownership {
         usufructOwners = []
     }
     
+    /// Transférer la NP et l'UF  d'une assurance vie NON DEMEMBRÉE d'un défunt nommé `decedentName`
+    /// aux donataires selon la `clause` bénéficiaire.
+    /// Dans le cas où la clause n'est pas démembrée, met à jour la clause bénéficiaire pour désigner
+    /// les enfants comme bénéficiaires de la part héritée par le conjoint à son décès
+    ///
+    /// - Warning: Cas non traité:
+    ///   - Le défunt est un des PP propriétaires du capital de l'assurance vie
+    ///     - && la clause bénéficiaire de l'assurane vie est démembrée
+    ///     - && le défunt n'est pas le seul PP
+    ///   - Parts non égales entre nue-propriétaires bénéficiaires
+    ///
+    /// - Parameters:
+    ///   - decedentName: le nom du défunt
+    ///   - clause: la clause bénéficiare de l'assurance vie
+    public mutating func transferUndismemberedLifeInsurance
+    (of decedentName    : String,
+     accordingTo clause : LifeInsuranceClause) {
+        // (B) le capital de l'assurance vie n'est pas démembré
+        // le défunt est-il un des PP propriétaires du capital de l'assurance vie ?
+        if hasAFullOwner(named: decedentName) {
+            // (1) le défunt est un des PP propriétaires du capital de l'assurance vie
+            if clause.isDismembered {
+                // (1) la clause bénéficiaire de l'assurane vie est démembrée
+                if fullOwners.count == 1 {
+                    // (a) le défunt est le seul PP de l'assurance vie
+                    // Transférer l'usufruit et la nue-prorpiété de l'assurance vie séparement
+                    transferUndismemberedLifeInsToUsufructAndBareOwners(accordingTo: clause)
+                } else {
+                    // (b)
+                    // TODO: - traiter le cas où le défunt n'est pas le seul PP
+                    customLogOwnership.log(level: .fault, "transferUndismemberedLifeInsurance: cas non traité (capital co-détenu en PP par plusieurs personnes avec clause démembrée)")
+                    fatalError("transferUndismemberedLifeInsurance: cas non traité (capital co-détenu en PP par plusieurs personnes avec clause démembrée)")
+                }
+                
+            } else {
+                // (2) la clause bénéficiaire de l'assurance vie n'est pas démembrée
+                // transférer le bien en PP aux donataires désignés dans la clause bénéficiaire
+                transferUndismemberedLifeInsFullOwnership(of          : decedentName ,
+                                                          accordingTo : clause)
+                // la part détenue par le conjoint sera donnée aux enfants par part égales
+//                let share = clause.fullRecipients
+//                updateCluaseAfterTransfer()
+            }
+            
+        } else {
+            // (2) sinon on ne fait rien
+            return
+        }
+    }
+    
     /// Transférer l'usufruit et la nue-prorpiété de l'assurance vie NON DEMEMBRÉE
     /// séparement aux bénéficiaires selon la `clause` bénéficiaire
     ///
     /// - Parameters:
     ///   - clause: la clause bénéficiare de l'assurance vie
     ///
-    /// - Warning:
+    /// - Note:
     ///   - A n'utiliser que si le capital n'est pas démembrée
     ///   - A n'utiliser que si la `clause` est démembrée
-    ///   - le cas de plusieurs usufruitiers bénéficiaires n'est pas traité
-    ///   - le cas de parts non égales entre nue-propriétaires bénéficiaires n'est pas traité
-    public mutating func transferUnDismemberedLifeInsToUsufructAndBareOwners(clause: LifeInsuranceClause) {
+    ///
+    /// - Warning: Cas non traités:
+    ///   - Parts non égales entre nue-propriétaires bénéficiaires
+    mutating func transferUndismemberedLifeInsToUsufructAndBareOwners
+    (accordingTo clause: LifeInsuranceClause) {
         guard !isDismembered else {
-            customLogOwnership.log(level: .fault, "transferUnDismemberedLifeInsToUsufructAndBareOwners: L'assurance vie est démembrée")
-            fatalError("transferUnDismemberedLifeInsToUsufructAndBareOwners: L'assurance vie est démembrée")
-        }
-        guard clause.bareRecipients.isNotEmpty else {
-            fatalError("transferUnDismemberedLifeInsToUsufructAndBareOwners: Aucun nue-propriétaire désigné dans la clause bénéficiaire démembrée de l'assurance vie")
+            customLogOwnership.log(level: .fault, "transferUndismemberedLifeInsToUsufructAndBareOwners: L'assurance vie est démembrée")
+            fatalError("transferUndismemberedLifeInsToUsufructAndBareOwners: L'assurance vie est démembrée")
         }
         guard clause.usufructRecipient.isNotEmpty else {
-            fatalError("transferUnDismemberedLifeInsToUsufructAndBareOwners: Aucun usufruitier désigné dans la clause bénéficiaire démembrée de l'assurance vie")
+            customLogOwnership.log(level: .fault, "Aucun bénéficiaire dans la clause bénéficiaire de l'assurance vie")
+            fatalError("Aucun bénéficiaire dans la clause bénéficiaire de l'assurance vie")
         }
-        
+
         isDismembered = true
         self.fullOwners = []
         // un seul usufruitier
         self.usufructOwners = [Owner(name     : clause.usufructRecipient,
                                      fraction : 100)]
-
+        
         // TODO: - traiter le cas des parts non égales chez les NP de la clause bénéficiaire
         // répartition des parts de NP entre bénéficiaires en NP
         let nbOfRecipients = clause.bareRecipients.count
@@ -176,25 +196,34 @@ extension Ownership {
     /// Transférer la PP de l'assurance vie NON DEMEMBRÉE aux donataires désignés
     /// dans la `clause` bénéficiaire
     ///
-    /// - Warning:
+    /// - Note:
     ///   - A n'utiliser que si le capital n'est pas démembrée
     ///   - A n'utiliser que si la `clause` n'est pas démembrée
     ///
     /// - Parameters:
     ///   - clause: la clause bénéficiare de l'assurance vie
-    public mutating func transferUnDismemberedLifeInsFullOwnership(clause: LifeInsuranceClause) {
+    mutating func transferUndismemberedLifeInsFullOwnership
+    (of decedentName    : String,
+     accordingTo clause : LifeInsuranceClause) {
         guard !isDismembered else {
-            customLogOwnership.log(level: .fault, "transferUnDismemberedLifeInsFullOwnership: L'assurance vie est démembrée")
-            fatalError("transferUnDismemberedLifeInsFullOwnership: L'assurance vie est démembrée")
+            customLogOwnership.log(level: .fault, "transferUndismemberedLifeInsFullOwnership: L'assurance vie est démembrée")
+            fatalError("transferUndismemberedLifeInsFullOwnership: L'assurance vie est démembrée")
         }
         guard clause.fullRecipients.isNotEmpty else {
             customLogOwnership.log(level: .fault, "Aucun bénéficiaire dans la clause bénéficiaire de l'assurance vie")
             fatalError("Aucun bénéficiaire dans la clause bénéficiaire de l'assurance vie")
         }
         
-        self.isDismembered  = false
-        self.fullOwners     = clause.fullRecipients
-        self.bareOwners     = []
-        self.usufructOwners = []
+        if let ownerIdx = fullOwners.firstIndex(where: { decedentName == $0.name }) {
+            // part de PP à redistribuer selon la clause bénéficiaire
+            let ownerShare = fullOwners[ownerIdx].fraction
+            // retirer le défunt de la liste des PP
+            fullOwners.remove(at: ownerIdx)
+            // redistribuer selon la clause bénéficiaire
+            clause.fullRecipients.forEach { recepient in
+                fullOwners.append(Owner(name     : recepient.name,
+                                        fraction : ownerShare * recepient.fraction / 100.0))
+            }
+        }
     }
 }

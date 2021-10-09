@@ -21,6 +21,9 @@ public extension ArrayOfNameableValuable where E: OwnableP {
         // injecter le délégué pour la méthode family.ageOf qui par défaut est nil à la création de l'objet
         for idx in items.indices {
             if let personAgeProvider = personAgeProvider {
+                guard items[idx].ownership.isValid else {
+                    fatalError("Object \"\(items[idx].name)\" has invalid ownership\n \(String(describing: items[idx].ownership))")
+                }
                 items[idx].ownership.setDelegateForAgeOf(delegate: personAgeProvider.ageOf)
             }
         }

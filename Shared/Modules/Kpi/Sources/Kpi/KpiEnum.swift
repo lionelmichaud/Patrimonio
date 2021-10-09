@@ -72,7 +72,7 @@ public enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
                     """
             case .successionTaxesAt2ndDeath:
                 return """
-                    Droits de succession dûs par les enfants au dernier décès des parents.
+                    Droits de succession cumulés dûs par les enfants après le dernier décès des parents.
                     """
         }
     }

@@ -34,7 +34,7 @@ struct OwnershipManager {
      in family                   : Family,
      withAssets assets           : inout Assets,
      withLiabilities liabilities : Liabilities,
-     toPayFor taxes              : [String : Double],
+     toPayFor taxes              : NameValueDico,
      atEndOf year                : Int,
      run                         : Int) {
         var missingCapitals = missingCapital(of: decedent,
@@ -93,8 +93,8 @@ struct OwnershipManager {
      in family                   : Family,
      withAssets assets           : inout Assets,
      withLiabilities liabilities : Liabilities,
-     toPayFor taxes              : [String : Double],
-     atEndOf year                : Int) -> [String : Double] {
+     toPayFor taxes              : NameValueDico,
+     atEndOf year                : Int) -> NameValueDico {
         // cumuler les valeurs d'actif net que chaque enfant peut vendre après transmission
         let childrenSellableCapital =
             childrenSellableCapitalAfterInheritance(receivedFrom    : decedent,
@@ -105,7 +105,7 @@ struct OwnershipManager {
         print("> Capital cessible détenu par les enfants après succession:\n \(childrenSellableCapital) \n Total = \(childrenSellableCapital.values.sum().k€String)")
         
         // calculer les capitaux manquants à chaque enfants pour pouvoir payer ses droits de succession
-        var missingCapital = [String : Double]()
+        var missingCapital = NameValueDico()
         taxes.forEach { childrenName, tax in
             let sellableCapital = childrenSellableCapital[childrenName] ?? 0.0
             missingCapital[childrenName] = max(0.0, tax - sellableCapital)
@@ -128,7 +128,7 @@ struct OwnershipManager {
      inFamily family             : Family,
      withAssets assets           : Assets,
      withLiabilities liabilities : Liabilities,
-     atEndOf year                : Int) -> [String : Double] {
+     atEndOf year                : Int) -> NameValueDico {
         // simuler les transmisssions pour calculer ce que les enfants
         // hériterons en PP sans modifier aucune clause d'AV
         var assetsCopy      = assets
@@ -157,8 +157,8 @@ struct OwnershipManager {
     (in family                   : Family,
      withAssets assets           : Assets,
      withLiabilities liabilities : Liabilities,
-     atEndOf year                : Int) -> [String : Double] {
-        var childrenSellableAssets = [String : Double]()
+     atEndOf year                : Int) -> NameValueDico {
+        var childrenSellableAssets = NameValueDico()
         // Attention: évaluer à la fin de l'année précédente (important pour les FreeInvestment)
         family.childrenAliveName(atEndOf: year)?.forEach { childName in
             childrenSellableAssets[childName] =
@@ -183,7 +183,7 @@ struct OwnershipManager {
     ///   - decedentName: nom de l'adulte décédé
     ///   - year: l'année du décès
     private func modifyClause(of freeInvest        : inout FreeInvestement,
-                              toGet missingCapital : inout [String : Double],
+                              toGet missingCapital : inout NameValueDico,
                               decedentName         : String,
                               conjointName         : String,
                               in family            : Family,
@@ -197,9 +197,7 @@ struct OwnershipManager {
         var newClause = LifeInsuranceClause()
         switch freeInvest.type {
             case let InvestementKind.lifeInsurance(periodicSocialTaxes, clause):
-                if !clause.isOptional ||
-                    !freeInvest.ownership.hasAFullOwner(named: decedentName) ||
-                    freeInvest.ownership.fullOwners.count != 1 {
+                guard clause.isOptional && freeInvest.ownership.hasAFullOwner(named: decedentName) else {
                     return
                 }
                 newPeriodicSocialTaxes = periodicSocialTaxes

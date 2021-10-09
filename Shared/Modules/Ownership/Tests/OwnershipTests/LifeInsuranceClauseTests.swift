@@ -74,9 +74,8 @@ class LifeInsuranceClauseTests: XCTestCase {
         clause.isOptional    = true
         clause.isDismembered = false
         clause.fullRecipients = [Owner(name: "Enfant1", fraction: 40),
-                                 Owner(name: "Enfant2", fraction: 40)]
+                                 Owner(name: "Enfant2", fraction: 60)]
         XCTAssertFalse(clause.isValid)
-        print(clause)
     }
         
     func test_clause_sans_option_valide() {
@@ -86,14 +85,12 @@ class LifeInsuranceClauseTests: XCTestCase {
         clause.isDismembered = false
         clause.fullRecipients = [Owner(name: "Enfant1", fraction: 100)]
         XCTAssertTrue(clause.isValid)
-        print(clause)
 
         clause.isOptional    = false
         clause.isDismembered = true
         clause.usufructRecipient = "Conjoint"
         clause.bareRecipients = ["Enfant1"]
         XCTAssertTrue(clause.isValid)
-        print(clause)
     }
 
     func test_clause_avec_option_valide() {
@@ -101,15 +98,7 @@ class LifeInsuranceClauseTests: XCTestCase {
         
         clause.isOptional    = true
         clause.isDismembered = false
-        clause.fullRecipients = [Owner(name: "Enfant1", fraction: 40),
-                                 Owner(name: "Enfant2", fraction: 60)]
-        XCTAssertTrue(clause.isValid)
-        print(clause)
-        
-        clause.isOptional    = true
-        clause.isDismembered = false
         clause.fullRecipients = [Owner(name: "Enfant1", fraction: 100)]
         XCTAssertTrue(clause.isValid)
-        print(clause)
     }
 }

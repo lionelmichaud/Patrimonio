@@ -24,7 +24,28 @@ public extension Collection where Element: AdditiveArithmetic {
     }
 }
 
+public extension Array where Element: Comparable {
+    /// Check if two arrays contain the same elements regardless of the order in which those elements appear
+    /// - Warning: les élements des tableaux doivent être `Comparable`
+    func containsSameElements(as other: [Element]) -> Bool {
+        return self.count == other.count && self.sorted() == other.sorted()
+    }
+}
+
+public extension Array where Element: Hashable {
+    /// Check if two arrays contain the same elements regardless of the order in which those elements appear
+    /// - Warning: les élements des tableaux doivent être `Comparable`
+    func containsSameElements(as other: [Element]) -> Bool {
+        let set1 = Set(self)
+        let set2 = Set(other)
+        
+        //if you compare big sets it is recommended to compare the count of items in the sets beforehand
+        return (set1.count == set2.count && set1 == set2)
+    }
+}
+
 public extension Array where Element: SignedNumeric {
+    /// Change le signe de tous les éléments du tableau
     static prefix func - (array: [Element]) -> [Element] {
         var newArray = [Element]()
         for idx in array.indices {
@@ -35,20 +56,14 @@ public extension Array where Element: SignedNumeric {
 }
 
 public extension Array {
-    /// If you have an array of elements and you want to split them into chunks of a size you specify
+    /// If you have an array of elements and you want to split them into chunks of a `size` you specify
     ///
     /// Usage:
     ///
     ///     let numbers = Array(1...100)
     ///     let result = numbers.chunked(into: 5) // Hello, Markdown!
     ///
-    /// - Parameters:
-    ///     - sdfds: sdfds
-    /// - Returns: sdfsdf
-    /// - Throws: sdfsdf
-    /// - Warning: sdffsd
-    ///
-    ///  - Note: [Reference](https://www.hackingwithswift.com/example-code/language/how-to-split-an-array-into-chunks)
+    /// -     ///  - Note: [Reference](https://www.hackingwithswift.com/example-code/language/how-to-split-an-array-into-chunks)
     func chunked(into size: Int) -> [[Element]] {
         return stride(from: 0, to: count, by: size).map {
             Array(self[$0 ..< Swift.min($0 + size, count)])
@@ -57,6 +72,9 @@ public extension Array {
 }
 
 public extension Array {
+    /// Retrourne true si les éléments du tableau sont ordonnés selon la relation d'ordre `isOrderedBefore`
+    /// - Parameter isOrderedBefore: relation d'ordre entre éléments du tableau à utiliser
+    /// - Returns: true si les éléments du tableau sont ordonnés selon la relation d'ordre `isOrderedBefore`
     func isSorted(_ isOrderedBefore: (Element, Element) -> Bool) -> Bool {
         for i in 1..<self.count {
             if !isOrderedBefore(self[i-1], self[i]) {

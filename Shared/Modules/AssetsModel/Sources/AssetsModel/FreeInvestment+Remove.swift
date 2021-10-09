@@ -12,7 +12,7 @@ import Ownership
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.FreeInvestement.remove")
 
 extension FreeInvestement {
-    func removal(netAmount        : Double,
+    func withdrawal(netAmount     : Double,
                  maxPermitedValue : Double)
     -> (brutAmount       : Double,
         brutAmountSplit  : (investement: Double, interest: Double),
@@ -108,8 +108,8 @@ extension FreeInvestement {
     /// - Parameters:
     ///   - netAmount: retrait net de charges sociales souhaité
     ///   - name: nom du débiteur ou nil
-    public mutating func remove(netAmount : Double,
-                                for name  : String = "")
+    public mutating func withdrawal(netAmount : Double,
+                                    for name  : String = "")
     -> (revenue          : Double,
         interests        : Double,
         netInterests     : Double,
@@ -132,7 +132,7 @@ extension FreeInvestement {
         let updateInterests  : Bool
         let maxPermitedValue : Double
         var ownedValueBefore : Double            = 0
-        var theOwnedValues   : [String : Double] = [:]
+        var theOwnedValues   : NameValueDico = [:]
         
         switch (checkOwnership, isAUsufructOwner, isAfullOwner, isTheUniqueFullOwner) {
             case (false, _, _, _):
@@ -188,7 +188,7 @@ extension FreeInvestement {
             return zero
         }
         
-        let _removal = removal(netAmount: netAmount, maxPermitedValue: maxPermitedValue)
+        let _removal = withdrawal(netAmount: netAmount, maxPermitedValue: maxPermitedValue)
         
         // décrémenter les intérêts et le capital
         if _removal.brutAmount == currentState.value {

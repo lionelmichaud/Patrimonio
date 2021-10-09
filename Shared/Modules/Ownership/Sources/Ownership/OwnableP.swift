@@ -66,11 +66,11 @@ public protocol OwnableP: NameableValuableP {
     ///   - evaluationContext: méthode d'évaluation de la valeure des bien
     /// - Returns: dictionnaire [Owner, Valeur possédée]
     func ownedValues(atEndOf year     : Int,
-                     evaluationContext : EvaluationContext) -> [String : Double]
+                     evaluationContext : EvaluationContext) -> NameValueDico
     
     func ownedValues(ofValue totalValue : Double,
                      atEndOf year       : Int,
-                     evaluationContext  : EvaluationContext) -> [String : Double]
+                     evaluationContext  : EvaluationContext) -> NameValueDico
     
     /// True si une des personnes listées perçoit des revenus de ce bien.
     /// Cad si elle est une des UF ou une des PP
@@ -152,8 +152,8 @@ public extension OwnableP {
     }
 
     func ownedValues(atEndOf year      : Int,
-                     evaluationContext : EvaluationContext) -> [String : Double] {
-        var dico: [String : Double] = [:]
+                     evaluationContext : EvaluationContext) -> NameValueDico {
+        var dico: NameValueDico = [:]
         if ownership.isDismembered {
             for owner in ownership.bareOwners {
                 dico[owner.name] = ownedValue(by                : owner.name,
@@ -179,8 +179,8 @@ public extension OwnableP {
     
     func ownedValues(ofValue totalValue : Double,
                      atEndOf year       : Int,
-                     evaluationContext  : EvaluationContext) -> [String : Double] {
-        var dico: [String : Double] = [:]
+                     evaluationContext  : EvaluationContext) -> NameValueDico {
+        var dico: NameValueDico = [:]
         if ownership.isDismembered {
             for owner in ownership.bareOwners {
                 dico[owner.name] = ownership.ownedValue(by                : owner.name,

@@ -9,7 +9,7 @@
         },
         "sexe"          : 0,
         "birth_Date"    : "1964-09-22T23:00:00+01:00",
-        "fiscal_option" : "Quotité disponible",
+        "fiscal_option" : "100% Usufruit",
         "work_Income"   : {
             "salary_brutSalary"      : 98400,
             "salary_taxableSalary"   : 80712,
@@ -75,7 +75,7 @@
         },
         "sexe"                 : 1,
         "birth_Date"    : "1968-12-17T23:00:00+01:00",
-        "fiscal_option" : "Quotité disponible",
+        "fiscal_option" : "100% Usufruit",
         "work_Income"   : {
             "turnOver_BNC" : 48000,
             "turnOver_incomeLossInsurance" : 4046
@@ -135,7 +135,7 @@
         "__preserved_type" : "Child.Type",
         "name" : {
             "familyName" : "MICHAUD",
-            "namePrefix" : "Mme",
+            "namePrefix" : "Mme.",
             "givenName" : "Lou-Ann"
         },
         "sexe" : 1,
@@ -163,11 +163,11 @@
         "__preserved_type" : "Child.Type",
         "name" : {
             "familyName" : "MICHAUD",
-            "namePrefix" : "M.",
+            "namePrefix" : "Mme.",
             "givenName" : "Isaline"
         },
         "sexe" : 1,
-        "birth_Date" : "1920-03-29T23:00:00+01:00",
+        "birth_Date" : "1930-03-29T22:00:00Z",
         "age_Of_University"   : 21,
         "age_Of_Independence" : 24
     }

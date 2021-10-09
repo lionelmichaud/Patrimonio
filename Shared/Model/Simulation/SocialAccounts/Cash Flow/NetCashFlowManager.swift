@@ -34,7 +34,7 @@ struct NetCashFlowManager {
     /// - Parameters:
     ///   - ownedCapitals: [nom du détenteur, du capital]
     ///   - year: année de l'investissement
-    func investCapital(ownedCapitals : [String : Double],
+    func investCapital(ownedCapitals : NameValueDico,
                        in patrimoine : Patrimoin,
                        atEndOf year  : Int) {
         ownedCapitals.forEach { (name, capital) in
@@ -49,7 +49,7 @@ struct NetCashFlowManager {
                             if periodicSocialTaxes &&
                                 patrimoine.assets.freeInvests[idx].ownership.hasAUniqueFullOwner(named: name) {
                                 // investir la totalité du cash
-                                patrimoine.assets.freeInvests[idx].add(capital)
+                                patrimoine.assets.freeInvests[idx].deposit(capital)
                                 return
                             }
                         default: break
@@ -61,7 +61,7 @@ struct NetCashFlowManager {
                             if !periodicSocialTaxes &&
                                 patrimoine.assets.freeInvests[idx].ownership.hasAUniqueFullOwner(named: name) {
                                 // investir la totalité du cash
-                                patrimoine.assets.freeInvests[idx].add(capital)
+                                patrimoine.assets.freeInvests[idx].deposit(capital)
                                 return
                             }
                         default: break
@@ -73,7 +73,7 @@ struct NetCashFlowManager {
                 where patrimoine.assets.freeInvests[idx].type == .pea
                     && patrimoine.assets.freeInvests[idx].ownership.hasAUniqueFullOwner(named: name) {
                     // investir la totalité du cash
-                    patrimoine.assets.freeInvests[idx].add(capital)
+                    patrimoine.assets.freeInvests[idx].deposit(capital)
                     return
                 }
                 
@@ -82,7 +82,7 @@ struct NetCashFlowManager {
                 where patrimoine.assets.freeInvests[idx].type == .other
                     && patrimoine.assets.freeInvests[idx].ownership.hasAUniqueFullOwner(named: name) {
                     // investir la totalité du cash
-                    patrimoine.assets.freeInvests[idx].add(capital)
+                    patrimoine.assets.freeInvests[idx].deposit(capital)
                     return
                 }
                 
@@ -113,7 +113,7 @@ struct NetCashFlowManager {
                         && amount != 0
                         && patrimoine.assets.freeInvests[idx].hasAFullOwner(in: adultsName) {
                         // investir la totalité du cash
-                        patrimoine.assets.freeInvests[idx].add(amount)
+                        patrimoine.assets.freeInvests[idx].deposit(amount)
                         return
                     }
                 default: break
@@ -126,7 +126,7 @@ struct NetCashFlowManager {
                         && amount != 0
                         && patrimoine.assets.freeInvests[idx].hasAFullOwner(in: adultsName) {
                         // investir la totalité du cash
-                        patrimoine.assets.freeInvests[idx].add(amount)
+                        patrimoine.assets.freeInvests[idx].deposit(amount)
                         return
                     }
                 default: break
@@ -138,7 +138,7 @@ struct NetCashFlowManager {
         where patrimoine.assets.freeInvests[idx].type == .pea
             && patrimoine.assets.freeInvests[idx].hasAFullOwner(in: adultsName) {
             // investir la totalité du cash
-            patrimoine.assets.freeInvests[idx].add(amount)
+            patrimoine.assets.freeInvests[idx].deposit(amount)
             return
         }
         // si pas d'assurance vie ni de PEA alors investir dans un autre placement
@@ -146,7 +146,7 @@ struct NetCashFlowManager {
         where patrimoine.assets.freeInvests[idx].type == .other
             && patrimoine.assets.freeInvests[idx].hasAFullOwner(in: adultsName) {
             // investir la totalité du cash
-            patrimoine.assets.freeInvests[idx].add(amount)
+            patrimoine.assets.freeInvests[idx].deposit(amount)
             return
         }
         
@@ -202,7 +202,7 @@ struct NetCashFlowManager {
         where patrimoine.assets.freeInvests[idx].type == .pea {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant du PEA s'il y en avait assez à la fin de l'année dernière
-            let removal = patrimoine.assets.freeInvests[idx].remove(netAmount : amountRemainingToRemove,
+            let removal = patrimoine.assets.freeInvests[idx].withdrawal(netAmount : amountRemainingToRemove,
                                                                     for       : name)
             amountRemainingToRemove -= removal.revenue
             // IRPP: les plus values PEA ne sont pas imposables à l'IRPP
@@ -218,7 +218,7 @@ struct NetCashFlowManager {
                 case .lifeInsurance:
                     // tant que l'on a pas retiré le montant souhaité
                     // retirer le montant de l'Assurances vie s'il y en avait assez à la fin de l'année dernière
-                    let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
+                    let removal = patrimoine.assets.freeInvests[idx].withdrawal(netAmount: amountRemainingToRemove)
                     amountRemainingToRemove -= removal.revenue
                     // IRPP: part des produit de la liquidation inscrit en compte courant imposable à l'IRPP après déduction de ce qu'il reste de franchise
                     var taxableInterests: Double
@@ -241,7 +241,7 @@ struct NetCashFlowManager {
         where patrimoine.assets.freeInvests[idx].type == .other {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant s'il y en avait assez à la fin de l'année dernière
-            let removal = patrimoine.assets.freeInvests[idx].remove(netAmount: amountRemainingToRemove)
+            let removal = patrimoine.assets.freeInvests[idx].withdrawal(netAmount: amountRemainingToRemove)
             amountRemainingToRemove -= removal.revenue
             // IRPP: les plus values sont imposables à l'IRPP
             // géré comme un revenu en report d'imposition (dette)

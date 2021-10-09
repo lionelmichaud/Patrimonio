@@ -112,8 +112,19 @@ public struct Assets {
                            note       : "Crée en 2019",
                            with       : personAgeProvider)
         
-        // initialiser le vetcuer d'état de chaque FreeInvestement à la date courante
+        // initialiser le vecteur d'état de chaque FreeInvestement à la date courante
         initializeFreeInvestementCurrentValue()
+        
+        periodicInvests.items.forEach {
+            if !$0.isValid {
+                fatalError("Object \"\($0.name)\" has invalid clause\n \(String(describing: $0.clause))")
+            }
+        }
+        freeInvests.items.forEach {
+            if !$0.isValid {
+                fatalError("Object \"\($0.name)\" has invalid clause\n \(String(describing: $0.clause))")
+            }
+        }
     }
     
     // MARK: - Methods

@@ -9,6 +9,7 @@ import Foundation
 import ModelEnvironment
 import Succession
 import NamedValue
+import Ownership
 import PatrimoineModel
 import PersonModel
 import FamilyModel
@@ -90,10 +91,10 @@ public struct SuccessionManager {
             // calculer les transmissions et les droits de transmission assurances vies
             // sans exercer de clause à option
             let lifeInsSuccession =
-                lifeInsuranceSuccessionManager.lifeInsuraceSuccession(in      : patrimoine,
-                                                                      of      : adultDecedent,
-                                                                      atEndOf : year,
-                                                                      using   : model)
+                lifeInsuranceSuccessionManager.lifeInsuranceSuccession(in      : patrimoine,
+                                                                       of      : adultDecedent,
+                                                                       atEndOf : year,
+                                                                       using   : model)
             lifeInsSuccessions.append(lifeInsSuccession)
             
             // au premier décès parmis les adultes:
@@ -112,7 +113,7 @@ public struct SuccessionManager {
                 let adultSurvivor = family.adults.first { $0.displayName != adultDecedent.displayName}!
                 print("> Adulte décédé   : \(adultDecedent.displayName)")
                 print("> Adulte survivant: \(adultSurvivor.displayName)")
-                print("> Droits de succession des enfants:\n \(childrenInheritancesTaxe)\n Somme = \(childrenInheritancesTaxe.values.sum())")
+                print("> Droits de succession des enfants:\n \(childrenInheritancesTaxe)\n Somme = \(childrenInheritancesTaxe.values.sum().k€String)")
                 ownershipManager.modifyLifeInsuranceClause(of              : adultDecedent,
                                                            conjoint        : adultSurvivor,
                                                            in              : family,
@@ -171,8 +172,8 @@ public struct SuccessionManager {
     /// Calculer le total des taxes dûes par les enfants
     /// - Parameter family: la famille
     /// - Returns: total des taxes dûes par les enfants
-    private func totalChildrenInheritanceTaxe(of family: Family) -> [String : Double] {
-        var childrenTaxes = [String : Double]()
+    private func totalChildrenInheritanceTaxe(of family: Family) -> NameValueDico {
+        var childrenTaxes = NameValueDico()
         family.children.forEach { child in
             childrenTaxes[child.displayName] = 0
             /// successions légales

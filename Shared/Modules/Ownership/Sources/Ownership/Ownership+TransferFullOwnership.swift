@@ -10,8 +10,56 @@ import Foundation
 import FiscalModel
 
 extension Ownership {
+    
+    /// Transférer la PP d'un copropriétaire d'un bien non démembré à ses héritiers selon l'option retnue par le conjoint survivant
+    /// - Parameters:
+    ///   - decedentName: le nom du défunt
+    ///   - spouseName: le conjoint survivant
+    ///   - chidrenNames: les enfants héritiers survivants
+    ///   - spouseFiscalOption: option fiscale du conjoint survivant éventuel
+    mutating func transferFullOwnership(of decedentName         : String,
+                                        toSpouse spouseName     : String,
+                                        toChildren chidrenNames : [String]?,
+                                        spouseFiscalOption      : InheritanceFiscalOption?) {
+        // il y a un conjoint survivant
+        if let chidrenNames = chidrenNames {
+            // il y a des enfants héritiers
+            // selon l'option fiscale du conjoint survivant
+            guard let spouseFiscalOption = spouseFiscalOption else {
+                fatalError("pas d'option fiscale passée en paramètre de transferOwnershipOf")
+            }
+            switch spouseFiscalOption {
+                case .fullUsufruct:
+                    transferFullOwnership(of                    : decedentName,
+                                          toThisNewUsufructuary : spouseName,
+                                          toTheseNewBareOwners  : chidrenNames)
+                    
+                case .quotiteDisponible:
+                    let shares = spouseFiscalOption.shares(nbChildren: chidrenNames.count)
+                    transferFullOwnership(of                : decedentName,
+                                          toSpouse          : spouseName,
+                                          quotiteDisponible : shares.forSpouse.bare,
+                                          toChildren        : chidrenNames)
+                    
+                case .usufructPlusBare:
+                    let sharing = spouseFiscalOption.shares(nbChildren: chidrenNames.count)
+                    transferFullOwnership(of              : decedentName,
+                                          toSpouse        : spouseName,
+                                          toChildren      : chidrenNames,
+                                          withThisSharing : sharing)
+            }
+            // factoriser les parts des usufuitier et des nue-propriétaires si nécessaire
+            groupShares()
+            
+        } else {
+            // il n'y pas d'enfant héritier mais un conjoint survivant
+            // tout revient au conjoint survivant en PP
+            fullOwners = [Owner(name: spouseName, fraction: 1.0)]
+        }
+    }
+
     /// Transférer la PP d'un copropriétaire d'un bien non démembré en la répartissant
-    /// entre un usufruitier (qui récupère d'UF) et des Nue-propriétaires (qui récupèrent la NP)
+    /// entre un usufruitier (qui récupère l'UF) et des Nue-propriétaires (qui récupèrent la NP)
     /// - Parameters:
     ///   - thisFullOwner: le PP celui qui sort
     ///   - toThisNewUsufructuary: celui qui prend l'UF
@@ -46,11 +94,11 @@ extension Ownership {
     }
     
     /// Transférer la PP d'un copropriétaire d'un bien non démembré en la répartissant
-    /// entre un usufruitier (qui récupère la quotité disponile en PP) et des Nue-propriétaires (qui récupèrent la NP)
+    /// entre les héritiers en PP selon la quotité disponible
     /// - Parameters:
     ///   - thisFullOwner: le PP celui qui sort
     ///   - toSpouse: le conjoint survivant
-    ///   - spouseShare: la quotité disponible pour le conjoint survivant
+    ///   - quotiteDisponible: la quotité disponible pour le conjoint survivant
     ///   - toChildren: les enfants héritiers survivants
     mutating func transferFullOwnership(of thisFullOwner  : String,
                                         toSpouse          : String,
@@ -115,53 +163,6 @@ extension Ownership {
             }
             
             fullOwners = [ ] // le bien est démembré
-        }
-    }
-    
-    /// Transférer la PP d'un copropriétaire d'un bien non démembré à ses héritiers selon l'option retnue par le conjoint survivant
-    /// - Parameters:
-    ///   - decedentName: le nom du défunt
-    ///   - spouseName: le conjoint survivant
-    ///   - chidrenNames: les enfants héritiers survivants
-    ///   - spouseFiscalOption: option fiscale du conjoint survivant éventuel
-    mutating func transferFullOwnership(of decedentName         : String,
-                                        toSpouse spouseName     : String,
-                                        toChildren chidrenNames : [String]?,
-                                        spouseFiscalOption      : InheritanceFiscalOption?) {
-        // il y a un conjoint survivant
-        if let chidrenNames = chidrenNames {
-            // il y a des enfants héritiers
-            // selon l'option fiscale du conjoint survivant
-            guard let spouseFiscalOption = spouseFiscalOption else {
-                fatalError("pas d'option fiscale passée en paramètre de transferOwnershipOf")
-            }
-            switch spouseFiscalOption {
-                case .fullUsufruct:
-                    transferFullOwnership(of                    : decedentName,
-                                          toThisNewUsufructuary : spouseName,
-                                          toTheseNewBareOwners  : chidrenNames)
-                    
-                case .quotiteDisponible:
-                    let shares = spouseFiscalOption.shares(nbChildren: chidrenNames.count)
-                    transferFullOwnership(of                : decedentName,
-                                          toSpouse          : spouseName,
-                                          quotiteDisponible : shares.forSpouse.bare,
-                                          toChildren        : chidrenNames)
-                    
-                case .usufructPlusBare:
-                    let sharing = spouseFiscalOption.shares(nbChildren: chidrenNames.count)
-                    transferFullOwnership(of              : decedentName,
-                                          toSpouse        : spouseName,
-                                          toChildren      : chidrenNames,
-                                          withThisSharing : sharing)
-            }
-            // factoriser les parts des usufuitier et des nue-propriétaires si nécessaire
-            groupShares()
-
-        } else {
-            // il n'y pas d'enfant héritier mais un conjoint survivant
-            // tout revient au conjoint survivant en PP
-            fullOwners = [Owner(name: spouseName, fraction: 1.0)]
         }
     }
 }

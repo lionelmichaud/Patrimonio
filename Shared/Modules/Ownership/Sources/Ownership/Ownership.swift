@@ -11,6 +11,8 @@ import FiscalModel
 
 let customLogOwnership = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Ownership")
 
+public typealias NameValueDico = [String : Double]
+
 // MARK: - Enumération de Nature d'une propriété
 
 public enum OwnershipNature: String, PickableEnumP {
@@ -289,8 +291,8 @@ public struct Ownership {
     /// - Returns: [Nom : Valeur possédée]
     public func ownedValues(ofValue totalValue : Double,
                             atEndOf year       : Int,
-                            evaluationContext  : EvaluationContext) -> [String : Double] {
-        var dico: [String : Double] = [:]
+                            evaluationContext  : EvaluationContext) -> NameValueDico {
+        var dico = NameValueDico()
         if isDismembered {
             for owner in bareOwners {
                 dico[owner.name] = ownedValue(by                : owner.name,
