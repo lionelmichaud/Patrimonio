@@ -15,6 +15,9 @@ import PersonModel
 import PatrimoineModel
 
 struct LifeInsuranceSuccessionManager {
+
+    // swiftlint:disable function_parameter_count
+
     /// Calcule la transmission d'assurance vie d'un `patrimoine` au décès de `decedent` et retourne
     /// une table des héritages et droits de succession pour chaque héritier
     /// - Parameters:
@@ -25,6 +28,8 @@ struct LifeInsuranceSuccessionManager {
     /// - Returns: Succession du défunt incluant la table des héritages et droits de succession pour chaque héritier
     func lifeInsuranceSuccession(in patrimoine : Patrimoin,
                                  of decedent   : Person,
+                                 spouseName    : String?,
+                                 childrenName  : [String]?,
                                  atEndOf year  : Int,
                                  using model   : Model) -> Succession {
         var inheritances     : [Inheritance]     = []
@@ -38,13 +43,6 @@ struct LifeInsuranceSuccessionManager {
                               inheritances : [])
         }
         
-        // calculer la masse d'assurance vie de la succession (y.c. celle détenue uniquement en UF)
-        // WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
-        //        let totalInheritanceValue = lifeInsuraceInheritanceValue(in      : patrimoine,
-        //                                                                 of      : decedent,
-        //                                                                 atEndOf : year - 1)
-        //        print("\n  Masse d'assurance vie détenue = \(totalInheritanceValue.rounded())")
-        
         // pour chaque assurance vie
         patrimoine
             .assets
@@ -52,8 +50,10 @@ struct LifeInsuranceSuccessionManager {
             .items
             .forEach { invest in
                 lifeInsuranceSuccessionMasses(of               : decedent,
+                                              spouseName       : spouseName,
+                                              childrenName     : childrenName,
                                               for              : invest,
-                                              atEndOf          : year - 1,
+                                              atEndOf          : year,
                                               massesSuccession : &massesSuccession)
             }
         
@@ -63,8 +63,10 @@ struct LifeInsuranceSuccessionManager {
             .items
             .forEach { invest in
                 lifeInsuranceSuccessionMasses(of               : decedent,
+                                              spouseName       : spouseName,
+                                              childrenName     : childrenName,
                                               for              : invest,
-                                              atEndOf          : year - 1,
+                                              atEndOf          : year,
                                               massesSuccession : &massesSuccession)
             }
         
@@ -118,6 +120,8 @@ struct LifeInsuranceSuccessionManager {
     ///   - massesSuccession: (héritier, base taxable)
     fileprivate func lifeInsuranceSuccessionMasses
     (of decedent      : Person,
+     spouseName       : String?,
+     childrenName     : [String]?,
      for invest       : FinancialEnvelopP,
      atEndOf year     : Int,
      massesSuccession : inout NameValueDico) {
@@ -139,6 +143,8 @@ struct LifeInsuranceSuccessionManager {
                                                      massesSuccession : &massesSuccession)
         } else {
             undismemberedLifeInsuranceSuccessionMasses(of               : decedentName,
+                                                       spouseName       : spouseName,
+                                                       childrenName     : childrenName,
                                                        for              : invest,
                                                        atEndOf          : year,
                                                        massesSuccession : &massesSuccession)
@@ -195,24 +201,28 @@ struct LifeInsuranceSuccessionManager {
     ///   - massesSuccession: (héritier, base taxable)
     fileprivate func undismemberedLifeInsuranceSuccessionMasses
     (of decedentName  : String,
+     spouseName       : String?,
+     childrenName     : [String]?,
      for invest       : FinancialEnvelopP,
      atEndOf year     : Int,
      massesSuccession : inout NameValueDico) {
-        guard let clause = invest.clause else { return }
+        guard var clause = invest.clause else { return }
         
         let ownedValuesBeforeTranmission =
-            invest.ownedValues(atEndOf           : year,
+            invest.ownedValues(atEndOf           : year - 1,
                                evaluationContext : .lifeInsuranceSuccession)
         
         var _invest = invest
         // simuler localement le transfert de propriété
-        _invest.ownership.transferUndismemberedLifeInsurance(of : decedentName,
-                                                             accordingTo : clause)
-        // faire la différence après / avant pour connaître les masses héritées
+        _invest.ownership.transferUndismemberedLifeInsurance(of           : decedentName,
+                                                             spouseName   : spouseName,
+                                                             childrenName : childrenName,
+                                                             accordingTo  : &clause)
         let ownedValuesAfterTranmission =
-            _invest.ownedValues(atEndOf           : year,
+            _invest.ownedValues(atEndOf           : year - 1,
                                 evaluationContext : .lifeInsuranceSuccession)
         
+        // faire la différence après / avant pour connaître les masses héritées
         ownedValuesAfterTranmission.forEach { (newOwnerName, newOwnedvalue) in
             // différence après - avant
             let oldOwnedValue = ownedValuesBeforeTranmission[newOwnerName] ?? 0.0

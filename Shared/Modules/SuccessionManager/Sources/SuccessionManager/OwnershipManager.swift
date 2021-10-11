@@ -28,7 +28,7 @@ struct OwnershipManager {
     ///   - liabilities: Passifs de la famille
     ///   - taxes: les droits de succession à payer par chaque enfant
     ///   - year: l'année du décès
-    func modifyLifeInsuranceClause
+    func modifyLifeInsuranceClauseIfNecessaryAndPossible
     (of decedent                 : Adult,
      conjoint                    : Adult,
      in family                   : Family,
@@ -37,29 +37,30 @@ struct OwnershipManager {
      toPayFor taxes              : NameValueDico,
      atEndOf year                : Int,
      run                         : Int) {
-        var missingCapitals = missingCapital(of: decedent,
-                                             in: family,
-                                             withAssets: &assets,
-                                             withLiabilities: liabilities,
-                                             toPayFor: taxes, atEndOf: year)
+        var missingCapitals = missingCapital(of              : decedent,
+                                             in              : family,
+                                             withAssets      : assets,
+                                             withLiabilities : liabilities,
+                                             toPayFor        : taxes,
+                                             atEndOf         : year)
         
         guard missingCapitals.values.sum() > 0.0 else {
             // il ne manque rien à personne
             return
         }
         
-        // trier les AV avec clause bénéficiaire à option par valeur possédée par le défunt
+        // trier les AV avec clause bénéficiaire à option par valeur possédée par le défunt croissantes
         // prendre les valeurs à la fin de l'année précédente
         assets
             .freeInvests
             .items
             .sort {
-                $0.ownedValue(by: decedent.displayName, atEndOf: year - 1, evaluationContext: .patrimoine) >
+                $0.ownedValue(by: decedent.displayName, atEndOf: year - 1, evaluationContext: .patrimoine) <
                     $1.ownedValue(by: decedent.displayName, atEndOf: year - 1, evaluationContext: .patrimoine)
             }
-        //print(String(describing: patrimoine.assets.freeInvests.items))
-        
+
         for idx in assets.freeInvests.items.indices {
+            //print(String(describing: patrimoine.assets.freeInvests.items[idx]))
             modifyClause(of           : &assets.freeInvests.items[idx],
                          toGet        : &missingCapitals,
                          decedentName : decedent.displayName,
@@ -91,7 +92,7 @@ struct OwnershipManager {
     private func missingCapital
     (of decedent                 : Adult,
      in family                   : Family,
-     withAssets assets           : inout Assets,
+     withAssets assets           : Assets,
      withLiabilities liabilities : Liabilities,
      toPayFor taxes              : NameValueDico,
      atEndOf year                : Int) -> NameValueDico {
@@ -138,7 +139,7 @@ struct OwnershipManager {
                             of          : decedent,
                             atEndOf     : year)
         
-        // cumuler les actifs nets dont les enfants sont les seuls PP après transmission
+        // cumuler les actifs nets dont les enfants sont PP après transmission
         return childrenNetSellableAssets(in              : family,
                                          withAssets      : assetsCopy,
                                          withLiabilities : liabilitiesCopy,
@@ -192,61 +193,59 @@ struct OwnershipManager {
         // ne considérer que :
         // - les assurance vie
         // - avec clause à option
-        // - dont le défunt est le seul PP
-        var newPeriodicSocialTaxes = false
-        var newClause = LifeInsuranceClause()
+        // - dont le défunt est un des PP
         switch freeInvest.type {
             case let InvestementKind.lifeInsurance(periodicSocialTaxes, clause):
                 guard clause.isOptional && freeInvest.ownership.hasAFullOwner(named: decedentName) else {
                     return
                 }
-                newPeriodicSocialTaxes = periodicSocialTaxes
-                newClause = clause
+                // capital décès
+                let decedentOwnedValue = freeInvest.ownedValue(by                : decedentName,
+                                                               atEndOf           : year - 1,
+                                                               evaluationContext : .patrimoine)
+                guard decedentOwnedValue >= 0 else {
+                    return
+                }
                 
+                SimulationLogger.shared.log(run      : run,
+                                            logTopic : .other,
+                                            message  : "Exercice de la clause à option de l'assurance \"\(freeInvest.name)\" de \(decedentName) à son décès en \(year) par \(conjointName)")
+                print("Assurance: \(freeInvest.name)\n Valeur possédée en \(year-1): \(decedentOwnedValue.k€String)")
+                
+                // modifier la clause bénéficiaire d'assurance vie
+                var newClause = clause
+                newClause.isOptional = false
+                newClause.fullRecipients = []
+                //  - capital décès total versé aux enfants (somme)
+                let givenToChildren = min(decedentOwnedValue, missingCapital.values.sum())
+                //  - part du capital décès versée aux enfants (somme) en PP
+                let partDesEnfants = givenToChildren * 100.0 / decedentOwnedValue
+                let childrenAlive  = family.childrenAliveName(atEndOf: year)
+                childrenAlive?.forEach { childrenName in
+                    newClause.fullRecipients.append(Owner(name     : childrenName,
+                                                          fraction : partDesEnfants / childrenAlive!.count.double()))
+                }
+                //  - part du capital versée au conjoint en PP
+                let partDuConjoint = 100.0 - partDesEnfants
+                newClause.fullRecipients.append(Owner(name     : conjointName,
+                                                      fraction : partDuConjoint))
+                
+                print("Part des enfants: \(partDesEnfants) % = \(givenToChildren.k€String)")
+                print("Part du conjoint: \(partDuConjoint) % = \((decedentOwnedValue - givenToChildren).k€String)")
+                
+                freeInvest.type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
+                                                 clause              : newClause)
+                print("Nouvelle clause:\n\(String(describing: newClause))")
+                
+                // Mettre à jour les `missingCapital` en conséquence
+                for childName in missingCapital.keys {
+                    missingCapital[childName]! -= givenToChildren / childrenAlive!.count.double()
+                    missingCapital[childName]! = max(0.0, missingCapital[childName]!)
+                }
+
             default:
                 // pas une assurance vie
                 return
-        }
-        // capital décès
-        let decedentOwnedValue = freeInvest.ownedValue(by                : decedentName,
-                                                       atEndOf           : year - 1,
-                                                       evaluationContext : .patrimoine)
-        guard decedentOwnedValue >= 0 else {
-            return
-        }
-        
-        SimulationLogger.shared.log(run      : run,
-                                    logTopic : .other,
-                                    message  : "Exercice de la clause à option de l'assurance \"\(freeInvest.name)\" de \(decedentName) à son décès en \(year) par \(conjointName)")
-        print("Assurance: \(freeInvest.name)\n Valeur possédée en \(year-1): \(decedentOwnedValue.k€String)")
-        
-        // modifier la clause bénéficiaire d'assurance vie
-        newClause.isOptional = false
-        newClause.fullRecipients = []
-        //  - capital décès total versé aux enfants (somme)
-        let givenToChildren = min(decedentOwnedValue, missingCapital.values.sum())
-        //  - part du capital décès versée aux enfants (somme) en PP
-        let partDesEnfants = givenToChildren * 100.0 / decedentOwnedValue
-        let childrenAlive = family.childrenAliveName(atEndOf: year)
-        childrenAlive?.forEach { childrenName in
-            newClause.fullRecipients.append(Owner(name     : childrenName,
-                                                  fraction : partDesEnfants / childrenAlive!.count.double()))
-        }
-        //  - part du capital versée au conjoint en PP
-        let partDuConjoint = 100.0 - partDesEnfants
-        newClause.fullRecipients.append(Owner(name     : conjointName,
-                                              fraction : partDuConjoint))
-        
-        print("Part des enfants: \(partDesEnfants) % = \(givenToChildren.k€String)")
-        print("Part du conjoint: \(partDuConjoint) % = \((decedentOwnedValue - givenToChildren).k€String)")
-
-        freeInvest.type = .lifeInsurance(periodicSocialTaxes : newPeriodicSocialTaxes,
-                                         clause              : newClause)
-        print("Nouvelle clause:\n \(String(describing: newClause))")
-
-        // Mettre à jour les `missingCapital` en conséquence
-        for childName in missingCapital.keys {
-            missingCapital[childName]! -= givenToChildren / childrenAlive!.count.double()
         }
     }
     
@@ -308,11 +307,16 @@ struct OwnershipManager {
                                      atEndOf year       : Int) {
         for idx in assets.periodicInvests.items.indices where assets.periodicInvests.items[idx].value(atEndOf: year) > 0 {
             switch assets.periodicInvests[idx].type {
-                case .lifeInsurance(_, let clause):
+                case .lifeInsurance(let periodicSocialTaxes, let clause):
+                    var newClause = clause
                     // régles de transmission particulières pour l'Assurance Vie
                     try! assets.periodicInvests[idx].ownership.transferLifeInsurance(
-                        of          : decedentName,
-                        accordingTo : clause)
+                        of           : decedentName,
+                        spouseName   : spouseName,
+                        childrenName : chidrenNames,
+                        accordingTo  : &newClause)
+                    assets.periodicInvests[idx].type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
+                                                                      clause              : newClause)
                     
                 default:
                     try! assets.periodicInvests[idx].ownership.transferOwnershipOf(
@@ -325,12 +329,17 @@ struct OwnershipManager {
         for idx in assets.freeInvests.items.indices where assets.freeInvests.items[idx].value(atEndOf: year) > 0 {
             assets.freeInvests[idx].initializeCurrentInterestsAfterTransmission(yearOfTransmission: year)
             switch assets.freeInvests[idx].type {
-                case .lifeInsurance(_, let clause):
+                case .lifeInsurance(let periodicSocialTaxes, let clause):
+                    var newClause = clause
                     // régles de transmission particulières pour l'Assurance Vie
                     try! assets.freeInvests[idx].ownership.transferLifeInsurance(
-                        of          : decedentName,
-                        accordingTo : clause)
-                    
+                        of           : decedentName,
+                        spouseName   : spouseName,
+                        childrenName : chidrenNames,
+                        accordingTo  : &newClause)
+                    assets.freeInvests[idx].type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
+                                                                      clause              : newClause)
+
                 default:
                     try! assets.freeInvests[idx].ownership.transferOwnershipOf(
                         decedentName       : decedentName,
