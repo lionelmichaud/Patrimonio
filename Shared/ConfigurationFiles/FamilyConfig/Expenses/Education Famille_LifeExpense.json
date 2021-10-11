@@ -33,7 +33,7 @@
                     "fixedYear" : 0,
                     "event"     : "Début des études supérieurs",
                     "group"     : null,
-                    "name"      : "Mme Lou-Ann MICHAUD"
+                    "name"      : "Mme. Lou-Ann MICHAUD"
                 }
             }
         },
@@ -49,13 +49,13 @@
                     "fixedYear" : 0,
                     "event"     : "Début des études supérieurs",
                     "group"     : null,
-                    "name"      : "Mme Lou-Ann MICHAUD"
+                    "name"      : "Mme. Lou-Ann MICHAUD"
                 },
                 "spanning_to" : {
                     "fixedYear" : 0,
                     "event"     : "Indépendance financière",
                     "group"     : null,
-                    "name"      : "Mme Lou-Ann MICHAUD"
+                    "name"      : "Mme. Lou-Ann MICHAUD"
                 }
             }
         },
@@ -74,7 +74,7 @@
                     "fixedYear" : 0,
                     "event"     : "Indépendance financière",
                     "group"     : null,
-                    "name"      : "Mme Lou-Ann MICHAUD"
+                    "name"      : "Mme. Lou-Ann MICHAUD"
                 }
             }
         },

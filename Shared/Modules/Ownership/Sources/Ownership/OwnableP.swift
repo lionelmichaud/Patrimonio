@@ -36,23 +36,41 @@ public protocol OwnableP: NameableValuableP {
     /// - Parameters:
     ///   - ownerName: nom de la personne recherchée
     ///   - year: date d'évaluation
-    ///   - evaluationMethod: méthode d'évaluation de la valeure des bien
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
     func ownedValue(by ownerName     : String,
                     atEndOf year     : Int,
-                    evaluationMethod : EvaluationMethod) -> Double
+                    evaluationContext : EvaluationContext) -> Double
     
+    /// Calcule une fraction `evaluatedFraction` de la valeur du bien
+    /// détenu en tout ou partie par la personne nommée `ownerName` et
+    /// uniquement si la nature du bien répond au critère `withOwnershipNature`
+    /// - Note:
+    ///     - si la nature du bien ne répond PAS au critère `withOwnershipNature`
+    ///       alors retourne 0.0
+    ///     - si `ownerName` n'a AUCUNE  part de propriété dans le bien, retorune 0.0
+    /// - Parameters:
+    ///   - ownerName: nom de la personne recherchée
+    ///   - year: date d'évaluation
+    ///   - withOwnershipNature: nature de propriété sélectionnée
+    ///   - evaluatedFraction: méthode d'évaluation sélectionnée
+    /// - Returns: fraction `evaluatedFraction` de la valeur du bien
+    func ownedValue(by ownerName        : String,
+                    atEndOf year        : Int,
+                    withOwnershipNature : OwnershipNature,
+                    evaluatedFraction   : EvaluatedFraction) -> Double
+
     /// Rend un dictionnaire [Owner, Valeur possédée] en appelalnt la méthode ownedValue()
     /// - Parameters:
     ///   - year: date d'évaluation
-    ///   - evaluationMethod: méthode d'évaluation de la valeure des bien
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
     /// - Returns: dictionnaire [Owner, Valeur possédée]
     func ownedValues(atEndOf year     : Int,
-                     evaluationMethod : EvaluationMethod) -> [String : Double]
+                     evaluationContext : EvaluationContext) -> NameValueDico
     
     func ownedValues(ofValue totalValue : Double,
                      atEndOf year       : Int,
-                     evaluationMethod   : EvaluationMethod) -> [String : Double]
+                     evaluationContext  : EvaluationContext) -> NameValueDico
     
     /// True si une des personnes listées perçoit des revenus de ce bien.
     /// Cad si elle est une des UF ou une des PP
@@ -67,19 +85,27 @@ public protocol OwnableP: NameableValuableP {
     /// Cad si elle est une des UF ou une des PP ou une des NP
     /// - Parameter names: liste de noms de membres de la famille
     func isPartOfPatrimoine(of names: [String]) -> Bool
+
+    /// True si le bien satisfait au critère `criteria` pour la personne nommée `name`
+    /// - Parameters:
+    ///   - criteria: nature de propriété recherchée
+    ///   - name: le nom du de personne recherchée parmi les propriétaires du bien
+    /// - Returns: True si le bien satisfait au critère `criteria` pour la personne nommée `name`
+    func satisfies(criteria : OwnershipNature,
+                   for name : String) -> Bool
 }
 
 public extension OwnableP {
     // implémentation par défaut
-    func ownedValue(by ownerName     : String,
-                    atEndOf year     : Int,
-                    evaluationMethod : EvaluationMethod) -> Double {
+    func ownedValue(by ownerName      : String,
+                    atEndOf year      : Int,
+                    evaluationContext : EvaluationContext) -> Double {
         // cas particuliers
-        switch evaluationMethod {
+        switch evaluationContext {
             case .legalSuccession:
                 // cas particulier d'une succession:
                 //   le défunt est-il usufruitier ?
-                if ownership.hasAnUsufructOwner(named: ownerName) {
+                if ownership.isDismembered && ownership.hasAnUsufructOwner(named: ownerName) {
                     // si oui alors l'usufruit rejoint la nu-propriété sans droit de succession
                     // l'usufruit n'est donc pas intégré à la masse successorale du défunt
                     return 0
@@ -98,35 +124,54 @@ public extension OwnableP {
         // prendre la valeur totale du bien sans aucune décote
         let evaluatedValue = value(atEndOf: year)
         // prendre la fraction possédée par ownerName
-        let value = evaluatedValue == 0 ? 0 : ownership.ownedValue(by               : ownerName,
-                                                                   ofValue          : evaluatedValue,
-                                                                   atEndOf          : year,
-                                                                   evaluationMethod : evaluationMethod)
+        let value = evaluatedValue == 0 ? 0 : ownership.ownedValue(by                : ownerName,
+                                                                   ofValue           : evaluatedValue,
+                                                                   atEndOf           : year,
+                                                                   evaluationContext : evaluationContext)
         return value
     }
     
     // implémentation par défaut
-    func ownedValues(atEndOf year     : Int,
-                     evaluationMethod : EvaluationMethod) -> [String : Double] {
-        var dico: [String : Double] = [:]
+    func ownedValue(by ownerName        : String,
+                    atEndOf year        : Int,
+                    withOwnershipNature : OwnershipNature,
+                    evaluatedFraction   : EvaluatedFraction) -> Double {
+        guard satisfies(criteria: withOwnershipNature, for: ownerName) else {
+            return 0
+        }
+        switch evaluatedFraction {
+
+            case .totalValue:
+                return value(atEndOf: year).rounded()
+
+            case .ownedValue:
+                return ownedValue(by               : ownerName,
+                                  atEndOf          : year,
+                                  evaluationContext: .patrimoine).rounded()
+        }
+    }
+
+    func ownedValues(atEndOf year      : Int,
+                     evaluationContext : EvaluationContext) -> NameValueDico {
+        var dico: NameValueDico = [:]
         if ownership.isDismembered {
             for owner in ownership.bareOwners {
-                dico[owner.name] = ownedValue(by               : owner.name,
-                                              atEndOf          : year,
-                                              evaluationMethod : evaluationMethod)
+                dico[owner.name] = ownedValue(by                : owner.name,
+                                              atEndOf           : year,
+                                              evaluationContext : evaluationContext)
             }
             for owner in ownership.usufructOwners {
-                dico[owner.name] = ownedValue(by               : owner.name,
-                                              atEndOf          : year,
-                                              evaluationMethod : evaluationMethod)
+                dico[owner.name] = ownedValue(by                : owner.name,
+                                              atEndOf           : year,
+                                              evaluationContext : evaluationContext)
             }
             
         } else {
             // valeur en pleine propriété
             for owner in ownership.fullOwners {
-                dico[owner.name] = ownedValue(by               : owner.name,
-                                              atEndOf          : year,
-                                              evaluationMethod : evaluationMethod)
+                dico[owner.name] = ownedValue(by                : owner.name,
+                                              atEndOf           : year,
+                                              evaluationContext : evaluationContext)
             }
         }
         return dico
@@ -134,29 +179,29 @@ public extension OwnableP {
     
     func ownedValues(ofValue totalValue : Double,
                      atEndOf year       : Int,
-                     evaluationMethod   : EvaluationMethod) -> [String : Double] {
-        var dico: [String : Double] = [:]
+                     evaluationContext  : EvaluationContext) -> NameValueDico {
+        var dico: NameValueDico = [:]
         if ownership.isDismembered {
             for owner in ownership.bareOwners {
-                dico[owner.name] = ownership.ownedValue(by               : owner.name,
-                                                        ofValue          : totalValue,
-                                                        atEndOf          : year,
-                                                        evaluationMethod : evaluationMethod)
+                dico[owner.name] = ownership.ownedValue(by                : owner.name,
+                                                        ofValue           : totalValue,
+                                                        atEndOf           : year,
+                                                        evaluationContext : evaluationContext)
             }
             for owner in ownership.usufructOwners {
-                dico[owner.name] = ownership.ownedValue(by               : owner.name,
-                                                        ofValue          : totalValue,
-                                                        atEndOf          : year,
-                                                        evaluationMethod : evaluationMethod)
+                dico[owner.name] = ownership.ownedValue(by                : owner.name,
+                                                        ofValue           : totalValue,
+                                                        atEndOf           : year,
+                                                        evaluationContext : evaluationContext)
             }
             
         } else {
             // valeur en pleine propriété
             for owner in ownership.fullOwners {
-                dico[owner.name] = ownership.ownedValue(by               : owner.name,
-                                                        ofValue          : totalValue,
-                                                        atEndOf          : year,
-                                                        evaluationMethod : evaluationMethod)
+                dico[owner.name] = ownership.ownedValue(by                : owner.name,
+                                                        ofValue           : totalValue,
+                                                        atEndOf           : year,
+                                                        evaluationContext : evaluationContext)
             }
         }
         return dico
@@ -178,6 +223,26 @@ public extension OwnableP {
         names.first(where: {
             ownership.hasAFullOwner(named: $0) || ownership.hasAnUsufructOwner(named: $0) || ownership.hasABareOwner(named: $0)
         }) != nil
+    }
+
+    /// True si le bien satisfait au critère `criteria` pour la personne nommée `ownerName`
+    /// - Parameters:
+    ///   - ownerName: le nom du de personne dont on calcule le bilan
+    ///   - criteria: nature de propriété sélectionnée
+    /// - Returns: True si le bien satisfait au critère `criteria` pour la personne nommée `ownerName`
+    func satisfies(criteria      : OwnershipNature,
+                   for ownerName : String) -> Bool {
+        switch criteria {
+
+            case .generatesRevenue:
+                return providesRevenue(to: [ownerName])
+
+            case .sellable:
+                return hasAFullOwner(in: [ownerName])
+
+            case .all:
+                return isPartOfPatrimoine(of: [ownerName])
+        }
     }
 }
 
@@ -204,15 +269,15 @@ extension Array where Element: OwnableP {
     /// - Parameters:
     ///   - ownerName: nom de la personne recherchée
     ///   - year: date d'évaluation
-    ///   - evaluationMethod: méthode d'évaluation de la valeure des bien
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
-    public func sumOfOwnedValues (by ownerName     : String,
-                                  atEndOf year     : Int,
-                                  evaluationMethod : EvaluationMethod) -> Double {
+    public func sumOfOwnedValues (by ownerName      : String,
+                                  atEndOf year      : Int,
+                                  evaluationContext : EvaluationContext) -> Double {
         return reduce(.zero, {result, element in
-            return result + element.ownedValue(by               : ownerName,
-                                               atEndOf          : year,
-                                               evaluationMethod : evaluationMethod)
+            return result + element.ownedValue(by                : ownerName,
+                                               atEndOf           : year,
+                                               evaluationContext : evaluationContext)
         })
     }
 }

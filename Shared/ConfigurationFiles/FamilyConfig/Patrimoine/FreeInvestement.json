@@ -143,14 +143,14 @@
             "type" : {
                 "lifeInsurance_taxes" : true,
                 "lifeInsurance_clause" : {
-                    "isDismembered"     : true,
-                    "fullRecipients"    : [ ],
-                    "usufructRecipient" : "Mme. Vanessa MICHAUD",
-                    "bareRecipients"    :
-                    [
-                        "Mme Lou-Ann MICHAUD",
-                        "M. Arthur MICHAUD"
-                    ]
+                    "isOptional"        : true,
+                    "isDismembered"     : false,
+                    "fullRecipients"    : [{
+                        "name"     : "Mme. Vanessa MICHAUD",
+                        "fraction" : 100
+                    }],
+                    "usufructRecipient" : "",
+                    "bareRecipients"    : [ ]
                 }
             },
             "interestRateType" : {
@@ -190,12 +190,13 @@
             "type" : {
                 "lifeInsurance_taxes" : true,
                 "lifeInsurance_clause" : {
+                    "isOptional"        : false,
                     "isDismembered"     : true,
                     "fullRecipients"    : [ ],
                     "usufructRecipient" : "Mme. Vanessa MICHAUD",
                     "bareRecipients"    :
                     [
-                        "Mme Lou-Ann MICHAUD",
+                        "Mme. Lou-Ann MICHAUD",
                         "M. Arthur MICHAUD"
                     ]
                 }
@@ -237,12 +238,13 @@
             "type" : {
                 "lifeInsurance_taxes" : true,
                 "lifeInsurance_clause" : {
+                    "isOptional"        : false,
                     "isDismembered"     : true,
                     "fullRecipients"    : [ ],
                     "usufructRecipient" : "Mme. Vanessa MICHAUD",
                     "bareRecipients"    :
                     [
-                        "Mme Lou-Ann MICHAUD",
+                        "Mme. Lou-Ann MICHAUD",
                         "M. Arthur MICHAUD"
                     ]
                 }
@@ -284,12 +286,13 @@
             "type" : {
                 "lifeInsurance_taxes" : true,
                 "lifeInsurance_clause" : {
+                    "isOptional"        : false,
                     "isDismembered"     : true,
                     "fullRecipients"    : [ ],
                     "usufructRecipient" : "Mme. Vanessa MICHAUD",
                     "bareRecipients"    :
                     [
-                        "Mme Lou-Ann MICHAUD",
+                        "Mme. Lou-Ann MICHAUD",
                         "M. Arthur MICHAUD"
                     ]
                 }
@@ -331,11 +334,18 @@
             "type" : {
                 "lifeInsurance_taxes" : true,
                 "lifeInsurance_clause" : {
+                    "isOptional"        : false,
                     "isDismembered"     : false,
                     "fullRecipients"    :
                     [
-                        "Mme Lou-Ann MICHAUD",
-                        "M. Arthur MICHAUD"
+                        {
+                            "name"     : "Mme. Lou-Ann MICHAUD",
+                            "fraction" : 50
+                        },
+                        {
+                            "name"     : "M. Arthur MICHAUD",
+                            "fraction" : 50
+                        }
                     ],
                     "usufructRecipient" : "",
                     "bareRecipients"    : [ ]
@@ -378,11 +388,18 @@
             "type" : {
                 "lifeInsurance_taxes" : true,
                 "lifeInsurance_clause" : {
+                    "isOptional"        : false,
                     "isDismembered"     : false,
                     "fullRecipients"    :
                     [
-                        "Mme Lou-Ann MICHAUD",
-                        "M. Arthur MICHAUD"
+                        {
+                            "name"     : "Mme. Lou-Ann MICHAUD",
+                            "fraction" : 50
+                        },
+                        {
+                            "name"     : "M. Arthur MICHAUD",
+                            "fraction" : 50
+                        }
                     ],
                     "usufructRecipient" : "",
                     "bareRecipients"    : [ ]

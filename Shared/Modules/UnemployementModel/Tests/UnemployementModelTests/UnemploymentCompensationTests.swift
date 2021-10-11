@@ -25,7 +25,7 @@ class UnemploymentCompensationTests: XCTestCase {
         let fiscalModel =
             Fiscal.Model(fromFile: Fiscal.Model.defaultFileName, fromBundle: Bundle.module)
             .initialized()
-        UnemploymentCompensationTests.unemploymentCompensation.setFiscalModel(fiscalModel)
+        UnemploymentCompensationTests.unemploymentCompensation.setAllocationChomageTaxesProviderP(fiscalModel.allocationChomageTaxes)
     }
     
     func date(year: Int, month: Int, day: Int) -> Date {

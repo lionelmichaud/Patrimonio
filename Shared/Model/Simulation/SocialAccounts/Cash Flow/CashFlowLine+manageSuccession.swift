@@ -42,7 +42,7 @@ extension CashFlowLine {
         lifeInsSuccessions += successionManager.lifeInsSuccessions
 
         adultTaxes
-            .perCategory[.succession]?
+            .perCategory[.legalSuccession]?
             .namedValues += successionManager.legalSuccessionsTaxes
         adultTaxes
             .perCategory[.liSuccession]?

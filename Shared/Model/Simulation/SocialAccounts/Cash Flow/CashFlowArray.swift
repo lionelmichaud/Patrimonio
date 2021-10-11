@@ -8,7 +8,6 @@
 
 import Foundation
 import NamedValue
-import Disk
 
 // MARK: - CashFlowArray: Table des cash flow annuels
 

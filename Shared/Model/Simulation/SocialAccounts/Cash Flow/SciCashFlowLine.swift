@@ -144,9 +144,9 @@ struct SciCashFlowLine {
                 netRevenue = liquidatedValue.netRevenue
                 // créditer le produit de la vente sur les comptes des personnes
                 // en fonction de leur part de propriété respective
-                let ownedSaleValues = scpi.ownedValues(ofValue          : liquidatedValue.netRevenue,
-                                                       atEndOf          : year,
-                                                       evaluationMethod : .patrimoine)
+                let ownedSaleValues = scpi.ownedValues(ofValue           : liquidatedValue.netRevenue,
+                                                       atEndOf           : year,
+                                                       evaluationContext : .patrimoine)
                 let netCashFlowManager = NetCashFlowManager()
                 netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
                                                  in            : patrimoine,

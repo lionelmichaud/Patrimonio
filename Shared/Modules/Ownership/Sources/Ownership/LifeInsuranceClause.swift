@@ -10,35 +10,49 @@ import Foundation
 
 // MARK: - Clause bénéficiaire d'assurance vie
 
+/// Clause bénéficiaire d'assurance vie
 /// - Warning:
-///   - le cas de plusieurs usufruitiers n'est pas traité
-///   - le cas de parts non égales entre nue-propriétaires n'est pas traité
-///   - le cas de parts non égales entre bénéficiaires en PP n'est pas traité
+///   - le cas de plusieurs usufruitiers bénéficiaires n'est pas traité
+///   - le cas de parts non égales entre nue-propriétaires bénéficiaires n'est pas traité
 public struct LifeInsuranceClause: Codable, Hashable {
-    public var isDismembered     : Bool     = false
+    public var isOptional   : Bool = false
+    public var isDismembered: Bool = false
     // bénéficiaire en PP
-    public var fullRecipients    : [String] = [ ] // PP si la clause n'est pas démembrée
+    public var fullRecipients: Owners = [] // PP si la clause n'est pas démembrée
     // bénéficiaire en UF
-    public var usufructRecipient : String   = ""
+    public var usufructRecipient: String = "" // UF si la clause est démembrée
     // bénéficiaire en NP
-    public var bareRecipients    : [String] = [ ]
+    // TODO: - traiter le cas des parts non égales chez les NP désignés dans la clause bénéficiaire
+    //   => public var bareRecipients: Owners = [] // NP si la clause est démembrée
+    public var bareRecipients: [String] = [] // NP si la clause est démembrée
     
     public var isValid: Bool {
-        if isDismembered {
-            return usufructRecipient.isNotEmpty && bareRecipients.isNotEmpty
-        } else {
-            return fullRecipients.isNotEmpty
+        switch (isOptional, isDismembered) {
+            case (true, true):
+                // une clause à option ne doit pas être démembrée
+                return false
+                
+            case (false, true):
+                return usufructRecipient.isNotEmpty && bareRecipients.isNotEmpty
+                
+            case (false, false):
+                return fullRecipients.isNotEmpty && fullRecipients.isvalid
+
+            case (true, false):
+                // un seul donataire désigné en PP dans une clause à option (celui qui exerce l'option)
+                return fullRecipients.count == 1 && fullRecipients.isvalid
         }
     }
     
-    public init() {    }
+    public init() { }
 }
 
 extension LifeInsuranceClause: CustomStringConvertible {
     public var description: String {
         let header = """
-        - Valide:    \(isValid.frenchString)
-        - Démembrée: \(isDismembered.frenchString)
+        - Valide: \(isValid.frenchString)
+        - Clause à option : \(isOptional.frenchString)
+        - Clause démembrée: \(isDismembered.frenchString)
 
         """
         let fr =

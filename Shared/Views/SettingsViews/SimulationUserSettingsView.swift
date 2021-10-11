@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Ownership
 import Persistence
 import PatrimoineModel
 import FamilyModel
@@ -16,7 +17,6 @@ struct SimulationUserSettingsView: View {
     // si la variable d'état est locale (@State) cela ne fonctionne pas correctement
     @Binding var simulateVolatility : Bool
     @Binding var ownership          : OwnershipNature
-    @Binding var evaluationMethod   : AssetEvaluationMethod
 
     var body: some View {
         Form {
@@ -44,11 +44,11 @@ struct SimulationUserSettingsView: View {
             }
             
 //            Section(footer: Text("L'évolution dans le temps du bilan des parents prendra en compte cette valorisation")) {
-//                CasePicker(pickedCase: $evaluationMethod, label: "Valorisation d'un bien")
+//                CasePicker(pickedCase: $evaluationContext, label: "Valorisation d'un bien")
 //                    .pickerStyle(DefaultPickerStyle())
-//                    .onChange(of     : evaluationMethod,
+//                    .onChange(of     : evaluationContext,
 //                              perform: { newValue in
-//                                UserSettings.shared.assetKpiEvaluationMethod = newValue
+//                                UserSettings.shared.assetKpiEvaluatedFraction = newValue
 //                              })
 //            }
         }
@@ -62,8 +62,7 @@ struct SimulationUserSettings_Previews: PreviewProvider {
     static var simulation = Simulation()
     static var previews: some View {
         SimulationUserSettingsView(simulateVolatility : .constant(true),
-                                   ownership          : .constant(.all),
-                                   evaluationMethod   : .constant(.totalValue))
+                                   ownership          : .constant(.all))
             .environmentObject(uiState)
             .environmentObject(family)
             .environmentObject(patrimoine)

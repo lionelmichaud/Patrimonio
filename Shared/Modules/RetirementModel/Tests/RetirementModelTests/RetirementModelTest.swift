@@ -59,4 +59,24 @@ class RetirementModelTest: XCTestCase {
         XCTAssertEqual(retirement.persistenceSM.currentState , .modified)
     }
 
+    func test_state_machine() {
+        var retirement = Retirement(fromBundle : Bundle.module)
+        
+        XCTAssertFalse(retirement.isModified)
+        
+        retirement.ageMinimumLegal = 2
+        XCTAssertTrue(retirement.isModified)
+        retirement.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(retirement.isModified)
+        
+        retirement.valeurDuPointAGIRC = 2
+        XCTAssertTrue(retirement.isModified)
+        retirement.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(retirement.isModified)
+        
+        retirement.ageMinimumAGIRC = 2
+        XCTAssertTrue(retirement.isModified)
+        retirement.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(retirement.isModified)
+    }
 }

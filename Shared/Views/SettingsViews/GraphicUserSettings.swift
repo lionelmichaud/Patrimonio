@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppFoundation
+import Ownership
 import Persistence
 import PatrimoineModel
 import FamilyModel
@@ -16,8 +17,8 @@ struct GraphicUserSettings: View {
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
     // si la variable d'état est locale (@State) cela ne fonctionne pas correctement
-    @Binding var ownership        : OwnershipNature
-    @Binding var evaluationMethod : AssetEvaluationMethod
+    @Binding var ownership         : OwnershipNature
+    @Binding var evaluatedFraction : EvaluatedFraction
     
     var body: some View {
         Form {
@@ -32,11 +33,11 @@ struct GraphicUserSettings: View {
             }
             
             Section(footer: Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu prendra en compte cette valorisation")) {
-                CasePicker(pickedCase: $evaluationMethod, label: "Valorisation d'un bien dans un bilan individuel")
+                CasePicker(pickedCase: $evaluatedFraction, label: "Valorisation d'un bien dans un bilan individuel")
                     .pickerStyle(DefaultPickerStyle())
-                    .onChange(of     : evaluationMethod,
+                    .onChange(of     : evaluatedFraction,
                               perform: { newValue in
-                                UserSettings.shared.assetGraphicEvaluationMethod = newValue
+                                UserSettings.shared.assetGraphicEvaluatedFraction = newValue
                               })
             }
         }
@@ -54,8 +55,8 @@ struct GraphicUserSettings_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationView {
-            NavigationLink(destination: GraphicUserSettings(ownership        : .constant(.all),
-                                                            evaluationMethod : .constant(.totalValue))
+            NavigationLink(destination: GraphicUserSettings(ownership         : .constant(.all),
+                                                            evaluatedFraction : .constant(.totalValue))
                             .environmentObject(patrimoine)) {
                 Label("Graphiques", systemImage: "chart.bar.xaxis")
             }

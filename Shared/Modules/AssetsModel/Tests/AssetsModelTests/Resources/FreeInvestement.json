@@ -23,6 +23,7 @@
     "type" : {
         "lifeInsurance_taxes"  : true,
         "lifeInsurance_clause" : {
+            "isOptional"        : false,
             "isDismembered"     : true,
             "fullRecipients"    : [ ],
             "usufructRecipient" : "Mme. Vanessa MICHAUD",

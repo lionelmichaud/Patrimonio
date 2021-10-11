@@ -9,27 +9,7 @@
 import Foundation
 import AppFoundation
 import Foil
-
-// MARK: - Enumération de nature d'une propriété
-
-public enum OwnershipNature: String, PickableEnumP {
-    case generatesRevenue = "Uniquement les biens génèrant revenu/dépense (possédés en PP ou en UF au moins en partie)"
-    case sellable         = "Uniquement les biens cessibles (possédés en PP au moins en partie)"
-    case all              = "Tous les biens (possédés en UF, NP ou PP au moins en partie)"
-    
-    public var pickerString: String {
-        return self.rawValue
-    }
-}
-
-public enum AssetEvaluationMethod: String, PickableEnumP {
-    case totalValue = "Valeur totale du bien"
-    case ownedValue = "Valeur patrimoniale de la fraction possédée du bien"
-    
-    public var pickerString: String {
-        return self.rawValue
-    }
-}
+import Ownership
 
 public struct UserSettings {
     public static var shared = UserSettings()
@@ -67,16 +47,16 @@ public struct UserSettings {
         }
     }
     
-    static let assetKpiEvaluationMethod = "assetKpiEvaluationMethod"
-    @WrappedDefault(keyName: UserSettings.assetKpiEvaluationMethod,
-                    defaultValue: AssetEvaluationMethod.ownedValue.rawValue)
-    var assetKpiEvaluationMethodString: String
-    public var assetKpiEvaluationMethod: AssetEvaluationMethod {
+    static let assetKpiEvaluatedFraction = "assetKpiEvaluatedFraction"
+    @WrappedDefault(keyName: UserSettings.assetKpiEvaluatedFraction,
+                    defaultValue: EvaluatedFraction.ownedValue.rawValue)
+    var assetKpiEvaluatedFractionString: String
+    public var assetKpiEvaluatedFraction: EvaluatedFraction {
         get {
-            AssetEvaluationMethod(rawValue: assetKpiEvaluationMethodString) ?? AssetEvaluationMethod.ownedValue
+            EvaluatedFraction(rawValue: assetKpiEvaluatedFractionString) ?? EvaluatedFraction.ownedValue
         }
         set {
-            assetKpiEvaluationMethodString = newValue.rawValue
+            assetKpiEvaluatedFractionString = newValue.rawValue
         }
     }
     
@@ -94,16 +74,16 @@ public struct UserSettings {
         }
     }
     
-    static let assetGraphicEvaluationMethod = "assetGraphicEvaluationMethod"
-    @WrappedDefault(keyName: UserSettings.assetGraphicEvaluationMethod,
-                    defaultValue: AssetEvaluationMethod.ownedValue.rawValue)
-    var assetGraphicEvaluationMethodString: String
-    public var assetGraphicEvaluationMethod: AssetEvaluationMethod {
+    static let assetGraphicEvaluatedFraction = "assetGraphicEvaluatedFraction"
+    @WrappedDefault(keyName: UserSettings.assetGraphicEvaluatedFraction,
+                    defaultValue: EvaluatedFraction.ownedValue.rawValue)
+    var assetGraphicEvaluatedFractionString: String
+    public var assetGraphicEvaluatedFraction: EvaluatedFraction {
         get {
-            AssetEvaluationMethod(rawValue: assetGraphicEvaluationMethodString) ?? AssetEvaluationMethod.ownedValue
+            EvaluatedFraction(rawValue: assetGraphicEvaluatedFractionString) ?? EvaluatedFraction.ownedValue
         }
         set {
-            assetGraphicEvaluationMethodString = newValue.rawValue
+            assetGraphicEvaluatedFractionString = newValue.rawValue
         }
     }
 }

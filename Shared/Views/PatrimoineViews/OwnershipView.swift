@@ -94,7 +94,7 @@ struct OwnershipView_Previews: PreviewProvider {
                                    amount: ownership.ownedValue(by     : member.displayName,
                                                                 ofValue: 100.0,
                                                                 atEndOf: Date.now.year,
-                                                                evaluationMethod: .ifi) )
+                                                                evaluationContext: .ifi) )
                     }
                 }
             }

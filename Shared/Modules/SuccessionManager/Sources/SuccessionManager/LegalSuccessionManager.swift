@@ -138,10 +138,13 @@ public struct LegalSuccessionManager {
                                         of decedent   : Person,
                                         atEndOf year  : Int) -> Double {
         var taxable: Double = 0
+//        print("décédé: \(decedent.displayName)")
         patrimoine.forEachOwnable { ownable in
-            taxable += ownable.ownedValue(by               : decedent.displayName,
-                                          atEndOf          : year,
-                                          evaluationMethod : .legalSuccession)
+            taxable += ownable.ownedValue(by                : decedent.displayName,
+                                          atEndOf           : year,
+                                          evaluationContext : .legalSuccession)
+//            print("Actif: \(ownable.name)")
+//            print("Valeur légale taxable: \(taxable.k€String)")
         }
         return taxable
     }

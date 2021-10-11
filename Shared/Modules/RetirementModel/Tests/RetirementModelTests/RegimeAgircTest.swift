@@ -29,10 +29,12 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
             SocioEconomy.Model(fromFile   : "SocioEconomyModelConfig.json",
                                fromBundle : Bundle.module)
                 .initialized())
-        RegimeAgircTest.regimeAgirc.setFiscalModel(
-            Fiscal.Model(fromFile   : "FiscalModelConfig.json",
-                         fromBundle : Bundle.module)
-                .initialized())
+        RegimeAgircTest.regimeAgirc.setNetRegimeAgircProviderP(
+            Fiscal
+                .Model(fromFile   : "FiscalModelConfig.json",
+                       fromBundle : Bundle.module)
+                .initialized()
+                .pensionTaxes)
         RegimeAgircTest.regimeAgirc.setRegimeGeneral(
             RegimeGeneral(model: RegimeGeneral.Model(fromFile: "RegimeGeneralModel.json",
                                                      fromBundle: Bundle.module)))

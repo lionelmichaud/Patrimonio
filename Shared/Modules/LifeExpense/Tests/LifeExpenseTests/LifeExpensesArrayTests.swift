@@ -26,10 +26,16 @@ final class LifeExpenseArrayTests: XCTestCase {
     static let underEvaluationRateProvider = ExpensesUnderEvaluationRateProvider()
     
     struct MembersCountProvider : MembersCountProviderP {
+        var nbOfAdults: Int = 2
+        
         var nbOfBornChildren: Int = 4
         
         func nbOfAdultAlive(atEndOf year: Int) -> Int {
             3
+        }
+        
+        func nbOfChildrenAlive(atEndOf year: Int) -> Int {
+            2
         }
         
         func nbOfFiscalChildren(during year: Int) -> Int {

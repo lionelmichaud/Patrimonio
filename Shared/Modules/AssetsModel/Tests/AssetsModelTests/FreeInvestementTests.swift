@@ -141,40 +141,40 @@ class FreeInvestementTests: XCTestCase {
         // lifeInsurance + legalSuccession
         var ownedValue = fi.ownedValue(by               : "M. Lionel MICHAUD",
                                        atEndOf          : 2020,
-                                       evaluationMethod : .legalSuccession)
+                                       evaluationContext : .legalSuccession)
         XCTAssertEqual(0, ownedValue)
         
         // lifeInsurance + patrimoine
         ownedValue = fi.ownedValue(by               : "M. Lionel MICHAUD",
                                    atEndOf          : 2020,
-                                   evaluationMethod : .patrimoine)
+                                   evaluationContext : .patrimoine)
         XCTAssertEqual(fi.value(atEndOf: 2020), ownedValue)
 
         // lifeInsurance + lifeInsuranceSuccession
         ownedValue = fi.ownedValue(by               : "M. Lionel MICHAUD",
                                    atEndOf          : 2020,
-                                   evaluationMethod : .lifeInsuranceSuccession)
+                                   evaluationContext : .lifeInsuranceSuccession)
         XCTAssertEqual(fi.value(atEndOf: 2020), ownedValue)
 
         // pea + legalSuccession
         fi.type = .pea
         ownedValue = fi.ownedValue(by               : "M. Lionel MICHAUD",
                                    atEndOf          : 2020,
-                                   evaluationMethod : .legalSuccession)
+                                   evaluationContext : .legalSuccession)
         XCTAssertEqual(fi.value(atEndOf: 2020), ownedValue)
 
         // pea + patrimoine
         fi.type = .pea
         ownedValue = fi.ownedValue(by               : "M. Lionel MICHAUD",
                                    atEndOf          : 2020,
-                                   evaluationMethod : .patrimoine)
+                                   evaluationContext : .patrimoine)
         XCTAssertEqual(fi.value(atEndOf: 2020), ownedValue)
 
         // pea + lifeInsuranceSuccession
         fi.type = .pea
         ownedValue = fi.ownedValue(by               : "M. Lionel MICHAUD",
                                    atEndOf          : 2020,
-                                   evaluationMethod : .lifeInsuranceSuccession)
+                                   evaluationContext : .lifeInsuranceSuccession)
         XCTAssertEqual(0, ownedValue)
     }
 }

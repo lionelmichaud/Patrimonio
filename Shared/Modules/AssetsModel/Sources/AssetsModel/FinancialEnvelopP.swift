@@ -34,4 +34,7 @@ public extension FinancialEnvelopP {
                 return nil
         }
     }
+    var isValid: Bool {
+        type.isValid
+    }
 }

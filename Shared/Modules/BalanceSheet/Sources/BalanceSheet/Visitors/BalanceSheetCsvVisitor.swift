@@ -112,7 +112,7 @@ public final class BalanceSheetCsvTableVisitor: BalanceSheetCsvVisitorP {
         }
 
         // construire le tableau de valeurs: une ligne par année
-        for idx in element.range {
+        for idx in element.indices {
             element[idx].accept(self)
             table.append("\n")
         }

@@ -15,6 +15,9 @@ import PersonModel
 import PatrimoineModel
 
 struct LifeInsuranceSuccessionManager {
+
+    // swiftlint:disable function_parameter_count
+
     /// Calcule la transmission d'assurance vie d'un `patrimoine` au décès de `decedent` et retourne
     /// une table des héritages et droits de succession pour chaque héritier
     /// - Parameters:
@@ -23,12 +26,14 @@ struct LifeInsuranceSuccessionManager {
     ///   - year: année du décès
     ///   - model: modèle d'envrionment à utiliser
     /// - Returns: Succession du défunt incluant la table des héritages et droits de succession pour chaque héritier
-    func lifeInsuraceSuccession(in patrimoine : Patrimoin,
-                                of decedent   : Person,
-                                atEndOf year  : Int,
-                                using model   : Model) -> Succession {
+    func lifeInsuranceSuccession(in patrimoine : Patrimoin,
+                                 of decedent   : Person,
+                                 spouseName    : String?,
+                                 childrenName  : [String]?,
+                                 atEndOf year  : Int,
+                                 using model   : Model) -> Succession {
         var inheritances     : [Inheritance]     = []
-        var massesSuccession : [String : Double] = [:]
+        var massesSuccession : NameValueDico = [:]
         
         guard let family = Patrimoin.familyProvider else {
             return Succession(kind         : .lifeInsurance,
@@ -38,13 +43,6 @@ struct LifeInsuranceSuccessionManager {
                               inheritances : [])
         }
         
-        // calculer la masse d'assurance vie de la succession (y.c. celle détenue uniquement en UF)
-        // WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
-        //        let totalInheritanceValue = lifeInsuraceInheritanceValue(in      : patrimoine,
-        //                                                                 of      : decedent,
-        //                                                                 atEndOf : year - 1)
-        //        print("\n  Masse d'assurance vie détenue = \(totalInheritanceValue.rounded())")
-        
         // pour chaque assurance vie
         patrimoine
             .assets
@@ -52,18 +50,23 @@ struct LifeInsuranceSuccessionManager {
             .items
             .forEach { invest in
                 lifeInsuranceSuccessionMasses(of               : decedent,
+                                              spouseName       : spouseName,
+                                              childrenName     : childrenName,
                                               for              : invest,
-                                              atEndOf          : year - 1,
+                                              atEndOf          : year,
                                               massesSuccession : &massesSuccession)
             }
+        
         patrimoine
             .assets
             .periodicInvests
             .items
             .forEach { invest in
                 lifeInsuranceSuccessionMasses(of               : decedent,
+                                              spouseName       : spouseName,
+                                              childrenName     : childrenName,
                                               for              : invest,
-                                              atEndOf          : year - 1,
+                                              atEndOf          : year,
                                               massesSuccession : &massesSuccession)
             }
         
@@ -100,75 +103,141 @@ struct LifeInsuranceSuccessionManager {
                           inheritances : inheritances)
     }
 
-    /// Calcule, pour chaque héritier, la base taxable d'une assurance vie
+    /// Calcule, pour chaque héritier d'un défunt nommé `decedentName`,
+    /// les bases taxables `massesSuccession` d'une assurance vie `invest`;
+    /// pour un décès survenu pendant l'année `year`
     ///
     /// L'usufruit rejoint la nue-propriété en franchise d'impôt et est donc exclue de la base taxable.
+    ///
+    /// - Warning: Cas non traités
+    ///   - capital de l'assurance vie démembré et le défunt est nue-propriétaire (la NP devrait rejoindre l'UF)
+    ///   - capital de l'assurance vie non démembré et co-détenu en PP par plusieurs personnes
     ///
     /// - Parameters:
     ///   - decedent: défunt
     ///   - invest: l'investissemment à analyser
     ///   - year: année du décès - 1
     ///   - massesSuccession: (héritier, base taxable)
-    fileprivate func lifeInsuranceSuccessionMasses(of decedent      : Person,
-                                                   for invest       : FinancialEnvelopP,
-                                                   atEndOf year     : Int,
-                                                   massesSuccession : inout [String : Double]) {
-        var _invest = invest
+    fileprivate func lifeInsuranceSuccessionMasses
+    (of decedent      : Person,
+     spouseName       : String?,
+     childrenName     : [String]?,
+     for invest       : FinancialEnvelopP,
+     atEndOf year     : Int,
+     massesSuccession : inout NameValueDico) {
+        guard invest.clause != nil else { return }
         
-        guard let clause = invest.clause else { return }
+        let decedentName = decedent.displayName
         
         // on a affaire à une assurance vie
         // masse successorale pour cet investissement
-        let masseDecedent = invest.ownedValue(by               : decedent.displayName,
-                                              atEndOf          : year,
-                                              evaluationMethod : .lifeInsuranceSuccession)
+        let masseDecedent = invest.ownedValue(by                : decedentName,
+                                              atEndOf           : year,
+                                              evaluationContext : .lifeInsuranceSuccession)
         guard masseDecedent > 0 else { return }
         
-        if invest.ownership.hasAnUsufructOwner(named: decedent.displayName) {
+        if invest.ownership.isDismembered {
+            dismemberedLifeInsuranceSuccessionMasses(of               : decedentName,
+                                                     for              : invest,
+                                                     atEndOf          : year,
+                                                     massesSuccession : &massesSuccession)
+        } else {
+            undismemberedLifeInsuranceSuccessionMasses(of               : decedentName,
+                                                       spouseName       : spouseName,
+                                                       childrenName     : childrenName,
+                                                       for              : invest,
+                                                       atEndOf          : year,
+                                                       massesSuccession : &massesSuccession)
+        }
+    }
+    
+    /// Calcule, pour chaque héritier d'un défunt nommé `decedentName`,
+    /// les bases taxables `massesSuccession` d'une assurance vie `invest` DEMEMBRÉE;
+    /// pour un décès survenu pendant l'année `year`
+    ///
+    /// L'usufruit rejoint la nue-propriété en franchise d'impôt et est donc exclue de la base taxable.
+    ///
+    /// - Warning: Cas non traités
+    ///  - capital de l'assurance vie démembré et le défunt est nue-propriétaire (la NP devrait rejoindre l'UF)
+    ///
+    /// - Parameters:
+    ///   - decedentName: nom du défunt
+    ///   - invest: l'investissemment à analyser
+    ///   - year: année du décès - 1
+    ///   - massesSuccession: (héritier, base taxable)
+    fileprivate func dismemberedLifeInsuranceSuccessionMasses
+    (of decedentName  : String,
+     for invest       : FinancialEnvelopP,
+     atEndOf year     : Int,
+     massesSuccession : inout NameValueDico) {
+        if invest.ownership.hasAnUsufructOwner(named: decedentName) {
             // le capital de l'assurane vie est démembré
             // le défunt est usufruitier
             // l'usufruit rejoint la nue-propriété sans taxe
             ()
         }
         
-        if invest.ownership.hasABareOwner(named: decedent.displayName) {
+        if invest.ownership.hasABareOwner(named: decedentName) {
             // le capital de l'assurane vie est démembré
             // le défunt est un nue-propriétaire
-            // TODO: - traiter le cas où le capital de l'assurance vie est démembré et le défunt est nue-propriétaire
+            // TODO: - traiter le cas où le capital de l'assurance vie est démembré et le défunt est nue-propriétaire (la NP rejoint l'UF)
             fatalError("lifeInsuraceSuccession: cas non traité (capital démembré et le défunt est nue-propriétaire)")
         }
+    }
+    
+    /// Calcule, pour chaque héritier d'un défunt nommé `decedentName`,
+    /// les bases taxables `massesSuccession` d'une assurance vie `invest` NON DEMEMBRÉE;
+    /// pour un décès survenu pendant l'année `year`
+    ///
+    /// L'usufruit rejoint la nue-propriété en franchise d'impôt et est donc exclue de la base taxable.
+    ///
+    /// - Warning: Cas non traités
+    ///  - capital de l'assurance vie démembré et le défunt est nue-propriétaire (la NP devrait rejoindre l'UF)
+    ///
+    /// - Parameters:
+    ///   - decedentName: nom du défunt
+    ///   - invest: l'investissemment à analyser
+    ///   - year: année du décès - 1
+    ///   - massesSuccession: (héritier, base taxable)
+    fileprivate func undismemberedLifeInsuranceSuccessionMasses
+    (of decedentName  : String,
+     spouseName       : String?,
+     childrenName     : [String]?,
+     for invest       : FinancialEnvelopP,
+     atEndOf year     : Int,
+     massesSuccession : inout NameValueDico) {
+        guard var clause = invest.clause else { return }
         
-        // le défunt est-il un des PP du capital de l'assurance vie ?
-        if invest.ownership.hasAFullOwner(named: decedent.displayName) {
-            // le capital de l'assurance vie n'est pas démembré
-            // le seul PP ?
-            if invest.ownership.fullOwners.count == 1 {
-                if clause.isDismembered {
-                    // la clause bénéficiaire de l'assurance vie est démembrée
-                    // simuler localement le transfert de propriété pour connaître les masses héritées
-                    _invest.ownership.transferLifeInsuranceUsufructAndBareOwnership(clause: clause)
-                    
+        let ownedValuesBeforeTranmission =
+            invest.ownedValues(atEndOf           : year - 1,
+                               evaluationContext : .lifeInsuranceSuccession)
+        
+        var _invest = invest
+        // simuler localement le transfert de propriété
+        _invest.ownership.transferUndismemberedLifeInsurance(of           : decedentName,
+                                                             spouseName   : spouseName,
+                                                             childrenName : childrenName,
+                                                             accordingTo  : &clause)
+        let ownedValuesAfterTranmission =
+            _invest.ownedValues(atEndOf           : year - 1,
+                                evaluationContext : .lifeInsuranceSuccession)
+        
+        // faire la différence après / avant pour connaître les masses héritées
+        ownedValuesAfterTranmission.forEach { (newOwnerName, newOwnedvalue) in
+            // différence après - avant
+            let oldOwnedValue = ownedValuesBeforeTranmission[newOwnerName] ?? 0.0
+            let increase = max(0.0, newOwnedvalue - oldOwnedValue)
+            
+            // s'il y a enrichissement
+            if increase > 0.0 {
+                if massesSuccession[newOwnerName] != nil {
+                    // incrémenter
+                    massesSuccession[newOwnerName]! += newOwnedvalue
                 } else {
-                    // la clause bénéficiaire de l'assurance vie n'est pas démembrée
-                    // simuler localement le transfert de propriété pour connaître les masses héritées
-                    _invest.ownership.transferLifeInsuranceFullOwnership(clause: clause)
+                    massesSuccession[newOwnerName] = newOwnedvalue
                 }
-                let ownedValues = _invest.ownedValues(atEndOf: year, evaluationMethod: .lifeInsuranceSuccession)
-                ownedValues.forEach { (name, value) in
-                    if massesSuccession[name] != nil {
-                        // incrémenter
-                        massesSuccession[name]! += value
-                    } else {
-                        massesSuccession[name] = value
-                    }
-                }
-                
-            } else {
-                // TODO: - traiter le cas où le capital est co-détenu en PP par plusieurs personnes
-                fatalError("lifeInsuraceSuccession: cas non traité (capital co-détenu en PP par plusieurs personnes)")
             }
-        } // sinon on ne fait rien car le défunt ne possède aucun droit sur le bien
-        
+        }
     }
     
     /// Calcule la masse totale d'assurance vie de la succession d'une personne.
@@ -186,9 +255,9 @@ struct LifeInsuranceSuccessionManager {
                                                   atEndOf year  : Int) -> Double {
         var taxable                                             : Double = 0
         patrimoine.forEachOwnable { ownable in
-            taxable += ownable.ownedValue(by               : decedent.displayName,
-                                          atEndOf          : year,
-                                          evaluationMethod : .lifeInsuranceSuccession)
+            taxable += ownable.ownedValue(by                : decedent.displayName,
+                                          atEndOf           : year,
+                                          evaluationContext : .lifeInsuranceSuccession)
         }
         return taxable
     }

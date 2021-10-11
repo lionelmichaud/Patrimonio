@@ -207,8 +207,8 @@ struct CashFlowLine {
     
     fileprivate mutating func computeISF(with patrimoine : Patrimoin,
                                          using model     : Model) {
-        let taxableAsset = patrimoine.realEstateValue(atEndOf          : year,
-                                                      evaluationMethod : .ifi)
+        let taxableAsset = patrimoine.realEstateValue(atEndOf           : year,
+                                                      evaluationContext : .ifi)
         adultTaxes.isf = try! model.fiscalModel.isf.isf(taxableAsset: taxableAsset)
         adultTaxes
             .perCategory[.isf]?

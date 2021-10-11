@@ -58,4 +58,24 @@ class HumanLifeTests: XCTestCase {
         XCTAssertEqual(humanLife.persistenceSM.currentState , .modified)
     }
 
+    func test_state_machine() {
+        var humanLife = HumanLife(fromBundle : Bundle.module)
+        
+        XCTAssertFalse(humanLife.isModified)
+        
+        humanLife.menLifeExpectationDeterministic = 2
+        XCTAssertTrue(humanLife.isModified)
+        humanLife.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(humanLife.isModified)
+        
+        humanLife.womenLifeExpectationDeterministic = 2
+        XCTAssertTrue(humanLife.isModified)
+        humanLife.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(humanLife.isModified)
+        
+        humanLife.nbOfYearsOfdependencyDeterministic = 2
+        XCTAssertTrue(humanLife.isModified)
+        humanLife.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(humanLife.isModified)
+    }
 }

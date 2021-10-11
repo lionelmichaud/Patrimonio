@@ -31,4 +31,12 @@ class UnemploymentModelTest: XCTestCase {
         XCTAssertNoThrow(UnemploymentModelTest.unemployment.saveAsJSON(toBundle: Bundle.module))
     }
     
+    func test_state_machine() {
+        let unemployment = Unemployment(fromBundle : Bundle.module)
+        
+        XCTAssertFalse(unemployment.isModified)
+        
+        unemployment.saveAsJSON(toBundle: Bundle.module)
+        XCTAssertFalse(unemployment.isModified)
+    }
 }
