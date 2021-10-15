@@ -70,11 +70,13 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         clause.bareRecipients    = ["Enfant 1", "Enfant 2"]
         
         print("AVANT : \n  Ownership =\n \(String(describing: ownership)) \n  Clause =\n \(String(describing: clause))")
-
+        
         XCTAssertNoThrow(
             try ownership.transferLifeInsurance(
                 of          : "Défunt",
-                accordingTo : clause))
+                spouseName  : "Conjoint",
+                childrenName: ["Enfant 1", "Enfant 2"],
+                accordingTo : &clause))
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertTrue(ownership.isDismembered)
@@ -82,7 +84,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         XCTAssertTrue(ownership.bareOwners == [Owner(name: "Enfant 1", fraction : 50),
                                                Owner(name: "Enfant 2", fraction : 50)])
         print("APRES : \n  Ownership = \n \(String(describing: ownership))")
-
+        
         print("Test 1b")
         ownership.isDismembered  = false
         ownership.fullOwners     = [Owner(name : "Défunt", fraction  : 100)]
@@ -95,18 +97,20 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         clause.bareRecipients    = ["Enfant 1"]
         
         print("AVANT : \n  Ownership =\n \(String(describing: ownership)) \n  Clause =\n \(String(describing: clause))")
-
+        
         XCTAssertNoThrow(
             try ownership.transferLifeInsurance(
                 of          : "Défunt",
-                accordingTo : clause))
+                spouseName  : "Conjoint",
+                childrenName: ["Enfant 1"],
+                accordingTo : &clause))
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertTrue(ownership.isDismembered)
         XCTAssertEqual(ownership.usufructOwners, [Owner(name: "Conjoint", fraction : 100)])
         XCTAssertTrue(ownership.bareOwners == [Owner(name: "Enfant 1", fraction : 100)])
         print("APRES : \n  Ownership = \n \(String(describing: ownership))")
-
+        
         // (B) le capital de l'assurance vie n'est pas démembré
         // (1) le défunt est un des PP propriétaires du capital de l'assurance vie
         // (2) la clause bénéficiaire de l'assurane vie n'est pas démembrée
@@ -125,11 +129,13 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         clause.bareRecipients    = []
         
         print("AVANT : \n  Ownership =\n \(String(describing: ownership)) \n  Clause =\n \(String(describing: clause))")
-
+        
         XCTAssertNoThrow(
             try ownership.transferLifeInsurance(
-                of               : "Défunt",
-                accordingTo      : clause))
+                of           : "Défunt",
+                spouseName   : "Conjoint",
+                childrenName : nil,
+                accordingTo  : &clause))
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertFalse(ownership.isDismembered)
@@ -137,7 +143,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         XCTAssertEqual(ownership.bareOwners, [])
         XCTAssertEqual(ownership.usufructOwners, [])
         print("APRES : \n  Ownership = \n \(String(describing: ownership))")
-
+        
         // (B) le capital de l'assurance vie n'est pas démembré
         // (1) le défunt est un des PP propriétaires du capital de l'assurance vie
         // (2) la clause bénéficiaire de l'assurane vie n'est pas démembrée
@@ -158,11 +164,13 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         clause.bareRecipients    = []
         
         print("AVANT : \n  Ownership =\n \(String(describing: ownership)) \n  Clause =\n \(String(describing: clause))")
-
+        
         XCTAssertNoThrow(
             try ownership.transferLifeInsurance(
-                of               : "Défunt",
-                accordingTo      : clause))
+                of           : "Défunt",
+                spouseName   : "Conjoint",
+                childrenName : ["Enfant 1", "Enfant 2"],
+                accordingTo  : &clause))
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertFalse(ownership.isDismembered)
@@ -173,7 +181,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         XCTAssertEqual(ownership.bareOwners, [])
         XCTAssertEqual(ownership.usufructOwners, [])
         print("APRES : \n  Ownership = \n \(String(describing: ownership))")
-
+        
         // (B) le capital de l'assurance vie n'est pas démembré
         // (2) le défunt n'est pas un des PP propriétaires du capital de l'assurance vie
         print("Cas B.2: ")
@@ -193,8 +201,10 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         
         XCTAssertNoThrow(
             try ownership.transferLifeInsurance(
-                of               : "Défunt",
-                accordingTo      : clause))
+                of           : "Défunt",
+                spouseName   : "Conjoint",
+                childrenName : nil,
+                accordingTo  : &clause))
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertFalse(ownership.isDismembered)
@@ -206,7 +216,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
     
     func test_transfer_Life_Insurance_demembrée () throws {
         var ownership = Ownership(ageOf: OwnershipTransferLifeInsuranceTests.ageOf)
-        let clause = LifeInsuranceClause()
+        var clause = LifeInsuranceClause()
         
         // (A) le capital de l'assurane vie est démembré
         // (1) le défunt est usufruitier
@@ -216,13 +226,15 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         ownership.bareOwners     = [Owner(name: "Conjoint",   fraction : 50),
                                     Owner(name: "Enfant 1", fraction : 30),
                                     Owner(name: "Enfant 2", fraction : 20)]
-
+        
         print("AVANT : " + ownership.description)
         print(clause)
         
         try ownership.transferLifeInsurance(
-            of          : "Défunt",
-            accordingTo : clause)
+            of           : "Défunt",
+            spouseName   : "Conjoint",
+            childrenName : ["Enfant 1", "Enfant 2"],
+            accordingTo  : &clause)
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertFalse(ownership.isDismembered)
@@ -247,8 +259,10 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase {
         print(clause)
         
         try ownership.transferLifeInsurance(
-            of          : "Défunt",
-            accordingTo : clause)
+            of           : "Défunt",
+            spouseName   : "Conjoint",
+            childrenName : ["Enfant 1", "Enfant 2"],
+            accordingTo  : &clause)
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertTrue(ownership.isDismembered)

@@ -214,10 +214,10 @@ struct LifeInsuranceSuccessionManager {
         
         var _invest = invest
         // simuler localement le transfert de propriété
-        _invest.ownership.transferUndismemberedLifeInsurance(of           : decedentName,
-                                                             spouseName   : spouseName,
-                                                             childrenName : childrenName,
-                                                             accordingTo  : &clause)
+        try! _invest.ownership.transferUndismemberedLifeInsurance(of           : decedentName,
+                                                                  spouseName   : spouseName,
+                                                                  childrenName : childrenName,
+                                                                  accordingTo  : &clause)
         let ownedValuesAfterTranmission =
             _invest.ownedValues(atEndOf           : year - 1,
                                 evaluationContext : .lifeInsuranceSuccession)
