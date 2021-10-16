@@ -152,51 +152,58 @@
     },
     {
       "target" : {
-        "containerPath" : "container:..\/FamilyModel",
-        "identifier" : "FamilyModelTests",
-        "name" : "FamilyModelTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/Liabilities",
-        "identifier" : "LiabilitiesTests",
-        "name" : "LiabilitiesTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/Kpi",
+        "containerPath" : "container:Shared\/Modules\/Kpi",
         "identifier" : "KpiTests",
         "name" : "KpiTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/PatrimoineModel",
+        "containerPath" : "container:Shared\/Modules\/FamilyModel",
+        "identifier" : "FamilyModelTests",
+        "name" : "FamilyModelTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/PatrimoineModel",
         "identifier" : "PatrimoineModelTests",
         "name" : "PatrimoineModelTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:",
+        "containerPath" : "container:Shared\/Modules\/Liabilities",
+        "identifier" : "LiabilitiesTests",
+        "name" : "LiabilitiesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/PersonModel",
         "identifier" : "PersonModelTests",
         "name" : "PersonModelTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/SimulationLogger",
+        "containerPath" : "container:Shared\/Modules\/SimulationLogger",
         "identifier" : "SimulationLoggerTests",
         "name" : "SimulationLoggerTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/SuccessionManager",
+        "containerPath" : "container:Shared\/Modules\/SuccessionManager",
         "identifier" : "SuccessionManagerTests",
         "name" : "SuccessionManagerTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/BalanceSheet",
+        "identifier" : "BalanceSheetTests",
+        "name" : "BalanceSheetTests"
       }
     }
   ],
