@@ -204,7 +204,13 @@ extension OwnershipManager {
                 
                 print("Part des enfants: \(partDesEnfants) % = \(givenToChildren.k€String)")
                 print("Part du conjoint: \(partDuConjoint) % = \((decedentOwnedValue - givenToChildren).k€String)")
-                
+
+                guard newClause.isValid else {
+                    let invalid = newClause
+                    customLogOwnershipManager.log(level: .error, "'modifyClause' a généré une 'clause' invalide \(invalid, privacy: .public)")
+                    fatalError("'modifyClause' a généré une 'clause' invalide \(invalid)")
+                }
+
                 freeInvest.type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
                                                  clause              : newClause)
                 print("Nouvelle clause:\n\(String(describing: newClause))")

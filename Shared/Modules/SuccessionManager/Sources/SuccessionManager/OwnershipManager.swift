@@ -6,7 +6,10 @@
 //
 
 import Foundation
+import os
 import FamilyModel
+
+let customLogOwnershipManager = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.OwnershipManager")
 
 struct OwnershipManager {
     

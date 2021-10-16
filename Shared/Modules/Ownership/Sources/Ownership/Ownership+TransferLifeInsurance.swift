@@ -229,8 +229,8 @@ extension Ownership {
             fatalError("transferUndismemberedLifeInsFullOwnership: L'assurance vie est démembrée")
         }
         guard clause.fullRecipients.isNotEmpty else {
-            customLogOwnership.log(level: .fault, "Aucun bénéficiaire dans la clause bénéficiaire de l'assurance vie")
-            fatalError("Aucun bénéficiaire dans la clause bénéficiaire de l'assurance vie")
+            customLogOwnership.log(level: .fault, "transferUndismemberedLifeInsFullOwnership: Aucun bénéficiaire dans la clause bénéficiaire de l'assurance vie")
+            fatalError("transferUndismemberedLifeInsFullOwnership: Aucun bénéficiaire dans la clause bénéficiaire de l'assurance vie")
         }
         
         if let ownerIdx = fullOwners.firstIndex(where: { decedentName == $0.name }) {
@@ -244,14 +244,17 @@ extension Ownership {
                                         fraction : ownerShare * recepient.fraction / 100.0))
             }
             groupShares()
-            print("Transfert assurance vie détenue en PP: Ownership avant\n\(String(describing: self))")
-            print("Transfert assurance vie détenue en PP: Clause avant\n\(String(describing: clause))")
+            print(">> Transfert assurance vie détenue en PP: \n Ownership avant\n\(String(describing: self))")
+            print(" Clause avant\n\(String(describing: clause))")
+
             // le conjoint survivant fait-il partie des nouveaux PP ?
             if let spouseIdx = fullOwners.firstIndex(where: { spouseName == $0.name }) {
                 // la part détenue par le conjoint survivant sera donnée aux enfants par part égales
                 // il faut mofifier la clause pour que sa part soit données aux enfants à son décès
                 let spouseShare = fullOwners[spouseIdx].fraction
                 clause.isOptional = false
+                // retirer le conjoint de la liste des bénéficiaires du prochain décès (le sien)
+                clause.fullRecipients.removeAll(where: { spouseName == $0.name })
                 // redistribuer sa part aux enfants
                 childrenName?.forEach { childName in
                     if let childrenIdx = clause.fullRecipients.firstIndex(where: { childName == $0.name }) {
@@ -261,16 +264,19 @@ extension Ownership {
                                                            fraction : spouseShare / childrenName!.count.double()))
                     }
                 }
-                // retirer le conjoint de la liste des bénéficiaires du prochain décès (le sien)
-                clause.fullRecipients.remove(at: spouseIdx)
+
+                guard clause.isValid else {
+                    let invalid = clause
+                    customLogOwnership.log(level: .error, "'transferUndismemberedLifeInsFullOwnership' a généré une 'clause' invalide \(invalid, privacy: .public)")
+                    throw ClauseError.invalidClause
+                }
             }
             
             guard isValid else {
                 let invalid = self
-                customLogOwnership.log(level: .error, "'transferOwnershipOf' a généré un 'ownership' invalide \(invalid, privacy: .public)")
+                customLogOwnership.log(level: .error, "'transferUndismemberedLifeInsFullOwnership' a généré un 'ownership' invalide \(invalid, privacy: .public)")
                 throw OwnershipError.invalidOwnership
             }
-
         }
     }
 }

@@ -10,6 +10,12 @@ import Foundation
 
 // MARK: - Clause bénéficiaire d'assurance vie
 
+// MARK: - La répartition des droits de propriété d'un bien entre personnes
+
+public enum ClauseError: Error {
+    case invalidClause
+}
+
 /// Clause bénéficiaire d'assurance vie
 /// - Warning:
 ///   - le cas de plusieurs usufruitiers bénéficiaires n'est pas traité

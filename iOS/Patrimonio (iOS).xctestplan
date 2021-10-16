@@ -149,6 +149,55 @@
         "identifier" : "SuccessionTests",
         "name" : "SuccessionTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/FamilyModel",
+        "identifier" : "FamilyModelTests",
+        "name" : "FamilyModelTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/Liabilities",
+        "identifier" : "LiabilitiesTests",
+        "name" : "LiabilitiesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/Kpi",
+        "identifier" : "KpiTests",
+        "name" : "KpiTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/PatrimoineModel",
+        "identifier" : "PatrimoineModelTests",
+        "name" : "PatrimoineModelTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "PersonModelTests",
+        "name" : "PersonModelTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/SimulationLogger",
+        "identifier" : "SimulationLoggerTests",
+        "name" : "SimulationLoggerTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/SuccessionManager",
+        "identifier" : "SuccessionManagerTests",
+        "name" : "SuccessionManagerTests"
+      }
     }
   ],
   "version" : 1
