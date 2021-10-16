@@ -140,7 +140,6 @@
 		796506D62640866F0036E466 /* scpiDetailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796506CA2640866F0036E466 /* scpiDetailedView.swift */; };
 		796506D8264094B00036E466 /* AssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796506D7264094B00036E466 /* AssetView.swift */; };
 		796506D9264094B00036E466 /* AssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796506D7264094B00036E466 /* AssetView.swift */; };
-		79657B5326B758680044D62C /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = 79657B5226B758680044D62C /* Numerics */; };
 		79683FB926B891D000F838BE /* ModelEnvironment in Frameworks */ = {isa = PBXBuildFile; productRef = 79683FB826B891D000F838BE /* ModelEnvironment */; };
 		79683FBB26B891DD00F838BE /* ModelEnvironment in Frameworks */ = {isa = PBXBuildFile; productRef = 79683FBA26B891DD00F838BE /* ModelEnvironment */; };
 		79683FEB26B8995900F838BE /* LiabilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79683FD426B8995900F838BE /* LiabilitiesTests.swift */; };
@@ -198,8 +197,6 @@
 		797931AA26416EA1000F8599 /* SimulationResultTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931A826416EA1000F8599 /* SimulationResultTable.swift */; };
 		797E95B126BACBFB000E1070 /* Succession in Frameworks */ = {isa = PBXBuildFile; productRef = 797E95B026BACBFB000E1070 /* Succession */; };
 		797E95B326BACC09000E1070 /* Succession in Frameworks */ = {isa = PBXBuildFile; productRef = 797E95B226BACC09000E1070 /* Succession */; };
-		7985C11926B75B43005C2138 /* RealModule in Frameworks */ = {isa = PBXBuildFile; productRef = 7985C11826B75B43005C2138 /* RealModule */; };
-		7985C11B26B75B4B005C2138 /* ComplexModule in Frameworks */ = {isa = PBXBuildFile; productRef = 7985C11A26B75B4B005C2138 /* ComplexModule */; };
 		7988A96326E178E600E00861 /* SimulationLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 7988A96226E178E600E00861 /* SimulationLogger */; };
 		7988A96526E1790800E00861 /* SimulationLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 7988A96426E1790800E00861 /* SimulationLogger */; };
 		798DE8A426357CF500C0C3B5 /* SwiftUIconditional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */; };
@@ -281,9 +278,6 @@
 		799604CD26B847E700309EE5 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799604CB26B847E700309EE5 /* AppVersion.swift */; };
 		7998E1C7262DC5C500DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */; };
 		7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E1CC262DC66700DA4A12 /* TypePreservingCodingAdapter */; };
-		799D7C7526E53D6100ACAED3 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 799D7C7426E53D6100ACAED3 /* OrderedCollections */; };
-		799D7C7726E53D6100ACAED3 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 799D7C7626E53D6100ACAED3 /* DequeModule */; };
-		799D7C7926E53D6100ACAED3 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 799D7C7826E53D6100ACAED3 /* Collections */; };
 		799DE8402654199600E96CF6 /* NoLoadedDossierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799DE83F2654199600E96CF6 /* NoLoadedDossierView.swift */; };
 		79A8A19526565DBC00B23AD7 /* DossierAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A8A19426565DBC00B23AD7 /* DossierAddView.swift */; };
 		79A8A19626565DBC00B23AD7 /* DossierAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A8A19426565DBC00B23AD7 /* DossierAddView.swift */; };
@@ -451,8 +445,6 @@
 		79D7C41626B6EFCA0057E343 /* ModelDeterministicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D7C41526B6EFCA0057E343 /* ModelDeterministicViewModel.swift */; };
 		79E713EC262C9886000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713EB262C9886000FD625 /* EconomyModel */; };
 		79E713EE262C9891000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713ED262C9891000FD625 /* EconomyModel */; };
-		79EC47A126307B8C0006EE44 /* Foil in Frameworks */ = {isa = PBXBuildFile; productRef = 79EC47A026307B8C0006EE44 /* Foil */; };
-		79EC47A726307BC90006EE44 /* Foil in Frameworks */ = {isa = PBXBuildFile; productRef = 79EC47A626307BC90006EE44 /* Foil */; };
 		79EC47F7263095C20006EE44 /* NetCashFlowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC47F6263095C20006EE44 /* NetCashFlowManager.swift */; };
 		79EC47F8263095C20006EE44 /* NetCashFlowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC47F6263095C20006EE44 /* NetCashFlowManager.swift */; };
 		79EC4800263096200006EE44 /* ValuedTaxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC47FE263096200006EE44 /* ValuedTaxes.swift */; };
@@ -473,7 +465,6 @@
 		79EC5EAA26406FD900FF8263 /* OwnerGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC5EA926406FD900FF8263 /* OwnerGroupBox.swift */; };
 		79EC5EAB26406FD900FF8263 /* OwnerGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EC5EA926406FD900FF8263 /* OwnerGroupBox.swift */; };
 		79EC7A1C26ECFFBB00C9C719 /* ModelDeterministicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D7C41526B6EFCA0057E343 /* ModelDeterministicViewModel.swift */; };
-		79EF42CC26C2B73000EC0555 /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF42CB26C2B73000EC0555 /* Numerics */; };
 		79EF42D226C2B74900EC0555 /* HumanLifeModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF42D126C2B74900EC0555 /* HumanLifeModel */; };
 		79EF42DC26C2B97500EC0555 /* PersonModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF42DB26C2B97500EC0555 /* PersonModel */; };
 		79EF42DE26C2B97E00EC0555 /* PersonModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF42DD26C2B97E00EC0555 /* PersonModel */; };
@@ -776,20 +767,15 @@
 			files = (
 				79EF7E68262C8A3600E9C0FF /* FiscalModel in Frameworks */,
 				79FFC12726B84BC8005DEC8D /* Persistence in Frameworks */,
-				79EC47A726307BC90006EE44 /* Foil in Frameworks */,
 				79683FB926B891D000F838BE /* ModelEnvironment in Frameworks */,
 				7974156226AB51E300683A3A /* Persistable in Frameworks */,
-				799D7C7726E53D6100ACAED3 /* DequeModule in Frameworks */,
-				799D7C7526E53D6100ACAED3 /* OrderedCollections in Frameworks */,
 				79155AF126E115D700757981 /* PatrimoineModel in Frameworks */,
-				79EF42CC26C2B73000EC0555 /* Numerics in Frameworks */,
 				797E95B326BACC09000E1070 /* Succession in Frameworks */,
 				79058371262C79050061F296 /* SocioEconomyModel in Frameworks */,
 				7988A96326E178E600E00861 /* SimulationLogger in Frameworks */,
 				7968405F26B8A8CC00F838BE /* Ownership in Frameworks */,
 				7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */,
 				797574B026C13C9600842572 /* LifeExpense in Frameworks */,
-				7985C11926B75B43005C2138 /* RealModule in Frameworks */,
 				7956995C262F90250015AF34 /* NamedValue in Frameworks */,
 				7998E1C7262DC5C500DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
 				79B2729B2634E80C00298E5D /* Charts in Frameworks */,
@@ -801,12 +787,10 @@
 				795F8AF526B9815D00E44A66 /* DateBoundary in Frameworks */,
 				79D3E9ED2661A8E4006FAA3F /* Stateful in Frameworks */,
 				7920DC92262C720D00536B03 /* AppFoundation in Frameworks */,
-				7985C11B26B75B4B005C2138 /* ComplexModule in Frameworks */,
 				796A707726E6A0F500769D1E /* Kpi in Frameworks */,
 				799074242660524200F224F7 /* FileAndFolder in Frameworks */,
 				798E844D26E1722200854003 /* SuccessionManager in Frameworks */,
 				7935FFE52654492500AC1715 /* Files in Frameworks */,
-				799D7C7926E53D6100ACAED3 /* Collections in Frameworks */,
 				79FC3D3B262C760A00A6184B /* Statistics in Frameworks */,
 				79E713EE262C9891000FD625 /* EconomyModel in Frameworks */,
 				792874F426E130A20011913B /* FamilyModel in Frameworks */,
@@ -825,7 +809,6 @@
 				79EF7E6A262C8A3D00E9C0FF /* FiscalModel in Frameworks */,
 				7974156426AB51FA00683A3A /* Persistable in Frameworks */,
 				792874FA26E130BD0011913B /* FamilyModel in Frameworks */,
-				79EC47A126307B8C0006EE44 /* Foil in Frameworks */,
 				79058373262C790F0061F296 /* SocioEconomyModel in Frameworks */,
 				79EF42DE26C2B97E00EC0555 /* PersonModel in Frameworks */,
 				79933A0026E0F80B0081D378 /* Liabilities in Frameworks */,
@@ -837,7 +820,6 @@
 				794B016326B9C12C00882684 /* AssetsModel in Frameworks */,
 				797574AE26C13C8C00842572 /* LifeExpense in Frameworks */,
 				7956995E262F90310015AF34 /* NamedValue in Frameworks */,
-				79657B5326B758680044D62C /* Numerics in Frameworks */,
 				7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
 				79B272A12634E82700298E5D /* Charts in Frameworks */,
 				79B2FE2C262C7DF900EBFF56 /* RetirementModel in Frameworks */,
@@ -1641,15 +1623,12 @@
 				79E713ED262C9891000FD625 /* EconomyModel */,
 				7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */,
 				7956995B262F90250015AF34 /* NamedValue */,
-				79EC47A626307BC90006EE44 /* Foil */,
 				79B2729A2634E80C00298E5D /* Charts */,
 				791ED0EA263A0A1200701202 /* StepperView */,
 				7935FFE42654492500AC1715 /* Files */,
 				799074232660524200F224F7 /* FileAndFolder */,
 				79D3E9EC2661A8E4006FAA3F /* Stateful */,
 				7974156126AB51E300683A3A /* Persistable */,
-				7985C11826B75B43005C2138 /* RealModule */,
-				7985C11A26B75B4B005C2138 /* ComplexModule */,
 				79FFC12626B84BC8005DEC8D /* Persistence */,
 				79683FB826B891D000F838BE /* ModelEnvironment */,
 				7968405E26B8A8CC00F838BE /* Ownership */,
@@ -1657,7 +1636,6 @@
 				794B016026B9C12400882684 /* AssetsModel */,
 				797E95B226BACC09000E1070 /* Succession */,
 				797574AF26C13C9600842572 /* LifeExpense */,
-				79EF42CB26C2B73000EC0555 /* Numerics */,
 				79EF42D126C2B74900EC0555 /* HumanLifeModel */,
 				79EF42DB26C2B97500EC0555 /* PersonModel */,
 				79155AD526E0FF6400757981 /* Liabilities */,
@@ -1665,9 +1643,6 @@
 				792874F326E130A20011913B /* FamilyModel */,
 				798E844C26E1722200854003 /* SuccessionManager */,
 				7988A96226E178E600E00861 /* SimulationLogger */,
-				799D7C7426E53D6100ACAED3 /* OrderedCollections */,
-				799D7C7626E53D6100ACAED3 /* DequeModule */,
-				799D7C7826E53D6100ACAED3 /* Collections */,
 				796A707626E6A0F500769D1E /* Kpi */,
 			);
 			productName = "Patrimonio (iOS)";
@@ -1699,13 +1674,11 @@
 				79E713EB262C9886000FD625 /* EconomyModel */,
 				7998E1CC262DC66700DA4A12 /* TypePreservingCodingAdapter */,
 				7956995D262F90310015AF34 /* NamedValue */,
-				79EC47A026307B8C0006EE44 /* Foil */,
 				79B272A02634E82700298E5D /* Charts */,
 				791ED0EC263A0A2800701202 /* StepperView */,
 				799074252660524C00F224F7 /* FileAndFolder */,
 				79D3E9EE2661A8F1006FAA3F /* Stateful */,
 				7974156326AB51FA00683A3A /* Persistable */,
-				79657B5226B758680044D62C /* Numerics */,
 				79FFC12826B84BD2005DEC8D /* Persistence */,
 				79683FBA26B891DD00F838BE /* ModelEnvironment */,
 				7968406026B8A8D500F838BE /* Ownership */,
@@ -1797,12 +1770,9 @@
 			mainGroup = 7920DC44262C700400536B03;
 			packageReferences = (
 				7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */,
-				79EC479F26307B8C0006EE44 /* XCRemoteSwiftPackageReference "Foil" */,
 				79B272992634E80C00298E5D /* XCRemoteSwiftPackageReference "Charts" */,
 				791ED0E9263A0A1200701202 /* XCRemoteSwiftPackageReference "StepperView" */,
-				79754456263C6C9800B03CA3 /* XCRemoteSwiftPackageReference "swift-numerics" */,
 				7935FFE32654492500AC1715 /* XCRemoteSwiftPackageReference "Files" */,
-				799D7C7326E53D6100ACAED3 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 7920DC52262C700500536B03 /* Products */;
 			projectDirPath = "";
@@ -2742,14 +2712,6 @@
 				minimumVersion = 4.2.0;
 			};
 		};
-		79754456263C6C9800B03CA3 /* XCRemoteSwiftPackageReference "swift-numerics" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-numerics.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.0;
-			};
-		};
 		7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git";
@@ -2758,28 +2720,12 @@
 				minimumVersion = 1.0.2;
 			};
 		};
-		799D7C7326E53D6100ACAED3 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-collections.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.7;
-			};
-		};
 		79B272992634E80C00298E5D /* XCRemoteSwiftPackageReference "Charts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielgindi/Charts.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 3.0.1;
-			};
-		};
-		79EC479F26307B8C0006EE44 /* XCRemoteSwiftPackageReference "Foil" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jessesquires/Foil.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -2860,11 +2806,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = DateBoundary;
 		};
-		79657B5226B758680044D62C /* Numerics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 79754456263C6C9800B03CA3 /* XCRemoteSwiftPackageReference "swift-numerics" */;
-			productName = Numerics;
-		};
 		79683FB826B891D000F838BE /* ModelEnvironment */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ModelEnvironment;
@@ -2925,16 +2866,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Succession;
 		};
-		7985C11826B75B43005C2138 /* RealModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 79754456263C6C9800B03CA3 /* XCRemoteSwiftPackageReference "swift-numerics" */;
-			productName = RealModule;
-		};
-		7985C11A26B75B4B005C2138 /* ComplexModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 79754456263C6C9800B03CA3 /* XCRemoteSwiftPackageReference "swift-numerics" */;
-			productName = ComplexModule;
-		};
 		7988A96226E178E600E00861 /* SimulationLogger */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SimulationLogger;
@@ -2973,21 +2904,6 @@
 			package = 7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */;
 			productName = TypePreservingCodingAdapter;
 		};
-		799D7C7426E53D6100ACAED3 /* OrderedCollections */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 799D7C7326E53D6100ACAED3 /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = OrderedCollections;
-		};
-		799D7C7626E53D6100ACAED3 /* DequeModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 799D7C7326E53D6100ACAED3 /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = DequeModule;
-		};
-		799D7C7826E53D6100ACAED3 /* Collections */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 799D7C7326E53D6100ACAED3 /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = Collections;
-		};
 		79B2729A2634E80C00298E5D /* Charts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 79B272992634E80C00298E5D /* XCRemoteSwiftPackageReference "Charts" */;
@@ -3021,21 +2937,6 @@
 		79E713ED262C9891000FD625 /* EconomyModel */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EconomyModel;
-		};
-		79EC47A026307B8C0006EE44 /* Foil */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 79EC479F26307B8C0006EE44 /* XCRemoteSwiftPackageReference "Foil" */;
-			productName = Foil;
-		};
-		79EC47A626307BC90006EE44 /* Foil */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 79EC479F26307B8C0006EE44 /* XCRemoteSwiftPackageReference "Foil" */;
-			productName = Foil;
-		};
-		79EF42CB26C2B73000EC0555 /* Numerics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 79754456263C6C9800B03CA3 /* XCRemoteSwiftPackageReference "swift-numerics" */;
-			productName = Numerics;
 		};
 		79EF42D126C2B74900EC0555 /* HumanLifeModel */ = {
 			isa = XCSwiftPackageProductDependency;

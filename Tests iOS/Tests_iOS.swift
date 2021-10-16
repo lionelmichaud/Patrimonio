@@ -6,8 +6,8 @@
 //
 
 import XCTest
-import Numerics
-import _NumericsShims
+//import Numerics
+//import _NumericsShims
 @testable import Patrimonio
 
 class Tests_iOS: XCTestCase { // swiftlint:disable:this type_name
