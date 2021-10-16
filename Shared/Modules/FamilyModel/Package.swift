@@ -15,6 +15,9 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
+        .package(name: "TypePreservingCodingAdapter",
+                 url: "https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git",
+                 .upToNextMajor(from: "1.0.0")),
         .package(path: "../AppFoundation"),
         .package(path: "../ModelEnvironment"),
         .package(path: "../Ownership"),
@@ -29,6 +32,7 @@ let package = Package(
         .target(
             name: "FamilyModel",
             dependencies: [
+                .product(name: "TypePreservingCodingAdapter", package: "TypePreservingCodingAdapter"),
                 "AppFoundation",
                 "ModelEnvironment",
                 "Ownership",

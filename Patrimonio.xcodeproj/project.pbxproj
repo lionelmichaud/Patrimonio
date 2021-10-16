@@ -276,8 +276,6 @@
 		79933A0026E0F80B0081D378 /* Liabilities in Frameworks */ = {isa = PBXBuildFile; productRef = 799339FF26E0F80B0081D378 /* Liabilities */; };
 		799604CC26B847E700309EE5 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799604CB26B847E700309EE5 /* AppVersion.swift */; };
 		799604CD26B847E700309EE5 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799604CB26B847E700309EE5 /* AppVersion.swift */; };
-		7998E1C7262DC5C500DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */; };
-		7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 7998E1CC262DC66700DA4A12 /* TypePreservingCodingAdapter */; };
 		799DE8402654199600E96CF6 /* NoLoadedDossierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799DE83F2654199600E96CF6 /* NoLoadedDossierView.swift */; };
 		79A8A19526565DBC00B23AD7 /* DossierAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A8A19426565DBC00B23AD7 /* DossierAddView.swift */; };
 		79A8A19626565DBC00B23AD7 /* DossierAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A8A19426565DBC00B23AD7 /* DossierAddView.swift */; };
@@ -777,7 +775,6 @@
 				7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */,
 				797574B026C13C9600842572 /* LifeExpense in Frameworks */,
 				7956995C262F90250015AF34 /* NamedValue in Frameworks */,
-				7998E1C7262DC5C500DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
 				79B2729B2634E80C00298E5D /* Charts in Frameworks */,
 				79EF42D226C2B74900EC0555 /* HumanLifeModel in Frameworks */,
 				79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */,
@@ -820,7 +817,6 @@
 				794B016326B9C12C00882684 /* AssetsModel in Frameworks */,
 				797574AE26C13C8C00842572 /* LifeExpense in Frameworks */,
 				7956995E262F90310015AF34 /* NamedValue in Frameworks */,
-				7998E1CD262DC66700DA4A12 /* TypePreservingCodingAdapter in Frameworks */,
 				79B272A12634E82700298E5D /* Charts in Frameworks */,
 				79B2FE2C262C7DF900EBFF56 /* RetirementModel in Frameworks */,
 				791ED0ED263A0A2800701202 /* StepperView in Frameworks */,
@@ -1621,7 +1617,6 @@
 				79B2FE2D262C7E0000EBFF56 /* RetirementModel */,
 				79EF7E67262C8A3600E9C0FF /* FiscalModel */,
 				79E713ED262C9891000FD625 /* EconomyModel */,
-				7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */,
 				7956995B262F90250015AF34 /* NamedValue */,
 				79B2729A2634E80C00298E5D /* Charts */,
 				791ED0EA263A0A1200701202 /* StepperView */,
@@ -1672,7 +1667,6 @@
 				796F2F8F262C8553002D20D1 /* HumanLifeModel */,
 				79EF7E69262C8A3D00E9C0FF /* FiscalModel */,
 				79E713EB262C9886000FD625 /* EconomyModel */,
-				7998E1CC262DC66700DA4A12 /* TypePreservingCodingAdapter */,
 				7956995D262F90310015AF34 /* NamedValue */,
 				79B272A02634E82700298E5D /* Charts */,
 				791ED0EC263A0A2800701202 /* StepperView */,
@@ -1769,7 +1763,6 @@
 			);
 			mainGroup = 7920DC44262C700400536B03;
 			packageReferences = (
-				7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */,
 				79B272992634E80C00298E5D /* XCRemoteSwiftPackageReference "Charts" */,
 				791ED0E9263A0A1200701202 /* XCRemoteSwiftPackageReference "StepperView" */,
 				7935FFE32654492500AC1715 /* XCRemoteSwiftPackageReference "Files" */,
@@ -2712,14 +2705,6 @@
 				minimumVersion = 4.2.0;
 			};
 		};
-		7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.2;
-			};
-		};
 		79B272992634E80C00298E5D /* XCRemoteSwiftPackageReference "Charts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielgindi/Charts.git";
@@ -2893,16 +2878,6 @@
 		799339FF26E0F80B0081D378 /* Liabilities */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Liabilities;
-		};
-		7998E1C6262DC5C500DA4A12 /* TypePreservingCodingAdapter */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */;
-			productName = TypePreservingCodingAdapter;
-		};
-		7998E1CC262DC66700DA4A12 /* TypePreservingCodingAdapter */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7998E1C5262DC5C500DA4A12 /* XCRemoteSwiftPackageReference "Type-Preserving-Coding-Adapter" */;
-			productName = TypePreservingCodingAdapter;
 		};
 		79B2729A2634E80C00298E5D /* Charts */ = {
 			isa = XCSwiftPackageProductDependency;

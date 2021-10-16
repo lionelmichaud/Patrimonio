@@ -18,8 +18,10 @@ let package = Package(
     dependencies:
         [
             // Dependencies declare other packages that this package depends on.
-            .package(url: "https://github.com/evgenyneu/SigmaSwiftStatistics.git", .upToNextMajor(from: "9.0.2")),
-            .package(url: "https://github.com/apple/swift-numerics.git", from: "0.0.8"),
+            .package(url: "https://github.com/evgenyneu/SigmaSwiftStatistics.git",
+                     .upToNextMajor(from: "9.0.2")),
+            .package(url: "https://github.com/apple/swift-numerics.git",
+                     from: "0.0.8"),
             // Using 'path', we can depend on a local package that's
             // located at a given path relative to our package's folder:
             .package(path: "../AppFoundation")

@@ -44,6 +44,384 @@
                ReferencedContainer = "container:Shared/Modules/ModelEnvironment">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "UnemployementModel"
+               BuildableName = "UnemployementModel"
+               BlueprintName = "UnemployementModel"
+               ReferencedContainer = "container:Shared/Modules/UnemployementModel">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SuccessionManager"
+               BuildableName = "SuccessionManager"
+               BlueprintName = "SuccessionManager"
+               ReferencedContainer = "container:Shared/Modules/SuccessionManager">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Succession"
+               BuildableName = "Succession"
+               BlueprintName = "Succession"
+               ReferencedContainer = "container:Shared/Modules/Succession">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Statistics"
+               BuildableName = "Statistics"
+               BlueprintName = "Statistics"
+               ReferencedContainer = "container:Shared/Modules/Statistics">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SocioEconomyModel"
+               BuildableName = "SocioEconomyModel"
+               BlueprintName = "SocioEconomyModel"
+               ReferencedContainer = "container:Shared/Modules/SocioEconomyModel">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SimulationLogger"
+               BuildableName = "SimulationLogger"
+               BlueprintName = "SimulationLogger"
+               ReferencedContainer = "container:Shared/Modules/SimulationLogger">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "RetirementModel"
+               BuildableName = "RetirementModel"
+               BlueprintName = "RetirementModel"
+               ReferencedContainer = "container:Shared/Modules/RetirementModel">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PersonModel"
+               BuildableName = "PersonModel"
+               BlueprintName = "PersonModel"
+               ReferencedContainer = "container:Shared/Modules/PersonModel">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AppFoundation"
+               BuildableName = "AppFoundation"
+               BlueprintName = "AppFoundation"
+               ReferencedContainer = "container:Shared/Modules/AppFoundation">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AssetsModel"
+               BuildableName = "AssetsModel"
+               BlueprintName = "AssetsModel"
+               ReferencedContainer = "container:Shared/Modules/AssetsModel">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BalanceSheet"
+               BuildableName = "BalanceSheet"
+               BlueprintName = "BalanceSheet"
+               ReferencedContainer = "container:Shared/Modules/BalanceSheet">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DateBoundary"
+               BuildableName = "DateBoundary"
+               BlueprintName = "DateBoundary"
+               ReferencedContainer = "container:Shared/Modules/DateBoundary">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "EconomyModel"
+               BuildableName = "EconomyModel"
+               BlueprintName = "EconomyModel"
+               ReferencedContainer = "container:Shared/Modules/EconomyModel">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FamilyModel"
+               BuildableName = "FamilyModel"
+               BlueprintName = "FamilyModel"
+               ReferencedContainer = "container:Shared/Modules/FamilyModel">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FileAndFolder"
+               BuildableName = "FileAndFolder"
+               BlueprintName = "FileAndFolder"
+               ReferencedContainer = "container:Shared/Modules/FileAndFolder">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FiscalModel"
+               BuildableName = "FiscalModel"
+               BlueprintName = "FiscalModel"
+               ReferencedContainer = "container:Shared/Modules/FiscalModel">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "HumanLifeModel"
+               BuildableName = "HumanLifeModel"
+               BlueprintName = "HumanLifeModel"
+               ReferencedContainer = "container:Shared/Modules/HumanLifeModel">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Kpi"
+               BuildableName = "Kpi"
+               BlueprintName = "Kpi"
+               ReferencedContainer = "container:Shared/Modules/Kpi">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Liabilities"
+               BuildableName = "Liabilities"
+               BlueprintName = "Liabilities"
+               ReferencedContainer = "container:Shared/Modules/Liabilities">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "LifeExpense"
+               BuildableName = "LifeExpense"
+               BlueprintName = "LifeExpense"
+               ReferencedContainer = "container:Shared/Modules/LifeExpense">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ModelEnvironment"
+               BuildableName = "ModelEnvironment"
+               BlueprintName = "ModelEnvironment"
+               ReferencedContainer = "container:Shared/Modules/ModelEnvironment">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "NamedValue"
+               BuildableName = "NamedValue"
+               BlueprintName = "NamedValue"
+               ReferencedContainer = "container:Shared/Modules/NamedValue">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PatrimoineModel"
+               BuildableName = "PatrimoineModel"
+               BlueprintName = "PatrimoineModel"
+               ReferencedContainer = "container:Shared/Modules/PatrimoineModel">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Ownership"
+               BuildableName = "Ownership"
+               BlueprintName = "Ownership"
+               ReferencedContainer = "container:Shared/Modules/Ownership">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Persistable"
+               BuildableName = "Persistable"
+               BlueprintName = "Persistable"
+               ReferencedContainer = "container:Shared/Modules/Persistable">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Stateful"
+               BuildableName = "Stateful"
+               BlueprintName = "Stateful"
+               ReferencedContainer = "container:Shared/Modules/Stateful">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Persistence"
+               BuildableName = "Persistence"
+               BlueprintName = "Persistence"
+               ReferencedContainer = "container:Shared/Modules/Persistence">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

@@ -15,7 +15,9 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        //.package(url: "https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git", .upToNextMajor(from: "1.0.2")),
+        .package(name: "TypePreservingCodingAdapter",
+                 url: "https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git",
+                 .upToNextMajor(from: "1.0.0")),
         .package(path: "../AppFoundation"),
         .package(path: "../HumanLifeModel"),
         .package(path: "../UnemployementModel"),
@@ -31,7 +33,7 @@ let package = Package(
         .target(
             name: "PersonModel",
             dependencies: [
-                //.product(name: "TypePreservingCodingAdapter", package: "TypePreservingCodingAdapter"),
+                .product(name: "TypePreservingCodingAdapter", package: "TypePreservingCodingAdapter"),
                 "AppFoundation",
                 "HumanLifeModel",
                 "UnemployementModel",

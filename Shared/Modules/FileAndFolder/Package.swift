@@ -14,7 +14,8 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/JohnSundell/Files.git", .upToNextMajor(from: "4.2.0")),
+        .package(url: "https://github.com/JohnSundell/Files.git",
+                 .upToNextMajor(from: "4.2.0")),
         .package(path: "../AppFoundation"),
         .package(path: "../Persistable")
     ],
