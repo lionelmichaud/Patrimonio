@@ -39,11 +39,6 @@ class LifeInsuranceClauseTests: XCTestCase {
         var clause = LifeInsuranceClause()
         
         clause.isOptional    = false
-        clause.isDismembered = false
-        clause.fullRecipients = []
-        XCTAssertFalse(clause.isValid)
-        
-        clause.isOptional    = false
         clause.isDismembered = true
         clause.usufructRecipient = ""
         clause.bareRecipients = []
@@ -80,6 +75,11 @@ class LifeInsuranceClauseTests: XCTestCase {
         
     func test_clause_sans_option_valide() {
         var clause = LifeInsuranceClause()
+        
+        clause.isOptional    = false
+        clause.isDismembered = false
+        clause.fullRecipients = []
+        XCTAssertTrue(clause.isValid)
         
         clause.isOptional    = false
         clause.isDismembered = false

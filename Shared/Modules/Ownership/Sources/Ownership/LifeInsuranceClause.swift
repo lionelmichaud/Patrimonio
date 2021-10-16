@@ -42,7 +42,8 @@ public struct LifeInsuranceClause: Codable, Hashable {
                 return usufructRecipient.isNotEmpty && bareRecipients.isNotEmpty
                 
             case (false, false):
-                return fullRecipients.isNotEmpty && fullRecipients.isvalid
+                // Note: il peut ne pas y avoir de donataire
+                return fullRecipients.isvalid
 
             case (true, false):
                 // un seul donataire désigné en PP dans une clause à option (celui qui exerce l'option)

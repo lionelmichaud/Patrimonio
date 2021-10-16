@@ -248,21 +248,15 @@ extension Ownership {
             print(" Clause avant\n\(String(describing: clause))")
 
             // le conjoint survivant fait-il partie des nouveaux PP ?
-            if let spouseIdx = fullOwners.firstIndex(where: { spouseName == $0.name }) {
+            if fullOwners.contains(where: { spouseName == $0.name }) {
                 // la part détenue par le conjoint survivant sera donnée aux enfants par part égales
                 // il faut mofifier la clause pour que sa part soit données aux enfants à son décès
-                let spouseShare = fullOwners[spouseIdx].fraction
                 clause.isOptional = false
-                // retirer le conjoint de la liste des bénéficiaires du prochain décès (le sien)
-                clause.fullRecipients.removeAll(where: { spouseName == $0.name })
+                clause.fullRecipients = []
                 // redistribuer sa part aux enfants
                 childrenName?.forEach { childName in
-                    if let childrenIdx = clause.fullRecipients.firstIndex(where: { childName == $0.name }) {
-                        clause.fullRecipients[childrenIdx].fraction += spouseShare / childrenName!.count.double()
-                    } else {
                         clause.fullRecipients.append(Owner(name     : childName,
-                                                           fraction : spouseShare / childrenName!.count.double()))
-                    }
+                                                           fraction : 100.0 / childrenName!.count.double()))
                 }
 
                 guard clause.isValid else {
