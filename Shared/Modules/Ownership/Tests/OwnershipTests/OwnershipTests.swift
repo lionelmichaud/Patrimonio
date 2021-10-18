@@ -30,9 +30,11 @@ class OwnershipTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        let demembrementModel = DemembrementModel.Model(fromFile   : DemembrementModel.Model.defaultFileName,
-                                                        fromBundle : Bundle.module)
-        let demembrement = DemembrementModel(model: demembrementModel)
+        let demembrementModel =
+        DemembrementModel.Model(fromFile   : DemembrementModel.Model.defaultFileName,
+                                fromBundle : Bundle.module)
+        let demembrement =
+        DemembrementModel(model: demembrementModel)
         
         Ownership.setDemembrementProviderP(demembrement)
     }
@@ -62,15 +64,32 @@ class OwnershipTests: XCTestCase {
     }
     
     func test_isNotValid() {
-        OwnershipTests.ownershipDemembre.usufructOwners = [Owner(name: "Owner2 de 55 ans en 2020", fraction : 50)]
-        XCTAssertFalse(OwnershipTests.ownershipDemembre.isValid)
-        OwnershipTests.ownershipDemembre.usufructOwners = [Owner(name: "Owner2 de 55 ans en 2020", fraction : 100)]
-        OwnershipTests.ownershipDemembre.bareOwners     = [Owner(name: "Nupropriétaire 1", fraction : 40),
-                                                           Owner(name: "Nupropriétaire 2", fraction : 50)]
-        XCTAssertFalse(OwnershipTests.ownershipDemembre.isValid)
-        
-        OwnershipTests.ownershipNonDemembre.fullOwners = [Owner(name: "Owner1 de 65 ans en 2020", fraction : 50)]
-        XCTAssertFalse(OwnershipTests.ownershipNonDemembre.isValid)
+        var ownership = OwnershipTests.ownershipDemembre
+        ownership.usufructOwners =
+        [Owner(name: "Owner2 de 55 ans en 2020", fraction : 50)]
+        XCTAssertFalse(ownership.isValid)
+
+        ownership = OwnershipTests.ownershipDemembre
+        ownership.bareOwners =
+        [Owner(name: "Nupropriétaire 1", fraction : 40),
+         Owner(name: "Nupropriétaire 2", fraction : 50)]
+        XCTAssertFalse(ownership.isValid)
+
+        ownership = OwnershipTests.ownershipDemembre
+        ownership.usufructOwners = []
+        XCTAssertFalse(ownership.isValid)
+
+        ownership = OwnershipTests.ownershipDemembre
+        ownership.bareOwners = []
+        XCTAssertFalse(ownership.isValid)
+
+        ownership = OwnershipTests.ownershipNonDemembre
+        ownership.fullOwners = [Owner(name: "Owner1 de 65 ans en 2020", fraction : 50)]
+        XCTAssertFalse(ownership.isValid)
+
+        ownership = OwnershipTests.ownershipNonDemembre
+        ownership.fullOwners = []
+        XCTAssertFalse(ownership.isValid)
     }
     
     func test_make_dismembered() {
@@ -81,6 +100,103 @@ class OwnershipTests: XCTestCase {
         XCTAssertEqual(OwnershipTests.ownershipNonDemembre.usufructOwners, fullOwners)
     }
     
+    func test_hasAUniqueFullOwner() {
+        XCTAssertTrue(OwnershipTests.ownershipNonDemembre.hasAUniqueFullOwner(named: "Owner1 de 65 ans en 2020"))
+        XCTAssertFalse(OwnershipTests.ownershipNonDemembre.hasAUniqueFullOwner(named: "inconnu"))
+        OwnershipTests.ownershipNonDemembre.fullOwners.append(Owner(name: "Owner2 de 55 ans en 2020", fraction : 100))
+        XCTAssertFalse(OwnershipTests.ownershipNonDemembre.hasAUniqueFullOwner(named: "Owner1 de 65 ans en 2020"))
+    }
+
+    func test_hasAFullOwner() {
+        XCTAssertTrue(OwnershipTests.ownershipNonDemembre.hasAFullOwner(named: "Owner1 de 65 ans en 2020"))
+        XCTAssertFalse(OwnershipTests.ownershipNonDemembre.hasAFullOwner(named: "inconnu"))
+    }
+
+    func test_hasABareOwner() {
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.hasABareOwner(named: "Nupropriétaire 1"))
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.hasABareOwner(named: "Nupropriétaire 2"))
+        XCTAssertFalse(OwnershipTests.ownershipDemembre.hasABareOwner(named: "Inconnu"))
+    }
+
+    func test_hasAnUsufructOwner() {
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.hasAnUsufructOwner(named: "Owner2 de 55 ans en 2020"))
+        XCTAssertFalse(OwnershipTests.ownershipDemembre.hasAnUsufructOwner(named: "Inconnu"))
+    }
+    
+    func test_hasAUniqueUsufructOwner() {
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.hasAUniqueUsufructOwner(named: "Owner2 de 55 ans en 2020"))
+        OwnershipTests.ownershipDemembre.usufructOwners.append(Owner(name: "Owner1 de 55 ans en 2020", fraction : 100))
+        XCTAssertFalse(OwnershipTests.ownershipDemembre.hasAUniqueUsufructOwner(named: "Owner1 de 55 ans en 2020"))
+        XCTAssertFalse(OwnershipTests.ownershipDemembre.hasAUniqueUsufructOwner(named: "Owner2 de 55 ans en 2020"))
+    }
+    
+    func test_providesRevenue() {
+        XCTAssertTrue(OwnershipTests.ownershipNonDemembre.providesRevenue(to: "Owner1 de 65 ans en 2020"))
+        XCTAssertFalse(OwnershipTests.ownershipNonDemembre.providesRevenue(to: "Inconnu"))
+
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.providesRevenue(to: "Owner2 de 55 ans en 2020"))
+        XCTAssertFalse(OwnershipTests.ownershipDemembre.providesRevenue(to: "Inconnu"))
+        XCTAssertFalse(OwnershipTests.ownershipDemembre.providesRevenue(to: "Nupropriétaire 1"))
+        XCTAssertFalse(OwnershipTests.ownershipDemembre.providesRevenue(to: "Nupropriétaire 2"))
+    }
+
+    func test_groupShares_dismembered() {
+        OwnershipTests.ownershipDemembre.usufructOwners = [Owner(name: "UF_Owner1", fraction : 30),
+                                                           Owner(name: "UF_Owner2", fraction : 20),
+                                                           Owner(name: "UF_Owner1", fraction : 50)]
+        OwnershipTests.ownershipDemembre.bareOwners = [Owner(name: "B_Owner1", fraction : 30),
+                                                       Owner(name: "B_Owner2", fraction : 20),
+                                                       Owner(name: "B_Owner1", fraction : 50)]
+
+        OwnershipTests.ownershipDemembre.groupShares()
+
+        XCTAssertEqual(OwnershipTests.ownershipDemembre.usufructOwners.count, 2)
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.usufructOwners
+                        .contains(Owner(name: "UF_Owner1", fraction : 80)))
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.usufructOwners
+                        .contains(Owner(name: "UF_Owner2", fraction : 20)))
+
+        XCTAssertEqual(OwnershipTests.ownershipDemembre.bareOwners.count, 2)
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.bareOwners
+                        .contains(Owner(name: "B_Owner1", fraction : 80)))
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.bareOwners
+                        .contains(Owner(name: "B_Owner2", fraction : 20)))
+    }
+
+    func test_groupShares_not_dismembered() {
+        OwnershipTests.ownershipNonDemembre.fullOwners = [Owner(name: "Owner1", fraction : 30),
+                                                          Owner(name: "Owner2", fraction : 20),
+                                                          Owner(name: "Owner1", fraction : 50)]
+
+        OwnershipTests.ownershipNonDemembre.groupShares()
+
+        XCTAssertEqual(OwnershipTests.ownershipNonDemembre.fullOwners.count, 2)
+        XCTAssertTrue(OwnershipTests.ownershipNonDemembre.fullOwners
+                        .contains(Owner(name: "Owner1", fraction : 80)))
+        XCTAssertTrue(OwnershipTests.ownershipNonDemembre.fullOwners
+                        .contains(Owner(name: "Owner2", fraction : 20)))
+    }
+
+    func test_groupShares_dismembered_regroupement() {
+        OwnershipTests.ownershipDemembre.usufructOwners = [Owner(name: "Owner1", fraction : 30),
+                                                           Owner(name: "Owner2", fraction : 20),
+                                                           Owner(name: "Owner1", fraction : 50)]
+        OwnershipTests.ownershipDemembre.bareOwners = [Owner(name: "Owner1", fraction : 30),
+                                                       Owner(name: "Owner2", fraction : 20),
+                                                       Owner(name: "Owner1", fraction : 50)]
+
+        OwnershipTests.ownershipDemembre.groupShares()
+
+        XCTAssertFalse(OwnershipTests.ownershipDemembre.isDismembered)
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.usufructOwners.isEmpty)
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.bareOwners.isEmpty)
+        XCTAssertEqual(OwnershipTests.ownershipDemembre.fullOwners.count, 2)
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.fullOwners
+                        .contains(Owner(name: "Owner1", fraction : 80)))
+        XCTAssertTrue(OwnershipTests.ownershipDemembre.fullOwners
+                        .contains(Owner(name: "Owner2", fraction : 20)))
+    }
+
     func test_ownership_demembrement() throws {
         var (usufructValue, bareValue) : (Double, Double) = (0, 0)
         XCTAssertNoThrow((usufructValue, bareValue) =
@@ -181,95 +297,5 @@ class OwnershipTests: XCTestCase {
         XCTAssertEqual(ownedValues.count, 1)
         let value = try XCTUnwrap(ownedValues["Owner1 de 65 ans en 2020"])
         XCTAssertEqual(value, 100)
-    }
-    
-    func test_groupShares_not_dismembered() {
-        OwnershipTests.ownershipNonDemembre.fullOwners = [Owner(name: "Owner1", fraction : 30),
-                                                          Owner(name: "Owner2", fraction : 20),
-                                                          Owner(name: "Owner1", fraction : 50)]
-        
-        OwnershipTests.ownershipNonDemembre.groupShares()
-        
-        XCTAssertEqual(OwnershipTests.ownershipNonDemembre.fullOwners.count, 2)
-        XCTAssertTrue(OwnershipTests.ownershipNonDemembre.fullOwners
-                        .contains(Owner(name: "Owner1", fraction : 80)))
-        XCTAssertTrue(OwnershipTests.ownershipNonDemembre.fullOwners
-                        .contains(Owner(name: "Owner2", fraction : 20)))
-    }
-    
-    func test_groupShares_dismembered() {
-        OwnershipTests.ownershipDemembre.usufructOwners = [Owner(name: "UF_Owner1", fraction : 30),
-                                                           Owner(name: "UF_Owner2", fraction : 20),
-                                                           Owner(name: "UF_Owner1", fraction : 50)]
-        OwnershipTests.ownershipDemembre.bareOwners = [Owner(name: "B_Owner1", fraction : 30),
-                                                       Owner(name: "B_Owner2", fraction : 20),
-                                                       Owner(name: "B_Owner1", fraction : 50)]
-        
-        OwnershipTests.ownershipDemembre.groupShares()
-        
-        XCTAssertEqual(OwnershipTests.ownershipDemembre.usufructOwners.count, 2)
-        XCTAssertTrue(OwnershipTests.ownershipDemembre.usufructOwners
-                        .contains(Owner(name: "UF_Owner1", fraction : 80)))
-        XCTAssertTrue(OwnershipTests.ownershipDemembre.usufructOwners
-                        .contains(Owner(name: "UF_Owner2", fraction : 20)))
-        
-        XCTAssertEqual(OwnershipTests.ownershipDemembre.bareOwners.count, 2)
-        XCTAssertTrue(OwnershipTests.ownershipDemembre.bareOwners
-                        .contains(Owner(name: "B_Owner1", fraction : 80)))
-        XCTAssertTrue(OwnershipTests.ownershipDemembre.bareOwners
-                        .contains(Owner(name: "B_Owner2", fraction : 20)))
-    }
-    
-    func test_groupShares_dismembered_regroupement() {
-        OwnershipTests.ownershipDemembre.usufructOwners = [Owner(name: "Owner1", fraction : 30),
-                                                           Owner(name: "Owner2", fraction : 20),
-                                                           Owner(name: "Owner1", fraction : 50)]
-        OwnershipTests.ownershipDemembre.bareOwners = [Owner(name: "Owner1", fraction : 30),
-                                                       Owner(name: "Owner2", fraction : 20),
-                                                       Owner(name: "Owner1", fraction : 50)]
-        
-        OwnershipTests.ownershipDemembre.groupShares()
-        
-        XCTAssertFalse(OwnershipTests.ownershipDemembre.isDismembered)
-        XCTAssertTrue(OwnershipTests.ownershipDemembre.usufructOwners.isEmpty)
-        XCTAssertTrue(OwnershipTests.ownershipDemembre.bareOwners.isEmpty)
-        XCTAssertEqual(OwnershipTests.ownershipDemembre.fullOwners.count, 2)
-        XCTAssertTrue(OwnershipTests.ownershipDemembre.fullOwners
-                        .contains(Owner(name: "Owner1", fraction : 80)))
-        XCTAssertTrue(OwnershipTests.ownershipDemembre.fullOwners
-                        .contains(Owner(name: "Owner2", fraction : 20)))
-    }
-    
-    func test_hasAUniqueFullOwner() {
-        XCTAssertTrue(OwnershipTests.ownershipNonDemembre.hasAUniqueFullOwner(named: "Owner1 de 65 ans en 2020"))
-        XCTAssertFalse(OwnershipTests.ownershipNonDemembre.hasAUniqueFullOwner(named: "inconnu"))
-        OwnershipTests.ownershipNonDemembre.fullOwners.append(Owner(name: "Owner2 de 55 ans en 2020", fraction : 100))
-        XCTAssertFalse(OwnershipTests.ownershipNonDemembre.hasAUniqueFullOwner(named: "Owner1 de 65 ans en 2020"))
-    }
-    
-    func test_hasAFullOwner() {
-        XCTAssertTrue(OwnershipTests.ownershipNonDemembre.hasAFullOwner(named: "Owner1 de 65 ans en 2020"))
-        XCTAssertFalse(OwnershipTests.ownershipNonDemembre.hasAFullOwner(named: "inconnu"))
-    }
-    
-    func test_hasABareOwner() {
-        XCTAssertTrue(OwnershipTests.ownershipDemembre.hasABareOwner(named: "Nupropriétaire 1"))
-        XCTAssertTrue(OwnershipTests.ownershipDemembre.hasABareOwner(named: "Nupropriétaire 2"))
-        XCTAssertFalse(OwnershipTests.ownershipDemembre.hasABareOwner(named: "Inconnu"))
-    }
-
-    func test_hasAnUsufructOwner() {
-        XCTAssertTrue(OwnershipTests.ownershipDemembre.hasAnUsufructOwner(named: "Owner2 de 55 ans en 2020"))
-        XCTAssertFalse(OwnershipTests.ownershipDemembre.hasAnUsufructOwner(named: "Inconnu"))
-    }
-    
-    func test_providesRevenue() {
-        XCTAssertTrue(OwnershipTests.ownershipNonDemembre.providesRevenue(to: "Owner1 de 65 ans en 2020"))
-        XCTAssertFalse(OwnershipTests.ownershipNonDemembre.providesRevenue(to: "Inconnu"))
-
-        XCTAssertTrue(OwnershipTests.ownershipDemembre.providesRevenue(to: "Owner2 de 55 ans en 2020"))
-        XCTAssertFalse(OwnershipTests.ownershipDemembre.providesRevenue(to: "Inconnu"))
-        XCTAssertFalse(OwnershipTests.ownershipDemembre.providesRevenue(to: "Nupropriétaire 1"))
-        XCTAssertFalse(OwnershipTests.ownershipDemembre.providesRevenue(to: "Nupropriétaire 2"))
     }
 }

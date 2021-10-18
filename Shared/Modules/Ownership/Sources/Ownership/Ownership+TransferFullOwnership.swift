@@ -17,10 +17,11 @@ extension Ownership {
     ///   - spouseName: le conjoint survivant
     ///   - chidrenNames: les enfants héritiers survivants
     ///   - spouseFiscalOption: option fiscale du conjoint survivant éventuel
-    mutating func transferFullOwnership(of decedentName         : String,
-                                        toSpouse spouseName     : String,
-                                        toChildren chidrenNames : [String]?,
-                                        spouseFiscalOption      : InheritanceFiscalOption?) {
+    mutating func transferFullOwnership
+    (of decedentName         : String,
+     toSpouse spouseName     : String,
+     toChildren chidrenNames : [String]?,
+     spouseFiscalOption      : InheritanceFiscalOption?) {
         // il y a un conjoint survivant
         if let chidrenNames = chidrenNames {
             // il y a des enfants héritiers
@@ -48,9 +49,7 @@ extension Ownership {
                                           toChildren      : chidrenNames,
                                           withThisSharing : sharing)
             }
-            // factoriser les parts des usufuitier et des nue-propriétaires si nécessaire
-            groupShares()
-            
+
         } else {
             // il n'y pas d'enfant héritier mais un conjoint survivant
             // tout revient au conjoint survivant en PP
@@ -58,15 +57,17 @@ extension Ownership {
         }
     }
 
-    /// Transférer la PP d'un copropriétaire d'un bien non démembré en la répartissant
-    /// entre un usufruitier (qui récupère l'UF) et des Nue-propriétaires (qui récupèrent la NP)
+    /// Transférer la PP d'un copropriétaire d'un bien non démembré
+    /// avec option du conjoint = 100% Usufruit
+    /// en la répartissant entre un usufruitier (qui récupère l'UF) et des Nue-propriétaires (qui récupèrent la NP)
     /// - Parameters:
     ///   - thisFullOwner: le PP celui qui sort
     ///   - toThisNewUsufructuary: celui qui prend l'UF
     ///   - toTheseNewBareowners: ceux qui prennent la NP
-    private mutating func transferFullOwnership(of thisFullOwner      : String,
-                                                toThisNewUsufructuary : String,
-                                                toTheseNewBareOwners  : [String]) {
+    mutating func transferFullOwnership
+    (of thisFullOwner      : String,
+     toThisNewUsufructuary : String,
+     toTheseNewBareOwners  : [String]) {
         if let ownerIdx = fullOwners.firstIndex(where: { thisFullOwner == $0.name }) {
             // le bien doit être démembré
             isDismembered = true
@@ -90,20 +91,25 @@ extension Ownership {
             }
             
             fullOwners = [ ] // le bien est démembré
+
+            // factoriser les parts des usufuitier et des nue-propriétaires si nécessaire
+            groupShares()
         }
     }
     
-    /// Transférer la PP d'un copropriétaire d'un bien non démembré en la répartissant
-    /// entre les héritiers en PP selon la quotité disponible
+    /// Transférer la PP d'un copropriétaire d'un bien non démembré
+    /// avec option du conjoint = Quotite Disponible
+    /// en la répartissant entre les héritiers en PP selon la quotité disponible
     /// - Parameters:
     ///   - thisFullOwner: le PP celui qui sort
     ///   - toSpouse: le conjoint survivant
     ///   - quotiteDisponible: la quotité disponible pour le conjoint survivant
     ///   - toChildren: les enfants héritiers survivants
-    mutating func transferFullOwnership(of thisFullOwner  : String,
-                                        toSpouse          : String,
-                                        quotiteDisponible : Double,
-                                        toChildren        : [String]) {
+    mutating func transferFullOwnership
+    (of thisFullOwner  : String,
+     toSpouse          : String,
+     quotiteDisponible : Double,
+     toChildren        : [String]) {
         if let ownerIdx = fullOwners.firstIndex(where: { thisFullOwner == $0.name }) {
             // part de PP à redistribuer
             let ownerShare = fullOwners[ownerIdx].fraction
@@ -117,20 +123,26 @@ extension Ownership {
                 fullOwners.append(Owner(name     : childName,
                                         fraction : ownerShare * (1.0 - quotiteDisponible) / toChildren.count.double()))
             }
+
+            // factoriser les parts des usufuitier et des nue-propriétaires si nécessaire
+            groupShares()
         }
     }
     
-    /// Transférer la PP d'un copropriétaire d'un bien non démembré en la répartissant
-    /// entre un usufruitier (qui récupère 1/4 en PP +3/4 en UF) et des Nue-propriétaires (qui récupèrent le reste)
+    /// Transférer la PP d'un copropriétaire d'un bien non démembré
+    /// avec option du conjoint = 1/4 en PP +3/4 en UF
+    /// en la répartissant entre un usufruitier (qui récupère 1/4 en PP +3/4 en UF)
+    /// et des Nue-propriétaires (qui récupèrent le reste)
     /// - Parameters:
     ///   - thisFullOwner: le PP celui qui sort
     ///   - toSpouse: le conjoint survivant
     ///   - toChildren: les enfants héritiers survivants
     ///   - shares: répartition des UF et NP entre conjoint et enfants
-    mutating func transferFullOwnership(of thisFullOwner        : String,
-                                        toSpouse                : String,
-                                        toChildren              : [String],
-                                        withThisSharing sharing : InheritanceSharing) {
+    mutating func transferFullOwnership
+    (of thisFullOwner        : String,
+     toSpouse                : String,
+     toChildren              : [String],
+     withThisSharing sharing : InheritanceSharing) {
         if let ownerIdx = fullOwners.firstIndex(where: { thisFullOwner == $0.name }) {
             // le bien doit être démembré
             isDismembered = true
@@ -163,6 +175,9 @@ extension Ownership {
             }
             
             fullOwners = [ ] // le bien est démembré
+
+            // factoriser les parts des usufuitier et des nue-propriétaires si nécessaire
+            groupShares()
         }
     }
 }

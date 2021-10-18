@@ -10,7 +10,7 @@ import XCTest
 import FiscalModel
 @testable import Ownership
 
-class OwnershipTransferTests: XCTestCase {
+class OwnershipTransferTests: XCTestCase { // swiftlint:disable:this type_body_length
     static var fullOwner1     : Owner!
     static var fullOwner2     : Owner!
     static var bareOwner1     : Owner!
@@ -75,9 +75,9 @@ class OwnershipTransferTests: XCTestCase {
         OwnershipTransferTests.ownership.setDelegateForAgeOf(delegate: OwnershipTransferTests.ageOf)
     }
     
-    func test_transfert_bien_démembré_avec_conjoint_avec_enfants() throws {
-        let ownershipModelIsBuggy = true
-        
+    // MARK: - Tests
+
+    func test_transfert_bien_démembré_avec_conjoint_avec_enfants() {
         var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
         
         // (A) le bien est démembré
@@ -95,11 +95,11 @@ class OwnershipTransferTests: XCTestCase {
                                     Owner(name: "Enfant 2", fraction : 40)]
         print("AVANT : " + ownership.description)
         
-        try ownership.transferOwnershipOf(
+        XCTAssertNoThrow(try ownership.transferOwnershipOf(
             decedentName       : "Défunt",
             chidrenNames       : ["Enfant 1", "Enfant 2"],
             spouseName         : "Conjoint",
-            spouseFiscalOption : .fullUsufruct)
+            spouseFiscalOption : .fullUsufruct))
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertFalse(ownership.isDismembered)
@@ -116,46 +116,50 @@ class OwnershipTransferTests: XCTestCase {
                                     Owner(name: "Conjoint", fraction : 30)]
         print("AVANT : " + ownership.description)
         
-        try ownership.transferOwnershipOf(
-            decedentName       : "Défunt",
-            chidrenNames       : ["Enfant 1", "Enfant 2"],
-            spouseName         : "Conjoint",
-            spouseFiscalOption : .fullUsufruct)
-        
-        XCTAssertTrue(ownership.isValid)
-        XCTAssertFalse(ownership.isDismembered)
-        XCTAssertTrue(ownership.fullOwners == [Owner(name: "Conjoint", fraction : 30),
-                                               Owner(name: "Enfant 1", fraction : 70.0 * 50.0 / 70.0),
-                                               Owner(name: "Enfant 2", fraction : 70.0 * 20.0 / 70.0)])
+        XCTAssertThrowsError(try ownership.transferOwnershipOf(
+                                decedentName       : "Défunt",
+                                chidrenNames       : ["Enfant 1", "Enfant 2"],
+                                spouseName         : "Conjoint",
+                                spouseFiscalOption : .fullUsufruct)) { error in
+            XCTAssertEqual(error as! OwnershipError, OwnershipError.tryingToTransferAssetWithSeveralUsufructOwners)
+        }
         print("APRES : " + ownership.description)
         
-        if !ownershipModelIsBuggy {
-            // (b) le défunt était seulement nue-propriétaire
-            print("Cas A.1.b: ")
-            
-            ownership.isDismembered = true
-            ownership.usufructOwners = [Owner(name: "Conjoint", fraction : 100)]
-            ownership.bareOwners     = [Owner(name: "Défunt",   fraction : 50),
-                                        Owner(name: "Enfant 1", fraction : 30),
-                                        Owner(name: "Enfant 2", fraction : 20)]
-            print("AVANT : " + ownership.description)
-            
-            try ownership.transferOwnershipOf(
-                decedentName       : "Défunt",
-                chidrenNames       : ["Enfant 1", "Enfant 2"],
-                spouseName         : "Conjoint",
-                spouseFiscalOption : .fullUsufruct)
-            
-            XCTAssertTrue(ownership.isValid)
-            XCTAssertTrue(ownership.isDismembered)
-            XCTAssertEqual(ownership.usufructOwners, [Owner(name: "Conjoint", fraction : 100)])
-            XCTAssertTrue(ownership.fullOwners == [Owner(name: "Enfant 1", fraction : 30.0 + 50.0 / 2.0),
-                                                   Owner(name: "Enfant 2", fraction : 40.0 + 50.0 / 2.0)])
-            print("APRES : " + ownership.description)
-        }
-        print("Cas A.1.c: ")
+        // (A) le bien est démembré
+        // (1) il y a un conjoint survivant
+        //      le défunt peut être usufruitier et/ou nue-propriétaire
+        // (b) le défunt était seulement nue-propriétaire
+        print("Cas A.1.b: ")
+
+        ownership.isDismembered = true
+        ownership.usufructOwners = [Owner(name: "Conjoint", fraction : 100)]
+        ownership.bareOwners     = [Owner(name: "Défunt",   fraction : 50),
+                                    Owner(name: "Enfant 1", fraction : 30),
+                                    Owner(name: "Enfant 3", fraction : 20)]
+        print("AVANT : " + ownership.description)
+        
+        XCTAssertNoThrow(try ownership.transferOwnershipOf(
+                            decedentName       : "Défunt",
+                            chidrenNames       : ["Enfant 1", "Enfant 2"],
+                            spouseName         : "Conjoint",
+                            spouseFiscalOption : .fullUsufruct))
+        
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertTrue(ownership.isDismembered)
+        XCTAssertEqual(ownership.usufructOwners, [Owner(name: "Conjoint", fraction : 100)])
+        XCTAssertEqual(Set(ownership.bareOwners),
+                       Set([Owner(name: "Enfant 1", fraction : 30.0 + 50.0 / 2.0),
+                            Owner(name: "Enfant 2", fraction :  0.0 + 50.0 / 2.0),
+                            Owner(name: "Enfant 3", fraction : 20.0)]))
+        print("APRES : " + ownership.description)
+
+        // (A) le bien est démembré
+        // (1) il y a un conjoint survivant
+        //      le défunt peut être usufruitier et/ou nue-propriétaire
         // (c) le défunt ne fait pas partie des usufruitires ni des nue-propriétaires
         // on ne fair rien
+        print("Cas A.1.c: ")
+
         ownership.isDismembered = true
         ownership.usufructOwners = [Owner(name: "Conjoint", fraction : 100)]
         ownership.bareOwners     = [Owner(name: "Enfant 1", fraction : 60),
@@ -163,14 +167,321 @@ class OwnershipTransferTests: XCTestCase {
         let ownershipAvant = ownership
         print("AVANT : " + ownership.description)
         
-        try ownership.transferOwnershipOf(
+        XCTAssertNoThrow(try ownership.transferOwnershipOf(
             decedentName       : "Défunt",
             chidrenNames       : ["Enfant 1", "Enfant 2"],
             spouseName         : "Conjoint",
-            spouseFiscalOption : .fullUsufruct)
+            spouseFiscalOption : .fullUsufruct))
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertEqual(ownershipAvant, ownership)
+        print("APRES : " + ownership.description)
+    }
+
+    func test_transferUsufructAndBareOwnership_sans_enfant() {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        
+        // (A) le bien est démembré
+        ownership.isDismembered = true
+        // (1) il y a un conjoint survivant
+        //      le défunt peut être usufruitier et/ou nue-propriétaire
+        // (b) le défunt était seulement nue-propriétaire
+        
+        ownership.isDismembered = true
+        ownership.usufructOwners = [Owner(name: "Défunt",   fraction : 60),
+                                    Owner(name: "Conjoint", fraction : 40)]
+        ownership.bareOwners     = [Owner(name: "Défunt",   fraction : 100)]
+        print("AVANT : " + ownership.description)
+        
+        XCTAssertNoThrow(try ownership.transferUsufructAndBareOwnership(
+                            of                 : "Défunt",
+                            toSpouse           : "Conjoint",
+                            toChildren         : nil,
+                            spouseFiscalOption : .fullUsufruct))
+        
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertFalse(ownership.isDismembered)
+        XCTAssertEqual(ownership.fullOwners, [Owner(name: "Conjoint", fraction : 100)])
+        print("APRES : " + ownership.description)
+        
+        ownership.isDismembered = true
+        ownership.usufructOwners = [Owner(name: "Défunt",   fraction : 100)]
+        ownership.bareOwners     = [Owner(name: "Défunt",   fraction : 60),
+                                    Owner(name: "Conjoint", fraction : 40)]
+        
+        print("AVANT : " + ownership.description)
+        
+        XCTAssertNoThrow(try ownership.transferUsufructAndBareOwnership(
+                            of                 : "Défunt",
+                            toSpouse           : "Conjoint",
+                            toChildren         : nil,
+                            spouseFiscalOption : .fullUsufruct))
+        
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertFalse(ownership.isDismembered)
+        XCTAssertEqual(ownership.fullOwners, [Owner(name: "Conjoint", fraction : 100)])
+        print("APRES : " + ownership.description)
+    }
+    
+    func test_transferUsufructAndBareOwnership_avec_enfant() {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        
+        // (A) le bien est démembré
+        ownership.isDismembered = true
+        // (1) il y a un conjoint survivant
+        //      le défunt peut être usufruitier et/ou nue-propriétaire
+        // (b) le défunt était seulement nue-propriétaire
+        
+        ownership.isDismembered = true
+        ownership.usufructOwners = [Owner(name: "Défunt", fraction : 100)]
+        ownership.bareOwners     = [Owner(name: "Défunt",   fraction : 50),
+                                    Owner(name: "Enfant 1", fraction : 30),
+                                    Owner(name: "Enfant 3", fraction : 20)]
+        print("AVANT : " + ownership.description)
+        
+        XCTAssertNoThrow(try ownership.transferUsufructAndBareOwnership(
+                            of                 : "Défunt",
+                            toSpouse           : "Conjoint",
+                            toChildren         : chidrenNames,
+                            spouseFiscalOption : .fullUsufruct))
+        
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertTrue(ownership.isDismembered)
+        XCTAssertEqual(ownership.usufructOwners, [Owner(name: "Conjoint", fraction : 100)])
+        XCTAssertEqual(Set(ownership.bareOwners),
+                       Set([Owner(name: "Enfant 1", fraction : 30.0 + 50.0 / 2.0),
+                            Owner(name: "Enfant 2", fraction :  0.0 + 50.0 / 2.0),
+                            Owner(name: "Enfant 3", fraction : 20.0)]))
+        print("APRES : " + ownership.description)
+    }
+    
+    func test_transferBareOwnership_sans_enfant() {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        
+        // (A) le bien est démembré
+        ownership.isDismembered = true
+        // (1) il y a un conjoint survivant
+        //      le défunt peut être usufruitier et/ou nue-propriétaire
+        // (b) le défunt était seulement nue-propriétaire
+        
+        ownership.isDismembered = true
+        ownership.usufructOwners = [Owner(name: "Conjoint", fraction : 100)]
+        ownership.bareOwners     = [Owner(name: "Défunt",   fraction : 100)]
+        print("AVANT : " + ownership.description)
+        
+        XCTAssertNoThrow(try ownership.transferBareOwnership(of                 : "Défunt",
+                                                             toSpouse           : "Conjoint",
+                                                             toChildren         : nil,
+                                                             spouseFiscalOption : .fullUsufruct))
+        
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertFalse(ownership.isDismembered)
+        XCTAssertEqual(ownership.fullOwners, [Owner(name: "Conjoint", fraction : 100)])
+        print("APRES : " + ownership.description)
+        
+        ownership.isDismembered = true
+        ownership.usufructOwners = [Owner(name: "Conjoint", fraction : 100)]
+        ownership.bareOwners     = [Owner(name: "Défunt", fraction : 60),
+                                    Owner(name: "Conjoint",  fraction : 40)]
+        
+        print("AVANT : " + ownership.description)
+        
+        XCTAssertNoThrow(try ownership.transferBareOwnership(of                 : "Défunt",
+                                                             toSpouse           : "Conjoint",
+                                                             toChildren         : nil,
+                                                             spouseFiscalOption : .fullUsufruct))
+        
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertFalse(ownership.isDismembered)
+        XCTAssertEqual(ownership.fullOwners, [Owner(name: "Conjoint", fraction : 100)])
+        print("APRES : " + ownership.description)
+    }
+    
+    func test_transferBareOwnership_avec_enfant_fullsusfrut() {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        
+        // (A) le bien est démembré
+        ownership.isDismembered = true
+        // (1) il y a un conjoint survivant
+        //      le défunt peut être usufruitier et/ou nue-propriétaire
+        // (b) le défunt était seulement nue-propriétaire
+        
+        ownership.isDismembered = true
+        ownership.usufructOwners = [Owner(name: "Conjoint", fraction : 100)]
+        ownership.bareOwners     = [Owner(name: "Défunt",   fraction : 50),
+                                    Owner(name: "Enfant 1", fraction : 30),
+                                    Owner(name: "Enfant 3", fraction : 20)]
+        print("AVANT : " + ownership.description)
+        
+        XCTAssertNoThrow(try ownership.transferBareOwnership(of                 : "Défunt",
+                                                             toSpouse           : "Conjoint",
+                                                             toChildren         : chidrenNames,
+                                                             spouseFiscalOption : .fullUsufruct))
+        
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertTrue(ownership.isDismembered)
+        XCTAssertEqual(ownership.usufructOwners, [Owner(name: "Conjoint", fraction : 100)])
+        XCTAssertEqual(Set(ownership.bareOwners),
+                       Set([Owner(name: "Enfant 1", fraction : 30.0 + 50.0 / 2.0),
+                            Owner(name: "Enfant 2", fraction :  0.0 + 50.0 / 2.0),
+                            Owner(name: "Enfant 3", fraction : 20.0)]))
+        print("APRES : " + ownership.description)
+    }
+    
+    func test_transferBareOwnership_avec_enfant_quotiteDisponible() {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        
+        // (A) le bien est démembré
+        ownership.isDismembered = true
+        // (1) il y a un conjoint survivant
+        //      le défunt peut être usufruitier et/ou nue-propriétaire
+        // (b) le défunt était seulement nue-propriétaire
+        
+        ownership.isDismembered = true
+        ownership.usufructOwners = [Owner(name: "Conjoint", fraction : 100)]
+        ownership.bareOwners     = [Owner(name: "Défunt",   fraction : 50),
+                                    Owner(name: "Enfant 1", fraction : 30),
+                                    Owner(name: "Enfant 3", fraction : 20)]
+        print("AVANT : " + ownership.description)
+        
+        XCTAssertNoThrow(try ownership.transferBareOwnership(of                 : "Défunt",
+                                                             toSpouse           : "Conjoint",
+                                                             toChildren         : chidrenNames,
+                                                             spouseFiscalOption : .quotiteDisponible))
+        
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertTrue(ownership.isDismembered)
+        XCTAssertEqual(ownership.usufructOwners, [Owner(name: "Conjoint", fraction : 100)])
+        let shares = InheritanceFiscalOption.quotiteDisponible.shares(nbChildren: chidrenNames.count)
+        let spouseShare = shares.forSpouse.bare
+        let childShare = 1.0 - spouseShare
+        XCTAssertEqual(Set(ownership.bareOwners),
+                       Set([Owner(name: "Conjoint", fraction : spouseShare * 50.0),
+                            Owner(name: "Enfant 1", fraction : 30.0 + childShare/2.0 * 50.0),
+                            Owner(name: "Enfant 2", fraction :  0.0 + childShare/2.0 * 50.0),
+                            Owner(name: "Enfant 3", fraction : 20.0)]))
+        print("APRES : " + ownership.description)
+    }
+    
+    func test_transferBareOwnership_avec_enfant_usufructPlusBare() {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        
+        // (A) le bien est démembré
+        ownership.isDismembered = true
+        // (1) il y a un conjoint survivant
+        //      le défunt peut être usufruitier et/ou nue-propriétaire
+        // (b) le défunt était seulement nue-propriétaire
+        
+        ownership.isDismembered = true
+        ownership.usufructOwners = [Owner(name: "Conjoint", fraction : 100)]
+        ownership.bareOwners     = [Owner(name: "Défunt",   fraction : 50),
+                                    Owner(name: "Enfant 1", fraction : 30),
+                                    Owner(name: "Enfant 3", fraction : 20)]
+        print("AVANT : " + ownership.description)
+        
+        XCTAssertNoThrow(try ownership.transferBareOwnership(of                 : "Défunt",
+                                                             toSpouse           : "Conjoint",
+                                                             toChildren         : chidrenNames,
+                                                             spouseFiscalOption : .usufructPlusBare))
+        
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertTrue(ownership.isDismembered)
+        XCTAssertEqual(ownership.usufructOwners, [Owner(name: "Conjoint", fraction : 100)])
+        let shares = InheritanceFiscalOption.usufructPlusBare.shares(nbChildren: chidrenNames.count)
+        let spouseShare = shares.forSpouse.bare
+        let childShare = shares.forChild.bare
+        XCTAssertEqual(Set(ownership.bareOwners),
+                       Set([Owner(name: "Conjoint", fraction : spouseShare * 50.0),
+                            Owner(name: "Enfant 1", fraction : 30.0 + childShare * 50.0),
+                            Owner(name: "Enfant 2", fraction :  0.0 + childShare * 50.0),
+                            Owner(name: "Enfant 3", fraction : 20.0)]))
+        print("APRES : " + ownership.description)
+    }
+    
+    func test_transferUsufruct_avec_plusieur_usufruitiers() {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        
+        // (A) le bien est démembré
+        ownership.isDismembered = true
+        
+        // (1) il y a un conjoint survivant
+        //      le défunt peut être usufruitier et/ou nue-propriétaire
+        // (a) le défunt était usufruitier
+        // (2) le défunt était seulement usufruitier
+        print("Cas A.1.a.2: ")
+        print("Test 1: avec enfants")
+        ownership.isDismembered = true
+        ownership.usufructOwners = [Owner(name: "Défunt",   fraction : 60),
+                                    Owner(name: "Conjoint", fraction : 40)]
+        ownership.bareOwners     = [Owner(name: "Enfant 1", fraction : 60),
+                                    Owner(name: "Enfant 2", fraction : 40)]
+        print("AVANT : " + ownership.description)
+        
+        XCTAssertThrowsError(try ownership.transferUsufruct(of: "Défunt", toChildren: chidrenNames)) { error in
+            XCTAssertEqual(error as! OwnershipError, OwnershipError.tryingToTransferAssetWithSeveralUsufructOwners)
+        }
+    }
+    
+    func test_transferUsufruct_avec_un_seul_usufruitier() {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        
+        // (A) le bien est démembré
+        ownership.isDismembered = true
+        
+        // (1) il y a un conjoint survivant
+        //      le défunt peut être usufruitier et/ou nue-propriétaire
+        // (a) le défunt était usufruitier
+        // (2) le défunt était seulement usufruitier
+        print("Cas A.1.a.2: ")
+        print("Test 1: avec enfants")
+        ownership.isDismembered = true
+        ownership.usufructOwners = [Owner(name: "Défunt",   fraction : 100)]
+        ownership.bareOwners     = [Owner(name: "Enfant 1", fraction : 60),
+                                    Owner(name: "Enfant 2", fraction : 40)]
+        print("AVANT : " + ownership.description)
+        
+        XCTAssertNoThrow(try ownership.transferUsufruct(of: "Défunt", toChildren: chidrenNames))
+        
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertFalse(ownership.isDismembered)
+        XCTAssertTrue(ownership.fullOwners == [Owner(name: "Enfant 1", fraction : 60),
+                                               Owner(name: "Enfant 2", fraction : 40)])
+        print("APRES : " + ownership.description)
+    }
+    
+    func test_transferUsufruct_avec_enfant_plus_autre_NP() {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        
+        // (A) le bien est démembré
+        ownership.isDismembered = true
+        
+        // (1) il y a un conjoint survivant
+        //      le défunt peut être usufruitier et/ou nue-propriétaire
+        // (a) le défunt était usufruitier
+        // (2) le défunt était seulement usufruitier
+        print("Cas A.1.a.2: ")
+        print("Test 1: avec enfants")
+        ownership.isDismembered = true
+        ownership.usufructOwners = [Owner(name: "Défunt",   fraction : 100)]
+        ownership.bareOwners     = [Owner(name: "Autre",    fraction : 20),
+                                    Owner(name: "Enfant 1", fraction : 30),
+                                    Owner(name: "Enfant 2", fraction : 50)]
+        print("AVANT : " + ownership.description)
+        
+        XCTAssertNoThrow(try ownership.transferUsufruct(of: "Défunt", toChildren: chidrenNames))
+        
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertFalse(ownership.isDismembered)
+        XCTAssertTrue(ownership.fullOwners == [Owner(name: "Autre",    fraction : 20),
+                                               Owner(name: "Enfant 1", fraction : 30),
+                                               Owner(name: "Enfant 2", fraction : 50)])
         print("APRES : " + ownership.description)
     }
     
@@ -221,7 +532,9 @@ class OwnershipTransferTests: XCTestCase {
     
     func test_transfert_bien_non_démembré() throws {
         var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
         
+        /// Cas B.1
         // (B) le bien n'est pas démembré
         ownership.isDismembered = false
         // (1) le défunt fait partie des plein-propriétaires
@@ -229,11 +542,11 @@ class OwnershipTransferTests: XCTestCase {
         // (b) il n'y a pas de conjoint survivant
         // un seul usufruitier + plusieurs enfants + pas de conjoint
         ownership.fullOwners = [Owner(name: "Défunt", fraction : 100)]
-        print("AVANT : " + ownership.description)
+        print("AVANT : " + String(describing: ownership))
         
         try ownership.transferOwnershipOf(
             decedentName       : "Défunt",
-            chidrenNames       : ["Enfant 1", "Enfant 2"],
+            chidrenNames       : chidrenNames,
             spouseName         : nil,
             spouseFiscalOption : nil)
         
@@ -241,19 +554,19 @@ class OwnershipTransferTests: XCTestCase {
         XCTAssertFalse(ownership.isDismembered)
         XCTAssertTrue(ownership.fullOwners == [Owner(name: "Enfant 1", fraction : 50),
                                                Owner(name: "Enfant 2", fraction : 50)])
-        print("APRES : " + ownership.description)
+        print("APRES : " + String(describing: ownership))
         
         // (a) il y a un conjoint survivant
         // un seul usufruitier + plusieurs enfants + un conjoint
         print("Cas B.1.a: ")
-        print("Test 1a: fullUsufruct")
+        print("Test 1a: option du conjoint = fullUsufruct")
         ownership.isDismembered = false
         ownership.fullOwners = [Owner(name: "Défunt", fraction : 100)]
-        print("AVANT : " + ownership.description)
-        
+        print("AVANT : " + String(describing: ownership))
+
         try ownership.transferOwnershipOf(
             decedentName       : "Défunt",
-            chidrenNames       : ["Enfant 1", "Enfant 2"],
+            chidrenNames       : chidrenNames,
             spouseName         : "Conjoint",
             spouseFiscalOption : .fullUsufruct)
         
@@ -262,16 +575,16 @@ class OwnershipTransferTests: XCTestCase {
         XCTAssertEqual(ownership.usufructOwners, [Owner(name: "Conjoint", fraction : 100)])
         XCTAssertTrue(ownership.bareOwners == [Owner(name: "Enfant 1", fraction : 50),
                                                Owner(name: "Enfant 2", fraction : 50)])
-        print("APRES : " + ownership.description)
-        
-        print("Test 1b: quotiteDisponible")
+        print("APRES : " + String(describing: ownership))
+
+        print("Test 1b: option du conjoint = quotiteDisponible")
         ownership.isDismembered = false
         ownership.fullOwners = [Owner(name: "Défunt", fraction : 100)]
-        print("AVANT : " + ownership.description)
-        
+        print("AVANT : " + String(describing: ownership))
+
         try ownership.transferOwnershipOf(
             decedentName       : "Défunt",
-            chidrenNames       : ["Enfant 1", "Enfant 2"],
+            chidrenNames       : chidrenNames,
             spouseName         : "Conjoint",
             spouseFiscalOption : .quotiteDisponible)
         
@@ -282,16 +595,16 @@ class OwnershipTransferTests: XCTestCase {
         XCTAssertTrue(ownership.fullOwners == [Owner(name: "Conjoint", fraction : 100.0/3.0),
                                                Owner(name: "Enfant 1", fraction : 100.0/3.0),
                                                Owner(name: "Enfant 2", fraction : 100.0/3.0)])
-        print("APRES : " + ownership.description)
-        
-        print("Test 1c: usufructPlusBare")
+        print("APRES : " + String(describing: ownership))
+
+        print("Test 1c: option du conjoint = usufructPlusBare")
         ownership.isDismembered = false
         ownership.fullOwners = [Owner(name: "Défunt", fraction : 100)]
-        print("AVANT : " + ownership.description)
-        
+        print("AVANT : " + String(describing: ownership))
+
         try ownership.transferOwnershipOf(
             decedentName       : "Défunt",
-            chidrenNames       : ["Enfant 1", "Enfant 2"],
+            chidrenNames       : chidrenNames,
             spouseName         : "Conjoint",
             spouseFiscalOption : .usufructPlusBare)
         
@@ -302,17 +615,17 @@ class OwnershipTransferTests: XCTestCase {
         XCTAssertTrue(ownership.bareOwners == [Owner(name: "Conjoint", fraction : 100.0/4.0),
                                                Owner(name: "Enfant 1", fraction : 100.0 * 3.0/8.0),
                                                Owner(name: "Enfant 2", fraction : 100.0 * 3.0/8.0)])
-        print("APRES : " + ownership.description)
-        
-        print("Test 2: fullUsufruct")
+        print("APRES : " + String(describing: ownership))
+
+        print("Test 2: option du conjoint = fullUsufruct")
         ownership.isDismembered = false
         ownership.fullOwners = [Owner(name: "Défunt", fraction : 70),
                                 Owner(name: "Conjoint", fraction : 30)]
-        print("AVANT : " + ownership.description)
-        
+        print("AVANT : " + String(describing: ownership))
+
         try ownership.transferOwnershipOf(
             decedentName       : "Défunt",
-            chidrenNames       : ["Enfant 1", "Enfant 2"],
+            chidrenNames       : chidrenNames,
             spouseName         : "Conjoint",
             spouseFiscalOption : .fullUsufruct)
         
@@ -322,17 +635,17 @@ class OwnershipTransferTests: XCTestCase {
         XCTAssertTrue(ownership.bareOwners == [Owner(name: "Conjoint", fraction : 30),
                                                Owner(name: "Enfant 1", fraction : 35),
                                                Owner(name: "Enfant 2", fraction : 35)])
-        print("APRES : " + ownership.description)
-        
-        print("Test 3: usufructPlusBare")
+        print("APRES : " + String(describing: ownership))
+
+        print("Test 3: option du conjoint = usufructPlusBare")
         ownership.isDismembered = false
         ownership.fullOwners = [Owner(name: "Défunt", fraction : 70),
                                 Owner(name: "Conjoint", fraction : 30)]
-        print("AVANT : " + ownership.description)
-        
+        print("AVANT : " + String(describing: ownership))
+
         try ownership.transferOwnershipOf(
             decedentName       : "Défunt",
-            chidrenNames       : ["Enfant 1", "Enfant 2"],
+            chidrenNames       : chidrenNames,
             spouseName         : "Conjoint",
             spouseFiscalOption : .usufructPlusBare)
         
@@ -343,17 +656,17 @@ class OwnershipTransferTests: XCTestCase {
         XCTAssertTrue(ownership.bareOwners == [Owner(name: "Conjoint", fraction : 30.0 + 0.25 * 70.0),
                                                Owner(name: "Enfant 1", fraction : 0.75 * 70.0 / 2.0),
                                                Owner(name: "Enfant 2", fraction : 0.75 * 70.0 / 2.0)])
-        print("APRES : " + ownership.description)
-        
-        print("Test 4: quotiteDisponible")
+        print("APRES : " + String(describing: ownership))
+
+        print("Test 4: option du conjoint = quotiteDisponible")
         ownership.isDismembered = false
         ownership.fullOwners = [Owner(name: "Défunt", fraction : 70),
                                 Owner(name: "Conjoint", fraction : 30)]
-        print("AVANT : " + ownership.description)
-        
+        print("AVANT : " + String(describing: ownership))
+
         try ownership.transferOwnershipOf(
             decedentName       : "Défunt",
-            chidrenNames       : ["Enfant 1", "Enfant 2"],
+            chidrenNames       : chidrenNames,
             spouseName         : "Conjoint",
             spouseFiscalOption : .quotiteDisponible)
         
@@ -364,24 +677,182 @@ class OwnershipTransferTests: XCTestCase {
         XCTAssertTrue(ownership.fullOwners == [Owner(name: "Conjoint", fraction : 30.0 + 70.0 / 3.0),
                                                Owner(name: "Enfant 1", fraction : 70.0 / 3.0),
                                                Owner(name: "Enfant 2", fraction : 70.0 / 3.0)])
-        print("APRES : " + ownership.description)
-        
+        print("APRES : " + String(describing: ownership))
+
+        /// Cas B.2
         print("Cas B.2: ")
+        // (B) le bien n'est pas démembré
+        ownership.isDismembered = false
         // (2) le défunt ne fait pas partie des plein-propriétaires
         // un seul usufruitier + plusieurs enfants + pas de conjoint
         ownership.fullOwners = [Owner(name: "Parent", fraction : 100)]
         let ownershipAvant = ownership
-        print("AVANT : " + ownership.description)
-        
+        print("AVANT : " + String(describing: ownership))
+
         try ownership.transferOwnershipOf(
             decedentName       : "Défunt",
-            chidrenNames       : ["Enfant 1", "Enfant 2"],
+            chidrenNames       : chidrenNames,
             spouseName         : nil,
             spouseFiscalOption : nil)
         
         XCTAssertTrue(ownership.isValid)
         XCTAssertFalse(ownership.isDismembered)
         XCTAssertEqual(ownershipAvant, ownership)
-        print("APRES : " + ownership.description)
+        print("APRES : " + String(describing: ownership))
+    }
+
+    func test_transferFullOwnership_avec_option_fullUsufruct_1_PP() throws {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        let ppOwners = [Owner(name: "Défunt", fraction : 100)]
+
+        print("Test 1a: option du conjoint = fullUsufruct")
+        ownership.isDismembered = false
+        ownership.fullOwners = ppOwners
+        print("AVANT : " + String(describing: ownership))
+
+        ownership.transferFullOwnership(
+            of                    : "Défunt",
+            toThisNewUsufructuary : "Conjoint",
+            toTheseNewBareOwners  : chidrenNames)
+
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertTrue(ownership.isDismembered)
+        XCTAssertEqual(ownership.usufructOwners, [Owner(name: "Conjoint", fraction : 100)])
+        XCTAssertTrue(ownership.bareOwners == [Owner(name: "Enfant 1", fraction : 50),
+                                               Owner(name: "Enfant 2", fraction : 50)])
+        print("APRES : " + String(describing: ownership))
+    }
+    func test_transferFullOwnership_avec_option_fullUsufruct_plusieur_PP() throws {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        let ppOwners = [Owner(name: "Défunt", fraction : 70),
+                        Owner(name: "Conjoint", fraction : 30)]
+
+        print("Test 2: option du conjoint = fullUsufruct")
+        ownership.isDismembered = false
+        ownership.fullOwners = ppOwners
+        print("AVANT : " + String(describing: ownership))
+
+        ownership.transferFullOwnership(
+            of                    : "Défunt",
+            toThisNewUsufructuary : "Conjoint",
+            toTheseNewBareOwners  : chidrenNames)
+
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertTrue(ownership.isDismembered)
+        XCTAssertEqual(ownership.usufructOwners, [Owner(name: "Conjoint", fraction : 100)])
+        XCTAssertTrue(ownership.bareOwners == [Owner(name: "Conjoint", fraction : 30),
+                                               Owner(name: "Enfant 1", fraction : 35),
+                                               Owner(name: "Enfant 2", fraction : 35)])
+        print("APRES : " + String(describing: ownership))
+    }
+
+    func test_transferFullOwnership_avec_option_quotiteDisponible_1_PP() throws {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        let ppOwners = [Owner(name: "Défunt", fraction : 100)]
+
+        print("Test 1b: option du conjoint = quotiteDisponible")
+        ownership.isDismembered = false
+        ownership.fullOwners = ppOwners
+        print("AVANT : " + String(describing: ownership))
+        let shares = InheritanceFiscalOption.quotiteDisponible.shares(nbChildren: chidrenNames.count)
+
+        ownership.transferFullOwnership(
+            of                : "Défunt",
+            toSpouse          : "Conjoint",
+            quotiteDisponible : shares.forSpouse.bare,
+            toChildren        : chidrenNames)
+
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertFalse(ownership.isDismembered)
+        XCTAssertEqual(ownership.usufructOwners, [])
+        XCTAssertEqual(ownership.bareOwners, [])
+        XCTAssertTrue(ownership.fullOwners == [Owner(name: "Conjoint", fraction : 100.0/3.0),
+                                               Owner(name: "Enfant 1", fraction : 100.0/3.0),
+                                               Owner(name: "Enfant 2", fraction : 100.0/3.0)])
+        print("APRES : " + String(describing: ownership))
+    }
+    func test_transferFullOwnership_avec_option_quotiteDisponible_plusieur_PP() throws {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        let ppOwners = [Owner(name: "Défunt", fraction : 70),
+                        Owner(name: "Conjoint", fraction : 30)]
+
+        print("Test 4: option du conjoint = quotiteDisponible")
+        ownership.isDismembered = false
+        ownership.fullOwners = ppOwners
+        print("AVANT : " + String(describing: ownership))
+        let shares = InheritanceFiscalOption.quotiteDisponible.shares(nbChildren: chidrenNames.count)
+
+        ownership.transferFullOwnership(
+            of                : "Défunt",
+            toSpouse          : "Conjoint",
+            quotiteDisponible : shares.forSpouse.bare,
+            toChildren        : chidrenNames)
+
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertFalse(ownership.isDismembered)
+        XCTAssertEqual(ownership.usufructOwners, [])
+        XCTAssertEqual(ownership.bareOwners, [])
+        XCTAssertTrue(ownership.fullOwners == [Owner(name: "Conjoint", fraction : 30.0 + 70.0 / 3.0),
+                                               Owner(name: "Enfant 1", fraction : 70.0 / 3.0),
+                                               Owner(name: "Enfant 2", fraction : 70.0 / 3.0)])
+        print("APRES : " + String(describing: ownership))
+    }
+
+    func test_transferFullOwnership_avec_option_usufructPlusBare_1_PP() throws {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        let ppOwners = [Owner(name: "Défunt", fraction : 100)]
+
+        print("Test 1c: option du conjoint = usufructPlusBare")
+        ownership.isDismembered = false
+        ownership.fullOwners = ppOwners
+        print("AVANT : " + String(describing: ownership))
+        let sharing = InheritanceFiscalOption.usufructPlusBare.shares(nbChildren: chidrenNames.count)
+        
+        ownership.transferFullOwnership(
+            of              : "Défunt",
+            toSpouse        : "Conjoint",
+            toChildren      : chidrenNames,
+            withThisSharing : sharing)
+
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertTrue(ownership.isDismembered)
+        XCTAssertEqual(ownership.fullOwners, [])
+        XCTAssertEqual(ownership.usufructOwners, [Owner(name: "Conjoint", fraction : 100)])
+        XCTAssertTrue(ownership.bareOwners == [Owner(name: "Conjoint", fraction : 100.0/4.0),
+                                               Owner(name: "Enfant 1", fraction : 100.0 * 3.0/8.0),
+                                               Owner(name: "Enfant 2", fraction : 100.0 * 3.0/8.0)])
+        print("APRES : " + String(describing: ownership))
+    }
+    func test_transferFullOwnership_avec_option_usufructPlusBare_plusieur_PP() throws {
+        var ownership = Ownership(ageOf: OwnershipTransferTests.ageOf)
+        let chidrenNames = ["Enfant 1", "Enfant 2"]
+        let ppOwners = [Owner(name: "Défunt", fraction : 70),
+                        Owner(name: "Conjoint", fraction : 30)]
+
+        print("Test 3: option du conjoint = usufructPlusBare")
+        ownership.isDismembered = false
+        ownership.fullOwners = ppOwners
+        print("AVANT : " + String(describing: ownership))
+        let sharing = InheritanceFiscalOption.usufructPlusBare.shares(nbChildren: chidrenNames.count)
+
+        ownership.transferFullOwnership(
+            of              : "Défunt",
+            toSpouse        : "Conjoint",
+            toChildren      : chidrenNames,
+            withThisSharing : sharing)
+
+        XCTAssertTrue(ownership.isValid)
+        XCTAssertTrue(ownership.isDismembered)
+        XCTAssertEqual(ownership.fullOwners, [])
+        XCTAssertEqual(ownership.usufructOwners, [Owner(name: "Conjoint", fraction : 100)])
+        XCTAssertTrue(ownership.bareOwners == [Owner(name: "Conjoint", fraction : 30.0 + 0.25 * 70.0),
+                                               Owner(name: "Enfant 1", fraction : 0.75 * 70.0 / 2.0),
+                                               Owner(name: "Enfant 2", fraction : 0.75 * 70.0 / 2.0)])
+        print("APRES : " + String(describing: ownership))
     }
 }

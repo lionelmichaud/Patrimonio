@@ -9,38 +9,37 @@ import Foundation
 import FiscalModel
 
 extension Ownership {
-    /// Transférer l'usufruit du défunt aux nue-propriétaires
+    /// Transférer l'usufruit du défunt nommé 'decedentName' aux nue-propriétaires
     /// - Note:
-    ///   - le défunt était seulement usufruitier
+    ///   - le défunt était seulement usufruitier (pas NP en même temps)
     ///   - le défunt avait donné sa nue-propriété avant son décès, alors l'usufruit rejoint la nue-propriété
     ///   - cad que les nues-propriétaires deviennent PP
     /// - Parameters:
     ///   - decedentName: le nom du défunt
     ///   - chidrenNames: les enfants héritiers survivants
-    /// - Warning: Ne donne pas le bon résultat pour un bien indivis.
+    /// - Warning:
+    ///   - Ne fonctionne pas pour un bien avec plusieurs Usufruitiers (throws error)
+    ///   - Ne pas utiliser si le 'decedentName' est aussi un NP
+    /// - Throws: bien avec plusieurs Usufruitiers: OwnershipError.tryingToTransferAssetithSeveralUsufructOwners
     mutating func transferUsufruct(of decedentName         : String,
-                                   toChildren chidrenNames : [String]?) {
-        // TODO: - Gérer correctement les transferts de propriété des biens indivis et démembrés
-        if let chidrenNames = chidrenNames {
-            //if let decedent = usufructOwners.owner(ownerName: decedentName) {
-            // la part d'usufruit à transmettre
-            //let usufructShare = decedent.fraction
-            
-            // l'UF rejoint la nue-propriété (enfants seulement)
-            chidrenNames.forEach { childName in
-                if let bareowner = bareOwners[childName] {
-                    usufructOwners.append(Owner(name: bareowner.name,
-                                                fraction: bareowner.fraction))
-                }
-            }
-            
-            // on supprime le défunt de la liste
-            usufructOwners.removeAll(where: { $0.name == decedentName })
-            
-            // factoriser les parts des usufuitiers et des nue-propriétaires si nécessaire
-            groupShares()
-            //}
+                                   toChildren chidrenNames : [String]?) throws {
+        guard hasAUniqueUsufructOwner(named: decedentName) else {
+            // TODO: - Gérer correctement les transferts de propriété des biens indivis et démembrés
+            customLogOwnership.log(level: .error, "transferUsufruct: \(OwnershipError.tryingToTransferAssetWithSeveralUsufructOwners.rawValue)")
+            throw OwnershipError.tryingToTransferAssetWithSeveralUsufructOwners
         }
+        
+        bareOwners.forEach { bareOwner in
+            // l'UF rejoint la nue-propriété
+            usufructOwners.append(Owner(name: bareOwner.name,
+                                        fraction: bareOwner.fraction))
+        }
+        
+        // on supprime le défunt de la liste
+        usufructOwners.removeAll(where: { $0.name == decedentName })
+        
+        // factoriser les parts des usufuitiers et des nue-propriétaires si nécessaire
+        groupShares()
     }
     
     /// Transférer la NP et UF  d'un copropriétaire d'un bien démembré à ses héritiers selon l'option retenue par le conjoint survivant
@@ -53,25 +52,28 @@ extension Ownership {
     ///   - spouseName: le conjoint survivant
     ///   - chidrenNames: les enfants héritiers survivants
     ///   - spouseFiscalOption: option fiscale du conjoint survivant éventuel
+    /// - Warning: Ne fonctionne pas pour un bien avec plusieurs Usufruitiers
+    /// - Throws: bien avec plusieurs Usufruitiers: OwnershipError.tryingToTransferAssetithSeveralUsufructOwners
     mutating func transferUsufructAndBareOwnership(of decedentName         : String,
                                                    toSpouse spouseName     : String,
                                                    toChildren chidrenNames : [String]?,
-                                                   spouseFiscalOption      : InheritanceFiscalOption?) {
+                                                   spouseFiscalOption      : InheritanceFiscalOption?) throws {
         if let chidrenNames = chidrenNames {
             // il y a des enfants héritiers
             // transmission NP + UF selon l'option fiscale du conjoint survivant
+            // TODO: - BUG ca ne marche pas comme ça
             guard let spouseFiscalOption = spouseFiscalOption else {
                 fatalError("pas d'option fiscale passée en paramètre de transferOwnershipOf")
             }
-            // l'UF du défunt rejoint la nue propriété des enfants qui la détiennent
-            transferUsufruct(of         : decedentName,
-                             toChildren : chidrenNames)
             // la NP est transmise aux enfants nue-propriétaires
-            transferBareOwnership(of                 : decedentName,
-                                  toSpouse           : spouseName,
-                                  toChildren         : chidrenNames,
-                                  spouseFiscalOption : spouseFiscalOption)
-            
+            try transferBareOwnership(of                 : decedentName,
+                                      toSpouse           : spouseName,
+                                      toChildren         : chidrenNames,
+                                      spouseFiscalOption : spouseFiscalOption)
+            // l'UF du défunt rejoint la nue propriété des enfants qui la détiennent
+            try transferUsufruct(of         : decedentName,
+                                toChildren : chidrenNames)
+
         } else {
             // il n'y pas d'enfant héritier mais un conjoint survivant
             // tout revient au conjoint survivant en PP
