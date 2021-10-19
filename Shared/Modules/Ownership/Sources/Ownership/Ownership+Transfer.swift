@@ -81,6 +81,7 @@ extension Ownership {
                     // (1) le défunt était aussi nue-propriétaire
                     // le défunt possèdait encore la UF + NP et les deux sont transmis
                     // selon l'option du conjoint survivant comme une PP
+                    // TODO: - BUG ca ne marche pas comme ça
                     try transferUsufructAndBareOwnership(of                 : decedentName,
                                                           toSpouse           : spouseName,
                                                           toChildren         : chidrenNames,
