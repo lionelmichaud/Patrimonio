@@ -323,11 +323,11 @@ extension Ownership {
                                         fraction : ownerShare * recepient.fraction / 100.0))
             }
             groupShares()
-            print(">> Transfert assurance vie détenue en PP: \n Ownership\n\(String(describing: self))")
 
             // MODIFICATION DE LA CLAUSE
             // le conjoint survivant fait-il partie des nouveaux PP ?
             if fullOwners.contains(where: { spouseName == $0.name }) {
+                print(">> Transfert assurance vie détenue en PP: \n Ownership\n\(String(describing: self))")
                 print("Modification de la clause\nClause avant:\n\(String(describing: clause))")
                 // la part détenue par le conjoint survivant sera donnée aux enfants par part égales
                 // il faut mofifier la clause pour que sa part soit données aux enfants à son décès

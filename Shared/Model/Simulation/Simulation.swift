@@ -286,6 +286,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
             // - mais pas à chaque Run
             if run == 1 {
                 resetKPIs()
+                SimulationLogger.shared.reset()
             }
             
             // Exécuter la simulation: construire les comptes sociaux du patrimoine de la famille
@@ -346,6 +347,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         lastYear  = firstYear + nbOfYears - 1
 
         currentRunNb = 1
+        SimulationLogger.shared.reset()
         SimulationLogger.shared.log(run      : currentRunNb,
                                     logTopic : LogTopic.simulationEvent,
                                     message  : "Début : \(firstYear!)")
