@@ -29,15 +29,12 @@ extension Ownership {
             throw OwnershipError.tryingToTransferAssetWithSeveralUsufructOwners
         }
         
-        bareOwners.forEach { bareOwner in
-            // l'UF rejoint la nue-propriété
-            usufructOwners.append(Owner(name: bareOwner.name,
-                                        fraction: bareOwner.fraction))
-        }
-        
-        // on supprime le défunt de la liste
-        usufructOwners.removeAll(where: { $0.name == decedentName })
-        
+        // chaque nue-propriétaire devient PP de sa propre part
+        isDismembered  = false
+        fullOwners     = bareOwners
+        bareOwners     = []
+        usufructOwners = []
+
         // factoriser les parts des usufuitiers et des nue-propriétaires si nécessaire
         groupShares()
     }

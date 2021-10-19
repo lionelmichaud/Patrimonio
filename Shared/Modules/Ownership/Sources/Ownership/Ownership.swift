@@ -53,10 +53,16 @@ public enum EvaluationContext: String, PickableEnumP {
 public enum OwnershipError: String, Error {
     case tryingToDismemberAnUndismemberedAsset =
             "Tentative de calul des valeurs démembrées d'un bien non démembré"
-    case tryingToTransferAssetWithSeveralUsufructOwners =
-            "Tentative de transmission d'un bien possédant plusieurs UF"
+    case tryingToTransferAssetWithNoBareOwner =
+            "Tentative de transmission d'un bien ne possédant pas de NP"
     case invalidOwnership =
             "Ownership est invalid"
+    case tryingToTransferAssetWithSeveralUsufructOwners =
+            "Cas non traité: Tentative de transmission d'un bien possédant plusieurs UF"
+    case tryingToTransferAssetWithDecedentAsBareOwner =
+            "Cas non traité: Tentative de transmission d'un bien dont le défunt est NP"
+    case tryingToTransferAssetWithManyFullOwnerAndDismemberedClause =
+            "Cas non traité: Tentative de transmission d'une AV avec Clause démembrée et dont le défunt est PP parmi plusieurs"
 }
 
 // MARK: - Struct définissant les droits de propriété d'un bien

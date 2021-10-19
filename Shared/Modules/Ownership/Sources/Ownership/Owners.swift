@@ -62,7 +62,7 @@ extension Owners {
         sumOfOwnedFractions.isApproximatelyEqual(to: 100.0, absoluteTolerance: 0.0001)
     }
     public var isvalid: Bool {
-        // il la liste est vide alors elle est valide
+        // si la liste est vide alors elle est valide
         guard !self.isEmpty else {
             return true
         }

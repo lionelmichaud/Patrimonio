@@ -12,8 +12,8 @@ import Foundation
 
 // MARK: - La répartition des droits de propriété d'un bien entre personnes
 
-public enum ClauseError: Error {
-    case invalidClause
+public enum ClauseError: String, Error {
+    case invalidClause = "La clause de l'assurance vie n'est pas valide"
 }
 
 /// Clause bénéficiaire d'assurance vie
@@ -49,6 +49,41 @@ public struct LifeInsuranceClause: Codable, Hashable {
                 // un seul donataire désigné en PP dans une clause à option (celui qui exerce l'option)
                 return fullRecipients.count == 1 && fullRecipients.isvalid
         }
+    }
+    
+    public var invalidityCause: String? {
+        guard !isValid else {
+            return ""
+        }
+        switch (isOptional, isDismembered) {
+            case (true, true):
+                // une clause à option ne doit pas être démembrée
+                return "Une clause à option ne doit pas être démembrée"
+                
+            case (false, true):
+                if usufructRecipient.isEmpty {
+                    return "La clause est démembrée en n'a pas de donataire en UF"
+                }
+                if bareRecipients.isEmpty {
+                    return "La clause est démembrée en n'a pas de donataire en NP"
+                }
+                
+            case (false, false):
+                // Note: il peut ne pas y avoir de donataire
+                if !fullRecipients.isvalid {
+                    return "La liste des donataires de la clause n'est pas valide"
+                }
+                
+            case (true, false):
+                // un seul donataire désigné en PP dans une clause à option (celui qui exerce l'option)
+                if !fullRecipients.isvalid {
+                    return "La liste des donataires de la clause à option n'est pas valide"
+                }
+                if fullRecipients.count != 1 {
+                    return "La liste des donataires de la clause à option inclue plusieurs donataires"
+                }
+        }
+        return nil
     }
     
     public init() { }

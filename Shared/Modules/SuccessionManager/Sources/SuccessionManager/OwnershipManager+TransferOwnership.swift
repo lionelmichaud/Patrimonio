@@ -23,6 +23,7 @@ extension OwnershipManager {
                              liabilities : inout Liabilities,
                              of decedent : Adult) {
         guard let family = Patrimoin.familyProvider else {
+            customLogOwnershipManager.log(level: .fault, "La famille n'est pas définie dans Patrimoin.transferOwnershipOf")
             fatalError("La famille n'est pas définie dans Patrimoin.transferOwnershipOf")
         }
         // rechercher un conjont survivant
@@ -66,53 +67,20 @@ extension OwnershipManager {
                                          chidrenNames       : [String]?,
                                          spouseName         : String?,
                                          spouseFiscalOption : InheritanceFiscalOption?) {
-        for idx in assets.periodicInvests.items.indices where assets.periodicInvests.items[idx].value(atEndOf: year) > 0 {
-            switch assets.periodicInvests[idx].type {
-                case .lifeInsurance(let periodicSocialTaxes, let clause):
-                    var newClause = clause
-                    // régles de transmission particulières pour l'Assurance Vie
-                    try! assets.periodicInvests[idx]
-                        .ownership.transferLifeInsurance(
-                            of           : decedentName,
-                            spouseName   : spouseName,
-                            childrenName : chidrenNames,
-                            accordingTo  : &newClause)
-                    assets.periodicInvests[idx].type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
-                                                                      clause              : newClause)
-
-                default:
-                    try! assets.periodicInvests[idx]
-                        .ownership.transferOwnershipOf(
-                            decedentName       : decedentName,
-                            chidrenNames       : chidrenNames,
-                            spouseName         : spouseName,
-                            spouseFiscalOption : spouseFiscalOption)
-            }
-        }
-        for idx in assets.freeInvests.items.indices where assets.freeInvests.items[idx].value(atEndOf: year) > 0 {
-            assets.freeInvests[idx].initializeCurrentInterestsAfterTransmission(yearOfTransmission: year)
-            switch assets.freeInvests[idx].type {
-                case .lifeInsurance(let periodicSocialTaxes, let clause):
-                    var newClause = clause
-                    // régles de transmission particulières pour l'Assurance Vie
-                    try! assets.freeInvests[idx]
-                        .ownership.transferLifeInsurance(
-                            of           : decedentName,
-                            spouseName   : spouseName,
-                            childrenName : chidrenNames,
-                            accordingTo  : &newClause)
-                    assets.freeInvests[idx].type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
-                                                                  clause              : newClause)
-
-                default:
-                    try! assets.freeInvests[idx]
-                        .ownership.transferOwnershipOf(
-                            decedentName       : decedentName,
-                            chidrenNames       : chidrenNames,
-                            spouseName         : spouseName,
-                            spouseFiscalOption : spouseFiscalOption)
-            }
-        }
+        transferPeriodicInvestOwnershipOf(
+            assets             : &assets,
+            decedentName       : decedentName,
+            chidrenNames       : chidrenNames,
+            spouseName         : spouseName,
+            spouseFiscalOption : spouseFiscalOption)
+        
+        transferFreeInvestOwnershipOf(
+            assets             : &assets,
+            decedentName       : decedentName,
+            chidrenNames       : chidrenNames,
+            spouseName         : spouseName,
+            spouseFiscalOption : spouseFiscalOption)
+        
         for idx in assets.realEstates.items.indices where assets.realEstates.items[idx].value(atEndOf: year) > 0 {
             try! assets.realEstates[idx]
                 .ownership.transferOwnershipOf(
@@ -136,6 +104,79 @@ extension OwnershipManager {
                                        atEndOf            : year)
     }
 
+    fileprivate func transferPeriodicInvestOwnershipOf(assets             : inout Assets,
+                                                       decedentName       : String,
+                                                       chidrenNames       : [String]?,
+                                                       spouseName         : String?,
+                                                       spouseFiscalOption : InheritanceFiscalOption?) {
+        for idx in assets.periodicInvests.items.indices where assets.periodicInvests.items[idx].value(atEndOf: year) > 0 {
+            do {
+                switch assets.periodicInvests[idx].type {
+                    case .lifeInsurance(let periodicSocialTaxes, let clause):
+                        var newClause = clause
+                        // régles de transmission particulières pour l'Assurance Vie
+                        try assets.periodicInvests[idx]
+                            .ownership.transferLifeInsurance(
+                                of           : decedentName,
+                                spouseName   : spouseName,
+                                childrenName : chidrenNames,
+                                accordingTo  : &newClause)
+                        assets.periodicInvests[idx].type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
+                                                                          clause              : newClause)
+                        
+                    default:
+                        try assets.periodicInvests[idx]
+                            .ownership.transferOwnershipOf(
+                                decedentName       : decedentName,
+                                chidrenNames       : chidrenNames,
+                                spouseName         : spouseName,
+                                spouseFiscalOption : spouseFiscalOption)
+                }
+            } catch {
+                let failedAsset = assets.periodicInvests[idx]
+                customLogOwnershipManager.log(level: .fault, "transferOwnershipOf failed with:\n\(String(describing: failedAsset))")
+                fatalError("transferOwnershipOf failed")
+            }
+        }
+    }
+    
+    fileprivate func transferFreeInvestOwnershipOf(assets             : inout Assets,
+                                                   decedentName       : String,
+                                                   chidrenNames       : [String]?,
+                                                   spouseName         : String?,
+                                                   spouseFiscalOption : InheritanceFiscalOption?) {
+        for idx in assets.freeInvests.items.indices where assets.freeInvests.items[idx].value(atEndOf: year) > 0 {
+            assets.freeInvests[idx].initializeCurrentInterestsAfterTransmission(yearOfTransmission: year)
+            do {
+                switch assets.freeInvests[idx].type {
+                    case .lifeInsurance(let periodicSocialTaxes, let clause):
+                        var newClause = clause
+                        // régles de transmission particulières pour l'Assurance Vie
+                        try assets.freeInvests[idx]
+                            .ownership.transferLifeInsurance(
+                                of           : decedentName,
+                                spouseName   : spouseName,
+                                childrenName : chidrenNames,
+                                accordingTo  : &newClause)
+                        assets.freeInvests[idx].type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
+                                                                      clause              : newClause)
+                        
+                    default:
+                        try assets.freeInvests[idx]
+                            .ownership.transferOwnershipOf(
+                                decedentName       : decedentName,
+                                chidrenNames       : chidrenNames,
+                                spouseName         : spouseName,
+                                spouseFiscalOption : spouseFiscalOption)
+                }
+            } catch {
+                let failedAsset = assets.freeInvests[idx]
+                customLogOwnershipManager.log(level: .fault, "transferOwnershipOf failed with:\n\(String(describing: failedAsset))")
+                fatalError("transferOwnershipOf failed")
+            }
+        }
+    }
+    
     /// Transférer la propriété des `liabilities` d'un défunt `decedent` vers ses héritiers
     /// en fonction de l'option fiscale du conjoint survivant éventuel
     /// - Parameters:
@@ -161,7 +202,7 @@ extension OwnershipManager {
                     spouseFiscalOption : spouseFiscalOption)
         }
         // transférer les dettes
-        for idx in liabilities.debts.items.indices {
+        for idx in liabilities.debts.items.indices where liabilities.debts.items[idx].value(atEndOf: year) > 0 {
             try! liabilities.debts.items[idx]
                 .ownership
                 .transferOwnershipOf(

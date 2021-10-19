@@ -35,6 +35,6 @@ public extension FinancialEnvelopP {
         }
     }
     var isValid: Bool {
-        type.isValid
+        type.isValid && ownership.isValid
     }
 }

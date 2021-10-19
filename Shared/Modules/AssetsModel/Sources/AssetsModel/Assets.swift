@@ -83,6 +83,7 @@ public struct Assets {
             scpis.isModified ||
             sci.isModified
     }
+    
     // MARK: - Initializers
     
     /// Initialiser à vide
@@ -114,20 +115,49 @@ public struct Assets {
         
         // initialiser le vecteur d'état de chaque FreeInvestement à la date courante
         initializeFreeInvestementCurrentValue()
-        
+        checkValidity()
+   }
+    
+    // MARK: - Methods
+    
+    /// Checks that each Asset item is valid. Crashes if not.
+    private func checkValidity() {
         periodicInvests.items.forEach {
             if !$0.isValid {
-                fatalError("Object \"\($0.name)\" has invalid clause\n \(String(describing: $0.clause))")
+                if !$0.ownership.isValid {
+                    fatalError("Object \"\($0.name)\" has invalid ownership\n \(String(describing: $0.ownership))")
+                }
+                if let clause = $0.clause, let cause = clause.invalidityCause {
+                    fatalError("Object \"\($0.name)\" has invalid clause\n \(String(describing: clause))\n\(cause)")
+                }
             }
         }
         freeInvests.items.forEach {
             if !$0.isValid {
-                fatalError("Object \"\($0.name)\" has invalid clause\n \(String(describing: $0.clause))")
+                if !$0.ownership.isValid {
+                    fatalError("Object \"\($0.name)\" has invalid ownership\n \(String(describing: $0.ownership))")
+                }
+                if let clause = $0.clause, let cause = clause.invalidityCause {
+                    fatalError("Object \"\($0.name)\" has invalid clause\n \(String(describing: clause))\n\(cause)")
+                }
+            }
+        }
+        realEstates.items.forEach {
+            if !$0.isValid {
+                fatalError("Object \"\($0.name)\" has invalid ownership\n \(String(describing: $0.ownership))")
+            }
+        }
+        scpis.items.forEach {
+            if !$0.isValid {
+                fatalError("Object \"\($0.name)\" has invalid ownership\n \(String(describing: $0.ownership))")
+            }
+        }
+        sci.scpis.items.forEach {
+            if !$0.isValid {
+                fatalError("Object \"\($0.name)\" has invalid ownership\n \(String(describing: $0.ownership))")
             }
         }
     }
-    
-    // MARK: - Methods
     
     public func saveAsJSON(toFolder folder: Folder) throws {
         try periodicInvests.saveAsJSON(toFolder: folder)

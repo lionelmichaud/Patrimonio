@@ -27,7 +27,8 @@ extension Ownership {
      spouseName         : String?,
      spouseFiscalOption : InheritanceFiscalOption?) throws {
         guard isValid else {
-            customLogOwnership.log(level: .error, "Tentative de transfert de propriété avec 'ownership' invalide")
+            let invalid = self
+            customLogOwnership.log(level: .error, "Tentative de transfert de propriété avec 'ownership' invalide\n\(invalid, privacy: .public)")
             throw OwnershipError.invalidOwnership
         }
         
@@ -47,7 +48,8 @@ extension Ownership {
         }
         
         guard isValid else {
-            customLogOwnership.log(level: .error, "'transferOwnershipOf' a généré un 'ownership' invalide")
+            let invalid = self
+            customLogOwnership.log(level: .error, "'transferOwnershipOf' a généré un 'ownership' invalide\n\(invalid, privacy: .public)")
             throw OwnershipError.invalidOwnership
         }
     }
@@ -95,7 +97,7 @@ extension Ownership {
                                           toChildren : chidrenNames)
                     
                 }
-            } else if bareOwners.contains(ownerName: decedentName) {
+            } else if hasABareOwner(named: decedentName) {
                 // (b) le défunt était seulement nue-propriétaire
                 // NUE-PROPRIETE
                 // retirer le défunt de la liste des nue-propriétaires
