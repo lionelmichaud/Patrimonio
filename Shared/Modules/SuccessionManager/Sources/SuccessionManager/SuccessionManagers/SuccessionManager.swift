@@ -7,7 +7,7 @@
 
 import Foundation
 import os
-import ModelEnvironment
+import FiscalModel
 import Succession
 import NamedValue
 import Ownership
@@ -22,11 +22,11 @@ public struct SuccessionManager {
     
     // MARK: - Properties
 
-    private var family     : FamilyProviderP
-    private var patrimoine : Patrimoin
-    private var model      : Model
-    private var year       : Int
-    private var run        : Int
+    private var family      : FamilyProviderP
+    private var patrimoine  : Patrimoin
+    private var fiscalModel : Fiscal.Model
+    private var year        : Int
+    private var run         : Int
 
     private var legalSuccessionManager         = LegalSuccessionManager()
     private let lifeInsuranceSuccessionManager = LifeInsuranceSuccessionManager()
@@ -45,20 +45,20 @@ public struct SuccessionManager {
     /// - Parameters:
     ///   - family: la famille dont il faut faire le bilan
     ///   - patrimoine: le patrimoine de la famille
-    ///   - model: model à utiliser (partie fiscale)
+    ///   - fiscalModel: model fiscal à utiliser
     ///   - year: année des décès
     ///   - run: numéro du run en cours de calcul
-    public init(with patrimoine : Patrimoin,
-                using model     : Model,
-                atEndOf year    : Int,
-                run             : Int) {
+    public init(with patrimoine   : Patrimoin,
+                using fiscalModel : Fiscal.Model,
+                atEndOf year      : Int,
+                run               : Int) {
         guard let familyProvider = Patrimoin.familyProvider else {
             customLog.log(level: .fault, "init: Patrimoin.familyProvider non initialisé")
             fatalError()
         }
         self.patrimoine       = patrimoine
         self.family           = familyProvider
-        self.model            = model
+        self.fiscalModel      = fiscalModel
         self.year             = year
         self.run              = run
         self.ownershipManager = OwnershipManager(of      : family,
@@ -102,7 +102,7 @@ public struct SuccessionManager {
                 legalSuccessionManager.legalSuccession(of      : adultDecedentName,
                                                        with    : patrimoine,
                                                        atEndOf : year,
-                                                       using   : model)
+                                                       using   : fiscalModel)
             
             // calculer les transmissions et les droits de transmission assurances vies
             // sans exercer de clause à option
@@ -113,7 +113,7 @@ public struct SuccessionManager {
                     spouseName   : family.spouseNameOf(adultDecedentName),
                     childrenName : family.childrenAliveName(atEndOf : year),
                     atEndOf      : year,
-                    using        : model)
+                    using        : fiscalModel)
             
             // au premier décès parmis les adultes:
             // s'assurer que les enfants peuvent payer les droits de succession
@@ -170,7 +170,7 @@ public struct SuccessionManager {
                 spouseName   : family.spouseNameOf(decedentName),
                 childrenName : family.childrenAliveName(atEndOf : year),
                 atEndOf      : year,
-                using        : model)
+                using        : fiscalModel)
     }
     
     /// Calculer le total des taxes dûes par les enfants à partir des successions

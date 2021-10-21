@@ -177,9 +177,8 @@ struct CashFlowLine {
             /// SUCCESSIONS: Calcul des droits de successions légales et assurances vies + peuple les successions de l'année
             ///              Transférer les biens des personnes décédées dans l'année vers ses héritiers
             manageSuccession(run   : run,
-                             of    : family,
                              with  : patrimoine,
-                             using : model)
+                             using : model.fiscalModel)
 
             /// FREE INVEST: populate revenue, des investissements financiers libres et investir/retirer le solde net du cash flow de l'année
             try manageYearlyNetCashFlow(of                  : patrimoine,

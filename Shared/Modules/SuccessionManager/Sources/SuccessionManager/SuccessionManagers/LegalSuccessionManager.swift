@@ -10,7 +10,7 @@ import Foundation
 import FiscalModel
 import Ownership
 import Succession
-import ModelEnvironment
+import FiscalModel
 import PersonModel
 import PatrimoineModel
 
@@ -28,12 +28,12 @@ public struct LegalSuccessionManager {
     ///   - patrimoine: patrimoine
     ///   - decedent: défunt
     ///   - year: année du décès
-    ///   - model: modèle d'envrionment à utiliser
+    ///   - fiscalModel: modèle fiscal à utiliser
     /// - Returns: Succession légale du défunt incluant la table des héritages et droits de succession pour chaque héritier
-    public func legalSuccession(of decedentName : String,
-                                with patrimoine : Patrimoin,
-                                atEndOf year    : Int,
-                                using model     : Model) -> Succession {
+    public func legalSuccession(of decedentName   : String,
+                                with patrimoine   : Patrimoin,
+                                atEndOf year      : Int,
+                                using fiscalModel : Fiscal.Model) -> Succession {
 
         var inheritances      : [Inheritance] = []
         var inheritanceShares : (forChild: Double, forSpouse: Double) = (0, 0)
@@ -65,7 +65,7 @@ public struct LegalSuccessionManager {
                 .fiscalOption
                 .sharedValues(nbChildren        : family.nbOfChildrenAlive(atEndOf: year),
                               spouseAge         : conjointSurvivant.age(atEndOf: year),
-                              demembrementModel : model.fiscalModel.demembrement)
+                              demembrementModel : fiscalModel.demembrement)
             
             // calculer la part d'héritage du conjoint
             let share = inheritanceShares.forSpouse
@@ -106,7 +106,7 @@ public struct LegalSuccessionManager {
                     let brut  = totalTaxableInheritance * share
                     
                     // caluler les droits de succession du conjoint
-                    let inheritance = try! model.fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brut)
+                    let inheritance = try! fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brut)
                     
                     //                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded()) (\(share.rounded())%)")
                     //                    print("    Taxe = \(inheritance.taxe.rounded())")

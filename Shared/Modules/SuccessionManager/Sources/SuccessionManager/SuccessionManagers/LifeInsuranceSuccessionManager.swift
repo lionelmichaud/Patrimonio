@@ -10,7 +10,7 @@ import Foundation
 import Ownership
 import AssetsModel
 import Succession
-import ModelEnvironment
+import FiscalModel
 import PersonModel
 import PatrimoineModel
 
@@ -24,14 +24,14 @@ struct LifeInsuranceSuccessionManager {
     ///   - patrimoine: patrimoine
     ///   - decedent: défunt
     ///   - year: année du décès
-    ///   - model: modèle d'envrionment à utiliser
+    ///   - fiscalModel: modèle fiscal à utiliser
     /// - Returns: Succession du défunt incluant la table des héritages et droits de succession pour chaque héritier
-    func lifeInsuranceSuccession(of decedentName : String,
+    func lifeInsuranceSuccession(of decedentName   : String,
                                  with patrimoine   : Patrimoin,
-                                 spouseName      : String?,
-                                 childrenName    : [String]?,
-                                 atEndOf year    : Int,
-                                 using model     : Model) -> Succession {
+                                 spouseName        : String?,
+                                 childrenName      : [String]?,
+                                 atEndOf year      : Int,
+                                 using fiscalModel : Fiscal.Model) -> Succession {
         var inheritances     : [Inheritance]     = []
         var massesSuccession : NameValueDico = [:]
         
@@ -79,10 +79,10 @@ struct LifeInsuranceSuccessionManager {
                 var heritage = (netAmount: 0.0, taxe: 0.0)
                 if member is Adult {
                     // le conjoint
-                    heritage = model.fiscalModel.lifeInsuranceInheritance.heritageToConjoint(partSuccession: masse)
+                    heritage = fiscalModel.lifeInsuranceInheritance.heritageToConjoint(partSuccession: masse)
                 } else {
                     // les enfants
-                    heritage = try! model.fiscalModel.lifeInsuranceInheritance.heritageOfChild(partSuccession: masse)
+                    heritage = try! fiscalModel.lifeInsuranceInheritance.heritageOfChild(partSuccession: masse)
                 }
                 //                print("  Part d'héritage de \(member.displayName) = \(masse.rounded()) (\((masse/totalTaxableInheritanceValue*100.0).rounded()) %)")
                 //                print("    Taxe = \(heritage.taxe.rounded())")

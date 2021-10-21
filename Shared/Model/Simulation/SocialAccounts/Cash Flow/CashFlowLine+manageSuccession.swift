@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import ModelEnvironment
+import FiscalModel
 import PersonModel
 import PatrimoineModel
 import FamilyModel
@@ -26,12 +26,12 @@ extension CashFlowLine {
     ///   - run: numéro du run en cours de calcul
     ///   - family: la famille dont il faut faire le bilan
     ///   - patrimoine: le patrimoine de la famille
-    mutating func manageSuccession(run             : Int,
-                                   of family       : Family,
-                                   with patrimoine : Patrimoin,
-                                   using model     : Model) {
+    ///   - fiscalModel: modèle fiscal
+    mutating func manageSuccession(run               : Int,
+                                   with patrimoine   : Patrimoin,
+                                   using fiscalModel : Fiscal.Model) {
         var successionManager = SuccessionManager(with    : patrimoine,
-                                                  using   : model,
+                                                  using   : fiscalModel,
                                                   atEndOf : year,
                                                   run     : run)
 
