@@ -30,8 +30,7 @@ extension CashFlowLine {
                                    of family       : Family,
                                    with patrimoine : Patrimoin,
                                    using model     : Model) {
-        var successionManager = SuccessionManager(of      : family,
-                                                  with    : patrimoine,
+        var successionManager = SuccessionManager(with    : patrimoine,
                                                   using   : model,
                                                   atEndOf : year,
                                                   run     : run)

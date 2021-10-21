@@ -48,8 +48,7 @@ public struct SuccessionManager {
     ///   - model: model à utiliser (partie fiscale)
     ///   - year: année des décès
     ///   - run: numéro du run en cours de calcul
-    public init(of family       : Family,
-                with patrimoine : Patrimoin,
+    public init(with patrimoine : Patrimoin,
                 using model     : Model,
                 atEndOf year    : Int,
                 run             : Int) {
