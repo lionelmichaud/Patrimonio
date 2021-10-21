@@ -121,7 +121,7 @@ struct SuccessorsDisclosureGroup: View {
     var body: some View {
         DisclosureGroup(
             content: {
-                ForEach(inheritances, id: \.personName) { inheritence in
+                ForEach(inheritances, id: \.successorName) { inheritence in
                     SuccessorGroupBox(inheritence: inheritence)
                 }
             },

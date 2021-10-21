@@ -26,19 +26,19 @@ struct LifeInsuranceSuccessionManager {
     ///   - year: année du décès
     ///   - model: modèle d'envrionment à utiliser
     /// - Returns: Succession du défunt incluant la table des héritages et droits de succession pour chaque héritier
-    func lifeInsuranceSuccession(in patrimoine : Patrimoin,
-                                 of decedent   : Person,
-                                 spouseName    : String?,
-                                 childrenName  : [String]?,
-                                 atEndOf year  : Int,
-                                 using model   : Model) -> Succession {
+    func lifeInsuranceSuccession(of decedentName : String,
+                                 with patrimoine   : Patrimoin,
+                                 spouseName      : String?,
+                                 childrenName    : [String]?,
+                                 atEndOf year    : Int,
+                                 using model     : Model) -> Succession {
         var inheritances     : [Inheritance]     = []
         var massesSuccession : NameValueDico = [:]
         
         guard let family = Patrimoin.familyProvider else {
             return Succession(kind         : .lifeInsurance,
                               yearOfDeath  : year,
-                              decedentName : decedent.displayName,
+                              decedentName : decedentName,
                               taxableValue : 0,
                               inheritances : [])
         }
@@ -49,7 +49,7 @@ struct LifeInsuranceSuccessionManager {
             .freeInvests
             .items
             .forEach { invest in
-                lifeInsuranceSuccessionMasses(of               : decedent,
+                lifeInsuranceSuccessionMasses(of               : decedentName,
                                               spouseName       : spouseName,
                                               childrenName     : childrenName,
                                               for              : invest,
@@ -62,7 +62,7 @@ struct LifeInsuranceSuccessionManager {
             .periodicInvests
             .items
             .forEach { invest in
-                lifeInsuranceSuccessionMasses(of               : decedent,
+                lifeInsuranceSuccessionMasses(of               : decedentName,
                                               spouseName       : spouseName,
                                               childrenName     : childrenName,
                                               for              : invest,
@@ -74,7 +74,7 @@ struct LifeInsuranceSuccessionManager {
         let totalTaxableInheritanceValue = massesSuccession.values.sum()
         
         // pour chaque membre de la famille autre que le défunt
-        for member in family.members.items where member != decedent {
+        for member in family.members.items where member.displayName != decedentName {
             if let masse = massesSuccession[member.displayName] {
                 var heritage = (netAmount: 0.0, taxe: 0.0)
                 if member is Adult {
@@ -98,7 +98,7 @@ struct LifeInsuranceSuccessionManager {
         //        print("  Taxe totale  = ", inheritances.sum(for: \.tax).rounded())
         return Succession(kind         : .lifeInsurance,
                           yearOfDeath  : year,
-                          decedentName : decedent.displayName,
+                          decedentName : decedentName,
                           taxableValue : totalTaxableInheritanceValue,
                           inheritances : inheritances)
     }
@@ -119,15 +119,13 @@ struct LifeInsuranceSuccessionManager {
     ///   - year: année du décès - 1
     ///   - massesSuccession: (héritier, base taxable)
     fileprivate func lifeInsuranceSuccessionMasses
-    (of decedent      : Person,
+    (of decedentName  : String,
      spouseName       : String?,
      childrenName     : [String]?,
      for invest       : FinancialEnvelopP,
      atEndOf year     : Int,
      massesSuccession : inout NameValueDico) {
         guard invest.clause != nil else { return }
-        
-        let decedentName = decedent.displayName
         
         // on a affaire à une assurance vie
         // masse successorale pour cet investissement
@@ -250,12 +248,12 @@ struct LifeInsuranceSuccessionManager {
     ///   - decedent: défunt
     ///   - year: année du décès - 1
     /// - Returns: masse totale d'assurance vie de la succession d'une personne
-    fileprivate func lifeInsuraceInheritanceValue(in patrimoine : Patrimoin,
-                                                  of decedent   : Person,
-                                                  atEndOf year  : Int) -> Double {
+    fileprivate func lifeInsuraceInheritanceValue(in patrimoine   : Patrimoin,
+                                                  of decedentName : String,
+                                                  atEndOf year    : Int) -> Double {
         var taxable                                             : Double = 0
         patrimoine.forEachOwnable { ownable in
-            taxable += ownable.ownedValue(by                : decedent.displayName,
+            taxable += ownable.ownedValue(by                : decedentName,
                                           atEndOf           : year,
                                           evaluationContext : .lifeInsuranceSuccession)
         }

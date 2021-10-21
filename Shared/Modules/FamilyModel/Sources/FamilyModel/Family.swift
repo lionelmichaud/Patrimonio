@@ -108,19 +108,20 @@ public final class Family: ObservableObject {
             }
     }
     
-    /// Retourne la liste des personnes décédées dans l'année
+    /// Retourne la liste des noms des personnes décédées dans l'année
     /// - Parameter year: année où l'on recherche des décès
     /// - Returns: liste des personnes décédées dans l'année
-    public func deceasedAdults(during year: Int) -> [Person] {
-        members.items.compactMap { member in
-            if member is Adult && member.isDeceased(during: year) {
-                // un décès est survenu
-                return member
-            } else {
-                return nil
+    public func deceasedAdults(during year: Int) -> [String] {
+        members.items
+            .sorted(by: \.birthDate)
+            .compactMap { member in
+                if member is Adult && member.isDeceased(during: year) {
+                    // un décès est survenu
+                    return member.displayName
+                } else {
+                    return nil
+                }
             }
-        }
-        .sorted(by: \.birthDate)
     }
     
     /// Revenus du tavail cumulés de la famille durant l'année
@@ -417,12 +418,18 @@ extension Family: AdultSpouseProviderP {
     /// - Returns: époux  (s'il existe)
     /// - Warning: Ne vérifie pas que l'époux est vivant
     public func spouseOf(_ member: Adult) -> Adult? {
-        for person in members.items {
-            if let adult = person as? Adult {
-                if adult != member { return adult }
-            }
-        }
-        return nil
+        return members.items
+            .first { person in
+                person is Adult && person != member
+            } as? Adult
+    }
+    
+    public func spouseNameOf(_ memberName: String) -> String? {
+        return members.items
+            .first { person in
+                person is Adult && person.displayName != memberName
+            }?
+            .displayName
     }
 }
 

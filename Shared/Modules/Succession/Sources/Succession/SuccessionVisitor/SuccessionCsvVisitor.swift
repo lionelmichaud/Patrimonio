@@ -84,7 +84,7 @@ public class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
             header2.append("Net(k€)" + separator)
         }
         // construire table
-        table.append(element.personName + separator)
+        table.append(element.successorName + separator)
         table.append(String((element.percent * 100).percentString()) + separator)
         table.append(String(Int(element.brut/1000)) + separator)
         table.append(String(Int(-element.tax/1000)) + separator)

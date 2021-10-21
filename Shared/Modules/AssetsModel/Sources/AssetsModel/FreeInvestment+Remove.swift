@@ -93,9 +93,9 @@ extension FreeInvestement {
     
     /// Effectuer un retrait de `netAmount` NET de charges sociales pour le compte d'un débiteur nommé `name`.
     /// - Note:
-    ///     Si `name` = nil : on retire le montant indépendament de tout droit de propriété
+    ///     Si `name` = "" : on retire le montant indépendament de tout droit de propriété
     ///
-    ///     Si `name` != nil : on tient compte des droit de propriété de `name` sur le bien:
+    ///     Si `name` != "" : on tient compte des droit de propriété de `name` sur le bien:
     ///     - Le retrait n'est alors autorisé que si `name` possède une part de la PP du bien.
     ///     - Autorise le retrait dans la limite de la part de propriété de `name`.
     ///     - Met à jour la part de propriété de `name` en conséquence.
@@ -115,7 +115,11 @@ extension FreeInvestement {
         netInterests     : Double,
         taxableInterests : Double,
         socialTaxes      : Double) {
-        let zero = (revenue: 0.0, interests: 0.0, netInterests: 0.0, taxableInterests: 0.0, socialTaxes: 0.0)
+        let zero = (revenue          : 0.0,
+                    interests        : 0.0,
+                    netInterests     : 0.0,
+                    taxableInterests : 0.0,
+                    socialTaxes      : 0.0)
         
         guard currentState.value > 0.0 else {
             // le compte est vide: on ne retire rien
@@ -150,7 +154,8 @@ extension FreeInvestement {
                 }
                 updateOwnership = false
                 updateInterests = true
-                // part d'intérêts qui revient à `name` compte tenu de sa part d'UF
+                // part d'intérêts annuel qui revient à `name` compte tenu de sa part d'UF
+                // c'est le montant maximum du retrait de cash possible en fin d'année
                 maxPermitedValue = ownership.ownedRevenue(by        : name,
                                                           ofRevenue : interest)
                 
@@ -175,7 +180,7 @@ extension FreeInvestement {
                 
             case (true, false, false, _):
                 // on doit tenir compte des droits de propriété de `name` sur le bien
-                // 'name' n'est ni UF ni PP => on ne retire rien
+                // 'name' n'est ni UF ni PP => on ne peut pas effectuer de retrait de cash
                 return zero
                 
             default:

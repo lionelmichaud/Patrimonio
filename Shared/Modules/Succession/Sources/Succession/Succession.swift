@@ -35,7 +35,7 @@ public struct Succession: Identifiable {
     // dictionnaire des héritages net reçu par chaque héritier dans une succession
     var successorsInheritedNetValue: [String: Double] {
         inheritances.reduce(into: [:]) { counts, inheritance in
-            counts[inheritance.personName, default: 0] += inheritance.net
+            counts[inheritance.successorName, default: 0] += inheritance.net
         }
     }
     
@@ -106,7 +106,7 @@ public struct Inheritance {
     // MARK: - Propeties
     
     // héritier
-    public var personName: String
+    public var successorName: String
     // fraction de la masse successorale reçue en héritage
     public var percent : Double // [0, 1]
     public var brut    : Double
@@ -120,7 +120,7 @@ public struct Inheritance {
                 brut       : Double,
                 net        : Double,
                 tax        : Double) {
-        self.personName = personName
+        self.successorName = personName
         self.percent = percent
         self.brut = brut
         self.net = net
@@ -135,7 +135,7 @@ extension Inheritance: SuccessionCsvVisitableP {
 extension Inheritance: CustomStringConvertible {
     public var description: String {
         """
-        Héritier:      \(personName)
+        Héritier:      \(successorName)
         Pourcentage:   \(percent * 100) %
         Héritage Brut: \(brut.k€String)
         Héritage Net:  \(net.k€String)

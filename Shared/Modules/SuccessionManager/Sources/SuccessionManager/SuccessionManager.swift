@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 import ModelEnvironment
 import Succession
 import NamedValue
@@ -15,11 +16,13 @@ import PersonModel
 import FamilyModel
 import SimulationLogger
 
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.SuccessionManager")
+
 public struct SuccessionManager {
     
     // MARK: - Properties
 
-    private var family     : Family
+    private var family     : FamilyProviderP
     private var patrimoine : Patrimoin
     private var model      : Model
     private var year       : Int
@@ -50,8 +53,12 @@ public struct SuccessionManager {
                 using model     : Model,
                 atEndOf year    : Int,
                 run             : Int) {
-        self.family           = family
+        guard let familyProvider = Patrimoin.familyProvider else {
+            customLog.log(level: .fault, "init: Patrimoin.familyProvider non initialisé")
+            fatalError()
+        }
         self.patrimoine       = patrimoine
+        self.family           = familyProvider
         self.model            = model
         self.year             = year
         self.run              = run
@@ -80,42 +87,42 @@ public struct SuccessionManager {
         lifeInsSuccessionsTaxes = []
 
         // (1) identification des personnes décédées dans l'année
-        let decedents = family.deceasedAdults(during: year)
+        let adultDecedentsNames = family.deceasedAdults(during: year)
         
-        guard decedents.isNotEmpty else { return }
+        guard adultDecedentsNames.isNotEmpty else { return }
         
         // (2) pour chaque défunt
-        decedents.forEach { person in
+        adultDecedentsNames.forEach { adultDecedentName in
             SimulationLogger.shared.log(run      : run,
                                         logTopic : .lifeEvent,
-                                        message  : "Décès de \(person.displayName) en \(year)")
-            guard let adultDecedent = person as? Adult else { return }
+                                        message  : "Décès de \(adultDecedentName) en \(year)")
             
             // calculer les successions et les droits de successions légales
             // sans exercer de clause à option
             let legalSuccession =
-                legalSuccessionManager.legalSuccession(in      : patrimoine,
-                                                       of      : adultDecedent,
+                legalSuccessionManager.legalSuccession(of      : adultDecedentName,
+                                                       with    : patrimoine,
                                                        atEndOf : year,
                                                        using   : model)
             
             // calculer les transmissions et les droits de transmission assurances vies
             // sans exercer de clause à option
             var lifeInsSuccession =
-                lifeInsuranceSuccessionManager.lifeInsuranceSuccession(in           : patrimoine,
-                                                                       of           : adultDecedent,
-                                                                       spouseName   : family.spouseOf(adultDecedent)?.displayName,
-                                                                       childrenName : family.childrenAliveName(atEndOf : year),
-                                                                       atEndOf      : year,
-                                                                       using        : model)
+                lifeInsuranceSuccessionManager.lifeInsuranceSuccession(
+                    of           : adultDecedentName,
+                    with         : patrimoine,
+                    spouseName   : family.spouseNameOf(adultDecedentName),
+                    childrenName : family.childrenAliveName(atEndOf : year),
+                    atEndOf      : year,
+                    using        : model)
             
             // au premier décès parmis les adultes:
             // s'assurer que les enfants peuvent payer les droits de succession
-            if adultDecedent == decedents.first &&
+            if adultDecedentName == adultDecedentsNames.first &&
                 family.nbOfAdults == 2 &&
                 (family.nbOfAdultAlive(atEndOf: year) == 1 ||
-                    family.nbOfAdultAlive(atEndOf: year) == 0 && decedents.count == 2) {
-                makeSureChildrenCanPaySuccessionTaxes(of                : adultDecedent,
+                    family.nbOfAdultAlive(atEndOf: year) == 0 && adultDecedentsNames.count == 2) {
+                makeSureChildrenCanPaySuccessionTaxes(of                : adultDecedentName,
                                                       legalSuccession   : legalSuccession,
                                                       lifeInsSuccession : &lifeInsSuccession)
             }
@@ -126,7 +133,7 @@ public struct SuccessionManager {
             // transférer les biens d'un défunt vers ses héritiers
             ownershipManager.transferOwnershipOf(assets      : &patrimoine.assets,
                                                  liabilities : &patrimoine.liabilities,
-                                                 of          : adultDecedent)
+                                                 of          : adultDecedentName)
         }
         
         // (3) Cummuler les droits de successions/transmissions de l'année
@@ -134,7 +141,7 @@ public struct SuccessionManager {
     }
 
     fileprivate func makeSureChildrenCanPaySuccessionTaxes
-    (of adultDecedent  : Adult,
+    (of decedentName   : String,
      legalSuccession   : Succession,
      lifeInsSuccession : inout Succession) {
         // calculer les taxes dûes par les enfants au premier décès
@@ -144,26 +151,48 @@ public struct SuccessionManager {
 
         // si nécessaire et si possible: l'adulte survivant exerce une option de clause d'AV
         // pour permettre le payement des droits de succession des enfants par les enfants
-        let adultSurvivor = family.adults.first { $0.displayName != adultDecedent.displayName}!
-        print("> Adulte décédé   : \(adultDecedent.displayName)")
-        print("> Adulte survivant: \(adultSurvivor.displayName)")
+        let adultSurvivorName = family.adultsName.first { $0 != decedentName}!
+        print("> Adulte décédé   : \(decedentName)")
+        print("> Adulte survivant: \(adultSurvivorName)")
         print("> Droits de succession des enfants:\n \(childrenInheritancesTaxe)\n Somme = \(childrenInheritancesTaxe.values.sum().k€String)")
-        ownershipManager.modifyLifeInsuranceClauseIfNecessaryAndPossible(
-            of              : adultDecedent,
-            conjoint        : adultSurvivor,
+        try! ownershipManager.modifyLifeInsuranceClauseIfNecessaryAndPossible(
+            of              : decedentName,
+            conjointName    : adultSurvivorName,
             withAssets      : &patrimoine.assets,
             withLiabilities : patrimoine.liabilities,
             toPayFor        : childrenInheritancesTaxe)
-
+        
         // recalculer les transmissions et les droits de transmission assurances vies
         // après avoir éventuellement exercé une clause à option
         lifeInsSuccession =
-        lifeInsuranceSuccessionManager.lifeInsuranceSuccession(in           : patrimoine,
-                                                               of           : adultDecedent,
-                                                               spouseName   : family.spouseOf(adultDecedent)?.displayName,
-                                                               childrenName : family.childrenAliveName(atEndOf : year),
-                                                               atEndOf      : year,
-                                                               using        : model)
+            lifeInsuranceSuccessionManager.lifeInsuranceSuccession(
+                of           : decedentName,
+                with           : patrimoine,
+                spouseName   : family.spouseNameOf(decedentName),
+                childrenName : family.childrenAliveName(atEndOf : year),
+                atEndOf      : year,
+                using        : model)
+    }
+    
+    /// Calculer le total des taxes dûes par les enfants à partir des successions
+    /// - Returns: total des taxes dûes par les enfants [Nom; Taxe totale à payer]
+    func totalChildrenInheritanceTaxe
+    (legalSuccession   : Succession,
+     lifeInsSuccession : Succession) -> NameValueDico {
+        var childrenTaxes = NameValueDico()
+        family.childrenName.forEach { childName in
+            childrenTaxes[childName] = 0
+            /// successions légales
+            /// succession des assurances vies
+            [legalSuccession, lifeInsSuccession].forEach { succession in
+                succession.inheritances.forEach { inheritance in
+                    if inheritance.successorName == childName {
+                        childrenTaxes[childName]! += inheritance.tax
+                    }
+                }
+            }
+        }
+        return childrenTaxes
     }
     
     /// Ajoute les droits de succession  aux taxes de l'année de succession.
@@ -176,7 +205,7 @@ public struct SuccessionManager {
             var taxe: Double = 0
             legalSuccessions.forEach { succession in
                 succession.inheritances.forEach { inheritance in
-                    if inheritance.personName == member.displayName {
+                    if inheritance.successorName == member.displayName {
                         taxe += inheritance.tax
                     }
                 }
@@ -189,7 +218,7 @@ public struct SuccessionManager {
             taxe = 0
             lifeInsSuccessions.forEach { succession in
                 succession.inheritances.forEach { inheritance in
-                    if inheritance.personName == member.displayName {
+                    if inheritance.successorName == member.displayName {
                         taxe += inheritance.tax
                     }
                 }
@@ -198,26 +227,5 @@ public struct SuccessionManager {
                 .append((name  : member.displayName,
                          value : taxe))
         }
-    }
-    
-    /// Calculer le total des taxes dûes par les enfants
-    /// - Returns: total des taxes dûes par les enfants
-    fileprivate func totalChildrenInheritanceTaxe
-    (legalSuccession   : Succession,
-     lifeInsSuccession : Succession) -> NameValueDico {
-        var childrenTaxes = NameValueDico()
-        family.children.forEach { child in
-            childrenTaxes[child.displayName] = 0
-            /// successions légales
-            /// succession des assurances vies
-            [legalSuccession, lifeInsSuccession].forEach { succession in
-                succession.inheritances.forEach { inheritance in
-                    if inheritance.personName == child.displayName {
-                        childrenTaxes[child.displayName]! += inheritance.tax
-                    }
-                }
-            }
-        }
-        return childrenTaxes
     }
 }

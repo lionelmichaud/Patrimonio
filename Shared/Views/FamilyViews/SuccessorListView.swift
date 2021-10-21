@@ -15,7 +15,7 @@ struct SuccessorsListView: View {
 
     var body: some View {
         List {
-            ForEach(inheritances, id: \.personName) { inheritence in
+            ForEach(inheritances, id: \.successorName) { inheritence in
                 SuccessorGroupBox(inheritence: inheritence)
             }
         }
@@ -30,7 +30,7 @@ struct SuccessorGroupBox : View {
     @EnvironmentObject private var family: Family
 
     var body: some View {
-        GroupBox(label: groupBoxLabel(personName: inheritence.personName).font(.headline)) {
+        GroupBox(label: groupBoxLabel(personName: inheritence.successorName).font(.headline)) {
             Group {
                 //                PercentView(label   : "Part de la succession",
                 //                            percent : inheritence.percent)

@@ -19,35 +19,38 @@ extension OwnershipManager {
     ///   - patrimoine: le patrimoine
     ///   - decedent: défunt
     ///   - year: année du décès
-    func transferOwnershipOf(assets      : inout Assets,
-                             liabilities : inout Liabilities,
-                             of decedent : Adult) {
+    func transferOwnershipOf(assets          : inout Assets,
+                             liabilities     : inout Liabilities,
+                             of decedentName : String) {
         guard let family = Patrimoin.familyProvider else {
             customLogOwnershipManager.log(level: .fault, "La famille n'est pas définie dans Patrimoin.transferOwnershipOf")
             fatalError("La famille n'est pas définie dans Patrimoin.transferOwnershipOf")
         }
+        
         // rechercher un conjont survivant
         var spouseName         : String?
         var spouseFiscalOption : InheritanceFiscalOption?
-        if let spouse = family.spouseOf(decedent) {
+        if let _spouseName = family.spouseNameOf(decedentName),
+           let spouse = family.member(withName: _spouseName) as? Adult {
             if spouse.isAlive(atEndOf: year) {
-                spouseName         = spouse.displayName
+                spouseName = _spouseName
                 spouseFiscalOption = spouse.fiscalOption
             }
         }
+        
         // rechercher des enfants héritiers vivants
         let chidrenNames = family.childrenAliveName(atEndOf: year)
-
+        
         // leur transférer la propriété de tous les biens détenus par le défunt
         // transférer les actifs
         transferOwnershipOf(assets             : &assets,
-                            decedentName       : decedent.displayName,
+                            decedentName       : decedentName,
                             chidrenNames       : chidrenNames,
                             spouseName         : spouseName,
                             spouseFiscalOption : spouseFiscalOption)
         // transférer les passifs
         transferOwnershipOf(liabilities        : &liabilities,
-                            decedentName       : decedent.displayName,
+                            decedentName       : decedentName,
                             chidrenNames       : chidrenNames,
                             spouseName         : spouseName,
                             spouseFiscalOption : spouseFiscalOption)

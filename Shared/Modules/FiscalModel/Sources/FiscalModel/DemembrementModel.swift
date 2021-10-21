@@ -58,7 +58,7 @@ public struct DemembrementModel: Codable, DemembrementProviderP {
     /// - Parameters:
     ///   - assetValue: valeur du bien en pleine propriété
     ///   - usufructuary: age de l'usufruitier
-    /// - Returns: valeurs de l'usufruit et de la nue-propriété
+    /// - Returns: valeurs de l'usufruit et de la nue-propriété [0, 1]; [0, 1]
     public func demembrement(of assetValue   : Double,
                              usufructuaryAge : Int) throws
     -> (usufructValue : Double,

@@ -12,6 +12,7 @@ import LifeExpense
 
 public protocol AdultSpouseProviderP {
     func spouseOf(_ member: Adult) -> Adult?
+    func spouseNameOf(_ memberName: String) -> String?
 }
 
 public typealias AdultRelativesProviderP = MembersCountProviderP & AdultSpouseProviderP

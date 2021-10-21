@@ -64,7 +64,7 @@ public struct KpiComputer {
         var taxes = 0.0
         for succession in allSuccessions {
             for inheritance in succession.inheritances {
-                if (family.member(withName: inheritance.personName) as? Child) != nil {
+                if (family.member(withName: inheritance.successorName) as? Child) != nil {
                     taxes += inheritance.tax
                 }
             }
@@ -76,7 +76,7 @@ public struct KpiComputer {
         var nets = 0.0
         for succession in allSuccessions {
             for inheritance in succession.inheritances {
-                if (family.member(withName: inheritance.personName) as? Child) != nil {
+                if (family.member(withName: inheritance.successorName) as? Child) != nil {
                     nets += inheritance.net
                 }
             }

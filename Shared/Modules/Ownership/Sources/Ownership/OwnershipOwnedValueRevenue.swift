@@ -11,7 +11,8 @@ extension Ownership {
     /// Calcule la part d'un revenu `totalRevenue`qui revient à une personne nommée `ownerName`
     /// en fonction de ses droits de propriété sur le bien.
     /// - Note:
-    ///     Pour une personne et un bien donné Part =
+    ///     Pour une personne et un bien donné
+    ///     ownedRevenue =
     ///     * Bien non démembré = part de la valeur actuelle détenue en PP par la personne
     ///     * Bien démembré        = part de la valeur actuelle détenue en UF par la personne
     /// - Parameters:
@@ -32,7 +33,8 @@ extension Ownership {
     /// Calcule la part d'un revenu `totalRevenue`qui revient à un groupe de personnes
     /// nommées `ownersName` en fonction de leur droit respectif de propriété sur le bien.
     /// - Note:
-    ///     Pour une personne et un bien donné Part =
+    ///     Pour une personne et un bien donné
+    ///     ownedRevenue =
     ///     * Bien non démembré = part de la valeur actuelle détenue en PP par la personne
     ///     * Bien démembré        = part de la valeur actuelle détenue en UF par la personne
     /// - Parameters:
@@ -62,7 +64,7 @@ extension Ownership {
         }
     }
     
-    /// Calcule la valeur d'un bien (de valeur totale `totalValue) possédée par un personne donnée
+    /// Calcule la valeur d'un bien (de valeur totale `totalValue`) possédée par un personne donnée
     /// à une date donnée `year` et selon le `evaluationContext` patrimonial, IFI, ISF, succession...
     /// - Parameters:
     ///   - ownerName: nom de la personne recherchée
@@ -77,7 +79,7 @@ extension Ownership {
         if isDismembered {
             switch evaluationContext {
                 case .ifi, .isf :
-                    // calcul de la part de pleine-propiété détenue
+                    // calcul de la part d'usufruit détenue
                     return usufructOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
                     
                 case .legalSuccession, .lifeInsuranceSuccession, .patrimoine:
@@ -100,20 +102,20 @@ extension Ownership {
                         bareValue     += nueProp
                     }
                     
-                    // calcul de la part de nue-propriété détenue
+                    // calcul de la valeur de la part de nue-propriété détenue
                     if let owner = bareOwners[ownerName] {
                         // on a trouvé un nue-propriétaire
                         value += owner.ownedValue(from: bareValue)
                     }
                     
-                    // calcul de la part d'usufuit détenue
+                    // calcul de la valeur de la part d'usufuit détenue
                     if let owner = usufructOwners[ownerName] {
-                        // on a trouvé un usufruitier
-                        // prorata détenu par l'usufruitier
+                        // on a trouvé un usufruitier nommé "ownerName"
+                        // prorata de l'UF détenu par l'usufruitier
                         let ownedValue = totalValue * owner.fraction / 100.0
-                        // valeur de son usufuit
                         let usufruiterAge = ageOf!(owner.name, year)
                         
+                        // valeur de son usufuit
                         value += try! Ownership
                             .demembrementProviderP
                             .demembrement(of              : ownedValue,

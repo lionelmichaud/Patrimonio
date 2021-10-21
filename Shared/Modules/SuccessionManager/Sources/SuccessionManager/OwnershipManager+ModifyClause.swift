@@ -17,18 +17,18 @@ extension OwnershipManager {
     
     /// Modifie une ou plusieur clauses d'AV pour permettre à chaque enfant de payer ses droits de succession
     /// - Parameters:
-    ///   - decedent: adulte décédé
+    ///   - decedentName: adulte décédé
     ///   - conjoint: l'adulte survivant au décès du premier adulte
     ///   - assets: Actifs de la famille
     ///   - liabilities: Passifs de la famille
     ///   - taxes: les droits de succession à payer par chaque enfant
     func modifyLifeInsuranceClauseIfNecessaryAndPossible
-    (of decedent                 : Adult,
-     conjoint                    : Adult,
+    (of decedentName             : String,
+     conjointName                : String,
      withAssets assets           : inout Assets,
      withLiabilities liabilities : Liabilities,
-     toPayFor taxes              : NameValueDico) {
-        var missingCapitals = missingCapital(of              : decedent,
+     toPayFor taxes              : NameValueDico) throws {
+        var missingCapitals = missingCapital(of              : decedentName,
                                              withAssets      : assets,
                                              withLiabilities : liabilities,
                                              toPayFor        : taxes)
@@ -44,16 +44,16 @@ extension OwnershipManager {
             .freeInvests
             .items
             .sort {
-                $0.ownedValue(by: decedent.displayName, atEndOf: year - 1, evaluationContext: .patrimoine) <
-                    $1.ownedValue(by: decedent.displayName, atEndOf: year - 1, evaluationContext: .patrimoine)
+                $0.ownedValue(by: decedentName, atEndOf: year - 1, evaluationContext: .patrimoine) <
+                    $1.ownedValue(by: decedentName, atEndOf: year - 1, evaluationContext: .patrimoine)
             }
         
         for idx in assets.freeInvests.items.indices {
             //print(String(describing: patrimoine.assets.freeInvests.items[idx]))
-            modifyClause(of           : &assets.freeInvests.items[idx],
-                         toGet        : &missingCapitals,
-                         decedentName : decedent.displayName,
-                         conjointName : conjoint.displayName)
+            try modifyClause(of           : &assets.freeInvests.items[idx],
+                             toGet        : &missingCapitals,
+                             decedentName : decedentName,
+                             conjointName : conjointName)
             
             // arrêter quand les capitaux des enfants seront suffisants pour payer
             if missingCapitals.values.sum() == 0.0 { break }
@@ -62,7 +62,7 @@ extension OwnershipManager {
         if missingCapitals.values.sum() > 0 {
             SimulationLogger.shared.log(run      : run,
                                         logTopic : .other,
-                                        message  : "Les enfants ne peuvent pas payer les droits de succession au décès de \(decedent.displayName) en \(year)")
+                                        message  : "Les enfants ne peuvent pas payer les droits de succession au décès de \(decedentName) en \(year)")
         }
     }
     
@@ -76,13 +76,13 @@ extension OwnershipManager {
     ///   - year: l'année du décès
     /// - Returns: capitaux manquant à chaque enfant pour payer ses droits de succcession
     fileprivate func missingCapital
-    (of decedent                 : Adult,
+    (of decedentName             : String,
      withAssets assets           : Assets,
      withLiabilities liabilities : Liabilities,
      toPayFor taxes              : NameValueDico) -> NameValueDico {
         // cumuler les valeurs d'actif net que chaque enfant peut vendre après transmission
         let childrenSellableCapital =
-            childrenSellableCapitalAfterInheritance(receivedFrom    : decedent,
+            childrenSellableCapitalAfterInheritance(receivedFrom    : decedentName,
                                                     withAssets      : assets,
                                                     withLiabilities : liabilities)
         print("> Capital cessible détenu par les enfants après succession:\n \(childrenSellableCapital) \n Total = \(childrenSellableCapital.values.sum().k€String)")
@@ -107,7 +107,7 @@ extension OwnershipManager {
     ///   - year: l'année du décès
     /// - Returns: cumul des valeurs d'actif net que les enfants peuvent vendre après transmission
     fileprivate func childrenSellableCapitalAfterInheritance
-    (receivedFrom decedent       : Adult,
+    (receivedFrom decedentName   : String,
      withAssets assets           : Assets,
      withLiabilities liabilities : Liabilities) -> NameValueDico {
         // simuler les transmisssions pour calculer ce que les enfants
@@ -116,7 +116,7 @@ extension OwnershipManager {
         var liabilitiesCopy = liabilities
         transferOwnershipOf(assets      : &assetsCopy,
                             liabilities : &liabilitiesCopy,
-                            of          : decedent)
+                            of          : decedentName)
         
         // cumuler les actifs nets dont les enfants sont PP après transmission
         return childrenNetSellableAssets(withAssets      : assetsCopy,
@@ -161,7 +161,7 @@ extension OwnershipManager {
     fileprivate func modifyClause(of freeInvest        : inout FreeInvestement,
                                   toGet missingCapital : inout NameValueDico,
                                   decedentName         : String,
-                                  conjointName         : String) {
+                                  conjointName         : String) throws {
         // ne considérer que :
         // - les assurance vie
         // - avec clause à option
@@ -208,7 +208,7 @@ extension OwnershipManager {
                 guard newClause.isValid else {
                     let invalid = newClause
                     customLogOwnershipManager.log(level: .error, "'modifyClause' a généré une 'clause' invalide \(invalid, privacy: .public)")
-                    fatalError("'modifyClause' a généré une 'clause' invalide \(invalid)")
+                    throw OwnershipError.invalidOwnership
                 }
 
                 freeInvest.type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,

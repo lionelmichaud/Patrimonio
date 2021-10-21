@@ -264,12 +264,12 @@ private struct InheritanceSectionView: View {
                                atEndOf year : Int,
                                decedent     : Adult) -> some View {
         let legalSuccessionManager = LegalSuccessionManager()
-        let succession = legalSuccessionManager.legalSuccession(in      : patrimoine,
-                                                                of      : decedent,
+        let succession = legalSuccessionManager.legalSuccession(of      : decedent.displayName,
+                                                                with    : patrimoine,
                                                                 atEndOf : year,
                                                                 using   : model)
         let taxableInheritanceValue = legalSuccessionManager.taxableInheritanceValue(in: patrimoine,
-                                                                                     of: decedent,
+                                                                                     of: decedent.displayName,
                                                                                      atEndOf: year)
         
         return DisclosureGroup(

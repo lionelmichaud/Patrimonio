@@ -27,14 +27,20 @@ class OwnershipTests: XCTestCase {
                 return 85 + (year - 2020)
         }
     }
+    static var usufruct = 0.4
+    static var barevalue = 0.6
+    struct DemembrementProvider: DemembrementProviderP {
+        func demembrement(of assetValue   : Double,
+                          usufructuaryAge : Int) throws -> (usufructValue : Double,
+                                                            bareValue     : Double) {
+            return (usufructValue : OwnershipTests.usufruct * assetValue,
+                    bareValue     : OwnershipTests.barevalue * assetValue)
+        }
+    }
     
     override class func setUp() {
         super.setUp()
-        let demembrementModel =
-        DemembrementModel.Model(fromFile   : DemembrementModel.Model.defaultFileName,
-                                fromBundle : Bundle.module)
-        let demembrement =
-        DemembrementModel(model: demembrementModel)
+        let demembrement = DemembrementProvider()
         
         Ownership.setDemembrementProviderP(demembrement)
     }
@@ -277,7 +283,8 @@ class OwnershipTests: XCTestCase {
     }
     
     func test_ownedValues_dismembered() throws {
-        let ownedValues = OwnershipTests.ownershipDemembre.ownedValues(ofValue: 100,
+        // 1 UF
+        var ownedValues = OwnershipTests.ownershipDemembre.ownedValues(ofValue: 100,
                                                                        atEndOf: 2020,
                                                                        evaluationContext: .patrimoine)
         XCTAssertEqual(ownedValues.count, 3)
@@ -288,14 +295,45 @@ class OwnershipTests: XCTestCase {
         let bareValue2 = try XCTUnwrap(ownedValues["Nupropriétaire 2"])
         XCTAssertGreaterThan(bareValue2, 0)
         XCTAssertEqual(100, usufructValue + bareValue1 + bareValue2)
+        XCTAssertEqual(ownedValues, ["Owner2 de 55 ans en 2020": 100.0 * OwnershipTests.usufruct,
+                                     "Nupropriétaire 1": 100.0 * 0.4 * OwnershipTests.barevalue,
+                                     "Nupropriétaire 2": 100.0 * 0.6 * OwnershipTests.barevalue])
+        
+        var ownershipDemembre = Ownership(ageOf: OwnableTests.ageOf)
+        ownershipDemembre.isDismembered  = true
+        ownershipDemembre.usufructOwners = [Owner(name: "Owner2 de 55 ans en 2020", fraction : 100)]
+        ownershipDemembre.bareOwners     = [Owner(name: "Owner2 de 55 ans en 2020", fraction : 20),
+                                            Owner(name: "Nupropriétaire 1", fraction : 30),
+                                            Owner(name: "Nupropriétaire 2", fraction : 50)]
+        ownedValues = ownershipDemembre.ownedValues(ofValue: 100,
+                                                    atEndOf: 2020,
+                                                    evaluationContext: .patrimoine)
+        XCTAssertEqual(ownedValues.count, 3)
+        XCTAssertEqual(ownedValues, ["Owner2 de 55 ans en 2020": 100.0 * OwnershipTests.usufruct + 100.0 * 0.2 * OwnershipTests.barevalue,
+                                     "Nupropriétaire 1": 100.0 * 0.3 * OwnershipTests.barevalue,
+                                     "Nupropriétaire 2": 100.0 * 0.5 * OwnershipTests.barevalue])
     }
     
     func test_ownedValues_not_dismembered() throws {
-        let ownedValues = OwnershipTests.ownershipNonDemembre.ownedValues(ofValue: 100,
+        // 1 NP
+        var ownedValues = OwnershipTests.ownershipNonDemembre.ownedValues(ofValue: 100,
                                                                           atEndOf: 2020,
                                                                           evaluationContext: .patrimoine)
         XCTAssertEqual(ownedValues.count, 1)
         let value = try XCTUnwrap(ownedValues["Owner1 de 65 ans en 2020"])
         XCTAssertEqual(value, 100)
+        
+        // 2 NP
+        var ownershipNonDemembre = Ownership(ageOf: OwnableTests.ageOf)
+        ownershipNonDemembre.isDismembered  = false
+        ownershipNonDemembre.fullOwners = [Owner(name: "Owner1", fraction : 70),
+                                           Owner(name: "Owner2", fraction : 30)]
+        ownedValues = ownershipNonDemembre.ownedValues(ofValue: 100,
+                                                       atEndOf: 2020,
+                                                       evaluationContext: .patrimoine)
+        
+        XCTAssertEqual(ownedValues.count, 2)
+        XCTAssertEqual(ownedValues, ["Owner1": 100.0 * 0.7,
+                                     "Owner2": 100.0 * 0.3])
     }
 }

@@ -20,6 +20,7 @@ public protocol MembersNameProviderP {
 
 public protocol MembersProviderP {
     var members: PersistableArrayOfPerson { get }
-
+    
+    func deceasedAdults(during year: Int) -> [String]
     func member(withName name: String) -> Person?
 }
