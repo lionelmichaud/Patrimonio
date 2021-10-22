@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os
 import FiscalModel
 import Ownership
 import Succession
@@ -14,134 +15,173 @@ import FiscalModel
 import PersonModel
 import PatrimoineModel
 
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.LegalSuccessionManager")
+
 public struct LegalSuccessionManager {
     
+    // MARK: - Properties
+
+    private var fiscalModel : Fiscal.Model
+    private var family      : FamilyProviderP
+    private var year        : Int
+
     // MARK: - Initializers
 
-    public init() {    }
+    public init(using fiscalModel : Fiscal.Model,
+                atEndOf year      : Int) {
+        guard let familyProvider = Patrimoin.familyProvider else {
+            customLog.log(level: .fault, "Patrimoin.familyProvider non initialisé")
+            fatalError()
+        }
+        self.fiscalModel = fiscalModel
+        self.family      = familyProvider
+        self.year        = year
+    }
 
     // MARK: - Methods
 
-    /// Calcule la succession légale d'un défunt `decedent`et retourne
+    /// Calcule la succession légale d'un défunt `decedentName`et retourne
     /// une table des héritages et droits de succession pour chaque héritier
     /// - Parameters:
     ///   - patrimoine: patrimoine
-    ///   - decedent: défunt
+    ///   - decedentName: nom du défunt
     ///   - year: année du décès
     ///   - fiscalModel: modèle fiscal à utiliser
     /// - Returns: Succession légale du défunt incluant la table des héritages et droits de succession pour chaque héritier
     public func legalSuccession(of decedentName   : String,
-                                with patrimoine   : Patrimoin,
-                                atEndOf year      : Int,
-                                using fiscalModel : Fiscal.Model) -> Succession {
+                                with patrimoine   : Patrimoin) -> Succession {
 
-        var inheritances      : [Inheritance] = []
-        var inheritanceShares : (forChild: Double, forSpouse: Double) = (0, 0)
-        
-        guard let family = Patrimoin.familyProvider else {
-            return Succession(kind         : .legal,
-                              yearOfDeath  : year,
-                              decedentName : decedentName,
-                              taxableValue : 0,
-                              inheritances : [])
-        }
-        
         // Calcul de la masse successorale taxable du défunt
         // WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
-        let totalTaxableInheritance = taxableInheritanceValue(in      : patrimoine,
-                                                              of      : decedentName,
-                                                              atEndOf : year - 1)
+        let _masseSuccessorale = masseSuccessorale(in : patrimoine,
+                                                   of : decedentName)
         //        print("  Masse successorale légale = \(totalTaxableInheritance.rounded())")
         
         // Calculer la part d'héritage du conjoint
         // Rechercher l'option fiscale du conjoint survivant et calculer sa part d'héritage
-        if let conjointSurvivant = family.members.items.first(where: { member in
-            member is Adult && member.isAlive(atEndOf: year) && member.displayName != decedentName
-        }) {
+        if let conjointSurvivant =
+            family.members.items.first(where: { member in
+                member is Adult && member.isAlive(atEndOf: year) && member.displayName != decedentName
+            }) {
             // il y a un conjoint survivant
-            // % d'héritage résultants de l'option fiscale retenue par le conjoint pour chacun des héritiers
-            inheritanceShares =
-                (conjointSurvivant as! Adult)
-                .fiscalOption
-                .sharedValues(nbChildren        : family.nbOfChildrenAlive(atEndOf: year),
-                              spouseAge         : conjointSurvivant.age(atEndOf: year),
-                              demembrementModel : fiscalModel.demembrement)
-            
-            // calculer la part d'héritage du conjoint
-            let share = inheritanceShares.forSpouse
-            let brut  = totalTaxableInheritance * share
-            
-            // calculer les droits de succession du conjoint
-            // TODO: le sortir d'une fonction du modèle fiscal
-            let tax = 0.0
-            
-            //            print("  Part d'héritage de \(conjointSurvivant.displayName) = \(brut.rounded()) (\((share*100.0).rounded())%)")
-            //            print("    Taxe = \(tax.rounded())")
-            inheritances.append(Inheritance(personName : conjointSurvivant.displayName,
-                                            percent    : share,
-                                            brut       : brut,
-                                            net        : brut - tax,
-                                            tax        : tax))
+            let inheritances = spouseInheritance(masseSuccessorale : _masseSuccessorale,
+                                                 conjointSurvivant : conjointSurvivant)
+            //        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
+            return Succession(kind         : .legal,
+                              yearOfDeath  : year,
+                              decedentName : decedentName,
+                              taxableValue : _masseSuccessorale,
+                              inheritances : inheritances)
+
         } else if family.nbOfChildrenAlive(atEndOf: year) > 0 {
             // pas de conjoint survivant, les enfants survivants se partagent l'héritage
-            inheritanceShares.forSpouse = 0
-            inheritanceShares.forChild  = InheritanceDonation.childShare(nbChildren: family.nbOfChildrenAlive(atEndOf: year))
-            
+            let inheritanceSharesForChild = InheritanceDonation.childShare(nbChildren: family.nbOfChildrenAlive(atEndOf: year))
+            let inheritances = childrenInheritance(inheritanceShareForChild : inheritanceSharesForChild,
+                                                   masseSuccessorale        : _masseSuccessorale)
+            //        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
+            return Succession(kind         : .legal,
+                              yearOfDeath  : year,
+                              decedentName : decedentName,
+                              taxableValue : _masseSuccessorale,
+                              inheritances : inheritances)
+
         } else {
             // pas de conjoint survivant, pas d'enfant survivant
             return Succession(kind         : .legal,
                               yearOfDeath  : year,
                               decedentName : decedentName,
-                              taxableValue : totalTaxableInheritance,
+                              taxableValue : _masseSuccessorale,
                               inheritances : [])
         }
         
+    }
+
+    /// Calcule de l'héritage légal du conjoint
+    /// - Parameters:
+    ///   - masseSuccessorale: masse successorale du défunt
+    ///   - conjointSurvivant: nom du conjoint survivant
+    ///   - fiscalModel: model fiscal
+    /// - Returns: héritage légal du conjoint
+    func spouseInheritance(masseSuccessorale : Double,
+                           conjointSurvivant : Person) -> [Inheritance] {
+        // % d'héritage résultants de l'option fiscale retenue par le conjoint pour chacun des héritiers
+        let inheritanceShares = (conjointSurvivant as! Adult)
+            .fiscalOption
+            .sharedValues(nbChildren        : family.nbOfChildrenAlive(atEndOf: year),
+                          spouseAge         : conjointSurvivant.age(atEndOf: year),
+                          demembrementModel : fiscalModel.demembrement)
+
+        // calculer la part d'héritage du conjoint
+        let share = inheritanceShares.forSpouse
+        let brut  = masseSuccessorale * share
+
+        // calculer les droits de succession du conjoint
+        // TODO: le sortir d'une fonction du modèle fiscal
+        let tax = 0.0
+
+        //            print("  Part d'héritage de \(conjointSurvivant.displayName) = \(brut.rounded()) (\((share*100.0).rounded())%)")
+        //            print("    Taxe = \(tax.rounded())")
+        var inheritances = [Inheritance(personName : conjointSurvivant.displayName,
+                                        percent    : share,
+                                        brut       : brut,
+                                        net        : brut - tax,
+                                        tax        : tax)]
+        // les enfants
+        inheritances += childrenInheritance(inheritanceShareForChild : inheritanceShares.forChild,
+                                            masseSuccessorale        : masseSuccessorale)
+
+        return inheritances
+    }
+
+    /// Calcule de l'héritage légal des enfants
+    /// - Parameters:
+    ///   - inheritanceShareForChild: part dévolue à chaque enfant
+    ///   - masseSuccessorale: masse successorale du défunt
+    ///   - fiscalModel: model fiscal
+    /// - Returns: héritage légal des enfants
+    func childrenInheritance(inheritanceShareForChild : Double,
+                             masseSuccessorale        : Double) -> [Inheritance] {
+        var inheritances: [Inheritance] = []
+
         if family.nbOfAdults > 0 {
             // Calcul de la part revenant à chaque enfant compte tenu de l'option fiscale du conjoint
-            for member in family.members.items where member is Child {
-                if member.isAlive(atEndOf: year) {
-                    // un enfant
-                    // calculer la part d'héritage d'un enfant
-                    let share = inheritanceShares.forChild
-                    let brut  = totalTaxableInheritance * share
-                    
-                    // caluler les droits de succession du conjoint
-                    let inheritance = try! fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brut)
-                    
-                    //                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded()) (\(share.rounded())%)")
-                    //                    print("    Taxe = \(inheritance.taxe.rounded())")
-                    inheritances.append(Inheritance(personName : member.displayName,
-                                                    percent    : share,
-                                                    brut       : brut,
-                                                    net        : inheritance.netAmount,
-                                                    tax        : inheritance.taxe))
-                }
+            family.childrenAliveName(atEndOf: year)?.forEach { childName in
+                // un enfant
+                // calculer la part d'héritage d'un enfant
+                let share = inheritanceShareForChild
+                let brut  = masseSuccessorale * share
+
+                // caluler les droits de succession du conjoint
+                let heritageOfChild = try! fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brut)
+
+                //                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded()) (\(share.rounded())%)")
+                //                    print("    Taxe = \(inheritance.taxe.rounded())")
+                inheritances.append(Inheritance(personName : childName,
+                                                percent    : share,
+                                                brut       : brut,
+                                                net        : heritageOfChild.netAmount,
+                                                tax        : heritageOfChild.taxe))
             }
         }
-        //        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
-        return Succession(kind         : .legal,
-                          yearOfDeath  : year,
-                          decedentName : decedentName,
-                          taxableValue : totalTaxableInheritance,
-                          inheritances : inheritances)
+
+        return inheritances
     }
-    
-    /// Calcule l'actif net taxable d'un `patrimoine` à la succession d'un défunt `decedent`
+
+    /// Calcule l'a masse successorale d'un `patrimoine` à la succession d'un défunt  nommé`decedentName`
     /// - Note: [Reference](https://www.service-public.fr/particuliers/vosdroits/F14198)
     /// - Parameters:
     ///   - patrimoine: patrimoine
-    ///   - decedent: défunt
+    ///   - decedentName: nom du défunt
     ///   - year: année du décès - 1
     /// - Returns: Masse successorale nette taxable du défunt
     /// - WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
-    public func taxableInheritanceValue(in patrimoine   : Patrimoin,
-                                        of decedentName : String,
-                                        atEndOf year    : Int) -> Double {
+    public func masseSuccessorale(in patrimoine   : Patrimoin,
+                                  of decedentName : String) -> Double {
         var taxable: Double = 0
 //        print("décédé: \(decedent.displayName)")
         patrimoine.forEachOwnable { ownable in
             taxable += ownable.ownedValue(by                : decedentName,
-                                          atEndOf           : year,
+                                          atEndOf           : year - 1,
                                           evaluationContext : .legalSuccession)
 //            print("Actif: \(ownable.name)")
 //            print("Valeur légale taxable: \(taxable.k€String)")

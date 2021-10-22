@@ -28,8 +28,8 @@ public struct SuccessionManager {
     private var year        : Int
     private var run         : Int
 
-    private var legalSuccessionManager         = LegalSuccessionManager()
-    private let lifeInsuranceSuccessionManager = LifeInsuranceSuccessionManager()
+    private var legalSuccessionManager         : LegalSuccessionManager
+    private let lifeInsuranceSuccessionManager : LifeInsuranceSuccessionManager
     private var ownershipManager               : OwnershipManager
 
     /// Les successions légales et assurances vie survenues dans l'année
@@ -61,6 +61,10 @@ public struct SuccessionManager {
         self.fiscalModel      = fiscalModel
         self.year             = year
         self.run              = run
+        self.legalSuccessionManager = LegalSuccessionManager(using   : fiscalModel,
+                                                             atEndOf : year)
+        self.lifeInsuranceSuccessionManager = LifeInsuranceSuccessionManager(using   : fiscalModel,
+                                                                             atEndOf : year)
         self.ownershipManager = OwnershipManager(of      : family,
                                                  atEndOf : year,
                                                  run     : run)
@@ -99,11 +103,9 @@ public struct SuccessionManager {
             // calculer les successions et les droits de successions légales
             // sans exercer de clause à option
             let legalSuccession =
-                legalSuccessionManager.legalSuccession(of      : adultDecedentName,
-                                                       with    : patrimoine,
-                                                       atEndOf : year,
-                                                       using   : fiscalModel)
-            
+                legalSuccessionManager.legalSuccession(of   : adultDecedentName,
+                                                       with : patrimoine)
+
             // calculer les transmissions et les droits de transmission assurances vies
             // sans exercer de clause à option
             var lifeInsSuccession =
@@ -111,9 +113,7 @@ public struct SuccessionManager {
                     of           : adultDecedentName,
                     with         : patrimoine,
                     spouseName   : family.spouseNameOf(adultDecedentName),
-                    childrenName : family.childrenAliveName(atEndOf : year),
-                    atEndOf      : year,
-                    using        : fiscalModel)
+                    childrenName : family.childrenAliveName(atEndOf : year))
             
             // au premier décès parmis les adultes:
             // s'assurer que les enfants peuvent payer les droits de succession
@@ -168,9 +168,7 @@ public struct SuccessionManager {
                 of           : decedentName,
                 with           : patrimoine,
                 spouseName   : family.spouseNameOf(decedentName),
-                childrenName : family.childrenAliveName(atEndOf : year),
-                atEndOf      : year,
-                using        : fiscalModel)
+                childrenName : family.childrenAliveName(atEndOf : year))
     }
     
     /// Calculer le total des taxes dûes par les enfants à partir des successions

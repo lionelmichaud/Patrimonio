@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os
 import Ownership
 import AssetsModel
 import Succession
@@ -14,24 +15,43 @@ import FiscalModel
 import PersonModel
 import PatrimoineModel
 
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.LifeInsuranceSuccessionManager")
+
 struct LifeInsuranceSuccessionManager {
 
-    // swiftlint:disable function_parameter_count
+    // MARK: - Properties
 
-    /// Calcule la transmission d'assurance vie d'un `patrimoine` au décès de `decedent` et retourne
+    private var fiscalModel : Fiscal.Model
+    private var family      : FamilyProviderP
+    private var year        : Int
+
+    // MARK: - Initializers
+
+    public init(using fiscalModel : Fiscal.Model,
+                atEndOf year      : Int) {
+        guard let familyProvider = Patrimoin.familyProvider else {
+            customLog.log(level: .fault, "Patrimoin.familyProvider non initialisé")
+            fatalError()
+        }
+        self.fiscalModel = fiscalModel
+        self.family      = familyProvider
+        self.year        = year
+    }
+
+    // MARK: - Methods
+
+    /// Calcule la transmission d'assurance vie d'un `patrimoine` au décès de `decedentName` et retourne
     /// une table des héritages et droits de succession pour chaque héritier
     /// - Parameters:
     ///   - patrimoine: patrimoine
-    ///   - decedent: défunt
+    ///   - decedentName: nom du défunt
     ///   - year: année du décès
     ///   - fiscalModel: modèle fiscal à utiliser
     /// - Returns: Succession du défunt incluant la table des héritages et droits de succession pour chaque héritier
     func lifeInsuranceSuccession(of decedentName   : String,
                                  with patrimoine   : Patrimoin,
                                  spouseName        : String?,
-                                 childrenName      : [String]?,
-                                 atEndOf year      : Int,
-                                 using fiscalModel : Fiscal.Model) -> Succession {
+                                 childrenName      : [String]?) -> Succession {
         var inheritances     : [Inheritance]     = []
         var massesSuccession : NameValueDico = [:]
         
@@ -44,8 +64,7 @@ struct LifeInsuranceSuccessionManager {
         }
         
         // pour chaque assurance vie
-        patrimoine
-            .assets
+        patrimoine.assets
             .freeInvests
             .items
             .forEach { invest in
@@ -53,12 +72,10 @@ struct LifeInsuranceSuccessionManager {
                                               spouseName       : spouseName,
                                               childrenName     : childrenName,
                                               for              : invest,
-                                              atEndOf          : year,
                                               massesSuccession : &massesSuccession)
             }
         
-        patrimoine
-            .assets
+        patrimoine.assets
             .periodicInvests
             .items
             .forEach { invest in
@@ -66,7 +83,6 @@ struct LifeInsuranceSuccessionManager {
                                               spouseName       : spouseName,
                                               childrenName     : childrenName,
                                               for              : invest,
-                                              atEndOf          : year,
                                               massesSuccession : &massesSuccession)
             }
         
@@ -123,7 +139,6 @@ struct LifeInsuranceSuccessionManager {
      spouseName       : String?,
      childrenName     : [String]?,
      for invest       : FinancialEnvelopP,
-     atEndOf year     : Int,
      massesSuccession : inout NameValueDico) {
         guard invest.clause != nil else { return }
         
@@ -137,14 +152,12 @@ struct LifeInsuranceSuccessionManager {
         if invest.ownership.isDismembered {
             dismemberedLifeInsuranceSuccessionMasses(of               : decedentName,
                                                      for              : invest,
-                                                     atEndOf          : year,
                                                      massesSuccession : &massesSuccession)
         } else {
             undismemberedLifeInsuranceSuccessionMasses(of               : decedentName,
                                                        spouseName       : spouseName,
                                                        childrenName     : childrenName,
                                                        for              : invest,
-                                                       atEndOf          : year,
                                                        massesSuccession : &massesSuccession)
         }
     }
@@ -166,7 +179,6 @@ struct LifeInsuranceSuccessionManager {
     fileprivate func dismemberedLifeInsuranceSuccessionMasses
     (of decedentName  : String,
      for invest       : FinancialEnvelopP,
-     atEndOf year     : Int,
      massesSuccession : inout NameValueDico) {
         if invest.ownership.hasAnUsufructOwner(named: decedentName) {
             // le capital de l'assurane vie est démembré
@@ -202,7 +214,6 @@ struct LifeInsuranceSuccessionManager {
      spouseName       : String?,
      childrenName     : [String]?,
      for invest       : FinancialEnvelopP,
-     atEndOf year     : Int,
      massesSuccession : inout NameValueDico) {
         guard var clause = invest.clause else { return }
         
