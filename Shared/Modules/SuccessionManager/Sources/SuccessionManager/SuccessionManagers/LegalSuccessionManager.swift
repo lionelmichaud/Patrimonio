@@ -11,7 +11,6 @@ import os
 import FiscalModel
 import Ownership
 import Succession
-import FiscalModel
 import PersonModel
 import PatrimoineModel
 
@@ -28,11 +27,8 @@ public struct LegalSuccessionManager {
     // MARK: - Initializers
 
     public init(using fiscalModel : Fiscal.Model,
+                familyProvider    : FamilyProviderP,
                 atEndOf year      : Int) {
-        guard let familyProvider = Patrimoin.familyProvider else {
-            customLog.log(level: .fault, "Patrimoin.familyProvider non initialisé")
-            fatalError()
-        }
         self.fiscalModel = fiscalModel
         self.family      = familyProvider
         self.year        = year

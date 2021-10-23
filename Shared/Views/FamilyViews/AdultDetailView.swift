@@ -221,7 +221,7 @@ private struct InheritanceSectionView: View {
                         deceaseDisclosure(decedent: adult)
                     },
                     label: {
-                        Text("SUCCESSION").font(.headline)
+                        Text("SUCCESSION LEGALE").font(.headline)
                     })
             }
         }
@@ -263,8 +263,9 @@ private struct InheritanceSectionView: View {
     func inheritanceDisclosure(label        : String,
                                atEndOf year : Int,
                                decedent     : Adult) -> some View {
-        let legalSuccessionManager = LegalSuccessionManager(using   : model.fiscalModel,
-                                                            atEndOf : year)
+        let legalSuccessionManager = LegalSuccessionManager(using          : model.fiscalModel,
+                                                            familyProvider : Patrimoin.familyProvider!,
+                                                            atEndOf        : year)
         let succession = legalSuccessionManager.legalSuccession(of    : decedent.displayName,
                                                                 with  : patrimoine)
         let taxableInheritanceValue = legalSuccessionManager.masseSuccessorale(in: patrimoine,

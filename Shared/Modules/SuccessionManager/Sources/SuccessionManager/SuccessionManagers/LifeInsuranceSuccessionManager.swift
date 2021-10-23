@@ -15,10 +15,11 @@ import FiscalModel
 import PersonModel
 import PatrimoineModel
 
-private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.LifeInsuranceSuccessionManager")
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine",
+                               category: "Model.LifeInsuranceSuccessionManager")
 
 struct LifeInsuranceSuccessionManager {
-
+    
     // MARK: - Properties
 
     private var fiscalModel : Fiscal.Model
@@ -28,13 +29,10 @@ struct LifeInsuranceSuccessionManager {
     // MARK: - Initializers
 
     public init(using fiscalModel : Fiscal.Model,
+                familyProvider    : FamilyProviderP,
                 atEndOf year      : Int) {
-        guard let familyProvider = Patrimoin.familyProvider else {
-            customLog.log(level: .fault, "Patrimoin.familyProvider non initialisé")
-            fatalError()
-        }
-        self.fiscalModel = fiscalModel
         self.family      = familyProvider
+        self.fiscalModel = fiscalModel
         self.year        = year
     }
 
@@ -52,7 +50,7 @@ struct LifeInsuranceSuccessionManager {
                                  with patrimoine   : Patrimoin,
                                  spouseName        : String?,
                                  childrenName      : [String]?) -> Succession {
-        var inheritances     : [Inheritance]     = []
+        var inheritances     : [Inheritance] = []
         var massesSuccession : NameValueDico = [:]
         
         guard let family = Patrimoin.familyProvider else {

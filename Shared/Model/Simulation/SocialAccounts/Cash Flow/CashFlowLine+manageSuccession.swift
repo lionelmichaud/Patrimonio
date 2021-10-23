@@ -29,11 +29,13 @@ extension CashFlowLine {
     ///   - fiscalModel: modèle fiscal
     mutating func manageSuccession(run               : Int,
                                    with patrimoine   : Patrimoin,
+                                   familyProvider    : FamilyProviderP,
                                    using fiscalModel : Fiscal.Model) {
-        var successionManager = SuccessionManager(with    : patrimoine,
-                                                  using   : fiscalModel,
-                                                  atEndOf : year,
-                                                  run     : run)
+        var successionManager = SuccessionManager(with           : patrimoine,
+                                                  using          : fiscalModel,
+                                                  atEndOf        : year,
+                                                  familyProvider : familyProvider,
+                                                  run            : run)
 
         successionManager.manageSuccession()
 

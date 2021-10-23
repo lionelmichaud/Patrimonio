@@ -51,27 +51,29 @@ public struct SuccessionManager {
     public init(with patrimoine   : Patrimoin,
                 using fiscalModel : Fiscal.Model,
                 atEndOf year      : Int,
+                familyProvider    : FamilyProviderP,
                 run               : Int) {
-        guard let familyProvider = Patrimoin.familyProvider else {
-            customLog.log(level: .fault, "init: Patrimoin.familyProvider non initialisé")
-            fatalError()
-        }
         self.patrimoine       = patrimoine
         self.family           = familyProvider
         self.fiscalModel      = fiscalModel
         self.year             = year
         self.run              = run
-        self.legalSuccessionManager = LegalSuccessionManager(using   : fiscalModel,
-                                                             atEndOf : year)
-        self.lifeInsuranceSuccessionManager = LifeInsuranceSuccessionManager(using   : fiscalModel,
-                                                                             atEndOf : year)
-        self.ownershipManager = OwnershipManager(of      : family,
-                                                 atEndOf : year,
-                                                 run     : run)
+        self.legalSuccessionManager =
+            LegalSuccessionManager(using          : fiscalModel,
+                                   familyProvider : familyProvider,
+                                   atEndOf        : year)
+        self.lifeInsuranceSuccessionManager =
+            LifeInsuranceSuccessionManager(using          : fiscalModel,
+                                           familyProvider : familyProvider,
+                                           atEndOf        : year)
+        self.ownershipManager =
+            OwnershipManager(of      : family,
+                             atEndOf : year,
+                             run     : run)
     }
-
+    
     // MARK: - Methods
-
+    
     /// Gérer les succession de l'année.
     ///
     /// - Note:
@@ -83,6 +85,7 @@ public struct SuccessionManager {
     ///      * Transférer les biens du défunt vers ses héritiers.
     ///
     ///    * 3 - Cummuler les droits de successions/transmissions de l'année.
+    ///
     public mutating func manageSuccession() {
         legalSuccessions        = []
         legalSuccessionsTaxes   = []
