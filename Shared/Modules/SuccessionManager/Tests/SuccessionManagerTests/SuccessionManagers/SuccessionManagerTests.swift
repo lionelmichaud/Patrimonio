@@ -52,8 +52,8 @@ import XCTest
                                          decedentName: "défunt",
                                          taxableValue: 100,
                                          inheritances: [conjointInheritance,
-                                                        enfant1Inheritance
+                                                        enfant1Inheritance,
                                                         enfant2Inheritance])
-            let childrenInheritanceTaxe = totalChildrenInheritanceTaxe(
+            //let childrenInheritanceTaxe = totalChildrenInheritanceTaxe(
         }
     }
