@@ -48,6 +48,12 @@ let package = Package(
         ),
         .testTarget(
             name: "SuccessionManagerTests",
-            dependencies: ["SuccessionManager"])
+            dependencies: [
+                "SuccessionManager"
+            ],
+            resources: [
+                .process("Resources") // We will store out assets here
+            ]
+        )
     ]
 )

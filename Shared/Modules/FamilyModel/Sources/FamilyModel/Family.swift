@@ -52,6 +52,19 @@ public final class Family: ObservableObject {
         members  = try PersistableArrayOfPerson(fromFolder: folder)
     }
     
+    /// Initiliser à partir d'un fichier JSON contenu dans le `bundle`
+    /// - Note: Utilisé seulement pour les Tests
+    /// - Parameters:
+    ///   - bundle: le bundle où se trouve le fichier JSON à utiliser
+    ///   - model: modèle à utiliser pour initialiser les membres de la famille
+    /// - Throws: en cas d'échec de lecture des données
+    public convenience init(fromBundle bundle : Bundle,
+                            using model       : Model) throws {
+        self.init()
+        members  = try PersistableArrayOfPerson(fromBundle: bundle,
+                                                using     : model)
+    }
+    
     // MARK: - Methodes
     
     /// lire à partir d'un fichier JSON contenu dans le dossier `fromFolder`

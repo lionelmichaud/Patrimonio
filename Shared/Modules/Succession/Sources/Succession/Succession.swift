@@ -101,7 +101,7 @@ extension Array where Element == Succession {
 }
 
 // MARK: - Héritage d'une personne
-public struct Inheritance {
+public struct Inheritance: Hashable {
     
     // MARK: - Propeties
     

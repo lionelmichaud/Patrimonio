@@ -118,7 +118,41 @@ public struct Assets {
         checkValidity()
    }
     
-    // MARK: - Methods
+    /// Initiliser à partir d'un fichier JSON contenu dans le `bundle`
+    /// - Note: Utilisé seulement pour les Tests
+    /// - Note: personAgeProvider est utilisée pour injecter dans chaque actif un délégué personAgeProvider.ageOf
+    ///         permettant de calculer les valeurs respectives des Usufruits et Nu-Propriétés
+    /// - Parameters:
+    ///   - bundle: le bundle dans lequel se trouve les fichiers JSON
+    ///   - personAgeProvider: forunit l'age d'une personne à partir de son nom
+    /// - Throws: en cas d'échec de lecture des données
+    public init(fromBundle bundle      : Bundle,
+                fileNamePrefix         : String = "",
+                with personAgeProvider : PersonAgeProviderP?) {
+        self.periodicInvests = PeriodicInvestementArray(fromBundle     : bundle,
+                                                        fileNamePrefix : fileNamePrefix,
+                                                        with           : personAgeProvider)
+        self.freeInvests = FreeInvestmentArray(fromBundle     : bundle,
+                                               fileNamePrefix : fileNamePrefix,
+                                               with           : personAgeProvider)
+        self.realEstates = RealEstateArray(fromBundle     : bundle,
+                                           fileNamePrefix : fileNamePrefix,
+                                           with           : personAgeProvider)
+        self.scpis = ScpiArray(fromBundle     : bundle,
+                               fileNamePrefix : fileNamePrefix,
+                               with           : personAgeProvider) // SCPI hors de la SCI
+        self.sci = SCI(fromBundle     : bundle,
+                       fileNamePrefix : fileNamePrefix,
+                       name           : "LVLA",
+                       note           : "Crée en 2019",
+                       with           : personAgeProvider)
+
+        // initialiser le vecteur d'état de chaque FreeInvestement à la date courante
+        initializeFreeInvestementCurrentValue()
+        checkValidity()
+    }
+    
+   // MARK: - Methods
     
     /// Checks that each Asset item is valid. Crashes if not.
     private func checkValidity() {

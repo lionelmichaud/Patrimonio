@@ -29,10 +29,23 @@ public extension ArrayOfNameableValuable where E: OwnableP {
         }
     }
     
-    init(for aClass        : AnyClass,
-         fileNamePrefix    : String = "",
+    init(for aClass             : AnyClass,
+         fileNamePrefix         : String = "",
          with personAgeProvider : PersonAgeProviderP?) {
         self.init(for            : aClass,
+                  fileNamePrefix : fileNamePrefix)
+        // injecter le délégué pour la méthode family.ageOf qui par défaut est nil à la création de l'objet
+        for idx in items.indices {
+            if let personAgeProvider = personAgeProvider {
+                items[idx].ownership.setDelegateForAgeOf(delegate: personAgeProvider.ageOf)
+            }
+        }
+    }
+    
+    init(fromBundle bundle      : Bundle,
+         fileNamePrefix         : String = "",
+         with personAgeProvider : PersonAgeProviderP?) {
+        self.init(fromBundle     : bundle,
                   fileNamePrefix : fileNamePrefix)
         // injecter le délégué pour la méthode family.ageOf qui par défaut est nil à la création de l'objet
         for idx in items.indices {

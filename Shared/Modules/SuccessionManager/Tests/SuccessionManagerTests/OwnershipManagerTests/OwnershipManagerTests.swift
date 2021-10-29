@@ -1,8 +1,8 @@
-//
-//  File.swift
-//  
-//
-//  Created by Lionel MICHAUD on 23/10/2021.
-//
+import Succession
+import XCTest
+@testable import SuccessionManager
 
-import Foundation
+final class OwnershipManagerTests: XCTestCase {
+    func test_totalChildrenInheritanceTaxe() {
+    }
+}

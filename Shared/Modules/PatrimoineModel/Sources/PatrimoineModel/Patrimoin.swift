@@ -96,6 +96,21 @@ public final class Patrimoin: ObservableObject {
         try self.liabilities = Liabilities(fromFolder : folder, with: Patrimoin.familyProvider)
     }
     
+    /// Initiliser à partir d'un fichier JSON contenu dans le `bundle`
+    /// - Note: Utilisé seulement pour les Tests
+    /// - Parameter bundle: le bundle dans lequel se trouve les fichiers JSON
+    public convenience init(fromBundle bundle : Bundle,
+                            fileNamePrefix    : String = "") {
+        self.init()
+        self.assets = Assets(fromBundle     : bundle,
+                             fileNamePrefix : fileNamePrefix,
+                             with           : Patrimoin.familyProvider)
+        self.liabilities = Liabilities(fromBundle     : bundle,
+                                       fileNamePrefix : fileNamePrefix,
+                                       with           : Patrimoin.familyProvider)
+        memento = nil
+    }
+    
     // MARK: - Methods
     
     /// lire à partir d'un fichier JSON contenu dans le dossier `fromFolder`

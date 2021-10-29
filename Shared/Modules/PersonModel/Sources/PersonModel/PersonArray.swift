@@ -6,12 +6,16 @@
 //
 
 import Foundation
+import os
 import AppFoundation
 import Files
 import NamedValue
 import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserving-Coding-Adapter.git
 import ModelEnvironment
 import Persistence
+
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio",
+                               category: "Model.PersonModel")
 
 public typealias PersistableArrayOfPerson = PersistableArray<Person>
 public extension PersistableArrayOfPerson {
@@ -22,15 +26,15 @@ public extension PersistableArrayOfPerson {
     ///   - model: modèle à utiliser pour initialiser les membres de la famille
     /// - Throws: en cas d'échec de lecture des données
     init(fromFolder folder : Folder,
-         using model  : Model) throws {
+         using model       : Model) throws {
         
         self.init()
         
+        let fileName = FileNameCst.kFamilyMembersFileName
         #if DEBUG
-        Swift.print("loading members (Person) from file: ", FileNameCst.kFamilyMembersFileName)
+        Swift.print("loading members (Person) from file: ", fileName)
         #endif
         // lire les person dans le fichier JSON du dossier `Folder`
-        let fileName = FileNameCst.kFamilyMembersFileName
         let data = try self.load(fromFile   : fileName,
                                  fromFolder : folder)
         do {
@@ -61,7 +65,66 @@ public extension PersistableArrayOfPerson {
         persistenceSM.process(event: .onLoad)
     }
     
-    /// Enregistrer au format JSON dans un fichier portant le nom  `FileNameCst.kFamilyMembersFileName`
+    /// Initialiser à partir d'un fichier JSON portant le nom `FileNameCst.kFamilyMembersFileName`
+    /// contenu dans le dossier `bundle`
+    /// - Parameters:
+    ///   - bundle: le bundle où se trouve le fichier JSON à utiliser
+    ///   - model: modèle à utiliser pour initialiser les membres de la famille
+    init(fromBundle bundle : Bundle,
+         using model       : Model) throws {
+        
+        self.init()
+
+        let fileName = FileNameCst.kFamilyMembersFileName
+        
+        // find file's URL
+        guard let url = bundle.url(forResource: fileName, withExtension: nil) else {
+            customLog.log(level: .fault, "Failed to locate file '\(fileName)' in bundle.")
+            fatalError("Failed to locate file '\(fileName)' in bundle.")
+        }
+        // MARK: - DEBUG - A supprimer
+        #if DEBUG
+        print("decoding file: ", url)
+        #endif
+        
+        // load data from URL
+        guard let data = try? Data(contentsOf: url) else {
+            customLog.log(level: .fault, "Failed to load file '\(fileName)' from bundle.")
+            fatalError("Failed to load file '\(fileName)' from bundle.")
+        }
+        
+        #if DEBUG
+        Swift.print("loading members (Person) from file: ", fileName)
+        #endif
+        do {
+            items = try Person.coder.decoder
+                .decode([Wrap].self, from: data)
+                .map { $0.wrapped as! Person }
+            
+        } catch DecodingError.keyNotFound(let key, let context) {
+            fatalError("Failed to decode \(fileName) in documents directory due to missing key '\(key.stringValue)' not found – \(context.debugDescription)")
+        } catch DecodingError.typeMismatch(_, let context) {
+            fatalError("Failed to decode \(fileName) in documents directory due to type mismatch – \(context.debugDescription)")
+        } catch DecodingError.valueNotFound(let type, let context) {
+            fatalError("Failed to decode \(fileName) in documents directory due to missing \(type) value – \(context.debugDescription)")
+        } catch DecodingError.dataCorrupted(let context) {
+            fatalError("Failed to decode \(fileName) in documents directory because it appears to be invalid JSON – \(context.codingPath)–  \(context.debugDescription)")
+        } catch {
+            fatalError("Failed to decode \(fileName) in documents directory: \(error.localizedDescription)")
+        }
+        
+        // initialiser les propriétés des Personnes qui ne peuvent pas être lues dans le fichier JSON
+        self.items.forEach { person in
+            // initialiser l'age de décès avec la valeur moyenne déterministe
+            // initialiser le nombre d'années de dépendence
+            person.initialize(using: model)
+        }
+        
+        // exécuter la transition
+        persistenceSM.process(event: .onLoad)
+    }
+    
+   /// Enregistrer au format JSON dans un fichier portant le nom  `FileNameCst.kFamilyMembersFileName`
     /// dans le folder nommé `folder` du répertoire `Documents`
     /// - Parameters:
     ///   - folder: nom du dossier du répertoire `Documents`

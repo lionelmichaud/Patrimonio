@@ -51,6 +51,25 @@ public struct Liabilities {
         try self.loans = LoanArray(fromFolder: folder, with: personAgeProvider)
     }
     
+    /// Initiliser à partir d'un fichier JSON contenu dans le `bundle`
+    /// - Note: Utilisé seulement pour les Tests
+    /// - Note: family est utilisée pour injecter dans chaque passif un délégué family.ageOf
+    ///         permettant de calculer les valeurs respectives des Usufruits et Nu-Propriétés
+    /// - Parameters:
+    ///   - bundle: le bundle dans lequel se trouve les fichiers JSON
+    ///   - personAgeProvider: forunit l'age d'une personne à partir de son nom
+    /// - Throws: en cas d'échec de lecture des données
+    public init(fromBundle bundle      : Bundle,
+                fileNamePrefix         : String = "",
+                with personAgeProvider : PersonAgeProviderP?) {
+        self.debts = DebtArray(fromBundle     : bundle,
+                               fileNamePrefix : fileNamePrefix,
+                               with           : personAgeProvider)
+        self.loans = LoanArray(fromBundle     : bundle,
+                               fileNamePrefix : fileNamePrefix,
+                               with           : personAgeProvider)
+    }
+
     // MARK: - Methods
     
     public func saveAsJSON(toFolder folder: Folder) throws {

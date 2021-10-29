@@ -8,7 +8,6 @@
 import Foundation
 import FiscalModel
 import PersonModel
-import PatrimoineModel
 import AssetsModel
 import Liabilities
 
@@ -22,11 +21,6 @@ extension OwnershipManager {
     func transferOwnershipOf(assets          : inout Assets,
                              liabilities     : inout Liabilities,
                              of decedentName : String) {
-        guard let family = Patrimoin.familyProvider else {
-            customLogOwnershipManager.log(level: .fault, "La famille n'est pas définie dans Patrimoin.transferOwnershipOf")
-            fatalError("La famille n'est pas définie dans Patrimoin.transferOwnershipOf")
-        }
-        
         // rechercher un conjont survivant
         var spouseName         : String?
         var spouseFiscalOption : InheritanceFiscalOption?

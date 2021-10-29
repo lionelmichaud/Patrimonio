@@ -55,6 +55,29 @@ public struct SCI {
         self.bankAccount = 0
     }
     
+    /// Initiliser à partir d'un fichier JSON contenu dans le dossier du `bundle`
+    /// - Note: Utilisé seulement pour les Tests
+    /// - Note: personAgeProvider est utilisée pour injecter dans chaque actif un délégué personAgeProvider.ageOf
+    ///         permettant de calculer les valeurs respectives des Usufruits et Nu-Propriétés
+    /// - Parameters:
+    ///   - folder: dossier où se trouve le fichier JSON à utiliser
+    ///   - name: nom de la SCI
+    ///   - note: note associée à la SCI
+    ///   - personAgeProvider: forunit l'age d'une personne à partir de son nom
+    /// - Throws: en cas d'échec de lecture des données
+    public init(fromBundle bundle      : Bundle,
+                fileNamePrefix         : String = "",
+                name                   : String,
+                note                   : String,
+                with personAgeProvider : PersonAgeProviderP?) {
+        self.name  = name
+        self.note  = note
+        self.scpis = ScpiArray(fromBundle     : bundle,
+                               fileNamePrefix : fileNamePrefix + "SCI_",
+                               with           : personAgeProvider)
+        self.bankAccount = 0
+    }
+    
     // MARK: - Methods
     
     public func saveAsJSON(toFolder folder: Folder) throws {

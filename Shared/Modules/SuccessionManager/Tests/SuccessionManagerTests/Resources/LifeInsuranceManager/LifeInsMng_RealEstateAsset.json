@@ -1,0 +1,77 @@
+{
+    "version" :
+    {
+        "version" : "0.1",
+        "date"    : "2020-10-12T23:00:00+01:00",
+        "comment" : null
+    },
+    "items" : [
+        {
+            "id"                      : "C200EDBE-5307-4D68-9312-7643871358D7",
+            "name"                    : "Maison Toulouse",
+            "note"                    : "Actualisé le 11/09/2020",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "M. Lionel MICHAUD",
+                        "fraction" : 70
+                    },
+                    {
+                        "name"     : "Mme. Vanessa MICHAUD",
+                        "fraction" : 30
+                    }
+                ],
+                "nue_propriétaires"   :
+                [
+                ],
+                "usufruitiers"        :
+                [
+                ]
+            },
+            "buyingYear"              : 
+            {
+                "fixedYear": 2011
+            },
+            "buyingPrice"             : 620000,
+            "yearlyTaxeFonciere"      : 2500,
+            
+            "willBeInhabited"         : true,
+            "inhabitedFrom"           :
+            {
+                "fixedYear": 2011
+            },
+            "inhabitedTo" : {
+                "fixedYear" : 0,
+                "event" : "Dépendance",
+                "group" : "Tous les Adultes",
+                "order" : "Date au plus tard"
+            },
+            "yearlyTaxeHabitation" : 2500,
+            
+            "willBeRented" : true,
+            "rentalFrom" : {
+                "fixedYear" : 0,
+                "event" : "Dépendance",
+                "group" : "Tous les Adultes",
+                "order" : "Date au plus tard"
+            },
+            "rentalTo"     :
+            {
+                "fixedYear": 2100
+            },
+            "monthlyRentAfterCharges" : 2000,
+            
+            "willBeSold"              : false,
+            "sellingYear"             :
+            {
+                "fixedYear": 2100
+            },
+            "sellingNetPrice"         : 600000,
+            
+            "estimatedValue"          : 600000
+        }
+    ]
+}

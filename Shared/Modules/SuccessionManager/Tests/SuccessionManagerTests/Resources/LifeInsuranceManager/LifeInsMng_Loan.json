@@ -1,0 +1,41 @@
+{
+    "version" :
+    {
+        "version" : "0.1",
+        "date"    : "2020-10-12T23:00:00+01:00",
+        "comment" : null
+    },
+    "items" : [
+        {
+            "id"               : "0F5011DB-C627-4390-BD09-2A53C6193582",
+            "name"             : "Emprunt Panneaux PV",
+            "note"             : "Actualisé le 16/02/2021",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "M. Lionel MICHAUD",
+                        "fraction" : 50
+                    },
+                    {
+                        "name"     : "Mme. Vanessa MICHAUD",
+                        "fraction" : 50
+                    }
+                ],
+                "nue_propriétaires"   :
+                [
+                ],
+                "usufruitiers"        :
+                [
+                ]
+            },
+            "firstYear"        : 2020,
+            "lastYear"         : 3000,
+            "loanedValue"      : -5900,
+            "interestRate"     : 0.0000001,
+            "monthlyInsurance" : 0.0
+        }
+    ]
+}

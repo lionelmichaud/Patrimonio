@@ -44,15 +44,19 @@ public struct LegalSuccessionManager {
     ///   - year: année du décès
     ///   - fiscalModel: modèle fiscal à utiliser
     /// - Returns: Succession légale du défunt incluant la table des héritages et droits de succession pour chaque héritier
-    public func legalSuccession(of decedentName   : String,
-                                with patrimoine   : Patrimoin) -> Succession {
+    public func legalSuccession(of decedentName : String,
+                                with patrimoine : Patrimoin,
+                                verbose         : Bool = false) -> Succession {
 
         // Calcul de la masse successorale taxable du défunt
         // WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
-        let _masseSuccessorale = masseSuccessorale(in : patrimoine,
-                                                   of : decedentName)
-        //        print("  Masse successorale légale = \(totalTaxableInheritance.rounded())")
-        
+        let _masseSuccessorale = masseSuccessorale(in      : patrimoine,
+                                                   of      : decedentName,
+                                                   verbose : verbose)
+        if verbose {
+            print("Masse successorale légale = \(_masseSuccessorale.rounded())")
+        }
+
         // Calculer la part d'héritage du conjoint
         // Rechercher l'option fiscale du conjoint survivant et calculer sa part d'héritage
         if let conjointSurvivant =
@@ -61,8 +65,14 @@ public struct LegalSuccessionManager {
             }) {
             // il y a un conjoint survivant
             let inheritances = spouseInheritance(masseSuccessorale : _masseSuccessorale,
-                                                 conjointSurvivant : conjointSurvivant)
-            //        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
+                                                 conjointSurvivant : conjointSurvivant as! Adult,
+                                                 verbose           : verbose)
+            if verbose {
+                print("  Part totale = ", inheritances.sum(for: \.percent))
+                print("  Brut total  = ", inheritances.sum(for: \.brut).rounded())
+                print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
+                print("  Net total   = ", inheritances.sum(for: \.net).rounded())
+            }
             return Succession(kind         : .legal,
                               yearOfDeath  : year,
                               decedentName : decedentName,
@@ -73,8 +83,14 @@ public struct LegalSuccessionManager {
             // pas de conjoint survivant, les enfants survivants se partagent l'héritage
             let inheritanceSharesForChild = InheritanceDonation.childShare(nbChildren: family.nbOfChildrenAlive(atEndOf: year))
             let inheritances = childrenInheritance(inheritanceShareForChild : inheritanceSharesForChild,
-                                                   masseSuccessorale        : _masseSuccessorale)
-            //        print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
+                                                   masseSuccessorale        : _masseSuccessorale,
+                                                   verbose                  : verbose)
+            if verbose {
+                print("  Part totale = ", inheritances.sum(for: \.percent))
+                print("  Brut total  = ", inheritances.sum(for: \.brut).rounded())
+                print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
+                print("  Net total   = ", inheritances.sum(for: \.net).rounded())
+            }
             return Succession(kind         : .legal,
                               yearOfDeath  : year,
                               decedentName : decedentName,
@@ -89,7 +105,6 @@ public struct LegalSuccessionManager {
                               taxableValue : _masseSuccessorale,
                               inheritances : [])
         }
-        
     }
 
     /// Calcule de l'héritage légal du conjoint
@@ -99,9 +114,10 @@ public struct LegalSuccessionManager {
     ///   - fiscalModel: model fiscal
     /// - Returns: héritage légal du conjoint
     func spouseInheritance(masseSuccessorale : Double,
-                           conjointSurvivant : Person) -> [Inheritance] {
+                           conjointSurvivant : Adult,
+                           verbose           : Bool = false) -> [Inheritance] {
         // % d'héritage résultants de l'option fiscale retenue par le conjoint pour chacun des héritiers
-        let inheritanceShares = (conjointSurvivant as! Adult)
+        let inheritanceShares = conjointSurvivant
             .fiscalOption
             .sharedValues(nbChildren        : family.nbOfChildrenAlive(atEndOf: year),
                           spouseAge         : conjointSurvivant.age(atEndOf: year),
@@ -115,16 +131,17 @@ public struct LegalSuccessionManager {
         // TODO: le sortir d'une fonction du modèle fiscal
         let tax = 0.0
 
-        //            print("  Part d'héritage de \(conjointSurvivant.displayName) = \(brut.rounded()) (\((share*100.0).rounded())%)")
-        //            print("    Taxe = \(tax.rounded())")
         var inheritances = [Inheritance(personName : conjointSurvivant.displayName,
                                         percent    : share,
                                         brut       : brut,
                                         net        : brut - tax,
                                         tax        : tax)]
+        if verbose { print(String(describing: inheritances.last)) }
+
         // les enfants
         inheritances += childrenInheritance(inheritanceShareForChild : inheritanceShares.forChild,
-                                            masseSuccessorale        : masseSuccessorale)
+                                            masseSuccessorale        : masseSuccessorale,
+                                            verbose                  : verbose)
 
         return inheritances
     }
@@ -136,7 +153,8 @@ public struct LegalSuccessionManager {
     ///   - fiscalModel: model fiscal
     /// - Returns: héritage légal des enfants
     func childrenInheritance(inheritanceShareForChild : Double,
-                             masseSuccessorale        : Double) -> [Inheritance] {
+                             masseSuccessorale        : Double,
+                             verbose                  : Bool = false) -> [Inheritance] {
         var inheritances: [Inheritance] = []
 
         if family.nbOfAdults > 0 {
@@ -150,8 +168,6 @@ public struct LegalSuccessionManager {
                 // caluler les droits de succession du conjoint
                 let heritageOfChild = try! fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brut)
 
-                //                    print("  Part d'héritage de \(child.displayName) = \(brut.rounded()) (\(share.rounded())%)")
-                //                    print("    Taxe = \(inheritance.taxe.rounded())")
                 inheritances.append(Inheritance(personName : childName,
                                                 percent    : share,
                                                 brut       : brut,
@@ -159,6 +175,7 @@ public struct LegalSuccessionManager {
                                                 tax        : heritageOfChild.taxe))
             }
         }
+        if verbose { print(String(describing: inheritances.last)) }
 
         return inheritances
     }
@@ -172,15 +189,19 @@ public struct LegalSuccessionManager {
     /// - Returns: Masse successorale nette taxable du défunt
     /// - WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
     public func masseSuccessorale(in patrimoine   : Patrimoin,
-                                  of decedentName : String) -> Double {
+                                  of decedentName : String,
+                                  verbose         : Bool = false) -> Double {
         var taxable: Double = 0
-//        print("décédé: \(decedent.displayName)")
+        if verbose { print("décédé: \(decedentName)") }
         patrimoine.forEachOwnable { ownable in
-            taxable += ownable.ownedValue(by                : decedentName,
-                                          atEndOf           : year - 1,
-                                          evaluationContext : .legalSuccession)
-//            print("Actif: \(ownable.name)")
-//            print("Valeur légale taxable: \(taxable.k€String)")
+            let _taxable = ownable.ownedValue(by                : decedentName,
+                                              atEndOf           : year - 1,
+                                              evaluationContext : .legalSuccession)
+            if verbose {
+                print("Actif: \(ownable.name)")
+                print(" => Valeur légale taxable: \(_taxable.rounded())")
+            }
+            taxable += _taxable
         }
         return taxable
     }

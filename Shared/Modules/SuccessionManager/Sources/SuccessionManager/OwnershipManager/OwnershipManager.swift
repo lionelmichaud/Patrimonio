@@ -13,13 +13,11 @@ import PatrimoineModel
 
 let customLogOwnershipManager = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.OwnershipManager")
 
-typealias MembersNameAgeProviderP = MembersNameProviderP & PersonAgeProviderP
-
 struct OwnershipManager {
     
     // MARK: - Properties
 
-    var family : MembersNameAgeProviderP
+    var family : FamilyProviderP
     var run    : Int
     var year   : Int
 
@@ -29,7 +27,7 @@ struct OwnershipManager {
     ///   - family: la famille dont il faut faire le bilan
     ///   - year: année des décès
     ///   - run: numéro du run en cours de calcul
-    init(of family    : MembersNameAgeProviderP,
+    init(of family    : FamilyProviderP,
          atEndOf year : Int,
          run          : Int) {
         self.family = family

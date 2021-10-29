@@ -111,11 +111,17 @@ public struct SuccessionManager {
 
             // calculer les transmissions et les droits de transmission assurances vies
             // sans exercer de clause à option
+            var spouseName: String?
+            if let _spouseName = family.spouseNameOf(adultDecedentName) {
+                if family.member(withName: _spouseName)!.isAlive(atEndOf: year) {
+                    spouseName = _spouseName
+                }
+            }
             var lifeInsSuccession =
                 lifeInsuranceSuccessionManager.lifeInsuranceSuccession(
                     of           : adultDecedentName,
                     with         : patrimoine,
-                    spouseName   : family.spouseNameOf(adultDecedentName),
+                    spouseName   : spouseName,
                     childrenName : family.childrenAliveName(atEndOf : year))
             
             // au premier décès parmis les adultes:

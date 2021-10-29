@@ -1,5 +1,6 @@
 import Succession
 import FamilyModel
+import AssetsModel
 import XCTest
     @testable import SuccessionManager
 
@@ -9,16 +10,16 @@ import XCTest
         
         override class func setUp() {
             super.setUp()
-            SuccessionManagerTests.family = Family(
-                fromFile             : RealEstateAsset.defaultFileName,
-                fromBundle           : Bundle.module,
-                dateDecodingStrategy : .iso8601,
-                keyDecodingStrategy  : .useDefaultKeys)
-            
-            RealEstateAsset.setFiscalModelProvider(
-                Fiscal.Model(fromFile   : "FiscalModelConfig.json",
-                             fromBundle : Bundle.module)
-                    .initialized())
+//            SuccessionManagerTests.family = Family(
+//                fromFile             : RealEstateAsset.defaultFileName,
+//                fromBundle           : Bundle.module,
+//                dateDecodingStrategy : .iso8601,
+//                keyDecodingStrategy  : .useDefaultKeys)
+//            
+//            RealEstateAsset.setFiscalModelProvider(
+//                Fiscal.Model(fromFile   : "FiscalModelConfig.json",
+//                             fromBundle : Bundle.module)
+//                    .initialized())
         }
         
         func test_totalChildrenInheritanceTaxe() {
@@ -36,12 +37,12 @@ import XCTest
                                               brut: 50,
                                               net: 40,
                                               tax: 10)
-            conjointInheritance = Inheritance(personName: "enfant 1",
+            enfant1Inheritance = Inheritance(personName: "enfant 1",
                                               percent: 0.2,
                                               brut: 30,
                                               net: 24,
                                               tax: 6)
-            conjointInheritance = Inheritance(personName: "enfant 2",
+            enfant2Inheritance = Inheritance(personName: "enfant 2",
                                               percent: 0.2,
                                               brut: 20,
                                               net: 16,

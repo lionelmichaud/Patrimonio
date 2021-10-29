@@ -85,6 +85,18 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, Pe
         persistenceSM.process(event: .onLoad)
     }
     
+    public init(fromBundle bundle : Bundle,
+                fileNamePrefix    : String = "") {
+        self = bundle.loadFromJSON(ArrayOfNameableValuable.self,
+                                   from                 : fileNamePrefix + String(describing: E.self) + ".json",
+                                   dateDecodingStrategy : .iso8601,
+                                   keyDecodingStrategy  : .useDefaultKeys)
+        self.fileNamePrefix = fileNamePrefix
+        
+        // exécuter la transition
+        persistenceSM.process(event: .onLoad)
+    }
+    
     // MARK: - Methods
 
     public func saveAsJSON(toFolder folder: Folder) throws {

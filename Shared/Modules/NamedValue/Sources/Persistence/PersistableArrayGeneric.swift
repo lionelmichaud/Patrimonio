@@ -75,6 +75,18 @@ public struct PersistableArray<E>: JsonCodableToFolderP, PersistableP where
         persistenceSM.process(event: .onLoad)
     }
     
+    public init(fromBundle bundle : Bundle,
+                fileNamePrefix    : String = "") {
+        self = bundle.loadFromJSON(PersistableArray.self,
+                                   from                 : fileNamePrefix + String(describing: E.self) + ".json",
+                                   dateDecodingStrategy : .iso8601,
+                                   keyDecodingStrategy  : .useDefaultKeys)
+        self.fileNamePrefix = fileNamePrefix
+        
+        // exécuter la transition
+        persistenceSM.process(event: .onLoad)
+    }
+    
     // MARK: - Methods
     
     /// Enregistrer au format JSON dans un fichier JSON portant le nom de la Class `E`
