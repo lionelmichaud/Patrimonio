@@ -141,8 +141,11 @@ extension LifeInsuranceSuccessionManager {
     ///
     /// L'usufruit rejoint la nue-propriété en franchise d'impôt et est donc exclue de la base taxable.
     ///
-    /// - Warning: Cas non traités
-    ///  - capital de l'assurance vie démembré et le défunt est nue-propriétaire (la NP devrait rejoindre l'UF)
+    /// - Warning: Cas non traité:
+    ///   - Le défunt est un des PP propriétaires du capital de l'assurance vie
+    ///     - && le défunt n'est pas le seul PP
+    ///     - && la clause bénéficiaire de l'assurane vie est démembrée
+    ///   - Parts non égales entre nue-propriétaires bénéficiaires
     ///
     /// - Parameters:
     ///   - decedentName: nom du défunt

@@ -56,8 +56,8 @@ struct ValuedRevenues {
         // itérer sur l'enum pour préserver l'ordre
         for category in RevenueCategory.allCases {
             if let element = perCategory[category] {
-                table.namedValues.append((name  : element.name,
-                                          value : element.credits.total))
+                table.namedValues.append(NamedValue(name  : element.name,
+                                                    value : element.credits.total))
             }
         }
         return table

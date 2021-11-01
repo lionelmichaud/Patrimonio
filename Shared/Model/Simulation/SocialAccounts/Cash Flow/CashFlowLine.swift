@@ -37,10 +37,10 @@ struct CashFlowLine {
     var taxableIrppRevenueDelayedToNextYear = Debt(name  : "REVENU IMPOSABLE REPORTE A L'ANNEE SUIVANTE",
                                                    note  : "",
                                                    value : 0)
-
+    
     /// Agrégat des Revenus annuels des Parents (hors SCI)
     var adultsRevenues = ValuedRevenues(name: "REVENUS PARENTS HORS SCI")
-
+    
     /// Total de tous les revenus nets de l'année des Parents, versé en compte courant
     ///  - avant taxes et impots
     ///  - inclus revenus de la SCI
@@ -51,7 +51,7 @@ struct CashFlowLine {
         adultsRevenues.totalRevenueSalesExcluded +
             sciCashFlowLine.netRevenuesSalesExcluded
     }
-
+    
     /// Total de tous les revenus nets de l'année des Parents, versé en compte courant.
     /// - avant taxes et impots
     /// - inclus revenus de la SCI
@@ -130,7 +130,7 @@ struct CashFlowLine {
          withPatrimoine patrimoine             : Patrimoin,
          taxableIrppRevenueDelayedFromLastyear : Double,
          using model                           : Model) throws {
-
+        
         self.year = year
         let adultsNames = family.adults.compactMap {
             $0.isAlive(atEndOf: year) ? $0.displayName : nil
@@ -146,7 +146,7 @@ struct CashFlowLine {
                                           of       : patrimoine,
                                           for      : adultsNames,
                                           using    : model)
-
+        
         try autoreleasepool {
             /// INCOME: populate Ages and Work incomes
             populateIncomes(of: family, using: model)
@@ -170,7 +170,7 @@ struct CashFlowLine {
             
             /// ISF: calcule de l'impot sur la fortune
             computeISF(with: patrimoine, using: model)
-
+            
             /// EXPENSES: compute and populate family expenses
             lifeExpenses.namedValues = expenses.namedValueTable(atEndOf: year)
             
@@ -183,7 +183,7 @@ struct CashFlowLine {
                              with           : patrimoine,
                              familyProvider : family,
                              using          : model.fiscalModel)
-
+            
             /// FREE INVEST: populate revenue, des investissements financiers libres et investir/retirer le solde net du cash flow de l'année
             try manageYearlyNetCashFlow(of                  : patrimoine,
                                         for                 : adultsNames,
@@ -204,8 +204,8 @@ struct CashFlowLine {
         adultTaxes
             .perCategory[.irpp]?
             .namedValues
-            .append((name  : TaxeCategory.irpp.rawValue,
-                     value : adultTaxes.irpp.amount.rounded()))
+            .append(NamedValue(name  : TaxeCategory.irpp.rawValue,
+                               value : adultTaxes.irpp.amount.rounded()))
     }
     
     fileprivate mutating func computeISF(with patrimoine : Patrimoin,
@@ -216,8 +216,8 @@ struct CashFlowLine {
         adultTaxes
             .perCategory[.isf]?
             .namedValues
-            .append((name  : TaxeCategory.isf.rawValue,
-                     value : adultTaxes.isf.amount.rounded()))
+            .append(NamedValue(name  : TaxeCategory.isf.rawValue,
+                               value : adultTaxes.isf.amount.rounded()))
     }
     
     /// Populate remboursement d'emprunts des adultes de la famille
@@ -232,14 +232,14 @@ struct CashFlowLine {
                 let yearlyPayement = -loan.yearlyPayement(year)
                 debtPayements
                     .namedValues
-                    .append((name : name,
-                             value: yearlyPayement.rounded()))
+                    .append(NamedValue(name : name,
+                                       value: yearlyPayement.rounded()))
             } else {
                 // pour garder le nombre de séries graphiques constant au cours du temps
                 debtPayements
                     .namedValues
-                    .append((name : name,
-                             value: 0))
+                    .append(NamedValue(name : name,
+                                       value: 0))
             }
         }
     }

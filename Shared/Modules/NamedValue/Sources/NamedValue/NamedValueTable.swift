@@ -10,13 +10,24 @@ import Foundation
 
 // MARK: - Table nommée de couples (nom, valeur)
 
-public typealias NamedValue = (name: String, value: Double)
+public struct NamedValue: Equatable, Comparable, CustomStringConvertible {
+    public var description: String {
+        "(\(name), \(value))"
+    }
+    public var name  : String
+    public var value : Double
+    
+    public init(name: String, value: Double) {
+        self.name  = name
+        self.value = value
+    }
+}
 
-func == (lhs: NamedValue, rhs: NamedValue) -> Bool {
+public func == (lhs: NamedValue, rhs: NamedValue) -> Bool {
     lhs.name == rhs.name && lhs.value == rhs.value
 }
 
-func < (lhs: NamedValue, rhs: NamedValue) -> Bool {
+public func < (lhs: NamedValue, rhs: NamedValue) -> Bool {
     lhs.name < rhs.name
 }
 
@@ -38,6 +49,7 @@ public struct NamedValueTable: HasNamedValuedTableP {
 extension NamedValueTable: CustomStringConvertible {
     public var description: String {
         """
+        
         Nom de la table: \(tableName)
         Valeurs de la table:
 

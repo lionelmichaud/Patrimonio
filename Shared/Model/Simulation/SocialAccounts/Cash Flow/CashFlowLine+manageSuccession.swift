@@ -42,18 +42,18 @@ extension CashFlowLine {
         legalSuccessions   += successionManager.legalSuccessions
         lifeInsSuccessions += successionManager.lifeInsSuccessions
 
-        // droits de successions légales
-        //   - imputables aux adultes
+        // droits de successions LEGAUX
+        //   - imputables aux adultes (= 0 puisque le conjoint survivant est exonéré)
         adultTaxes
             .perCategory[.legalSuccession]?
             .namedValues += successionManager.legalSuccessionsTaxesAdults
-        //   - imputables aux enfants
+        //   - imputables aux enfants (doit être prélevé sur l'héritage après transfert de propriété)
         childrenTaxes
             .perCategory[.legalSuccession]?
             .namedValues += successionManager.legalSuccessionsTaxesChildren
 
-        // droits de successions légales
-        //   - imputables aux adultes
+        // droits de transmission des ASSURANCES VIES
+        //   - imputables aux adultes (= 0 puisque le conjoint survivant est exonéré)
         adultTaxes
             .perCategory[.liSuccession]?
             .namedValues += successionManager.lifeInsSuccessionsTaxesAdults

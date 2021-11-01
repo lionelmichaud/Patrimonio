@@ -9,6 +9,7 @@
 import Foundation
 import AppFoundation
 import PatrimoineModel
+import NamedValue
 
 extension CashFlowLine {
     /// Gère le produit de la vente des investissements financiers périodiques + les versements périodiques à réaliser
@@ -77,22 +78,22 @@ extension CashFlowLine {
                 .perCategory[.financials]?
                 .credits
                 .namedValues
-                .append((name: name,
+                .append(NamedValue(name: name,
                          value: revenue.rounded()))
             adultsRevenues
                 .perCategory[.financials]?
                 .taxablesIrpp
                 .namedValues
-                .append((name: name,
+                .append(NamedValue(name: name,
                          value: taxablesIrpp.rounded()))
             adultTaxes
                 .perCategory[.socialTaxes]?
                 .namedValues
-                .append((name: name,
+                .append(NamedValue(name: name,
                          value: socialTaxes.rounded()))
             investPayements
                 .namedValues
-                .append((name : name,
+                .append(NamedValue(name : name,
                          value: yearlyPayement.rounded()))
         }
     }

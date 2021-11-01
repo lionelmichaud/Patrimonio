@@ -149,7 +149,7 @@ final class LegalSuccessionManagerTests: XCTestCase {
                                                  brut       : brut,
                                                  abatFrac   : 1.0,
                                                  net        : heritageOfChild.netAmount,
-                                                 tax        : heritageOfChild.taxe),                                 ])
+                                                 tax        : heritageOfChild.taxe)])
         
         XCTAssertEqual(Set(inheritance), theoryInheritance)
     }
@@ -185,7 +185,7 @@ final class LegalSuccessionManagerTests: XCTestCase {
                                                  brut       : brutChild,
                                                  abatFrac   : 1.0,
                                                  net        : heritageOfChild.netAmount,
-                                                 tax        : heritageOfChild.taxe),                                 ])
+                                                 tax        : heritageOfChild.taxe)])
         
         XCTAssertEqual(Set(inheritance), theoryInheritance)
     }
@@ -195,7 +195,7 @@ final class LegalSuccessionManagerTests: XCTestCase {
             .legalSuccession(of      : "M. Lionel MICHAUD",
                              with    : Tests.patrimoin,
                              verbose : Tests.verbose)
-
+        
         let masse = Tests.manager.masseSuccessorale(in      : Tests.patrimoin,
                                                     of      : "M. Lionel MICHAUD",
                                                     verbose : Tests.verbose)
@@ -222,8 +222,8 @@ final class LegalSuccessionManagerTests: XCTestCase {
                                                  brut       : brutChild,
                                                  abatFrac   : 1.0,
                                                  net        : heritageOfChild.netAmount,
-                                                 tax        : heritageOfChild.taxe),                                 ])
-
+                                                 tax        : heritageOfChild.taxe)])
+        
         XCTAssertEqual(succession.kind, SuccessionKindEnum.legal)
         XCTAssertEqual(succession.yearOfDeath, 2021)
         XCTAssertEqual(succession.decedentName, "M. Lionel MICHAUD")
@@ -261,7 +261,7 @@ final class LegalSuccessionManagerTests: XCTestCase {
                                                  brut       : brutChild,
                                                  abatFrac   : 1.0,
                                                  net        : heritageOfChild.netAmount,
-                                                 tax        : heritageOfChild.taxe),                                 ])
+                                                 tax        : heritageOfChild.taxe)])
 
         XCTAssertEqual(succession.kind, SuccessionKindEnum.legal)
         XCTAssertEqual(succession.yearOfDeath, 2021)

@@ -8,6 +8,7 @@
 
 import Foundation
 import PatrimoineModel
+import NamedValue
 
 extension CashFlowLine {
     /// Populate produit de vente, dividendes, taxes sociales des SCPI hors de la SCI
@@ -42,19 +43,19 @@ extension CashFlowLine {
                 .perCategory[.scpis]?
                 .credits
                 .namedValues
-                .append((name: scpiName,
-                         value: revenue.rounded()))
+                .append(NamedValue(name: scpiName,
+                                   value: revenue.rounded()))
             adultsRevenues
                 .perCategory[.scpis]?
                 .taxablesIrpp
                 .namedValues
-                .append((name: scpiName,
-                         value: taxableIrpp.rounded()))
+                .append(NamedValue(name: scpiName,
+                                   value: taxableIrpp.rounded()))
             adultTaxes
                 .perCategory[.socialTaxes]?
                 .namedValues
-                .append((name: scpiName,
-                         value: socialTaxes.rounded()))
+                .append(NamedValue(name: scpiName,
+                                   value: socialTaxes.rounded()))
             
             /// Vente
             // le produit de la vente se répartit entre UF et NP si démembrement
@@ -79,8 +80,8 @@ extension CashFlowLine {
                 .perCategory[.scpiSale]?
                 .credits
                 .namedValues
-                .append((name: scpiName,
-                         value: netRevenue.rounded()))
+                .append(NamedValue(name: scpiName,
+                                   value: netRevenue.rounded()))
         }
     }
 }

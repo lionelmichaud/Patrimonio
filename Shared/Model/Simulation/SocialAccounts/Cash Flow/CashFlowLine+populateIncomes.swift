@@ -10,6 +10,7 @@ import Foundation
 import ModelEnvironment
 import PersonModel
 import FamilyModel
+import NamedValue
 
 extension CashFlowLine {
     /// Populate Ages and Work incomes
@@ -32,15 +33,15 @@ extension CashFlowLine {
                     .perCategory[.workIncomes]?
                     .credits
                     .namedValues
-                    .append((name: name,
-                             value: workIncome.net.rounded()))
+                    .append(NamedValue(name: name,
+                                       value: workIncome.net.rounded()))
                 // part des revenus du travail inscrite en compte qui est imposable à l'IRPP
                 adultsRevenues
                     .perCategory[.workIncomes]?
                     .taxablesIrpp
                     .namedValues
-                    .append((name: name,
-                             value: workIncome.taxableIrpp.rounded()))
+                    .append(NamedValue(name: name,
+                                       value: workIncome.taxableIrpp.rounded()))
                 
                 /// pension de retraite
                 let pension  = adult.pension(during: year, using: model)
@@ -49,8 +50,8 @@ extension CashFlowLine {
                     .perCategory[.pensions]?
                     .credits
                     .namedValues
-                    .append((name: name,
-                             value: pension.net.rounded()))
+                    .append(NamedValue(name: name,
+                                       value: pension.net.rounded()))
                 // part de la pension inscrite en compte qui est imposable à l'IRPP
                 let relicat = model.fiscalModel.pensionTaxes.model.maxRebate - totalPensionDiscount
                 var discount = pension.net - pension.taxable
@@ -60,16 +61,16 @@ extension CashFlowLine {
                         .perCategory[.pensions]?
                         .taxablesIrpp
                         .namedValues
-                        .append((name: name,
-                                 value: pension.taxable.rounded()))
+                        .append(NamedValue(name: name,
+                                           value: pension.taxable.rounded()))
                 } else {
                     discount = relicat
                     adultsRevenues
                         .perCategory[.pensions]?
                         .taxablesIrpp
                         .namedValues
-                        .append((name: name,
-                                 value: (pension.net - discount).rounded()))
+                        .append(NamedValue(name: name,
+                                           value: (pension.net - discount).rounded()))
                 }
                 totalPensionDiscount += discount
                 
@@ -79,27 +80,27 @@ extension CashFlowLine {
                     .perCategory[.layoffCompensation]?
                     .credits
                     .namedValues
-                    .append((name: name,
-                             value: compensation.net.rounded()))
+                    .append(NamedValue(name: name,
+                                       value: compensation.net.rounded()))
                 adultsRevenues
                     .perCategory[.layoffCompensation]?
                     .taxablesIrpp
                     .namedValues
-                    .append((name: name,
-                             value: compensation.taxable.rounded()))
+                    .append(NamedValue(name: name,
+                                       value: compensation.taxable.rounded()))
                 /// allocation chomage
                 let alocation = adult.unemployementAllocation(during: year, using: model)
                 adultsRevenues
                     .perCategory[.unemployAlloc]?
                     .credits
                     .namedValues
-                    .append((name: name, value: alocation.net.rounded()))
+                    .append(NamedValue(name: name, value: alocation.net.rounded()))
                 adultsRevenues
                     .perCategory[.unemployAlloc]?
                     .taxablesIrpp
                     .namedValues
-                    .append((name: name,
-                             value: alocation.taxable.rounded()))
+                    .append(NamedValue(name: name,
+                                       value: alocation.taxable.rounded()))
             }
         }
     }

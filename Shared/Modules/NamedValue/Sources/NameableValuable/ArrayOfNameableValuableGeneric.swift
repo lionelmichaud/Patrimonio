@@ -150,8 +150,8 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, Pe
     
     public func namedValueTable(atEndOf: Int) -> NamedValueArray {
         items.map {
-            (name  : $0.name,
-             value : $0.value(atEndOf : atEndOf))
+            NamedValue(name  : $0.name,
+                       value : $0.value(atEndOf : atEndOf))
         }
     }
 }

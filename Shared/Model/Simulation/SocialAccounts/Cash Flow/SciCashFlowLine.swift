@@ -54,7 +54,7 @@ struct SciCashFlowLine {
             scpiDividends.valuesArray + scpiSale.valuesArray
         }
     }
-
+    
     // MARK: - Properties
     
     let year : Int
@@ -74,7 +74,7 @@ struct SciCashFlowLine {
     /// Solde net des Revenus - IS de la SCI
     /// - EXCLUS produit de ventes de l'année capitalisé en cours d'années
     var netRevenuesSalesExcluded : Double { revenues.scpiDividends.total - IS }
-
+    
     /// tableau résumé des noms
     var namesArray: [String] {
         revenues.namesArray + ["SCI-IS"]
@@ -98,8 +98,8 @@ struct SciCashFlowLine {
     
     var summary: NamedValueTable {
         var table = NamedValueTable(tableName: "SCI")
-        table.namedValues.append((name  : "Revenu SCI",
-                                  value : netRevenues))
+        table.namedValues.append(NamedValue(name  : "Revenu SCI",
+                                            value : netRevenues))
         return table
     }
     
@@ -129,8 +129,8 @@ struct SciCashFlowLine {
                 revenue = fraction / 100.0 * yearlyRevenue.revenue
             }
             revenues.scpiDividends.namedValues
-                .append((name : scpiName,
-                         value: revenue.rounded()))
+                .append(NamedValue(name : scpiName,
+                                   value: revenue.rounded()))
             
             /// Ventes
             // le produit de la vente se répartit entre UF et NP si démembrement
@@ -153,8 +153,8 @@ struct SciCashFlowLine {
                                                  atEndOf       : year)
             }
             revenues.scpiSale.namedValues
-                .append((name : scpiName,
-                         value: netRevenue.rounded()))
+                .append(NamedValue(name : scpiName,
+                                   value: netRevenue.rounded()))
         }
         
         /// calcul de l'IS de la SCI dû sur les dividendes (sur les ventes: déduis au moment de la vente)

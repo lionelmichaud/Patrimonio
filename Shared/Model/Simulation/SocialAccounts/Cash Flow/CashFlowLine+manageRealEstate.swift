@@ -8,6 +8,7 @@
 
 import Foundation
 import PatrimoineModel
+import NamedValue
 
 extension CashFlowLine {
     /// Populate loyers, produit de la vente et impots locaux des biens immobiliers
@@ -46,27 +47,27 @@ extension CashFlowLine {
                 .perCategory[.realEstateRents]?
                 .credits
                 .namedValues
-                .append((name: name,
-                         value: revenue.rounded()))
+                .append(NamedValue(name: name,
+                                   value: revenue.rounded()))
             // part des loyers inscrit en compte courant imposable à l'IRPP - idem ci-dessus car même base
             adultsRevenues
                 .perCategory[.realEstateRents]?
                 .taxablesIrpp
                 .namedValues
-                .append((name: name,
-                         value: taxableIrpp.rounded()))
+                .append(NamedValue(name: name,
+                                   value: taxableIrpp.rounded()))
             // prélèvements sociaux payés sur le loyer
             adultTaxes
                 .perCategory[.socialTaxes]?
                 .namedValues
-                .append((name : name,
-                         value: socialTaxes.rounded()))
+                .append(NamedValue(name : name,
+                                   value: socialTaxes.rounded()))
             // impôts locaux
             adultTaxes
                 .perCategory[.localTaxes]?
                 .namedValues
-                .append((name: name,
-                         value: yearlyLocaltaxes.rounded()))
+                .append(NamedValue(name: name,
+                                   value: yearlyLocaltaxes.rounded()))
             
             /// Vente
             // le produit de la vente se répartit entre UF et NP si démembrement
@@ -91,8 +92,8 @@ extension CashFlowLine {
                 .perCategory[.realEstateSale]?
                 .credits
                 .namedValues
-                .append((name: name,
-                         value: netRevenue.rounded()))
+                .append(NamedValue(name: name,
+                                   value: netRevenue.rounded()))
         }
     }
 }

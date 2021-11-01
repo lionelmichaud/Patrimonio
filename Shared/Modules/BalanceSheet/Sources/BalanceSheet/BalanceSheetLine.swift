@@ -113,8 +113,8 @@ public struct BalanceSheetLine {
         assets[AppSettings.shared.allPersonsLabel]!
             .perCategory[category]?
             .namedValues
-            .append((name  : namePrefix + asset.name,
-                     value : asset.value(atEndOf: year).rounded()))
+            .append(NamedValue(name  : namePrefix + asset.name,
+                               value : asset.value(atEndOf: year).rounded()))
         
         //  somme des adultes (filtré et évalué selon préférences graphiques de l'utilisateur)
         var value: Double = 0
@@ -127,8 +127,8 @@ public struct BalanceSheetLine {
         assets[AppSettings.shared.adultsLabel]!
             .perCategory[category]?
             .namedValues
-            .append((name  : namePrefix + asset.name,
-                     value : value))
+            .append(NamedValue(name  : namePrefix + asset.name,
+                               value : value))
         
         //  individus (filtré et évalué selon préférences graphiques de l'utilisateur)
         membersName.forEach { name in
@@ -136,12 +136,12 @@ public struct BalanceSheetLine {
                                          atEndOf             : year,
                                          withOwnershipNature : UserSettings.shared.ownershipGraphicSelection,
                                          evaluatedFraction   : UserSettings.shared.assetGraphicEvaluatedFraction)
-
+            
             assets[name]!
                 .perCategory[category]?
                 .namedValues
-                .append((name  : namePrefix + asset.name,
-                         value : value))
+                .append(NamedValue(name  : namePrefix + asset.name,
+                                   value : value))
         }
     }
     
@@ -154,8 +154,8 @@ public struct BalanceSheetLine {
         liabilities[AppSettings.shared.allPersonsLabel]!
             .perCategory[category]?
             .namedValues
-            .append((name  : liability.name,
-                     value : liability.value(atEndOf: year).rounded()))
+            .append(NamedValue(name  : liability.name,
+                               value : liability.value(atEndOf: year).rounded()))
         
         //  adultes
         var value: Double = 0
@@ -168,8 +168,8 @@ public struct BalanceSheetLine {
         liabilities[AppSettings.shared.adultsLabel]!
             .perCategory[category]?
             .namedValues
-            .append((name  : liability.name,
-                     value : value))
+            .append(NamedValue(name  : liability.name,
+                               value : value))
         
         //  individus
         membersName.forEach { name in
@@ -180,8 +180,8 @@ public struct BalanceSheetLine {
             liabilities[name]!
                 .perCategory[category]?
                 .namedValues
-                .append( (name  : liability.name,
-                          value : value))
+                .append(NamedValue(name  : liability.name,
+                                   value : value))
         }
     }
 }

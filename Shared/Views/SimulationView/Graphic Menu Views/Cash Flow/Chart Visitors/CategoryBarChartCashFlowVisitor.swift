@@ -74,8 +74,8 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
             
             // valeurs des dépenses
             let selectedNamedValues = element.lifeExpenses.namedValues
-                .filter({ (name, _) in
-                    selectedExpensesNameArray.contains(name)
+                .filter({ namedValue in
+                    selectedExpensesNameArray.contains(namedValue.name)
                 })
             let y = selectedNamedValues.map(\.value)
             dataEntries.append(BarChartDataEntry(x       : element.year.double(),

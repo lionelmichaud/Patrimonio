@@ -84,8 +84,8 @@ public extension DictionaryOfNamedValueTableP {
         // itérer sur l'enum pour préserver l'ordre
         for category in Category.allCases {
             if let element = perCategory[category] {
-                table.namedValues.append((name  : element.tableName,
-                                          value : element.total))
+                table.namedValues.append(NamedValue(name  : element.tableName,
+                                                    value : element.total))
             }
         }
         return table

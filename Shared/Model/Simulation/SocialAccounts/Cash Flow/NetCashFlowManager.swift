@@ -247,8 +247,8 @@ struct NetCashFlowManager {
             // géré comme un revenu en report d'imposition (dette)
             totalTaxableInterests += removal.taxableInterests
             // Prélèvements sociaux
-            taxes[.socialTaxes]?.namedValues.append((name : patrimoine.assets.freeInvests[idx].name,
-                                                     value: removal.socialTaxes))
+            taxes[.socialTaxes]?.namedValues.append(NamedValue(name : patrimoine.assets.freeInvests[idx].name,
+                                                               value: removal.socialTaxes))
             if amountRemainingToRemove <= 0.0 {
                 return
             }

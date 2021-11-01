@@ -21,29 +21,29 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 public struct SuccessionManager {
     
     // MARK: - Properties
-
+    
     private var family      : FamilyProviderP
     private var patrimoine  : Patrimoin
     private var fiscalModel : Fiscal.Model
     private var year        : Int
     private var run         : Int
-
+    
     private var legalSuccessionManager         : LegalSuccessionManager
     private let lifeInsuranceSuccessionManager : LifeInsuranceSuccessionManager
     private var ownershipManager               : OwnershipManager
-
+    
     /// Les successions légales et assurances vie survenues dans l'année
     public var legalSuccessions   : [Succession] = []
     public var lifeInsSuccessions : [Succession] = []
-
+    
     /// Taxes sur les successions légales et assurances vie survenues dans l'année
     public var legalSuccessionsTaxesAdults     = NamedValueArray()
     public var legalSuccessionsTaxesChildren   = NamedValueArray()
     public var lifeInsSuccessionsTaxesAdults   = NamedValueArray()
     public var lifeInsSuccessionsTaxesChildren = NamedValueArray()
-
+    
     // MARK: - Initializers
-
+    
     /// - Parameters:
     ///   - family: la famille dont il faut faire le bilan
     ///   - patrimoine: le patrimoine de la famille
@@ -96,7 +96,7 @@ public struct SuccessionManager {
         lifeInsSuccessions              = []
         lifeInsSuccessionsTaxesAdults   = []
         lifeInsSuccessionsTaxesChildren = []
-
+        
         // (1) identification des personnes décédées dans l'année
         let adultDecedentsNames = family.deceasedAdults(during: year)
         
@@ -114,7 +114,7 @@ public struct SuccessionManager {
                 legalSuccessionManager.legalSuccession(of      : adultDecedentName,
                                                        with    : patrimoine,
                                                        verbose : verbose)
-
+            
             // calculer les transmissions et les droits de transmission assurances vies
             // sans exercer de clause à option
             var spouseName: String?
@@ -145,23 +145,23 @@ public struct SuccessionManager {
             
             legalSuccessions.append(legalSuccession)
             lifeInsSuccessions.append(lifeInsSuccession)
-
+            
             // transférer les biens d'un défunt vers ses héritiers
             ownershipManager.transferOwnershipOf(assets      : &patrimoine.assets,
                                                  liabilities : &patrimoine.liabilities,
                                                  of          : adultDecedentName)
         }
         
-        // (3) Cummuler les droits de successions/transmissions de l'année
-        updateSuccessionsTaxes(legalSuccessions   : legalSuccessions,
-                               lifeInsSuccessions : lifeInsSuccessions,
-                               verbose            : verbose)
+        // (3) Cummuler les droits de successions/transmissions de l'année par personne
+        computeSuccessionsTaxesPerPerson(legalSuccessions   : legalSuccessions,
+                                         lifeInsSuccessions : lifeInsSuccessions,
+                                         verbose            : verbose)
         
         if verbose {
             print(String(describing: self))
         }
     }
-
+    
     fileprivate func makeSureChildrenCanPaySuccessionTaxes
     (of decedentName   : String,
      legalSuccession   : Succession,
@@ -170,10 +170,10 @@ public struct SuccessionManager {
         
         // calculer les taxes dûes par les enfants au premier décès
         let childrenInheritancesTaxe =
-        totalChildrenInheritanceTaxe(legalSuccession   : legalSuccession,
-                                     lifeInsSuccession : lifeInsSuccession,
-                                     verbose           : verbose)
-
+            totalChildrenInheritanceTaxe(legalSuccession   : legalSuccession,
+                                         lifeInsSuccession : lifeInsSuccession,
+                                         verbose           : verbose)
+        
         // si nécessaire et si possible: l'adulte survivant exerce une option de clause d'AV
         // pour permettre le payement des droits de succession des enfants par les enfants
         let adultSurvivorName = family.adultsName.first { $0 != decedentName}!
@@ -222,11 +222,13 @@ public struct SuccessionManager {
     
     /// Ajoute les droits de succession  aux taxes de l'année de succession.
     ///
-    /// On traite séparément les droits de succession dûs par les parents et par les enfants.
+    /// On traite séparément les droits de succession dûs par les PARENTS et par les ENFANTS.
     ///
-    mutating func updateSuccessionsTaxes(legalSuccessions   : [Succession],
-                                         lifeInsSuccessions : [Succession],
-                                         verbose            : Bool = false) {
+    /// On traite séparément les droits de succession LEGAUX et ASSURANCE VIE.
+    ///
+    mutating func computeSuccessionsTaxesPerPerson(legalSuccessions   : [Succession],
+                                                   lifeInsSuccessions : [Succession],
+                                                   verbose            : Bool = false) {
         family.members.items.forEach { member in
             /// successions légales
             var taxe: Double = 0
@@ -239,12 +241,12 @@ public struct SuccessionManager {
             }
             if member is Adult {
                 legalSuccessionsTaxesAdults
-                    .append((name  : member.displayName,
-                             value : taxe))
+                    .append(NamedValue(name  : member.displayName,
+                                       value : taxe))
             } else {
                 legalSuccessionsTaxesChildren
-                    .append((name  : member.displayName,
-                             value : taxe))
+                    .append(NamedValue(name  : member.displayName,
+                                       value : taxe))
             }
             /// succession des assurances vies
             taxe = 0
@@ -257,12 +259,12 @@ public struct SuccessionManager {
             }
             if member is Adult {
                 lifeInsSuccessionsTaxesAdults
-                    .append((name  : member.displayName,
-                             value : taxe))
+                    .append(NamedValue(name  : member.displayName,
+                                       value : taxe))
             } else {
                 lifeInsSuccessionsTaxesChildren
-                    .append((name  : member.displayName,
-                             value : taxe))
+                    .append(NamedValue(name  : member.displayName,
+                                       value : taxe))
             }
         }
     }

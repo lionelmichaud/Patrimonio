@@ -71,7 +71,7 @@ import NamedValue
         
         // MARK: Tests Calculs Abattements
         
-        func test_updateSuccessionsTaxes() {
+        func test_computeSuccessionsTaxesPerPerson() {
             let decedentName = "M. Lionel MICHAUD"
             let spouseName   = "Mme. Vanessa MICHAUD"
             let childrenName = ["Mme. Isaline MICHAUD", "M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
@@ -108,10 +108,6 @@ import NamedValue
             let theory_free_av_afel_enf = 1.0 * 0.5 * 0.5 * (106_533.0 +  96_805.0)
             //let theory_free_av_afev     = 0.0 * 0.5 * ( 29_000.0 +  31_213.0)
             
-            //            let totalTaxableInheritanceValue =
-            //                2.0 * (therory_period_tonl_enf + theory_free_av_afel_enf + theory_free_av_boul_enf) +
-            //                theory_free_av_afel_van + theory_free_av_boul_van
-            //
             let capitauxDeces = ["Mme. Vanessa MICHAUD" : theory_free_av_boul_van + theory_free_av_afel_van,
                                  "M. Arthur MICHAUD"    : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf,
                                  "Mme. Lou-Ann MICHAUD" : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf]
@@ -161,7 +157,7 @@ import NamedValue
             //                                                        enfant2Inheritance])
             //
             
-            Tests.manager.updateSuccessionsTaxes(legalSuccessions   : [Succession(kind: .legal,
+            Tests.manager.computeSuccessionsTaxesPerPerson(legalSuccessions   : [Succession(kind: .legal,
                                                                                   yearOfDeath: 2021,
                                                                                   decedentName: decedentName,
                                                                                   taxableValue: 0.0,
@@ -169,15 +165,13 @@ import NamedValue
                                                  lifeInsSuccessions : [lifeInsSuccession],
                                                  verbose            : Tests.verbose)
             
-            let theory_lifeInsSuccessionsTaxesAdults = [(name: decedentName, value: 0.0),
-                                                        (name: spouseName, value: 0.0)]
-            let theory_lifeInsSuccessionsTaxesChildren: NamedValueArray = [(name: childrenName.first!, value: 0.0),
-                                                                           (name: childrenName[1],     value: taxeEnfant),
-                                                                           (name: childrenName.last!,  value: taxeEnfant)]
-            XCTAssertEqual(theory_lifeInsSuccessionsTaxesAdults,
-                           Tests.manager.lifeInsSuccessionsTaxesAdults)
-            XCTAssertEqual(theory_lifeInsSuccessionsTaxesChildren,
-                           Tests.manager.lifeInsSuccessionsTaxesChildren)
+            let theory_lifeInsSuccessionsTaxesAdults = [NamedValue(name: decedentName, value: 0.0),
+                                                        NamedValue(name: spouseName, value: 0.0)]
+            let theory_lifeInsSuccessionsTaxesChildren: NamedValueArray = [NamedValue(name: childrenName.first!, value: 0.0),
+                                                                           NamedValue(name: childrenName[1],     value: taxeEnfant),
+                                                                           NamedValue(name: childrenName.last!,  value: taxeEnfant)]
+            XCTAssertTrue(theory_lifeInsSuccessionsTaxesAdults.containsSameElements(as: Tests.manager.lifeInsSuccessionsTaxesAdults))
+            XCTAssertTrue(theory_lifeInsSuccessionsTaxesChildren.containsSameElements(as: Tests.manager.lifeInsSuccessionsTaxesChildren))
         }
         
         func test_totalChildrenInheritanceTaxe() {
