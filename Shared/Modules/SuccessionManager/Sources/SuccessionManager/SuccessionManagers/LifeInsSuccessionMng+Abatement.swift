@@ -21,7 +21,7 @@ extension LifeInsuranceSuccessionManager {
     ///   - spouseName: nom du conjoint du défunt
     ///   - childrenName: nom des enfants du défunt
     ///   - verbose: sorties console
-    /// - Returns: [nom héritier : montant de l'abattement]
+    /// - Returns: [nom héritier : fraction de l'abattement maximum [0;1] ]
     func abattementsParPersonne(of decedentName : String,
                                 with invests    : [FinancialEnvelopP],
                                 spouseName      : String?,

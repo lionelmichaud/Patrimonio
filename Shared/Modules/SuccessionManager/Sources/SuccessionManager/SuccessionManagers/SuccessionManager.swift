@@ -37,8 +37,10 @@ public struct SuccessionManager {
     public var lifeInsSuccessions : [Succession] = []
 
     /// Taxes sur les successions légales et assurances vie survenues dans l'année
-    public var legalSuccessionsTaxes   = NamedValueArray()
-    public var lifeInsSuccessionsTaxes = NamedValueArray()
+    public var legalSuccessionsTaxesAdults     = NamedValueArray()
+    public var legalSuccessionsTaxesChildren   = NamedValueArray()
+    public var lifeInsSuccessionsTaxesAdults   = NamedValueArray()
+    public var lifeInsSuccessionsTaxesChildren = NamedValueArray()
 
     // MARK: - Initializers
 
@@ -86,11 +88,14 @@ public struct SuccessionManager {
     ///
     ///    * 3 - Cummuler les droits de successions/transmissions de l'année.
     ///
-    public mutating func manageSuccession() {
-        legalSuccessions        = []
-        legalSuccessionsTaxes   = []
-        lifeInsSuccessions      = []
-        lifeInsSuccessionsTaxes = []
+    public mutating func manageSuccession(verbose: Bool = false) {
+        // tout remettre à 0 avant chaque calcul
+        legalSuccessions                = []
+        legalSuccessionsTaxesAdults     = []
+        legalSuccessionsTaxesChildren   = []
+        lifeInsSuccessions              = []
+        lifeInsSuccessionsTaxesAdults   = []
+        lifeInsSuccessionsTaxesChildren = []
 
         // (1) identification des personnes décédées dans l'année
         let adultDecedentsNames = family.deceasedAdults(during: year)
@@ -106,8 +111,9 @@ public struct SuccessionManager {
             // calculer les successions et les droits de successions légales
             // sans exercer de clause à option
             let legalSuccession =
-                legalSuccessionManager.legalSuccession(of   : adultDecedentName,
-                                                       with : patrimoine)
+                legalSuccessionManager.legalSuccession(of      : adultDecedentName,
+                                                       with    : patrimoine,
+                                                       verbose : verbose)
 
             // calculer les transmissions et les droits de transmission assurances vies
             // sans exercer de clause à option
@@ -122,7 +128,8 @@ public struct SuccessionManager {
                     of           : adultDecedentName,
                     with         : patrimoine,
                     spouseName   : spouseName,
-                    childrenName : family.childrenAliveName(atEndOf : year))
+                    childrenName : family.childrenAliveName(atEndOf : year),
+                    verbose      : verbose)
             
             // au premier décès parmis les adultes:
             // s'assurer que les enfants peuvent payer les droits de succession
@@ -132,7 +139,8 @@ public struct SuccessionManager {
                     family.nbOfAdultAlive(atEndOf: year) == 0 && adultDecedentsNames.count == 2) {
                 makeSureChildrenCanPaySuccessionTaxes(of                : adultDecedentName,
                                                       legalSuccession   : legalSuccession,
-                                                      lifeInsSuccession : &lifeInsSuccession)
+                                                      lifeInsSuccession : &lifeInsSuccession,
+                                                      verbose           : verbose)
             }
             
             legalSuccessions.append(legalSuccession)
@@ -145,17 +153,26 @@ public struct SuccessionManager {
         }
         
         // (3) Cummuler les droits de successions/transmissions de l'année
-        updateSuccessionsTaxes()
+        updateSuccessionsTaxes(legalSuccessions   : legalSuccessions,
+                               lifeInsSuccessions : lifeInsSuccessions,
+                               verbose            : verbose)
+        
+        if verbose {
+            print(String(describing: self))
+        }
     }
 
     fileprivate func makeSureChildrenCanPaySuccessionTaxes
     (of decedentName   : String,
      legalSuccession   : Succession,
-     lifeInsSuccession : inout Succession) {
+     lifeInsSuccession : inout Succession,
+     verbose           : Bool = false) {
+        
         // calculer les taxes dûes par les enfants au premier décès
         let childrenInheritancesTaxe =
         totalChildrenInheritanceTaxe(legalSuccession   : legalSuccession,
-                                     lifeInsSuccession : lifeInsSuccession)
+                                     lifeInsSuccession : lifeInsSuccession,
+                                     verbose           : verbose)
 
         // si nécessaire et si possible: l'adulte survivant exerce une option de clause d'AV
         // pour permettre le payement des droits de succession des enfants par les enfants
@@ -175,16 +192,18 @@ public struct SuccessionManager {
         lifeInsSuccession =
             lifeInsuranceSuccessionManager.lifeInsuranceSuccession(
                 of           : decedentName,
-                with           : patrimoine,
+                with         : patrimoine,
                 spouseName   : family.spouseNameOf(decedentName),
-                childrenName : family.childrenAliveName(atEndOf : year))
+                childrenName : family.childrenAliveName(atEndOf : year),
+                verbose      : verbose)
     }
     
     /// Calculer le total des taxes dûes par les enfants à partir des successions
     /// - Returns: total des taxes dûes par les enfants [Nom; Taxe totale à payer]
-    func totalChildrenInheritanceTaxe
-    (legalSuccession   : Succession,
-     lifeInsSuccession : Succession) -> NameValueDico {
+    func totalChildrenInheritanceTaxe(legalSuccession   : Succession,
+                                      lifeInsSuccession : Succession,
+                                      verbose           : Bool = false) -> NameValueDico {
+        
         var childrenTaxes = NameValueDico()
         family.childrenName.forEach { childName in
             childrenTaxes[childName] = 0
@@ -205,7 +224,9 @@ public struct SuccessionManager {
     ///
     /// On traite séparément les droits de succession dûs par les parents et par les enfants.
     ///
-    fileprivate mutating func updateSuccessionsTaxes() {
+    mutating func updateSuccessionsTaxes(legalSuccessions   : [Succession],
+                                         lifeInsSuccessions : [Succession],
+                                         verbose            : Bool = false) {
         family.members.items.forEach { member in
             /// successions légales
             var taxe: Double = 0
@@ -216,10 +237,15 @@ public struct SuccessionManager {
                     }
                 }
             }
-            legalSuccessionsTaxes
-                .append((name  : member.displayName,
-                         value : taxe))
-            
+            if member is Adult {
+                legalSuccessionsTaxesAdults
+                    .append((name  : member.displayName,
+                             value : taxe))
+            } else {
+                legalSuccessionsTaxesChildren
+                    .append((name  : member.displayName,
+                             value : taxe))
+            }
             /// succession des assurances vies
             taxe = 0
             lifeInsSuccessions.forEach { succession in
@@ -229,9 +255,31 @@ public struct SuccessionManager {
                     }
                 }
             }
-            lifeInsSuccessionsTaxes
-                .append((name  : member.displayName,
-                         value : taxe))
+            if member is Adult {
+                lifeInsSuccessionsTaxesAdults
+                    .append((name  : member.displayName,
+                             value : taxe))
+            } else {
+                lifeInsSuccessionsTaxesChildren
+                    .append((name  : member.displayName,
+                             value : taxe))
+            }
         }
+    }
+}
+
+extension SuccessionManager: CustomStringConvertible {
+    public var description: String {
+        """
+        Successions Légales:
+        \(String(describing: legalSuccessions).withPrefixedSplittedLines("  "))
+            Droits de succession:
+            \(String(describing: legalSuccessionsTaxesAdults + legalSuccessionsTaxesChildren).withPrefixedSplittedLines("  "))
+
+        Successions Assurances Vies:
+        \(String(describing: lifeInsSuccessions).withPrefixedSplittedLines("  "))
+            Taxes de transmission:
+            \(String(describing: lifeInsSuccessionsTaxesAdults + lifeInsSuccessionsTaxesChildren).withPrefixedSplittedLines("  "))
+        """
     }
 }

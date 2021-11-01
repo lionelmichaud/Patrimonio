@@ -64,16 +64,19 @@ struct CashFlowLine {
     // Dépenses des Parents
     
     /// Agrégat des Taxes annuelles payées par les Parents
-    var adultTaxes      = ValuedTaxes(name: "Taxes")
+    var adultTaxes      = ValuedTaxes(name: "Taxes des parents")
+    
+    /// Agrégat des Taxes annuelles payées par les Enfants
+    var childrenTaxes   = ValuedTaxes(name: "Taxes des enfants")
     
     /// Dépenses de vie des Parents
-    var lifeExpenses    = NamedValueTable(tableName: "Dépenses de vie")
+    var lifeExpenses    = NamedValueTable(tableName: "Dépenses de vie des parents")
     
     /// remboursements d'emprunts ou de dettes des Parents
-    var debtPayements   = NamedValueTable(tableName: "Remb. dette")
+    var debtPayements   = NamedValueTable(tableName: "Remb. dette des parents")
     
     /// Versements périodiques des Parents sur des plan d'investissement périodiques
-    var investPayements = NamedValueTable(tableName: "Investissements")
+    var investPayements = NamedValueTable(tableName: "Investissements des parents")
     
     /// Total des dépenses annuelles des Parents
     var sumOfExpenses: Double {

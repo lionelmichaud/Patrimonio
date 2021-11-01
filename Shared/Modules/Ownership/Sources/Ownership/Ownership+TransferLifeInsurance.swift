@@ -44,7 +44,8 @@ extension Ownership {
     public mutating func transferLifeInsurance(of decedentName    : String,
                                                spouseName         : String?,
                                                childrenName       : [String]?,
-                                               accordingTo clause : inout LifeInsuranceClause) throws {
+                                               accordingTo clause : inout LifeInsuranceClause,
+                                               verbose            : Bool = false) throws {
         guard isValid else {
             let invalid = self
             customLogOwnership.log(level: .error, "'transferOwnershipOf' a généré un 'ownership' invalide\n\(invalid, privacy: .public)")
@@ -54,8 +55,9 @@ extension Ownership {
         if isDismembered {
             // (A) le capital de l'assurane vie est démembré
             try transferDismemberedLifeInsurance(
-                of: decedentName,
-                accordingTo: clause)
+                of          : decedentName,
+                accordingTo : clause,
+                verbose     : verbose)
             
         } else {
             // (B) le capital de l'assurance vie n'est pas démembré
@@ -63,7 +65,8 @@ extension Ownership {
                 of           : decedentName,
                 spouseName   : spouseName,
                 childrenName : childrenName,
-                accordingTo  : &clause)
+                accordingTo  : &clause,
+                verbose      : verbose)
         }
         
         guard isValid else {
@@ -93,7 +96,8 @@ extension Ownership {
     ///
     mutating func transferDismemberedLifeInsurance
     (of decedentName    : String,
-     accordingTo clause : LifeInsuranceClause) throws {
+     accordingTo clause : LifeInsuranceClause,
+     verbose            : Bool = false) throws {
         // (A) le capital de l'assurane vie est démembré
         let isUsufructOwner = hasAnUsufructOwner(named: decedentName)
         let isBareOwner     = hasABareOwner(named: decedentName)
@@ -102,7 +106,7 @@ extension Ownership {
             case (true, false):
                 // (1) le défunt est UF et pas NP
                 // l'usufruit rejoint la nue-propriété
-                try transfertDismemberedLifeInsuranceUsufruct(of: decedentName)
+                try transfertDismemberedLifeInsuranceUsufruct(of: decedentName, verbose: verbose)
                 
             case (_, true):
                 // (2) le défunt est un NP
@@ -134,7 +138,8 @@ extension Ownership {
     ///   - OwnershipError.tryingToTransferAssetWithSeveralUsufructOwners
     ///   - OwnershipError.tryingToTransferAssetWithNoBareOwner
     ///
-    fileprivate mutating func transfertDismemberedLifeInsuranceUsufruct(of decedentName: String) throws {
+    fileprivate mutating func transfertDismemberedLifeInsuranceUsufruct(of decedentName : String,
+                                                                        verbose         : Bool = false) throws {
         guard hasAUniqueUsufructOwner(named: decedentName) else {
             // TODO: - Gérer correctement les transferts de propriété des biens indivis et démembrés
             let invalid = self
@@ -192,7 +197,8 @@ extension Ownership {
     (of decedentName    : String,
      spouseName         : String?,
      childrenName       : [String]?,
-     accordingTo clause : inout LifeInsuranceClause) throws {
+     accordingTo clause : inout LifeInsuranceClause,
+     verbose            : Bool = false) throws {
         // (B) le capital de l'assurance vie n'est pas démembré
         // le défunt est-il un des PP propriétaires du capital de l'assurance vie ?
         if hasAFullOwner(named: decedentName) {
@@ -202,7 +208,8 @@ extension Ownership {
                 if fullOwners.count == 1 {
                     // (a) le défunt est le seul PP de l'assurance vie
                     // Transférer l'usufruit et la nue-prorpiété de l'assurance vie séparement
-                    try transferUndismemberedLifeInsToUsufructAndBareOwners(accordingTo: clause)
+                    try transferUndismemberedLifeInsToUsufructAndBareOwners(accordingTo: clause,
+                                                                            verbose    : verbose)
 
                 } else {
                     // (b) le défunt n'est pas le seul PP de l'assurance vie
@@ -219,7 +226,8 @@ extension Ownership {
                 try transferUndismemberedLifeInsFullOwnership(of           : decedentName ,
                                                               spouseName   : spouseName,
                                                               childrenName : childrenName,
-                                                              accordingTo  : &clause)
+                                                              accordingTo  : &clause,
+                                                              verbose      : verbose)
 
             }
             
@@ -246,7 +254,8 @@ extension Ownership {
     ///   - OwnershipError.invalidOwnership
     ///
     fileprivate mutating func transferUndismemberedLifeInsToUsufructAndBareOwners
-    (accordingTo clause: LifeInsuranceClause) throws {
+    (accordingTo clause : LifeInsuranceClause,
+     verbose            : Bool = false) throws {
         guard !isDismembered else {
             customLogOwnership.log(level: .fault, "transferUndismemberedLifeInsToUsufructAndBareOwners: L'assurance vie est démembrée")
             fatalError("transferUndismemberedLifeInsToUsufructAndBareOwners: L'assurance vie est démembrée")
@@ -299,7 +308,8 @@ extension Ownership {
     (of decedentName    : String,
      spouseName         : String?,
      childrenName       : [String]?,
-     accordingTo clause : inout LifeInsuranceClause) throws {
+     accordingTo clause : inout LifeInsuranceClause,
+     verbose            : Bool = false) throws {
         guard !isDismembered else {
             customLogOwnership.log(level: .fault,
                                    "transferUndismemberedLifeInsFullOwnership: L'assurance vie est démembrée")
@@ -323,22 +333,26 @@ extension Ownership {
                                         fraction : ownerShare * recepient.fraction / 100.0))
             }
             groupShares()
-
+            
             // MODIFICATION DE LA CLAUSE
             // le conjoint survivant fait-il partie des nouveaux PP ?
             if fullOwners.contains(where: { spouseName == $0.name }) {
-                print(">> Transfert assurance vie détenue en PP: \n Ownership\n\(String(describing: self))")
-                print("Modification de la clause\nClause avant:\n\(String(describing: clause))")
+                if verbose {
+                    print(">> Transfert assurance vie détenue en PP: \n Ownership\n\(String(describing: self))")
+                    print("Modification de la clause\n  Clause avant:\n\(String(describing: clause))")
+                }
                 // la part détenue par le conjoint survivant sera donnée aux enfants par part égales
                 // il faut mofifier la clause pour que sa part soit données aux enfants à son décès
                 clause.isOptional = false
                 clause.fullRecipients = []
                 // redistribuer sa part aux enfants
                 childrenName?.forEach { childName in
-                        clause.fullRecipients.append(Owner(name     : childName,
-                                                           fraction : 100.0 / childrenName!.count.double()))
+                    clause.fullRecipients.append(Owner(name     : childName,
+                                                       fraction : 100.0 / childrenName!.count.double()))
                 }
-                print(" Clause après:\n\(String(describing: clause))")
+                if verbose {
+                    print("  Clause après:\n\(String(describing: clause))")
+                }
                 guard clause.isValid else {
                     let invalid = clause
                     let cause = clause.invalidityCause ?? ""

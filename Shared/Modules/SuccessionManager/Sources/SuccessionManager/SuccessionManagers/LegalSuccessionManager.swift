@@ -134,6 +134,7 @@ public struct LegalSuccessionManager {
         var inheritances = [Inheritance(personName : conjointSurvivant.displayName,
                                         percent    : share,
                                         brut       : brut,
+                                        abatFrac   : 1.0,
                                         net        : brut - tax,
                                         tax        : tax)]
         if verbose { print(String(describing: inheritances.last)) }
@@ -171,6 +172,7 @@ public struct LegalSuccessionManager {
                 inheritances.append(Inheritance(personName : childName,
                                                 percent    : share,
                                                 brut       : brut,
+                                                abatFrac   : 1.0,
                                                 net        : heritageOfChild.netAmount,
                                                 tax        : heritageOfChild.taxe))
             }

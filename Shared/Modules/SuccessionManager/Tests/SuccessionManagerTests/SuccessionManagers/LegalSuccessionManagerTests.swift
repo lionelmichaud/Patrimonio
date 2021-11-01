@@ -51,13 +51,14 @@ final class LegalSuccessionManagerTests: XCTestCase {
         PeriodicInvestement.setEconomyModelProvider(model.economyModel)
         FreeInvestement.setEconomyModelProvider(model.economyModel)
 
-        // charger le patrimoine
-        patrimoin = Patrimoin(fromBundle: Bundle.module,
-                              fileNamePrefix: "LifeInsMng_")
-
         // charger la famille
         XCTAssertNoThrow(family = try Family(fromBundle: Bundle.module, using: model),
                          "Failed to read Family from Module Bundle \(String(describing: Bundle.module.resourcePath))")
+
+        // charger le patrimoine
+        Patrimoin.familyProvider = family
+        patrimoin = Patrimoin(fromBundle: Bundle.module,
+                              fileNamePrefix: "LifeInsMng_")
         
         // injection de family dans la propriété statique de DateBoundary pour lier les évenements à des personnes
         DateBoundary.setPersonEventYearProvider(family)
@@ -140,11 +141,13 @@ final class LegalSuccessionManagerTests: XCTestCase {
         let theoryInheritance = Set([Inheritance(personName : "M. Arthur MICHAUD",
                                                  percent    : share,
                                                  brut       : brut,
+                                                 abatFrac   : 1.0,
                                                  net        : heritageOfChild.netAmount,
                                                  tax        : heritageOfChild.taxe),
                                      Inheritance(personName : "Mme. Lou-Ann MICHAUD",
                                                  percent    : share,
                                                  brut       : brut,
+                                                 abatFrac   : 1.0,
                                                  net        : heritageOfChild.netAmount,
                                                  tax        : heritageOfChild.taxe),                                 ])
         
@@ -168,16 +171,19 @@ final class LegalSuccessionManagerTests: XCTestCase {
         let theoryInheritance = Set([Inheritance(personName : "Mme. Vanessa MICHAUD",
                                                  percent    : conjointShare,
                                                  brut       : conjointShare * masse,
+                                                 abatFrac   : 1.0,
                                                  net        : conjointShare * masse,
                                                  tax        : 0.0),
                                      Inheritance(personName : "M. Arthur MICHAUD",
                                                  percent    : childShare,
                                                  brut       : brutChild,
+                                                 abatFrac   : 1.0,
                                                  net        : heritageOfChild.netAmount,
                                                  tax        : heritageOfChild.taxe),
                                      Inheritance(personName : "Mme. Lou-Ann MICHAUD",
                                                  percent    : childShare,
                                                  brut       : brutChild,
+                                                 abatFrac   : 1.0,
                                                  net        : heritageOfChild.netAmount,
                                                  tax        : heritageOfChild.taxe),                                 ])
         
@@ -202,16 +208,19 @@ final class LegalSuccessionManagerTests: XCTestCase {
         let theoryInheritance = Set([Inheritance(personName : "Mme. Vanessa MICHAUD",
                                                  percent    : conjointShare,
                                                  brut       : conjointShare * masse,
+                                                 abatFrac   : 1.0,
                                                  net        : conjointShare * masse,
                                                  tax        : 0.0),
                                      Inheritance(personName : "M. Arthur MICHAUD",
                                                  percent    : childShare,
                                                  brut       : brutChild,
+                                                 abatFrac   : 1.0,
                                                  net        : heritageOfChild.netAmount,
                                                  tax        : heritageOfChild.taxe),
                                      Inheritance(personName : "Mme. Lou-Ann MICHAUD",
                                                  percent    : childShare,
                                                  brut       : brutChild,
+                                                 abatFrac   : 1.0,
                                                  net        : heritageOfChild.netAmount,
                                                  tax        : heritageOfChild.taxe),                                 ])
 
@@ -244,11 +253,13 @@ final class LegalSuccessionManagerTests: XCTestCase {
         let theoryInheritance = Set([Inheritance(personName : "M. Arthur MICHAUD",
                                                  percent    : childShare,
                                                  brut       : brutChild,
+                                                 abatFrac   : 1.0,
                                                  net        : heritageOfChild.netAmount,
                                                  tax        : heritageOfChild.taxe),
                                      Inheritance(personName : "Mme. Lou-Ann MICHAUD",
                                                  percent    : childShare,
                                                  brut       : brutChild,
+                                                 abatFrac   : 1.0,
                                                  net        : heritageOfChild.netAmount,
                                                  tax        : heritageOfChild.taxe),                                 ])
 

@@ -240,37 +240,80 @@ class LifeInsuranceInheritanceTests: XCTestCase {
     
     // MARK: Tests
 
-    func test_calcul_heritage_assurance_vie_par_enfant() throws {
+    func test_calcul_heritage_assurance_vie_par_enfant() {
         var partSuccession : Double
         var taxTheory      : Double
+        var resultat       : (netAmount: Double, taxe: Double) = (0.0, 0.0)
         
         partSuccession = 100_000.0
-        var resultat = try LifeInsuranceInheritanceTests.lifeInsuranceInheritance.heritageOfChild(
-            partSuccession: partSuccession)
+        XCTAssertNoThrow(resultat =
+                            try LifeInsuranceInheritanceTests.lifeInsuranceInheritance.heritageNetTaxToChild(
+                                partSuccession: partSuccession))
         taxTheory = 0.0
         XCTAssertEqual(taxTheory, resultat.taxe)
         XCTAssertEqual(partSuccession - taxTheory, resultat.netAmount)
-
+        
         partSuccession = 160_000.0
-        resultat = try LifeInsuranceInheritanceTests.lifeInsuranceInheritance.heritageOfChild(
-            partSuccession: partSuccession)
+        XCTAssertNoThrow(resultat =
+                            try LifeInsuranceInheritanceTests.lifeInsuranceInheritance.heritageNetTaxToChild(
+                                partSuccession: partSuccession))
         taxTheory = (partSuccession - 152_500.0) * 0.2
         XCTAssertEqual(taxTheory, resultat.taxe)
         XCTAssertEqual(partSuccession - taxTheory, resultat.netAmount)
         
         partSuccession = 1_000_000.0
-        resultat = try LifeInsuranceInheritanceTests.lifeInsuranceInheritance.heritageOfChild(
-            partSuccession: partSuccession)
+        XCTAssertNoThrow(resultat =
+                            try LifeInsuranceInheritanceTests.lifeInsuranceInheritance.heritageNetTaxToChild(
+                                partSuccession: partSuccession))
         taxTheory = (852_500.0 - 152_500.0) * 0.2 + (partSuccession - 852_500.0) * 0.3125
         XCTAssertEqual(taxTheory, resultat.taxe)
         XCTAssertEqual(partSuccession - taxTheory, resultat.netAmount)
+    }
+    
+    func test_calcul_heritage_assurance_vie_par_enfant_avec_reduction_abattement() {
+        var partSuccession : Double
+        var taxTheory      : Double
+        var resultat       : (netAmount: Double, taxe: Double) = (0.0, 0.0)
+        let fracAbattement = 0.8
+        let abbatementReduit = fracAbattement * 152_500.0
+        
+        partSuccession = abbatementReduit - 1_000.0
+        XCTAssertNoThrow(resultat =
+                            try LifeInsuranceInheritanceTests
+                            .lifeInsuranceInheritance
+                            .heritageNetTaxToChild(partSuccession: partSuccession,
+                                                   fracAbattement: fracAbattement))
+        taxTheory = 0.0
+        XCTAssertEqual(taxTheory, resultat.taxe)
+        XCTAssertEqual(partSuccession - taxTheory, resultat.netAmount)
+        
+        partSuccession = abbatementReduit + 1_000.0
+        XCTAssertNoThrow(resultat =
+                            try LifeInsuranceInheritanceTests
+                            .lifeInsuranceInheritance
+                            .heritageNetTaxToChild(partSuccession: partSuccession,
+                                                   fracAbattement: fracAbattement))
+        taxTheory = (partSuccession - abbatementReduit) * 0.2
+        XCTAssertEqual(taxTheory, resultat.taxe)
+        XCTAssertEqual(partSuccession - taxTheory, resultat.netAmount)
+        
+        partSuccession = 1_000_000.0
+        XCTAssertNoThrow(resultat =
+                            try LifeInsuranceInheritanceTests
+                            .lifeInsuranceInheritance
+                            .heritageNetTaxToChild(partSuccession: partSuccession,
+                                                   fracAbattement: fracAbattement))
+        taxTheory = (852_500.0 - abbatementReduit) * 0.2 + (partSuccession - 852_500.0) * 0.3125
+        XCTAssertEqual(taxTheory, resultat.taxe)
+        XCTAssertEqual(partSuccession - taxTheory, resultat.netAmount)
+        
     }
     
     func test_calcul_heritage_assurance_vie_par_conjoint() {
         var partSuccession: Double
         
         partSuccession = 1_000_000.0
-        let resultat = LifeInsuranceInheritanceTests.lifeInsuranceInheritance.heritageToConjoint(
+        let resultat = LifeInsuranceInheritanceTests.lifeInsuranceInheritance.heritageNetTaxToConjoint(
             partSuccession: partSuccession)
         XCTAssertEqual(0.0, resultat.taxe)
         XCTAssertEqual(partSuccession, resultat.netAmount)

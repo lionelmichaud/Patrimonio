@@ -71,10 +71,10 @@ extension Succession: SuccessionCsvVisitableP {
 extension Succession: CustomStringConvertible {
     public var description: String {
         ("""
-        Type de succession:  \(kind.rawValue)
-        Défunt:              \(decedentName)
-        Année du décès:      \(yearOfDeath)
-        Masses successorale: \(taxableValue.k€String)
+        Type de succession:         \(kind.rawValue)
+        Défunt:                     \(decedentName)
+        Année du décès:             \(yearOfDeath)
+        Masse successorale taxable: \(taxableValue.k€String)
         Héritiers:
 
         """
@@ -108,23 +108,26 @@ public struct Inheritance: Hashable {
     // héritier
     public var successorName: String
     // fraction de la masse successorale reçue en héritage
-    public var percent : Double // [0, 1]
-    public var brut    : Double
-    public var net     : Double
-    public var tax     : Double
+    public var percent  : Double // [0, 1]
+    public var brut     : Double
+    public var abatFrac : Double // [0, 1] de l'abattement fiscal maximum
+    public var net      : Double
+    public var tax      : Double
     
     // MARK: - Initializer
     
     public init(personName : String,
                 percent    : Double,
                 brut       : Double,
+                abatFrac   : Double,
                 net        : Double,
                 tax        : Double) {
         self.successorName = personName
-        self.percent = percent
-        self.brut = brut
-        self.net = net
-        self.tax = tax
+        self.percent       = percent
+        self.brut          = brut
+        self.abatFrac      = abatFrac
+        self.net           = net
+        self.tax           = tax
     }
 }
 extension Inheritance: SuccessionCsvVisitableP {
@@ -136,9 +139,10 @@ extension Inheritance: CustomStringConvertible {
     public var description: String {
         """
         Héritier:      \(successorName)
-        Pourcentage:   \(percent * 100) %
-        Héritage Brut: \(brut.k€String)
-        Héritage Net:  \(net.k€String)
+        Pourcentage:   \((percent * 100).percentString(digit: 1)) % de la masse successorale
+        Héritage Brut: \(brut.k€String) (valeur fiscale)
+        Abattement %:  \((abatFrac * 100.0).rounded()) % de l'abattement fiscal maximum
+        Héritage Net:  \(net.k€String) (valeur fiscale)
         Droits:        \(tax.k€String)
 
         """.withPrefixedSplittedLines("  ")

@@ -12,6 +12,14 @@ import Foundation
 
 public typealias NamedValue = (name: String, value: Double)
 
+func == (lhs: NamedValue, rhs: NamedValue) -> Bool {
+    lhs.name == rhs.name && lhs.value == rhs.value
+}
+
+func < (lhs: NamedValue, rhs: NamedValue) -> Bool {
+    lhs.name < rhs.name
+}
+
 public typealias NamedValueArray = [NamedValue]
 
 public struct NamedValueTable: HasNamedValuedTableP {
@@ -35,7 +43,7 @@ extension NamedValueTable: CustomStringConvertible {
 
         """
             +
-            namedValues.description
+            String(describing: namedValues)
     }
 }
 

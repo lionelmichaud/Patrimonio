@@ -1,60 +1,246 @@
-import Succession
-import FamilyModel
-import AssetsModel
 import XCTest
-    @testable import SuccessionManager
+@testable import SuccessionManager
+import FiscalModel
+import ModelEnvironment
+import DateBoundary
+import Succession
+import PersonModel
+import FamilyModel
+import Ownership
+import AssetsModel
+import PatrimoineModel
+import NamedValue
 
     final class SuccessionManagerTests: XCTestCase {
-
-        static var family: Family!
+        typealias Tests = SuccessionManagerTests
+        
+        static var manager     : SuccessionManager!
+        static var model       : Model!
+        static var fiscalModel : Fiscal.Model!
+        static var family      : Family!
+        static var patrimoin   : Patrimoin!
+        
+        static let verbose = true
+        
+        // MARK: Helpers
         
         override class func setUp() {
             super.setUp()
-//            SuccessionManagerTests.family = Family(
-//                fromFile             : RealEstateAsset.defaultFileName,
-//                fromBundle           : Bundle.module,
-//                dateDecodingStrategy : .iso8601,
-//                keyDecodingStrategy  : .useDefaultKeys)
-//            
-//            RealEstateAsset.setFiscalModelProvider(
-//                Fiscal.Model(fromFile   : "FiscalModelConfig.json",
-//                             fromBundle : Bundle.module)
-//                    .initialized())
+            // charger le model
+            XCTAssertNoThrow(model = Model(fromBundle: Bundle.module),
+                             "Failed to read Model from Module Bundle \(String(describing: Bundle.module.resourcePath))")
+            fiscalModel = model.fiscalModel
+            
+            /// gérer les dépendances entre le Modèle et les objets applicatifs
+            // Injection de Fiscal
+            RealEstateAsset.setFiscalModelProvider(model.fiscalModel)
+            SCPI.setFiscalModelProvider(model.fiscalModel)
+            PeriodicInvestement.setFiscalModelProvider(model.fiscalModel)
+            FreeInvestement.setFiscalModelProvider(model.fiscalModel)
+            Ownership.setDemembrementProviderP(model.fiscalModel.demembrement)
+            
+            // Injection de Economy
+            SCPI.setInflationProvider(model.economyModel)
+            PeriodicInvestement.setEconomyModelProvider(model.economyModel)
+            FreeInvestement.setEconomyModelProvider(model.economyModel)
+            
+            // charger la famille
+            XCTAssertNoThrow(family = try Family(fromBundle: Bundle.module, using: model),
+                             "Failed to read Family from Module Bundle \(String(describing: Bundle.module.resourcePath))")
+            
+            // charger le patrimoine
+            // injection de family dans la propriété statique de Patrimoin
+            Patrimoin.familyProvider = family
+            patrimoin = Patrimoin(fromBundle: Bundle.module,
+                                  fileNamePrefix: "LifeInsMng_")
+            
+            // injection de family dans la propriété statique de DateBoundary pour lier les évenements à des personnes
+            DateBoundary.setPersonEventYearProvider(family)
+            // injection de family dans la propriété statique de Adult
+            Adult.setAdultRelativesProvider(family)
+            // injection de family dans la propriété statique de Patrimoin
+            Patrimoin.familyProvider = family
+            
+            // initialiser le Manager
+            manager = SuccessionManager(with           : patrimoin,
+                                        using          : fiscalModel,
+                                        atEndOf        : 2021,
+                                        familyProvider : family,
+                                        run            : 1)
+        }
+        
+        // MARK: Tests Calculs Abattements
+        
+        func test_updateSuccessionsTaxes() {
+            let decedentName = "M. Lionel MICHAUD"
+            let spouseName   = "Mme. Vanessa MICHAUD"
+            let childrenName = ["Mme. Isaline MICHAUD", "M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
+            
+            // créer les managers
+            let legalSuccessionManager =
+                LegalSuccessionManager(using          : Tests.fiscalModel,
+                                       familyProvider : Tests.family,
+                                       atEndOf        : 2021)
+            let lifeInsuranceSuccessionManager =
+                LifeInsuranceSuccessionManager(using          : Tests.fiscalModel,
+                                               familyProvider : Tests.family,
+                                               atEndOf        : 2021)
+            
+            // calculers les succession (testées de par ailleurs)
+            let lifeInsSuccession =
+                lifeInsuranceSuccessionManager.lifeInsuranceSuccession(
+                    of           : decedentName,
+                    with         : Tests.patrimoin,
+                    spouseName   : spouseName,
+                    childrenName : Tests.family.childrenAliveName(atEndOf : 2021),
+                    verbose      : Tests.verbose)
+            
+            //                      = pris en compte * part héritage * valeur
+            let therory_period_tonl_enf = 1.0 * 0.5 * (0.0 + 150_000.0)
+            //let therory_period_tonv_enf = 0.0 * 0.0 * (0.0 +  5_000.0)
+            
+            //                          = pris en compte * UF/NP * part héritage * valeur
+            //let theory_free_peal        = 0.0 * 1.0 * ( 23_900.0 + 149_899.0)
+            //let theory_free_livAl       = 0.0 * 1.0 * (      0.0 +  23_063.0)
+            let theory_free_av_boul_van = 1.0 * 1.0 * 1.0 * (  2_621.0 + 104_594.0)
+            let theory_free_av_boul_enf = 1.0 * 0.5 * 0.0 * (  2_621.0 + 104_594.0)
+            let theory_free_av_afel_van = 1.0 * 0.5 * 1.0 * (106_533.0 +  96_805.0)
+            let theory_free_av_afel_enf = 1.0 * 0.5 * 0.5 * (106_533.0 +  96_805.0)
+            //let theory_free_av_afev     = 0.0 * 0.5 * ( 29_000.0 +  31_213.0)
+            
+            //            let totalTaxableInheritanceValue =
+            //                2.0 * (therory_period_tonl_enf + theory_free_av_afel_enf + theory_free_av_boul_enf) +
+            //                theory_free_av_afel_van + theory_free_av_boul_van
+            //
+            let capitauxDeces = ["Mme. Vanessa MICHAUD" : theory_free_av_boul_van + theory_free_av_afel_van,
+                                 "M. Arthur MICHAUD"    : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf,
+                                 "Mme. Lou-Ann MICHAUD" : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf]
+            
+            let taxeEnfant = (capitauxDeces["M. Arthur MICHAUD"]! - 0.5 * 152500.0) * 0.2
+            //
+            //            let legalInheritances: [Inheritance] = []
+            //
+            //            let lifeInsInheritances = [
+            //                Inheritance(personName : "Mme. Vanessa MICHAUD",
+            //                            percent    : capitauxDeces["Mme. Vanessa MICHAUD"]! / totalTaxableInheritanceValue,
+            //                            brut       : capitauxDeces["Mme. Vanessa MICHAUD"]!,
+            //                            abatFrac   : 1.0,
+            //                            net        : capitauxDeces["Mme. Vanessa MICHAUD"]!,
+            //                            tax        : 0.0),
+            //                Inheritance(personName : "M. Arthur MICHAUD",
+            //                            percent    : capitauxDeces["M. Arthur MICHAUD"]! / totalTaxableInheritanceValue,
+            //                            brut       : capitauxDeces["M. Arthur MICHAUD"]!,
+            //                            abatFrac   : 0.5,
+            //                            net        : capitauxDeces["M. Arthur MICHAUD"]! - taxeEnfant,
+            //                            tax        : taxeEnfant),
+            //                Inheritance(personName : "Mme. Lou-Ann MICHAUD",
+            //                            percent    : capitauxDeces["Mme. Lou-Ann MICHAUD"]! / totalTaxableInheritanceValue,
+            //                            brut       : capitauxDeces["Mme. Lou-Ann MICHAUD"]!,
+            //                            abatFrac   : 0.5,
+            //                            net        : capitauxDeces["Mme. Lou-Ann MICHAUD"]! - taxeEnfant,
+            //                            tax        : taxeEnfant)
+            //            ]
+            //
+            //            let lifeInsSuccession = Succession(kind         : .lifeInsurance,
+            //                                               yearOfDeath  : 2021,
+            //                                               decedentName : decedentName,
+            //                                               taxableValue : totalTaxableInheritanceValue,
+            //                                               inheritances : inheritances)
+            //
+            //            let legalSuccession =
+            //                legalSuccessionManager.legalSuccession(of      : adultDecedentName,
+            //                                                       with    : patrimoine,
+            //                                                       verbose : verbose)
+            
+            //            legalSuccession = Succession(kind         : .legal,
+            //                                         yearOfDeath  : 2021,
+            //                                         decedentName : decedentName,
+            //                                         taxableValue : 100,
+            //                                         inheritances: [conjointInheritance,
+            //                                                        enfant1Inheritance,
+            //                                                        enfant2Inheritance])
+            //
+            
+            Tests.manager.updateSuccessionsTaxes(legalSuccessions   : [Succession(kind: .legal,
+                                                                                  yearOfDeath: 2021,
+                                                                                  decedentName: decedentName,
+                                                                                  taxableValue: 0.0,
+                                                                                  inheritances: [])],
+                                                 lifeInsSuccessions : [lifeInsSuccession],
+                                                 verbose            : Tests.verbose)
+            
+            let theory_lifeInsSuccessionsTaxesAdults = [(name: decedentName, value: 0.0),
+                                                        (name: spouseName, value: 0.0)]
+            let theory_lifeInsSuccessionsTaxesChildren: NamedValueArray = [(name: childrenName.first!, value: 0.0),
+                                                                           (name: childrenName[1],     value: taxeEnfant),
+                                                                           (name: childrenName.last!,  value: taxeEnfant)]
+            XCTAssertEqual(theory_lifeInsSuccessionsTaxesAdults,
+                           Tests.manager.lifeInsSuccessionsTaxesAdults)
+            XCTAssertEqual(theory_lifeInsSuccessionsTaxesChildren,
+                           Tests.manager.lifeInsSuccessionsTaxesChildren)
         }
         
         func test_totalChildrenInheritanceTaxe() {
-            // This is an example of a functional test case.
-            // Use XCTAssert and related functions to verify your tests produce the correct
-            // results.
-            var legalSuccession     : Succession
-            var lifeInsSuccession   : Succession
-            var conjointInheritance : Inheritance
-            var enfant1Inheritance  : Inheritance
-            var enfant2Inheritance  : Inheritance
+            let decedentName = "M. Lionel MICHAUD"
+            let spouseName   = "Mme. Vanessa MICHAUD"
+            let childrenName = ["Mme. Isaline MICHAUD", "M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
             
-            conjointInheritance = Inheritance(personName: "conjoint",
-                                              percent: 0.2,
-                                              brut: 50,
-                                              net: 40,
-                                              tax: 10)
-            enfant1Inheritance = Inheritance(personName: "enfant 1",
-                                              percent: 0.2,
-                                              brut: 30,
-                                              net: 24,
-                                              tax: 6)
-            enfant2Inheritance = Inheritance(personName: "enfant 2",
-                                              percent: 0.2,
-                                              brut: 20,
-                                              net: 16,
-                                              tax: 4)
+            // créer les managers
+            let lifeInsuranceSuccessionManager =
+                LifeInsuranceSuccessionManager(using          : Tests.fiscalModel,
+                                               familyProvider : Tests.family,
+                                               atEndOf        : 2021)
             
-            legalSuccession = Succession(kind: .legal,
-                                         yearOfDeath: 2020,
-                                         decedentName: "défunt",
-                                         taxableValue: 100,
-                                         inheritances: [conjointInheritance,
-                                                        enfant1Inheritance,
-                                                        enfant2Inheritance])
-            //let childrenInheritanceTaxe = totalChildrenInheritanceTaxe(
+            // calculers les succession (testées de par ailleurs)
+            let lifeInsSuccession =
+                lifeInsuranceSuccessionManager.lifeInsuranceSuccession(
+                    of           : decedentName,
+                    with         : Tests.patrimoin,
+                    spouseName   : spouseName,
+                    childrenName : Tests.family.childrenAliveName(atEndOf : 2021),
+                    verbose      : Tests.verbose)
+
+            //                      = pris en compte * part héritage * valeur
+            let therory_period_tonl_enf = 1.0 * 0.5 * (0.0 + 150_000.0)
+            //let therory_period_tonv_enf = 0.0 * 0.0 * (0.0 +  5_000.0)
+
+            //                          = pris en compte * UF/NP * part héritage * valeur
+            //let theory_free_peal        = 0.0 * 1.0 * ( 23_900.0 + 149_899.0)
+            //let theory_free_livAl       = 0.0 * 1.0 * (      0.0 +  23_063.0)
+            let theory_free_av_boul_van = 1.0 * 1.0 * 1.0 * (  2_621.0 + 104_594.0)
+            let theory_free_av_boul_enf = 1.0 * 0.5 * 0.0 * (  2_621.0 + 104_594.0)
+            let theory_free_av_afel_van = 1.0 * 0.5 * 1.0 * (106_533.0 +  96_805.0)
+            let theory_free_av_afel_enf = 1.0 * 0.5 * 0.5 * (106_533.0 +  96_805.0)
+            //let theory_free_av_afev     = 0.0 * 0.5 * ( 29_000.0 +  31_213.0)
+
+            let capitauxDeces = ["Mme. Vanessa MICHAUD" : theory_free_av_boul_van + theory_free_av_afel_van,
+                                 "M. Arthur MICHAUD"    : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf,
+                                 "Mme. Lou-Ann MICHAUD" : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf]
+
+            let taxeEnfant = (capitauxDeces["M. Arthur MICHAUD"]! - 0.5 * 152500.0) * 0.2
+//
+
+            let childrenInheritancesTaxe =
+                Tests.manager.totalChildrenInheritanceTaxe(legalSuccession   : Succession(kind: .legal,
+                                                                                          yearOfDeath: 2021,
+                                                                                          decedentName: decedentName,
+                                                                                          taxableValue: 0.0,
+                                                                                          inheritances: []),
+                                                           lifeInsSuccession : lifeInsSuccession,
+                                                           verbose           : Tests.verbose)
+            
+            let theory = [childrenName.first : 0.0,
+                          childrenName[1]    : taxeEnfant,
+                          childrenName.last  : taxeEnfant]
+            
+            XCTAssertEqual(theory, childrenInheritancesTaxe)
+        }
+        
+        func test_makeSureChildrenCanPaySuccessionTaxes() {
+            
+        }
+        
+        func test_manageSuccession() {
+            
         }
     }

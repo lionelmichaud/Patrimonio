@@ -46,6 +46,10 @@ extension LifeInsuranceSuccessionManager {
                                 uniquingKeysWith: { $0 + $1 })
             
         }
+        if verbose {
+            print("Capitaux décès totaux reçus : ")
+            print("  ", String(describing: capitauxDeces))
+        }
         return capitauxDeces
     }
     
@@ -71,14 +75,18 @@ extension LifeInsuranceSuccessionManager {
                                                       childrenName     : [String]?,
                                                       for invest       : FinancialEnvelopP,
                                                       verbose          : Bool = false) -> NameValueDico {
-        guard invest.clause != nil else { return [:] }
+        guard invest.isLifeInsurance else {
+            return [:]
+        }
         
         // on a affaire à une assurance vie
         // masse successorale pour cet investissement
         let ownedValueDecedent = invest.ownedValue(by                : decedentName,
                                                    atEndOf           : year,
                                                    evaluationContext : .lifeInsuranceSuccession)
-        guard ownedValueDecedent > 0 else { return [:] }
+        guard ownedValueDecedent > 0 else {
+            return [:]
+        }
         
         if invest.ownership.isDismembered {
             return dismemberedLifeInsCapitauxDecesTaxables(of      : decedentName,
@@ -147,7 +155,12 @@ extension LifeInsuranceSuccessionManager {
                                                    childrenName    : [String]?,
                                                    for invest      : FinancialEnvelopP,
                                                    verbose         : Bool = false) -> NameValueDico {
-        guard var clause = invest.clause else { return [:]}
+        guard var clause = invest.clause else {
+            return [:]
+        }
+        guard !invest.ownership.isDismembered else {
+            return [:]
+        }
         
         let ownedValuesBeforeTranmission =
             invest.ownedValues(atEndOf           : year - 1,
@@ -158,7 +171,8 @@ extension LifeInsuranceSuccessionManager {
         try! _invest.ownership.transferUndismemberedLifeInsurance(of           : decedentName,
                                                                   spouseName   : spouseName,
                                                                   childrenName : childrenName,
-                                                                  accordingTo  : &clause)
+                                                                  accordingTo  : &clause,
+                                                                  verbose      : verbose)
         let ownedValuesAfterTranmission =
             _invest.ownedValues(atEndOf           : year - 1,
                                 evaluationContext : .lifeInsuranceSuccession)
@@ -171,8 +185,12 @@ extension LifeInsuranceSuccessionManager {
             
             // s'il y a enrichissement
             if newOwnedvalue > oldOwnedValue {
-                capitauxDeces[newOwnerName] = newOwnedvalue
+                capitauxDeces[newOwnerName] = newOwnedvalue - oldOwnedValue
             }
+        }
+        if verbose {
+            print("Capitaux décès reçus de \(invest.name): ")
+            print("  ", String(describing: capitauxDeces))
         }
         return capitauxDeces
     }

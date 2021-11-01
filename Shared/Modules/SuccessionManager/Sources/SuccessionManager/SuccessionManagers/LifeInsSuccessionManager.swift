@@ -25,10 +25,18 @@ struct LifeInsuranceSuccessionManager {
 
     typealias AbattementPersonel = NamedValue
 
-    struct CoupleUFNP: Hashable, Equatable {
+    struct CoupleUFNP: Hashable, Equatable, CustomStringConvertible {
         var UF: AbattementPersonel
         var NP: AbattementPersonel
-        
+        var description: String {
+            """
+
+            Couple :
+                UF : \(String(describing: UF))
+                NP : \(String(describing: NP))
+            """
+        }
+
         func hash(into hasher: inout Hasher) {
             hasher.combine(UF.name)
             hasher.combine(UF.value)
@@ -75,10 +83,10 @@ struct LifeInsuranceSuccessionManager {
                                  childrenName    : [String]?,
                                  verbose         : Bool = false) -> Succession {
         var inheritances  : [Inheritance] = []
-
+        
         let financialEnvelops: [FinancialEnvelopP] =
-        patrimoine.assets.freeInvests.items + patrimoine.assets.periodicInvests.items
-
+            patrimoine.assets.freeInvests.items + patrimoine.assets.periodicInvests.items
+        
         // calculer le montant de l'abattement de chaque héritier
         let abattementsDico = abattementsParPersonne(of           : decedentName,
                                                      with         : financialEnvelops,
@@ -86,7 +94,7 @@ struct LifeInsuranceSuccessionManager {
                                                      childrenName : childrenName,
                                                      verbose      : verbose)
         
-        // calculer les capitaux décès reçu par chaque héritier
+        // calculer les capitaux décès taxables reçus par chaque héritier
         let capitauxDeces = capitauxDecesTaxablesParPersonne(of           : decedentName,
                                                              with         : financialEnvelops,
                                                              spouseName   : spouseName,
@@ -96,20 +104,25 @@ struct LifeInsuranceSuccessionManager {
         // calcul de la masse totale taxable
         let totalTaxableInheritanceValue = capitauxDeces.values.sum()
         if verbose {
-            print("Masse successorale assurance vie = \(totalTaxableInheritanceValue.rounded())")
+            print("Total des capitaux décès taxables assurance vie = \(totalTaxableInheritanceValue.rounded())")
         }
 
         // calculer l'héritage de chaque membre de la famille autre que le défunt
-        // à partir des capitaux décès reçus
+        // à partir des capitaux décès reçus et des abattements
         for member in family.members.items where member.displayName != decedentName {
             if let capitaux = capitauxDeces[member.displayName] {
                 var heritageNetTax = (netAmount: 0.0, taxe: 0.0)
                 if member is Adult {
                     // le conjoint
-                    heritageNetTax = fiscalModel.lifeInsuranceInheritance.heritageToConjoint(partSuccession: capitaux)
+                    heritageNetTax =
+                        fiscalModel.lifeInsuranceInheritance
+                        .heritageNetTaxToConjoint(partSuccession: capitaux)
                 } else {
                     // les enfants
-                    heritageNetTax = try! fiscalModel.lifeInsuranceInheritance.heritageOfChild(partSuccession: capitaux)
+                    heritageNetTax =
+                        try! fiscalModel.lifeInsuranceInheritance
+                        .heritageNetTaxToChild(partSuccession: capitaux,
+                                               fracAbattement: abattementsDico[member.displayName])
                 }
                 if verbose {
                     print("  Part d'héritage de \(member.displayName) = \(capitaux.rounded()) (\((capitaux/totalTaxableInheritanceValue*100.0).rounded()) %)")
@@ -118,16 +131,17 @@ struct LifeInsuranceSuccessionManager {
                 inheritances.append(Inheritance(personName : member.displayName,
                                                 percent    : capitaux / totalTaxableInheritanceValue,
                                                 brut       : capitaux,
+                                                abatFrac   : abattementsDico[member.displayName]!,
                                                 net        : heritageNetTax.netAmount,
                                                 tax        : heritageNetTax.taxe))
             }
         }
         
         if verbose {
-            print("  Part totale = ", inheritances.sum(for: \.percent))
-            print("  Brut total  = ", inheritances.sum(for: \.brut).rounded())
-            print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
-            print("  Net total   = ", inheritances.sum(for: \.net).rounded())
+            print("  Part total = ", inheritances.sum(for: \.percent))
+            print("  Brut total = ", inheritances.sum(for: \.brut).rounded())
+            print("  Taxe total = ", inheritances.sum(for: \.tax).rounded())
+            print("  Net total  = ", inheritances.sum(for: \.net).rounded())
         }
         return Succession(kind         : .lifeInsurance,
                           yearOfDeath  : year,

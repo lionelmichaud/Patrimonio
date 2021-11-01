@@ -34,7 +34,7 @@ public extension Array where Element: Comparable {
 
 public extension Array where Element: Hashable {
     /// Check if two arrays contain the same elements regardless of the order in which those elements appear
-    /// - Warning: les élements des tableaux doivent être `Comparable`
+    /// - Warning: les élements des tableaux doivent être `Hashable`
     func containsSameElements(as other: [Element]) -> Bool {
         let set1 = Set(self)
         let set2 = Set(other)

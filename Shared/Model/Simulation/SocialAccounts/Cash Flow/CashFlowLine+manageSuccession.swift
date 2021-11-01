@@ -42,11 +42,24 @@ extension CashFlowLine {
         legalSuccessions   += successionManager.legalSuccessions
         lifeInsSuccessions += successionManager.lifeInsSuccessions
 
+        // droits de successions légales
+        //   - imputables aux adultes
         adultTaxes
             .perCategory[.legalSuccession]?
-            .namedValues += successionManager.legalSuccessionsTaxes
+            .namedValues += successionManager.legalSuccessionsTaxesAdults
+        //   - imputables aux enfants
+        childrenTaxes
+            .perCategory[.legalSuccession]?
+            .namedValues += successionManager.legalSuccessionsTaxesChildren
+
+        // droits de successions légales
+        //   - imputables aux adultes
         adultTaxes
             .perCategory[.liSuccession]?
-            .namedValues += successionManager.lifeInsSuccessionsTaxes
+            .namedValues += successionManager.lifeInsSuccessionsTaxesAdults
+        //   - imputables aux enfants
+        childrenTaxes
+            .perCategory[.liSuccession]?
+            .namedValues += successionManager.lifeInsSuccessionsTaxesChildren
     }
 }

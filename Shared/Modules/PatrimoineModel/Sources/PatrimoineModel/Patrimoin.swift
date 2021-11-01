@@ -113,7 +113,8 @@ public final class Patrimoin: ObservableObject {
     
     // MARK: - Methods
     
-    /// lire à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// Lire à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Warning : Patrimoin.familyProvider doit être défini avant d'appeler cette méthode
     /// - Parameters:
     ///   - folder: dossier où se trouve le fichier JSON à utiliser
     ///   - model: modèle à utiliser pour initialiser les membres de la famille

@@ -76,7 +76,7 @@
            },
            "firstYear"               : 2020,
            "initialInterest"         : 0,
-           "initialValue"            : 27321,
+           "initialValue"            : 150000,
            "interestRateType" : {
                "contractualRate_fixedRate" : 4.0
            },

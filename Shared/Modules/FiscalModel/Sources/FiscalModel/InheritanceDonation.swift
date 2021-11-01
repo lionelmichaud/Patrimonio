@@ -196,22 +196,50 @@ public struct LifeInsuranceInheritance: Codable {
     
     /// Calcul les taxes sur la transmission de l'assurance vie vers un enfant
     /// - Parameter partSuccession: masse transmise vers un enfant
-    public func heritageOfChild(partSuccession: Double) throws
+    /// - Throws: ModelError.heritageOfChildSlicesIssue si pb d'utilisation de la table fiscale
+    /// - Returns: (net, taxe))
+    public func heritageNetTaxToChild(partSuccession : Double,
+                                      fracAbattement : Double? = nil) throws
     -> (netAmount : Double,
         taxe      : Double) {
         // application du barême
-        if let taxe = model.tax(for: partSuccession) {
-            let net  = partSuccession - taxe
-            return (netAmount : net,
-                    taxe      : taxe)
+        if let fracAbattement = fracAbattement {
+            // tenir compte de la réduction d'abattement / grille
+            if var taxe = model.tax(for: partSuccession) {
+                let abattementMax = model.grid[model.grid.startIndex + 1].floor
+                let premierTaux   = model.grid[model.grid.startIndex + 1].rate
+                if partSuccession >= abattementMax {
+                    let ajout = abattementMax * (1.0 - fracAbattement) * premierTaux
+                    taxe += ajout
+                } else if partSuccession >= abattementMax * fracAbattement {
+                    let ajout = (partSuccession - abattementMax * fracAbattement) * premierTaux
+                    taxe += ajout
+                } else {
+                    taxe = 0.0
+                }
+                let net  = partSuccession - taxe
+                return (netAmount : net,
+                        taxe      : taxe)
+            } else {
+                throw ModelError.heritageOfChildSlicesIssue
+            }
+
         } else {
-            throw ModelError.heritageOfChildSlicesIssue
+            if let taxe = model.tax(for: partSuccession) {
+                let net  = partSuccession - taxe
+                return (netAmount : net,
+                        taxe      : taxe)
+            } else {
+                throw ModelError.heritageOfChildSlicesIssue
+            }
         }
     }
     
     /// Calcul les taxes sur la transmission de l'assurance vie vers un conjoint
     /// - Parameter partSuccession: masse transmise vers un conjoint
-    public func heritageToConjoint(partSuccession: Double)
+    /// - Returns: (net, taxe))
+    public func heritageNetTaxToConjoint(partSuccession : Double,
+                                         abattement     : Double?  = nil)
     -> (netAmount : Double,
         taxe      : Double) {
         // les sommes héritées par le conjoint, par le partenaire pacsé et sous certaines conditions
