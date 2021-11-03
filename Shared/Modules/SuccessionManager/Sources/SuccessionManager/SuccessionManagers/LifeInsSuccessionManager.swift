@@ -72,10 +72,10 @@ struct LifeInsuranceSuccessionManager {
     /// Calcule la transmission d'assurance vie d'un `patrimoine` au décès de `decedentName` et retourne
     /// une table des héritages et droits de succession pour chaque héritier
     /// - Parameters:
-    ///   - patrimoine: patrimoine
     ///   - decedentName: nom du défunt
-    ///   - year: année du décès
-    ///   - fiscalModel: modèle fiscal à utiliser
+    ///   - patrimoine: patrimoine
+    ///   - spouseName: nom du conjoint du défunt
+    ///   - childrenName: nom des enfants du défunt
     /// - Returns: Succession du défunt incluant la table des héritages et droits de succession pour chaque héritier
     func lifeInsuranceSuccession(of decedentName : String,
                                  with patrimoine : Patrimoin,

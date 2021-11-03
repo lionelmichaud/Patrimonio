@@ -13,6 +13,7 @@ import AssetsModel
 // MARK: - Calcul des abattements individuels sur les capitaux décès d'assurance vie
 
 extension LifeInsuranceSuccessionManager {
+    
     /// Calcule, pour chaque héritier `spouseName` et `childrenName` d'un défunt nommé `decedentName`,
     /// le montant de l'abattement par héritier sur les capitaux décès
     /// - Parameters:

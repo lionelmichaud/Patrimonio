@@ -123,12 +123,13 @@ public struct SuccessionManager {
                     spouseName = _spouseName
                 }
             }
+            let childrenAlive = family.childrenAliveName(atEndOf : year)
             var lifeInsSuccession =
                 lifeInsuranceSuccessionManager.lifeInsuranceSuccession(
                     of           : adultDecedentName,
                     with         : patrimoine,
                     spouseName   : spouseName,
-                    childrenName : family.childrenAliveName(atEndOf : year),
+                    childrenName : childrenAlive,
                     verbose      : verbose)
             
             // au premier décès parmis les adultes:
@@ -150,6 +151,13 @@ public struct SuccessionManager {
             ownershipManager.transferOwnershipOf(assets      : &patrimoine.assets,
                                                  liabilities : &patrimoine.liabilities,
                                                  of          : adultDecedentName)
+            
+            // prélèvement à la source des taxes de trnansmission sur les capitaux dècès d'AV
+            lifeInsuranceSuccessionManager.removeTransmissionTaxes(of           : adultDecedentName,
+                                                             with         : patrimoine,
+                                                             spouseName   : spouseName,
+                                                             childrenName : childrenAlive,
+                                                             verbose      : verbose)
         }
         
         // (3) Cummuler les droits de successions/transmissions de l'année par personne
