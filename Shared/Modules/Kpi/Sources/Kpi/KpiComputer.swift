@@ -77,7 +77,7 @@ public struct KpiComputer {
         for succession in allSuccessions {
             for inheritance in succession.inheritances {
                 if (family.member(withName: inheritance.successorName) as? Child) != nil {
-                    nets += inheritance.net
+                    nets += inheritance.netFiscal
                 }
             }
         }

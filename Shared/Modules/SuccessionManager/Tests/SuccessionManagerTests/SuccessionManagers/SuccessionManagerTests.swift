@@ -170,8 +170,8 @@ import NamedValue
             let theory_lifeInsSuccessionsTaxesChildren: NamedValueArray = [NamedValue(name: childrenName.first!, value: 0.0),
                                                                            NamedValue(name: childrenName[1],     value: taxeEnfant),
                                                                            NamedValue(name: childrenName.last!,  value: taxeEnfant)]
-            XCTAssertTrue(theory_lifeInsSuccessionsTaxesAdults.containsSameElements(as: Tests.manager.lifeInsSuccessionsTaxesAdults))
-            XCTAssertTrue(theory_lifeInsSuccessionsTaxesChildren.containsSameElements(as: Tests.manager.lifeInsSuccessionsTaxesChildren))
+            XCTAssertTrue(theory_lifeInsSuccessionsTaxesAdults.containsSameElements(as: Tests.manager.lifeInsurance.taxesAdults))
+            XCTAssertTrue(theory_lifeInsSuccessionsTaxesChildren.containsSameElements(as: Tests.manager.lifeInsurance.taxesChildren))
         }
         
         func test_totalChildrenInheritanceTaxe() {

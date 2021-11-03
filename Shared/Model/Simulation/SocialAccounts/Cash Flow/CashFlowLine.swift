@@ -41,13 +41,16 @@ struct CashFlowLine {
     /// Agrégat des Revenus annuels des Parents (hors SCI)
     var adultsRevenues = ValuedRevenues(name: "REVENUS PARENTS HORS SCI")
     
+    /// Agrégat des Revenus annuels des Enfants
+    var childrenRevenues = ValuedRevenues(name: "REVENUS ENFANTS")
+    
     /// Total de tous les revenus nets de l'année des Parents, versé en compte courant
     ///  - avant taxes et impots
     ///  - inclus revenus de la SCI
     ///  - EXCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
     ///
     /// Note: Utilisé pour calculer le Net Cash-Flow de fin d'année (à réinvestir en fin d'année)
-    var sumOfRevenuesSalesExcluded: Double {
+    var sumOfAdultsRevenuesSalesExcluded: Double {
         adultsRevenues.totalRevenueSalesExcluded +
             sciCashFlowLine.netRevenuesSalesExcluded
     }
@@ -56,7 +59,7 @@ struct CashFlowLine {
     /// - avant taxes et impots
     /// - inclus revenus de la SCI
     /// - INCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
-    var sumOfRevenues: Double {
+    var sumOfAdultsRevenues: Double {
         adultsRevenues.totalRevenue +
             sciCashFlowLine.netRevenues
     }
@@ -79,7 +82,7 @@ struct CashFlowLine {
     var investPayements = NamedValueTable(tableName: "Investissements des parents")
     
     /// Total des dépenses annuelles des Parents
-    var sumOfExpenses: Double {
+    var sumOfAdultsExpenses: Double {
         adultTaxes.total +
             lifeExpenses.total +
             debtPayements.total +
@@ -93,14 +96,14 @@ struct CashFlowLine {
     /// - inclus revenus/dépenses de la SCI
     /// - EXCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
     var netCashFlowSalesExcluded: Double {
-        sumOfRevenuesSalesExcluded - sumOfExpenses
+        sumOfAdultsRevenuesSalesExcluded - sumOfAdultsExpenses
     }
     
     /// Solde net de tous les revenus - dépenses (y.c. ventes de bien en séparation de bien))
     /// - inclus revenus/dépenses de la SCI
     /// - INCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
     var netCashFlow: Double {
-        sumOfRevenues - sumOfExpenses
+        sumOfAdultsRevenues - sumOfAdultsExpenses
     }
     
     // Successions survenus dans l'année

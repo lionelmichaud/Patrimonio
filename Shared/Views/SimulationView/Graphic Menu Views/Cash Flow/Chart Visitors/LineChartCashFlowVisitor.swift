@@ -52,9 +52,9 @@ class LineChartCashFlowVisitor: CashFlowLineChartVisitorP {
 
     func buildLineChart(element: CashFlowLine) {
         self.yVals1.append(ChartDataEntry(x: element.year.double(),
-                                          y: element.sumOfRevenues))
+                                          y: element.sumOfAdultsRevenues))
         self.yVals2.append(ChartDataEntry(x: element.year.double(),
-                                          y: -element.sumOfExpenses))
+                                          y: -element.sumOfAdultsExpenses))
         self.yVals3.append(ChartDataEntry(x: element.year.double(),
                                           y: element.netCashFlow))
     }

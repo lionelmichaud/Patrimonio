@@ -138,10 +138,10 @@ struct LifeInsuranceSuccessionManager {
         }
         
         if verbose {
-            print("  Part total = ", inheritances.sum(for: \.percent))
-            print("  Brut total = ", inheritances.sum(for: \.brut).rounded())
+            print("  Part total = ", inheritances.sum(for: \.percentFiscal))
+            print("  Brut total = ", inheritances.sum(for: \.brutFiscal).rounded())
             print("  Taxe total = ", inheritances.sum(for: \.tax).rounded())
-            print("  Net total  = ", inheritances.sum(for: \.net).rounded())
+            print("  Net total  = ", inheritances.sum(for: \.netFiscal).rounded())
         }
         return Succession(kind         : .lifeInsurance,
                           yearOfDeath  : year,

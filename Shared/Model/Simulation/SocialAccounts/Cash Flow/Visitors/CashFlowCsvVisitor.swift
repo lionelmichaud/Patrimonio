@@ -156,7 +156,7 @@ final class CashFlowCsvTableVisitor: CashFlowCsvVisitorP {
         visitSCI()
 
         // somme des rentrées de trésorerie
-        table.append("\(element.sumOfRevenues.roundedString); " )
+        table.append("\(element.sumOfAdultsRevenues.roundedString); " )
 
         visitExpenses()
         visitTaxes()
@@ -164,7 +164,7 @@ final class CashFlowCsvTableVisitor: CashFlowCsvVisitorP {
         visitInvestements()
 
         // somme des sorties de trésoreries
-        table.append("\(element.sumOfExpenses.roundedString); " )
+        table.append("\(element.sumOfAdultsExpenses.roundedString); " )
 
         // Net cashflow
         table.append("\(element.netCashFlow.roundedString)" )

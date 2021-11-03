@@ -22,7 +22,9 @@ enum RevenueCategory: String, PickableEnumP, Codable, Hashable {
     case scpiSale           = "Vente SCPI" // capitalisés
     case realEstateRents    = "Revenu Location"
     case realEstateSale     = "Vente Immeuble" // capitalisés
-    
+    case legalSuccession    = "Héritages Légaux"
+    case liSuccession       = "Capitaux décès Ass. Vie"
+
     // properties
     
     var pickerString: String {
@@ -35,7 +37,8 @@ enum RevenueCategory: String, PickableEnumP, Codable, Hashable {
         switch self {
             case .workIncomes, .pensions,
                  .layoffCompensation, .unemployAlloc,
-                 .scpis, .realEstateRents:
+                 .scpis, .realEstateRents,
+                 .legalSuccession, .liSuccession:
                 return true
                 
             case .financials, .scpiSale, .realEstateSale:

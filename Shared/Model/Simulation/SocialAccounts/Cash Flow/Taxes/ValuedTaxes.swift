@@ -32,6 +32,18 @@ struct ValuedTaxes: DictionaryOfNamedValueTableP {
     }
 }
 
+extension ValuedTaxes: CustomStringConvertible {
+    public var description: String {
+        let nameStr = "Nom: \(name)\n"
+        var tableStr = ""
+        perCategory.forEach { category, revenues in
+            tableStr += "\(category.displayString) :\n"
+            tableStr += "\(String(describing: revenues).withPrefixedSplittedLines("  ")) :\n"
+        }
+        return nameStr + tableStr
+    }
+}
+
 // MARK: - Extensions for VISITORS
 
 extension ValuedTaxes: CashFlowCsvVisitableP {

@@ -35,16 +35,16 @@ struct SuccessorGroupBox : View {
                 //                PercentView(label   : "Part de la succession",
                 //                            percent : inheritence.percent)
                 AmountView(label  : "Valeur héritée brute (évaluation fiscale)",
-                           amount : inheritence.brut,
-                           comment: inheritence.percent.percentStringRounded + " de la succession")
+                           amount : inheritence.brutFiscal,
+                           comment: inheritence.percentFiscal.percentStringRounded + " de la succession")
                     .padding(.top, 3)
                 AmountView(label  : "Droits de succession à payer",
                            amount : -inheritence.tax,
-                           comment: (inheritence.tax / inheritence.brut).percentStringRounded)
+                           comment: (inheritence.tax / inheritence.brutFiscal).percentStringRounded)
                     .padding(.top, 3)
                 Divider()
                 AmountView(label : "Valeur héritée nette (évaluation fiscale)",
-                           amount: inheritence.net)
+                           amount: inheritence.netFiscal)
             }
             .foregroundColor(.secondary)
         }

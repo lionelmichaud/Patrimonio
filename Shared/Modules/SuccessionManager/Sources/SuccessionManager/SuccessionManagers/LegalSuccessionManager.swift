@@ -68,10 +68,10 @@ public struct LegalSuccessionManager {
                                                  conjointSurvivant : conjointSurvivant as! Adult,
                                                  verbose           : verbose)
             if verbose {
-                print("  Part totale = ", inheritances.sum(for: \.percent))
-                print("  Brut total  = ", inheritances.sum(for: \.brut).rounded())
+                print("  Part totale = ", inheritances.sum(for: \.percentFiscal))
+                print("  Brut total  = ", inheritances.sum(for: \.brutFiscal).rounded())
                 print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
-                print("  Net total   = ", inheritances.sum(for: \.net).rounded())
+                print("  Net total   = ", inheritances.sum(for: \.netFiscal).rounded())
             }
             return Succession(kind         : .legal,
                               yearOfDeath  : year,
@@ -86,10 +86,10 @@ public struct LegalSuccessionManager {
                                                    masseSuccessorale        : _masseSuccessorale,
                                                    verbose                  : verbose)
             if verbose {
-                print("  Part totale = ", inheritances.sum(for: \.percent))
-                print("  Brut total  = ", inheritances.sum(for: \.brut).rounded())
+                print("  Part totale = ", inheritances.sum(for: \.percentFiscal))
+                print("  Brut total  = ", inheritances.sum(for: \.brutFiscal).rounded())
                 print("  Taxe totale = ", inheritances.sum(for: \.tax).rounded())
-                print("  Net total   = ", inheritances.sum(for: \.net).rounded())
+                print("  Net total   = ", inheritances.sum(for: \.netFiscal).rounded())
             }
             return Succession(kind         : .legal,
                               yearOfDeath  : year,

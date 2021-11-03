@@ -35,13 +35,13 @@ public struct Succession: Identifiable {
     // dictionnaire des héritages net reçu par chaque héritier dans une succession
     var successorsInheritedNetValue: [String: Double] {
         inheritances.reduce(into: [:]) { counts, inheritance in
-            counts[inheritance.successorName, default: 0] += inheritance.net
+            counts[inheritance.successorName, default: 0] += inheritance.netFiscal
         }
     }
     
     // somme des héritages reçus par les héritiers dans une succession
     public var net: Double {
-        inheritances.sum(for: \.net)
+        inheritances.sum(for: \.netFiscal)
     }
     
     // somme des taxes payées par les héritiers dans une succession
@@ -106,13 +106,13 @@ public struct Inheritance: Hashable {
     // MARK: - Propeties
     
     // héritier
-    public var successorName: String
+    public var successorName : String
     // fraction de la masse successorale reçue en héritage
-    public var percent  : Double // [0, 1]
-    public var brut     : Double
-    public var abatFrac : Double // [0, 1] de l'abattement fiscal maximum
-    public var net      : Double
-    public var tax      : Double
+    public var percentFiscal : Double // [0, 1] = brutFiscal / masse successorale
+    public var brutFiscal    : Double // valeur fiscale
+    public var abatFrac      : Double // [0, 1] de l'abattement fiscal maximum
+    public var netFiscal     : Double // valeur fiscale
+    public var tax           : Double
     
     // MARK: - Initializer
     
@@ -123,10 +123,10 @@ public struct Inheritance: Hashable {
                 net        : Double,
                 tax        : Double) {
         self.successorName = personName
-        self.percent       = percent
-        self.brut          = brut
+        self.percentFiscal = percent
+        self.brutFiscal    = brut
         self.abatFrac      = abatFrac
-        self.net           = net
+        self.netFiscal     = net
         self.tax           = tax
     }
 }
@@ -139,10 +139,10 @@ extension Inheritance: CustomStringConvertible {
     public var description: String {
         """
         Héritier:      \(successorName)
-        Pourcentage:   \((percent * 100).percentString(digit: 1)) % de la masse successorale
-        Héritage Brut: \(brut.k€String) (valeur fiscale)
+        Pourcentage:   \((percentFiscal * 100).percentString(digit: 1)) % de la masse successorale
+        Héritage Brut: \(brutFiscal.k€String) (valeur fiscale)
         Abattement %:  \((abatFrac * 100.0).rounded()) % de l'abattement fiscal maximum
-        Héritage Net:  \(net.k€String) (valeur fiscale)
+        Héritage Net:  \(netFiscal.k€String) (valeur fiscale)
         Droits:        \(tax.k€String)
 
         """.withPrefixedSplittedLines("  ")

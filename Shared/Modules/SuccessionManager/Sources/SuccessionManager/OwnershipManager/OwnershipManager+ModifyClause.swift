@@ -38,7 +38,7 @@ extension OwnershipManager {
             return
         }
         
-        // trier les AV avec clause bénéficiaire à option par valeur possédée par le défunt croissantes
+        // trier les AV avec clause bénéficiaire à option par valeur croissantes possédée par le défunt
         // prendre les valeurs à la fin de l'année précédente
         assets
             .freeInvests

@@ -73,7 +73,10 @@ extension LifeInsuranceSuccessionManager {
         }
     }
     
-    func removeTransmissionTaxesClauseDismembered(<#parameters#>) {
+    func removeTransmissionTaxesClauseDismembered() {
+        
+    }
+    func removeTransmissionTaxesClauseUndismembered() {
         
     }
 }
