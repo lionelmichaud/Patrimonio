@@ -230,8 +230,8 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
                 // appliquer la décote succession
                 evaluatedValue = inheritanceValue(atEndOf: year)
                 
-            case .lifeInsuranceSuccession:
-                // on recherche uniquement les assurances vies
+            case .lifeInsuranceSuccession, .lifeInsuranceTransmission:
+                // dans ce contexte, on recherche uniquement les assurances vies
                 return 0
                 
             case .patrimoine:

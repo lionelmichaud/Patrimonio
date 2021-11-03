@@ -70,11 +70,11 @@ extension LifeInsuranceSuccessionManager {
     ///   - invest: une assurances vie
     ///   - verbose: sorties console
     /// - Returns: [nom héritier : montant des capitaux décès reçus]
-    func capitauxDecesTaxablesParPersonneParAssurance(of decedentName  : String,
-                                                      spouseName       : String?,
-                                                      childrenName     : [String]?,
-                                                      for invest       : FinancialEnvelopP,
-                                                      verbose          : Bool = false) -> NameValueDico {
+    func capitauxDecesTaxablesParPersonneParAssurance(of decedentName : String,
+                                                      spouseName      : String?,
+                                                      childrenName    : [String]?,
+                                                      for invest      : FinancialEnvelopP,
+                                                      verbose         : Bool = false) -> NameValueDico {
         guard invest.isLifeInsurance else {
             return [:]
         }

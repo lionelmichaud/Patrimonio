@@ -37,12 +37,13 @@ public enum EvaluatedFraction: String, PickableEnumP {
 // MARK: - Enumération de Contexte d'évaluation d'un Patrmoine (régles fiscales à appliquer)
 
 public enum EvaluationContext: String, PickableEnumP {
-    case ifi                     = "IFI"
-    case isf                     = "ISF"
-    case legalSuccession         = "Succession Légale"
-    case lifeInsuranceSuccession = "Succession Assurance Vie"
-    case patrimoine              = "Patrimoniale"
-    
+    case ifi                       = "Valeur fiscale IFI"
+    case isf                       = "Valeur fiscale ISF"
+    case legalSuccession           = "Valeur fiscale Succession Légale"
+    case lifeInsuranceSuccession   = "Valeur fiscale Succession Assurance Vie"
+    case lifeInsuranceTransmission = "Valeur transmise Succession Assurance Vie"
+    case patrimoine                = "Valeur Patrimoniale"
+
     public var pickerString: String {
         return self.rawValue
     }

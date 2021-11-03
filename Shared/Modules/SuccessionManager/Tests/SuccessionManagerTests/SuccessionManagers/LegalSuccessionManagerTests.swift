@@ -192,7 +192,7 @@ final class LegalSuccessionManagerTests: XCTestCase {
     
     func test_legalSuccession_avec_conjoint_survivant() {
         let succession = Tests.manager
-            .legalSuccession(of      : "M. Lionel MICHAUD",
+            .succession(of      : "M. Lionel MICHAUD",
                              with    : Tests.patrimoin,
                              verbose : Tests.verbose)
         
@@ -237,7 +237,7 @@ final class LegalSuccessionManagerTests: XCTestCase {
 
         let succession =
         Tests.manager
-            .legalSuccession(of      : "M. Lionel MICHAUD",
+            .succession(of      : "M. Lionel MICHAUD",
                              with    : Tests.patrimoin,
                              verbose : Tests.verbose)
 

@@ -44,9 +44,9 @@ public struct LegalSuccessionManager {
     ///   - year: année du décès
     ///   - fiscalModel: modèle fiscal à utiliser
     /// - Returns: Succession légale du défunt incluant la table des héritages et droits de succession pour chaque héritier
-    public func legalSuccession(of decedentName : String,
-                                with patrimoine : Patrimoin,
-                                verbose         : Bool = false) -> Succession {
+    public func succession(of decedentName : String,
+                           with patrimoine : Patrimoin,
+                           verbose         : Bool = false) -> Succession {
 
         // Calcul de la masse successorale taxable du défunt
         // WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.

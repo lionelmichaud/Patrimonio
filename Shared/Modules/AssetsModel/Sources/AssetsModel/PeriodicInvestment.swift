@@ -178,8 +178,6 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     public func ownedValue(by ownerName      : String,
                            atEndOf year      : Int,
                            evaluationContext : EvaluationContext) -> Double {
-        var evaluatedValue : Double
-        
         // cas particuliers
         switch evaluationContext {
             case .legalSuccession:
@@ -197,16 +195,15 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
                             return 0
                         }
                         // pas de décote
-                        evaluatedValue = value(atEndOf: year)
                 }
                 
-            case .lifeInsuranceSuccession:
+            case .lifeInsuranceSuccession, .lifeInsuranceTransmission:
                 // le bien est-il une assurance vie ?
                 switch type {
                     case .lifeInsurance:
                         // pas de décote
-                        evaluatedValue = value(atEndOf: year)
-                        
+                        break
+
                     default:
                         // on recherche uniquement les assurances vies
                         return 0
@@ -214,8 +211,12 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
                 
             case .ifi, .isf, .patrimoine:
                 // pas de décote
-                evaluatedValue = value(atEndOf: year)
+                break
         }
+        
+        // prendre la valeur totale du bien sans aucune décote
+        let evaluatedValue = value(atEndOf: year)
+        
         // calculer la part de propriété
         let value = evaluatedValue == 0 ? 0 : ownership.ownedValue(by                : ownerName,
                                                                    ofValue           : evaluatedValue,

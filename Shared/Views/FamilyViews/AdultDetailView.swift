@@ -266,7 +266,7 @@ private struct InheritanceSectionView: View {
         let legalSuccessionManager = LegalSuccessionManager(using          : model.fiscalModel,
                                                             familyProvider : Patrimoin.familyProvider!,
                                                             atEndOf        : year)
-        let succession = legalSuccessionManager.legalSuccession(of    : decedent.displayName,
+        let succession = legalSuccessionManager.succession(of    : decedent.displayName,
                                                                 with  : patrimoine)
         let taxableInheritanceValue = legalSuccessionManager.masseSuccessorale(in: patrimoine,
                                                                                of: decedent.displayName)

@@ -253,15 +253,14 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                             return 0
                         }
                         // pas de décote
-                        ()
                 }
                 
-            case .lifeInsuranceSuccession:
+            case .lifeInsuranceSuccession, .lifeInsuranceTransmission:
                 // le bien est-il une assurance vie ?
                 switch type {
                     case .lifeInsurance:
                         // pas de décote
-                        ()
+                        break
                         
                     default:
                         // on recherche uniquement les assurances vies
@@ -270,10 +269,9 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                 
             case .ifi, .isf, .patrimoine:
                 // pas de décote
-                ()
+                break
         }
         
-        // cas général
         // prendre la valeur totale du bien sans aucune décote
         let evaluatedValue = value(atEndOf: year)
         

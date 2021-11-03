@@ -88,7 +88,7 @@ import NamedValue
             
             // calculers les succession (testées de par ailleurs)
             let lifeInsSuccession =
-                lifeInsuranceSuccessionManager.lifeInsuranceSuccession(
+                lifeInsuranceSuccessionManager.fiscalSuccession(
                     of           : decedentName,
                     with         : Tests.patrimoin,
                     spouseName   : spouseName,
@@ -187,7 +187,7 @@ import NamedValue
             
             // calculers les succession (testées de par ailleurs)
             let lifeInsSuccession =
-                lifeInsuranceSuccessionManager.lifeInsuranceSuccession(
+                lifeInsuranceSuccessionManager.fiscalSuccession(
                     of           : decedentName,
                     with         : Tests.patrimoin,
                     spouseName   : spouseName,

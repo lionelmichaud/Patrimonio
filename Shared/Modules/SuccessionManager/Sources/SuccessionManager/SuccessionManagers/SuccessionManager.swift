@@ -132,12 +132,12 @@ public struct SuccessionManager {
             /// calculer les successions et les droits de successions légales
             // sans exercer de clause à option
             let legalSuccession =
-                legalSuccessionManager.legalSuccession(of      : adultDecedentName,
-                                                       with    : patrimoine,
-                                                       verbose : verbose)
+                legalSuccessionManager.succession(of      : adultDecedentName,
+                                                  with    : patrimoine,
+                                                  verbose : verbose)
             
             /// calculer les transmissions et les droits de transmission assurances vies
-            // sans exercer de clause à option
+            /// sans exercer de clause à option
             var spouseName: String?
             if let _spouseName = family.spouseNameOf(adultDecedentName) {
                 if family.member(withName: _spouseName)!.isAlive(atEndOf: year) {
@@ -146,14 +146,14 @@ public struct SuccessionManager {
             }
             let childrenAlive = family.childrenAliveName(atEndOf : year)
             var lifeInsSuccession =
-                lifeInsuranceSuccessionManager.lifeInsuranceSuccession(
+                lifeInsuranceSuccessionManager.fiscalSuccession(
                     of           : adultDecedentName,
                     with         : patrimoine,
                     spouseName   : spouseName,
                     childrenName : childrenAlive,
                     verbose      : verbose)
             
-            // au premier décès parmis les adultes:
+            /// au premier décès parmis les adultes:
             /// s'assurer que les enfants peuvent payer les droits de succession
             if adultDecedentName == adultDecedentsNames.first &&
                 family.nbOfAdults == 2 &&
@@ -219,7 +219,7 @@ public struct SuccessionManager {
         // recalculer les transmissions et les droits de transmission assurances vies
         // après avoir éventuellement exercé une clause à option
         lifeInsSuccession =
-            lifeInsuranceSuccessionManager.lifeInsuranceSuccession(
+            lifeInsuranceSuccessionManager.fiscalSuccession(
                 of           : decedentName,
                 with         : patrimoine,
                 spouseName   : family.spouseNameOf(decedentName),

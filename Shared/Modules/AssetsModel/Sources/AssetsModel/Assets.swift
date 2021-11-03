@@ -345,8 +345,8 @@ public struct Assets {
                     scpis.value(atEndOf: year) +
                     sci.scpis.value(atEndOf: year)
                 
-            case .lifeInsuranceSuccession:
-                // on recherche uniquement les assurances vies
+            case .lifeInsuranceSuccession, .lifeInsuranceTransmission:
+                // on recherche uniquement les assurances vies dans ce contexte
                 return 0
         }
     }

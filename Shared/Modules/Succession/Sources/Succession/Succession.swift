@@ -27,7 +27,7 @@ public struct Succession: Identifiable {
     public let yearOfDeath  : Int
     // personne dont on fait la succession
     public let decedentName : String
-    // masses successorale
+    // masses successorale fiscale
     public let taxableValue : Double
     // liste des héritages par héritier
     public let inheritances : [Inheritance]

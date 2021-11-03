@@ -354,7 +354,7 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
         let spouseName   = "Mme. Vanessa MICHAUD"
         let childrenName = ["M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
         
-        let succession = Tests.manager.lifeInsuranceSuccession(of           : decedentName,
+        let succession = Tests.manager.fiscalSuccession(of           : decedentName,
                                                                with         : Tests.patrimoin,
                                                                spouseName   : spouseName,
                                                                childrenName : childrenName,

@@ -77,11 +77,11 @@ struct LifeInsuranceSuccessionManager {
     ///   - spouseName: nom du conjoint du défunt
     ///   - childrenName: nom des enfants du défunt
     /// - Returns: Succession du défunt incluant la table des héritages et droits de succession pour chaque héritier
-    func lifeInsuranceSuccession(of decedentName : String,
-                                 with patrimoine : Patrimoin,
-                                 spouseName      : String?,
-                                 childrenName    : [String]?,
-                                 verbose         : Bool = false) -> Succession {
+    func fiscalSuccession(of decedentName : String,
+                          with patrimoine : Patrimoin,
+                          spouseName      : String?,
+                          childrenName    : [String]?,
+                          verbose         : Bool = false) -> Succession {
         var inheritances  : [Inheritance] = []
         
         let financialEnvelops: [FinancialEnvelopP] =

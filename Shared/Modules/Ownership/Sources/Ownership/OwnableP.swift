@@ -114,13 +114,13 @@ public extension OwnableP {
                     return 0
                 }
                 
-            case .lifeInsuranceSuccession:
+            case .lifeInsuranceSuccession, .lifeInsuranceTransmission:
                 // cas particulier d'une succession:
-                // on recherche uniquement les assurances vies
+                // dans ce contexte, on recherche uniquement les assurances vies
                 return 0
                 
             case .ifi, .isf, .patrimoine:
-                ()
+                break
         }
         
         // cas général
