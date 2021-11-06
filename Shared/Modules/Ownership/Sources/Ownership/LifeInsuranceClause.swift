@@ -39,6 +39,7 @@ public struct LifeInsuranceClause: Codable, Hashable {
                 return false
                 
             case (false, true):
+                // il doit y avoir au moins 1 usufruitier et 1 nu-propriétaire
                 return usufructRecipient.isNotEmpty && bareRecipients.isNotEmpty
                 
             case (false, false):

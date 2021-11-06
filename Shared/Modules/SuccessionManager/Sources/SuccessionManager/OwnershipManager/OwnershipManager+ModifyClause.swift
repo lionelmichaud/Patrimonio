@@ -15,25 +15,34 @@ import SimulationLogger
 
 extension OwnershipManager {
     
-    /// Modifie une ou plusieur clauses d'AV pour permettre à chaque enfant de payer ses droits de succession
+    /// Modifie une ou plusieurs clauses d'AV pour permettre à chaque enfant de payer ses droits de succession
     /// - Parameters:
     ///   - decedentName: adulte décédé
-    ///   - conjoint: l'adulte survivant au décès du premier adulte
+    ///   - conjointName: l'adulte survivant au décès du premier adulte
     ///   - assets: Actifs de la famille
     ///   - liabilities: Passifs de la famille
+    ///   - capitauxDecesRecusNet: capitaux décès nets de taxes de transmssion reçus par les héritiers
     ///   - taxes: les droits de succession à payer par chaque enfant
     func modifyLifeInsuranceClauseIfNecessaryAndPossible
-    (of decedentName             : String,
+    (decedentName                : String,
      conjointName                : String,
      withAssets assets           : inout Assets,
      withLiabilities liabilities : Liabilities,
-     toPayFor taxes              : NameValueDico) throws {
-        var missingCapitals = missingCapital(of              : decedentName,
-                                             withAssets      : assets,
-                                             withLiabilities : liabilities,
-                                             toPayFor        : taxes)
+     toPayFor taxes              : NameValueDico,
+     capitauxDecesRecusNet       : LifeInsuranceSuccessionManager.NameCapitauxDecesDico,
+     verbose                     : Bool = false) throws {
+        
+        var missingCapitals = missingCapital(decedentName          : decedentName,
+                                             withAssets            : assets,
+                                             withLiabilities       : liabilities,
+                                             toPayFor              : taxes,
+                                             capitauxDecesRecusNet : capitauxDecesRecusNet,
+                                             verbose               : verbose)
         
         guard missingCapitals.values.sum() > 0.0 else {
+            if verbose {
+                print("Il ne manque pas de capital aux enfants pour payer les taxes et les droits de succession")
+            }
             // il ne manque rien à personne
             return
         }
@@ -68,45 +77,53 @@ extension OwnershipManager {
     
     /// Calcule les capitaux manquant à chaque enfant pour payer ses droits de succcession `taxes`
     /// - Parameters:
-    ///   - decedent: adulte décédé
-    ///   - family: la famille
+    ///   - decedentName: adulte décédé
     ///   - assets: Actifs de la famille
     ///   - liabilities: Passifs de la famille
     ///   - taxes: les droits de succession à payer par chaque enfant
-    ///   - year: l'année du décès
+    ///   - capitauxDecesRecusNet: capitaux décès nets de taxes de transmssion reçus par les héritiers
     /// - Returns: capitaux manquant à chaque enfant pour payer ses droits de succcession
-    fileprivate func missingCapital
-    (of decedentName             : String,
+    func missingCapital
+    (decedentName                : String,
      withAssets assets           : Assets,
      withLiabilities liabilities : Liabilities,
-     toPayFor taxes              : NameValueDico) -> NameValueDico {
+     toPayFor taxes              : NameValueDico,
+     capitauxDecesRecusNet       : LifeInsuranceSuccessionManager.NameCapitauxDecesDico,
+     verbose                     : Bool = false) -> NameValueDico {
         // cumuler les valeurs d'actif net que chaque enfant peut vendre après transmission
         let childrenSellableCapital =
             childrenSellableCapitalAfterInheritance(receivedFrom    : decedentName,
                                                     withAssets      : assets,
                                                     withLiabilities : liabilities)
-        print("> Capital cessible détenu par les enfants après succession:\n \(childrenSellableCapital) \n Total = \(childrenSellableCapital.values.sum().k€String)")
         
         // calculer les capitaux manquants à chaque enfants pour pouvoir payer ses droits de succession
         var missingCapital = NameValueDico()
         taxes.forEach { childrenName, tax in
-            let sellableCapital = childrenSellableCapital[childrenName] ?? 0.0
-            missingCapital[childrenName] = max(0.0, tax - sellableCapital)
+            let sellableCapital      = childrenSellableCapital[childrenName] ?? 0.0
+            let capitalDecesBrutRecu = capitauxDecesRecusNet[childrenName]?.received.brut ?? 0.0
+            missingCapital[childrenName] = max(0.0, tax - (sellableCapital + capitalDecesBrutRecu))
+            if verbose {
+                print(childrenName)
+                print("  > Taxe & Droits de succession à payer:\n     \(tax.k€String)")
+                print("  > Capital cessible détenu après succession:\n     +\(sellableCapital.k€String)")
+                print("  > Capital décès brut reçus à la succession:\n     +\(capitalDecesBrutRecu.k€String)")
+                print("  > Capital manquant à pour payer les droits de succession:\n     =\(missingCapital[childrenName]!.k€String)\n")
+            }
         }
-        print("> Capital manquant aux enfants pour payer les droits de succession:\n \(missingCapital) \n Total = \(missingCapital.values.sum().k€String)")
+        if verbose {
+            print("> Capital manquant aux enfants pour payer les droits de succession:\n \(missingCapital) \n Total = \(missingCapital.values.sum().k€String)")
+        }
         
         return missingCapital
     }
     
     /// Calcule le cumul des valeurs d'actif net que les enfants peuvent vendre après transmission
     /// - Parameters:
-    ///   - decedent: adulte décédé
-    ///   - family: la famille
+    ///   - decedentName: adulte décédé
     ///   - assets: Actifs de la famille
     ///   - liabilities: Passifs de la famille
-    ///   - year: l'année du décès
     /// - Returns: cumul des valeurs d'actif net que les enfants peuvent vendre après transmission
-    fileprivate func childrenSellableCapitalAfterInheritance
+    func childrenSellableCapitalAfterInheritance
     (receivedFrom decedentName   : String,
      withAssets assets           : Assets,
      withLiabilities liabilities : Liabilities) -> NameValueDico {
@@ -123,17 +140,15 @@ extension OwnershipManager {
                                          withLiabilities : liabilitiesCopy)
     }
     
-    /// Actif net vendable détenu par l'ensemble des enfants à la fin de l'année `year`
-    /// pour à sa valeur patrimoniale.
+    /// Actif net vendable détenu par chaque enfant à la fin de l'année `year`
+    /// à sa valeur patrimoniale.
     /// - Parameters:
-    ///   - family: la famille
     ///   - assets: actifs de la famille
     ///   - liabilities: passifs de la famille
-    ///   - year: année
     /// - Returns: actif net vendable détenu par l'ensemble des enfants à la fin de l'année
-    fileprivate func childrenNetSellableAssets
-    (withAssets assets           : Assets,
-     withLiabilities liabilities : Liabilities) -> NameValueDico {
+    func childrenNetSellableAssets(withAssets assets           : Assets,
+                                   withLiabilities liabilities : Liabilities) -> NameValueDico {
+        
         var childrenSellableAssets = NameValueDico()
         // Attention: évaluer à la fin de l'année précédente (important pour les FreeInvestment)
         family.childrenAliveName(atEndOf: year)?.forEach { childName in
@@ -161,7 +176,8 @@ extension OwnershipManager {
     fileprivate func modifyClause(of freeInvest        : inout FreeInvestement,
                                   toGet missingCapital : inout NameValueDico,
                                   decedentName         : String,
-                                  conjointName         : String) throws {
+                                  conjointName         : String,
+                                  verbose              : Bool = false) throws {
         // ne considérer que :
         // - les assurance vie
         // - avec clause à option
@@ -182,14 +198,18 @@ extension OwnershipManager {
                 SimulationLogger.shared.log(run      : run,
                                             logTopic : .other,
                                             message  : "Exercice de la clause à option de l'assurance \"\(freeInvest.name)\" de \(decedentName) à son décès en \(year) par \(conjointName)")
-                print("Assurance: \(freeInvest.name)\n Valeur possédée en \(year-1): \(decedentOwnedValue.k€String)")
+                if verbose {
+                    print("Assurance: \(freeInvest.name)\n Valeur possédée en \(year-1): \(decedentOwnedValue.k€String)")
+                }
                 
                 // modifier la clause bénéficiaire d'assurance vie
                 var newClause = clause
                 newClause.isOptional = false
                 newClause.fullRecipients = []
+                
                 //  - capital décès total versé aux enfants (somme)
                 let givenToChildren = min(decedentOwnedValue, missingCapital.values.sum())
+                
                 //  - part du capital décès versée aux enfants (somme) en PP
                 let partDesEnfants = givenToChildren * 100.0 / decedentOwnedValue
                 let childrenAlive  = family.childrenAliveName(atEndOf: year)
@@ -197,23 +217,28 @@ extension OwnershipManager {
                     newClause.fullRecipients.append(Owner(name     : childrenName,
                                                           fraction : partDesEnfants / childrenAlive!.count.double()))
                 }
+                
                 //  - part du capital versée au conjoint en PP
                 let partDuConjoint = 100.0 - partDesEnfants
                 newClause.fullRecipients.append(Owner(name     : conjointName,
                                                       fraction : partDuConjoint))
                 
-                print("Part des enfants: \(partDesEnfants) % = \(givenToChildren.k€String)")
-                print("Part du conjoint: \(partDuConjoint) % = \((decedentOwnedValue - givenToChildren).k€String)")
-
+                if verbose {
+                    print("Part des enfants: \(partDesEnfants) % = \(givenToChildren.k€String)")
+                    print("Part du conjoint: \(partDuConjoint) % = \((decedentOwnedValue - givenToChildren).k€String)")
+                }
+                
                 guard newClause.isValid else {
                     let invalid = newClause
                     customLogOwnershipManager.log(level: .error, "'modifyClause' a généré une 'clause' invalide \(invalid, privacy: .public)")
                     throw OwnershipError.invalidOwnership
                 }
-
+                
                 freeInvest.type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
                                                  clause              : newClause)
-                print("Nouvelle clause:\n\(String(describing: newClause))")
+                if verbose {
+                    print("Nouvelle clause:\n\(String(describing: newClause))")
+                }
                 
                 // Mettre à jour les `missingCapital` en conséquence
                 for childName in missingCapital.keys {
@@ -226,5 +251,4 @@ extension OwnershipManager {
                 return
         }
     }
-
 }

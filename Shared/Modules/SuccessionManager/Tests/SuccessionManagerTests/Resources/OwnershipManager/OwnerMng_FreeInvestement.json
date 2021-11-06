@@ -1,0 +1,233 @@
+{
+    "version" :
+    {
+        "version" : "0.1",
+        "date"    : "2020-10-12T23:00:00+01:00",
+        "comment" : null
+    },
+    
+    "items" : [
+        {
+            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B0",
+            "name"         : "PEA Bourso",
+            "note"         : "Ouvert le 24/03/2014\nMis à jour le 31/12/2020\nFonds actions",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "M. Lionel MICHAUD",
+                        "fraction" : 100
+                    }
+                ],
+                "nue_propriétaires"   :
+                [ ],
+                "usufruitiers"        :
+                [ ]
+            },
+            "lastKnownState" : {
+                "year"       : 2020,
+                "interest"   : 23900,
+                "investment" : 149899
+            },
+            "type" : {
+                "PEA" : true
+            },
+            "interestRateType" : {
+                "marketRate_stockRatio" : 100.0
+            },
+            "currentState" : {
+                "year"       : 0,
+                "interest"   : 0,
+                "investment" : 0
+            }
+        },
+        
+        {
+            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B1",
+            "name"         : "AV Lionel Bourso",
+            "note"         : "Ouvert le 04/03/2012\nMis à jour le 31/12/2020\nFonds actions",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "M. Lionel MICHAUD",
+                        "fraction" : 100
+                    }
+                ],
+                "nue_propriétaires"   :
+                [ ],
+                "usufruitiers"        :
+                [ ]
+            },
+            "lastKnownState" : {
+                "year"       : 2020,
+                "interest"   : 2621,
+                "investment" : 104594
+            },
+            "type" : {
+                "lifeInsurance_taxes" : true,
+                "lifeInsurance_clause" : {
+                    "isOptional"        : true,
+                    "isDismembered"     : false,
+                    "fullRecipients"    : [{
+                        "name"     : "Mme. Vanessa MICHAUD",
+                        "fraction" : 100
+                    }],
+                    "usufructRecipient" : "",
+                    "bareRecipients"    : [ ]
+                }
+            },
+            "interestRateType" : {
+                "marketRate_stockRatio" : 100.0
+            },
+            "currentState" : {
+                "year"       : 0,
+                "interest"   : 0,
+                "investment" : 0
+            }
+        },
+        
+        {
+            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B3",
+            "name"         : "AV Lionel AFER",
+            "note"         : "Ouvert le 30/06/1999\nMis à jour le 31/12/2020\nFonds actions",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "M. Lionel MICHAUD",
+                        "fraction" : 100
+                    }
+                ],
+                "nue_propriétaires"   :
+                [ ],
+                "usufruitiers"        :
+                [ ]
+            },
+            "lastKnownState" : {
+                "year"       : 2020,
+                "interest"   : 406533,
+                "investment" : 96805
+            },
+            "type" : {
+                "lifeInsurance_taxes" : true,
+                "lifeInsurance_clause" : {
+                    "isOptional"        : false,
+                    "isDismembered"     : true,
+                    "fullRecipients"    : [ ],
+                    "usufructRecipient" : "Mme. Vanessa MICHAUD",
+                    "bareRecipients"    :
+                    [
+                        "Mme. Lou-Ann MICHAUD",
+                        "M. Arthur MICHAUD"
+                    ]
+                }
+            },
+            "interestRateType" : {
+                "marketRate_stockRatio" : 100.0
+            },
+            "currentState" : {
+                "year"       : 0,
+                "interest"   : 0,
+                "investment" : 0
+            }
+        },
+
+        {
+            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B5",
+            "name"         : "AV Vanessa AFER",
+            "note"         : "Ouvert le 30/06/1999\nMis à jour le 31/12/2020\nFonds actions",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "Mme. Vanessa MICHAUD",
+                        "fraction" : 100
+                    }
+                ],
+                "nue_propriétaires"   :
+                [ ],
+                "usufruitiers"        :
+                [ ]
+            },
+            "lastKnownState" : {
+                "year"       : 2020,
+                "interest"   : 29000,
+                "investment" : 31213
+            },
+            "type" : {
+                "lifeInsurance_taxes" : true,
+                "lifeInsurance_clause" : {
+                    "isOptional"        : false,
+                    "isDismembered"     : false,
+                    "fullRecipients"    :
+                    [
+                        {
+                            "name"     : "Mme. Lou-Ann MICHAUD",
+                            "fraction" : 50
+                        },
+                        {
+                            "name"     : "M. Arthur MICHAUD",
+                            "fraction" : 50
+                        }
+                    ],
+                    "usufructRecipient" : "",
+                    "bareRecipients"    : [ ]
+                }
+            },
+            "interestRateType" : {
+                "marketRate_stockRatio" : 100.0
+            },
+            "currentState" : {
+                "year"       : 0,
+                "interest"   : 0,
+                "investment" : 0
+            }
+        },
+
+        {
+            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B7",
+            "name"         : "Livret A Lionel Bourso",
+            "note"         : "Ouvert en 2016",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "M. Lionel MICHAUD",
+                        "fraction" : 100
+                    }
+                ],
+                "nue_propriétaires"   :
+                [ ],
+                "usufruitiers"        :
+                [ ]
+            },
+            "lastKnownState" : {
+                "year"       : 2020,
+                "interest"   : 0,
+                "investment" : 23063
+            },
+            "type" : {
+                "other" : true
+            },
+            "interestRateType" : {
+                "contractualRate_fixedRate" : 0.5
+            },
+            "currentState" : {
+                "year"       : 0,
+                "interest"   : 0,
+                "investment" : 0
+            }
+        }
+    ]
+}

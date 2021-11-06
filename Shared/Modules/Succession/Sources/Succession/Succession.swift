@@ -77,9 +77,7 @@ extension Succession: CustomStringConvertible {
         Masse successorale taxable: \(taxableValue.k€String)
         Héritiers:
 
-        """
-            + String(describing: inheritances))
-            .withPrefixedSplittedLines("  ")
+        """ + String(describing: inheritances).withPrefixedSplittedLines("  "))
     }
 }
 extension Array where Element == Succession {
@@ -101,33 +99,41 @@ extension Array where Element == Succession {
 }
 
 // MARK: - Héritage d'une personne
+
 public struct Inheritance: Hashable {
     
     // MARK: - Propeties
     
     // héritier
     public var successorName : String
-    // fraction de la masse successorale reçue en héritage
+    // évaluation de la valeur fiscale
     public var percentFiscal : Double // [0, 1] = brutFiscal / masse successorale
     public var brutFiscal    : Double // valeur fiscale
     public var abatFrac      : Double // [0, 1] de l'abattement fiscal maximum
     public var netFiscal     : Double // valeur fiscale
     public var tax           : Double
-    
+    // évaluation de la valeur réellement transmise en cash
+    public var received      : Double
+    public var receivedNet   : Double // net de taxes
+
     // MARK: - Initializer
     
-    public init(personName : String,
-                percent    : Double,
-                brut       : Double,
-                abatFrac   : Double,
-                net        : Double,
-                tax        : Double) {
+    public init(personName    : String,
+                percentFiscal : Double = 0.0,
+                brutFiscal    : Double = 0.0,
+                abatFrac      : Double = 0.0,
+                netFiscal     : Double = 0.0,
+                tax           : Double = 0.0,
+                received      : Double = 0.0,
+                receivedNet   : Double = 0.0) {
         self.successorName = personName
-        self.percentFiscal = percent
-        self.brutFiscal    = brut
+        self.percentFiscal = percentFiscal
+        self.brutFiscal    = brutFiscal
         self.abatFrac      = abatFrac
-        self.netFiscal     = net
+        self.netFiscal     = netFiscal
         self.tax           = tax
+        self.received      = received
+        self.receivedNet   = receivedNet
     }
 }
 extension Inheritance: SuccessionCsvVisitableP {
@@ -138,13 +144,15 @@ extension Inheritance: SuccessionCsvVisitableP {
 extension Inheritance: CustomStringConvertible {
     public var description: String {
         """
-        Héritier:      \(successorName)
-        Pourcentage:   \((percentFiscal * 100).percentString(digit: 1)) % de la masse successorale
-        Héritage Brut: \(brutFiscal.k€String) (valeur fiscale)
-        Abattement %:  \((abatFrac * 100.0).rounded()) % de l'abattement fiscal maximum
-        Héritage Net:  \(netFiscal.k€String) (valeur fiscale)
-        Droits:        \(tax.k€String)
+        Héritier:        \(successorName)
+        Pourcentage:     \((percentFiscal * 100).percentString(digit: 1)) % de la masse successorale
+        Héritage Brut:   \(brutFiscal.k€String) (valeur fiscale)
+        Abattement %:    \((abatFrac * 100.0).rounded()) % de l'abattement fiscal maximum
+        Héritage Net:    \(netFiscal.k€String) (valeur fiscale)
+        Taxes ou Droits: \(tax.k€String)
+        Cash reçu:       \(received.k€String)
+        Cash reçu net:   \(receivedNet.k€String)
 
-        """.withPrefixedSplittedLines("  ")
+        """
     }
 }

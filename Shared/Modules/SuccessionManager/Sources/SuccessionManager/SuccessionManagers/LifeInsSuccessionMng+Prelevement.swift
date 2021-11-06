@@ -31,8 +31,7 @@ extension LifeInsuranceSuccessionManager {
             patrimoine.assets.freeInvests.items + patrimoine.assets.periodicInvests.items
         
         var abattementsDico =
-            abattementsParPersonne(of           : decedentName,
-                                   with         : financialEnvelops,
+            abattementsParPersonne(for          : financialEnvelops,
                                    spouseName   : spouseName,
                                    childrenName : childrenName,
                                    verbose      : verbose)
@@ -59,12 +58,12 @@ extension LifeInsuranceSuccessionManager {
                                  childrenName                : [String]?,
                                  verbose                     : Bool = false) {
         // calculer les capitaux décès reçus par chaque bénéficiaire
-        let capitauxDeces =
-            capitauxDecesTaxablesParPersonneParAssurance(of           : decedentName,
-                                                         spouseName   : spouseName,
-                                                         childrenName : childrenName,
-                                                         for          : invest,
-                                                         verbose      : verbose)
+//        let capitauxDeces =
+//            capitauxDecesTaxablesParPersonneParAssurance(of           : decedentName,
+//                                                         spouseName   : spouseName,
+//                                                         childrenName : childrenName,
+//                                                         for          : invest,
+//                                                         verbose      : verbose)
         // prélever les taxes à la source
         if invest.clause!.isDismembered {
             removeTransmissionTaxesClauseDismembered()

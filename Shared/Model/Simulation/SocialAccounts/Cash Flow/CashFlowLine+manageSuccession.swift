@@ -39,7 +39,7 @@ extension CashFlowLine {
                                                   run            : run)
 
         /// Gérer les succession de l'année
-        successionManager.manageSuccession()
+        successionManager.manageSuccessions()
 
         /// Récupérer les Successions de l'année pour le Cash-Flow de l'année
         legalSuccessions   += successionManager.legal.successions

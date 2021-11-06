@@ -60,12 +60,13 @@ struct SuccessorGroupBox : View {
 }
 
 struct SuccessorGroupBox_Previews: PreviewProvider {
-    static let inheritence = Inheritance(personName: "M. Lionel MICHAUD",
-                                         percent: 100.0,
-                                         brut: 1,
-                                         abatFrac: 0.8,
-                                         net: 2,
-                                         tax: 3)
+    static let inheritence = Inheritance(personName    : "M. Lionel MICHAUD",
+                                         percentFiscal : 100.0,
+                                         brutFiscal    : 1,
+                                         abatFrac      : 0.8,
+                                         netFiscal     : 2,
+                                         tax           : 3,
+                                         receivedCash  : 2)
     static var previews: some View {
         SuccessorGroupBox(inheritence: inheritence)
     }

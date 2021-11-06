@@ -138,18 +138,18 @@ final class LegalSuccessionManagerTests: XCTestCase {
         var heritageOfChild: (netAmount: Double, taxe: Double) = (0.0, 0.0)
         XCTAssertNoThrow(heritageOfChild = try Tests.fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brut),
                          "failed in fiscalModel.inheritanceDonation.heritageOfChild")
-        let theoryInheritance = Set([Inheritance(personName : "M. Arthur MICHAUD",
-                                                 percent    : share,
-                                                 brut       : brut,
-                                                 abatFrac   : 1.0,
-                                                 net        : heritageOfChild.netAmount,
-                                                 tax        : heritageOfChild.taxe),
-                                     Inheritance(personName : "Mme. Lou-Ann MICHAUD",
-                                                 percent    : share,
-                                                 brut       : brut,
-                                                 abatFrac   : 1.0,
-                                                 net        : heritageOfChild.netAmount,
-                                                 tax        : heritageOfChild.taxe)])
+        let theoryInheritance = Set([Inheritance(personName    : "M. Arthur MICHAUD",
+                                                 percentFiscal : share,
+                                                 brutFiscal    : brut,
+                                                 abatFrac      : 1.0,
+                                                 netFiscal     : heritageOfChild.netAmount,
+                                                 tax           : heritageOfChild.taxe),
+                                     Inheritance(personName    : "Mme. Lou-Ann MICHAUD",
+                                                 percentFiscal : share,
+                                                 brutFiscal    : brut,
+                                                 abatFrac      : 1.0,
+                                                 netFiscal     : heritageOfChild.netAmount,
+                                                 tax           : heritageOfChild.taxe)])
         
         XCTAssertEqual(Set(inheritance), theoryInheritance)
     }
@@ -168,24 +168,24 @@ final class LegalSuccessionManagerTests: XCTestCase {
         var heritageOfChild: (netAmount: Double, taxe: Double) = (0.0, 0.0)
         XCTAssertNoThrow(heritageOfChild = try Tests.fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brutChild),
                          "failed in fiscalModel.inheritanceDonation.heritageOfChild")
-        let theoryInheritance = Set([Inheritance(personName : "Mme. Vanessa MICHAUD",
-                                                 percent    : conjointShare,
-                                                 brut       : conjointShare * masse,
-                                                 abatFrac   : 1.0,
-                                                 net        : conjointShare * masse,
-                                                 tax        : 0.0),
-                                     Inheritance(personName : "M. Arthur MICHAUD",
-                                                 percent    : childShare,
-                                                 brut       : brutChild,
-                                                 abatFrac   : 1.0,
-                                                 net        : heritageOfChild.netAmount,
-                                                 tax        : heritageOfChild.taxe),
-                                     Inheritance(personName : "Mme. Lou-Ann MICHAUD",
-                                                 percent    : childShare,
-                                                 brut       : brutChild,
-                                                 abatFrac   : 1.0,
-                                                 net        : heritageOfChild.netAmount,
-                                                 tax        : heritageOfChild.taxe)])
+        let theoryInheritance = Set([Inheritance(personName    : "Mme. Vanessa MICHAUD",
+                                                 percentFiscal : conjointShare,
+                                                 brutFiscal    : conjointShare * masse,
+                                                 abatFrac      : 1.0,
+                                                 netFiscal     : conjointShare * masse,
+                                                 tax           : 0.0),
+                                     Inheritance(personName    : "M. Arthur MICHAUD",
+                                                 percentFiscal : childShare,
+                                                 brutFiscal    : brutChild,
+                                                 abatFrac      : 1.0,
+                                                 netFiscal     : heritageOfChild.netAmount,
+                                                 tax           : heritageOfChild.taxe),
+                                     Inheritance(personName    : "Mme. Lou-Ann MICHAUD",
+                                                 percentFiscal : childShare,
+                                                 brutFiscal    : brutChild,
+                                                 abatFrac      : 1.0,
+                                                 netFiscal     : heritageOfChild.netAmount,
+                                                 tax           : heritageOfChild.taxe)])
         
         XCTAssertEqual(Set(inheritance), theoryInheritance)
     }
@@ -205,24 +205,24 @@ final class LegalSuccessionManagerTests: XCTestCase {
         var heritageOfChild: (netAmount: Double, taxe: Double) = (0.0, 0.0)
         XCTAssertNoThrow(heritageOfChild = try Tests.fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brutChild),
                          "failed in fiscalModel.inheritanceDonation.heritageOfChild")
-        let theoryInheritance = Set([Inheritance(personName : "Mme. Vanessa MICHAUD",
-                                                 percent    : conjointShare,
-                                                 brut       : conjointShare * masse,
-                                                 abatFrac   : 1.0,
-                                                 net        : conjointShare * masse,
-                                                 tax        : 0.0),
-                                     Inheritance(personName : "M. Arthur MICHAUD",
-                                                 percent    : childShare,
-                                                 brut       : brutChild,
-                                                 abatFrac   : 1.0,
-                                                 net        : heritageOfChild.netAmount,
-                                                 tax        : heritageOfChild.taxe),
-                                     Inheritance(personName : "Mme. Lou-Ann MICHAUD",
-                                                 percent    : childShare,
-                                                 brut       : brutChild,
-                                                 abatFrac   : 1.0,
-                                                 net        : heritageOfChild.netAmount,
-                                                 tax        : heritageOfChild.taxe)])
+        let theoryInheritance = Set([Inheritance(personName    : "Mme. Vanessa MICHAUD",
+                                                 percentFiscal : conjointShare,
+                                                 brutFiscal    : conjointShare * masse,
+                                                 abatFrac      : 1.0,
+                                                 netFiscal     : conjointShare * masse,
+                                                 tax           : 0.0),
+                                     Inheritance(personName    : "M. Arthur MICHAUD",
+                                                 percentFiscal : childShare,
+                                                 brutFiscal    : brutChild,
+                                                 abatFrac      : 1.0,
+                                                 netFiscal     : heritageOfChild.netAmount,
+                                                 tax           : heritageOfChild.taxe),
+                                     Inheritance(personName    : "Mme. Lou-Ann MICHAUD",
+                                                 percentFiscal : childShare,
+                                                 brutFiscal    : brutChild,
+                                                 abatFrac      : 1.0,
+                                                 netFiscal     : heritageOfChild.netAmount,
+                                                 tax           : heritageOfChild.taxe)])
         
         XCTAssertEqual(succession.kind, SuccessionKindEnum.legal)
         XCTAssertEqual(succession.yearOfDeath, 2021)
@@ -250,18 +250,18 @@ final class LegalSuccessionManagerTests: XCTestCase {
         var heritageOfChild: (netAmount: Double, taxe: Double) = (0.0, 0.0)
         XCTAssertNoThrow(heritageOfChild = try Tests.fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brutChild),
                          "failed in fiscalModel.inheritanceDonation.heritageOfChild")
-        let theoryInheritance = Set([Inheritance(personName : "M. Arthur MICHAUD",
-                                                 percent    : childShare,
-                                                 brut       : brutChild,
-                                                 abatFrac   : 1.0,
-                                                 net        : heritageOfChild.netAmount,
-                                                 tax        : heritageOfChild.taxe),
-                                     Inheritance(personName : "Mme. Lou-Ann MICHAUD",
-                                                 percent    : childShare,
-                                                 brut       : brutChild,
-                                                 abatFrac   : 1.0,
-                                                 net        : heritageOfChild.netAmount,
-                                                 tax        : heritageOfChild.taxe)])
+        let theoryInheritance = Set([Inheritance(personName    : "M. Arthur MICHAUD",
+                                                 percentFiscal : childShare,
+                                                 brutFiscal    : brutChild,
+                                                 abatFrac      : 1.0,
+                                                 netFiscal     : heritageOfChild.netAmount,
+                                                 tax           : heritageOfChild.taxe),
+                                     Inheritance(personName    : "Mme. Lou-Ann MICHAUD",
+                                                 percentFiscal : childShare,
+                                                 brutFiscal    : brutChild,
+                                                 abatFrac      : 1.0,
+                                                 netFiscal     : heritageOfChild.netAmount,
+                                                 tax           : heritageOfChild.taxe)])
 
         XCTAssertEqual(succession.kind, SuccessionKindEnum.legal)
         XCTAssertEqual(succession.yearOfDeath, 2021)

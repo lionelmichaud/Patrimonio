@@ -51,11 +51,19 @@ struct LifeInsuranceSuccessionManager {
     
     typealias SetAbatCoupleUFNP = Set<CoupleUFNP>
     
+    struct CapitauxDeces {
+        var fiscal   : (brut: Double, net: Double) = (0, 0)
+        var received : (brut: Double, net: Double) = (0, 0)
+    }
+    
+    typealias NameCapitauxDecesDico = [String : CapitauxDeces]
+    
     // MARK: - Properties
     
-    var fiscalModel : Fiscal.Model
-    var family      : FamilyProviderP
-    var year        : Int
+    var fiscalModel   : Fiscal.Model
+    var family        : FamilyProviderP
+    var year          : Int
+    var capitauxDeces = NameCapitauxDecesDico()
 
     // MARK: - Initializers
 
@@ -77,76 +85,106 @@ struct LifeInsuranceSuccessionManager {
     ///   - spouseName: nom du conjoint du défunt
     ///   - childrenName: nom des enfants du défunt
     /// - Returns: Succession du défunt incluant la table des héritages et droits de succession pour chaque héritier
-    func fiscalSuccession(of decedentName : String,
-                          with patrimoine : Patrimoin,
-                          spouseName      : String?,
-                          childrenName    : [String]?,
-                          verbose         : Bool = false) -> Succession {
-        var inheritances  : [Inheritance] = []
+    mutating func succession(of decedentName : String,
+                             with patrimoine : Patrimoin,
+                             spouseName      : String?,
+                             childrenName    : [String]?,
+                             verbose         : Bool = false) -> Succession {
         
+        capitauxDeces = NameCapitauxDecesDico()
+        var inheritances: [Inheritance] = []
+
         let financialEnvelops: [FinancialEnvelopP] =
             patrimoine.assets.freeInvests.items + patrimoine.assets.periodicInvests.items
         
         // calculer le montant de l'abattement de chaque héritier
-        let abattementsDico = abattementsParPersonne(of           : decedentName,
-                                                     with         : financialEnvelops,
+        let abattementsDico = abattementsParPersonne(for          : financialEnvelops,
                                                      spouseName   : spouseName,
                                                      childrenName : childrenName,
                                                      verbose      : verbose)
         
         // calculer les capitaux décès taxables reçus par chaque héritier
-        let capitauxDeces = capitauxDecesTaxablesParPersonne(of           : decedentName,
-                                                             with         : financialEnvelops,
-                                                             spouseName   : spouseName,
-                                                             childrenName : childrenName,
-                                                             verbose      : verbose)
-
-        // calcul de la masse totale taxable
-        let totalTaxableInheritanceValue = capitauxDeces.values.sum()
+        let capitaux = capitauxDecesTaxableRecusParPersonne(of      : decedentName,
+                                                            with    : financialEnvelops,
+                                                            verbose : verbose)
+        capitaux.taxable.forEach { name, value in
+            if capitauxDeces[name] == nil {
+                capitauxDeces[name] = CapitauxDeces(fiscal: (brut: value, net: 0))
+            } else {
+                capitauxDeces[name]!.fiscal.brut = value
+            }
+        }
+        capitaux.received.forEach { name, value in
+            if capitauxDeces[name] == nil {
+                capitauxDeces[name] = CapitauxDeces(received: (brut: value, net: 0))
+            } else {
+                capitauxDeces[name]!.received.brut = value
+            }
+        }
+        
+        // calcul de la masse totale taxable et reçue réellement
+        let totalTaxableValue  = capitaux.taxable.values.sum()
+        let totalReceivedValue = capitaux.received.values.sum()
         if verbose {
-            print("Total des capitaux décès taxables assurance vie = \(totalTaxableInheritanceValue.rounded())")
+            print("Total des capitaux décès taxables assurance vie = \(totalTaxableValue.rounded())")
+            print("Total des capitaux décès reçus d'assurance vie  = \(totalReceivedValue.rounded())")
         }
 
         // calculer l'héritage de chaque membre de la famille autre que le défunt
-        // à partir des capitaux décès reçus et des abattements
+        // à partir des capitaux décès taxables et des abattements
         for member in family.members.items where member.displayName != decedentName {
-            if let capitaux = capitauxDeces[member.displayName] {
+            let name = member.displayName
+            if let capitauxTaxables = capitaux.taxable[name] {
+                // calculer les taxes de transmission
                 var heritageNetTax = (netAmount: 0.0, taxe: 0.0)
                 if member is Adult {
                     // le conjoint
                     heritageNetTax =
                         fiscalModel.lifeInsuranceInheritance
-                        .heritageNetTaxToConjoint(partSuccession: capitaux)
+                        .heritageNetTaxToConjoint(partSuccession: capitauxTaxables)
                 } else {
                     // les enfants
                     heritageNetTax =
                         try! fiscalModel.lifeInsuranceInheritance
-                        .heritageNetTaxToChild(partSuccession: capitaux,
-                                               fracAbattement: abattementsDico[member.displayName])
+                        .heritageNetTaxToChild(partSuccession: capitauxTaxables,
+                                               fracAbattement: abattementsDico[name])
                 }
+                capitauxDeces[name]!.fiscal.net   = heritageNetTax.netAmount
+                let receivedNet = capitauxDeces[name]!.received.brut == 0.0 ? 0.0 : capitauxDeces[name]!.received.brut - heritageNetTax.taxe
+                capitauxDeces[name]!.received.net = receivedNet
+
                 if verbose {
-                    print("  Part d'héritage de \(member.displayName) = \(capitaux.rounded()) (\((capitaux/totalTaxableInheritanceValue*100.0).rounded()) %)")
-                    print("    Taxe = \(heritageNetTax.taxe.rounded())")
+                    print("  Part d'héritage de \(member.displayName) = \(capitauxTaxables.rounded()) (\((capitauxTaxables/totalTaxableValue*100.0).rounded()) %)")
+                    print("    Brut     = \(capitauxTaxables.rounded())")
+                    print("    Taxe     = \(heritageNetTax.taxe.rounded())")
+                    print("    Net      = \(heritageNetTax.netAmount.rounded())")
+                    print("    Reçu     = \(capitauxDeces[name]!.received.brut.rounded())")
+                    print("    Reçu net = \(capitauxDeces[name]!.received.net.rounded())")
                 }
-                inheritances.append(Inheritance(personName : member.displayName,
-                                                percent    : capitaux / totalTaxableInheritanceValue,
-                                                brut       : capitaux,
-                                                abatFrac   : abattementsDico[member.displayName]!,
-                                                net        : heritageNetTax.netAmount,
-                                                tax        : heritageNetTax.taxe))
+                
+                inheritances.append(Inheritance(personName    : name,
+                                                percentFiscal : capitauxTaxables / totalTaxableValue,
+                                                brutFiscal    : capitauxTaxables,
+                                                abatFrac      : abattementsDico[name]!,
+                                                netFiscal     : heritageNetTax.netAmount,
+                                                tax           : heritageNetTax.taxe,
+                                                received      : capitauxDeces[name]!.received.brut,
+                                                receivedNet   : capitauxDeces[name]!.received.net))
             }
         }
         
         if verbose {
-            print("  Part total = ", inheritances.sum(for: \.percentFiscal))
-            print("  Brut total = ", inheritances.sum(for: \.brutFiscal).rounded())
-            print("  Taxe total = ", inheritances.sum(for: \.tax).rounded())
-            print("  Net total  = ", inheritances.sum(for: \.netFiscal).rounded())
+            print("  Part total     = ", inheritances.sum(for: \.percentFiscal).percentString(digit: 1))
+            print("  Brut total     = ", inheritances.sum(for: \.brutFiscal).rounded())
+            print("  Taxe total     = ", inheritances.sum(for: \.tax).rounded())
+            print("  Net total      = ", inheritances.sum(for: \.netFiscal).rounded())
+            print("  Reçu total     = ", inheritances.sum(for: \.received).rounded())
+            print("  Reçu net total = ", inheritances.sum(for: \.receivedNet).rounded())
         }
         return Succession(kind         : .lifeInsurance,
                           yearOfDeath  : year,
                           decedentName : decedentName,
-                          taxableValue : totalTaxableInheritanceValue,
+                          taxableValue : totalTaxableValue,
                           inheritances : inheritances)
     }
 
@@ -160,8 +198,8 @@ struct LifeInsuranceSuccessionManager {
     ///   - decedent: défunt
     ///   - year: année du décès - 1
     /// - Returns: masse totale d'assurance vie de la succession d'une personne
-    fileprivate func lifeInsuraceInheritanceValue(in patrimoine   : Patrimoin,
-                                                  of decedentName : String) -> Double {
+    fileprivate func lifeInsuranceInheritanceValue(in patrimoine   : Patrimoin,
+                                                   of decedentName : String) -> Double {
         var taxable                                             : Double = 0
         patrimoine.forEachOwnable { ownable in
             taxable += ownable.ownedValue(by                : decedentName,

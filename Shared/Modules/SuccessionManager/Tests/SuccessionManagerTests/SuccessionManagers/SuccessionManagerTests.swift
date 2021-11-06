@@ -71,7 +71,7 @@ import NamedValue
         
         // MARK: Tests Calculs Abattements
         
-        func test_computeSuccessionsTaxesPerPerson() {
+        func test_computeCashAndTaxesPerPerson() {
             let decedentName = "M. Lionel MICHAUD"
             let spouseName   = "Mme. Vanessa MICHAUD"
             let childrenName = ["Mme. Isaline MICHAUD", "M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
@@ -81,14 +81,14 @@ import NamedValue
                 LegalSuccessionManager(using          : Tests.fiscalModel,
                                        familyProvider : Tests.family,
                                        atEndOf        : 2021)
-            let lifeInsuranceSuccessionManager =
+            var lifeInsuranceSuccessionManager =
                 LifeInsuranceSuccessionManager(using          : Tests.fiscalModel,
                                                familyProvider : Tests.family,
                                                atEndOf        : 2021)
             
             // calculers les succession (testées de par ailleurs)
             let lifeInsSuccession =
-                lifeInsuranceSuccessionManager.fiscalSuccession(
+                lifeInsuranceSuccessionManager.succession(
                     of           : decedentName,
                     with         : Tests.patrimoin,
                     spouseName   : spouseName,
@@ -157,13 +157,13 @@ import NamedValue
             //                                                        enfant2Inheritance])
             //
             
-            Tests.manager.computeSuccessionsTaxesPerPerson(legalSuccessions   : [Succession(kind: .legal,
-                                                                                  yearOfDeath: 2021,
-                                                                                  decedentName: decedentName,
-                                                                                  taxableValue: 0.0,
-                                                                                  inheritances: [])],
-                                                 lifeInsSuccessions : [lifeInsSuccession],
-                                                 verbose            : Tests.verbose)
+            Tests.manager.computeCashAndTaxesPerPerson(legalSuccessions   : [Succession(kind: .legal,
+                                                                                        yearOfDeath: 2021,
+                                                                                        decedentName: decedentName,
+                                                                                        taxableValue: 0.0,
+                                                                                        inheritances: [])],
+                                                       lifeInsSuccessions : [lifeInsSuccession],
+                                                       verbose            : Tests.verbose)
             
             let theory_lifeInsSuccessionsTaxesAdults = [NamedValue(name: decedentName, value: 0.0),
                                                         NamedValue(name: spouseName, value: 0.0)]
@@ -180,14 +180,14 @@ import NamedValue
             let childrenName = ["Mme. Isaline MICHAUD", "M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
             
             // créer les managers
-            let lifeInsuranceSuccessionManager =
+            var lifeInsuranceSuccessionManager =
                 LifeInsuranceSuccessionManager(using          : Tests.fiscalModel,
                                                familyProvider : Tests.family,
                                                atEndOf        : 2021)
             
             // calculers les succession (testées de par ailleurs)
             let lifeInsSuccession =
-                lifeInsuranceSuccessionManager.fiscalSuccession(
+                lifeInsuranceSuccessionManager.succession(
                     of           : decedentName,
                     with         : Tests.patrimoin,
                     spouseName   : spouseName,

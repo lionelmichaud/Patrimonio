@@ -70,15 +70,13 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
     // MARK: Tests Calculs Abattements
     
     func test_calcul_abattementsParPersonne() {
-        let decedentName = "M. Lionel MICHAUD"
         let spouseName   = "Mme. Vanessa MICHAUD"
         let childrenName = ["M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
         let financialEnvelops: [FinancialEnvelopP] =
             Tests.patrimoin.assets.freeInvests.items + Tests.patrimoin.assets.periodicInvests.items
         
         let abattementsDico =
-            Tests.manager.abattementsParPersonne(of           : decedentName,
-                                                 with         : financialEnvelops,
+            Tests.manager.abattementsParPersonne(for          : financialEnvelops,
                                                  spouseName   : spouseName,
                                                  childrenName : childrenName,
                                                  verbose      : Tests.verbose)
@@ -91,18 +89,12 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
     }
     
     func test_calcul_abattementsParCouple() {
-        let decedentName = "M. Lionel MICHAUD"
-        let spouseName   = "Mme. Vanessa MICHAUD"
-        let childrenName = ["M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
         let financialEnvelops: [FinancialEnvelopP] =
             Tests.patrimoin.assets.freeInvests.items + Tests.patrimoin.assets.periodicInvests.items
         
         let abattementsParCouple =
-            Tests.manager.abattementsParCouple(of           : decedentName,
-                                               with         : financialEnvelops,
-                                               spouseName   : spouseName,
-                                               childrenName : childrenName,
-                                               verbose      : Tests.verbose)
+            Tests.manager.abattementsParCouple(for     : financialEnvelops,
+                                               verbose : Tests.verbose)
         
         let theory = LifeInsuranceSuccessionManager.SetAbatCoupleUFNP([
             LifeInsuranceSuccessionManager.CoupleUFNP(UF: NamedValue(name: "Mme. Vanessa MICHAUD", value: 0.5),
@@ -115,17 +107,11 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
     }
     
     func test_calcul_abattementsParAssurance() {
-        let decedentName = "M. Lionel MICHAUD"
-        let spouseName   = "Mme. Vanessa MICHAUD"
-        let childrenName = ["M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
         let avAfer =
             Tests.patrimoin.assets.freeInvests.items.first(where: { $0.name == "AV Lionel AFER" })!
         
         let abattementsParAssurance =
-            Tests.manager.abattementsParAssurance(of           : decedentName,
-                                                  spouseName   : spouseName,
-                                                  childrenName : childrenName,
-                                                  for          : avAfer,
+            Tests.manager.abattementsParAssurance(for          : avAfer,
                                                   verbose      : Tests.verbose)
         
         let theory = LifeInsuranceSuccessionManager.SetAbatCoupleUFNP([
@@ -138,15 +124,15 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
         XCTAssertEqual(theory, abattementsParAssurance)
     }
     
-    // MARK: Tests Calculs Capituax Décès Taxables
+    // MARK: Tests Calculs Capitaux Décès Taxables et Reçus en Cash
     
-    func test_undismemberedLifeInsCapitauxDecesTaxables() {
+    func test_capitauxDecesAvUndismembered() {
         let defunt   = "M. Lionel MICHAUD"
         let conjoint = "Mme. Vanessa MICHAUD"
         let enfant1  = "Mme. Lou-Ann MICHAUD"
         let enfant2  = "M. Arthur MICHAUD"
         
-        // Cas n°1
+        // Cas n°1: clause non démembrée
         var ownership = Ownership(ageOf: Tests.family.ageOf)
         ownership.isDismembered = false
         ownership.fullOwners = [Owner(name: defunt, fraction: 100.0)]
@@ -169,72 +155,35 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
         invest.ownership = ownership
         
         var capitalDeces = Tests.manager
-            .undismemberedLifeInsCapitauxDecesTaxables(of           : defunt,
-                                                       spouseName   : conjoint,
-                                                       childrenName : [enfant1, enfant2],
-                                                       for          : invest,
-                                                       verbose      : Tests.verbose)
-        var theory = [enfant1 : 40.0,
-                      enfant2 : 60.0]
-        
-        XCTAssertEqual(theory, capitalDeces)
-        
-        // Cas n°2
+            .capitauxDecesAvUndismembered(of           : defunt,
+                                          for          : invest,
+                                          verbose      : Tests.verbose)
+        var theoryTaxable = [enfant1 : 40.0,
+                             enfant2 : 60.0]
+        var theoryReceived = [enfant1 : 40.0,
+                              enfant2 : 60.0]
+
+        XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
+        XCTAssertEqual(theoryReceived, capitalDeces.received)
+
+        // Cas n°2: clause non démembrée
         ownership.fullOwners = [Owner(name: defunt,   fraction: 50.0),
                                 Owner(name: conjoint, fraction: 50.0)]
         invest.ownership = ownership
         
         capitalDeces = Tests.manager
-            .undismemberedLifeInsCapitauxDecesTaxables(of           : defunt,
-                                                       spouseName   : conjoint,
-                                                       childrenName : [enfant1, enfant2],
-                                                       for          : invest,
-                                                       verbose      : Tests.verbose)
-        theory = [enfant1 : 0.4 * 50.0,
-                  enfant2 : 0.6 * 50.0]
-        
-        XCTAssertEqual(theory, capitalDeces)
-        
-        // Cas n°3
-        ownership.fullOwners = [Owner(name: defunt,   fraction: 50.0),
-                                Owner(name: conjoint, fraction: 50.0)]
-        invest.ownership = ownership
-        
-        capitalDeces = Tests.manager
-            .undismemberedLifeInsCapitauxDecesTaxables(of           : defunt,
-                                                       spouseName   : conjoint,
-                                                       childrenName : [enfant1, enfant2],
-                                                       for          : invest,
-                                                       verbose      : Tests.verbose)
-        theory = [enfant1 : 0.4 * 50.0,
-                  enfant2 : 0.6 * 50.0]
-        
-        XCTAssertEqual(theory, capitalDeces)
-        
-        // cas n°3
-        ownership.fullOwners = [Owner(name: defunt, fraction: 100.0)]
-        invest.ownership = ownership
-        
-        clause.isDismembered     = true
-        clause.usufructRecipient = conjoint
-        clause.bareRecipients    = [enfant1, enfant2]
-        type = InvestementKind.lifeInsurance(periodicSocialTaxes: true,
-                                             clause: clause)
-        invest.type = type
-        
-        capitalDeces = Tests.manager
-            .undismemberedLifeInsCapitauxDecesTaxables(of           : defunt,
-                                                       spouseName   : conjoint,
-                                                       childrenName : [enfant1, enfant2],
-                                                       for          : invest,
-                                                       verbose      : Tests.verbose)
-        theory = [conjoint : 50.0,
-                  enfant1  : 0.5 * 50.0,
-                  enfant2  : 0.5 * 50.0]
-        
-        XCTAssertEqual(theory, capitalDeces)
-        
-        // cas n°4
+            .capitauxDecesAvUndismembered(of           : defunt,
+                                          for          : invest,
+                                          verbose      : Tests.verbose)
+        theoryTaxable = [enfant1 : 0.4 * 50.0,
+                         enfant2 : 0.6 * 50.0]
+        theoryReceived = [enfant1 : 0.4 * 50.0,
+                          enfant2 : 0.6 * 50.0]
+
+        XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
+        XCTAssertEqual(theoryReceived, capitalDeces.received)
+
+        // cas n°3: clause non démembrée
         ownership.fullOwners = [Owner(name: defunt,  fraction: 50.0),
                                 Owner(name: enfant1, fraction: 20.0),
                                 Owner(name: enfant2, fraction: 30.0)]
@@ -248,18 +197,67 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
         invest.type = type
         
         capitalDeces = Tests.manager
-            .undismemberedLifeInsCapitauxDecesTaxables(of           : defunt,
-                                                       spouseName   : conjoint,
-                                                       childrenName : [enfant1, enfant2],
-                                                       for          : invest,
-                                                       verbose      : Tests.verbose)
-        theory = [enfant1  : 20.0 + 0.4 * 50.0 - 20.0,
-                  enfant2  : 30.0 + 0.6 * 50.0 - 30.0]
+            .capitauxDecesAvUndismembered(of           : defunt,
+                                          for          : invest,
+                                          verbose      : Tests.verbose)
+        theoryTaxable = [enfant1  : 20.0 + 0.4 * 50.0 - 20.0,
+                         enfant2  : 30.0 + 0.6 * 50.0 - 30.0]
+        theoryReceived = [enfant1  : 20.0 + 0.4 * 50.0 - 20.0,
+                          enfant2  : 30.0 + 0.6 * 50.0 - 30.0]
+
+        XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
+        XCTAssertEqual(theoryReceived, capitalDeces.received)
+
+        // cas n°4: clause démembrée
+        ownership.fullOwners = [Owner(name: defunt, fraction: 100.0)]
+        invest.ownership = ownership
         
-        XCTAssertEqual(theory, capitalDeces)
+        clause.isDismembered     = true
+        clause.usufructRecipient = conjoint
+        clause.bareRecipients    = [enfant1, enfant2]
+        type = InvestementKind.lifeInsurance(periodicSocialTaxes: true,
+                                             clause: clause)
+        invest.type = type
+        
+        capitalDeces = Tests.manager
+            .capitauxDecesAvUndismembered(of           : defunt,
+                                          for          : invest,
+                                          verbose      : Tests.verbose)
+        theoryTaxable = [conjoint : 50.0,
+                         enfant1  : 0.5 * 50.0,
+                         enfant2  : 0.5 * 50.0]
+        theoryReceived = [conjoint : 100.0]
+
+        XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
+        XCTAssertEqual(theoryReceived, capitalDeces.received)
+
+        // cas n°5: clause démembrée
+        ownership.fullOwners = [Owner(name: defunt,  fraction: 50.0),
+                                Owner(name: enfant1, fraction: 20.0),
+                                Owner(name: enfant2, fraction: 30.0)]
+        invest.ownership = ownership
+        
+        clause.isDismembered     = true
+        clause.usufructRecipient = conjoint
+        clause.bareRecipients    = [enfant1, enfant2]
+        type = InvestementKind.lifeInsurance(periodicSocialTaxes: true,
+                                             clause: clause)
+        invest.type = type
+        
+        capitalDeces = Tests.manager
+            .capitauxDecesAvUndismembered(of           : defunt,
+                                          for          : invest,
+                                          verbose      : Tests.verbose)
+        theoryTaxable = [conjoint : 0.5 * 50.0,
+                         enfant1  : 0.5/2.0 * 50.0,
+                         enfant2  : 0.5/2.0 * 50.0]
+        theoryReceived = [conjoint : 50.0]
+        
+        XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
+        XCTAssertEqual(theoryReceived, capitalDeces.received)
     }
     
-    func test_dismemberedLifeInsCapitauxDecesTaxables() {
+    func test_capitauxDecesAvDismembered() {
         let defunt   = "M. Lionel MICHAUD"
         let conjoint = "Mme. Vanessa MICHAUD"
         let enfant1  = "Mme. Lou-Ann MICHAUD"
@@ -290,29 +288,48 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
         invest.ownership = ownership
         
         var capitalDeces = Tests.manager
-            .dismemberedLifeInsCapitauxDecesTaxables(of        : defunt,
-                                                     for     : invest,
-                                                     verbose : Tests.verbose)
+            .capitauxDecesAvDismembered(of      : defunt,
+                                        for     : invest,
+                                        verbose : Tests.verbose)
         
-        var theory: NameValueDico = [:]
-        
-        XCTAssertEqual(theory, capitalDeces)
-        
+        var theoryTaxable: NameValueDico = [:]
+        var theoryReceived: NameValueDico = [:]
+
+        XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
+        XCTAssertEqual(theoryReceived, capitalDeces.received)
+
         // cas n°2
         ownership.usufructOwners = [Owner(name: conjoint, fraction: 100.0)]
         invest.ownership = ownership
         
         capitalDeces = Tests.manager
-            .dismemberedLifeInsCapitauxDecesTaxables(of        : defunt,
-                                                     for     : invest,
-                                                     verbose : Tests.verbose)
+            .capitauxDecesAvDismembered(of      : defunt,
+                                        for     : invest,
+                                        verbose : Tests.verbose)
         
-        theory = [:]
+        theoryTaxable = [:]
+        theoryReceived = [:]
+
+        XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
+        XCTAssertEqual(theoryReceived, capitalDeces.received)
         
-        XCTAssertEqual(theory, capitalDeces)
+        // cas n°3
+        invest.type = .pea
+
+        capitalDeces = Tests.manager
+            .capitauxDecesAvDismembered(of      : defunt,
+                                        for     : invest,
+                                        verbose : Tests.verbose)
+        
+        theoryTaxable = [:]
+        theoryReceived = [:]
+        
+        XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
+        XCTAssertEqual(theoryReceived, capitalDeces.received)
+        
     }
     
-    func test_capitauxDecesTaxablesParPersonne() {
+    func test_capitauxDecesTaxableRecusParPersonne() {
         let decedentName = "M. Lionel MICHAUD"
         let spouseName   = "Mme. Vanessa MICHAUD"
         let childrenName = ["M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
@@ -321,11 +338,9 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
             Tests.patrimoin.assets.freeInvests.items + Tests.patrimoin.assets.periodicInvests.items
         
         let capitauxDecesParPersonne =
-            Tests.manager.capitauxDecesTaxablesParPersonne(of           : decedentName,
-                                                           with         : financialEnvelops,
-                                                           spouseName   : spouseName,
-                                                           childrenName : childrenName,
-                                                           verbose      : Tests.verbose)
+            Tests.manager.capitauxDecesTaxableRecusParPersonne(of           : decedentName,
+                                                               with         : financialEnvelops,
+                                                               verbose      : Tests.verbose)
         
         //                      = pris en compte * part héritage * valeur
         let therory_period_tonl_enf = 1.0 * 0.5 * (0.0 + 150_000.0)
@@ -340,25 +355,25 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
         let theory_free_av_afel_enf = 1.0 * 0.5 * 0.5 * (106_533.0 +  96_805.0)
         //let theory_free_av_afev     = 0.0 * 0.5 * ( 29_000.0 +  31_213.0)
         
-        let theory = ["Mme. Vanessa MICHAUD" : theory_free_av_boul_van + theory_free_av_afel_van,
-                      "M. Arthur MICHAUD"    : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf,
-                      "Mme. Lou-Ann MICHAUD" : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf]
+        let theoryTaxable = ["Mme. Vanessa MICHAUD" : theory_free_av_boul_van + theory_free_av_afel_van,
+                             "M. Arthur MICHAUD"    : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf,
+                             "Mme. Lou-Ann MICHAUD" : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf]
         
-        XCTAssertEqual(theory, capitauxDecesParPersonne)
+        XCTAssertEqual(theoryTaxable, capitauxDecesParPersonne.taxable)
     }
     
     // MARK: Tests Calcul Succession Assurances Vies
     
-    func test_lifeInsuranceSuccession() {
+    func test_succession() {
         let decedentName = "M. Lionel MICHAUD"
         let spouseName   = "Mme. Vanessa MICHAUD"
         let childrenName = ["M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
         
-        let succession = Tests.manager.fiscalSuccession(of           : decedentName,
-                                                               with         : Tests.patrimoin,
-                                                               spouseName   : spouseName,
-                                                               childrenName : childrenName,
-                                                               verbose      : Tests.verbose)
+        let succession = Tests.manager.succession(of           : decedentName,
+                                                  with         : Tests.patrimoin,
+                                                  spouseName   : spouseName,
+                                                  childrenName : childrenName,
+                                                  verbose      : Tests.verbose)
         
         //                      = pris en compte * part héritage * valeur
         let therory_period_tonl_enf = 1.0 * 0.5 * (0.0 + 150_000.0)
@@ -377,31 +392,41 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
             2.0 * (therory_period_tonl_enf + theory_free_av_afel_enf + theory_free_av_boul_enf) +
             theory_free_av_afel_van + theory_free_av_boul_van
         
-        let capitauxDeces = ["Mme. Vanessa MICHAUD" : theory_free_av_boul_van + theory_free_av_afel_van,
-                             "M. Arthur MICHAUD"    : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf,
-                             "Mme. Lou-Ann MICHAUD" : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf]
+        let capitauxTaxables = ["Mme. Vanessa MICHAUD" : theory_free_av_boul_van + theory_free_av_afel_van,
+                                "M. Arthur MICHAUD"    : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf,
+                                "Mme. Lou-Ann MICHAUD" : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf]
         
-        let taxeEnfant = (capitauxDeces["M. Arthur MICHAUD"]! - 0.5 * 152500.0) * 0.2
+        let capitauxReceived = ["Mme. Vanessa MICHAUD" : theory_free_av_boul_van + theory_free_av_afel_van + 2 * theory_free_av_afel_enf,
+                                "M. Arthur MICHAUD"    : therory_period_tonl_enf + theory_free_av_boul_enf,
+                                "Mme. Lou-Ann MICHAUD" : therory_period_tonl_enf + theory_free_av_boul_enf]
+
+        let taxeEnfant = (capitauxTaxables["M. Arthur MICHAUD"]! - 0.5 * 152500.0) * 0.2
         
         let inheritances = [
-            Inheritance(personName : "Mme. Vanessa MICHAUD",
-                        percent    : capitauxDeces["Mme. Vanessa MICHAUD"]! / totalTaxableInheritanceValue,
-                        brut       : capitauxDeces["Mme. Vanessa MICHAUD"]!,
-                        abatFrac   : 1.0,
-                        net        : capitauxDeces["Mme. Vanessa MICHAUD"]!,
-                        tax        : 0.0),
-            Inheritance(personName : "M. Arthur MICHAUD",
-                        percent    : capitauxDeces["M. Arthur MICHAUD"]! / totalTaxableInheritanceValue,
-                        brut       : capitauxDeces["M. Arthur MICHAUD"]!,
-                        abatFrac   : 0.5,
-                        net        : capitauxDeces["M. Arthur MICHAUD"]! - taxeEnfant,
-                        tax        : taxeEnfant),
-            Inheritance(personName : "Mme. Lou-Ann MICHAUD",
-                        percent    : capitauxDeces["Mme. Lou-Ann MICHAUD"]! / totalTaxableInheritanceValue,
-                        brut       : capitauxDeces["Mme. Lou-Ann MICHAUD"]!,
-                        abatFrac   : 0.5,
-                        net        : capitauxDeces["Mme. Lou-Ann MICHAUD"]! - taxeEnfant,
-                        tax        : taxeEnfant)
+            Inheritance(personName    : "Mme. Vanessa MICHAUD",
+                        percentFiscal : capitauxTaxables["Mme. Vanessa MICHAUD"]! / totalTaxableInheritanceValue,
+                        brutFiscal    : capitauxTaxables["Mme. Vanessa MICHAUD"]!,
+                        abatFrac      : 1.0,
+                        netFiscal     : capitauxTaxables["Mme. Vanessa MICHAUD"]!,
+                        tax           : 0.0,
+                        received      : capitauxReceived["Mme. Vanessa MICHAUD"]!,
+                        receivedNet   : capitauxReceived["Mme. Vanessa MICHAUD"]!),
+            Inheritance(personName    : "M. Arthur MICHAUD",
+                        percentFiscal : capitauxTaxables["M. Arthur MICHAUD"]! / totalTaxableInheritanceValue,
+                        brutFiscal    : capitauxTaxables["M. Arthur MICHAUD"]!,
+                        abatFrac      : 0.5,
+                        netFiscal     : capitauxTaxables["M. Arthur MICHAUD"]! - taxeEnfant,
+                        tax           : taxeEnfant,
+                        received      : capitauxReceived["M. Arthur MICHAUD"]!,
+                        receivedNet   : capitauxReceived["M. Arthur MICHAUD"]! - taxeEnfant),
+            Inheritance(personName    : "Mme. Lou-Ann MICHAUD",
+                        percentFiscal : capitauxTaxables["Mme. Lou-Ann MICHAUD"]! / totalTaxableInheritanceValue,
+                        brutFiscal    : capitauxTaxables["Mme. Lou-Ann MICHAUD"]!,
+                        abatFrac      : 0.5,
+                        netFiscal     : capitauxTaxables["Mme. Lou-Ann MICHAUD"]! - taxeEnfant,
+                        tax           : taxeEnfant,
+                        received      : capitauxReceived["Mme. Lou-Ann MICHAUD"]!,
+                        receivedNet   : capitauxReceived["Mme. Lou-Ann MICHAUD"]! - taxeEnfant)
         ]
         
         let theory = Succession(kind         : .lifeInsurance,

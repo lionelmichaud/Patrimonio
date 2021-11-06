@@ -130,13 +130,14 @@ public struct LegalSuccessionManager {
         // calculer les droits de succession du conjoint
         // TODO: le sortir d'une fonction du modèle fiscal
         let tax = 0.0
+        let net = brut - tax
 
-        var inheritances = [Inheritance(personName : conjointSurvivant.displayName,
-                                        percent    : share,
-                                        brut       : brut,
-                                        abatFrac   : 1.0,
-                                        net        : brut - tax,
-                                        tax        : tax)]
+        var inheritances = [Inheritance(personName    : conjointSurvivant.displayName,
+                                        percentFiscal : share,
+                                        brutFiscal    : brut,
+                                        abatFrac      : 1.0,
+                                        netFiscal     : net,
+                                        tax           : tax)]
         if verbose { print(String(describing: inheritances.last)) }
 
         // les enfants
@@ -169,12 +170,12 @@ public struct LegalSuccessionManager {
                 // caluler les droits de succession du conjoint
                 let heritageOfChild = try! fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brut)
 
-                inheritances.append(Inheritance(personName : childName,
-                                                percent    : share,
-                                                brut       : brut,
-                                                abatFrac   : 1.0,
-                                                net        : heritageOfChild.netAmount,
-                                                tax        : heritageOfChild.taxe))
+                inheritances.append(Inheritance(personName    : childName,
+                                                percentFiscal : share,
+                                                brutFiscal    : brut,
+                                                abatFrac      : 1.0,
+                                                netFiscal     : heritageOfChild.netAmount,
+                                                tax           : heritageOfChild.taxe))
             }
         }
         if verbose { print(String(describing: inheritances.last)) }
