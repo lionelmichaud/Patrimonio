@@ -21,6 +21,9 @@ public enum ClauseError: String, Error {
 ///   - le cas de plusieurs usufruitiers bénéficiaires n'est pas traité
 ///   - le cas de parts non égales entre nue-propriétaires bénéficiaires n'est pas traité
 public struct LifeInsuranceClause: Codable, Hashable {
+
+    // MARK: - Properties
+
     public var isOptional   : Bool = false
     public var isDismembered: Bool = false
     // bénéficiaire en PP
@@ -87,7 +90,12 @@ public struct LifeInsuranceClause: Codable, Hashable {
         return nil
     }
     
+    // MARK: - Initializers
+    
     public init() { }
+    
+    // MARK: - Methods
+    
 }
 
 extension LifeInsuranceClause: CustomStringConvertible {

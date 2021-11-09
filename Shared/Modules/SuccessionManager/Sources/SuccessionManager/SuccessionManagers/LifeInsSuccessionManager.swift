@@ -19,9 +19,13 @@ import PatrimoineModel
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine",
                                category: "Model.LifeInsuranceSuccessionManager")
 
+// Créances de restitution d'un Quasi-Usufruitier envers les Nu-propriétaires
+public typealias CreanceDeRestituationDico = [String : NameValueDico]
+
+// Gestionnaire de transmission d'Assurances Vies
 struct LifeInsuranceSuccessionManager {
     
-    // MARK: - Types
+    // MARK: - Nested Types
 
     typealias AbattementPersonel = NamedValue
 
@@ -51,9 +55,17 @@ struct LifeInsuranceSuccessionManager {
     
     typealias SetAbatCoupleUFNP = Set<CoupleUFNP>
     
-    struct CapitauxDeces {
+    struct CapitauxDeces: Equatable {
         var fiscal   : (brut: Double, net: Double) = (0, 0)
         var received : (brut: Double, net: Double) = (0, 0)
+        var creance  : Double = 0
+        
+        static func == (lhs: LifeInsuranceSuccessionManager.CapitauxDeces,
+                        rhs: LifeInsuranceSuccessionManager.CapitauxDeces) -> Bool {
+            lhs.creance == rhs.creance &&
+                lhs.fiscal == rhs.fiscal &&
+                lhs.received == rhs.received
+        }
     }
     
     typealias NameCapitauxDecesDico = [String : CapitauxDeces]
@@ -63,13 +75,16 @@ struct LifeInsuranceSuccessionManager {
     var fiscalModel   : Fiscal.Model
     var family        : FamilyProviderP
     var year          : Int
-    var capitauxDeces = NameCapitauxDecesDico()
+    // capitaux décès reçu par chaque héritier
+    var capitauxDeces             = NameCapitauxDecesDico()
+    // créances de restitution de quasi-usufruits d'un héritier (UF) envers les autres (NP)
+    var creanceDeRestituationDico = CreanceDeRestituationDico()
 
     // MARK: - Initializers
 
-    public init(using fiscalModel : Fiscal.Model,
-                familyProvider    : FamilyProviderP,
-                atEndOf year      : Int) {
+    init(using fiscalModel : Fiscal.Model,
+         familyProvider    : FamilyProviderP,
+         atEndOf year      : Int) {
         self.family      = familyProvider
         self.fiscalModel = fiscalModel
         self.year        = year
@@ -91,7 +106,8 @@ struct LifeInsuranceSuccessionManager {
                              childrenName    : [String]?,
                              verbose         : Bool = false) -> Succession {
         
-        capitauxDeces = NameCapitauxDecesDico()
+        capitauxDeces             = NameCapitauxDecesDico()
+        creanceDeRestituationDico = CreanceDeRestituationDico()
         var inheritances: [Inheritance] = []
 
         let financialEnvelops: [FinancialEnvelopP] =
@@ -107,21 +123,31 @@ struct LifeInsuranceSuccessionManager {
         let capitaux = capitauxDecesTaxableRecusParPersonne(of      : decedentName,
                                                             with    : financialEnvelops,
                                                             verbose : verbose)
-        capitaux.taxable.forEach { name, value in
-            if capitauxDeces[name] == nil {
-                capitauxDeces[name] = CapitauxDeces(fiscal: (brut: value, net: 0))
+        capitaux.taxable.forEach { heritier, value in
+            if capitauxDeces[heritier] == nil {
+                capitauxDeces[heritier] = CapitauxDeces(fiscal: (brut: value, net: 0))
             } else {
-                capitauxDeces[name]!.fiscal.brut = value
+                capitauxDeces[heritier]!.fiscal.brut += value
             }
         }
-        capitaux.received.forEach { name, value in
-            if capitauxDeces[name] == nil {
-                capitauxDeces[name] = CapitauxDeces(received: (brut: value, net: 0))
+        capitaux.received.forEach { heritier, value in
+            if capitauxDeces[heritier] == nil {
+                capitauxDeces[heritier] = CapitauxDeces(received: (brut: value, net: 0))
             } else {
-                capitauxDeces[name]!.received.brut = value
+                capitauxDeces[heritier]!.received.brut += value
             }
         }
-        
+        creanceDeRestituationDico = capitaux.creances
+        creanceDeRestituationDico.forEach { quasiUF, creances in
+            creances.forEach { creancier, value in
+                if capitauxDeces[creancier] == nil {
+                    capitauxDeces[creancier] = CapitauxDeces(creance: value)
+                } else {
+                    capitauxDeces[creancier]!.creance += value
+                }
+            }
+        }
+
         // calcul de la masse totale taxable et reçue réellement
         let totalTaxableValue  = capitaux.taxable.values.sum()
         let totalReceivedValue = capitaux.received.values.sum()
@@ -152,14 +178,19 @@ struct LifeInsuranceSuccessionManager {
                 capitauxDeces[name]!.fiscal.net   = heritageNetTax.netAmount
                 let receivedNet = capitauxDeces[name]!.received.brut == 0.0 ? 0.0 : capitauxDeces[name]!.received.brut - heritageNetTax.taxe
                 capitauxDeces[name]!.received.net = receivedNet
-
+                
                 if verbose {
-                    print("  Part d'héritage de \(member.displayName) = \(capitauxTaxables.rounded()) (\((capitauxTaxables/totalTaxableValue*100.0).rounded()) %)")
-                    print("    Brut     = \(capitauxTaxables.rounded())")
-                    print("    Taxe     = \(heritageNetTax.taxe.rounded())")
-                    print("    Net      = \(heritageNetTax.netAmount.rounded())")
-                    print("    Reçu     = \(capitauxDeces[name]!.received.brut.rounded())")
-                    print("    Reçu net = \(capitauxDeces[name]!.received.net.rounded())")
+                    print(
+                        """
+                        Part d'héritage de \(member.displayName) = \(capitauxTaxables.rounded()) (\((capitauxTaxables/totalTaxableValue*100.0).rounded()) %
+                           Brut     = \(capitauxTaxables.rounded())
+                           Taxe     = \(heritageNetTax.taxe.rounded())
+                           Net      = \(heritageNetTax.netAmount.rounded())
+                           Reçu     = \(capitauxDeces[name]!.received.brut.rounded())
+                           Reçu net = \(capitauxDeces[name]!.received.net.rounded())
+                           Créance  = \(capitauxDeces[name]?.creance.rounded() ?? 0)
+
+                        """)
                 }
                 
                 inheritances.append(Inheritance(personName    : name,
@@ -169,17 +200,23 @@ struct LifeInsuranceSuccessionManager {
                                                 netFiscal     : heritageNetTax.netAmount,
                                                 tax           : heritageNetTax.taxe,
                                                 received      : capitauxDeces[name]!.received.brut,
-                                                receivedNet   : capitauxDeces[name]!.received.net))
+                                                receivedNet   : capitauxDeces[name]!.received.net,
+                                                creanceRestit : capitauxDeces[name]?.creance ?? 0))
             }
         }
         
         if verbose {
-            print("  Part total     = ", inheritances.sum(for: \.percentFiscal).percentString(digit: 1))
-            print("  Brut total     = ", inheritances.sum(for: \.brutFiscal).rounded())
-            print("  Taxe total     = ", inheritances.sum(for: \.tax).rounded())
-            print("  Net total      = ", inheritances.sum(for: \.netFiscal).rounded())
-            print("  Reçu total     = ", inheritances.sum(for: \.received).rounded())
-            print("  Reçu net total = ", inheritances.sum(for: \.receivedNet).rounded())
+            print(
+                """
+                TOTAL
+                   Part      = \(inheritances.sum(for: \.percentFiscal).percentString(digit: 1))
+                   Brut      = \(inheritances.sum(for: \.brutFiscal).rounded()))
+                   Taxe      = \(inheritances.sum(for: \.tax).rounded()))
+                   Net       = \(inheritances.sum(for: \.netFiscal).rounded()))
+                   Reçu      = \(inheritances.sum(for: \.received).rounded()))
+                   Reçu net  = \(inheritances.sum(for: \.receivedNet).rounded())
+                   Créance   = \(inheritances.sum(for: \.creanceRestit).rounded())
+                """)
         }
         return Succession(kind         : .lifeInsurance,
                           yearOfDeath  : year,

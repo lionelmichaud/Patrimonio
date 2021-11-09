@@ -115,7 +115,9 @@ public struct Inheritance: Hashable {
     // évaluation de la valeur réellement transmise en cash
     public var received      : Double
     public var receivedNet   : Double // net de taxes
-
+    // évaluation de la valeur réellement transmise en cash
+    public var creanceRestit : Double
+    
     // MARK: - Initializer
     
     public init(personName    : String,
@@ -125,7 +127,8 @@ public struct Inheritance: Hashable {
                 netFiscal     : Double = 0.0,
                 tax           : Double = 0.0,
                 received      : Double = 0.0,
-                receivedNet   : Double = 0.0) {
+                receivedNet   : Double = 0.0,
+                creanceRestit : Double = 0.0) {
         self.successorName = personName
         self.percentFiscal = percentFiscal
         self.brutFiscal    = brutFiscal
@@ -134,6 +137,7 @@ public struct Inheritance: Hashable {
         self.tax           = tax
         self.received      = received
         self.receivedNet   = receivedNet
+        self.creanceRestit = creanceRestit
     }
 }
 extension Inheritance: SuccessionCsvVisitableP {
@@ -152,6 +156,7 @@ extension Inheritance: CustomStringConvertible {
         Taxes ou Droits: \(tax.k€String)
         Cash reçu:       \(received.k€String)
         Cash reçu net:   \(receivedNet.k€String)
+        Créance de resti:\(creanceRestit.k€String)
 
         """
     }

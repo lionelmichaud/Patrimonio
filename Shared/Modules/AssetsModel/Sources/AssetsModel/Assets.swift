@@ -155,7 +155,7 @@ public struct Assets {
    // MARK: - Methods
     
     /// Checks that each Asset item is valid. Crashes if not.
-    private func checkValidity() {
+    public func checkValidity() {
         periodicInvests.items.forEach {
             if !$0.isValid {
                 if !$0.ownership.isValid {

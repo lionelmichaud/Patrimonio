@@ -66,7 +66,8 @@ struct SuccessorGroupBox_Previews: PreviewProvider {
                                          abatFrac      : 0.8,
                                          netFiscal     : 2,
                                          tax           : 3,
-                                         receivedCash  : 2)
+                                         received      : 2,
+                                         receivedNet   : 1)
     static var previews: some View {
         SuccessorGroupBox(inheritence: inheritence)
     }

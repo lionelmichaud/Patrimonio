@@ -105,7 +105,7 @@ class OwnersTests: XCTestCase {
         var owners = OwnersTests.owners
         let countBefore = owners.count
         
-        try owners.replace(thisOwner: "Name 1", with: ["New Owner 1", "New Owner 2"])
+        XCTAssertNoThrow(try owners.replace(thisOwner: "Name 1", with: ["New Owner 1", "New Owner 2"]))
         XCTAssertEqual(countBefore + 1, owners.count)
         XCTAssert(!owners.contains(OwnersTests.owner1))
         XCTAssert(owners.contains(OwnersTests.owner2))
@@ -118,6 +118,34 @@ class OwnersTests: XCTestCase {
         XCTAssertEqual(5.0, newOwner2.fraction)
     }
     
+    func test_redistribute_with_no_other_Owners() {
+        var owners = [OwnersTests.owner1!]
+        XCTAssertThrowsError(try owners.redistributeShare(of: "Name 1")) { error in
+            XCTAssertEqual(error as! OwnersError, OwnersError.noOtherOwners)
+        }
+    }
+    
+    func test_redistribute_with_no_Owner() {
+        var owners = [OwnersTests.owner1!]
+        XCTAssertThrowsError(try owners.redistributeShare(of: "Unknown")) { error in
+            XCTAssertEqual(error as! OwnersError, OwnersError.ownerDoesNotExist)
+        }
+    }
+    
+    func test_redistribute_with_other_Owners() throws {
+        var owners = OwnersTests.owners
+        let countBefore = owners.count
+
+        XCTAssertNoThrow(try owners.redistributeShare(of: "Name 1"))
+        XCTAssertEqual(countBefore, owners.count + 1)
+        let owner2 = try XCTUnwrap(owners["Name 2"])
+        let owner3 = try XCTUnwrap(owners["Name 3"])
+        let owner4 = try XCTUnwrap(owners["Name 4"])
+        XCTAssertEqual(20.0 + 10.0 / 3.0, owner2.fraction)
+        XCTAssertEqual(30.0 + 10.0 / 3.0, owner3.fraction)
+        XCTAssertEqual(40.0 + 10.0 / 3.0, owner4.fraction)
+    }
+
     func test_group_shares() {
         var owners = OwnersTests.owners
         let countBefore = owners.count

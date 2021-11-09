@@ -145,11 +145,11 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     var currentState: State
     
     /// Intérêts cumulés au cours du temps depuis la transmission de l'usufruit jusqu'à l'instant présent
-    var currentInterestsAfterTransmission: State?
+    var currentStateAfterTransmission: State?
     
     /// Intérêts cumulés au cours du temps depuis la transmission de l'usufruit jusqu'à l'instant présent
-    var cumulatedInterestsAfterSuccession: Double? {
-        currentInterestsAfterTransmission?.interest
+    var cumulatedInterestsSinceSuccession: Double? {
+        currentStateAfterTransmission?.interest
     }
     
     /// Intérêts cumulés au cours du temps depuis l'origine jusqu'à l'instant présent
@@ -197,7 +197,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         }
     }
     
-    /// Intérêts annuels en € du capital accumulé à l'instant présent
+    /// Intérêts annuels en € du capital accumulé à l'instant wprésent
     /// - Parameter idx: [0, nb d'années simulées - 1]
     /// - Returns: Intérêts annuels en €
     private func yearlyInterest(in year: Int) -> Double {
@@ -206,7 +206,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     
     /// Fractionnement d'un retrait entre: versements cumulés et intérêts cumulés
     /// - Parameter amount: montant du retrait
-    func split(removal amount: Double) -> (investement: Double, interest: Double) {
+    func split(removal amount: Double) -> (investment: Double, interest: Double) {
         let deltaInterest   = amount * (currentState.interest / currentState.value)
         let deltaInvestment = amount - deltaInterest
         return (deltaInvestment, deltaInterest)
@@ -302,12 +302,12 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         currentState.interest += interests
         currentState.year = year
         
-        currentInterestsAfterTransmission?.interest += interests
+        currentStateAfterTransmission?.interest += interests
     }
     
     /// Remettre la valeur courante à la date de fin d'année passée
     public mutating func resetCurrentState() {
-        currentInterestsAfterTransmission = nil
+        currentStateAfterTransmission = nil
         
         // calculer la valeur de currentState à la date de fin d'année passée
         let estimationYear = Date.now.year - 1
@@ -338,7 +338,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     }
     
     public mutating func initializeCurrentInterestsAfterTransmission(yearOfTransmission: Int) {
-        currentInterestsAfterTransmission =
+        currentStateAfterTransmission =
             State(year       : yearOfTransmission,
                   interest   : 0,
                   investment : 0)
@@ -365,7 +365,7 @@ extension FreeInvestement: CustomStringConvertible {
         - Valeur (\(Date.now.year)): \(value(atEndOf: Date.now.year).€String)
         - Etat initial: (year: \(lastKnownState.year), interest: \(lastKnownState.interest.€String), invest: \(lastKnownState.investment.€String), Value: \(lastKnownState.value.€String))
         - Etat courant: (year: \(currentState.year), interest: \(currentState.interest.€String), invest: \(currentState.investment.€String), Value: \(currentState.value.€String))
-        - Intérêt Cumulés depuis la transmission: (year: \(currentInterestsAfterTransmission?.year ?? 0), interest: \(currentInterestsAfterTransmission?.interest.€String ?? 0.€String))
+        - Intérêt Cumulés depuis la transmission: (year: \(currentStateAfterTransmission?.year ?? 0), interest: \(currentStateAfterTransmission?.interest.€String ?? 0.€String))
         - \(interestRateType)
         - Taux d'intérêt net d'inflation avant prélèvements sociaux:   \(averageInterestRate) %
         - Taux d'intérêt net d'inflation, net de prélèvements sociaux: \(averageInterestRateNet) %

@@ -111,6 +111,11 @@ extension OwnershipManager {
                 switch assets.periodicInvests[idx].type {
                     case .lifeInsurance(let periodicSocialTaxes, let clause):
                         var newClause = clause
+                        // retirer les capitaux décès de l'AV si nécessaire
+                        // TODO: - faire de même pour PeriodicInvestment
+                        assets.periodicInvests[idx]
+                            .withdrawLifeInsuranceCapitalDeces(of      : decedentName,
+                                                               atEndOf : year)
                         // régles de transmission particulières pour l'Assurance Vie
                         try assets.periodicInvests[idx]
                             .ownership.transferLifeInsurance(
@@ -118,6 +123,7 @@ extension OwnershipManager {
                                 spouseName   : spouseName,
                                 childrenName : chidrenNames,
                                 accordingTo  : &newClause)
+                        // mettre à jour la clause
                         assets.periodicInvests[idx].type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
                                                                           clause              : newClause)
                         
@@ -148,6 +154,8 @@ extension OwnershipManager {
                 switch assets.freeInvests[idx].type {
                     case .lifeInsurance(let periodicSocialTaxes, let clause):
                         var newClause = clause
+                        // retirer les capitaux décès de l'AV si nécessaire
+                        assets.freeInvests[idx].withdrawLifeInsuranceCapitalDeces(of: decedentName)
                         // régles de transmission particulières pour l'Assurance Vie
                         try assets.freeInvests[idx]
                             .ownership.transferLifeInsurance(
@@ -155,6 +163,7 @@ extension OwnershipManager {
                                 spouseName   : spouseName,
                                 childrenName : chidrenNames,
                                 accordingTo  : &newClause)
+                        // mettre à jour la clause
                         assets.freeInvests[idx].type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
                                                                       clause              : newClause)
                         

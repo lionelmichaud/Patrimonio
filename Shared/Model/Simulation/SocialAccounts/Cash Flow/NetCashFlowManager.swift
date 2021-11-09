@@ -202,8 +202,10 @@ struct NetCashFlowManager {
         where patrimoine.assets.freeInvests[idx].type == .pea {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant du PEA s'il y en avait assez à la fin de l'année dernière
-            let removal = patrimoine.assets.freeInvests[idx].withdrawal(netAmount : amountRemainingToRemove,
-                                                                    for       : name)
+            let removal = patrimoine.assets
+                .freeInvests[idx].withdrawal(netAmount : amountRemainingToRemove,
+                                             for       : name,
+                                             verbose   : true)
             amountRemainingToRemove -= removal.revenue
             // IRPP: les plus values PEA ne sont pas imposables à l'IRPP
             // Prélèvements sociaux: prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
@@ -218,7 +220,10 @@ struct NetCashFlowManager {
                 case .lifeInsurance:
                     // tant que l'on a pas retiré le montant souhaité
                     // retirer le montant de l'Assurances vie s'il y en avait assez à la fin de l'année dernière
-                    let removal = patrimoine.assets.freeInvests[idx].withdrawal(netAmount: amountRemainingToRemove)
+                    let removal = patrimoine.assets
+                        .freeInvests[idx].withdrawal(netAmount : amountRemainingToRemove,
+                                                     for       : name,
+                                                     verbose   : true)
                     amountRemainingToRemove -= removal.revenue
                     // IRPP: part des produit de la liquidation inscrit en compte courant imposable à l'IRPP après déduction de ce qu'il reste de franchise
                     var taxableInterests: Double
@@ -241,7 +246,10 @@ struct NetCashFlowManager {
         where patrimoine.assets.freeInvests[idx].type == .other {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant s'il y en avait assez à la fin de l'année dernière
-            let removal = patrimoine.assets.freeInvests[idx].withdrawal(netAmount: amountRemainingToRemove)
+            let removal = patrimoine.assets
+                .freeInvests[idx].withdrawal(netAmount : amountRemainingToRemove,
+                                             for       : name,
+                                             verbose   : true)
             amountRemainingToRemove -= removal.revenue
             // IRPP: les plus values sont imposables à l'IRPP
             // géré comme un revenu en report d'imposition (dette)

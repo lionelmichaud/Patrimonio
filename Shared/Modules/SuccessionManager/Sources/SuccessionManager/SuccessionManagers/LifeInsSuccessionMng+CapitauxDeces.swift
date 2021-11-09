@@ -19,7 +19,8 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine",
 extension LifeInsuranceSuccessionManager {
     
     /// Calcule, pour chaque héritier `spouseName` et `childrenName` d'un défunt nommé `decedentName`,
-    /// le montant des capitaux décès  TAXABLES et RECUS en CASH d'un ensemble d'assurances vie `invests`;
+    /// le montant des capitaux décès  TAXABLES et RECUS en CASH d'un ensemble d'assurances vie `invests`
+    /// et le montant des créances de restitution
     ///
     /// L'usufruit rejoint la nue-propriété en franchise d'impôt et est donc exclue de la base taxable.
     ///
@@ -36,9 +37,11 @@ extension LifeInsuranceSuccessionManager {
                                               with invests    : [FinancialEnvelopP],
                                               verbose         : Bool = false) ->
     (taxable  : NameValueDico,
-     received : NameValueDico) {
-        var capitauxTaxables : (taxable  : NameValueDico,
-                                received : NameValueDico) = ([:], [:])
+     received : NameValueDico,
+     creances : CreanceDeRestituationDico) {
+        var capitauxDeces = (taxable  : NameValueDico(),
+                             received : NameValueDico(),
+                             creances : CreanceDeRestituationDico())
         
         // pour chaque assurance vie
         invests.forEach { invest in
@@ -46,21 +49,31 @@ extension LifeInsuranceSuccessionManager {
                 capitauxDecesParPersonneParAssurance(of      : decedentName,
                                                      for     : invest,
                                                      verbose : verbose)
-            capitauxTaxables.taxable.merge(_capitauxDecesParPersonneParAssurance.taxable,
-                                           uniquingKeysWith: { $0 + $1 })
-            capitauxTaxables.received.merge(_capitauxDecesParPersonneParAssurance.received,
-                                            uniquingKeysWith: { $0 + $1 })
+            capitauxDeces.taxable.merge(_capitauxDecesParPersonneParAssurance.taxable,
+                                        uniquingKeysWith: { $0 + $1 })
+            capitauxDeces.received.merge(_capitauxDecesParPersonneParAssurance.received,
+                                         uniquingKeysWith: { $0 + $1 })
+            capitauxDeces.creances.merge(_capitauxDecesParPersonneParAssurance.creances,
+                                         uniquingKeysWith: {
+                                            $0.merging($1,
+                                                       uniquingKeysWith: { $0 + $1 })
+                                         })
         }
         if verbose {
-            print("Capitaux décès totaux taxables : ")
-            print("  ", String(describing: capitauxTaxables))
+            print(
+                """
+                Capitaux décès totaux : ")
+                   Taxable       : \(String(describing: capitauxDeces.taxable))
+                   Reçu en cash  : \(String(describing: capitauxDeces.received))
+                   Créances rest : \(String(describing: capitauxDeces.creances))
+                """)
         }
-        return capitauxTaxables
+        return capitauxDeces
     }
     
     /// Calcule, pour chaque héritier `spouseName` et `childrenName` d'un défunt nommé `decedentName`,
     /// le montant des capitaux décès  TAXABLES et RECUS en CASH d'une assurance vie `invest`;
-    /// pour un décès survenu pendant l'année `year`
+    /// et le montant des créances de restitution
     ///
     /// L'usufruit rejoint la nue-propriété en franchise d'impôt et est donc exclue de la base taxable.
     ///
@@ -77,10 +90,11 @@ extension LifeInsuranceSuccessionManager {
                                               for invest      : FinancialEnvelopP,
                                               verbose         : Bool = false) ->
     (taxable  : NameValueDico,
-     received : NameValueDico) {
+     received : NameValueDico,
+     creances : CreanceDeRestituationDico) {
         
         guard invest.isLifeInsurance else {
-            return (taxable: [:], received: [:])
+            return (taxable: [:], received: [:], creances: [:])
         }
         
         // on a affaire à une assurance vie
@@ -89,7 +103,7 @@ extension LifeInsuranceSuccessionManager {
                                                    atEndOf           : year - 1,
                                                    evaluationContext : .lifeInsuranceSuccession)
         guard ownedValueDecedent > 0 else {
-            return (taxable: [:], received: [:])
+            return (taxable: [:], received: [:], creances: [:])
         }
         
         if invest.ownership.isDismembered {
@@ -105,8 +119,8 @@ extension LifeInsuranceSuccessionManager {
     
     /// Calcule, pour chaque héritier d'un défunt nommé `decedentName`,
     /// le valeur taxable `taxable` et le montant de l'éventuel versement reçu en cash `received`
+    /// et le montant des créances de restitution
     /// pour une assurance vie `invest` DEMEMBRÉE;
-    /// pour un décès survenu pendant l'année `year`
     ///
     /// L'usufruit rejoint la nue-propriété en franchise d'impôt et est donc exclue de la base taxable.
     ///
@@ -123,16 +137,14 @@ extension LifeInsuranceSuccessionManager {
                                     for invest      : FinancialEnvelopP,
                                     verbose         : Bool = false) ->
     (taxable  : NameValueDico,
-     received : NameValueDico) {
+     received : NameValueDico,
+     creances : CreanceDeRestituationDico) {
         
-        guard let clause = invest.clause else {
-            return (taxable: [:], received: [:])
-        }
-        guard !clause.isDismembered else {
-            fatalError("la clause ne doit pas être démembrée")
+        guard invest.isLifeInsurance else {
+            return (taxable: [:], received: [:], creances: [:])
         }
         guard invest.ownership.isDismembered else {
-            fatalError("Le bien doit être démembré)")
+            fatalError("Le bien doit être démembré")
         }
         if invest.ownership.hasAnUsufructOwner(named: decedentName) {
             // le capital de l'assurane vie est démembré
@@ -141,7 +153,7 @@ extension LifeInsuranceSuccessionManager {
             if verbose {
                 print("Le capital de '\(invest.name)' est démembré : l'usufruit rejoint la nu-propriété sans versement de cash, non taxable")
             }
-            return (taxable: [:], received: [:])
+            return (taxable: [:], received: [:], creances: [:])
         }
         
         if invest.ownership.hasABareOwner(named: decedentName) {
@@ -152,13 +164,13 @@ extension LifeInsuranceSuccessionManager {
         }
         
         // le défunt n'est ni usufruitier ni nue-propriétaire de l'AV
-        return (taxable: [:], received: [:])
+        return (taxable: [:], received: [:], creances: [:])
     }
     
     /// Calcule, pour chaque héritier d'un défunt nommé `decedentName`,
     /// le valeur taxable `taxable` et le montant de l'éventuel versement reçu en cash `received`
+    /// et le montant des créances de restitution
     /// pour une assurance vie `invest` NON DEMEMBRÉE;
-    /// pour un décès survenu pendant l'année `year`
     ///
     /// - Parameters:
     ///   - decedentName: nom du défunt
@@ -171,22 +183,24 @@ extension LifeInsuranceSuccessionManager {
                                       for invest      : FinancialEnvelopP,
                                       verbose         : Bool = false) ->
     (taxable  : NameValueDico,
-     received : NameValueDico) {
+     received : NameValueDico,
+     creances : CreanceDeRestituationDico) {
         
         guard let clause = invest.clause else {
             // le bien n'est pas une assurance vie
-            return (taxable: [:], received: [:])
+            return (taxable: [:], received: [:], creances: [:])
         }
         guard clause.isValid else {
             customLog.log(level: .fault, "La clause bénéficiaire n'est pas valide \(clause, privacy: .public)")
             fatalError("La clause bénéficiaire n'est pas valide")
         }
         guard !invest.ownership.isDismembered else {
+            customLog.log(level: .fault, "Le bien ne doit pas être démembré")
             fatalError("Le bien ne doit pas être démembré)")
         }
         guard invest.ownership.hasAFullOwner(named: decedentName) else {
             // le défunt n'a aucun droit de propriété sur le bien
-            return (taxable: [:], received: [:])
+            return (taxable: [:], received: [:], creances: [:])
         }
         
         // masse successorale
@@ -194,8 +208,9 @@ extension LifeInsuranceSuccessionManager {
                                                    atEndOf           : year - 1,
                                                    evaluationContext : .lifeInsuranceSuccession)
         
-        var capitauxDeces : (taxable  : NameValueDico,
-                             received : NameValueDico) = ([:], [:])
+        var capitauxDeces = (taxable  : NameValueDico(),
+                             received : NameValueDico(),
+                             creances : CreanceDeRestituationDico())
         if clause.isDismembered {
             // Clause démembrée
             // le donataire usufruitier se voit crédité de la masse successorale totale: quasi-usufruit
@@ -212,9 +227,16 @@ extension LifeInsuranceSuccessionManager {
                 capitauxDeces.taxable[recipient] = demembrement.bareValue / clause.bareRecipients.count.double()
             }
             
+            // Calculer et mémoriser les créances de restitutions de l'UF envers les NP
+            var creances = NameValueDico()
+            clause.bareRecipients.forEach { creancier in
+                creances[creancier] = ownedValueDecedent / clause.bareRecipients.count.double()
+            }
+            capitauxDeces.creances[clause.usufructRecipient] = creances
+            
         } else {
             // Clause non démembrée
-            // versée en cash au donataires désignés dans la caluse bénéficiaire
+            // versée en cash au donataires désignés dans la clause bénéficiaire
             // taxable
             clause.fullRecipients.forEach { recipientOwner in
                 let recipientShare = recipientOwner.fraction * ownedValueDecedent / 100.0
@@ -224,11 +246,14 @@ extension LifeInsuranceSuccessionManager {
         }
 
         if verbose {
-            print("Capitaux décès issus de \(invest.name): ")
-            print("  Taxable      : ", String(describing: capitauxDeces.taxable))
-            print("  Reçu en cash : ", String(describing: capitauxDeces.received))
+            print(
+                """
+                Capitaux décès issus de \(invest.name) : ")
+                   Taxable       : \(String(describing: capitauxDeces.taxable))
+                   Reçu en cash  : \(String(describing: capitauxDeces.received))
+                   Créances rest : \(String(describing: capitauxDeces.creances))
+                """)
         }
         return capitauxDeces
     }
-    
 }

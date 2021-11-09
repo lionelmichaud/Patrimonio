@@ -274,6 +274,37 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
                 taxableIrppInterests : taxableInterests,
                 socialTaxes          : cumulatedInterest - netInterests)
     }
+
+    /// Retirer les capitaux décès de `decedentName` de l'assurance vie
+    /// si l'AV n'est pas démembrée et si `decedentName` est un des PP
+    /// - Warning: les droits de propriété ne sont PAS mis à jour en conséquence
+    /// - Parameters:
+    ///   - decedentName: nom du défunt
+    ///   - year: année du décès
+    public mutating func withdrawLifeInsuranceCapitalDeces(of decedentName : String,
+                                                           atEndOf year: Int) {
+        guard isLifeInsurance else {
+            return
+        }
+        guard !ownership.isDismembered else {
+            return
+        }
+        guard ownership.hasAFullOwner(named: decedentName) else {
+            // le défunt n'a aucun droit de propriété sur le bien
+            return
+        }
+        
+        // capitaux décès
+        let ownedValueDecedent = ownedValue(by                : decedentName,
+                                            atEndOf           : year,
+                                            evaluationContext : .lifeInsuranceSuccession)
+        
+        // les capitaux décès sont retirés de l'assurance vie pour être distribuée en cash
+        // décrémenter le capital (versement et intérêts) du montant retiré
+//        let withdraw = split(removal: ownedValueDecedent)
+//        currentState.interest   -= withdraw.interest
+//        currentState.investment -= withdraw.investment
+    }
 }
 
 // MARK: - Extensions

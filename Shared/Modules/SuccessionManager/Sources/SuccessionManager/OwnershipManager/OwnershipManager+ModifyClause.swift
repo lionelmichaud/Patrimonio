@@ -40,10 +40,10 @@ extension OwnershipManager {
                                              verbose               : verbose)
         
         guard missingCapitals.values.sum() > 0.0 else {
+            // il ne manque rien à personne
             if verbose {
                 print("Il ne manque pas de capital aux enfants pour payer les taxes et les droits de succession")
             }
-            // il ne manque rien à personne
             return
         }
         
@@ -72,6 +72,8 @@ extension OwnershipManager {
             SimulationLogger.shared.log(run      : run,
                                         logTopic : .other,
                                         message  : "Les enfants ne peuvent pas payer les droits de succession au décès de \(decedentName) en \(year)")
+        } else if verbose {
+            print("=> Les enfants pourront payer grâce à l'exercice de clauses à option")
         }
     }
     
@@ -92,9 +94,9 @@ extension OwnershipManager {
      verbose                     : Bool = false) -> NameValueDico {
         // cumuler les valeurs d'actif net que chaque enfant peut vendre après transmission
         let childrenSellableCapital =
-            childrenSellableCapitalAfterInheritance(receivedFrom    : decedentName,
-                                                    withAssets      : assets,
-                                                    withLiabilities : liabilities)
+            childrenNetSellableAssetsAfterInheritance(receivedFrom    : decedentName,
+                                                      withAssets      : assets,
+                                                      withLiabilities : liabilities)
         
         // calculer les capitaux manquants à chaque enfants pour pouvoir payer ses droits de succession
         var missingCapital = NameValueDico()
@@ -104,10 +106,10 @@ extension OwnershipManager {
             missingCapital[childrenName] = max(0.0, tax - (sellableCapital + capitalDecesBrutRecu))
             if verbose {
                 print(childrenName)
-                print("  > Taxe & Droits de succession à payer:\n     \(tax.k€String)")
+                print("  > Taxe & Droits de succession à payer:\n     -\(tax.k€String)")
                 print("  > Capital cessible détenu après succession:\n     +\(sellableCapital.k€String)")
                 print("  > Capital décès brut reçus à la succession:\n     +\(capitalDecesBrutRecu.k€String)")
-                print("  > Capital manquant à pour payer les droits de succession:\n     =\(missingCapital[childrenName]!.k€String)\n")
+                print("  > Capital manquant à pour payer les droits de succession:\n     = \(missingCapital[childrenName]!.k€String)\n")
             }
         }
         if verbose {
@@ -123,7 +125,7 @@ extension OwnershipManager {
     ///   - assets: Actifs de la famille
     ///   - liabilities: Passifs de la famille
     /// - Returns: cumul des valeurs d'actif net que les enfants peuvent vendre après transmission
-    func childrenSellableCapitalAfterInheritance
+    func childrenNetSellableAssetsAfterInheritance
     (receivedFrom decedentName   : String,
      withAssets assets           : Assets,
      withLiabilities liabilities : Liabilities) -> NameValueDico {
@@ -173,11 +175,11 @@ extension OwnershipManager {
     ///   - missingCapital: capitaux manquant à chaque enfant pour payer ses droits de succcession
     ///   - decedentName: nom de l'adulte décédé
     ///   - year: l'année du décès
-    fileprivate func modifyClause(of freeInvest        : inout FreeInvestement,
-                                  toGet missingCapital : inout NameValueDico,
-                                  decedentName         : String,
-                                  conjointName         : String,
-                                  verbose              : Bool = false) throws {
+    func modifyClause(of freeInvest        : inout FreeInvestement,
+                      toGet missingCapital : inout NameValueDico,
+                      decedentName         : String,
+                      conjointName         : String,
+                      verbose              : Bool = false) throws {
         // ne considérer que :
         // - les assurance vie
         // - avec clause à option
@@ -223,6 +225,9 @@ extension OwnershipManager {
                 newClause.fullRecipients.append(Owner(name     : conjointName,
                                                       fraction : partDuConjoint))
                 
+                // éliminer les parts nulles éventuelles
+                newClause.fullRecipients.groupShares()
+                
                 if verbose {
                     print("Part des enfants: \(partDesEnfants) % = \(givenToChildren.k€String)")
                     print("Part du conjoint: \(partDuConjoint) % = \((decedentOwnedValue - givenToChildren).k€String)")
@@ -251,4 +256,120 @@ extension OwnershipManager {
                 return
         }
     }
+    
+    /// Modifier les clauses d'AV dont le défunt est un des donataires
+    /// - Parameters:
+    ///   - decedentName: Nom du défunt
+    ///   - childrenName: nom des enfants du défunt
+    ///   - assets: les actifs de la famille à modifier
+    func modifyClausesWhereDecedentIsFuturRecipient
+    (decedentName      : String,
+     childrenName      : [String]?,
+     withAssets assets : inout Assets) throws {
+        
+        for idx in assets.freeInvests.items.indices {
+            switch assets.freeInvests[idx].type {
+                case let InvestementKind.lifeInsurance(periodicSocialTaxes, clause):
+                    var newClause = clause
+                    manageRecipientDeath(decedentName : decedentName,
+                                         withClause   : &newClause,
+                                         childrenName : childrenName)
+                    
+                    guard newClause.isValid else {
+                        let invalid = newClause
+                        customLogOwnershipManager.log(level: .error, "a généré une 'clause' invalide \(invalid, privacy: .public)")
+                        throw ClauseError.invalidClause
+                    }
+                    assets.freeInvests[idx].type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
+                                                                  clause              : newClause)
+                    
+                default:
+                    break
+            }
+        }
+        
+        for idx in assets.periodicInvests.items.indices {
+            switch assets.periodicInvests[idx].type {
+                case let InvestementKind.lifeInsurance(periodicSocialTaxes, clause):
+                    var newClause = clause
+                    manageRecipientDeath(decedentName : decedentName,
+                                         withClause   : &newClause,
+                                         childrenName : childrenName)
+                    
+                    guard newClause.isValid else {
+                        let invalid = newClause
+                        customLogOwnershipManager.log(level: .error, "a généré une 'clause' invalide \(invalid, privacy: .public)")
+                        throw ClauseError.invalidClause
+                    }
+                    assets.periodicInvests[idx].type = .lifeInsurance(periodicSocialTaxes : periodicSocialTaxes,
+                                                                      clause              : newClause)
+                    
+                default:
+                    break
+            }
+        }
+    }
+    
+    /// Modifier une clause d'AV si le défunt est un des donataires
+    /// - Parameters:
+    ///   - decedentName: Nom du défunt
+    ///   - clause: la clause à modifier
+    ///   - childrenName: nom des enfants du défunt
+    func manageRecipientDeath(decedentName      : String,
+                              withClause clause : inout LifeInsuranceClause,
+                              childrenName      : [String]?) {
+        if clause.isDismembered {
+            // (A) la clause est est démembrée
+            if clause.usufructRecipient == decedentName {
+                // (1) le défunt est l'usufruitier désigné dans la clause
+                // -> remembrer la clause
+                clause.isDismembered = false
+                clause.fullRecipients = clause.bareRecipients.map {
+                    Owner(name     : $0,
+                          fraction : 100.0 / clause.bareRecipients.count.double())
+                }
+                clause.usufructRecipient = ""
+                clause.bareRecipients = []
+                
+            } else if clause.bareRecipients.contains(decedentName) {
+                // (2) le défunt est un des NP désignés dans la clause
+                if clause.bareRecipients.count > 1 {
+                    // (a) il y a d'autres NP
+                    // -> supprimer le NP
+                    clause.bareRecipients
+                        .remove(at: clause.bareRecipients.firstIndex(of: decedentName)!)
+                    
+                } else {
+                    // (b) il n'y a pas d'autres NP
+                    // -> remembrer la clause
+                    clause.isDismembered = false
+                    clause.fullRecipients = [Owner(name: clause.usufructRecipient,
+                                                   fraction: 100)]
+                    clause.usufructRecipient = ""
+                    clause.bareRecipients = []
+                }
+            }
+        } else {
+            // (B) la clause n'est pas démembrée
+            if clause.fullRecipients.contains(ownerName: decedentName) {
+                // (1) le défunt est un des PP désignés dans la clause
+                if clause.fullRecipients.count > 1 {
+                    // (a) il y a d'autres PP dans la clause
+                    // -> transférer aux autres PP par parts égales
+                    try! clause.fullRecipients.redistributeShare(of: decedentName)
+                    
+                } else {
+                    // (b) il n'y a pas d'autres PP dans la clause
+                    // -> transférer aux enfants par parts égales
+                    if let childrenName = childrenName {
+                        // (1) il ya des enfants héritiers
+                        try! clause.fullRecipients.replace(thisOwner : decedentName,
+                                                           with      : childrenName)
+                        clause.isOptional = false
+                    }
+                }
+            }
+        }
+    }
+
 }

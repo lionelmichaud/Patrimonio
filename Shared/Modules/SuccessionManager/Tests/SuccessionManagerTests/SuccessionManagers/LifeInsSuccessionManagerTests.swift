@@ -162,10 +162,10 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
                              enfant2 : 60.0]
         var theoryReceived = [enfant1 : 40.0,
                               enfant2 : 60.0]
-
+        
         XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
         XCTAssertEqual(theoryReceived, capitalDeces.received)
-
+        
         // Cas n°2: clause non démembrée
         ownership.fullOwners = [Owner(name: defunt,   fraction: 50.0),
                                 Owner(name: conjoint, fraction: 50.0)]
@@ -179,10 +179,10 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
                          enfant2 : 0.6 * 50.0]
         theoryReceived = [enfant1 : 0.4 * 50.0,
                           enfant2 : 0.6 * 50.0]
-
+        
         XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
         XCTAssertEqual(theoryReceived, capitalDeces.received)
-
+        
         // cas n°3: clause non démembrée
         ownership.fullOwners = [Owner(name: defunt,  fraction: 50.0),
                                 Owner(name: enfant1, fraction: 20.0),
@@ -204,10 +204,10 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
                          enfant2  : 30.0 + 0.6 * 50.0 - 30.0]
         theoryReceived = [enfant1  : 20.0 + 0.4 * 50.0 - 20.0,
                           enfant2  : 30.0 + 0.6 * 50.0 - 30.0]
-
+        
         XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
         XCTAssertEqual(theoryReceived, capitalDeces.received)
-
+        
         // cas n°4: clause démembrée
         ownership.fullOwners = [Owner(name: defunt, fraction: 100.0)]
         invest.ownership = ownership
@@ -227,10 +227,10 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
                          enfant1  : 0.5 * 50.0,
                          enfant2  : 0.5 * 50.0]
         theoryReceived = [conjoint : 100.0]
-
+        
         XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
         XCTAssertEqual(theoryReceived, capitalDeces.received)
-
+        
         // cas n°5: clause démembrée
         ownership.fullOwners = [Owner(name: defunt,  fraction: 50.0),
                                 Owner(name: enfant1, fraction: 20.0),
@@ -292,12 +292,14 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
                                         for     : invest,
                                         verbose : Tests.verbose)
         
-        var theoryTaxable: NameValueDico = [:]
+        var theoryTaxable : NameValueDico = [:]
         var theoryReceived: NameValueDico = [:]
-
+        var theoryCreances: CreanceDeRestituationDico = [:]
+        
         XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
         XCTAssertEqual(theoryReceived, capitalDeces.received)
-
+        XCTAssertEqual(theoryCreances, capitalDeces.creances)
+        
         // cas n°2
         ownership.usufructOwners = [Owner(name: conjoint, fraction: 100.0)]
         invest.ownership = ownership
@@ -307,32 +309,49 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
                                         for     : invest,
                                         verbose : Tests.verbose)
         
-        theoryTaxable = [:]
+        theoryTaxable  = [:]
         theoryReceived = [:]
-
+        theoryCreances = [:]
+        
         XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
         XCTAssertEqual(theoryReceived, capitalDeces.received)
+        XCTAssertEqual(theoryCreances, capitalDeces.creances)
         
         // cas n°3
         invest.type = .pea
-
+        
         capitalDeces = Tests.manager
             .capitauxDecesAvDismembered(of      : defunt,
                                         for     : invest,
                                         verbose : Tests.verbose)
         
-        theoryTaxable = [:]
+        theoryTaxable  = [:]
         theoryReceived = [:]
+        theoryCreances = [:]
         
         XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
         XCTAssertEqual(theoryReceived, capitalDeces.received)
+        XCTAssertEqual(theoryCreances, capitalDeces.creances)
         
+        // cas n°4
+        invest.type = .other
+        
+        capitalDeces = Tests.manager
+            .capitauxDecesAvDismembered(of      : defunt,
+                                        for     : invest,
+                                        verbose : Tests.verbose)
+        
+        theoryTaxable  = [:]
+        theoryReceived = [:]
+        theoryCreances = [:]
+        
+        XCTAssertEqual(theoryTaxable, capitalDeces.taxable)
+        XCTAssertEqual(theoryReceived, capitalDeces.received)
+        XCTAssertEqual(theoryCreances, capitalDeces.creances)
     }
     
     func test_capitauxDecesTaxableRecusParPersonne() {
         let decedentName = "M. Lionel MICHAUD"
-        let spouseName   = "Mme. Vanessa MICHAUD"
-        let childrenName = ["M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
         
         let financialEnvelops: [FinancialEnvelopP] =
             Tests.patrimoin.assets.freeInvests.items + Tests.patrimoin.assets.periodicInvests.items
@@ -359,7 +378,18 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
                              "M. Arthur MICHAUD"    : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf,
                              "Mme. Lou-Ann MICHAUD" : therory_period_tonl_enf + theory_free_av_boul_enf + theory_free_av_afel_enf]
         
+        let theoryReceived = ["Mme. Vanessa MICHAUD" : theory_free_av_boul_van + theory_free_av_afel_van + 2 * theory_free_av_afel_enf,
+                              "M. Arthur MICHAUD"    : therory_period_tonl_enf + theory_free_av_boul_enf,
+                              "Mme. Lou-Ann MICHAUD" : therory_period_tonl_enf + theory_free_av_boul_enf]
+        
+        let theoryCreances: CreanceDeRestituationDico =
+            ["Mme. Vanessa MICHAUD" : ["M. Arthur MICHAUD"    : (theory_free_av_afel_van + 2 * theory_free_av_afel_enf) / 2.0,
+                                       "Mme. Lou-Ann MICHAUD" : (theory_free_av_afel_van + 2 * theory_free_av_afel_enf) / 2.0]
+            ]
+        
         XCTAssertEqual(theoryTaxable, capitauxDecesParPersonne.taxable)
+        XCTAssertEqual(theoryReceived, capitauxDecesParPersonne.received)
+        XCTAssertEqual(theoryCreances, capitauxDecesParPersonne.creances)
     }
     
     // MARK: Tests Calcul Succession Assurances Vies
@@ -399,8 +429,30 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
         let capitauxReceived = ["Mme. Vanessa MICHAUD" : theory_free_av_boul_van + theory_free_av_afel_van + 2 * theory_free_av_afel_enf,
                                 "M. Arthur MICHAUD"    : therory_period_tonl_enf + theory_free_av_boul_enf,
                                 "Mme. Lou-Ann MICHAUD" : therory_period_tonl_enf + theory_free_av_boul_enf]
-
+        
+        let theoryCreances: CreanceDeRestituationDico =
+            ["Mme. Vanessa MICHAUD" : ["M. Arthur MICHAUD"    : (theory_free_av_afel_van + 2 * theory_free_av_afel_enf) / 2.0,
+                                       "Mme. Lou-Ann MICHAUD" : (theory_free_av_afel_van + 2 * theory_free_av_afel_enf) / 2.0]
+            ]
+        
         let taxeEnfant = (capitauxTaxables["M. Arthur MICHAUD"]! - 0.5 * 152500.0) * 0.2
+        
+        let capitauxDeces: LifeInsuranceSuccessionManager.NameCapitauxDecesDico =
+            ["Mme. Vanessa MICHAUD" : LifeInsuranceSuccessionManager.CapitauxDeces(fiscal  : (brut: capitauxTaxables["Mme. Vanessa MICHAUD"]!,
+                                                                                              net : capitauxTaxables["Mme. Vanessa MICHAUD"]!),
+                                                                                   received: (brut: capitauxReceived["Mme. Vanessa MICHAUD"]!,
+                                                                                              net : capitauxReceived["Mme. Vanessa MICHAUD"]!),
+                                                                                   creance : 0.0),
+             "M. Arthur MICHAUD"    : LifeInsuranceSuccessionManager.CapitauxDeces(fiscal  : (brut: capitauxTaxables["M. Arthur MICHAUD"]!,
+                                                                                              net : capitauxTaxables["M. Arthur MICHAUD"]! - taxeEnfant),
+                                                                                   received: (brut: capitauxReceived["M. Arthur MICHAUD"]!,
+                                                                                              net:  capitauxReceived["M. Arthur MICHAUD"]! - taxeEnfant),
+                                                                                   creance: theoryCreances["Mme. Vanessa MICHAUD"]!["M. Arthur MICHAUD"]!),
+             "Mme. Lou-Ann MICHAUD" : LifeInsuranceSuccessionManager.CapitauxDeces(fiscal  : (brut: capitauxTaxables["Mme. Lou-Ann MICHAUD"]!,
+                                                                                              net : capitauxTaxables["Mme. Lou-Ann MICHAUD"]! - taxeEnfant),
+                                                                                   received: (brut: capitauxReceived["Mme. Lou-Ann MICHAUD"]!,
+                                                                                              net : capitauxReceived["Mme. Lou-Ann MICHAUD"]! - taxeEnfant),
+                                                                                   creance: theoryCreances["Mme. Vanessa MICHAUD"]!["Mme. Lou-Ann MICHAUD"]!)]
         
         let inheritances = [
             Inheritance(personName    : "Mme. Vanessa MICHAUD",
@@ -410,7 +462,8 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
                         netFiscal     : capitauxTaxables["Mme. Vanessa MICHAUD"]!,
                         tax           : 0.0,
                         received      : capitauxReceived["Mme. Vanessa MICHAUD"]!,
-                        receivedNet   : capitauxReceived["Mme. Vanessa MICHAUD"]!),
+                        receivedNet   : capitauxReceived["Mme. Vanessa MICHAUD"]!,
+                        creanceRestit : 0.0),
             Inheritance(personName    : "M. Arthur MICHAUD",
                         percentFiscal : capitauxTaxables["M. Arthur MICHAUD"]! / totalTaxableInheritanceValue,
                         brutFiscal    : capitauxTaxables["M. Arthur MICHAUD"]!,
@@ -418,7 +471,8 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
                         netFiscal     : capitauxTaxables["M. Arthur MICHAUD"]! - taxeEnfant,
                         tax           : taxeEnfant,
                         received      : capitauxReceived["M. Arthur MICHAUD"]!,
-                        receivedNet   : capitauxReceived["M. Arthur MICHAUD"]! - taxeEnfant),
+                        receivedNet   : capitauxReceived["M. Arthur MICHAUD"]! - taxeEnfant,
+                        creanceRestit : theoryCreances["Mme. Vanessa MICHAUD"]!["M. Arthur MICHAUD"]!),
             Inheritance(personName    : "Mme. Lou-Ann MICHAUD",
                         percentFiscal : capitauxTaxables["Mme. Lou-Ann MICHAUD"]! / totalTaxableInheritanceValue,
                         brutFiscal    : capitauxTaxables["Mme. Lou-Ann MICHAUD"]!,
@@ -426,7 +480,8 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
                         netFiscal     : capitauxTaxables["Mme. Lou-Ann MICHAUD"]! - taxeEnfant,
                         tax           : taxeEnfant,
                         received      : capitauxReceived["Mme. Lou-Ann MICHAUD"]!,
-                        receivedNet   : capitauxReceived["Mme. Lou-Ann MICHAUD"]! - taxeEnfant)
+                        receivedNet   : capitauxReceived["Mme. Lou-Ann MICHAUD"]! - taxeEnfant,
+                        creanceRestit : theoryCreances["Mme. Vanessa MICHAUD"]!["Mme. Lou-Ann MICHAUD"]!)
         ]
         
         let theory = Succession(kind         : .lifeInsurance,
@@ -439,5 +494,7 @@ final class LifeInsSuccessionManagerTests: XCTestCase {
         XCTAssertEqual(theory.decedentName, succession.decedentName)
         XCTAssertEqual(theory.taxableValue, succession.taxableValue)
         XCTAssertTrue(theory.inheritances.containsSameElements(as: succession.inheritances))
+        XCTAssertEqual(theoryCreances, Tests.manager.creanceDeRestituationDico)
+        XCTAssertEqual(capitauxDeces, Tests.manager.capitauxDeces)
     }
 }

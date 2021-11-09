@@ -100,7 +100,8 @@ public struct Ownership {
             return (bareOwners.isNotEmpty && bareOwners.isvalid) &&
                 (usufructOwners.isNotEmpty && usufructOwners.isvalid)
         } else {
-            return fullOwners.isNotEmpty && fullOwners.isvalid
+            // aucun propriétaire est autorisé
+            return fullOwners.isvalid
         }
     }
     
@@ -119,7 +120,7 @@ public struct Ownership {
     }
     
     /// Factoriser les parts des usufuitier et des nue-propriétaires si nécessaire
-    mutating func groupShares() {
+    public mutating func groupShares() {
         if isDismembered {
             fullOwners = [ ]
             usufructOwners.groupShares()
