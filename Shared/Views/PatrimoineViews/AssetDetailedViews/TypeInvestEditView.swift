@@ -47,12 +47,19 @@ struct TypeInvestEditView : View {
                         self.investType = .lifeInsurance(periodicSocialTaxes: newValue,
                                                          clause             : self.clause)
                     }
-                Toggle("Démembrement de la clause bénéficiaire", isOn: $clause.isDismembered)
+                Toggle("Clause bénéficiaire à option (non démembrable)", isOn: $clause.isOptional)
                     .onChange(of: clause) { newValue in
+                        var newClause = newValue
+                        if newClause.isOptional {
+                            newClause.isDismembered = false
+                        }
                         self.investType = .lifeInsurance(periodicSocialTaxes: isPeriodic,
-                                                         clause             : newValue)
+                                                         clause             : newClause)
                     }
-                if clause.isDismembered {
+                if !clause.isOptional {
+                    Toggle("Clause bénéficiaire démembrée", isOn: $clause.isDismembered)
+                }
+                if clause.isDismembered && !clause.isOptional {
                     // usufruitier
                     Picker(selection : $clause.usufructRecipient,
                            label     : Text("Bénéficiaire de l'usufruit").foregroundColor(clause.usufructRecipient.isNotEmpty ? .blue : .red)) {

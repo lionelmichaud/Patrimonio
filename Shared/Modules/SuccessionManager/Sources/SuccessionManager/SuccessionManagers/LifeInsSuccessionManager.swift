@@ -138,7 +138,7 @@ struct LifeInsuranceSuccessionManager {
             }
         }
         creanceDeRestituationDico = capitaux.creances
-        creanceDeRestituationDico.forEach { quasiUF, creances in
+        creanceDeRestituationDico.forEach { _, creances in
             creances.forEach { creancier, value in
                 if capitauxDeces[creancier] == nil {
                     capitauxDeces[creancier] = CapitauxDeces(creance: value)

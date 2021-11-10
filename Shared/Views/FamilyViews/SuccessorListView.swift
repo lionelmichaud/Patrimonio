@@ -9,42 +9,76 @@ import SwiftUI
 import Succession
 import PersonModel
 import FamilyModel
+import ModelEnvironment
 
 struct SuccessorsListView: View {
+    var successionKind : SuccessionKindEnum
     var inheritances : [Inheritance]
 
     var body: some View {
         List {
             ForEach(inheritances, id: \.successorName) { inheritence in
-                SuccessorGroupBox(inheritence: inheritence)
+                SuccessorGroupBox(successionKind : successionKind,
+                                  inheritence    : inheritence)
             }
         }
-        .navigationTitle("Héritage")
+        .navigationTitle("Héritiers")
         .navigationBarTitleDisplayMode(.inline)
 
     }
 }
 
 struct SuccessorGroupBox : View {
-    var inheritence: Inheritance
+    var successionKind : SuccessionKindEnum
+    var inheritence    : Inheritance
     @EnvironmentObject private var family: Family
+    @EnvironmentObject private var model : Model
+    
+    var abattement: Double {
+        switch successionKind {
+            case .lifeInsurance:
+                return model.fiscalModel.lifeInsuranceInheritance.abattement(fracAbattement: inheritence.abatFrac)
+            case .legal:
+                return model.fiscalModel.inheritanceDonation.model.abatLigneDirecte
+        }
+    }
+    var abattementFraction: Double {
+        switch successionKind {
+            case .lifeInsurance:
+                return inheritence.abatFrac
+            case .legal:
+                return 1.0
+        }
+    }
 
     var body: some View {
         GroupBox(label: groupBoxLabel(personName: inheritence.successorName).font(.headline)) {
             Group {
-                //                PercentView(label   : "Part de la succession",
-                //                            percent : inheritence.percent)
-                AmountView(label  : "Valeur héritée brute (évaluation fiscale)",
+                AmountView(label  : "Base taxable brute (évaluation fiscale)",
                            amount : inheritence.brutFiscal,
-                           comment: inheritence.percentFiscal.percentStringRounded + " de la succession")
+                           comment: inheritence.percentFiscal.percentStringRounded + " de la masse successorale")
+                    .padding(.top, 3)
+                AmountView(label  : "Abattement fiscal",
+                           amount : abattement,
+                           comment: abattementFraction.percentStringRounded)
                     .padding(.top, 3)
                 AmountView(label  : "Droits de succession à payer",
                            amount : -inheritence.tax,
                            comment: (inheritence.tax / inheritence.brutFiscal).percentStringRounded)
                     .padding(.top, 3)
+                AmountView(label  : "Net (évaluation fiscale)",
+                           amount : inheritence.netFiscal,
+                           comment: "=")
+                    .padding(.top, 3)
                 Divider()
-                AmountView(label : "Valeur héritée nette (évaluation fiscale)",
-                           amount: inheritence.netFiscal)
+                AmountView(label  : "Héritage reçu brut (en cash)",
+                           amount : inheritence.received)
+                AmountView(label  : "Héritage reçu net (en cash)",
+                           amount : inheritence.receivedNet)
+                    .padding(.top, 3)
+                AmountView(label  : "Créance de restitution de l'héritier envers le quasi-usufruitier",
+                           amount : inheritence.creanceRestit)
+                    .padding(.top, 3)
             }
             .foregroundColor(.secondary)
         }
@@ -69,6 +103,7 @@ struct SuccessorGroupBox_Previews: PreviewProvider {
                                          received      : 2,
                                          receivedNet   : 1)
     static var previews: some View {
-        SuccessorGroupBox(inheritence: inheritence)
+        SuccessorGroupBox(successionKind : SuccessionKindEnum.lifeInsurance,
+                          inheritence    : inheritence)
     }
 }

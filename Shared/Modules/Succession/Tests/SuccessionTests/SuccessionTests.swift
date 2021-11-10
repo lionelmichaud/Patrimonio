@@ -43,20 +43,20 @@ final class SuccessionTests: XCTestCase {
     func test_successorsInheritedNetValue() {
         // dictionnaire des héritages net reçu par chaque héritier sur un ensemble de successions
         var successorsInheritedNetValue: [String: Double] =
-            SuccessionTests.successions.successorsInheritedNetValue
+            SuccessionTests.successions.successorsReceivedNetValue
         XCTAssertTrue(successorsInheritedNetValue.count > 0)
         XCTAssertEqual(successorsInheritedNetValue["Héritier 1"], 75_000)
         XCTAssertEqual(successorsInheritedNetValue["Héritier 2"], 90_000)
         
         // dictionnaire des héritages net reçu par chaque héritier dans une succession
-        successorsInheritedNetValue = SuccessionTests.succession1.successorsInheritedNetValue
+        successorsInheritedNetValue = SuccessionTests.succession1.successorsReceivedNetValue
         XCTAssertTrue(successorsInheritedNetValue.count > 0)
         XCTAssertEqual(successorsInheritedNetValue["Héritier 1"], 35_000)
         XCTAssertEqual(successorsInheritedNetValue["Héritier 2"], 50_000)
     }
     
     func test_somme_des_héritages_reçus_par_les_héritiers_dans_une_succession() {
-        let somme = SuccessionTests.succession1.net
+        let somme = SuccessionTests.succession1.netFiscal
         XCTAssertEqual(somme, 85_000)
     }
     

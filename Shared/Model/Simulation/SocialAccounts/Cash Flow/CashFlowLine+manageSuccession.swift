@@ -41,6 +41,7 @@ extension CashFlowLine {
         /// Gérer les succession de l'année
         successionManager.manageSuccessions()
 
+        /// Incorporation des successions au CashFlow de l'année
         /// Récupérer les Successions de l'année pour le Cash-Flow de l'année
         legalSuccessions   += successionManager.legal.successions
         lifeInsSuccessions += successionManager.lifeInsurance.successions
@@ -57,7 +58,7 @@ extension CashFlowLine {
             .credits
             .namedValues += successionManager.legal.revenuesChildren
         
-        // Revenus bruts des successionsASSURANCES VIES
+        /// Revenus bruts des successionsASSURANCES VIES
         //   - pour les adultes
         adultsRevenues
             .perCategory[.liSuccession]?
@@ -79,7 +80,7 @@ extension CashFlowLine {
             .perCategory[.legalSuccession]?
             .namedValues += successionManager.legal.taxesChildren
 
-        // droits de transmission des ASSURANCES VIES
+        /// Droits de transmission des ASSURANCES VIES
         //   - imputables aux adultes (= 0 puisque le conjoint survivant est exonéré)
         adultTaxes
             .perCategory[.liSuccession]?

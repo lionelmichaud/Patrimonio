@@ -278,8 +278,9 @@ private struct InheritanceSectionView: View {
                 AmountView(label : "Droits de succession à payer par les héritiers",
                            amount: -succession.tax)
                 AmountView(label : "Succession nette laissée aux héritiers",
-                           amount: succession.net)
-                NavigationLink(destination: SuccessorsListView(inheritances: succession.inheritances)) {
+                           amount: succession.netFiscal)
+                NavigationLink(destination                                  : SuccessorsListView(successionKind                                  : SuccessionKindEnum.legal,
+                                                               inheritances : succession.inheritances)) {
                     Text("Héritage")
                         .foregroundColor(.blue)
                 }

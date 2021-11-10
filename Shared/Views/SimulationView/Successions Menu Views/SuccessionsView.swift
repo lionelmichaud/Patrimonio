@@ -30,14 +30,20 @@ struct SuccessionsView: View {
                 GroupBox(label: Text("Cumulatif des Successions").font(.headline)) {
                     Group {
                         Group {
-                            AmountView(label : "Masse successorale",
+                            AmountView(label : "Masse successorale taxable brute (évaluation fiscale)",
                                        amount: successions.sum(for: \.taxableValue))
-                            AmountView(label : "Droits de succession à payer",
+                            AmountView(label : "Droits de succession à payer par les héritiers",
                                        amount: -successions.sum(for: \.tax),
                                        comment: (successions.sum(for: \.tax) / successions.sum(for: \.taxableValue)).percentStringRounded)
+                            AmountView(label : "Net (évaluation fiscale)",
+                                       amount: successions.sum(for: \.netFiscal))
                             Divider()
-                            AmountView(label : "Succession nette laissée aux héritiers",
-                                       amount: successions.sum(for: \.net))
+                            AmountView(label  : "Somme des héritages reçu brut (en cash)",
+                                       amount : successions.sum(for: \.received))
+                            AmountView(label  : "Somme des héritages reçu net (en cash)",
+                                       amount : successions.sum(for: \.receivedNet))
+                            AmountView(label  : "Somme des créance de restitution des héritiers envers le quasi-usufruitier",
+                                       amount : successions.sum(for: \.creanceRestit))
                         }
                         .foregroundColor(.secondary)
                         .padding(.top, 3)
@@ -68,10 +74,10 @@ struct CumulatedSuccessorsDisclosureGroup: View {
     var body: some View {
         DisclosureGroup(
             content: {
-                ForEach(successions.successorsInheritedNetValue.keys.sorted(), id:\.self) { name in
+                ForEach(successions.successorsReceivedNetValue.keys.sorted(), id:\.self) { name in
                     GroupBox(label: Text(name).font(.headline)) {
-                        AmountView(label  : "Valeur héritée nette",
-                                   amount : successions.successorsInheritedNetValue[name]!)
+                        AmountView(label  : "Somme des héritages reçu net (en cash)",
+                                   amount : successions.successorsReceivedNetValue[name]!)
                             .foregroundColor(.secondary)
                             .padding(.top, 3)
                     }
@@ -96,19 +102,26 @@ struct SuccessionGroupBox: View {
                     Text("en \(String(succession.yearOfDeath))").fontWeight(.regular)) {
             Group {
                 Group {
-                    AmountView(label : "Masse successorale",
+                    AmountView(label : "Masse successorale taxable brute (évaluation fiscale)",
                                amount: succession.taxableValue)
                     AmountView(label : "Droits de succession à payer par les héritiers",
                                amount: -succession.tax,
                                comment: (succession.tax / succession.taxableValue).percentStringRounded)
+                    AmountView(label : "Net (évaluation fiscale)",
+                               amount: succession.netFiscal)
                     Divider()
-                    AmountView(label : "Succession nette laissée aux héritiers",
-                               amount: succession.net)
-                }
+                    AmountView(label  : "Somme des héritages reçu brut (en cash)",
+                               amount : succession.received)
+                    AmountView(label  : "Somme des héritages reçu net (en cash)",
+                               amount : succession.receivedNet)
+                    AmountView(label  : "Somme des créance de restitution des héritiers envers le quasi-usufruitier",
+                               amount : succession.creanceRestit)
+               }
                 .foregroundColor(.secondary)
                 .padding(.top, 3)
                 Divider()
-                SuccessorsDisclosureGroup(inheritances: succession.inheritances)
+                SuccessorsDisclosureGroup(successionKind : succession.kind,
+                                          inheritances   : succession.inheritances)
             }
             .padding(.leading)
         }
@@ -116,13 +129,15 @@ struct SuccessionGroupBox: View {
 }
 
 struct SuccessorsDisclosureGroup: View {
-    var inheritances : [Inheritance]
+    var successionKind : SuccessionKindEnum
+    var inheritances   : [Inheritance]
     
     var body: some View {
         DisclosureGroup(
             content: {
                 ForEach(inheritances, id: \.successorName) { inheritence in
-                    SuccessorGroupBox(inheritence: inheritence)
+                    SuccessorGroupBox(successionKind : successionKind,
+                                      inheritence    : inheritence)
                 }
             },
             label: {

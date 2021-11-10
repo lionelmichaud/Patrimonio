@@ -27,20 +27,20 @@ public struct Succession: Identifiable {
     public let yearOfDeath  : Int
     // personne dont on fait la succession
     public let decedentName : String
-    // masses successorale fiscale
+    // masse successorale en valeure fiscale
     public let taxableValue : Double
     // liste des héritages par héritier
     public let inheritances : [Inheritance]
     
-    // dictionnaire des héritages net reçu par chaque héritier dans une succession
-    var successorsInheritedNetValue: [String: Double] {
+    // dictionnaire des héritages net reçu en cash par chaque héritier dans une succession
+    var successorsReceivedNetValue: [String: Double] {
         inheritances.reduce(into: [:]) { counts, inheritance in
-            counts[inheritance.successorName, default: 0] += inheritance.netFiscal
+            counts[inheritance.successorName, default: 0] += inheritance.receivedNet
         }
     }
     
     // somme des héritages reçus par les héritiers dans une succession
-    public var net: Double {
+    public var netFiscal: Double {
         inheritances.sum(for: \.netFiscal)
     }
     
@@ -48,7 +48,16 @@ public struct Succession: Identifiable {
     public var tax: Double {
         inheritances.sum(for: \.tax)
     }
-    
+    public var received      : Double {
+        inheritances.sum(for: \.received)
+    }
+    public var receivedNet   : Double {
+        inheritances.sum(for: \.receivedNet)
+    }
+    public var creanceRestit : Double {
+        inheritances.sum(for: \.creanceRestit)
+    }
+
     // MARK: - Initializer
     
     public init(kind         : SuccessionKindEnum,
@@ -74,18 +83,18 @@ extension Succession: CustomStringConvertible {
         Type de succession:         \(kind.rawValue)
         Défunt:                     \(decedentName)
         Année du décès:             \(yearOfDeath)
-        Masse successorale taxable: \(taxableValue.k€String)
+        Masse successorale taxable: \(taxableValue.k€String) (valeur fiscale)
         Héritiers:
 
         """ + String(describing: inheritances).withPrefixedSplittedLines("  "))
     }
 }
 extension Array where Element == Succession {
-    // dictionnaire des héritages net reçu par chaque héritier sur un ensemble de successions
-    public var successorsInheritedNetValue: [String: Double] {
+    // dictionnaire des héritages net reçu en cash par chaque héritier sur un ensemble de successions
+    public var successorsReceivedNetValue: [String: Double] {
         var globalDico: [String: Double] = [:]
         self.forEach { succession in
-            let dico = succession.successorsInheritedNetValue
+            let dico = succession.successorsReceivedNetValue
             for name in dico.keys {
                 if globalDico[name] != nil {
                     globalDico[name]! += dico[name]!
@@ -115,7 +124,7 @@ public struct Inheritance: Hashable {
     // évaluation de la valeur réellement transmise en cash
     public var received      : Double
     public var receivedNet   : Double // net de taxes
-    // évaluation de la valeur réellement transmise en cash
+    // créance de restitution de l'héritier envers le quasi-usufruitier
     public var creanceRestit : Double
     
     // MARK: - Initializer
