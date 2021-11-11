@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os
 import AppFoundation
 import Statistics
 import FiscalModel
@@ -14,6 +15,12 @@ import EconomyModel
 import NamedValue
 import Persistence
 import Ownership
+
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.PeriodicInvestement")
+
+public enum PeriodicInvestementError: Error {
+    case IlegalOperation
+}
 
 public typealias PeriodicInvestementArray = ArrayOfNameableValuable<PeriodicInvestement>
 
@@ -23,6 +30,16 @@ public typealias PeriodicInvestementArray = ArrayOfNameableValuable<PeriodicInve
 /// Tous les intérêts sont capitalisés
 // conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
 public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP {
+    
+    // MARK: - Nested Types
+    
+    /// Situation annuelle de l'investissement
+    public struct State: Codable, Equatable {
+        public var firstYear         : Int
+        public var initialInterest   : Double // portion of interests included in the Value
+        public var initialInvestment : Double // portion of investment included in the Value
+        public var initialValue      : Double { initialInterest + initialInvestment } // valeur totale
+    }
     
     // MARK: - Static Properties
     
@@ -81,10 +98,12 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     public var type            : InvestementKind
     public var yearlyPayement  : Double = 0.0 // versements nets de frais
     public var yearlyCost      : Double = 0.0 // Frais sur versements
-    // Ouverture
+    // date d'ouverture
     public var firstYear       : Int // au 31 décembre
     public var initialValue    : Double = 0.0
     public var initialInterest : Double = 0.0 // portion of interests included in the initialValue
+    // date de liquidation
+    public var lastYear        : Int // au 31 décembre
     // rendement
     public var interestRateType       : InterestRateKind // type de taux de rendement
     public var averageInterestRate    : Double {// % avant charges sociales si prélevées à la source annuellement
@@ -113,9 +132,9 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
                 return averageInterestRate
         }
     }
-    // liquidation
-    public var lastYear        : Int // au 31 décembre
-    
+    // état de référence à partir duquel est calculé l'état courant
+    var refState: State!
+
     // MARK: - Initializers
     
     public init(name             : String,
@@ -128,19 +147,29 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
                 initialInterest  : Double = 0.0,
                 yearlyPayement   : Double = 0.0,
                 yearlyCost       : Double = 0.0) {
-        self.name             = name
-        self.note             = note
-        self.type             = type
-        self.firstYear        = firstYear
-        self.lastYear         = lastYear
-        self.interestRateType = interestRateType
-        self.initialValue     = initialValue
-        self.initialInterest  = initialInterest
-        self.yearlyPayement   = yearlyPayement
-        self.yearlyCost       = yearlyCost
+        self.name                = name
+        self.note                = note
+        self.type                = type
+        self.firstYear           = firstYear
+        self.lastYear            = lastYear
+        self.interestRateType    = interestRateType
+        self.initialValue        = initialValue
+        self.initialInterest     = initialInterest
+        self.yearlyPayement      = yearlyPayement
+        self.yearlyCost = yearlyCost
+        self.refState = State(firstYear         : firstYear,
+                              initialInterest   : initialInterest,
+                              initialInvestment : initialValue - initialInterest)
     }
     
     // MARK: - Methods
+    
+    /// Remettre l'état courant à sa valeur initiale
+    public mutating func resetReferenceState() {
+        self.refState = State(firstYear         : firstYear,
+                              initialInterest   : initialInterest,
+                              initialInvestment : initialValue - initialInterest)
+    }
     
     /// Versement annuel, frais de versement inclus
     /// - Parameter year: année
@@ -149,6 +178,11 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     public func yearlyTotalPayement(atEndOf year: Int) -> Double {
         guard (firstYear...lastYear).contains(year) else {
             return 0
+        }
+        guard year >= refState.firstYear else {
+            customLog.log(level: .error,
+                          "L'année d'évaluation \(year) est < à l'année de référence \(refState.firstYear)")
+            fatalError()
         }
         return yearlyPayement + yearlyCost
     }
@@ -160,10 +194,15 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
         guard (firstYear...lastYear).contains(year) else {
             return 0.0
         }
+        guard year >= refState.firstYear else {
+            customLog.log(level: .error,
+                          "L'année d'évaluation \(year) est < à l'année de référence \(refState.firstYear)")
+            fatalError()
+        }
         return try! futurValue(payement     : yearlyPayement,
                                interestRate : averageInterestRateNet/100,
-                               nbPeriod     : year - firstYear,
-                               initialValue : initialValue)
+                               nbPeriod     : year - refState.firstYear,
+                               initialValue : refState.initialValue)
     }
     
     /// Calcule la valeur d'un bien possédée par un personne donnée à une date donnée
@@ -232,12 +271,19 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
         guard (firstYear...lastYear).contains(year) else {
             return 0.0
         }
-        return initialInterest + value(atEndOf: year) - (initialValue + yearlyPayement * Double(year - firstYear))
+        guard year >= refState.firstYear else {
+            customLog.log(level: .error,
+                          "L'année d'évaluation \(year) est < à l'année de référence \(refState.firstYear)")
+            fatalError()
+        }
+        return refState.initialInterest +
+            value(atEndOf: year) - (refState.initialValue + yearlyPayement * Double(year - refState.firstYear))
     }
     
     /// valeur liquidative à la date de liquidation
     /// - Parameter year: fin de l'année
     /// - Returns:
+    ///   - 0 si `year` n'est pas égal à la date de liquidation
     ///   - revenue : produit de la vente
     ///   - interests : intérêts bruts avant prélèvements sociaux et IRPP
     ///   - netInterests : intérêts nets de prélèvements sociaux
@@ -252,6 +298,11 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
         socialTaxes          : Double) {
         guard year == lastYear else {
             return (0.0, 0.0, 0.0, 0.0, 0.0)
+        }
+        guard year >= refState.firstYear else {
+            customLog.log(level: .error,
+                          "L'année d'évaluation \(year) est < à l'année de référence \(refState.firstYear)")
+            fatalError()
         }
         let cumulatedInterest = cumulatedInterests(atEndOf: year)
         var netInterests     : Double
@@ -275,6 +326,22 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
                 socialTaxes          : cumulatedInterest - netInterests)
     }
 
+    /// Fractionnement  d'un retrait entre: versements cumulés et intérêts cumulés
+    /// - Parameter amount: montant du retrait
+    func split(removal amount : Double,
+               atEndOf year   : Int) -> (investment: Double, interest: Double) {
+        guard year >= refState.firstYear else {
+            customLog.log(level: .error,
+                          "L'année d'évaluation \(year) est < à l'année de référence \(refState.firstYear)")
+            fatalError()
+        }
+        let currentValue     = value(atEndOf: year)
+        let currentInterests = cumulatedInterests(atEndOf: year)
+        let deltaInterest   = amount * (currentInterests / currentValue)
+        let deltaInvestment = amount - deltaInterest
+        return (deltaInvestment, deltaInterest)
+    }
+    
     /// Retirer les capitaux décès de `decedentName` de l'assurance vie
     /// si l'AV n'est pas démembrée et si `decedentName` est un des PP
     /// - Warning: les droits de propriété ne sont PAS mis à jour en conséquence
@@ -293,7 +360,13 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
             // le défunt n'a aucun droit de propriété sur le bien
             return
         }
-        
+        guard year >= refState.firstYear else {
+            let firstYear = refState.firstYear
+            customLog.log(level: .error,
+                          "L'année d'évaluation \(year) est < à l'année de référence \(firstYear)")
+            fatalError()
+        }
+
         // capitaux décès
         let ownedValueDecedent = ownedValue(by                : decedentName,
                                             atEndOf           : year,
@@ -301,9 +374,10 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
         
         // les capitaux décès sont retirés de l'assurance vie pour être distribuée en cash
         // décrémenter le capital (versement et intérêts) du montant retiré
-//        let withdraw = split(removal: ownedValueDecedent)
-//        currentState.interest   -= withdraw.interest
-//        currentState.investment -= withdraw.investment
+        let withdrawal = split(removal: ownedValueDecedent, atEndOf: year)
+        refState = State(firstYear         : year,
+                         initialInterest   : refState.initialInterest - withdrawal.interest,
+                         initialInvestment : refState.initialInvestment - withdrawal.investment)
     }
 }
 
@@ -324,11 +398,12 @@ extension PeriodicInvestement: CustomStringConvertible {
         - Type:\(type.description.withPrefixedSplittedLines("  "))
         - Droits de propriété:
         \(ownership.description.withPrefixedSplittedLines("  "))
-        - Valeur:            \(value(atEndOf: Date.now.year).€String)
-        - Première année:    \(firstYear) dernière année: \(lastYear)
-        - Valeur initiale:   \(initialValue.€String) dont intérêts: \(initialInterest.€String)
+        - Valeur:              \(value(atEndOf: Date.now.year).€String)
+        - Première année:      \(firstYear) dernière année: \(lastYear)
+        - Valeur initiale:     \(initialValue.€String) dont intérêts: \(initialInterest.€String)
+        - Valeur de référence: \(refState.initialValue.€String) dont intérêts: \(refState.initialInterest.€String)
         - Versement annuel net de frais:  \(yearlyPayement.€String) Frais sur versements annuels: \(yearlyCost.€String)
-        - Valeur liquidative: \(value(atEndOf: lastYear).€String) Intérêts cumulés: \(cumulatedInterests(atEndOf: lastYear).€String)
+        - Valeur liquidative:  \(value(atEndOf: lastYear).€String) Intérêts cumulés: \(cumulatedInterests(atEndOf: lastYear).€String)
         - \(interestRateType)
         - Taux d'intérêt net d'inflation avant prélèvements sociaux:   \(averageInterestRate) %
         - Taux d'intérêt net d'inflation, net de prélèvements sociaux: \(averageInterestRateNet) %

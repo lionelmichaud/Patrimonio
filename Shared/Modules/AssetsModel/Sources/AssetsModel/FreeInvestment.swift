@@ -31,7 +31,7 @@ public typealias FreeInvestmentArray = ArrayOfNameableValuable<FreeInvestement>
 // conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
 public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP {
     
-    // nested types
+    // MARK: - Nested Types
     
     /// Situation annuelle de l'investissement
     public struct State: Codable, Equatable {

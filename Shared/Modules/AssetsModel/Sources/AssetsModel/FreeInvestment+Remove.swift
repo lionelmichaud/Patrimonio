@@ -264,8 +264,8 @@ extension FreeInvestement {
 
         // les capitaux décès sont retirés de l'assurance vie pour être distribuée en cash
         // décrémenter le capital (versement et intérêts) du montant retiré
-        let withdraw = split(removal: ownedValueDecedent)
-        currentState.interest   -= withdraw.interest
-        currentState.investment -= withdraw.investment
+        let withdrawal = split(removal: ownedValueDecedent)
+        currentState.interest   -= withdrawal.interest
+        currentState.investment -= withdrawal.investment
     }
 }

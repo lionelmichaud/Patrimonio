@@ -48,7 +48,7 @@ struct CashFlowGlobalChartView: View {
                 // Graphique Evénement de Vie
                 if lifeEventChatIsPresented {
                     FamilyLifeEventChartView(endDate: lastYear ?? Date.now.year + 30)
-                        .frame(minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealHeight: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxHeight: geometry.size.height/4.0, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                        .frame(minHeight: 0, idealHeight: 100, maxHeight: geometry.size.height/4.0, alignment: .center)
                         .padding(.trailing, 4)
                 }
             }

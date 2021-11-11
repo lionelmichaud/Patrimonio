@@ -114,7 +114,7 @@ public struct Assets {
                            with       : personAgeProvider)
         
         // initialiser le vecteur d'état de chaque FreeInvestement à la date courante
-        initializeFreeInvestementCurrentValue()
+        initializeInvestementsCurrentValue()
         checkValidity()
    }
     
@@ -148,7 +148,7 @@ public struct Assets {
                        with           : personAgeProvider)
 
         // initialiser le vecteur d'état de chaque FreeInvestement à la date courante
-        initializeFreeInvestementCurrentValue()
+        initializeInvestementsCurrentValue()
         checkValidity()
     }
     
@@ -204,10 +204,14 @@ public struct Assets {
     /// Réinitialiser les valeurs courantes des investissements libres
     /// - Warning:
     ///   - Doit être appelée après le chargement d'un objet FreeInvestement depuis le fichier JSON
+    ///   - Doit être appelée après le chargement d'un objet PeriodicInvestement depuis le fichier JSON
     ///   - Doit être appelée après toute simulation ayant affectée le Patrimoine (succession)
-    public mutating func initializeFreeInvestementCurrentValue() {
+    public mutating func initializeInvestementsCurrentValue() {
         for idx in freeInvests.items.indices {
             freeInvests[idx].resetCurrentState()
+        }
+        for idx in periodicInvests.items.indices {
+            periodicInvests[idx].resetReferenceState()
         }
     }
     
