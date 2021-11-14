@@ -198,7 +198,7 @@ extension OwnershipManager {
                                          spouseName         : String?,
                                          spouseFiscalOption : InheritanceFiscalOption?) {
         // transférer les emprunts
-        for idx in liabilities.loans.items.indices where liabilities.loans.items[idx].value(atEndOf: year) > 0 {
+        for idx in liabilities.loans.items.indices where liabilities.loans.items[idx].value(atEndOf: year) < 0 {
             try! liabilities.loans.items[idx]
                 .ownership
                 .transferOwnershipOf(
@@ -208,7 +208,7 @@ extension OwnershipManager {
                     spouseFiscalOption : spouseFiscalOption)
         }
         // transférer les dettes
-        for idx in liabilities.debts.items.indices where liabilities.debts.items[idx].value(atEndOf: year) > 0 {
+        for idx in liabilities.debts.items.indices where liabilities.debts.items[idx].value(atEndOf: year) < 0 {
             try! liabilities.debts.items[idx]
                 .ownership
                 .transferOwnershipOf(

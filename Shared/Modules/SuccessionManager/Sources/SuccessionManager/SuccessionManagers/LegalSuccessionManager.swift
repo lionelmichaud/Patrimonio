@@ -137,7 +137,9 @@ public struct LegalSuccessionManager {
                                         brutFiscal    : brut,
                                         abatFrac      : 1.0,
                                         netFiscal     : net,
-                                        tax           : tax)]
+                                        tax           : tax,
+                                        received      : 0.0,
+                                        receivedNet   : 0.0 - tax)]
         if verbose { print(String(describing: inheritances.last)) }
 
         // les enfants
@@ -175,7 +177,9 @@ public struct LegalSuccessionManager {
                                                 brutFiscal    : brut,
                                                 abatFrac      : 1.0,
                                                 netFiscal     : heritageOfChild.netAmount,
-                                                tax           : heritageOfChild.taxe))
+                                                tax           : heritageOfChild.taxe,
+                                                received      : 0.0,
+                                                receivedNet   : 0.0 - heritageOfChild.taxe))
             }
         }
         if verbose { print(String(describing: inheritances.last)) }
@@ -197,6 +201,7 @@ public struct LegalSuccessionManager {
         var taxable: Double = 0
         if verbose { print("décédé: \(decedentName)") }
         patrimoine.forEachOwnable { ownable in
+            guard ownable.isOwnedBySomebody else { return }
             let _taxable = ownable.ownedValue(by                : decedentName,
                                               atEndOf           : year - 1,
                                               evaluationContext : .legalSuccession)

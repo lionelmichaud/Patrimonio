@@ -35,8 +35,8 @@ struct SettingsView: View {
                     .isDetailLink(true)
 
                 // Graphics settings
-                NavigationLink(destination: GraphicUserSettings(ownership        : $graphicOwnership,
-                                                                evaluatedFraction: $graphicEvaluationMethod)) {
+                NavigationLink(destination: GraphicUserSettingsView(ownership        : $graphicOwnership,
+                                                                    evaluatedFraction: $graphicEvaluationMethod)) {
                     Label("Graphiques", systemImage: "chart.bar.xaxis")
                 }
                     .isDetailLink(true)

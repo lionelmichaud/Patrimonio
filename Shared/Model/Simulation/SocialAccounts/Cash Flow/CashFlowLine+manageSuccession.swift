@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Persistence
 import FiscalModel
 import PersonModel
 import PatrimoineModel
@@ -39,14 +40,14 @@ extension CashFlowLine {
                                                   run            : run)
 
         /// Gérer les succession de l'année
-        successionManager.manageSuccessions()
+        successionManager.manageSuccessions(verbose: false)
 
         /// Incorporation des successions au CashFlow de l'année
         /// Récupérer les Successions de l'année pour le Cash-Flow de l'année
         legalSuccessions   += successionManager.legal.successions
         lifeInsSuccessions += successionManager.lifeInsurance.successions
 
-        /// Revenus bruts des successions LEGAUX
+        /// Revenus bruts des successions LEGALES
         //   - pour les adultes
         adultsRevenues
             .perCategory[.legalSuccession]?
@@ -58,12 +59,14 @@ extension CashFlowLine {
             .credits
             .namedValues += successionManager.legal.revenuesChildren
         
-        /// Revenus bruts des successionsASSURANCES VIES
+        /// Revenus bruts des transmissions d'ASSURANCES VIES
         //   - pour les adultes
-        adultsRevenues
-            .perCategory[.liSuccession]?
-            .credits
-            .namedValues += successionManager.lifeInsurance.revenuesAdults
+        if UserSettings.shared.cashFlowGraphicIncludeQuasiUsufruct {
+            adultsRevenues
+                .perCategory[.liSuccession]?
+                .credits
+                .namedValues += successionManager.lifeInsurance.revenuesAdults
+        }
         //   - pour les enfants
         childrenRevenues
             .perCategory[.liSuccession]?
@@ -72,9 +75,11 @@ extension CashFlowLine {
 
         /// Droits de successions LEGAUX
         //   - imputables aux adultes (= 0 puisque le conjoint survivant est exonéré)
-        adultTaxes
-            .perCategory[.legalSuccession]?
-            .namedValues += successionManager.legal.taxesAdults
+        if UserSettings.shared.cashFlowGraphicIncludeQuasiUsufruct {
+            adultTaxes
+                .perCategory[.legalSuccession]?
+                .namedValues += successionManager.legal.taxesAdults
+        }
         //   - imputables aux enfants (doit être prélevé sur l'héritage après transfert de propriété)
         childrenTaxes
             .perCategory[.legalSuccession]?

@@ -16,13 +16,13 @@ public struct UserSettings {
     
     // (Key, Value) pairs
 
-    // paramètres de simulation
+    /// Paramètres de simulation
     static let simulateVolatility = "simulateVolatility"
     @WrappedDefault(keyName: UserSettings.simulateVolatility,
                     defaultValue: false)
     public var simulateVolatility: Bool
     
-    // paramètres de gestion de fichiers
+    /// Paramètres de gestion de fichiers
     static let shareCsvFiles = "shareCsvFiles"
     @WrappedDefault(keyName: UserSettings.shareCsvFiles,
                     defaultValue: true)
@@ -33,11 +33,11 @@ public struct UserSettings {
                     defaultValue: true)
     public var shareImageFiles: Bool
     
-    // paramètres KPI
+    /// Paramètres KPI
     static let ownershipKpiSelection = "ownershipKpiSelection"
     @WrappedDefault(keyName: UserSettings.ownershipKpiSelection,
                     defaultValue: OwnershipNature.sellable.rawValue)
-    var ownershipKpiSelectionString: String
+    private var ownershipKpiSelectionString: String
     public var ownershipKpiSelection: OwnershipNature {
         get {
             OwnershipNature(rawValue: ownershipKpiSelectionString) ?? OwnershipNature.sellable
@@ -50,7 +50,7 @@ public struct UserSettings {
     static let assetKpiEvaluatedFraction = "assetKpiEvaluatedFraction"
     @WrappedDefault(keyName: UserSettings.assetKpiEvaluatedFraction,
                     defaultValue: EvaluatedFraction.ownedValue.rawValue)
-    var assetKpiEvaluatedFractionString: String
+    private var assetKpiEvaluatedFractionString: String
     public var assetKpiEvaluatedFraction: EvaluatedFraction {
         get {
             EvaluatedFraction(rawValue: assetKpiEvaluatedFractionString) ?? EvaluatedFraction.ownedValue
@@ -60,11 +60,12 @@ public struct UserSettings {
         }
     }
     
-    // paramètres Graphiques
+    /// Paramètres Graphiques
+    // graphique Bilan
     static let ownershipGraphicSelection = "ownershipGraphicSelection"
     @WrappedDefault(keyName: UserSettings.ownershipGraphicSelection,
                     defaultValue: OwnershipNature.sellable.rawValue)
-    var ownershipGraphicSelectionString: String
+    private var ownershipGraphicSelectionString: String
     public var ownershipGraphicSelection: OwnershipNature {
         get {
             OwnershipNature(rawValue: ownershipGraphicSelectionString) ?? OwnershipNature.sellable
@@ -77,7 +78,7 @@ public struct UserSettings {
     static let assetGraphicEvaluatedFraction = "assetGraphicEvaluatedFraction"
     @WrappedDefault(keyName: UserSettings.assetGraphicEvaluatedFraction,
                     defaultValue: EvaluatedFraction.ownedValue.rawValue)
-    var assetGraphicEvaluatedFractionString: String
+    private var assetGraphicEvaluatedFractionString: String
     public var assetGraphicEvaluatedFraction: EvaluatedFraction {
         get {
             EvaluatedFraction(rawValue: assetGraphicEvaluatedFractionString) ?? EvaluatedFraction.ownedValue
@@ -86,4 +87,15 @@ public struct UserSettings {
             assetGraphicEvaluatedFractionString = newValue.rawValue
         }
     }
+    
+    // graphique CashFlow
+    static let cashFlowGraphicIncludeQuasiUsufruct = "cashFlowGraphicIncludeQuasiUsufruct"
+    @WrappedDefault(keyName: UserSettings.cashFlowGraphicIncludeQuasiUsufruct,
+                    defaultValue: false)
+    public var cashFlowGraphicIncludeQuasiUsufruct: Bool
+    
+//    static let dictionary = "dictionary"
+//    @WrappedDefault(keyName: UserSettings.dictionary,
+//                    defaultValue: [EvaluatedFraction.ownedValue : true])
+//    public var dictionary: [EvaluatedFraction : Bool]
 }

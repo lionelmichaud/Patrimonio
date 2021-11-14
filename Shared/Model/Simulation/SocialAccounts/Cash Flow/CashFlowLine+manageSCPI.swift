@@ -64,16 +64,20 @@ extension CashFlowLine {
             var netRevenue: Double = 0
             if scpi.isPartOfPatrimoine(of: adultsName) {
                 let liquidatedValue = scpi.liquidatedValueIRPP(year - 1)
-                netRevenue = liquidatedValue.netRevenue
-                // créditer le produit de la vente sur les comptes des personnes
-                // en fonction de leur part de propriété respective
-                let ownedSaleValues = scpi.ownedValues(ofValue           : liquidatedValue.netRevenue,
-                                                       atEndOf           : year,
-                                                       evaluationContext : .patrimoine)
-                let netCashFlowManager = NetCashFlowManager()
-                netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
-                                                 in            : patrimoine,
-                                                 atEndOf       : year)
+                
+                if liquidatedValue.revenue > 0 {
+                    netRevenue = liquidatedValue.netRevenue
+                    // créditer le produit de la vente sur les comptes des personnes
+                    // en fonction de leur part de propriété respective
+                    let ownedSaleValues = scpi.ownedValues(ofValue           : liquidatedValue.netRevenue,
+                                                           atEndOf           : year,
+                                                           evaluationContext : .patrimoine)
+                    let netCashFlowManager = NetCashFlowManager()
+                    netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
+                                                     in            : patrimoine,
+                                                     atEndOf       : year)
+                }
+                
             }
             // pour garder le nombre de séries graphiques constant au cours du temps
             adultsRevenues

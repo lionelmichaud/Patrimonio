@@ -78,8 +78,10 @@ extension LifeInsuranceSuccessionManager {
         
         // pour chaque assurance vie
         invests.forEach { invest in
-            setAbatCoupleUFNP.formUnion(abattementsParAssurance(for     : invest,
-                                                                verbose : verbose))
+            if invest.isOwnedBySomebody {
+                setAbatCoupleUFNP.formUnion(abattementsParAssurance(for     : invest,
+                                                                    verbose : verbose))
+            }
         }
         if verbose {
             print(setAbatCoupleUFNP)

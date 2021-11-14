@@ -31,47 +31,50 @@ extension CashFlowLine {
             var taxablesIrpp   : Double = 0
             var socialTaxes    : Double = 0
             var yearlyPayement : Double = 0
-
+            
             if periodicInvestement.isPartOfPatrimoine(of: adultsName) {
                 /// Ventes de l'année
                 // le crédit se fait au début de l'année qui suit la vente
                 let liquidatedValue = periodicInvestement.liquidatedValue(atEndOf: year - 1)
-                // produit de la liquidation inscrit en compte courant avant prélèvements sociaux et IRPP
-                revenue = liquidatedValue.revenue
-                // créditer le produit de la vente sur les comptes des personnes
-                // en fonction de leur part de propriété respective
-                let ownedSaleValues = periodicInvestement.ownedValues(ofValue           : liquidatedValue.revenue,
-                                                                      atEndOf           : year,
-                                                                      evaluationContext : .patrimoine)
-                let netCashFlowManager = NetCashFlowManager()
-                netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
-                                                 in            : patrimoine,
-                                                 atEndOf       : year)
                 
-                // populate plus values taxables à l'IRPP
-                switch periodicInvestement.type {
-                    case .lifeInsurance:
-                        var taxableInterests: Double
-                        // apply rebate if some is remaining
-                        taxableInterests = zeroOrPositive(liquidatedValue.taxableIrppInterests - lifeInsuranceRebate)
-                        lifeInsuranceRebate -= (liquidatedValue.taxableIrppInterests - taxableInterests)
-                        // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
-                        taxablesIrpp = taxableInterests
-                        
-                    case .pea:
-                        // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
-                        taxablesIrpp = liquidatedValue.taxableIrppInterests
-                        
-                    case .other:
-                        // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
-                        taxablesIrpp = liquidatedValue.taxableIrppInterests
+                if liquidatedValue.revenue > 0 {
+                    // produit de la liquidation inscrit en compte courant avant prélèvements sociaux et IRPP
+                    revenue = liquidatedValue.revenue
+                    // créditer le produit de la vente sur les comptes des personnes
+                    // en fonction de leur part de propriété respective
+                    let ownedSaleValues = periodicInvestement.ownedValues(ofValue           : liquidatedValue.revenue,
+                                                                          atEndOf           : year,
+                                                                          evaluationContext : .patrimoine)
+                    let netCashFlowManager = NetCashFlowManager()
+                    netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
+                                                     in            : patrimoine,
+                                                     atEndOf       : year)
+                    
+                    // populate plus values taxables à l'IRPP
+                    switch periodicInvestement.type {
+                        case .lifeInsurance:
+                            var taxableInterests: Double
+                            // apply rebate if some is remaining
+                            taxableInterests = zeroOrPositive(liquidatedValue.taxableIrppInterests - lifeInsuranceRebate)
+                            lifeInsuranceRebate -= (liquidatedValue.taxableIrppInterests - taxableInterests)
+                            // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
+                            taxablesIrpp = taxableInterests
+                            
+                        case .pea:
+                            // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
+                            taxablesIrpp = liquidatedValue.taxableIrppInterests
+                            
+                        case .other:
+                            // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
+                            taxablesIrpp = liquidatedValue.taxableIrppInterests
+                    }
+                    // populate prélèvements sociaux
+                    socialTaxes = liquidatedValue.socialTaxes
+                    
+                    /// Versements annuels
+                    // on compte quand même les versements de la dernière année
+                    yearlyPayement = periodicInvestement.yearlyTotalPayement(atEndOf: year)
                 }
-                // populate prélèvements sociaux
-                socialTaxes = liquidatedValue.socialTaxes
-                
-                /// Versements annuels
-                // on compte quand même les versements de la dernière année
-                yearlyPayement = periodicInvestement.yearlyTotalPayement(atEndOf: year)
             }
             
             adultsRevenues
@@ -79,7 +82,7 @@ extension CashFlowLine {
                 .credits
                 .namedValues
                 .append(NamedValue(name: name,
-                         value: revenue.rounded()))
+                                   value: revenue.rounded()))
             adultsRevenues
                 .perCategory[.financials]?
                 .taxablesIrpp

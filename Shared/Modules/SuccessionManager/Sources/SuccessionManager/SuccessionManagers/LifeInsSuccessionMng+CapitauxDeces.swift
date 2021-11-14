@@ -45,6 +45,7 @@ extension LifeInsuranceSuccessionManager {
         
         // pour chaque assurance vie
         invests.forEach { invest in
+            guard invest.isOwnedBySomebody else { return }
             let _capitauxDecesParPersonneParAssurance =
                 capitauxDecesParPersonneParAssurance(of      : decedentName,
                                                      for     : invest,

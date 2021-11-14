@@ -14,6 +14,7 @@ import NamedValue
 public protocol OwnableP: NameableValuableP {
     var ownership: Ownership { get set }
     var isValid: Bool { get }
+    var isOwnedBySomebody: Bool { get }
 
     /// Calcule la valeur d'un bien possédée par un personne donnée à une date donnée
     /// selon la régle générale ou selon la règle de l'IFI, de l'ISF, de la succession...
@@ -97,7 +98,8 @@ public protocol OwnableP: NameableValuableP {
 }
 
 public extension OwnableP {
-    var isValid: Bool { ownership.isValid }
+    var isValid           : Bool { ownership.isValid }
+    var isOwnedBySomebody : Bool { ownership.isOwnedBySomebody }
 
     // implémentation par défaut
     func ownedValue(by ownerName      : String,

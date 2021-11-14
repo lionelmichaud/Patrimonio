@@ -104,6 +104,13 @@ public struct Ownership {
             return fullOwners.isvalid
         }
     }
+    public var isOwnedBySomebody: Bool {
+        if isDismembered {
+            return usufructOwners.isNotEmpty
+        } else {
+            return fullOwners.isNotEmpty
+        }
+    }
     
     // MARK: - Initializers
     
