@@ -9,6 +9,7 @@ import Foundation
 import os
 import AppFoundation
 import NamedValue
+import Persistence
 import LifeExpense
 import Charts // https://github.com/danielgindi/Charts.git
 
@@ -25,6 +26,7 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
     var dataSet                         : BarChartDataSet?
     private var _dataSet                = BarChartDataSet()
     private var dataEntries             = [ChartDataEntry]()
+    private var personSelection         : String
     private var categoryName            : String
     private var expenses                : LifeExpensesDic
     private var selectedExpenseCategory : LifeExpenseCategory?
@@ -37,9 +39,11 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
     private var nbNegativeLabels        = 0
 
     init(element                 : CashFlowArray,
+         personSelection         : String,
          categoryName            : String,
          expenses                : LifeExpensesDic,
          selectedExpenseCategory : LifeExpenseCategory?  = nil) {
+        self.personSelection         = personSelection
         self.categoryName            = categoryName
         self.expenses                = expenses
         self.selectedExpenseCategory = selectedExpenseCategory
@@ -62,53 +66,32 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
         dataSet = _dataSet
     }
 
-    func getExpensesDataSet(element: CashFlowLine) {
-        if let expenseCategory = selectedExpenseCategory {
-            /// rechercher les valeurs de la seule catégorie de dépenses sélectionnée
-            let selectedExpensesNameArray = expenses.expensesNameArray(of: expenseCategory)
-            if labelsInCategory.count == 0 {
-                labelsInCategory = element.lifeExpenses.namesArray.filter { name in
-                    selectedExpensesNameArray.contains(name)
-                }
-            }
-            
-            // valeurs des dépenses
-            let selectedNamedValues = element.lifeExpenses.namedValues
-                .filter({ namedValue in
-                    selectedExpensesNameArray.contains(namedValue.name)
-                })
-            let y = selectedNamedValues.map(\.value)
-            dataEntries.append(BarChartDataEntry(x       : element.year.double(),
-                                                 yValues : -y))
-            
-        } else {
-            /// rechercher les valeurs de toutes les dépenses
-            if labelsInCategory.count == 0 {
-                labelsInCategory = element.lifeExpenses.namesArray
-            }
-            // valeurs des dépenses
-            let y = element.lifeExpenses.valuesArray
-            dataEntries.append(BarChartDataEntry(x       : element.year.double(),
-                                                 yValues : -y))
-        }
-        nbNegativeLabels = labelsInCategory.count
-    }
-
     // swiftlint:disable cyclomatic_complexity
     func buildCategoryStackedBarChart(element: CashFlowLine) {
-        if element.adultsRevenues.summary.contains(name: categoryName) {
+        var revenues : ValuedRevenues
+        var taxes    : ValuedTaxes
+        
+        if personSelection == AppSettings.shared.adultsLabel {
+            revenues = element.adultsRevenues
+            taxes    = element.adultTaxes
+        } else {
+            revenues = element.childrenRevenues
+            taxes    = element.childrenTaxes
+        }
+        
+        if revenues.summary.contains(name: categoryName) {
             /// rechercher la catégorie dans les revenus
             guard revenueCategory != nil else {
                 return
             }
             if labelsInCategory.count == 0 {
-                guard let labels = element.adultsRevenues.perCategory[revenueCategory!]?.credits.namesArray else {
+                guard let labels = revenues.perCategory[revenueCategory!]?.credits.namesArray else {
                     return
                 }
                 labelsInCategory = labels
                 nbPositiveLabels = labelsInCategory.count
             }
-            element.adultsRevenues.accept(self)
+            revenues.accept(self)
             guard let y = y else { return }
             dataEntries.append(BarChartDataEntry(x       : element.year.double(),
                                                  yValues : y))
@@ -120,26 +103,32 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
                 nbPositiveLabels = labelsInCategory.count
             }
             // valeurs des dettes
-            element.sciCashFlowLine.accept(self)
-            guard let y = y else { return }
-            dataEntries.append(BarChartDataEntry(x       : element.year.double(),
-                                                 yValues : y))
+            if personSelection == AppSettings.shared.adultsLabel {
+                element.sciCashFlowLine.accept(self)
+                guard let y = y else { return }
+                dataEntries.append(BarChartDataEntry(x       : element.year.double(),
+                                                     yValues : y))
+            } else {
+                let y = [Double].init(repeating: 0, count: nbPositiveLabels)
+                dataEntries.append(BarChartDataEntry(x       : element.year.double(),
+                                                     yValues : y))
+            }
 
-        } else if element.adultTaxes.summary.contains(name: categoryName) {
+        } else if taxes.summary.contains(name: categoryName) {
             /// rechercher les valeurs des taxes
             // customLog.log(level: .info, "Catégorie trouvée dans taxes : \(found.name)")
             guard taxCategory != nil else {
                 return
             }
             if labelsInCategory.count == 0 {
-                guard let labels = element.adultTaxes.perCategory[taxCategory!]?.namesArray else {
+                guard let labels = taxes.perCategory[taxCategory!]?.namesArray else {
                     return
                 }
                 labelsInCategory = labels
                 nbNegativeLabels = labelsInCategory.count
             }
             // valeurs des revenus de la catégorie
-            element.adultTaxes.accept(self)
+            taxes.accept(self)
             guard let y = y else { return }
             dataEntries.append(BarChartDataEntry(x       : element.year.double(),
                                                  yValues : -y))
@@ -155,7 +144,12 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
                 nbNegativeLabels = labelsInCategory.count
             }
             // valeurs des dettes
-            let y = element.debtPayements.valuesArray
+            var y : [Double]
+            if personSelection == AppSettings.shared.adultsLabel {
+                y = element.debtPayements.valuesArray
+            } else {
+                y = [Double].init(repeating: 0, count: nbNegativeLabels)
+            }
             dataEntries.append(BarChartDataEntry(x       : element.year.double(),
                                                  yValues : -y))
 
@@ -166,9 +160,13 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
                 labelsInCategory = element.investPayements.namesArray
                 nbNegativeLabels = labelsInCategory.count
             }
-
             // valeurs des investissements
-            let y = element.investPayements.valuesArray
+            var y : [Double]
+            if personSelection == AppSettings.shared.adultsLabel {
+                y = element.investPayements.valuesArray
+            } else {
+                y = [Double].init(repeating: 0, count: nbNegativeLabels)
+            }
             dataEntries.append(BarChartDataEntry(x       : element.year.double(),
                                                  yValues : -y))
 
@@ -180,6 +178,49 @@ class CategoryBarChartCashFlowVisitor: CashFlowCategoryStackedBarChartVisitorP {
     }
     // swiftlint:enable cyclomatic_complexity
 
+    func getExpensesDataSet(element: CashFlowLine) {
+        if let expenseCategory = selectedExpenseCategory {
+            /// rechercher les valeurs de la seule catégorie de dépenses sélectionnée
+            let selectedExpensesNameArray = expenses.expensesNameArray(of: expenseCategory)
+            if labelsInCategory.count == 0 {
+                labelsInCategory = element.lifeExpenses.namesArray.filter { name in
+                    selectedExpensesNameArray.contains(name)
+                }
+            }
+            
+            // valeurs des dépenses
+            var y : [Double]
+            if personSelection == AppSettings.shared.adultsLabel {
+                let selectedNamedValues = element.lifeExpenses.namedValues
+                    .filter({ namedValue in
+                        selectedExpensesNameArray.contains(namedValue.name)
+                    })
+                y = selectedNamedValues.map(\.value)
+            } else {
+                y = [Double].init(repeating: 0, count: labelsInCategory.count)
+            }
+            dataEntries.append(BarChartDataEntry(x       : element.year.double(),
+                                                 yValues : -y))
+            
+        } else {
+            /// rechercher les valeurs de toutes les dépenses
+            if labelsInCategory.count == 0 {
+                labelsInCategory = element.lifeExpenses.namesArray
+            }
+            
+            // valeurs des dépenses
+            var y : [Double]
+            if personSelection == AppSettings.shared.adultsLabel {
+                y = element.lifeExpenses.valuesArray
+            } else {
+                y = [Double].init(repeating: 0, count: labelsInCategory.count)
+            }
+            dataEntries.append(BarChartDataEntry(x       : element.year.double(),
+                                                 yValues : -y))
+        }
+        nbNegativeLabels = labelsInCategory.count
+    }
+    
     func buildCategoryStackedBarChart(element: ValuedTaxes) {
         y = element.perCategory[taxCategory!]?.valuesArray
     }

@@ -29,9 +29,9 @@ struct CashFlowLine {
     /// les comptes annuels de la SCI
     let sciCashFlowLine : SciCashFlowLine
     
-    // Les comptes annuels des Parents
+    // Les comptes annuels
     
-    // Revenus des Parents
+    // Revenus
     
     /// Profits des Parents en report d'imposition d'une année sur l'autre
     var taxableIrppRevenueDelayedToNextYear = Debt(name  : "REVENU IMPOSABLE REPORTE A L'ANNEE SUIVANTE",
@@ -63,8 +63,11 @@ struct CashFlowLine {
         adultsRevenues.totalRevenue +
             sciCashFlowLine.netRevenues
     }
-    
-    // Dépenses des Parents
+    var sumOfChildrenRevenues: Double {
+        childrenRevenues.totalRevenue
+    }
+
+    // Dépenses
     
     /// Agrégat des Taxes annuelles payées par les Parents
     var adultTaxes      = ValuedTaxes(name: "Taxes des parents")
@@ -88,24 +91,31 @@ struct CashFlowLine {
             debtPayements.total +
             investPayements.total
     }
-    
+    /// Total des dépenses annuelles des Enfants
+    var sumOfChildrenExpenses: Double {
+        childrenTaxes.total
+    }
+
     // Soldes nets annuels (Revenus - Dépenses) des Parents
     
     /// Solde net des revenus - dépenses courants des Parents - dépenses communes (hors ventes de bien en séparation de bien)
     /// Solde net de tous les revenus - dépenses (y.c. ventes de bien en séparation de bien))
     /// - inclus revenus/dépenses de la SCI
     /// - EXCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
-    var netCashFlowSalesExcluded: Double {
+    var netAdultsCashFlowSalesExcluded: Double {
         sumOfAdultsRevenuesSalesExcluded - sumOfAdultsExpenses
     }
     
     /// Solde net de tous les revenus - dépenses (y.c. ventes de bien en séparation de bien))
     /// - inclus revenus/dépenses de la SCI
     /// - INCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
-    var netCashFlow: Double {
+    var netAdultsCashFlow: Double {
         sumOfAdultsRevenues - sumOfAdultsExpenses
     }
-    
+    var netChildrenCashFlow: Double {
+        sumOfChildrenRevenues - sumOfChildrenExpenses
+    }
+
     // Successions survenus dans l'année
     
     /// Les successions légales survenues dans l'année
@@ -264,7 +274,7 @@ struct CashFlowLine {
                                                       for adultsName      : [String],
                                                       lifeInsuranceRebate : inout Double) throws {
         let netCashFlowManager       = NetCashFlowManager()
-        let netCashFlowSalesExcluded = self.netCashFlowSalesExcluded
+        let netCashFlowSalesExcluded = self.netAdultsCashFlowSalesExcluded
         
         // On ne gère pas ici le ré-investissement des biens vendus dans l'année et détenus en propre
         // c'est fait en amont au moment de la vente

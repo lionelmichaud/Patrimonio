@@ -167,7 +167,7 @@ final class CashFlowCsvTableVisitor: CashFlowCsvVisitorP {
         table.append("\(element.sumOfAdultsExpenses.roundedString); " )
 
         // Net cashflow
-        table.append("\(element.netCashFlow.roundedString)" )
+        table.append("\(element.netAdultsCashFlow.roundedString)" )
     }
 
     func buildCsv(element: CashFlowArray) {

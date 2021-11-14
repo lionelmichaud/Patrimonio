@@ -50,6 +50,16 @@ struct CashFlowDetailedChartView: View {
             ZStack(alignment: .leading) {
                 /// zone de graphique
                 VStack {
+                    // sélecteur: Adults / Enfants
+                    Picker(selection: self.$uiState.cfChartState.parentChildrenSelection, label: Text("Personne")) {
+                        Text(AppSettings.shared.adultsLabel)
+                            .tag(AppSettings.shared.adultsLabel)
+                        Text(AppSettings.shared.childrenLabel)
+                            .tag(AppSettings.shared.childrenLabel)
+                    }
+                    .padding(.horizontal)
+                    .pickerStyle(SegmentedPickerStyle())
+                    
                     // sélecteur: Actif / Passif / Tout
                     CasePicker(pickedCase: self.$uiState.cfChartState.combination, label: "")
                         .padding(.horizontal)
@@ -64,7 +74,8 @@ struct CashFlowDetailedChartView: View {
                         }
                     }
                     // graphique Cash-Flow
-                    CashFlowStackedBarChartView(socialAccounts: self.$simulation.socialAccounts,
+                    CashFlowStackedBarChartView(for           : uiState.cfChartState.parentChildrenSelection,
+                                                socialAccounts: self.$simulation.socialAccounts,
                                                 title         : self.simulation.title,
                                                 combination   : self.uiState.cfChartState.combination,
                                                 itemSelection : self.uiState.cfChartState.itemSelection,
@@ -144,19 +155,22 @@ struct CashFlowStackedBarChartView: UIViewRepresentable {
 
     @Binding var socialAccounts : SocialAccounts
     var combination             : CashCombination
+    var parentChildrenSelection : String
     var itemSelectionList       : ItemSelectionList
     var expenses                : LifeExpensesDic
     var selectedExpenseCategory : LifeExpenseCategory?
 
     // MARK: - Initializer
 
-    internal init(socialAccounts          : Binding<SocialAccounts>,
-                  title                   : String,
-                  combination             : CashCombination,
-                  itemSelection           : ItemSelectionList,
-                  expenses                : LifeExpensesDic,
-                  selectedExpenseCategory : LifeExpenseCategory? = nil) {
+    internal init(for parentChildrenSelection : String,
+                  socialAccounts              : Binding<SocialAccounts>,
+                  title                       : String,
+                  combination                 : CashCombination,
+                  itemSelection               : ItemSelectionList,
+                  expenses                    : LifeExpensesDic,
+                  selectedExpenseCategory     : LifeExpenseCategory?  = nil) {
         CashFlowStackedBarChartView.titleStatic = title
+        self.parentChildrenSelection = parentChildrenSelection
         self.combination             = combination
         self.itemSelectionList       = itemSelection
         self.expenses                = expenses
@@ -207,10 +221,11 @@ struct CashFlowStackedBarChartView: UIViewRepresentable {
             // il y a un seule catégorie de sélectionnée, afficher le détail des items de la catégorie
             if let categoryName = itemSelectionList.firstSelectedCategory() {
                 aDataSet = CategoryBarChartCashFlowVisitor(
-                    element                : socialAccounts.cashFlowArray,
-                    categoryName           : categoryName,
-                    expenses               : expenses,
-                    selectedExpenseCategory: selectedExpenseCategory).dataSet
+                    element                 : socialAccounts.cashFlowArray,
+                    personSelection         : parentChildrenSelection,
+                    categoryName            : categoryName,
+                    expenses                : expenses,
+                    selectedExpenseCategory : selectedExpenseCategory).dataSet
             } else {
                 customLog.log(level: .error,
                               "CashFlowStackedBarChartView : aDataSet = nil => graphique vide")
@@ -220,6 +235,7 @@ struct CashFlowStackedBarChartView: UIViewRepresentable {
             // il y a plusieurs catégories sélectionnées, afficher le graphe résumé par catégorie
             aDataSet = BarChartCashFlowVisitor(
                 element           : socialAccounts.cashFlowArray,
+                personSelection   : parentChildrenSelection,
                 combination       : combination,
                 itemSelectionList : itemSelectionList).dataSet
         }

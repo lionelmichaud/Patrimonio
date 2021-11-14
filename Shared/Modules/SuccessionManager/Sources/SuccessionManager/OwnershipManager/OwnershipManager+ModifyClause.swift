@@ -92,6 +92,11 @@ extension OwnershipManager {
      toPayFor taxes              : NameValueDico,
      capitauxDecesRecusNet       : LifeInsuranceSuccessionManager.NameCapitauxDecesDico,
      verbose                     : Bool = false) -> NameValueDico {
+        
+        // l'allocation aux enfants d'une partie de l'option va accroitre leur capitaux décès
+        // donc accroitre leur taxes => il faut en tenir compte en augmenant leur option d'autan
+        let correctionFactor = 1.3
+        
         // cumuler les valeurs d'actif net que chaque enfant peut vendre après transmission
         let childrenSellableCapital =
             childrenNetSellableAssetsAfterInheritance(receivedFrom    : decedentName,
@@ -101,6 +106,7 @@ extension OwnershipManager {
         // calculer les capitaux manquants à chaque enfants pour pouvoir payer ses droits de succession
         var missingCapital = NameValueDico()
         taxes.forEach { childrenName, tax in
+            let tax = tax * correctionFactor
             let sellableCapital      = childrenSellableCapital[childrenName] ?? 0.0
             let capitalDecesBrutRecu = capitauxDecesRecusNet[childrenName]?.received.brut ?? 0.0
             missingCapital[childrenName] = max(0.0, tax - (sellableCapital + capitalDecesBrutRecu))

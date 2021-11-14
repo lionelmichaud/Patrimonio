@@ -130,8 +130,8 @@ struct BalanceSheetLineChartView: NSUIViewRepresentable {
                   socialAccounts : Binding<SocialAccounts>,
                   title          : String) {
         BalanceSheetLineChartView.titleStatic = title
-        self.personSelection  = thisName
-        self._socialAccounts  = socialAccounts
+        self.personSelection                  = thisName
+        self._socialAccounts                  = socialAccounts
     }
 
     // MARK: - Type methods
@@ -169,12 +169,13 @@ struct BalanceSheetLineChartView: NSUIViewRepresentable {
     }
 
     // MARK: - Methods
-
+    
     func updateData(of chartView: LineChartView) {
         // créer les DataSet: LineChartDataSets
-        let dataSets = LineChartBalanceSheetVisitor(
-            element         : socialAccounts.balanceArray,
-            personSelection : personSelection)
+        let dataSets =
+            LineChartBalanceSheetVisitor(
+                element         : socialAccounts.balanceArray,
+                personSelection : personSelection)
             .dataSets
         
         // ajouter les DataSet au Chartdata
