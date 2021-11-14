@@ -61,25 +61,21 @@ extension CashFlowLine {
         
         /// Revenus bruts des transmissions d'ASSURANCES VIES
         //   - pour les adultes
-        if UserSettings.shared.cashFlowGraphicIncludeQuasiUsufruct {
-            adultsRevenues
-                .perCategory[.liSuccession]?
-                .credits
-                .namedValues += successionManager.lifeInsurance.revenuesAdults
-        }
+        adultsRevenues
+            .perCategory[.liSuccession]?
+            .credits
+            .namedValues += successionManager.lifeInsurance.revenuesAdults
         //   - pour les enfants
         childrenRevenues
             .perCategory[.liSuccession]?
             .credits
             .namedValues += successionManager.lifeInsurance.revenuesChildren
-
+        
         /// Droits de successions LEGAUX
         //   - imputables aux adultes (= 0 puisque le conjoint survivant est exonéré)
-        if UserSettings.shared.cashFlowGraphicIncludeQuasiUsufruct {
-            adultTaxes
-                .perCategory[.legalSuccession]?
-                .namedValues += successionManager.legal.taxesAdults
-        }
+        adultTaxes
+            .perCategory[.legalSuccession]?
+            .namedValues += successionManager.legal.taxesAdults
         //   - imputables aux enfants (doit être prélevé sur l'héritage après transfert de propriété)
         childrenTaxes
             .perCategory[.legalSuccession]?

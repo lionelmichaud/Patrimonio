@@ -19,7 +19,7 @@ struct GraphicUserSettingsView: View {
     // si la variable d'état est locale (@State) cela ne fonctionne pas correctement
     @Binding var ownership         : OwnershipNature
     @Binding var evaluatedFraction : EvaluatedFraction
-    @State private var includeQuasiUsufruct: Bool = UserSettings.shared.cashFlowGraphicIncludeQuasiUsufruct
+//    @State private var includeQuasiUsufruct: Bool = UserSettings.shared.cashFlowGraphicIncludeQuasiUsufruct
     
     var body: some View {
         Form {
@@ -40,14 +40,16 @@ struct GraphicUserSettingsView: View {
                         UserSettings.shared.assetGraphicEvaluatedFraction = newValue
                     }
             }
-            Section(header: Text("Graphique Cash-Flow".uppercased()),
-                    footer: Text("Le graphique de l'évolution dans le temps du cash flow incluera les quasi-usufruits issus des transmissions d'assurances vie")) {
-                // Graphique Cash Flow
-                Toggle("Inclure les quasi-usufruits", isOn: $includeQuasiUsufruct)
-                    .onChange(of     : includeQuasiUsufruct) { newValue in
-                        UserSettings.shared.cashFlowGraphicIncludeQuasiUsufruct = newValue
-                    }
-            }.padding(.top)
+            
+            // Graphique Cash-Flow
+//            Section(header: Text("Graphique Cash-Flow".uppercased()),
+//                    footer: Text("Le graphique de l'évolution dans le temps du cash flow incluera les quasi-usufruits issus des transmissions d'assurances vie")) {
+//                // Graphique Cash Flow
+//                Toggle("Inclure les quasi-usufruits", isOn: $includeQuasiUsufruct)
+//                    .onChange(of     : includeQuasiUsufruct) { newValue in
+//                        UserSettings.shared.cashFlowGraphicIncludeQuasiUsufruct = newValue
+//                    }
+//            }.padding(.top)
         }
     }
 }

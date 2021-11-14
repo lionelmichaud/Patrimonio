@@ -89,13 +89,8 @@ public struct UserSettings {
     }
     
     // graphique CashFlow
-    static let cashFlowGraphicIncludeQuasiUsufruct = "cashFlowGraphicIncludeQuasiUsufruct"
-    @WrappedDefault(keyName: UserSettings.cashFlowGraphicIncludeQuasiUsufruct,
-                    defaultValue: false)
-    public var cashFlowGraphicIncludeQuasiUsufruct: Bool
-    
-//    static let dictionary = "dictionary"
-//    @WrappedDefault(keyName: UserSettings.dictionary,
-//                    defaultValue: [EvaluatedFraction.ownedValue : true])
-//    public var dictionary: [EvaluatedFraction : Bool]
+//    static let cashFlowGraphicIncludeQuasiUsufruct = "cashFlowGraphicIncludeQuasiUsufruct"
+//    @WrappedDefault(keyName: UserSettings.cashFlowGraphicIncludeQuasiUsufruct,
+//                    defaultValue: true)
+//    public var cashFlowGraphicIncludeQuasiUsufruct: Bool
 }
