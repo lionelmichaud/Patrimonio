@@ -145,14 +145,18 @@ struct CashFlowLine {
          using model                           : Model) throws {
         
         self.year = year
-        let adultsNames = family.adults.compactMap {
-            $0.isAlive(atEndOf: year) ? $0.displayName : nil
-        }
-        adultsRevenues.taxableIrppRevenueDelayedFromLastYear.setValue(to: taxableIrppRevenueDelayedFromLastyear)
+        let childrenNames = family.childrenAliveName(atEndOf: year) ?? []
+        let adultsNames   = family.adultsAliveName(atEndOf: year) ?? []
+        adultsRevenues
+            .taxableIrppRevenueDelayedFromLastYear
+            .setValue(to: taxableIrppRevenueDelayedFromLastyear)
         
         /// initialize life insurance yearly rebate on taxes
         // TODO: mettre à jour le model de défiscalisation Asurance Vie
-        var lifeInsuranceRebate = model.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson * family.nbOfAdultAlive(atEndOf: year).double()
+        var lifeInsuranceRebate =
+            model.fiscalModel
+            .lifeInsuranceTaxes
+            .model.rebatePerPerson * family.nbOfAdultAlive(atEndOf: year).double()
         
         /// SCI: calculer le cash flow de la SCI
         sciCashFlowLine = SciCashFlowLine(withYear : year,
@@ -198,9 +202,9 @@ struct CashFlowLine {
                              using          : model.fiscalModel)
             
             /// FREE INVEST: populate revenue, des investissements financiers libres et investir/retirer le solde net du cash flow de l'année
-            try manageYearlyNetCashFlow(of                  : patrimoine,
-                                        for                 : adultsNames,
-                                        lifeInsuranceRebate : &lifeInsuranceRebate)
+            try manageAdultsYearlyNetCashFlow(of                  : patrimoine,
+                                              forAdults           : adultsNames,
+                                              lifeInsuranceRebate : &lifeInsuranceRebate)
         }
         #if DEBUG
         //Swift.print("Year = \(year), Revenus = \(sumOfrevenues), Expenses = \(sumOfExpenses), Net cash flow = \(netCashFlow)")
@@ -270,9 +274,9 @@ struct CashFlowLine {
     ///   - adultsName: des adultes
     ///   - lifeInsuranceRebate: franchise d'imposition sur les plus values
     /// - Throws: Si pas assez de capital -> CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)
-    fileprivate mutating func manageYearlyNetCashFlow(of patrimoine       : Patrimoin,
-                                                      for adultsName      : [String],
-                                                      lifeInsuranceRebate : inout Double) throws {
+    fileprivate mutating func manageAdultsYearlyNetCashFlow(of patrimoine        : Patrimoin,
+                                                            forAdults adultsName : [String],
+                                                            lifeInsuranceRebate  : inout Double) throws {
         let netCashFlowManager       = NetCashFlowManager()
         let netCashFlowSalesExcluded = self.netAdultsCashFlowSalesExcluded
         

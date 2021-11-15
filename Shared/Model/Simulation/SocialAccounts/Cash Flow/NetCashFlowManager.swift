@@ -39,8 +39,8 @@ struct NetCashFlowManager {
                        atEndOf year  : Int) {
         ownedCapitals.forEach { (name, capital) in
             if capital != 0,
-               let adult = Patrimoin.familyProvider?.member(withName: name) as? Adult,
-               adult.isAlive(atEndOf: year) {
+               let member = Patrimoin.familyProvider?.member(withName: name),
+               member.isAlive(atEndOf: year) {
                 
                 // investir en priorité dans une assurance vie
                 for idx in patrimoine.assets.freeInvests.items.indices {

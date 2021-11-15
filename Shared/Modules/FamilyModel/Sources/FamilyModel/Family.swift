@@ -120,7 +120,19 @@ public final class Family: ObservableObject {
                 person as! Child
             }
     }
-    
+    /// Rend la liste des adults vivants
+    /// - Parameter year: année
+    /// - Warning: Vérifie que l'adulte est vivant
+    public func adultsAlive(atEndOf year: Int) -> [Adult]? {
+        members.items
+            .filter { person in
+                person is Adult && person.isAlive(atEndOf: year)
+            }
+            .map { person in
+                person as! Adult
+            }
+    }
+
     /// Retourne la liste des noms des personnes décédées dans l'année
     /// - Parameter year: année où l'on recherche des décès
     /// - Returns: liste des personnes décédées dans l'année
@@ -464,6 +476,9 @@ extension Family: MembersNameProviderP {
     }
     public func childrenAliveName(atEndOf year: Int) -> [String]? {
         chidldrenAlive(atEndOf: year)?.map { $0.displayName }
+    }
+    public func adultsAliveName(atEndOf year: Int) -> [String]? {
+        adultsAlive(atEndOf: year)?.map { $0.displayName }
     }
 }
 
