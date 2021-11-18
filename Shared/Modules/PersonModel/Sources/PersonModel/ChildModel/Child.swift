@@ -8,6 +8,7 @@
 
 import Foundation
 import AppFoundation
+import ModelEnvironment
 import DateBoundary
 
 // MARK: -
@@ -123,4 +124,11 @@ public final class Child: Person {
                 return nil
         }
     }
+    
+    /// Réinitialiser les prioriétés variables des membres de manière aléatoires
+    /// - Warning: les enfants ont toujours une date de décès déterministe
+    public override final func nextRandomProperties(using model: Model) {
+        super.setRandomPropertiesDeterministicaly(using: model)
+    }
+
 }

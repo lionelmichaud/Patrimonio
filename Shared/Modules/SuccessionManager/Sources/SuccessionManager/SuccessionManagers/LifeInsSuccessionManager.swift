@@ -158,7 +158,7 @@ struct LifeInsuranceSuccessionManager {
 
         // calculer l'héritage de chaque membre de la famille autre que le défunt
         // à partir des capitaux décès taxables et des abattements
-        for member in family.members.items where member.displayName != decedentName {
+        for member in family.members.items where member.isAlive(atEndOf: year) && member.displayName != decedentName {
             let name = member.displayName
             if let capitauxTaxables = capitaux.taxable[name] {
                 // calculer les taxes de transmission

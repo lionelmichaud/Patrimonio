@@ -22,7 +22,7 @@ public struct Succession: Identifiable {
     
     public let id           = UUID()
     // nature
-    public let kind: SuccessionKindEnum
+    public let kind         : SuccessionKindEnum
     // année de la succession
     public let yearOfDeath  : Int
     // personne dont on fait la succession

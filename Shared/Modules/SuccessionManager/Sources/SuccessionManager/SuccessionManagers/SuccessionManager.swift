@@ -22,13 +22,13 @@ public struct SuccessionManager {
     
     // MARK: - Nested Types
     
-    public struct Results: CustomStringConvertible {
-        /// Les successions légales et assurances vie survenues dans l'année
+    public struct SuccessionsSynthesis: CustomStringConvertible {
+        /// Les successions légales / assurances vie survenues dans l'année
         public var successions      : [Succession] = []
-        /// Revenus bruts des successions légales et assurances vie survenues dans l'année
+        /// Somme des revenus bruts des successions légales / assurances vie survenues dans l'année, par personne
         public var revenuesAdults   = NamedValueArray()
         public var revenuesChildren = NamedValueArray()
-        /// Taxes sur les successions légales et assurances vie survenues dans l'année
+        /// Somme des taxes sur les successions légales / assurances vie survenues dans l'année, par personne
         public var taxesAdults      = NamedValueArray()
         public var taxesChildren    = NamedValueArray()
         
@@ -52,20 +52,20 @@ public struct SuccessionManager {
     
     // MARK: - Properties
     
-    var family      : FamilyProviderP
-    var patrimoine  : Patrimoin
+    var family              : FamilyProviderP
+    var patrimoine          : Patrimoin
+    var year                : Int
     private var fiscalModel : Fiscal.Model
-    var year        : Int
     private var run         : Int
     
     /// délégués
-    private var legalSuccessionManager         : LegalSuccessionManager
+    private var legalSuccessionManager : LegalSuccessionManager
     var lifeInsuranceSuccessionManager : LifeInsuranceSuccessionManager
     var ownershipManager               : OwnershipManager
     
     /// résultats des calculs des successions légales et assurances vie survenues dans l'année
-    public var legal         = Results()
-    public var lifeInsurance = Results()
+    public var legal         = SuccessionsSynthesis()
+    public var lifeInsurance = SuccessionsSynthesis()
     public var creanceDeRestituationDico : CreanceDeRestituationDico {
         lifeInsuranceSuccessionManager.creanceDeRestituationDico
     }
@@ -119,8 +119,8 @@ public struct SuccessionManager {
     ///
     public mutating func manageSuccessions(verbose: Bool = false) {
         // tout remettre à 0 avant chaque calcul
-        legal         = Results()
-        lifeInsurance = Results()
+        legal         = SuccessionsSynthesis()
+        lifeInsurance = SuccessionsSynthesis()
         
         /// (1) identification des personnes décédées dans l'année
         let adultDecedentsNames = family.deceasedAdults(during: year)

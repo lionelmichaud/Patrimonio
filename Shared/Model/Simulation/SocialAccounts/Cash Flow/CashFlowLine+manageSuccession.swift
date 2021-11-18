@@ -90,5 +90,14 @@ extension CashFlowLine {
         childrenTaxes
             .perCategory[.liSuccession]?
             .namedValues += successionManager.lifeInsurance.taxesChildren
+        
+        /// Solde net des héritages éventuellement reçus par les enfants dans l'année
+        if successionManager.legal.revenuesChildren.isNotEmpty ||
+            successionManager.lifeInsurance.revenuesChildren.isNotEmpty {
+            netChildrenInheritances.append(
+                (successionManager.legal.revenuesChildren.sum(for: \.value) - successionManager.legal.taxesChildren.sum(for: \.value)) +
+                (successionManager.lifeInsurance.revenuesChildren.sum(for: \.value) - successionManager.lifeInsurance.taxesChildren.sum(for: \.value)))
+        }
+        
     }
 }

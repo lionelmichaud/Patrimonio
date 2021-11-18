@@ -36,11 +36,13 @@ struct SocialAccounts {
     var balanceArray  = BalanceSheetArray()
     var firstYear     = Date.now.year
     var lastYear      = Date.now.year
-    // les successions légales
+    // les successions légales survenues depuis le début du run
     var legalSuccessions   : [Succession] = []
-    // les transmissions d'assurances vie
+    // les transmissions d'assurances vie survenues depuis le début du run
     var lifeInsSuccessions : [Succession] = []
-    
+    // soldes nets de l'héritage reçu par les enfants à chaque décès depuis le début du run
+    var netChildrenInheritances: [Double] = []
+
     // MARK: - Computed Properties
     
     // MARK: - Methods
@@ -102,6 +104,9 @@ struct SocialAccounts {
                 legalSuccessions   += newCashFlowLine.legalSuccessions
                 // ajouter les éventuelles transmissions d'assurance vie survenues pendant l'année à la liste globale
                 lifeInsSuccessions += newCashFlowLine.lifeInsSuccessions
+                // ajouter le solde net des héritages éventuellement reçus par les enfants dans l'année à la liste globale
+                netChildrenInheritances += newCashFlowLine.netChildrenInheritances
+                
             } catch {
                 /// il n'y a plus de Cash => on arrête la simulation
                 lastYear = year
@@ -131,7 +136,8 @@ struct SocialAccounts {
                                                withKPIs                           : &kpis,
                                                withBalanceArray                   : balanceArray,
                                                balanceSheetLineAfterTransmission  : newBalanceSheetLine,
-                                               allSuccessions                     : legalSuccessions + lifeInsSuccessions)
+                                               allSuccessions                     : legalSuccessions + lifeInsSuccessions,
+                                               netChildrenInheritances            : netChildrenInheritances)
             }
             
             balanceArray.append(newBalanceSheetLine)

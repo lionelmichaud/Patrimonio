@@ -306,10 +306,10 @@ struct NetCashFlowManager {
         } else {
             sortedAdultNames = adultsName
         }
-        sortedAdultNames.forEach { name in
-            print("nom: \(name)")
-            print("richesse disponible (freeInvest en partie en PP): \(totalFreeInvestementsValue(ownedBy: name, in: patrimoine, atEndOf: year).rounded())")
-        }
+//        sortedAdultNames.forEach { name in
+//            print("nom: \(name)")
+//            print("richesse disponible (freeInvest en partie en PP): \(totalFreeInvestementsValue(ownedBy: name, in: patrimoine, atEndOf: year).rounded())")
+//        }
 
         // trier par taux de rendement croissant
         patrimoine.assets.freeInvests.items.sort(by: {$0.averageInterestRate < $1.averageInterestRate})

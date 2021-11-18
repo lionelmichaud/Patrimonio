@@ -7,6 +7,7 @@ import Succession
 import Liabilities
 import PatrimoineModel
 import FamilyModel
+import SuccessionManager
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CashFlow")
 
@@ -124,6 +125,9 @@ struct CashFlowLine {
     /// Les transmissions d'assurances vie survenues dans l'année
     var lifeInsSuccessions : [Succession] = []
     
+    /// Solde net des héritages reçus par les enfants dans l'année
+    var netChildrenInheritances: [Double] = [] // un seul élément ou aucun
+    
     // MARK: - Initialization
     
     /// Création et peuplement d'un année de Cash Flow
@@ -145,8 +149,7 @@ struct CashFlowLine {
          using model                           : Model) throws {
         
         self.year = year
-        let childrenNames = family.childrenAliveName(atEndOf: year) ?? []
-        let adultsNames   = family.adultsAliveName(atEndOf: year) ?? []
+        let adultsNames = family.adultsAliveName(atEndOf: year) ?? []
         adultsRevenues
             .taxableIrppRevenueDelayedFromLastYear
             .setValue(to: taxableIrppRevenueDelayedFromLastyear)

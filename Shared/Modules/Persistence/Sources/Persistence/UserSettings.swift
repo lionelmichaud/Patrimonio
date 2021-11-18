@@ -34,32 +34,32 @@ public struct UserSettings {
     public var shareImageFiles: Bool
     
     /// Paramètres KPI
-    static let ownershipKpiSelection = "ownershipKpiSelection"
-    @WrappedDefault(keyName: UserSettings.ownershipKpiSelection,
-                    defaultValue: OwnershipNature.sellable.rawValue)
-    private var ownershipKpiSelectionString: String
-    public var ownershipKpiSelection: OwnershipNature {
-        get {
-            OwnershipNature(rawValue: ownershipKpiSelectionString) ?? OwnershipNature.sellable
-        }
-        set {
-            ownershipKpiSelectionString = newValue.rawValue
-        }
-    }
+//    static let ownershipKpiSelection = "ownershipKpiSelection"
+//    @WrappedDefault(keyName: UserSettings.ownershipKpiSelection,
+//                    defaultValue: OwnershipNature.sellable.rawValue)
+//    private var ownershipKpiSelectionString: String
+//    public var ownershipKpiSelection: OwnershipNature {
+//        get {
+//            OwnershipNature(rawValue: ownershipKpiSelectionString) ?? OwnershipNature.sellable
+//        }
+//        set {
+//            ownershipKpiSelectionString = newValue.rawValue
+//        }
+//    }
     
-    static let assetKpiEvaluatedFraction = "assetKpiEvaluatedFraction"
-    @WrappedDefault(keyName: UserSettings.assetKpiEvaluatedFraction,
-                    defaultValue: EvaluatedFraction.ownedValue.rawValue)
-    private var assetKpiEvaluatedFractionString: String
-    public var assetKpiEvaluatedFraction: EvaluatedFraction {
-        get {
-            EvaluatedFraction(rawValue: assetKpiEvaluatedFractionString) ?? EvaluatedFraction.ownedValue
-        }
-        set {
-            assetKpiEvaluatedFractionString = newValue.rawValue
-        }
-    }
-    
+//    static let assetKpiEvaluatedFraction = "assetKpiEvaluatedFraction"
+//    @WrappedDefault(keyName: UserSettings.assetKpiEvaluatedFraction,
+//                    defaultValue: EvaluatedFraction.ownedValue.rawValue)
+//    private var assetKpiEvaluatedFractionString: String
+//    public var assetKpiEvaluatedFraction: EvaluatedFraction {
+//        get {
+//            EvaluatedFraction(rawValue: assetKpiEvaluatedFractionString) ?? EvaluatedFraction.ownedValue
+//        }
+//        set {
+//            assetKpiEvaluatedFractionString = newValue.rawValue
+//        }
+//    }
+//    
     /// Paramètres Graphiques
     // graphique Bilan
     static let ownershipGraphicSelection = "ownershipGraphicSelection"

@@ -47,10 +47,10 @@ struct KpiSummaryView: View {
     func kpiNoteSubstituted(_ note: String) -> String {
         var substituted: String = note
         substituted = substituted.replacingOccurrences(of    : "<<OwnershipNature>>",
-                                                       with  : UserSettings.shared.ownershipKpiSelection.rawValue,
+                                                       with  : UserSettings.shared.ownershipGraphicSelection.rawValue,
                                                        count : 1)
         substituted = substituted.replacingOccurrences(of    : "<<AssetEvaluationContext>>",
-                                                       with  : UserSettings.shared.assetKpiEvaluatedFraction.rawValue,
+                                                       with  : UserSettings.shared.assetGraphicEvaluatedFraction.rawValue,
                                                        count : 1)
         return substituted
     }
@@ -64,6 +64,7 @@ struct KpiSummaryView: View {
                     .background(Color.secondary)
                 AmountView(label   : "Valeur Objectif Minimale",
                            amount  : kpi.objective,
+                           kEuro   : true,
                            comment : simulation.mode == .random ? "à atteindre avec une probabilité ≥ \(kpi.probaObjective.percentStringRounded)" : "")
                     .padding(EdgeInsets(top: withPadding ? 3 : 0, leading: 0, bottom: withPadding ? 3 : 0, trailing: 0))
                 if simulation.mode == .random {
@@ -81,6 +82,7 @@ struct KpiSummaryView: View {
             HStack {
                 AmountView(label   : "Valeur Atteinte",
                            amount  : kpi.value(withMode: simulation.mode)!,
+                           kEuro   : true,
                            comment : simulation.mode == .random ? "avec une probabilité de \(kpi.probaObjective.percentStringRounded)" : "")
                 Image(systemName: kpi.objectiveIsReached(withMode: simulation.mode)! ? "checkmark.circle.fill" : "multiply.circle.fill")
                     .imageScale(/*@START_MENU_TOKEN@*/.large/*@END_MENU_TOKEN@*/)
