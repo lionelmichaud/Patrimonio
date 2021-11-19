@@ -157,7 +157,7 @@ public struct BalanceSheetLine {
             .append(NamedValue(name  : liability.name,
                                value : liability.value(atEndOf: year).rounded()))
         
-        //  adultes
+        //  somme des adultes (filtré et évalué selon préférences graphiques de l'utilisateur)
         var value: Double = 0
         adultsName.forEach { name in
             value += liability.ownedValue(by                  : name,
@@ -171,7 +171,7 @@ public struct BalanceSheetLine {
             .append(NamedValue(name  : liability.name,
                                value : value))
         
-        //  individus
+        //  individus (filtré et évalué selon préférences graphiques de l'utilisateur)
         membersName.forEach { name in
             let value = liability.ownedValue(by                  : name,
                                              atEndOf             : year,

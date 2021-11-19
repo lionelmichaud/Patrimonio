@@ -10,7 +10,9 @@ import XCTest
 import FiscalModel
 @testable import Ownership
 
-class OwnershipTransferLifeInsuranceTests: XCTestCase {
+// swiftlint:disable file_length
+
+class OwnershipTransferLifeInsuranceTests: XCTestCase { // swiftlint:disable:this type_body_length
     
     typealias Tests = OwnershipTransferLifeInsuranceTests
     

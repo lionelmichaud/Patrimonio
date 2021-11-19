@@ -11,7 +11,7 @@ import Ownership
 import PatrimoineModel
 import NamedValue
 
-final class LifeInsSuccessionManagerTests: XCTestCase {
+final class LifeInsSuccessionManagerTests: XCTestCase { // swiftlint:disable:this type_body_length
     typealias Tests = LifeInsSuccessionManagerTests
     
     static var manager     : LifeInsuranceSuccessionManager!

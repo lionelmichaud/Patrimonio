@@ -171,7 +171,7 @@ public struct KpiComputer {
     ///   - balanceSheetLineAfterTransmission: Bilan après transmissions
     ///   - allSuccessions: ensemble des succssions ayant eu lieu à ce moment de la simulation
     ///   - netChildrenInheritances: soldes nets de l'héritage reçu par les enfants à chaque décès
-    public mutating func computeKpisAtDeath
+    public mutating func computeKpisAtDeath // swiftlint:disable:this function_parameter_count
     (year                               : Int,
      withKPIs kpiDictionnary            : inout KpiDictionary,
      withBalanceArray balanceArray      : BalanceSheetArray,

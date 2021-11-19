@@ -11,10 +11,10 @@ import XCTest
 class NamedValueTableTests: XCTestCase {
     static let data: NamedValueArray =
         [
-            (name: "Item 1", value: 1.0),
-            (name: "Item 2", value: 2.0),
-            (name: "Item 3", value: 3.0),
-            (name: "Item 4", value: 4.0)
+            NamedValue(name: "Item 1", value: 1.0),
+            NamedValue(name: "Item 2", value: 2.0),
+            NamedValue(name: "Item 3", value: 3.0),
+            NamedValue(name: "Item 4", value: 4.0)
         ]
     static var namedValueTable: NamedValueTable = NamedValueTable(tableName: "Titre de la table")
     

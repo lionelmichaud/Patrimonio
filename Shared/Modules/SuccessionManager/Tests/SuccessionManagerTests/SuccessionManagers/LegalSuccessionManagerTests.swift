@@ -143,13 +143,17 @@ final class LegalSuccessionManagerTests: XCTestCase {
                                                  brutFiscal    : brut,
                                                  abatFrac      : 1.0,
                                                  netFiscal     : heritageOfChild.netAmount,
-                                                 tax           : heritageOfChild.taxe),
+                                                 tax           : heritageOfChild.taxe,
+                                                 received      : 0.0,
+                                                 receivedNet   : -heritageOfChild.taxe),
                                      Inheritance(personName    : "Mme. Lou-Ann MICHAUD",
                                                  percentFiscal : share,
                                                  brutFiscal    : brut,
                                                  abatFrac      : 1.0,
                                                  netFiscal     : heritageOfChild.netAmount,
-                                                 tax           : heritageOfChild.taxe)])
+                                                 tax           : heritageOfChild.taxe,
+                                                 received      : 0.0,
+                                                 receivedNet   : -heritageOfChild.taxe)])
         
         XCTAssertEqual(Set(inheritance), theoryInheritance)
     }
@@ -173,19 +177,25 @@ final class LegalSuccessionManagerTests: XCTestCase {
                                                  brutFiscal    : conjointShare * masse,
                                                  abatFrac      : 1.0,
                                                  netFiscal     : conjointShare * masse,
-                                                 tax           : 0.0),
+                                                 tax           : 0.0,
+                                                 received      : 0.0,
+                                                 receivedNet   : 0.0),
                                      Inheritance(personName    : "M. Arthur MICHAUD",
                                                  percentFiscal : childShare,
                                                  brutFiscal    : brutChild,
                                                  abatFrac      : 1.0,
                                                  netFiscal     : heritageOfChild.netAmount,
-                                                 tax           : heritageOfChild.taxe),
+                                                 tax           : heritageOfChild.taxe,
+                                                 received      : 0.0,
+                                                 receivedNet   : -heritageOfChild.taxe),
                                      Inheritance(personName    : "Mme. Lou-Ann MICHAUD",
                                                  percentFiscal : childShare,
                                                  brutFiscal    : brutChild,
                                                  abatFrac      : 1.0,
                                                  netFiscal     : heritageOfChild.netAmount,
-                                                 tax           : heritageOfChild.taxe)])
+                                                 tax           : heritageOfChild.taxe,
+                                                 received      : 0.0,
+                                                 receivedNet   : -heritageOfChild.taxe)])
         
         XCTAssertEqual(Set(inheritance), theoryInheritance)
     }
@@ -210,19 +220,25 @@ final class LegalSuccessionManagerTests: XCTestCase {
                                                  brutFiscal    : conjointShare * masse,
                                                  abatFrac      : 1.0,
                                                  netFiscal     : conjointShare * masse,
-                                                 tax           : 0.0),
+                                                 tax           : 0.0,
+                                                 received      : 0.0,
+                                                 receivedNet   : 0.0),
                                      Inheritance(personName    : "M. Arthur MICHAUD",
                                                  percentFiscal : childShare,
                                                  brutFiscal    : brutChild,
                                                  abatFrac      : 1.0,
                                                  netFiscal     : heritageOfChild.netAmount,
-                                                 tax           : heritageOfChild.taxe),
+                                                 tax           : heritageOfChild.taxe,
+                                                 received      : 0.0,
+                                                 receivedNet   : -heritageOfChild.taxe),
                                      Inheritance(personName    : "Mme. Lou-Ann MICHAUD",
                                                  percentFiscal : childShare,
                                                  brutFiscal    : brutChild,
                                                  abatFrac      : 1.0,
                                                  netFiscal     : heritageOfChild.netAmount,
-                                                 tax           : heritageOfChild.taxe)])
+                                                 tax           : heritageOfChild.taxe,
+                                                 received      : 0.0,
+                                                 receivedNet   : -heritageOfChild.taxe)])
         
         XCTAssertEqual(succession.kind, SuccessionKindEnum.legal)
         XCTAssertEqual(succession.yearOfDeath, 2021)
@@ -255,13 +271,17 @@ final class LegalSuccessionManagerTests: XCTestCase {
                                                  brutFiscal    : brutChild,
                                                  abatFrac      : 1.0,
                                                  netFiscal     : heritageOfChild.netAmount,
-                                                 tax           : heritageOfChild.taxe),
+                                                 tax           : heritageOfChild.taxe,
+                                                 received      : 0.0,
+                                                 receivedNet   : -heritageOfChild.taxe),
                                      Inheritance(personName    : "Mme. Lou-Ann MICHAUD",
                                                  percentFiscal : childShare,
                                                  brutFiscal    : brutChild,
                                                  abatFrac      : 1.0,
                                                  netFiscal     : heritageOfChild.netAmount,
-                                                 tax           : heritageOfChild.taxe)])
+                                                 tax           : heritageOfChild.taxe,
+                                                 received      : 0.0,
+                                                 receivedNet   : -heritageOfChild.taxe)])
 
         XCTAssertEqual(succession.kind, SuccessionKindEnum.legal)
         XCTAssertEqual(succession.yearOfDeath, 2021)

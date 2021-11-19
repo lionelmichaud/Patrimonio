@@ -74,7 +74,7 @@ class BarChartCashFlowVisitor: CashFlowStackedBarChartVisitorP {
         dataSet = _dataSet
     }
     
-    func buildStackedBarChart(element: CashFlowLine) {
+    func buildStackedBarChart(element: CashFlowLine) { // swiftlint:disable:this cyclomatic_complexity
         var revenues : ValuedRevenues
         var taxes    : ValuedTaxes
         

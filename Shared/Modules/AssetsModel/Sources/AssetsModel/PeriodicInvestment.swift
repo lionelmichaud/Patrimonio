@@ -147,19 +147,19 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
                 initialInterest  : Double = 0.0,
                 yearlyPayement   : Double = 0.0,
                 yearlyCost       : Double = 0.0) {
-        self.name                = name
-        self.note                = note
-        self.type                = type
-        self.firstYear           = firstYear
-        self.lastYear            = lastYear
-        self.interestRateType    = interestRateType
-        self.initialValue        = initialValue
-        self.initialInterest     = initialInterest
-        self.yearlyPayement      = yearlyPayement
-        self.yearlyCost = yearlyCost
-        self.refState = State(firstYear         : firstYear,
-                              initialInterest   : initialInterest,
-                              initialInvestment : initialValue - initialInterest)
+        self.name             = name
+        self.note             = note
+        self.type             = type
+        self.firstYear        = firstYear
+        self.lastYear         = lastYear
+        self.interestRateType = interestRateType
+        self.initialValue     = initialValue
+        self.initialInterest  = initialInterest
+        self.yearlyPayement   = yearlyPayement
+        self.yearlyCost       = yearlyCost
+        self.refState         = State(firstYear         : firstYear,
+                                      initialInterest   : initialInterest,
+                                      initialInvestment : initialValue - initialInterest)
     }
     
     // MARK: - Methods

@@ -40,11 +40,7 @@ struct BalanceSheetGlobalChartView: View {
         
         Lorsque la Famille est sélectionnée, tous les biens sont incorporés pour leur valeur globale.
 
-        Lorsque les Parents sont sélectionnés, les biens incorporés sont définis dans les préférences KPI ⚙️
-        et sont évalués à leur valeur possédée (patrimoniale).
-
-        Lorsqu'un seul individu est sélectionné, les biens sont évalués selon une méthode
-        et selon un filtre définis dans les préférences graphiques ⚙️.
+        Les biens incorporés sont filtrés et évalués selon les préférences graphiques (Bilan) ⚙️.
 
         Utiliser le bouton 📷 pour placer une copie d'écran dans votre album photo.
         """
@@ -74,7 +70,7 @@ struct BalanceSheetGlobalChartView: View {
                 // Graphique Evénement de Vie
                 if lifeEventChatIsPresented {
                     FamilyLifeEventChartView(endDate: lastYear ?? Date.now.year + 30)
-                        .frame(minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealHeight: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxHeight: geometry.size.height/4.0, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                        .frame(minHeight: 0, idealHeight: 100, maxHeight: geometry.size.height/4.0, alignment: .center)
                         .padding(.trailing, 4)
                 }
             }

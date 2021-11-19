@@ -108,7 +108,7 @@ extension FreeInvestement {
     /// - Parameters:
     ///   - netAmount: retrait net de charges sociales souhaité
     ///   - name: nom du débiteur ou nil
-    public mutating func withdrawal(netAmount : Double,
+    public mutating func withdrawal(netAmount : Double, // swiftlint:disable:this cyclomatic_complexity
                                     for name  : String = "",
                                     verbose   : Bool = false)
     -> (revenue          : Double,

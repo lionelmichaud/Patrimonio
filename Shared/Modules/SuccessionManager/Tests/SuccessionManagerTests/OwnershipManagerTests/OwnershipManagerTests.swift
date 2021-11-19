@@ -277,9 +277,11 @@ final class OwnershipManagerTests: XCTestCase {
                                          verbose               : Tests.verbose)
         
         // 100% UF pour le conjoint
+        let correctionFactor = 1.3
         let expectedMissingCapital =
-            ["M. Arthur MICHAUD"    : taxes["M. Arthur MICHAUD"]! - capitauxDeces["M. Arthur MICHAUD"]!.received.brut,
-             "Mme. Lou-Ann MICHAUD" : taxes["Mme. Lou-Ann MICHAUD"]! - capitauxDeces["Mme. Lou-Ann MICHAUD"]!.received.brut]
+            ["M. Arthur MICHAUD"    : correctionFactor * taxes["M. Arthur MICHAUD"]! - capitauxDeces["M. Arthur MICHAUD"]!.received.brut,
+             "Mme. Lou-Ann MICHAUD" : correctionFactor * taxes["Mme. Lou-Ann MICHAUD"]! - capitauxDeces["Mme. Lou-Ann MICHAUD"]!.received.brut
+            ]
         
         XCTAssertEqual(expectedMissingCapital, missingCapital)
     }
@@ -384,11 +386,6 @@ final class OwnershipManagerTests: XCTestCase {
         
         let taxes = ["M. Arthur MICHAUD"    : taxeEnfant,
                      "Mme. Lou-Ann MICHAUD" : taxeEnfant]
-        
-        // 100% UF pour le conjoint
-        let expectedMissingCapital =
-            ["M. Arthur MICHAUD"    : taxes["M. Arthur MICHAUD"]! - capitauxDeces["M. Arthur MICHAUD"]!.received.brut,
-             "Mme. Lou-Ann MICHAUD" : taxes["Mme. Lou-Ann MICHAUD"]! - capitauxDeces["Mme. Lou-Ann MICHAUD"]!.received.brut]
         
         XCTAssertNoThrow(try Tests.manager
             .modifyLifeInsuranceClauseIfNecessaryAndPossible(decedentName          : decedentName,

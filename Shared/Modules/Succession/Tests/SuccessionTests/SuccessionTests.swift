@@ -2,10 +2,38 @@ import XCTest
 @testable import Succession
 
 final class SuccessionTests: XCTestCase {
-    static let héritage1 = Inheritance(personName: "Héritier 1", percent: 0.4, brut: 40_000, net: 35_000, tax: 5_000)
-    static let héritage2 = Inheritance(personName: "Héritier 2", percent: 0.6, brut: 60_000, net: 50_000, tax: 10_000)
-    static let héritage3 = Inheritance(personName: "Héritier 1", percent: 0.5, brut: 50_000, net: 40_000, tax: 10_000)
-    static let héritage4 = Inheritance(personName: "Héritier 2", percent: 0.5, brut: 50_000, net: 40_000, tax: 10_000)
+    static let héritage1 = Inheritance(personName     : "Héritier 1",
+                                        percentFiscal : 0.4,
+                                        brutFiscal    : 40_000,
+                                        netFiscal     : 35_000,
+                                        tax           : 5_000,
+                                        received      : 30_000,
+                                        receivedNet   : 10_000,
+                                        creanceRestit : 38_000)
+    static let héritage2 = Inheritance(personName     : "Héritier 2",
+                                        percentFiscal : 0.6,
+                                        brutFiscal    : 60_000,
+                                        netFiscal     : 50_000,
+                                        tax           : 10_000,
+                                        received      : 30_000,
+                                        receivedNet   : 20_000,
+                                        creanceRestit : 38_000)
+    static let héritage3 = Inheritance(personName     : "Héritier 1",
+                                        percentFiscal : 0.5,
+                                        brutFiscal    : 50_000,
+                                        netFiscal     : 40_000,
+                                        tax           : 10_000,
+                                        received      : 30_000,
+                                        receivedNet   : 30_000,
+                                        creanceRestit : 38_000)
+    static let héritage4 = Inheritance(personName     : "Héritier 2",
+                                        percentFiscal : 0.5,
+                                        brutFiscal    : 50_000,
+                                        netFiscal     : 40_000,
+                                        tax           : 10_000,
+                                        received      : 30_000,
+                                        receivedNet   : 40_000,
+                                        creanceRestit : 38_000)
     static var succession1 : Succession!
     static var succession2 : Succession!
     static var successions : [Succession]!
@@ -45,14 +73,14 @@ final class SuccessionTests: XCTestCase {
         var successorsInheritedNetValue: [String: Double] =
             SuccessionTests.successions.successorsReceivedNetValue
         XCTAssertTrue(successorsInheritedNetValue.count > 0)
-        XCTAssertEqual(successorsInheritedNetValue["Héritier 1"], 75_000)
-        XCTAssertEqual(successorsInheritedNetValue["Héritier 2"], 90_000)
+        XCTAssertEqual(successorsInheritedNetValue["Héritier 1"], 40_000)
+        XCTAssertEqual(successorsInheritedNetValue["Héritier 2"], 60_000)
         
         // dictionnaire des héritages net reçu par chaque héritier dans une succession
         successorsInheritedNetValue = SuccessionTests.succession1.successorsReceivedNetValue
         XCTAssertTrue(successorsInheritedNetValue.count > 0)
-        XCTAssertEqual(successorsInheritedNetValue["Héritier 1"], 35_000)
-        XCTAssertEqual(successorsInheritedNetValue["Héritier 2"], 50_000)
+        XCTAssertEqual(successorsInheritedNetValue["Héritier 1"], 10_000)
+        XCTAssertEqual(successorsInheritedNetValue["Héritier 2"], 20_000)
     }
     
     func test_somme_des_héritages_reçus_par_les_héritiers_dans_une_succession() {
