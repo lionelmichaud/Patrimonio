@@ -114,7 +114,7 @@ public struct Assets {
                            with       : personAgeProvider)
         
         // initialiser le vecteur d'état de chaque FreeInvestement à la date courante
-        initializeFreeInvestementCurrentValue()
+        initializeInvestementsCurrentValue()
         checkValidity()
    }
     
@@ -148,14 +148,14 @@ public struct Assets {
                        with           : personAgeProvider)
 
         // initialiser le vecteur d'état de chaque FreeInvestement à la date courante
-        initializeFreeInvestementCurrentValue()
+        initializeInvestementsCurrentValue()
         checkValidity()
     }
     
    // MARK: - Methods
     
     /// Checks that each Asset item is valid. Crashes if not.
-    private func checkValidity() {
+    public func checkValidity() {
         periodicInvests.items.forEach {
             if !$0.isValid {
                 if !$0.ownership.isValid {
@@ -204,10 +204,14 @@ public struct Assets {
     /// Réinitialiser les valeurs courantes des investissements libres
     /// - Warning:
     ///   - Doit être appelée après le chargement d'un objet FreeInvestement depuis le fichier JSON
+    ///   - Doit être appelée après le chargement d'un objet PeriodicInvestement depuis le fichier JSON
     ///   - Doit être appelée après toute simulation ayant affectée le Patrimoine (succession)
-    public mutating func initializeFreeInvestementCurrentValue() {
+    public mutating func initializeInvestementsCurrentValue() {
         for idx in freeInvests.items.indices {
             freeInvests[idx].resetCurrentState()
+        }
+        for idx in periodicInvests.items.indices {
+            periodicInvests[idx].resetReferenceState()
         }
     }
     
@@ -345,8 +349,8 @@ public struct Assets {
                     scpis.value(atEndOf: year) +
                     sci.scpis.value(atEndOf: year)
                 
-            case .lifeInsuranceSuccession:
-                // on recherche uniquement les assurances vies
+            case .lifeInsuranceSuccession, .lifeInsuranceTransmission:
+                // on recherche uniquement les assurances vies dans ce contexte
                 return 0
         }
     }

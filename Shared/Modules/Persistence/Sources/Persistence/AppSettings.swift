@@ -21,6 +21,7 @@ public struct AppSettings: Decodable {
     var tableDir        : String
     public var allPersonsLabel : String
     public var adultsLabel     : String
+    public var childrenLabel   : String
 
     // MARK: - Static Methods
     

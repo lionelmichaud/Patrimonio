@@ -67,6 +67,10 @@ class OwnershipTests: XCTestCase {
     func test_isValid() {
         XCTAssertTrue(OwnershipTests.ownershipDemembre.isValid)
         XCTAssertTrue(OwnershipTests.ownershipNonDemembre.isValid)
+
+        var ownership = OwnershipTests.ownershipNonDemembre
+        ownership.fullOwners = []
+        XCTAssertTrue(ownership.isValid)
     }
     
     func test_isNotValid() {
@@ -91,10 +95,6 @@ class OwnershipTests: XCTestCase {
 
         ownership = OwnershipTests.ownershipNonDemembre
         ownership.fullOwners = [Owner(name: "Owner1 de 65 ans en 2020", fraction : 50)]
-        XCTAssertFalse(ownership.isValid)
-
-        ownership = OwnershipTests.ownershipNonDemembre
-        ownership.fullOwners = []
         XCTAssertFalse(ownership.isValid)
     }
     
@@ -325,7 +325,7 @@ class OwnershipTests: XCTestCase {
         
         // 2 NP
         var ownershipNonDemembre = Ownership(ageOf: OwnableTests.ageOf)
-        ownershipNonDemembre.isDismembered  = false
+        ownershipNonDemembre.isDismembered = false
         ownershipNonDemembre.fullOwners = [Owner(name: "Owner1", fraction : 70),
                                            Owner(name: "Owner2", fraction : 30)]
         ownedValues = ownershipNonDemembre.ownedValues(ofValue: 100,

@@ -41,14 +41,16 @@ struct ValuedRevenues {
             }
         })
     }
-
+    
     /// total de tous les revenus de l'année imposables à l'IRPP
     var totalTaxableIrpp: Double {
         // ne pas oublier les revenus en report d'imposition
-        perCategory.reduce(.zero, { result, element in result + element.value.taxablesIrpp.total })
-            + taxableIrppRevenueDelayedFromLastYear.value(atEndOf: 0)
+        perCategory.reduce(.zero, { result, element in
+            result + element.value.taxablesIrpp.total
+        })
+        + taxableIrppRevenueDelayedFromLastYear.value(atEndOf: 0)
     }
-
+    
     /// tableau des noms de catégories et valeurs total "créditée" des revenus de cette catégorie
     var summary: NamedValueTable {
         var table = NamedValueTable(tableName: name)
@@ -119,6 +121,18 @@ struct ValuedRevenues {
     }
 }
 
+extension ValuedRevenues: CustomStringConvertible {
+    public var description: String {
+        let nameStr = "Nom: \(name)\n"
+        var tableStr = ""
+        perCategory.forEach { category, revenues in
+            tableStr += "\(category.displayString) :\n"
+            tableStr += "\(String(describing: revenues).withPrefixedSplittedLines("  ")) :\n"
+        }
+        return nameStr + tableStr
+    }
+}
+
 // MARK: Agrégat de tables des revenus (perçu, taxable) pour une catégorie nommée donnée
 
 struct RevenuesInCategory {
@@ -145,11 +159,12 @@ struct RevenuesInCategory {
 
 extension RevenuesInCategory: CustomStringConvertible {
     var description: String {
-        var desc = "Nom: \(name)\n"
-        desc += credits.description.withPrefixedSplittedLines("  ") + "\n"
-        desc += taxablesIrpp.description.withPrefixedSplittedLines("  ") + "\n"
+        """
 
-        return desc
+        Nom: \(name)
+        \(credits.description.withPrefixedSplittedLines("  "))
+        \(taxablesIrpp.description.withPrefixedSplittedLines("  "))
+        """
     }
 }
 

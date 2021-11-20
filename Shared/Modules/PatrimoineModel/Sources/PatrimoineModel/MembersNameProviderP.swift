@@ -16,6 +16,7 @@ public protocol MembersNameProviderP {
     var childrenName : [String] { get }
 
     func childrenAliveName(atEndOf year: Int) -> [String]?
+    func adultsAliveName(atEndOf year: Int) -> [String]?
 }
 
 public protocol MembersProviderP {

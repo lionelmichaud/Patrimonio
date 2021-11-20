@@ -1,0 +1,42 @@
+{
+    "version" :
+    {
+        "version" : "0.1",
+        "date"    : "2020-10-12T23:00:00+01:00",
+        "comment" : null
+    },
+    "items" : [
+        {
+            "id"           : "282CC28F-0BC2-4323-AEA3-1FD3FD6E0EBF",
+            "name"         : "EPARGNE PIERRE-Voisin",
+            "note"         : "Actualisé le 15/02/2021",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "M. Lionel MICHAUD",
+                        "fraction" : 90
+                    },
+                    {
+                        "name"     : "Mme. Vanessa MICHAUD",
+                        "fraction" : 10
+                    }
+                ],
+                "nue_propriétaires"   :
+                [
+                ],
+                "usufruitiers"        :
+                [
+                ]
+            },
+            "buyingDate"   : "2019-09-30T21  :53  :04Z",
+            "buyingPrice"  : 72365,
+            "willBeSold"   : false,
+            "sellingDate"  : "2100-04-23T21 :53 :04Z",
+            "revaluatRate" : 0.0,
+            "interestRate" : 0.0
+        }
+    ]
+}

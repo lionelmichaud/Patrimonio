@@ -112,6 +112,7 @@ struct AmountView: View {
     let label   : String
     let amount  : Double
     let digit   : Int
+    let kEuro   : Bool
     let weight  : Font.Weight
     let comment : String?
     
@@ -121,9 +122,15 @@ struct AmountView: View {
                 .fontWeight(weight)
             Spacer()
             if comment != nil { Text(comment!).foregroundColor(.secondary) }
-            Text(amount.€String(digit: digit))
-                .fontWeight(weight)
-                .frame(maxWidth: 100, alignment: .trailing)
+            if kEuro {
+                Text(amount.k€String)
+                    .fontWeight(weight)
+                    .frame(maxWidth: 100, alignment: .trailing)
+            } else {
+                Text(amount.€String(digit: digit))
+                    .fontWeight(weight)
+                    .frame(maxWidth: 100, alignment: .trailing)
+            }
         }
     }
     
@@ -136,11 +143,13 @@ struct AmountView: View {
     ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
     init(label   : String,
          amount  : Double,
+         kEuro   : Bool        = false,
          digit   : Int         = 0,
          weight  : Font.Weight = .regular,
          comment : String?     = nil) {
         self.label   = label
         self.amount  = amount
+        self.kEuro   = kEuro
         self.digit   = digit
         self.weight  = weight
         self.comment = comment

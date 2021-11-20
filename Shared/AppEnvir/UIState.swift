@@ -62,22 +62,23 @@ final class UIState: ObservableObject {
     
     // MARK: - Etat de la vue Compute
     struct ComputationState {
-        var nbYears : Double = 15
+        var nbYears : Double = 50
         var nbRuns  : Double = 100
     }
     
     // MARK: - Etat des filtres graphes Bilan
     struct BalanceSheetChartState {
-        var nameSelection : String = AppSettings.shared.allPersonsLabel
+        var nameSelection : String             = AppSettings.shared.allPersonsLabel
         var combination   : BalanceCombination = .both
-        var itemSelection : ItemSelectionList = []
+        var itemSelection : ItemSelectionList  = []
     }
     
     // MARK: - Etat des filtres graphes Cash Flow
     struct CashFlowChartState {
-        var combination            : CashCombination = .both
-        var itemSelection          : ItemSelectionList = []
-        var onlyOneCategorySeleted : Bool {
+        var parentChildrenSelection : String            = AppSettings.shared.adultsLabel
+        var combination             : CashCombination   = .both
+        var itemSelection           : ItemSelectionList = []
+        var onlyOneCategorySeleted  : Bool {
             let count = itemSelection.reduce(.zero, { result, element in result + (element.selected ? 1 : 0) })
             return count == 1
         }

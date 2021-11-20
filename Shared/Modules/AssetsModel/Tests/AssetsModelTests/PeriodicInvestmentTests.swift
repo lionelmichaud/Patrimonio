@@ -49,6 +49,7 @@ class PeriodicInvestementTests: XCTestCase {
         
         PeriodicInvestementTests.fi = PeriodicInvestement(fromFile   : PeriodicInvestement.defaultFileName,
                                                           fromBundle : Bundle.module)
+        PeriodicInvestementTests.fi.resetReferenceState()
         
         PeriodicInvestementTests.inflation =
             PeriodicInvestementTests

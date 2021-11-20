@@ -64,7 +64,7 @@ public enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
                     """
             case .netSuccessionAt2ndDeath:
                 return """
-                    Héritage total net reçu par les enfants au dernier décès des parents.
+                    Héritage total net reçu par les enfants après le dernier décès des parents.
                     """
             case .successionTaxesAt1stDeath:
                 return """

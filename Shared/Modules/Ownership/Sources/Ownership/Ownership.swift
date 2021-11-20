@@ -37,12 +37,13 @@ public enum EvaluatedFraction: String, PickableEnumP {
 // MARK: - Enumération de Contexte d'évaluation d'un Patrmoine (régles fiscales à appliquer)
 
 public enum EvaluationContext: String, PickableEnumP {
-    case ifi                     = "IFI"
-    case isf                     = "ISF"
-    case legalSuccession         = "Succession Légale"
-    case lifeInsuranceSuccession = "Succession Assurance Vie"
-    case patrimoine              = "Patrimoniale"
-    
+    case ifi                       = "Valeur fiscale IFI"
+    case isf                       = "Valeur fiscale ISF"
+    case legalSuccession           = "Valeur fiscale Succession Légale"
+    case lifeInsuranceSuccession   = "Valeur fiscale Succession Assurance Vie"
+    case lifeInsuranceTransmission = "Valeur transmise Succession Assurance Vie"
+    case patrimoine                = "Valeur Patrimoniale"
+
     public var pickerString: String {
         return self.rawValue
     }
@@ -99,7 +100,15 @@ public struct Ownership {
             return (bareOwners.isNotEmpty && bareOwners.isvalid) &&
                 (usufructOwners.isNotEmpty && usufructOwners.isvalid)
         } else {
-            return fullOwners.isNotEmpty && fullOwners.isvalid
+            // aucun propriétaire est autorisé
+            return fullOwners.isvalid
+        }
+    }
+    public var isOwnedBySomebody: Bool {
+        if isDismembered {
+            return usufructOwners.isNotEmpty
+        } else {
+            return fullOwners.isNotEmpty
         }
     }
     
@@ -118,7 +127,7 @@ public struct Ownership {
     }
     
     /// Factoriser les parts des usufuitier et des nue-propriétaires si nécessaire
-    mutating func groupShares() {
+    public mutating func groupShares() {
         if isDismembered {
             fullOwners = [ ]
             usufructOwners.groupShares()

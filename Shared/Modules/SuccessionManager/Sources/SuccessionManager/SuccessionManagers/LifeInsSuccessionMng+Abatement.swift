@@ -17,24 +17,19 @@ extension LifeInsuranceSuccessionManager {
     /// Calcule, pour chaque héritier `spouseName` et `childrenName` d'un défunt nommé `decedentName`,
     /// le montant de l'abattement par héritier sur les capitaux décès
     /// - Parameters:
-    ///   - decedentName: nom du défunt
     ///   - invests: ensemble d'assurances vie
     ///   - spouseName: nom du conjoint du défunt
     ///   - childrenName: nom des enfants du défunt
     ///   - verbose: sorties console
     /// - Returns: [nom héritier : fraction de l'abattement maximum [0;1] ]
-    func abattementsParPersonne(of decedentName : String,
-                                with invests    : [FinancialEnvelopP],
-                                spouseName      : String?,
-                                childrenName    : [String]?,
-                                verbose         : Bool = false) -> NameValueDico {
+    func abattementsParPersonne(for invests  : [FinancialEnvelopP],
+                                spouseName   : String?,
+                                childrenName : [String]?,
+                                verbose      : Bool = false) -> NameValueDico {
         // calculer les montants des abattements par couple UF / NP
         // pour les donataires d'AV avec clause démembrée
-        let setAbatCoupleUFNP = abattementsParCouple(of           : decedentName,
-                                                     with         : invests,
-                                                     spouseName   : spouseName,
-                                                     childrenName : childrenName,
-                                                     verbose      : verbose)
+        let setAbatCoupleUFNP = abattementsParCouple(for     : invests,
+                                                     verbose : verbose)
         // en déduire l'abattement par personne
         var abattementsDico = NameValueDico()
         setAbatCoupleUFNP.forEach { couple in
@@ -74,26 +69,19 @@ extension LifeInsuranceSuccessionManager {
     /// Calcule, pour chaque héritier `spouseName` et `childrenName` d'un défunt nommé `decedentName`,
     /// le montant de l'abattement par héritier sur les capitaux décès reçus d'AV avec clause démembrée
     /// - Parameters:
-    ///   - decedentName: nom du défunt
     ///   - invests: ensemble d'assurances vie
-    ///   - spouseName: nom du conjoint du défunt
-    ///   - childrenName: nom des enfants du défunt
     ///   - verbose: sorties console
     /// - Returns: set de couples (UF, NP)
-    func abattementsParCouple(of decedentName : String,
-                              with invests    : [FinancialEnvelopP],
-                              spouseName      : String?,
-                              childrenName    : [String]?,
-                              verbose         : Bool = false) -> SetAbatCoupleUFNP {
+    func abattementsParCouple(for invests : [FinancialEnvelopP],
+                              verbose     : Bool = false) -> SetAbatCoupleUFNP {
         var setAbatCoupleUFNP = SetAbatCoupleUFNP()
         
         // pour chaque assurance vie
         invests.forEach { invest in
-            setAbatCoupleUFNP.formUnion(abattementsParAssurance(of           : decedentName,
-                                                                spouseName   : spouseName,
-                                                                childrenName : childrenName,
-                                                                for          : invest,
-                                                                verbose      : verbose))
+            if invest.isOwnedBySomebody {
+                setAbatCoupleUFNP.formUnion(abattementsParAssurance(for     : invest,
+                                                                    verbose : verbose))
+            }
         }
         if verbose {
             print(setAbatCoupleUFNP)
@@ -101,11 +89,8 @@ extension LifeInsuranceSuccessionManager {
         return setAbatCoupleUFNP
     }
     
-    func abattementsParAssurance(of decedentName : String,
-                                 spouseName      : String?,
-                                 childrenName    : [String]?,
-                                 for invest      : FinancialEnvelopP,
-                                 verbose         : Bool = false) -> SetAbatCoupleUFNP {
+    func abattementsParAssurance(for invest : FinancialEnvelopP,
+                                 verbose    : Bool = false) -> SetAbatCoupleUFNP {
         guard let clause = invest.clause else {
             return SetAbatCoupleUFNP()
         }

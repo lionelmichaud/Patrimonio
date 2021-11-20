@@ -7,6 +7,7 @@
 
 import Foundation
 import AppFoundation
+import Persistence
 import NamedValue
 import Charts // https://github.com/danielgindi/Charts.git
 
@@ -18,10 +19,11 @@ import Charts // https://github.com/danielgindi/Charts.git
 ///   - itemSelectionList: séries sélectionnées pour être affichées
 /// - Returns: DataSet
 class BarChartCashFlowVisitor: CashFlowStackedBarChartVisitorP {
-
+    
     var dataSet: BarChartDataSet?
     private var _dataSet          = BarChartDataSet()
     private var dataEntries         = [ChartDataEntry]()
+    private var personSelection     : String
     private var combination         : CashCombination = .both
     private var itemSelectionList   : ItemSelectionList
     private var barChartDataEntry   = [BarChartDataEntry]()
@@ -40,24 +42,29 @@ class BarChartCashFlowVisitor: CashFlowStackedBarChartVisitorP {
     private var labelInvest         = [String]()
     private var positiveLabels      = [String]()
     private var negativeLabels      = [String]()
-
+    
     init(element           : CashFlowArray,
+         personSelection   : String,
          combination       : CashCombination = .both,
          itemSelectionList : ItemSelectionList) {
+        self.personSelection   = personSelection
         self.combination       = combination
         self.itemSelectionList = itemSelectionList
         buildStackedBarChart(element: element)
     }
-
+    
     func buildStackedBarChart(element: CashFlowArray) {
         // si la table est vide alors quitter
         guard element.isNotEmpty else { return }
-
+        
+        positiveLabels = []
+        negativeLabels = []
+        
         for idx in element.startIndex..<element.endIndex {
             processingFirstLine = (idx == element.startIndex)
             element[idx].accept(self)
         }
-
+        
         let labels = positiveLabels + negativeLabels
         _dataSet = BarChartDataSet(entries: dataEntries,
                                    label: (labels.count == 1 ? labels.first : nil))
@@ -66,65 +73,106 @@ class BarChartCashFlowVisitor: CashFlowStackedBarChartVisitorP {
                                              numberNegative: negativeLabels.count)
         dataSet = _dataSet
     }
-
-    func buildStackedBarChart(element: CashFlowLine) {
+    
+    func buildStackedBarChart(element: CashFlowLine) { // swiftlint:disable:this cyclomatic_complexity
+        var revenues : ValuedRevenues
+        var taxes    : ValuedTaxes
+        
+        if personSelection == AppSettings.shared.adultsLabel {
+            revenues = element.adultsRevenues
+            taxes    = element.adultTaxes
+        } else {
+            revenues = element.childrenRevenues
+            taxes    = element.childrenTaxes
+        }
+        
         switch combination {
             case .revenues:
-                element.adultsRevenues.accept(self)
-                element.sciCashFlowLine.accept(self)
+                revenues.accept(self)
                 if processingFirstLine {
-                    positiveLabels = labelRevenues + labelSCI
+                    positiveLabels += labelRevenues
                 }
+                
+                if personSelection == AppSettings.shared.adultsLabel {
+                    element.sciCashFlowLine.accept(self)
+                    if processingFirstLine {
+                        positiveLabels += labelSCI
+                    }
+                }
+                
                 dataEntries.append(BarChartDataEntry(x       : element.year.double(),
                                                      yValues : yRevenues + ySCI))
-
+                
             case .expenses:
-                element.adultTaxes.accept(self)
-                yExpenses = -element.lifeExpenses.filtredTableValue(with : itemSelectionList)
-                yDebt     = -element.debtPayements.filtredTableValue(with     : itemSelectionList)
-                yInvest   = -element.investPayements.filtredTableValue(with : itemSelectionList)
+                taxes.accept(self)
                 if processingFirstLine {
-                    labelExpenses = element.lifeExpenses.filtredTableName(with: itemSelectionList)
-                    labelDebt     = element.debtPayements.filtredTableName(with: itemSelectionList)
-                    labelInvest   = element.investPayements.filtredTableName(with: itemSelectionList)
-                    negativeLabels = labelExpenses + labelTaxes + labelDebt + labelInvest
+                    negativeLabels += labelTaxes
                 }
+                
+                if personSelection == AppSettings.shared.adultsLabel {
+                    yExpenses = -element.lifeExpenses.filtredTableValue(with : itemSelectionList)
+                    yDebt     = -element.debtPayements.filtredTableValue(with     : itemSelectionList)
+                    yInvest   = -element.investPayements.filtredTableValue(with : itemSelectionList)
+                    if processingFirstLine {
+                        labelExpenses = element.lifeExpenses.filtredTableName(with: itemSelectionList)
+                        labelDebt     = element.debtPayements.filtredTableName(with: itemSelectionList)
+                        labelInvest   = element.investPayements.filtredTableName(with: itemSelectionList)
+                        negativeLabels += labelExpenses + labelDebt + labelInvest
+                    }
+                }
+                
                 dataEntries.append(BarChartDataEntry(x       : element.year.double(),
-                                                     yValues : yExpenses + yTaxes + yDebt + yInvest))
-
+                                                     yValues : yTaxes + yExpenses + yDebt + yInvest))
+                
             case .both:
-                element.adultsRevenues.accept(self)
-                element.sciCashFlowLine.accept(self)
-                element.adultTaxes.accept(self)
-                yExpenses = -element.lifeExpenses.filtredTableValue(with : itemSelectionList)
-                yDebt     = -element.debtPayements.filtredTableValue(with     : itemSelectionList)
-                yInvest   = -element.investPayements.filtredTableValue(with : itemSelectionList)
+                revenues.accept(self)
                 if processingFirstLine {
-                    positiveLabels = labelRevenues + labelSCI
-                    labelExpenses = element.lifeExpenses.filtredTableName(with: itemSelectionList)
-                    labelDebt     = element.debtPayements.filtredTableName(with: itemSelectionList)
-                    labelInvest   = element.investPayements.filtredTableName(with: itemSelectionList)
-                    negativeLabels = labelExpenses + labelTaxes + labelDebt + labelInvest
+                    positiveLabels += labelRevenues
                 }
+                
+                if personSelection == AppSettings.shared.adultsLabel {
+                    element.sciCashFlowLine.accept(self)
+                    if processingFirstLine {
+                        positiveLabels += labelSCI
+                    }
+                }
+                
+                taxes.accept(self)
+                if processingFirstLine {
+                    negativeLabels += labelTaxes
+                }
+                
+                if personSelection == AppSettings.shared.adultsLabel {
+                    yExpenses = -element.lifeExpenses.filtredTableValue(with : itemSelectionList)
+                    yDebt     = -element.debtPayements.filtredTableValue(with     : itemSelectionList)
+                    yInvest   = -element.investPayements.filtredTableValue(with : itemSelectionList)
+                    if processingFirstLine {
+                        labelExpenses = element.lifeExpenses.filtredTableName(with: itemSelectionList)
+                        labelDebt     = element.debtPayements.filtredTableName(with: itemSelectionList)
+                        labelInvest   = element.investPayements.filtredTableName(with: itemSelectionList)
+                        negativeLabels += labelExpenses + labelDebt + labelInvest
+                    }
+                }
+                
                 dataEntries.append(BarChartDataEntry(x       : element.year.double(),
-                                                     yValues : yRevenues + ySCI + yExpenses + yTaxes + yDebt + yInvest))
+                                                     yValues : yRevenues + ySCI + yTaxes + yExpenses + yDebt + yInvest))
         }
     }
-
+    
     func buildStackedBarChart(element: ValuedRevenues) {
         if processingFirstLine {
             labelRevenues = element.summaryFiltredNames(with: itemSelectionList)
         }
         yRevenues = element.summaryFiltredValues(with: itemSelectionList)
     }
-
+    
     func buildStackedBarChart(element: ValuedTaxes) {
         if processingFirstLine {
             labelTaxes = element.summaryFiltredNames(with: itemSelectionList)
         }
-       yTaxes = -element.summaryFiltredValues(with: itemSelectionList)
+        yTaxes = -element.summaryFiltredValues(with: itemSelectionList)
     }
-
+    
     func buildStackedBarChart(element: SciCashFlowLine) {
         if processingFirstLine {
             labelSCI = element.summaryFiltredNames(with: itemSelectionList)

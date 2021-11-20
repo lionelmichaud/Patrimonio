@@ -7,6 +7,7 @@ import Succession
 import Liabilities
 import PatrimoineModel
 import FamilyModel
+import SuccessionManager
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CashFlow")
 
@@ -29,9 +30,9 @@ struct CashFlowLine {
     /// les comptes annuels de la SCI
     let sciCashFlowLine : SciCashFlowLine
     
-    // Les comptes annuels des Parents
+    // Les comptes annuels
     
-    // Revenus des Parents
+    // Revenus
     
     /// Profits des Parents en report d'imposition d'une année sur l'autre
     var taxableIrppRevenueDelayedToNextYear = Debt(name  : "REVENU IMPOSABLE REPORTE A L'ANNEE SUIVANTE",
@@ -41,13 +42,16 @@ struct CashFlowLine {
     /// Agrégat des Revenus annuels des Parents (hors SCI)
     var adultsRevenues = ValuedRevenues(name: "REVENUS PARENTS HORS SCI")
     
+    /// Agrégat des Revenus annuels des Enfants
+    var childrenRevenues = ValuedRevenues(name: "REVENUS ENFANTS")
+    
     /// Total de tous les revenus nets de l'année des Parents, versé en compte courant
     ///  - avant taxes et impots
     ///  - inclus revenus de la SCI
     ///  - EXCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
     ///
     /// Note: Utilisé pour calculer le Net Cash-Flow de fin d'année (à réinvestir en fin d'année)
-    var sumOfRevenuesSalesExcluded: Double {
+    var sumOfAdultsRevenuesSalesExcluded: Double {
         adultsRevenues.totalRevenueSalesExcluded +
             sciCashFlowLine.netRevenuesSalesExcluded
     }
@@ -56,12 +60,15 @@ struct CashFlowLine {
     /// - avant taxes et impots
     /// - inclus revenus de la SCI
     /// - INCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
-    var sumOfRevenues: Double {
+    var sumOfAdultsRevenues: Double {
         adultsRevenues.totalRevenue +
             sciCashFlowLine.netRevenues
     }
-    
-    // Dépenses des Parents
+    var sumOfChildrenRevenues: Double {
+        childrenRevenues.totalRevenue
+    }
+
+    // Dépenses
     
     /// Agrégat des Taxes annuelles payées par les Parents
     var adultTaxes      = ValuedTaxes(name: "Taxes des parents")
@@ -79,30 +86,37 @@ struct CashFlowLine {
     var investPayements = NamedValueTable(tableName: "Investissements des parents")
     
     /// Total des dépenses annuelles des Parents
-    var sumOfExpenses: Double {
+    var sumOfAdultsExpenses: Double {
         adultTaxes.total +
             lifeExpenses.total +
             debtPayements.total +
             investPayements.total
     }
-    
+    /// Total des dépenses annuelles des Enfants
+    var sumOfChildrenExpenses: Double {
+        childrenTaxes.total
+    }
+
     // Soldes nets annuels (Revenus - Dépenses) des Parents
     
     /// Solde net des revenus - dépenses courants des Parents - dépenses communes (hors ventes de bien en séparation de bien)
     /// Solde net de tous les revenus - dépenses (y.c. ventes de bien en séparation de bien))
     /// - inclus revenus/dépenses de la SCI
     /// - EXCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
-    var netCashFlowSalesExcluded: Double {
-        sumOfRevenuesSalesExcluded - sumOfExpenses
+    var netAdultsCashFlowSalesExcluded: Double {
+        sumOfAdultsRevenuesSalesExcluded - sumOfAdultsExpenses
     }
     
     /// Solde net de tous les revenus - dépenses (y.c. ventes de bien en séparation de bien))
     /// - inclus revenus/dépenses de la SCI
     /// - INCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
-    var netCashFlow: Double {
-        sumOfRevenues - sumOfExpenses
+    var netAdultsCashFlow: Double {
+        sumOfAdultsRevenues - sumOfAdultsExpenses
     }
-    
+    var netChildrenCashFlow: Double {
+        sumOfChildrenRevenues - sumOfChildrenExpenses
+    }
+
     // Successions survenus dans l'année
     
     /// Les successions légales survenues dans l'année
@@ -110,6 +124,9 @@ struct CashFlowLine {
     
     /// Les transmissions d'assurances vie survenues dans l'année
     var lifeInsSuccessions : [Succession] = []
+    
+    /// Solde net des héritages reçus par les enfants dans l'année
+    var netChildrenInheritances: [Double] = [] // un seul élément ou aucun
     
     // MARK: - Initialization
     
@@ -132,14 +149,17 @@ struct CashFlowLine {
          using model                           : Model) throws {
         
         self.year = year
-        let adultsNames = family.adults.compactMap {
-            $0.isAlive(atEndOf: year) ? $0.displayName : nil
-        }
-        adultsRevenues.taxableIrppRevenueDelayedFromLastYear.setValue(to: taxableIrppRevenueDelayedFromLastyear)
+        let adultsNames = family.adultsAliveName(atEndOf: year) ?? []
+        adultsRevenues
+            .taxableIrppRevenueDelayedFromLastYear
+            .setValue(to: taxableIrppRevenueDelayedFromLastyear)
         
         /// initialize life insurance yearly rebate on taxes
         // TODO: mettre à jour le model de défiscalisation Asurance Vie
-        var lifeInsuranceRebate = model.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson * family.nbOfAdultAlive(atEndOf: year).double()
+        var lifeInsuranceRebate =
+            model.fiscalModel
+            .lifeInsuranceTaxes
+            .model.rebatePerPerson * family.nbOfAdultAlive(atEndOf: year).double()
         
         /// SCI: calculer le cash flow de la SCI
         sciCashFlowLine = SciCashFlowLine(withYear : year,
@@ -185,9 +205,9 @@ struct CashFlowLine {
                              using          : model.fiscalModel)
             
             /// FREE INVEST: populate revenue, des investissements financiers libres et investir/retirer le solde net du cash flow de l'année
-            try manageYearlyNetCashFlow(of                  : patrimoine,
-                                        for                 : adultsNames,
-                                        lifeInsuranceRebate : &lifeInsuranceRebate)
+            try manageAdultsYearlyNetCashFlow(of                  : patrimoine,
+                                              forAdults           : adultsNames,
+                                              lifeInsuranceRebate : &lifeInsuranceRebate)
         }
         #if DEBUG
         //Swift.print("Year = \(year), Revenus = \(sumOfrevenues), Expenses = \(sumOfExpenses), Net cash flow = \(netCashFlow)")
@@ -257,11 +277,11 @@ struct CashFlowLine {
     ///   - adultsName: des adultes
     ///   - lifeInsuranceRebate: franchise d'imposition sur les plus values
     /// - Throws: Si pas assez de capital -> CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)
-    fileprivate mutating func manageYearlyNetCashFlow(of patrimoine       : Patrimoin,
-                                                      for adultsName      : [String],
-                                                      lifeInsuranceRebate : inout Double) throws {
+    fileprivate mutating func manageAdultsYearlyNetCashFlow(of patrimoine        : Patrimoin,
+                                                            forAdults adultsName : [String],
+                                                            lifeInsuranceRebate  : inout Double) throws {
         let netCashFlowManager       = NetCashFlowManager()
-        let netCashFlowSalesExcluded = self.netCashFlowSalesExcluded
+        let netCashFlowSalesExcluded = self.netAdultsCashFlowSalesExcluded
         
         // On ne gère pas ici le ré-investissement des biens vendus dans l'année et détenus en propre
         // c'est fait en amont au moment de la vente

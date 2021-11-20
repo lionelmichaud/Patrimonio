@@ -15,7 +15,7 @@ extension FreeInvestement {
     func withdrawal(netAmount        : Double,
                     maxPermitedValue : Double)
     -> (brutAmount       : Double,
-        brutAmountSplit  : (investement: Double, interest: Double),
+        brutAmountSplit  : (investment: Double, interest: Double),
         revenue          : Double,
         interests        : Double,
         netInterests     : Double,
@@ -23,7 +23,7 @@ extension FreeInvestement {
         socialTaxes      : Double) {
         var revenue = netAmount
         var brutAmount       : Double
-        var brutAmountSplit  : (investement  : Double, interest  : Double)
+        var brutAmountSplit  : (investment  : Double, interest  : Double)
         var netInterests     : Double // intérêts nets de charges sociales
         var taxableInterests : Double // part imposable à l'IRPP des intérêts nets de charges sociales
         var socialTaxes      : Double // charges sociales sur les intérêts
@@ -108,8 +108,9 @@ extension FreeInvestement {
     /// - Parameters:
     ///   - netAmount: retrait net de charges sociales souhaité
     ///   - name: nom du débiteur ou nil
-    public mutating func withdrawal(netAmount : Double,
-                                    for name  : String = "")
+    public mutating func withdrawal(netAmount : Double, // swiftlint:disable:this cyclomatic_complexity
+                                    for name  : String = "",
+                                    verbose   : Bool = false)
     -> (revenue          : Double,
         interests        : Double,
         netInterests     : Double,
@@ -128,14 +129,14 @@ extension FreeInvestement {
         
         let (checkOwnership, isAUsufructOwner, isAfullOwner, isTheUniqueFullOwner) =
             (name != "",
-             ownership.hasAnUsufructOwner(named: name),
-             ownership.hasAFullOwner(named: name),
-             ownership.hasAUniqueFullOwner(named: name))
+             ownership.isDismembered && ownership.hasAnUsufructOwner(named: name),
+             !ownership.isDismembered && ownership.hasAFullOwner(named: name),
+             !ownership.isDismembered && ownership.hasAUniqueFullOwner(named: name))
         
         let updateOwnership  : Bool
         let updateInterests  : Bool
         let maxPermitedValue : Double
-        var ownedValueBefore : Double            = 0
+        var ownedValueBefore : Double = 0
         var theOwnedValues   : NameValueDico = [:]
         
         switch (checkOwnership, isAUsufructOwner, isAfullOwner, isTheUniqueFullOwner) {
@@ -148,7 +149,7 @@ extension FreeInvestement {
             case (true, true, _, _):
                 // on doit tenir compte des droits de propriété de `name` sur le bien
                 // Le bien est démembré et 'name' est un des UF
-                guard let interest = cumulatedInterestsAfterSuccession else {
+                guard let interest = cumulatedInterestsSinceSuccession else {
                     // il n'y pas d'intérêts à retirer de ce bien
                     return zero
                 }
@@ -184,9 +185,8 @@ extension FreeInvestement {
                 return zero
                 
             default:
-                customLog.log(level: .error,
-                              "FreeInvestementError.remove: cas non prévu")
-                return zero
+                customLog.log(level: .fault, "cas non prévu")
+                fatalError("cas non prévu")
         }
         
         guard maxPermitedValue > 0 else {
@@ -203,28 +203,33 @@ extension FreeInvestement {
         } else {
             // décrémenter le capital (versement et intérêts) du montant brut retiré pour obtenir le net (de charges sociales) souhaité
             currentState.interest   -= _removal.brutAmountSplit.interest
-            currentState.investment -= _removal.brutAmountSplit.investement
+            currentState.investment -= _removal.brutAmountSplit.investment
         }
         
         // actualiser les intérêts cumulés depuis la transmission compte tenu de ce qui vient d'être retiré
         if updateInterests {
-            currentInterestsAfterTransmission?.interest -= _removal.brutAmount
+            currentStateAfterTransmission?.interest -= _removal.brutAmount
         }
         
         // actualiser les droits de propriété en tenant compte du retrait qui va être fait
         if updateOwnership {
             let ownedValueAfter = ownedValueBefore - _removal.brutAmount
-            print("Avant   = \(ownedValueBefore.k€String)")
-            print("Retrait = \(_removal.brutAmount.k€String)")
-            print("Après   = \(ownedValueAfter.k€String)")
-            print("Ownership avant = \n", String(describing: ownership))
+            if verbose {
+                print("Avant   = \(ownedValueBefore.k€String)")
+                print("Retrait = \(_removal.brutAmount.k€String)")
+                print("Après   = \(ownedValueAfter.k€String)")
+                print("Ownership avant = \n", String(describing: ownership))
+            }
             theOwnedValues[name] = ownedValueAfter
             ownership.fullOwners = []
             theOwnedValues.forEach { (name: String, value: Double) in
                 ownership.fullOwners.append(Owner(name     : name,
                                                   fraction : value / currentState.value * 100.0))
             }
-            print("Ownership après = \n", String(describing: ownership))
+            ownership.groupShares()
+            if verbose {
+                print("Ownership après = \n", String(describing: ownership))
+            }
         }
         
         return (revenue          : _removal.revenue,
@@ -232,5 +237,35 @@ extension FreeInvestement {
                 netInterests     : _removal.netInterests,
                 taxableInterests : _removal.taxableInterests,
                 socialTaxes      : _removal.socialTaxes)
+    }
+
+    /// Retirer les capitaux décès de `decedentName` de l'assurance vie
+    /// si l'AV n'est pas démembrée et si `decedentName` est un des PP
+    /// - Warning: les droits de propriété ne sont PAS mis à jour en conséquence
+    /// - Parameters:
+    ///   - decedentName: nom du défunt
+    ///   - year: année du décès
+    public mutating func withdrawLifeInsuranceCapitalDeces(of decedentName : String) {
+        guard isLifeInsurance else {
+            return
+        }
+        guard !ownership.isDismembered else {
+            return
+        }
+        guard ownership.hasAFullOwner(named: decedentName) else {
+            // le défunt n'a aucun droit de propriété sur le bien
+            return
+        }
+
+        // capitaux décès
+        let ownedValueDecedent = ownedValue(by                : decedentName,
+                                            atEndOf           : currentState.year,
+                                            evaluationContext : .lifeInsuranceSuccession)
+
+        // les capitaux décès sont retirés de l'assurance vie pour être distribuée en cash
+        // décrémenter le capital (versement et intérêts) du montant retiré
+        let withdrawal = split(removal: ownedValueDecedent)
+        currentState.interest   -= withdrawal.interest
+        currentState.investment -= withdrawal.investment
     }
 }

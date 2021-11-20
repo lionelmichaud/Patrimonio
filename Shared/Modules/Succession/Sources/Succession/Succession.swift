@@ -22,33 +22,42 @@ public struct Succession: Identifiable {
     
     public let id           = UUID()
     // nature
-    public let kind: SuccessionKindEnum
+    public let kind         : SuccessionKindEnum
     // année de la succession
     public let yearOfDeath  : Int
     // personne dont on fait la succession
     public let decedentName : String
-    // masses successorale
+    // masse successorale en valeure fiscale
     public let taxableValue : Double
     // liste des héritages par héritier
     public let inheritances : [Inheritance]
     
-    // dictionnaire des héritages net reçu par chaque héritier dans une succession
-    var successorsInheritedNetValue: [String: Double] {
+    // dictionnaire des héritages net reçu en cash par chaque héritier dans une succession
+    var successorsReceivedNetValue: [String: Double] {
         inheritances.reduce(into: [:]) { counts, inheritance in
-            counts[inheritance.successorName, default: 0] += inheritance.net
+            counts[inheritance.successorName, default: 0] += inheritance.receivedNet
         }
     }
     
     // somme des héritages reçus par les héritiers dans une succession
-    public var net: Double {
-        inheritances.sum(for: \.net)
+    public var netFiscal: Double {
+        inheritances.sum(for: \.netFiscal)
     }
     
     // somme des taxes payées par les héritiers dans une succession
     public var tax: Double {
         inheritances.sum(for: \.tax)
     }
-    
+    public var received      : Double {
+        inheritances.sum(for: \.received)
+    }
+    public var receivedNet   : Double {
+        inheritances.sum(for: \.receivedNet)
+    }
+    public var creanceRestit : Double {
+        inheritances.sum(for: \.creanceRestit)
+    }
+
     // MARK: - Initializer
     
     public init(kind         : SuccessionKindEnum,
@@ -74,20 +83,18 @@ extension Succession: CustomStringConvertible {
         Type de succession:         \(kind.rawValue)
         Défunt:                     \(decedentName)
         Année du décès:             \(yearOfDeath)
-        Masse successorale taxable: \(taxableValue.k€String)
+        Masse successorale taxable: \(taxableValue.k€String) (valeur fiscale)
         Héritiers:
 
-        """
-            + String(describing: inheritances))
-            .withPrefixedSplittedLines("  ")
+        """ + String(describing: inheritances).withPrefixedSplittedLines("  "))
     }
 }
 extension Array where Element == Succession {
-    // dictionnaire des héritages net reçu par chaque héritier sur un ensemble de successions
-    public var successorsInheritedNetValue: [String: Double] {
+    // dictionnaire des héritages net reçu en cash par chaque héritier sur un ensemble de successions
+    public var successorsReceivedNetValue: [String: Double] {
         var globalDico: [String: Double] = [:]
         self.forEach { succession in
-            let dico = succession.successorsInheritedNetValue
+            let dico = succession.successorsReceivedNetValue
             for name in dico.keys {
                 if globalDico[name] != nil {
                     globalDico[name]! += dico[name]!
@@ -101,33 +108,45 @@ extension Array where Element == Succession {
 }
 
 // MARK: - Héritage d'une personne
+
 public struct Inheritance: Hashable {
     
     // MARK: - Propeties
     
     // héritier
-    public var successorName: String
-    // fraction de la masse successorale reçue en héritage
-    public var percent  : Double // [0, 1]
-    public var brut     : Double
-    public var abatFrac : Double // [0, 1] de l'abattement fiscal maximum
-    public var net      : Double
-    public var tax      : Double
+    public var successorName : String
+    // évaluation de la valeur fiscale
+    public var percentFiscal : Double // [0, 1] = brutFiscal / masse successorale
+    public var brutFiscal    : Double // valeur fiscale
+    public var abatFrac      : Double // [0, 1] de l'abattement fiscal maximum
+    public var netFiscal     : Double // valeur fiscale
+    public var tax           : Double
+    // évaluation de la valeur réellement transmise en cash
+    public var received      : Double
+    public var receivedNet   : Double // net de taxes
+    // créance de restitution de l'héritier envers le quasi-usufruitier
+    public var creanceRestit : Double
     
     // MARK: - Initializer
     
-    public init(personName : String,
-                percent    : Double,
-                brut       : Double,
-                abatFrac   : Double,
-                net        : Double,
-                tax        : Double) {
+    public init(personName    : String,
+                percentFiscal : Double = 0.0,
+                brutFiscal    : Double = 0.0,
+                abatFrac      : Double = 0.0,
+                netFiscal     : Double = 0.0,
+                tax           : Double = 0.0,
+                received      : Double = 0.0,
+                receivedNet   : Double = 0.0,
+                creanceRestit : Double = 0.0) {
         self.successorName = personName
-        self.percent       = percent
-        self.brut          = brut
+        self.percentFiscal = percentFiscal
+        self.brutFiscal    = brutFiscal
         self.abatFrac      = abatFrac
-        self.net           = net
+        self.netFiscal     = netFiscal
         self.tax           = tax
+        self.received      = received
+        self.receivedNet   = receivedNet
+        self.creanceRestit = creanceRestit
     }
 }
 extension Inheritance: SuccessionCsvVisitableP {
@@ -138,13 +157,16 @@ extension Inheritance: SuccessionCsvVisitableP {
 extension Inheritance: CustomStringConvertible {
     public var description: String {
         """
-        Héritier:      \(successorName)
-        Pourcentage:   \((percent * 100).percentString(digit: 1)) % de la masse successorale
-        Héritage Brut: \(brut.k€String) (valeur fiscale)
-        Abattement %:  \((abatFrac * 100.0).rounded()) % de l'abattement fiscal maximum
-        Héritage Net:  \(net.k€String) (valeur fiscale)
-        Droits:        \(tax.k€String)
+        Héritier:        \(successorName)
+        Pourcentage:     \((percentFiscal * 100).percentString(digit: 1)) % de la masse successorale
+        Héritage Brut:   \(brutFiscal.k€String) (valeur fiscale)
+        Abattement %:    \((abatFrac * 100.0).rounded()) % de l'abattement fiscal maximum
+        Héritage Net:    \(netFiscal.k€String) (valeur fiscale)
+        Taxes ou Droits: \(tax.k€String)
+        Cash reçu:       \(received.k€String)
+        Cash reçu net:   \(receivedNet.k€String)
+        Créance de resti:\(creanceRestit.k€String)
 
-        """.withPrefixedSplittedLines("  ")
+        """
     }
 }

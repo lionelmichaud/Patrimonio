@@ -80,8 +80,14 @@ extension Ownership {
             switch evaluationContext {
                 case .ifi, .isf :
                     // calcul de la part d'usufruit détenue
+                    // on prend en compte la valeur en pleine propriété
                     return usufructOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
                     
+                case .lifeInsuranceTransmission:
+                    // calcul de la part d'usufruit détenue = Quasi-Usufruit dans ce cas
+                    // on prend en compte la valeur en pleine propriété pour la transmission en numéraire aux donatires
+                    return usufructOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
+
                 case .legalSuccession, .lifeInsuranceSuccession, .patrimoine:
                     // démembrement
                     var usufructValue : Double = 0.0

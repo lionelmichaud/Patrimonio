@@ -7,6 +7,7 @@
 
 import Foundation
 import AppFoundation
+import Persistence
 import Charts
 
 // MARK: - Génération de graphiques - Synthèse - CASH FLOW
@@ -14,18 +15,21 @@ import Charts
 /// Dessiner un graphe à lignes : revenus + dépenses + net
 /// - Returns: UIView
 class LineChartCashFlowVisitor: CashFlowLineChartVisitorP {
-    init(element: CashFlowArray) {
-        buildLineChart(element: element)
-    }
-
     var dataSets = [LineChartDataSet]()
     //: ### ChartDataEntry
+    private var personSelection : String
     private var yVals1 = [ChartDataEntry]()
     private var yVals2 = [ChartDataEntry]()
     private var yVals3 = [ChartDataEntry]()
     private var totalAssetsValue      : Double = 0
     private var totalLiabilitiesValue : Double = 0
 
+    init(element         : CashFlowArray,
+         personSelection : String) {
+        self.personSelection = personSelection
+        buildLineChart(element: element)
+    }
+    
     func buildLineChart(element: CashFlowArray) {
         // si la table est vide alors quitter
         guard element.isNotEmpty else { return }
@@ -51,12 +55,26 @@ class LineChartCashFlowVisitor: CashFlowLineChartVisitorP {
     }
 
     func buildLineChart(element: CashFlowLine) {
-        self.yVals1.append(ChartDataEntry(x: element.year.double(),
-                                          y: element.sumOfRevenues))
-        self.yVals2.append(ChartDataEntry(x: element.year.double(),
-                                          y: -element.sumOfExpenses))
-        self.yVals3.append(ChartDataEntry(x: element.year.double(),
-                                          y: element.netCashFlow))
+        switch personSelection {
+            case AppSettings.shared.adultsLabel:
+                self.yVals1.append(ChartDataEntry(x: element.year.double(),
+                                                  y: element.sumOfAdultsRevenues))
+                self.yVals2.append(ChartDataEntry(x: element.year.double(),
+                                                  y: -element.sumOfAdultsExpenses))
+                self.yVals3.append(ChartDataEntry(x: element.year.double(),
+                                                  y: element.netAdultsCashFlow))
+
+            case AppSettings.shared.childrenLabel:
+                self.yVals1.append(ChartDataEntry(x: element.year.double(),
+                                                  y: element.sumOfChildrenRevenues))
+                self.yVals2.append(ChartDataEntry(x: element.year.double(),
+                                                  y: -element.sumOfChildrenExpenses))
+                self.yVals3.append(ChartDataEntry(x: element.year.double(),
+                                                  y: element.netChildrenCashFlow))
+
+            default:
+                return
+        }
     }
 
 }

@@ -485,8 +485,8 @@
 		79FC722426330D2C004F3BD2 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC722226330D2C004F3BD2 /* AppCommands.swift */; };
 		79FC723726331A9D004F3BD2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC723526331A9D004F3BD2 /* SettingsView.swift */; };
 		79FC723F26331C69004F3BD2 /* SimulationUserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC723D26331C69004F3BD2 /* SimulationUserSettingsView.swift */; };
-		79FC724926331CCD004F3BD2 /* GraphicUserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC724826331CCD004F3BD2 /* GraphicUserSettings.swift */; };
-		79FC724A26331CCD004F3BD2 /* GraphicUserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC724826331CCD004F3BD2 /* GraphicUserSettings.swift */; };
+		79FC724926331CCD004F3BD2 /* GraphicUserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC724826331CCD004F3BD2 /* GraphicUserSettingsView.swift */; };
+		79FC724A26331CCD004F3BD2 /* GraphicUserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC724826331CCD004F3BD2 /* GraphicUserSettingsView.swift */; };
 		79FC725226331E0A004F3BD2 /* PickerHelperViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC725126331E0A004F3BD2 /* PickerHelperViews.swift */; };
 		79FC725326331E0A004F3BD2 /* PickerHelperViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC725126331E0A004F3BD2 /* PickerHelperViews.swift */; };
 		79FC7259263320BE004F3BD2 /* AppVersionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC7258263320BE004F3BD2 /* AppVersionView.swift */; };
@@ -748,7 +748,7 @@
 		79FC722226330D2C004F3BD2 /* AppCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
 		79FC723526331A9D004F3BD2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		79FC723D26331C69004F3BD2 /* SimulationUserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationUserSettingsView.swift; sourceTree = "<group>"; };
-		79FC724826331CCD004F3BD2 /* GraphicUserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicUserSettings.swift; sourceTree = "<group>"; };
+		79FC724826331CCD004F3BD2 /* GraphicUserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicUserSettingsView.swift; sourceTree = "<group>"; };
 		79FC725126331E0A004F3BD2 /* PickerHelperViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerHelperViews.swift; sourceTree = "<group>"; };
 		79FC7258263320BE004F3BD2 /* AppVersionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionView.swift; sourceTree = "<group>"; };
 		79FC725F26333350004F3BD2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -1554,7 +1554,7 @@
 			children = (
 				79FC7258263320BE004F3BD2 /* AppVersionView.swift */,
 				79FC723D26331C69004F3BD2 /* SimulationUserSettingsView.swift */,
-				79FC724826331CCD004F3BD2 /* GraphicUserSettings.swift */,
+				79FC724826331CCD004F3BD2 /* GraphicUserSettingsView.swift */,
 				790C616F266AA5A80032A35E /* ExportSettingsView.swift */,
 			);
 			path = SettingsViews;
@@ -2087,7 +2087,7 @@
 				79EC5E9126406AAD00FF8263 /* LoanDetailedView.swift in Sources */,
 				790C616A266AA56B0032A35E /* SimulationUserSettingsView.swift in Sources */,
 				796506D8264094B00036E466 /* AssetView.swift in Sources */,
-				79FC724926331CCD004F3BD2 /* GraphicUserSettings.swift in Sources */,
+				79FC724926331CCD004F3BD2 /* GraphicUserSettingsView.swift in Sources */,
 				7990D8E1264F1C4000078CB6 /* BarChartCashFlowVisitor.swift in Sources */,
 				796506D12640866F0036E466 /* InterestRateTypeView.swift in Sources */,
 				796506CB2640866F0036E466 /* PeriodicInvestDetailedView.swift in Sources */,
@@ -2162,7 +2162,7 @@
 				79FC723726331A9D004F3BD2 /* SettingsView.swift in Sources */,
 				79B2727B2634D68E00298E5D /* BoundaryEditView.swift in Sources */,
 				79EC5E9926406ADA00FF8263 /* OwnershipView.swift in Sources */,
-				79FC724A26331CCD004F3BD2 /* GraphicUserSettings.swift in Sources */,
+				79FC724A26331CCD004F3BD2 /* GraphicUserSettingsView.swift in Sources */,
 				79AA5D772650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */,
 				7990D8D6264EBDB700078CB6 /* BarChartBalanceSheetVisitor.swift in Sources */,
 				791ED105263A20F600701202 /* SuccessorListView.swift in Sources */,

@@ -128,7 +128,7 @@ func getBetaGammaLineChartDataSets(minX : Double,
                                    alpha: Double,
                                    beta : Double) -> [LineChartDataSet]? {
 
-    let nbSamples = 100
+    let nbSamples = 300
 
     //: ### ChartDataEntry
 
@@ -143,15 +143,15 @@ func getBetaGammaLineChartDataSets(minX : Double,
                                             alpha : alpha,
                                             beta  : beta)
     betaGenerator.initialize()
-
+    
     /// PDF de la distribution Beta(alpha,beta)
     let yVals1 = numericFunctionSampler(minX      : minX,
-                                 maxX      : maxX,
-                                 nbSamples : nbSamples,
-                                 f         : betaGenerator.pdf).map {
-                                    ChartDataEntry(x: $0.x, y: $0.y)
-                                 }
-
+                                        maxX      : maxX,
+                                        nbSamples : nbSamples,
+                                        f         : betaGenerator.pdf).map {
+                                            ChartDataEntry(x: $0.x, y: $0.y)
+                                        }
+    
     /// CDF de la distribution Beta(alpha,beta)
     var yVals2 = [ChartDataEntry]()
     if let betaCdfCurve = betaGenerator.cdfCurve {
@@ -159,7 +159,7 @@ func getBetaGammaLineChartDataSets(minX : Double,
             yVals2.append(ChartDataEntry(x: point.x, y: point.y))
         }
     }
-
+    
     /// tirages aléatoires selon distribution en Beta et ajout à un histogramme
     let nbRandomSamples = 1000
     let sequence = betaGenerator.sequence(of: nbRandomSamples)
@@ -169,7 +169,7 @@ func getBetaGammaLineChartDataSets(minX : Double,
                               Xmax             : maxX,
                               bucketNb         : 50)
     histogram.record(sequence)
-
+    
     /// PDF des tirages aléatoires
     var yVals3 = [ChartDataEntry]()
     histogram.xPDF.forEach {

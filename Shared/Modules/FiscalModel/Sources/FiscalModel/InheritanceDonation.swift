@@ -98,13 +98,13 @@ public struct InheritanceDonation: Codable {
     public struct Model: JsonCodableToBundleP, VersionableP {
         public static var defaultFileName: String = "InheritanceDonationModel.json"
         
-        public var version         : Version
-        var gridDonationConjoint   : RateGrid
-        var abatConjoint           : Double //  80_724€
-        var gridLigneDirecte       : RateGrid
-        var abatLigneDirecte       : Double // 100_000€
-        let fraisFunéraires        : Double //   1_500€
-        public let decoteResidence : Double // 20% // %
+        public var version          : Version
+        var gridDonationConjoint    : RateGrid
+        var abatConjoint            : Double //  80_724€
+        var gridLigneDirecte        : RateGrid
+        public var abatLigneDirecte : Double // 100_000€
+        public let fraisFunéraires  : Double //   1_500€
+        public let decoteResidence  : Double // 20% // %
     }
     
     // MARK: - Properties
@@ -192,6 +192,13 @@ public struct LifeInsuranceInheritance: Codable {
     /// Initializer les paramètres calculés pour les tranches d'imposition à partir des seuils et des taux
     mutating func initialize() throws {
         try model.initializeGrid()
+    }
+    
+    /// Abattement sur les taxes de transmission d'assurance vie en €
+    /// - Parameter fracAbattement: Fraction de l'abattement [0, 1]
+    /// - Returns: Abattement sur les taxes de transmission
+    public func abattement(fracAbattement : Double) -> Double {
+        model.grid[model.grid.startIndex + 1].floor * fracAbattement
     }
     
     /// Calcul les taxes sur la transmission de l'assurance vie vers un enfant

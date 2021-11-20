@@ -77,16 +77,19 @@ extension CashFlowLine {
                 //    produit net de charges sociales et d'impôt sur la plus-value
                 // le crédit se fait au début de l'année qui suit la vente
                 let liquidatedValue = realEstate.liquidatedValue(year - 1)
-                netRevenue = liquidatedValue.netRevenue
-                // créditer le produit de la vente sur les comptes des personnes
-                // en fonction de leur part de propriété respective
-                let ownedSaleValues = realEstate.ownedValues(ofValue           : liquidatedValue.netRevenue,
-                                                             atEndOf           : year,
-                                                             evaluationContext : .patrimoine)
-                let netCashFlowManager = NetCashFlowManager()
-                netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
-                                                 in            : patrimoine,
-                                                 atEndOf       : year)
+                
+                if liquidatedValue.revenue > 0 {
+                    netRevenue = liquidatedValue.netRevenue
+                    // créditer le produit de la vente sur les comptes des personnes
+                    // en fonction de leur part de propriété respective
+                    let ownedSaleValues = realEstate.ownedValues(ofValue           : liquidatedValue.netRevenue,
+                                                                 atEndOf           : year,
+                                                                 evaluationContext : .patrimoine)
+                    let netCashFlowManager = NetCashFlowManager()
+                    netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
+                                                     in            : patrimoine,
+                                                     atEndOf       : year)
+                }
             }
             adultsRevenues
                 .perCategory[.realEstateSale]?

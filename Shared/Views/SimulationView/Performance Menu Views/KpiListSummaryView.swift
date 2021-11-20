@@ -43,14 +43,30 @@ struct KpiSummaryView: View {
     @State var kpi  : KPI
     var withPadding : Bool
     var withDetails : Bool
-    
+    var maxiMiniStr : String {
+        switch kpi.comparator {
+            case .maximize:
+                return "Minimale"
+            case .minimize:
+                return "Maximale"
+        }
+    }
+    var compareStr : String {
+        switch kpi.comparator {
+            case .maximize:
+                return "à dépasser"
+            case .minimize:
+                return "à ne pas dépasser"
+        }
+    }
+
     func kpiNoteSubstituted(_ note: String) -> String {
         var substituted: String = note
         substituted = substituted.replacingOccurrences(of    : "<<OwnershipNature>>",
-                                                       with  : UserSettings.shared.ownershipKpiSelection.rawValue,
+                                                       with  : UserSettings.shared.ownershipGraphicSelection.rawValue,
                                                        count : 1)
         substituted = substituted.replacingOccurrences(of    : "<<AssetEvaluationContext>>",
-                                                       with  : UserSettings.shared.assetKpiEvaluatedFraction.rawValue,
+                                                       with  : UserSettings.shared.assetGraphicEvaluatedFraction.rawValue,
                                                        count : 1)
         return substituted
     }
@@ -62,25 +78,27 @@ struct KpiSummaryView: View {
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.secondary)
-                AmountView(label   : "Valeur Objectif Minimale",
+                AmountView(label   : "Valeur Objectif " + maxiMiniStr,
                            amount  : kpi.objective,
-                           comment : simulation.mode == .random ? "à atteindre avec une probabilité ≥ \(kpi.probaObjective.percentStringRounded)" : "")
+                           kEuro   : true,
+                           comment : simulation.mode == .random ? compareStr + " avec une probabilité ≥ \(kpi.probaObjective.percentStringRounded)" : "")
                     .padding(EdgeInsets(top: withPadding ? 3 : 0, leading: 0, bottom: withPadding ? 3 : 0, trailing: 0))
                 if simulation.mode == .random {
                     HStack {
-                        PercentView(label   : "Valeur Objectif Atteinte",
+                        PercentView(label   : "Critère satisfait",
                                     percent : 1.0 - (kpi.probability(for: kpi.objective) ?? Double.nan),
                                     comment : "avec une probabilité de")
                         Image(systemName: kpi.objectiveIsReached(withMode: simulation.mode)! ? "checkmark.circle.fill" : "multiply.circle.fill")
-                            .imageScale(/*@START_MENU_TOKEN@*/.large/*@END_MENU_TOKEN@*/)
+                            .imageScale(.large)
                     }
                     .foregroundColor(kpi.objectiveIsReached(withMode: simulation.mode)! ? .green : .red)
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: withPadding ? 3 : 0, trailing: 0))
                 }
             }
             HStack {
-                AmountView(label   : "Valeur Atteinte",
+                AmountView(label   : "Valeur " + maxiMiniStr + " Atteinte",
                            amount  : kpi.value(withMode: simulation.mode)!,
+                           kEuro   : true,
                            comment : simulation.mode == .random ? "avec une probabilité de \(kpi.probaObjective.percentStringRounded)" : "")
                 Image(systemName: kpi.objectiveIsReached(withMode: simulation.mode)! ? "checkmark.circle.fill" : "multiply.circle.fill")
                     .imageScale(/*@START_MENU_TOKEN@*/.large/*@END_MENU_TOKEN@*/)

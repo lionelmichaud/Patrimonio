@@ -17,8 +17,8 @@
     },
     "lastKnownState" : {
         "year"       : 2020,
-        "interest"   : 0,
-        "investment" : 100
+        "interest"   : 10,
+        "investment" : 90
     },
     "type" : {
         "lifeInsurance_taxes"  : true,

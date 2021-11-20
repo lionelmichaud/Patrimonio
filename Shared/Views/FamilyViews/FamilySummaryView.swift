@@ -47,7 +47,7 @@ struct FamilySummaryView: View {
             .navigationTitle("Résumé")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear(perform: computeCurrentYearCashFlow)
-            .onDisappear(perform: self.patrimoine.resetFreeInvestementCurrentValue)
+            .onDisappear(perform: self.patrimoine.resetInvestementsCurrentValue)
         } else {
             NoLoadedDossierView()
         }
@@ -96,7 +96,7 @@ struct RevenuSummarySection: View {
                 AmountView(label : "Revenu de la SCI net de taxes et d'IS ",
                            amount: cashFlow!.sciCashFlowLine.netRevenues)
                 AmountView(label : "Revenu total net",
-                           amount: cashFlow!.sumOfRevenues,
+                           amount: cashFlow!.sumOfAdultsRevenues,
                            weight: .bold)
                 AmountView(label : "Revenu imposable à l'IRPP",
                            amount: cashFlow!.adultsRevenues.totalTaxableIrpp)

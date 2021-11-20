@@ -33,15 +33,15 @@ struct SimulationUserSettingsView: View {
                               })
             }
             
-            Section(header: Text("Calcul des KPI".uppercased()),
-                    footer: Text("L'évolution dans le temps du bilan des parents ne prendra en compte que les biens satisfaisant à ce critère")) {
-                CasePicker(pickedCase: $ownership, label: "Filtrage des actifs et passifs des parents")
-                    .pickerStyle(DefaultPickerStyle())
-                    .onChange(of     : ownership,
-                              perform: { newValue in
-                                UserSettings.shared.ownershipKpiSelection = newValue
-                              })
-            }
+//            Section(header: Text("Calcul des KPI".uppercased()),
+//                    footer: Text("L'évolution dans le temps du bilan des parents ne prendra en compte que les biens satisfaisant à ce critère")) {
+//                CasePicker(pickedCase: $ownership, label: "Filtrage des actifs et passifs des parents")
+//                    .pickerStyle(DefaultPickerStyle())
+//                    .onChange(of     : ownership,
+//                              perform: { newValue in
+//                                UserSettings.shared.ownershipKpiSelection = newValue
+//                              })
+//            }
             
 //            Section(footer: Text("L'évolution dans le temps du bilan des parents prendra en compte cette valorisation")) {
 //                CasePicker(pickedCase: $evaluationContext, label: "Valorisation d'un bien")

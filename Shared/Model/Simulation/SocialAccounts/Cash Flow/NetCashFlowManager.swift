@@ -39,8 +39,8 @@ struct NetCashFlowManager {
                        atEndOf year  : Int) {
         ownedCapitals.forEach { (name, capital) in
             if capital != 0,
-               let adult = Patrimoin.familyProvider?.member(withName: name) as? Adult,
-               adult.isAlive(atEndOf: year) {
+               let member = Patrimoin.familyProvider?.member(withName: name),
+               member.isAlive(atEndOf: year) {
                 
                 // investir en priorité dans une assurance vie
                 for idx in patrimoine.assets.freeInvests.items.indices {
@@ -202,8 +202,10 @@ struct NetCashFlowManager {
         where patrimoine.assets.freeInvests[idx].type == .pea {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant du PEA s'il y en avait assez à la fin de l'année dernière
-            let removal = patrimoine.assets.freeInvests[idx].withdrawal(netAmount : amountRemainingToRemove,
-                                                                    for       : name)
+            let removal = patrimoine.assets
+                .freeInvests[idx].withdrawal(netAmount : amountRemainingToRemove,
+                                             for       : name,
+                                             verbose   : true)
             amountRemainingToRemove -= removal.revenue
             // IRPP: les plus values PEA ne sont pas imposables à l'IRPP
             // Prélèvements sociaux: prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
@@ -218,7 +220,10 @@ struct NetCashFlowManager {
                 case .lifeInsurance:
                     // tant que l'on a pas retiré le montant souhaité
                     // retirer le montant de l'Assurances vie s'il y en avait assez à la fin de l'année dernière
-                    let removal = patrimoine.assets.freeInvests[idx].withdrawal(netAmount: amountRemainingToRemove)
+                    let removal = patrimoine.assets
+                        .freeInvests[idx].withdrawal(netAmount : amountRemainingToRemove,
+                                                     for       : name,
+                                                     verbose   : true)
                     amountRemainingToRemove -= removal.revenue
                     // IRPP: part des produit de la liquidation inscrit en compte courant imposable à l'IRPP après déduction de ce qu'il reste de franchise
                     var taxableInterests: Double
@@ -241,7 +246,10 @@ struct NetCashFlowManager {
         where patrimoine.assets.freeInvests[idx].type == .other {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant s'il y en avait assez à la fin de l'année dernière
-            let removal = patrimoine.assets.freeInvests[idx].withdrawal(netAmount: amountRemainingToRemove)
+            let removal = patrimoine.assets
+                .freeInvests[idx].withdrawal(netAmount : amountRemainingToRemove,
+                                             for       : name,
+                                             verbose   : true)
             amountRemainingToRemove -= removal.revenue
             // IRPP: les plus values sont imposables à l'IRPP
             // géré comme un revenu en report d'imposition (dette)
@@ -298,10 +306,10 @@ struct NetCashFlowManager {
         } else {
             sortedAdultNames = adultsName
         }
-        sortedAdultNames.forEach { name in
-            print("nom: \(name)")
-            print("richesse disponible (freeInvest en partie en PP): \(totalFreeInvestementsValue(ownedBy: name, in: patrimoine, atEndOf: year).rounded())")
-        }
+//        sortedAdultNames.forEach { name in
+//            print("nom: \(name)")
+//            print("richesse disponible (freeInvest en partie en PP): \(totalFreeInvestementsValue(ownedBy: name, in: patrimoine, atEndOf: year).rounded())")
+//        }
 
         // trier par taux de rendement croissant
         patrimoine.assets.freeInvests.items.sort(by: {$0.averageInterestRate < $1.averageInterestRate})

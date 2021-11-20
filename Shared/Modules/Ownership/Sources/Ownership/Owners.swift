@@ -49,6 +49,7 @@ public typealias Owners = [Owner]
 enum OwnersError: Error {
     case ownerDoesNotExist
     case noNewOwners
+    case noOtherOwners
 }
 
 extension Owners {
@@ -93,11 +94,11 @@ extension Owners {
         return true
     }
     
-    func contains(ownerName: String) -> Bool {
+    public func contains(ownerName: String) -> Bool {
         self[ownerName] != nil
     }
     
-    func ownerIdx(ownerName: String) -> Int? {
+    public func ownerIdx(ownerName: String) -> Int? {
         self.firstIndex(where: { ownerName == $0.name })
     }
     
@@ -108,8 +109,8 @@ extension Owners {
     /// - Throws:
     ///  - `ownerDoesNotExist`: le propriétaire recherché n'est pas dans la liste des propriétaire
     ///  - `noNewOwners`: la liste des nouveaux propriétaires est vide
-    mutating func replace(thisOwner           : String,
-                          with theseNewOwners : [String]) throws {
+    public mutating func replace(thisOwner           : String,
+                                 with theseNewOwners : [String]) throws {
         guard theseNewOwners.count != 0 else { throw OwnersError.noNewOwners }
         
         if let ownerIdx = self.ownerIdx(ownerName: thisOwner) {
@@ -123,13 +124,30 @@ extension Owners {
             }
             // Factoriser les parts des owners si nécessaire
             groupShares()
+            
+        } else {
+            throw OwnersError.ownerDoesNotExist
+        }
+    }
+    
+    public mutating func redistributeShare(of owner: String) throws {
+        if let ownerIdx = self.ownerIdx(ownerName: owner) {
+            guard self.count > 1 else { throw OwnersError.noOtherOwners }
+            // part à redistribuer
+            let ownerShare = self[ownerIdx].fraction
+            // retirer l'ancien propriétaire
+            self.remove(at: ownerIdx)
+            for idx in self.indices where self[idx].name != owner {
+                self[idx].fraction += ownerShare / (self.count).double()
+            }
+            
         } else {
             throw OwnersError.ownerDoesNotExist
         }
     }
     
     /// Factoriser les parts des owners si nécessaire
-    mutating func groupShares() {
+    public mutating func groupShares() {
         // identifer les owners et compter les occurences de chaque owner dans le tableau
         let dicOfOwnersNames = self.reduce(into: [:]) { counts, owner in
             counts[owner.name, default: 0] += 1

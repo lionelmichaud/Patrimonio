@@ -24,8 +24,9 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", catego
 
 /// Vue globale du cash flow: Revenus / Dépenses / Net
 struct CashFlowGlobalChartView: View {
-    @EnvironmentObject var dataStore : Store
-    @EnvironmentObject var simulation: Simulation
+    @EnvironmentObject var dataStore  : Store
+    @EnvironmentObject var simulation : Simulation
+    @EnvironmentObject var uiState    : UIState
     @State private var lifeEventChatIsPresented = false
     var lastYear: Int? { simulation.socialAccounts.cashFlowArray.last?.year }
     @State private var showInfoPopover = false
@@ -41,14 +42,25 @@ struct CashFlowGlobalChartView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                CashFlowLineChartView(socialAccounts : $simulation.socialAccounts,
+                // sélecteur: Adults / Enfants
+                Picker(selection: self.$uiState.cfChartState.parentChildrenSelection, label: Text("Personne")) {
+                    Text(AppSettings.shared.adultsLabel)
+                        .tag(AppSettings.shared.adultsLabel)
+                    Text(AppSettings.shared.childrenLabel)
+                        .tag(AppSettings.shared.childrenLabel)
+                }
+                .padding(.horizontal)
+                .pickerStyle(SegmentedPickerStyle())
+                
+                CashFlowLineChartView(for            : uiState.cfChartState.parentChildrenSelection,
+                                      socialAccounts : $simulation.socialAccounts,
                                       title          : simulation.title)
                     .padding(.trailing, 4)
 
                 // Graphique Evénement de Vie
                 if lifeEventChatIsPresented {
                     FamilyLifeEventChartView(endDate: lastYear ?? Date.now.year + 30)
-                        .frame(minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealHeight: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxHeight: geometry.size.height/4.0, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                        .frame(minHeight: 0, idealHeight: 100, maxHeight: geometry.size.height/4.0, alignment: .center)
                         .padding(.trailing, 4)
                 }
             }
@@ -96,12 +108,16 @@ struct CashFlowLineChartView: UIViewRepresentable {
     // MARK: - Properties
 
     @Binding var socialAccounts : SocialAccounts
+    var parentChildrenSelection: String
 
     // MARK: - Initializer
-
-    internal init(socialAccounts : Binding<SocialAccounts>, title: String) {
+    
+    internal init(for parentChildrenSelection : String,
+                  socialAccounts              : Binding<SocialAccounts>,
+                  title                       : String) {
         CashFlowLineChartView.titleStatic = title
-        self._socialAccounts  = socialAccounts
+        self.parentChildrenSelection      = parentChildrenSelection
+        self._socialAccounts              = socialAccounts
     }
     
     // MARK: - Type methods
@@ -142,11 +158,12 @@ struct CashFlowLineChartView: UIViewRepresentable {
 
     func updateData(of chartView: LineChartView) {
         // créer les DataSet: LineChartDataSets
-        // créer les DataSet: LineChartDataSets
         let dataSets =
-            LineChartCashFlowVisitor(element: socialAccounts.cashFlowArray)
+            LineChartCashFlowVisitor(
+                element         : socialAccounts.cashFlowArray,
+                personSelection : parentChildrenSelection)
             .dataSets
-
+        
         // ajouter les DataSet au Chartdata
         let data = LineChartData(dataSets: dataSets)
         data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)

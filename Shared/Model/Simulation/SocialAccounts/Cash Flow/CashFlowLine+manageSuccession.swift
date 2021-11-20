@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Persistence
 import FiscalModel
 import PersonModel
 import PatrimoineModel
@@ -31,35 +32,72 @@ extension CashFlowLine {
                                    with patrimoine   : Patrimoin,
                                    familyProvider    : FamilyProviderP,
                                    using fiscalModel : Fiscal.Model) {
+        // créer le manager délégué
         var successionManager = SuccessionManager(with           : patrimoine,
                                                   using          : fiscalModel,
                                                   atEndOf        : year,
                                                   familyProvider : familyProvider,
                                                   run            : run)
 
-        successionManager.manageSuccession()
+        /// Gérer les succession de l'année
+        successionManager.manageSuccessions(verbose: false)
 
-        legalSuccessions   += successionManager.legalSuccessions
-        lifeInsSuccessions += successionManager.lifeInsSuccessions
+        /// Incorporation des successions au CashFlow de l'année
+        /// Récupérer les Successions de l'année pour le Cash-Flow de l'année
+        legalSuccessions   += successionManager.legal.successions
+        lifeInsSuccessions += successionManager.lifeInsurance.successions
 
-        // droits de successions LEGAUX
+        /// Revenus bruts des successions LEGALES
+        //   - pour les adultes
+        adultsRevenues
+            .perCategory[.legalSuccession]?
+            .credits
+            .namedValues += successionManager.legal.revenuesAdults
+        //   - pour les enfants
+        childrenRevenues
+            .perCategory[.legalSuccession]?
+            .credits
+            .namedValues += successionManager.legal.revenuesChildren
+        
+        /// Revenus bruts des transmissions d'ASSURANCES VIES
+        //   - pour les adultes
+        adultsRevenues
+            .perCategory[.liSuccession]?
+            .credits
+            .namedValues += successionManager.lifeInsurance.revenuesAdults
+        //   - pour les enfants
+        childrenRevenues
+            .perCategory[.liSuccession]?
+            .credits
+            .namedValues += successionManager.lifeInsurance.revenuesChildren
+        
+        /// Droits de successions LEGAUX
         //   - imputables aux adultes (= 0 puisque le conjoint survivant est exonéré)
         adultTaxes
             .perCategory[.legalSuccession]?
-            .namedValues += successionManager.legalSuccessionsTaxesAdults
+            .namedValues += successionManager.legal.taxesAdults
         //   - imputables aux enfants (doit être prélevé sur l'héritage après transfert de propriété)
         childrenTaxes
             .perCategory[.legalSuccession]?
-            .namedValues += successionManager.legalSuccessionsTaxesChildren
+            .namedValues += successionManager.legal.taxesChildren
 
-        // droits de transmission des ASSURANCES VIES
+        /// Droits de transmission des ASSURANCES VIES
         //   - imputables aux adultes (= 0 puisque le conjoint survivant est exonéré)
         adultTaxes
             .perCategory[.liSuccession]?
-            .namedValues += successionManager.lifeInsSuccessionsTaxesAdults
+            .namedValues += successionManager.lifeInsurance.taxesAdults
         //   - imputables aux enfants
         childrenTaxes
             .perCategory[.liSuccession]?
-            .namedValues += successionManager.lifeInsSuccessionsTaxesChildren
+            .namedValues += successionManager.lifeInsurance.taxesChildren
+        
+        /// Solde net des héritages éventuellement reçus par les enfants dans l'année
+        if successionManager.legal.revenuesChildren.isNotEmpty ||
+            successionManager.lifeInsurance.revenuesChildren.isNotEmpty {
+            netChildrenInheritances.append(
+                (successionManager.legal.revenuesChildren.sum(for: \.value) - successionManager.legal.taxesChildren.sum(for: \.value)) +
+                (successionManager.lifeInsurance.revenuesChildren.sum(for: \.value) - successionManager.lifeInsurance.taxesChildren.sum(for: \.value)))
+        }
+        
     }
 }

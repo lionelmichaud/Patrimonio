@@ -266,7 +266,7 @@ private struct InheritanceSectionView: View {
         let legalSuccessionManager = LegalSuccessionManager(using          : model.fiscalModel,
                                                             familyProvider : Patrimoin.familyProvider!,
                                                             atEndOf        : year)
-        let succession = legalSuccessionManager.legalSuccession(of    : decedent.displayName,
+        let succession = legalSuccessionManager.succession(of    : decedent.displayName,
                                                                 with  : patrimoine)
         let taxableInheritanceValue = legalSuccessionManager.masseSuccessorale(in: patrimoine,
                                                                                of: decedent.displayName)
@@ -278,8 +278,9 @@ private struct InheritanceSectionView: View {
                 AmountView(label : "Droits de succession à payer par les héritiers",
                            amount: -succession.tax)
                 AmountView(label : "Succession nette laissée aux héritiers",
-                           amount: succession.net)
-                NavigationLink(destination: SuccessorsListView(inheritances: succession.inheritances)) {
+                           amount: succession.netFiscal)
+                NavigationLink(destination                                  : SuccessorsListView(successionKind                                  : SuccessionKindEnum.legal,
+                                                               inheritances : succession.inheritances)) {
                     Text("Héritage")
                         .foregroundColor(.blue)
                 }

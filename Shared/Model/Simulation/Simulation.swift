@@ -98,50 +98,56 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         /// création et initialisation des KPI
         var kpiType: KpiEnum = .minimumAdultsAssetExcludinRealEstates
         var kpi =
-            KPI(name            : kpiType.displayString,
-                note            : kpiType.note,
-                objective       : 200_000.0,
-                withProbability : 0.98)
+            KPI(name                    : kpiType.displayString,
+                note                    : kpiType.note,
+                objective               : 200_000.0,
+                withProbability         : 0.98,
+                comparatorWithObjective : .maximize)
         kpis[kpiType] = kpi
 
         kpiType = .assetAt1stDeath
         kpi =
-            KPI(name            : kpiType.displayString,
-                note            : kpiType.note,
-                objective       : 200_000.0,
-                withProbability : 0.98)
+            KPI(name                    : kpiType.displayString,
+                note                    : kpiType.note,
+                objective               : 200_000.0,
+                withProbability         : 0.98,
+                comparatorWithObjective : .maximize)
         kpis[kpiType] = kpi
 
         kpiType = .assetAt2ndtDeath
         kpi =
-            KPI(name            : kpiType.displayString,
-                note            : kpiType.note,
-                objective       : 200_000.0,
-                withProbability : 0.98)
+            KPI(name                    : kpiType.displayString,
+                note                    : kpiType.note,
+                objective               : 200_000.0,
+                withProbability         : 0.98,
+                comparatorWithObjective : .maximize)
         kpis[kpiType] = kpi
 
         kpiType = .netSuccessionAt2ndDeath
         kpi =
-            KPI(name            : kpiType.displayString,
-                note            : kpiType.note,
-                objective       : 200_000.0,
-                withProbability : 0.98)
+            KPI(name                    : kpiType.displayString,
+                note                    : kpiType.note,
+                objective               : 200_000.0,
+                withProbability         : 0.98,
+                comparatorWithObjective : .maximize)
         kpis[kpiType] = kpi
 
         kpiType = .successionTaxesAt1stDeath
         kpi =
-            KPI(name            : kpiType.displayString,
-                note            : kpiType.note,
-                objective       : 0.0,
-                withProbability : 0.98)
+            KPI(name                    : kpiType.displayString,
+                note                    : kpiType.note,
+                objective               : 0.0,
+                withProbability         : 0.98,
+                comparatorWithObjective : .maximize)
         kpis[kpiType] = kpi
 
         kpiType = .successionTaxesAt2ndDeath
         kpi =
-            KPI(name            : kpiType.displayString,
-                note            : kpiType.note,
-                objective       : 0.0,
-                withProbability : 0.98)
+            KPI(name                    : kpiType.displayString,
+                note                    : kpiType.note,
+                objective               : 0.0,
+                withProbability         : 0.98,
+                comparatorWithObjective : .maximize)
         kpis[kpiType] = kpi
     }
 

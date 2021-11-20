@@ -53,16 +53,24 @@ struct KpiDetailedView: View {
                         case .random:
                             // simulation de Monté-Carlo
                             HStack {
-                                AmountView(label: "Valeur Moyenne", amount: kpi.average(withMode: simulation.mode) ?? Double.nan)
+                                AmountView(label  : "Valeur Moyenne",
+                                           amount : kpi.average(withMode : simulation.mode) ?? Double.nan,
+                                           kEuro  : true)
                                     .padding(.trailing)
-                                AmountView(label: "Valeur Médiane", amount: kpi.median(withMode: simulation.mode) ?? Double.nan)
+                                AmountView(label  : "Valeur Médiane",
+                                           amount : kpi.median(withMode : simulation.mode) ?? Double.nan,
+                                           kEuro  : true)
                                     .padding(.leading)
                             }
                             .padding(.top, 3)
                             HStack {
-                                AmountView(label: "Valeur Minimale", amount: kpi.min(withMode: simulation.mode) ?? Double.nan)
+                                AmountView(label  : "Valeur Minimale",
+                                           amount : kpi.min(withMode : simulation.mode) ?? Double.nan,
+                                           kEuro  : true)
                                     .padding(.trailing)
-                                AmountView(label: "Valeur Maximale", amount: kpi.max(withMode: simulation.mode) ?? Double.nan)
+                                AmountView(label  : "Valeur Maximale",
+                                           amount : kpi.max(withMode : simulation.mode) ?? Double.nan,
+                                           kEuro  : true)
                                     .padding(.leading)
                             }
                             .padding(.top, 3)

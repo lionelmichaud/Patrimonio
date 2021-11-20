@@ -173,7 +173,7 @@ public struct Liabilities {
                 /// on prend la valeure totale de toutes les emprunts
                 return loans.value(atEndOf: year)
                 
-            case .lifeInsuranceSuccession:
+            case .lifeInsuranceSuccession, .lifeInsuranceTransmission:
                 return 0
         }
     }

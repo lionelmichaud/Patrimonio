@@ -10,6 +10,8 @@ import XCTest
 import FiscalModel
 @testable import Ownership
 
+// swiftlint:disable file_length
+
 class OwnershipTransferTests: XCTestCase { // swiftlint:disable:this type_body_length
     static var fullOwner1     : Owner!
     static var fullOwner2     : Owner!

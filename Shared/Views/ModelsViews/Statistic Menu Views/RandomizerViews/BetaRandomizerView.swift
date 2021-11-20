@@ -64,7 +64,7 @@ struct BetaRandomizerView: UIViewRepresentable {
     }
     
     func getLineChartDataSets() -> [LineChartDataSet]? {
-        let nbSamples = 100
+        let nbSamples = 300
 
         // ajouter les dataSet au dataSets
         var dataSets = [LineChartDataSet]()
