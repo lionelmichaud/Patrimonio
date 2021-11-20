@@ -136,15 +136,15 @@ public struct Histogram: Codable {
         dataset.last
     }
     // cases pour compter les échantillons dans chaque case
-    private var buckets  = [Bucket]()
+    private var buckets = [Bucket]()
     // largeur en X d'une case
-    private var Xstep: Double = 0.0
+    private var Xstep   : Double = 0.0
     // valeure minimum pour qu'un échantillon soit rangé dans une case
-    var Xmin     : Double = 0.0
+    var Xmin            : Double = 0.0
     // valeure maximum pour qu'un échantillon soit rangé dans une case
-    var Xmax     : Double = 0.0
+    var Xmax            : Double = 0.0
     // valeures centrales des cases
-    var xValues  = [Double]()
+    var xValues         = [Double]()
     var isInitialized: Bool {
         buckets.count != 0
     } // computed
@@ -427,7 +427,8 @@ public struct Histogram: Codable {
             // pas d'échantillons à traiter
             return nil
         }
-        return Sigma.percentile(dataset, percentile: probability)
+        //return Sigma.percentile(dataset, percentile: probability)
+        return Sigma.quantiles.method4(dataset, probability: probability)
     }
 
     /// Renvoie la probabilité P telle que CDF(X) >= P

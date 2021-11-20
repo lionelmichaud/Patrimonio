@@ -61,10 +61,12 @@ public extension KpiDictionary {
 ///
 /// Usage:
 /// ```
-///       var kpi = KPI(name            : "My KPI",
-///                      note            : "KPI description",
-///                      objective       : 100_000.0,
-///                      withProbability : 0.95)
+///       // le KPI doit être >= 100_000.0 avec une probabilité de 95%
+///       var kpi = KPI(name                    : "My KPI",
+///                      note                    : "KPI description",
+///                      objective               : 100_000.0,
+///                      withProbability         : 0.95,
+///                      comparatorWithObjective : .maximize)
 ///
 ///       // ajoute un(des) échantillon(s) à l'histogramme
 ///       kpi.record(kpiSample1, withMode: .random)
@@ -76,17 +78,24 @@ public extension KpiDictionary {
 ///       let objectiveReached = kpi.objectiveIsReached(withMode: .random)
 ///
 ///       // récupère la valeur déterministe du KPI
-///       // ou valeur statistique du KPI atteinte avec la proba objectif (withProbability)
+///       // ou valeur statistique du KPI dépassée avec la proba objectif (withProbability)
 ///       let kpiValue = kpi.value()
 ///
-///       // valeur statistique du KPI atteinte avec la proba 90%
+///       // valeur statistique du KPI dépassée avec la proba 90%
 ///       let kpiValue = kpi.value(for: 0.90)
 ///
 ///       // remet à zéro l'historique du KPI
 ///       kpi.reset()
 /// ```
 ///
-public struct KPI: Identifiable, Codable {
+public struct KPI: Identifiable {
+
+    // MARK: - Netsed Types
+
+    public enum ComparatorEnum: String, Codable {
+        case maximize = "plus grand que"
+        case minimize = "plus petit que"
+    }
 
     // MARK: - Static Properties
     
@@ -95,29 +104,39 @@ public struct KPI: Identifiable, Codable {
     // MARK: - Properties
     
     public var id = UUID()
-    public var name            : String
-    public var note            : String
+    public var name : String
+    public var note : String
     // objectif à atteindre
-    public var objective       : Double
+    public var objective      : Double
     // probability d'atteindre l'objectif
-    public var probaObjective  : Double
+    public var probaObjective : Double
     // valeur déterministe
     private var valueKPI: Double?
     // histogramme des valeurs du KPI
-    public var histogram: Histogram
-    
+    public var histogram: Histogram = Histogram(name: "")
+    // comparateur / seuil
+    public var comparator: ComparatorEnum = .maximize
+    private var isBetterThanObjective: ((Double, Double) -> Bool) = (>=)
+
     // MARK: - Initializers
     
-    public init(name            : String,
-                note            : String = "",
-                objective       : Double,
-                withProbability : Double) {
+    public init(name                    : String,
+                note                    : String = "",
+                objective               : Double,
+                withProbability         : Double,
+                comparatorWithObjective : ComparatorEnum = .maximize) {
         self.name           = name
         self.note           = note
         self.objective      = objective
         self.probaObjective = withProbability
         // initializer l'histogramme sans les cases
         self.histogram      = Histogram(name: name)
+        switch comparatorWithObjective {
+            case .maximize:
+                isBetterThanObjective = (>=)
+            case .minimize:
+                isBetterThanObjective = (<=)
+        }
     }
     
     // MARK: - Methods
@@ -167,7 +186,7 @@ public struct KPI: Identifiable, Codable {
     ///     - retourne la valeur unique du KPI
     ///
     ///     Mode Aléatoire:
-    ///     - retourne la valeur X telle que la probabilité P(X>Objectif)
+    ///     - retourne la valeur X telle que la probabilité P(X>Objectif) ou P(X<Objectif)
     ///     est = à la probabilité Pobjectif.
     ///
     ///     P(X>Objectif) = 1 - P(X<=Objectif)
@@ -178,7 +197,12 @@ public struct KPI: Identifiable, Codable {
                 return valueKPI
                 
             case .random:
-                return percentile(for: 1.0 - probaObjective)
+                switch comparator {
+                    case .maximize:
+                        return percentile(for: 1.0 - probaObjective)
+                    case .minimize:
+                        return percentile(for: probaObjective)
+                }
         }
     }
     
@@ -255,7 +279,7 @@ public struct KPI: Identifiable, Codable {
     }
     
     public func objectiveIsReached(for value: Double) -> Bool {
-        value >= objective
+        isBetterThanObjective(value, objective)
     }
     
     /// Retourrne true si l'objectif de valeur est atteint lors du run unique (.deterministic)
@@ -264,7 +288,7 @@ public struct KPI: Identifiable, Codable {
         guard let value = self.value(withMode: mode) else {
             return nil
         }
-        return value >= objective
+        return isBetterThanObjective(value, objective)
     }
     
     /// Retourrne true si l'objectif de valeur est atteint lors du run unique (.deterministic)
@@ -273,6 +297,16 @@ public struct KPI: Identifiable, Codable {
         guard let lastValue = self.lastValue(withMode: mode) else {
             return nil
         }
-        return lastValue >= objective
+        return isBetterThanObjective(lastValue, objective)
+    }
+}
+
+extension KPI: Codable {
+    enum CodingKeys: String, CodingKey {
+        case name           = "nom"
+        case note           = "note"
+        case objective      = "valeur objectif"
+        case probaObjective = "probabilité minimum_d'atteindre l'objectif"
+        case comparator     = "comparateur avec l'objectif"
     }
 }
