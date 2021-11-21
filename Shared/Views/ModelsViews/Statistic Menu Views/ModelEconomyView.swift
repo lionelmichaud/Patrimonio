@@ -63,7 +63,7 @@ struct ModelEconomyView: View {
     func applyChangesToTemplate(from viewModel: BetaRandomViewModel) {
         guard let templateFolder = PersistenceManager.templateFolder() else {
             alertItem =
-                AlertItem(title         : Text("Echec"),
+                AlertItem(title         : Text("Répertoire 'Modèle' absent"),
                           dismissButton : .default(Text("OK")))
             return
         }
@@ -77,7 +77,7 @@ struct ModelEconomyView: View {
             try model.saveAsJSON(toFolder: templateFolder)
         } catch {
             alertItem =
-                AlertItem(title         : Text("Echec"),
+                AlertItem(title         : Text("Echec de l'enregistrement"),
                           dismissButton : .default(Text("OK")))
         }
     }

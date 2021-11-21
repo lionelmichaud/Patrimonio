@@ -14,8 +14,19 @@ import OrderedCollections
 // MARK: - KpiDictionary : tableau de KPI
 
 public typealias KpiDictionary = OrderedDictionary<KpiEnum, KPI>
+
 extension KpiDictionary: JsonCodableToFolderP {}
+
 public extension KpiDictionary {
+    
+    mutating func setKpisName() {
+        for key in KpiEnum.allCases {
+            var kpi = self[key]
+            kpi?.name = key.rawValue
+            self[key] = kpi
+        }
+    }
+    
     /// Remettre à zéro l'historique des KPI (Histogramme)
     mutating func reset(withMode mode : SimulationModeEnum) {
         self = mapValues { kpi in
@@ -106,7 +117,7 @@ public struct KPI: Identifiable {
     // MARK: - Properties
     
     public var id = UUID()
-    public var name : String
+    public var name : String = ""
     public var note : String
     // objectif à atteindre
     public var objective      : Double
@@ -305,7 +316,6 @@ public struct KPI: Identifiable {
 
 extension KPI: Codable {
     enum CodingKeys: String, CodingKey {
-        case name           = "nom"
         case note           = "note"
         case objective      = "valeur objectif"
         case probaObjective = "probabilité minimum d'atteindre l'objectif"

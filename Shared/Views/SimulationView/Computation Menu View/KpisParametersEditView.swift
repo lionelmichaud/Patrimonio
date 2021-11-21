@@ -25,6 +25,7 @@ struct KpisParametersEditView: View {
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 SaveToDiskButton(text: "Modèle", action: applyChangesToTemplate)
+                    .disabled(!simulation.isModified)
             }
         }
     }
@@ -33,15 +34,17 @@ struct KpisParametersEditView: View {
     func applyChangesToTemplate() {
         guard let templateFolder = PersistenceManager.templateFolder() else {
             alertItem =
-                AlertItem(title         : Text("Echec"),
+                AlertItem(title         : Text("Répertoire 'Modèle' absent"),
                           dismissButton : .default(Text("OK")))
             return
         }
         do {
             try simulation.saveAsJSON(toFolder: templateFolder)
+            // le dossier reste modifié tant qu'on ne l'a pas enregistré dans son propre répertoire
+            simulation.persistenceSM.process(event: .onModify)
         } catch {
             alertItem =
-                AlertItem(title         : Text("Echec"),
+                AlertItem(title         : Text("Echec de l'enregistrement"),
                           dismissButton : .default(Text("OK")))
         }
     }

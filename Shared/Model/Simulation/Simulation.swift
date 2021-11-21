@@ -109,7 +109,8 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
                                    from                 : Simulation.defaultKpiFileName,
                                    dateDecodingStrategy : .iso8601,
                                    keyDecodingStrategy  : .useDefaultKeys)
-        
+        kpis.setKpisName()
+
         // exécuter la transition
         persistenceSM.process(event: .onLoad)
     }
@@ -126,6 +127,7 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
                                  fromFolder           : folder,
                                  dateDecodingStrategy : .iso8601,
                                  keyDecodingStrategy  : .useDefaultKeys)
+        kpis.setKpisName()
 
         // exécuter la transition
         persistenceSM.process(event: .onLoad)
