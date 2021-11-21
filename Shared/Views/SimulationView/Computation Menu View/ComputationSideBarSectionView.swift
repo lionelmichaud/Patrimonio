@@ -1,5 +1,5 @@
 //
-//  ComputationSectionView.swift
+//  ComputationSideBarSectionView.swift
 //  Patrimonio
 //
 //  Created by Lionel MICHAUD on 02/06/2021.
@@ -10,7 +10,7 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 
-struct ComputationSectionView: View {
+struct ComputationSideBarSectionView: View {
     @EnvironmentObject private var simulation : Simulation
     @EnvironmentObject private var uiState    : UIState
     
@@ -25,14 +25,14 @@ struct ComputationSectionView: View {
     }
 }
 
-struct ComputationSectionView_Previews: PreviewProvider {
+struct ComputationSideBarSectionView_Previews: PreviewProvider {
     static let dataStore  = Store()
     static var family     = Family()
     static var patrimoine = Patrimoin()
     static var simulation = Simulation()
 
     static var previews: some View {
-        ComputationSectionView()
+        ComputationSideBarSectionView()
             .environmentObject(dataStore)
             .environmentObject(family)
             .environmentObject(patrimoine)

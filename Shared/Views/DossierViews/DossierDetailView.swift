@@ -68,7 +68,7 @@ struct DossierDetailView: View {
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
         .navigationTitle(Text("Dossier"))
-        .alert(item: $alertItem, content: myAlert)
+        .alert(item: $alertItem, content: createAlert)
         .sheet(isPresented: $showingSheet) {
             DossierEditView(title        : "Modifier le Dossier",
                             originalItem : dossier)
@@ -135,7 +135,9 @@ struct DossierDetailView: View {
     /// True si le dossier est actif et a été modifié
     private var savable: Bool {
         dossier.isActive &&
-            (family.isModified || expenses.isModified || patrimoine.isModified || model.isModified)
+            (family.isModified || expenses.isModified ||
+                patrimoine.isModified || model.isModified ||
+                simulation.isModified)
     }
     
     /// si le dossier est déjà actif et a été modifié alors prévenir que les modif vont être écrasées
@@ -149,7 +151,9 @@ struct DossierDetailView: View {
                                        secondaryButton: .cancel())
         } else if let activeDossier = dataStore.activeDossier,
                   activeDossier != dossier,
-                  (family.isModified || expenses.isModified || patrimoine.isModified || model.isModified) {
+                  (family.isModified || expenses.isModified ||
+                    patrimoine.isModified || model.isModified ||
+                    simulation.isModified) {
             // le dossier sélectionné n'est pas encore chargé
             // et il y a déjà un autre dossier chargé avec des modifications non sauvegardées
             self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
@@ -172,6 +176,7 @@ struct DossierDetailView: View {
                 try family.saveAsJSON(toFolder: folder)
                 try expenses.saveAsJSON(toFolder: folder)
                 try patrimoine.saveAsJSON(toFolder: folder)
+                try simulation.saveAsJSON(toFolder: folder)
                 // forcer la vue à se rafraichir
                 dataStore.objectWillChange.send()
                 Simulation.playSound()
@@ -207,6 +212,7 @@ struct DossierDetailView: View {
                 try expenses.loadFromJSON(fromFolder: folder)
                 try family.loadFromJSON(fromFolder: folder,
                                         using     : model)
+                try simulation.loadFromJSON(fromFolder: folder)
             }
         } catch {
             self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),

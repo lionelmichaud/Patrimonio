@@ -24,7 +24,8 @@ let package = Package(
         .package(path: "../PersonModel"),
         .package(path: "../BalanceSheet"),
         .package(path: "../Succession"),
-        .package(path: "../Persistence")
+        .package(path: "../Persistence"),
+        .package(path: "../FileAndFolder")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -40,7 +41,8 @@ let package = Package(
                 "PersonModel",
                 "BalanceSheet",
                 "Succession",
-                "Persistence"
+                "Persistence",
+                "FileAndFolder"
             ]
         ),
         .testTarget(

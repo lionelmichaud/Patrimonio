@@ -36,9 +36,11 @@ extension SuccessionManager {
         // si nécessaire et si possible: l'adulte survivant exerce une option de clause d'AV
         // pour permettre le payement des droits de succession des enfants par les enfants
         let adultSurvivorName = family.adultsName.first { $0 != decedentName}!
-        print("> Adulte décédé   : \(decedentName)")
-        print("> Adulte survivant: \(adultSurvivorName)")
-        print("> Droits de succession des enfants:\n \(childrenInheritancesTaxe)\n Somme = \(childrenInheritancesTaxe.values.sum().k€String)")
+        if verbose {
+            print("> Adulte décédé   : \(decedentName)")
+            print("> Adulte survivant: \(adultSurvivorName)")
+            print("> Droits de succession des enfants:\n \(childrenInheritancesTaxe)\n Somme = \(childrenInheritancesTaxe.values.sum().k€String)")
+        }
         try ownershipManager.modifyLifeInsuranceClauseIfNecessaryAndPossible(
             decedentName          : decedentName,
             conjointName          : adultSurvivorName,

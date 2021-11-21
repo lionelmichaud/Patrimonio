@@ -163,3 +163,19 @@ struct SocialAccounts {
         return kpiComputer.currentRunKpiResults
     }
 }
+
+extension SocialAccounts: CustomStringConvertible {
+    public var description: String {
+        """
+
+        COMPTES SOCIAUX:
+          Année Début: \(String(describing: firstYear))
+          Année Fin  : \(String(describing: lastYear))
+          Cash Flow: \(String(describing: cashFlowArray))
+          Bilan: \(String(describing: balanceArray))
+        \(String(describing: legalSuccessions).withPrefixedSplittedLines("  "))
+        \(String(describing: lifeInsSuccessions).withPrefixedSplittedLines("  "))
+        \(String(describing: netChildrenInheritances).withPrefixedSplittedLines("  "))
+        """
+    }
+}

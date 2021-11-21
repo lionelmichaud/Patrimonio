@@ -56,7 +56,7 @@ struct DossierEditView: View {
             }
             .font(.body)
             .textFieldStyle(RoundedBorderTextFieldStyle())
-            .alert(item: $alertItem, content: myAlert)
+            .alert(item: $alertItem, content: createAlert)
         }
         .onAppear(perform: onAppear)
     }

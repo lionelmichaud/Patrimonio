@@ -42,10 +42,10 @@ struct ModelDeterministicView: View {
                     ModelDeterministicRetirementView(viewModel: viewModel)
                 }
                 .navigationTitle("Modèle Déterministe")
-                .alert(item: $alertItem, content: myAlert)
+                .alert(item: $alertItem, content: createAlert)
                 .toolbar {
                     ToolbarItem(placement: .automatic) {
-                        SaveToDiskButton(text: "Template", action: applyChangesToTemplate)
+                        SaveToDiskButton(text: "Modèle", action: applyChangesToTemplate)
                     }
                     ToolbarItem(placement: .automatic) {
                         ApplyChangesButton(action : applyChanges)
@@ -88,7 +88,7 @@ struct ModelDeterministicView: View {
     func applyChangesToTemplate() {
         guard let templateFolder = PersistenceManager.templateFolder() else {
             alertItem =
-                AlertItem(title         : Text("Echec"),
+                AlertItem(title         : Text("Répertoire 'Modèle' absent"),
                           dismissButton : .default(Text("OK")))
             return
         }
@@ -97,7 +97,7 @@ struct ModelDeterministicView: View {
             try model.saveAsJSON(toFolder: templateFolder)
         } catch {
             alertItem =
-                AlertItem(title         : Text("Echec"),
+                AlertItem(title         : Text("Echec de l'enregistrement"),
                           dismissButton : .default(Text("OK")))
         }
     }

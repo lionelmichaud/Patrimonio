@@ -16,6 +16,7 @@ import HumanLifeModel
 import Files
 import ModelEnvironment
 import Persistence
+import Persistable
 import Succession
 import LifeExpense
 import PersonModel
@@ -31,8 +32,8 @@ protocol CanResetSimulationP {
     func notifyComputationInputsModification()
 }
 
-final class Simulation: ObservableObject, CanResetSimulationP {
-
+final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
+   
     //#if DEBUG
     /// URL du fichier de stockage du résultat de calcul au format CSV
     //    static let monteCarloFileUrl = Bundle.main.url(forResource: "Monté-Carlo Kpi.csv", withExtension: nil)
@@ -40,6 +41,7 @@ final class Simulation: ObservableObject, CanResetSimulationP {
 
     // MARK: - Type Properties
 
+    static private let defaultKpiFileName: String = "KPI.json"
     static var player: AVPlayer { AVPlayer.sharedDingPlayer }
 
     // MARK: - Type Methods
@@ -61,21 +63,22 @@ final class Simulation: ObservableObject, CanResetSimulationP {
 
     // vecteur d'état de la simulation
     @Published var currentRunNb   : Int = 0
-    private var computationSM     = SimulationComputationStateMachine()
-    private var persistenceSM     = SimulationPersistenceStateMachine()
+    private var computationSM        = SimulationComputationStateMachine()
+    private var resultsPersistenceSM = SimulationPersistenceStateMachine()
+    public  var persistenceSM        = PersistenceStateMachine()
     // résultats de la simulation
     @Published var socialAccounts        = SocialAccounts()
     @Published var kpis                  = KpiDictionary()
     @Published var monteCarloResultTable = SimulationResultTable()
     @Published var currentRunResults     = SimulationResultLine()
-
+    
     // MARK: - Computed Properties
 
     var computationState : SimulationComputationState {
         computationSM.currentState
     }
     var persistenceState : SimulationPersistenceState {
-        persistenceSM.currentState
+        resultsPersistenceSM.currentState
     }
     var isComputed     : Bool {
         computationState == .completed
@@ -84,80 +87,65 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         persistenceState == .savable
     }
 
-    var occuredLegalSuccessions: [Succession] {
+    var occuredLegalSuccessions   : [Succession] {
         socialAccounts.legalSuccessions
     }
-    var occuredLifeInsSuccessions: [Succession] {
+    var occuredLifeInsSuccessions : [Succession] {
         socialAccounts.lifeInsSuccessions
     }
 
     // MARK: - Initializers
 
-    /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été séelctionné
-    init() {
-        /// création et initialisation des KPI
-        var kpiType: KpiEnum = .minimumAdultsAssetExcludinRealEstates
-        var kpi =
-            KPI(name                    : kpiType.displayString,
-                note                    : kpiType.note,
-                objective               : 200_000.0,
-                withProbability         : 0.98,
-                comparatorWithObjective : .maximize)
-        kpis[kpiType] = kpi
+    /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été sélectionné
+    init() { }
 
-        kpiType = .assetAt1stDeath
-        kpi =
-            KPI(name                    : kpiType.displayString,
-                note                    : kpiType.note,
-                objective               : 200_000.0,
-                withProbability         : 0.98,
-                comparatorWithObjective : .maximize)
-        kpis[kpiType] = kpi
+    /// Initiliser à partir d'un fichier JSON contenu dans le `bundle`
+    /// - Note: Utilisé seulement pour les Tests
+    /// - Parameters:
+    ///   - bundle: le bundle dans lequel se trouve les fichiers JSON
+    /// - Throws: en cas d'échec de lecture des données
+    public init(fromBundle bundle : Bundle) {
+        kpis = bundle.loadFromJSON(KpiDictionary.self,
+                                   from                 : Simulation.defaultKpiFileName,
+                                   dateDecodingStrategy : .iso8601,
+                                   keyDecodingStrategy  : .useDefaultKeys)
+        kpis.setKpisName()
 
-        kpiType = .assetAt2ndtDeath
-        kpi =
-            KPI(name                    : kpiType.displayString,
-                note                    : kpiType.note,
-                objective               : 200_000.0,
-                withProbability         : 0.98,
-                comparatorWithObjective : .maximize)
-        kpis[kpiType] = kpi
-
-        kpiType = .netSuccessionAt2ndDeath
-        kpi =
-            KPI(name                    : kpiType.displayString,
-                note                    : kpiType.note,
-                objective               : 200_000.0,
-                withProbability         : 0.98,
-                comparatorWithObjective : .maximize)
-        kpis[kpiType] = kpi
-
-        kpiType = .successionTaxesAt1stDeath
-        kpi =
-            KPI(name                    : kpiType.displayString,
-                note                    : kpiType.note,
-                objective               : 0.0,
-                withProbability         : 0.98,
-                comparatorWithObjective : .maximize)
-        kpis[kpiType] = kpi
-
-        kpiType = .successionTaxesAt2ndDeath
-        kpi =
-            KPI(name                    : kpiType.displayString,
-                note                    : kpiType.note,
-                objective               : 0.0,
-                withProbability         : 0.98,
-                comparatorWithObjective : .maximize)
-        kpis[kpiType] = kpi
+        // exécuter la transition
+        persistenceSM.process(event: .onLoad)
     }
-
+    
     // MARK: - Methods
+    
+    /// Lire à partir d'un fichier JSON contenu dans le dossier `fromFolder`
+    /// - Parameters:
+    ///   - folder: dossier où se trouve le fichier JSON à utiliser
+    /// - Throws: en cas d'échec de lecture des données
+    public func loadFromJSON(fromFolder folder: Folder) throws {
+        // charger les données JSON
+        kpis = try KpiDictionary(fromFile             : Simulation.defaultKpiFileName,
+                                 fromFolder           : folder,
+                                 dateDecodingStrategy : .iso8601,
+                                 keyDecodingStrategy  : .useDefaultKeys)
+        kpis.setKpisName()
+
+        // exécuter la transition
+        persistenceSM.process(event: .onLoad)
+    }
+    
+    public func saveAsJSON(toFolder folder: Folder) throws {
+        try kpis.saveAsJSON(toFile   : Simulation.defaultKpiFileName,
+                            toFolder : folder)
+
+        // exécuter la transition
+        persistenceSM.process(event: .onSave)
+    }
     
     /// Traiter un événement
     /// - Parameter event: événement à traiter
     func process(event: SimulationEvent) {
         computationSM.process(event: event)
-        persistenceSM.process(event: event)
+        resultsPersistenceSM.process(event: event)
     }
 
     /// Réinitialiser la simulation quand un des paramètres qui influe sur la simulation à changé
@@ -175,6 +163,13 @@ final class Simulation: ObservableObject, CanResetSimulationP {
     ///  - mais pas à chaque Run
     private func resetKPIs() {
         kpis.reset(withMode: mode)
+    }
+    
+    func setKpi(type  : KpiEnum,
+                value : KPI) {
+        kpis[type] = value
+        notifyComputationInputsModification()
+        persistenceSM.process(event: .onModify)
     }
     
     /// Remettre à zéro les historiques des tirages aléatoires avant le lancement d'un MontéCarlo
@@ -384,5 +379,25 @@ final class Simulation: ObservableObject, CanResetSimulationP {
         patrimoine.restoreState()
 
         process(event: .onComputationCompletion)
+    }
+}
+
+extension Simulation: CustomStringConvertible {
+    public var description: String {
+        """
+
+        SIMULATION:
+          Titre: \(title)
+          Note:  \(note)
+          Mode:  \(mode)
+          Année Début: \(String(describing: firstYear))
+          Année Fin  : \(String(describing: lastYear))
+          Run en cours: \(String(describing: currentRunNb))
+          - Modifié:  \(isModified.frenchString)
+          - Terminé:  \(isComputed.frenchString)
+          - Sauvable: \(isSavable.frenchString)
+        \(String(describing: kpis).withPrefixedSplittedLines("  "))
+        \(String(describing: socialAccounts).withPrefixedSplittedLines("  "))
+        """
     }
 }

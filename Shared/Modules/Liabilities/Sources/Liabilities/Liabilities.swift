@@ -191,8 +191,8 @@ extension Liabilities: CustomStringConvertible {
     public var description: String {
         """
         PASSIF:
-        \(debts.description.withPrefixedSplittedLines("  "))
-        \(loans.description.withPrefixedSplittedLines("  "))
+        \(String(describing: debts).withPrefixedSplittedLines("  "))
+        \(String(describing: loans).withPrefixedSplittedLines("  "))
         """
     }
 }
