@@ -18,6 +18,7 @@ struct DossierPropertiesView: View {
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var expenses   : LifeExpensesDic
     @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var simulation : Simulation
     var dossier: Dossier
     var sectionHeader: String
 
@@ -41,7 +42,9 @@ struct DossierPropertiesView: View {
     }
     
     private func savable() -> Bool {
-        family.isModified || expenses.isModified || patrimoine.isModified || model.isModified
+        family.isModified || expenses.isModified ||
+            patrimoine.isModified || model.isModified ||
+            simulation.isModified
     }
 }
 

@@ -118,7 +118,7 @@ struct BetaRandomizerEditView : View {
         BetaRandomizerView(randomizer: betaRandomizer)
             .toolbar {
                 ToolbarItem(placement: .automatic) {
-                    SaveToDiskButton(text   : "Template",
+                    SaveToDiskButton(text   : "Modèle",
                                      action : { applyChangesToTemplate(viewModel) })
                 }
                 ToolbarItem(placement: .automatic) {

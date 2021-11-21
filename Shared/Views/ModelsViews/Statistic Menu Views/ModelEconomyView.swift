@@ -54,7 +54,7 @@ struct ModelEconomyView: View {
         }
         .navigationTitle("Modèle Economique: Fonctions de Distribution")
         .navigationBarTitleDisplayMode(.inline)
-        .alert(item: $alertItem, content: myAlert)
+        .alert(item: $alertItem, content: createAlert)
     }
 
     // MARK: - Methods

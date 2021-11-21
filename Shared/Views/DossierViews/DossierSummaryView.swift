@@ -19,6 +19,7 @@ struct DossierSummaryView: View {
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var expenses   : LifeExpensesDic
     @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var simulation : Simulation
     @State private var alertItem: AlertItem?
 
     var body: some View {
@@ -28,7 +29,7 @@ struct DossierSummaryView: View {
                                       sectionHeader: "Dossier en cours")
             }
             .navigationTitle(Text("Dossier en cours d'utilisation"))
-            .alert(item: $alertItem, content: myAlert)
+            .alert(item: $alertItem, content: createAlert)
             .toolbar {
                 /// Bouton: Sauvegarder
                 ToolbarItem(placement: .automatic) {
@@ -43,7 +44,9 @@ struct DossierSummaryView: View {
     
     /// True si le dossier a été modifié
     private var savable: Bool {
-        family.isModified || expenses.isModified || patrimoine.isModified || model.isModified
+        family.isModified || expenses.isModified ||
+            patrimoine.isModified || model.isModified ||
+            simulation.isModified
     }
 
     // MARK: - Methods

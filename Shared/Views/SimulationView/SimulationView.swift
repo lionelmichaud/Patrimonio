@@ -31,7 +31,7 @@ struct SimulationView: View {
             /// Primary view
             List {
                 // calcul de simulation
-                ComputationSectionView()
+                ComputationSideBarSectionView()
                 
                 if dataStore.activeDossier != nil {
                     // affichage du scénario utilisé pour la simulation

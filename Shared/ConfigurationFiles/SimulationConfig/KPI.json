@@ -1,0 +1,50 @@
+[
+    "Actif Financier Minimum",
+    {
+        "valeur objectif" : 200000,
+        "probabilité minimum d'atteindre l'objectif" : 0.98,
+        "comparateur avec l'objectif" : "plus grand que",
+        "nom" : "Actif Financier Minimum",
+        "note" : "Valeur minimale atteinte dans le temps pour l'ACTIF NET des ADULTES (hors immobilier physique) :\n - Biens pris en compte : <<OwnershipNature>>\n - Contexte d'évaluation: <<AssetEvaluationContext>>"
+    },
+    "Actif au Premier Décès",
+    {
+        "valeur objectif" : 200000,
+        "probabilité minimum d'atteindre l'objectif" : 0.98,
+        "comparateur avec l'objectif" : "plus grand que",
+        "nom" : "Actif au Premier Décès",
+        "note" : "Valeur atteinte au 1er décès pour l'ACTIF NET (hors immobilier physique) :\n - Biens pris en compte : <<OwnershipNature>>\n - Contexte d'évaluation: <<AssetEvaluationContext>>"
+    },
+    "Actif au Dernier Décès",
+    {
+        "valeur objectif" : 200000,
+        "probabilité minimum d'atteindre l'objectif" : 0.98,
+        "comparateur avec l'objectif" : "plus grand que",
+        "nom" : "Actif au Dernier Décès",
+        "note" : "Valeur atteinte au 2nd décès pour l'ACTIF NET (hors immobilier physique) :\n - Biens pris en compte : <<OwnershipNature>>\n - Contexte d'évaluation: <<AssetEvaluationContext>>"
+    },
+    "Héritage net des enfants",
+    {
+        "valeur objectif" : 200000,
+        "probabilité minimum d'atteindre l'objectif" : 0.98,
+        "comparateur avec l'objectif" : "plus grand que",
+        "nom" : "Héritage net des enfants",
+        "note" : "Héritage total net reçu par les enfants après le dernier décès des parents."
+    },
+    "Droits suc. enfants 1er décès",
+    {
+        "valeur objectif" : 0,
+        "probabilité minimum d'atteindre l'objectif" : 0.98,
+        "comparateur avec l'objectif" : "plus grand que",
+        "nom" : "Droits suc. enfants 1er décès",
+        "note" : "Droits de succession dûs par les enfants au premier décès d'un parent."
+    },
+    "Droits suc. enfants total",
+    {
+        "valeur objectif" : 0,
+        "probabilité minimum d'atteindre l'objectif" : 0.98,
+        "comparateur avec l'objectif" : "plus grand que",
+        "nom" : "Droits suc. enfants total",
+        "note" : "Droits de succession cumulés dûs par les enfants après le dernier décès des parents."
+    }
+]

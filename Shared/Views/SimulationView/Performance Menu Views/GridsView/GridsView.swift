@@ -152,7 +152,7 @@ struct ShortGridView: View {
                 PopOverContentView(title       : popOverTitle,
                                    description : popOverMessage)
             }
-            .alert(item: $alertItem, content: myAlert)
+            .alert(item: $alertItem, content: createAlert)
     }
     
     func saveGrid() {

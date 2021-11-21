@@ -45,7 +45,7 @@ struct OwnersListView: View {
         }
         .onChange(of: name, perform: addOwner)
         .onAppear(perform: checkPercentageOfOwnership)
-        .alert(item: $alertItem, content: myAlert)
+        .alert(item: $alertItem, content: createAlert)
     }
     
     func checkPercentageOfOwnership() {
@@ -114,9 +114,11 @@ struct OwnersListView_Previews: PreviewProvider {
         Group {
             OwnersListView(title: "Usufruitier",
                            owners: .constant(goodOwners))
+                .preferredColorScheme(.dark)
                 .environmentObject(family)
             OwnersListView(title: "Usufruitier",
                            owners: .constant(badOwners))
+                .preferredColorScheme(.dark)
                 .environmentObject(family)
         }
     }

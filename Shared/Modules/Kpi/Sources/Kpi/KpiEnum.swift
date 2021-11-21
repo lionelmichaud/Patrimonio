@@ -11,69 +11,17 @@ import Persistence
 
 // MARK: - Enumération des KPI
 
-public enum KpiEnum: Int, PickableEnumP, Codable, Hashable {
-    case minimumAdultsAssetExcludinRealEstates = 0
-    case assetAt1stDeath
-    case assetAt2ndtDeath
-    case netSuccessionAt2ndDeath
-    case successionTaxesAt1stDeath
-    case successionTaxesAt2ndDeath
+public enum KpiEnum: String, PickableEnumP, Codable, Hashable {
+    case minimumAdultsAssetExcludinRealEstates = "Actif Financier Minimum"
+    case assetAt1stDeath                       = "Actif au Premier Décès"
+    case assetAt2ndtDeath                      = "Actif au Dernier Décès"
+    case netSuccessionAt2ndDeath               = "Héritage net des enfants"
+    case successionTaxesAt1stDeath             = "Droits suc. enfants 1er décès"
+    case successionTaxesAt2ndDeath             = "Droits suc. enfants total"
 
     // properties
     
-    var id: Int {
-        return self.rawValue
-    }
-    
     public var pickerString: String {
-        switch self {
-            case .minimumAdultsAssetExcludinRealEstates:
-                return "Actif Financier Minimum"
-            case .assetAt1stDeath:
-                return "Actif au Premier Décès"
-            case .assetAt2ndtDeath:
-                return "Actif au Dernier Décès"
-            case .netSuccessionAt2ndDeath: // KPI #4
-                return "Héritage net des enfants"
-            case .successionTaxesAt1stDeath:  // KPI #5
-                return "Droits suc. enfants 1er décès"
-            case .successionTaxesAt2ndDeath:  // KPI #6
-                return "Droits suc. enfants total"
-        }
-    }
-    
-    public var note: String {
-        switch self {
-            case .minimumAdultsAssetExcludinRealEstates:
-                return """
-                    Valeur minimale atteinte dans le temps pour l'ACTIF NET des ADULTES (hors immobilier physique) :
-                     - Biens pris en compte : <<OwnershipNature>>
-                     - Contexte d'évaluation: <<AssetEvaluationContext>>
-                    """
-            case .assetAt1stDeath:
-                return """
-                    Valeur atteinte au 1er décès pour l'ACTIF NET (hors immobilier physique) :
-                     - Biens pris en compte : <<OwnershipNature>>
-                     - Contexte d'évaluation: <<AssetEvaluationContext>>
-                    """
-            case .assetAt2ndtDeath:
-                return """
-                    Valeur atteinte au 2nd décès pour l'ACTIF NET (hors immobilier physique) :
-                     - Biens pris en compte : <<OwnershipNature>>
-                     - Contexte d'évaluation: <<AssetEvaluationContext>>
-                    """
-            case .netSuccessionAt2ndDeath:
-                return """
-                    Héritage total net reçu par les enfants après le dernier décès des parents.
-                    """
-            case .successionTaxesAt1stDeath:
-                return """
-                    Droits de succession dûs par les enfants au premier décès d'un parent.
-                    """
-            case .successionTaxesAt2ndDeath:
-                return """
-                    Droits de succession cumulés dûs par les enfants après le dernier décès des parents.
-                    """
-        }
+        self.rawValue
     }
 }

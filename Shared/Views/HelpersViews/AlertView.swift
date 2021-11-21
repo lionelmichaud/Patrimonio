@@ -17,7 +17,7 @@ struct AlertItem: Identifiable {
     var secondaryButton : Alert.Button?
 }
 
-func myAlert(alertItem: AlertItem) -> Alert {
+func createAlert(alertItem: AlertItem) -> Alert {
     if let primaryButton = alertItem.primaryButton,
         let secondaryButton = alertItem.secondaryButton {
         return Alert(title           : alertItem.title,
@@ -62,7 +62,7 @@ struct ContentWithAlertView: View {
                 Text("SHOW ALERT 2")
             })
 
-        }.alert(item: $alertItem, content: myAlert)
+        }.alert(item: $alertItem, content: createAlert)
     }
 }
 

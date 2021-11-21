@@ -240,9 +240,9 @@ extension Patrimoin: CustomStringConvertible {
         """
 
         PATRIMOINE:
-        \(("Modifié:" + String(isModified)).withPrefixedSplittedLines("  "))
-        \(assets.description.withPrefixedSplittedLines("  "))
-        \(liabilities.description.withPrefixedSplittedLines("  "))
+          Modifié: \(isModified.frenchString)
+        \(String(describing: assets).withPrefixedSplittedLines("  "))
+        \(String(describing: liabilities).withPrefixedSplittedLines("  "))
         """
     }
 }

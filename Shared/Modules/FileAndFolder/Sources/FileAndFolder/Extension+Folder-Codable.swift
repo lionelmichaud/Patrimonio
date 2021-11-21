@@ -6,7 +6,10 @@
 //
 
 import Foundation
+import os
 import Files
+
+private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Folder.extension")
 
 public extension Folder {
     /// Lire les `Data` dans un fichier nommé `fileName`
@@ -14,8 +17,14 @@ public extension Folder {
     /// - Parameters:
     ///   - fileName: nom du fichier
     func load(from fileName: String) throws -> Data {
-        let file = try self.file(named: fileName)
-        return try file.read()
+        do {
+            let file = try self.file(named: fileName)
+            return try file.read()
+        } catch {
+            let errorStr = String(describing: (error as! LocationError))
+            customLog.log(level: .error, "\(errorStr)")
+            throw error
+        }
     }
     /// Lire l'objet de type `type` au format JSON dans un fichier nommé `fileName`
     /// dans le folder `self`
@@ -26,10 +35,16 @@ public extension Folder {
                                       from fileName: String,
                                       dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
                                       keyDecodingStrategy : JSONDecoder.KeyDecodingStrategy  = .useDefaultKeys) throws -> T {
-        let jsonFile = try self.file(named: fileName)
-        return jsonFile.loadFromJSON(type,
-                                     dateDecodingStrategy: dateDecodingStrategy,
-                                     keyDecodingStrategy: keyDecodingStrategy)
+        do {
+            let jsonFile = try self.file(named: fileName)
+            return jsonFile.loadFromJSON(type,
+                                         dateDecodingStrategy: dateDecodingStrategy,
+                                         keyDecodingStrategy: keyDecodingStrategy)
+        } catch {
+            let errorStr = String(describing: (error as! LocationError))
+            customLog.log(level: .error, "\(errorStr)")
+            throw error
+        }
     }
     
     /// Enregistrer  `encodeData` dans un fichier nommé `fileName`
@@ -39,8 +54,14 @@ public extension Folder {
     ///   - fileName: nom du fichier
     func save(_ encodeData: Data,
               to fileName: String) throws {
-        let file = try self.createFileIfNeeded(withName: fileName)
-        file.save(encodeData)
+        do {
+            let file = try self.createFileIfNeeded(withName: fileName)
+            file.save(encodeData)
+        } catch {
+            let errorStr = String(describing: (error as! LocationError))
+            customLog.log(level: .error, "\(errorStr)")
+            throw error
+        }
     }
     
     /// Enregistrer l'objet `object` au format JSON dans un fichier nommé `fileName`
@@ -52,9 +73,15 @@ public extension Folder {
                                     to fileName: String,
                                     dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate,
                                     keyEncodingStrategy : JSONEncoder.KeyEncodingStrategy  = .useDefaultKeys) throws {
-        let jsonFile = try self.createFileIfNeeded(withName: fileName)
-        jsonFile.saveAsJSON(object,
-                            dateEncodingStrategy: dateEncodingStrategy,
-                            keyEncodingStrategy: keyEncodingStrategy)
+        do {
+            let jsonFile = try self.createFileIfNeeded(withName: fileName)
+            jsonFile.saveAsJSON(object,
+                                dateEncodingStrategy: dateEncodingStrategy,
+                                keyEncodingStrategy: keyEncodingStrategy)
+        } catch {
+            let errorStr = String(describing: (error as! LocationError))
+            customLog.log(level: .error, "\(errorStr)")
+            throw error
+        }
     }
 }

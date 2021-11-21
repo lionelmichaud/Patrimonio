@@ -18,6 +18,7 @@ struct DossierBrowserView: View {
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var expenses   : LifeExpensesDic
     @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var simulation : Simulation
     @Binding var showingSheet        : Bool
     @State private var alertItem     : AlertItem?
 
@@ -51,7 +52,7 @@ struct DossierBrowserView: View {
             .onMove(perform: moveDossier)
             .listStyle(SidebarListStyle())
         }
-        .alert(item: $alertItem, content: myAlert)
+        .alert(item: $alertItem, content: createAlert)
     }
     
     func activate(dossierIndex: Int) {
@@ -81,7 +82,11 @@ struct DossierBrowserView: View {
     /// True si le dossier est actif et a été modifié
     func savable(_ dossier: Dossier) -> Bool {
         dossier.isActive &&
-            (family.isModified || expenses.isModified || patrimoine.isModified || model.isModified)
+            (family.isModified ||
+                expenses.isModified ||
+                patrimoine.isModified ||
+                model.isModified ||
+                simulation.isModified)
     }
     
 }

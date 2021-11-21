@@ -42,10 +42,10 @@ struct ModelDeterministicView: View {
                     ModelDeterministicRetirementView(viewModel: viewModel)
                 }
                 .navigationTitle("Modèle Déterministe")
-                .alert(item: $alertItem, content: myAlert)
+                .alert(item: $alertItem, content: createAlert)
                 .toolbar {
                     ToolbarItem(placement: .automatic) {
-                        SaveToDiskButton(text: "Template", action: applyChangesToTemplate)
+                        SaveToDiskButton(text: "Modèle", action: applyChangesToTemplate)
                     }
                     ToolbarItem(placement: .automatic) {
                         ApplyChangesButton(action : applyChanges)

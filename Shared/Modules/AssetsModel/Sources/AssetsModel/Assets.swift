@@ -360,11 +360,11 @@ extension Assets: CustomStringConvertible {
     public var description: String {
         """
         ACTIF:
-        \(periodicInvests.description.withPrefixedSplittedLines("  "))
-        \(freeInvests.description.withPrefixedSplittedLines("  "))
-        \(realEstates.description.withPrefixedSplittedLines("  "))
-        \(scpis.description.withPrefixedSplittedLines("  "))
-        \(sci.description.withPrefixedSplittedLines("  "))
+        \(String(describing: periodicInvests).withPrefixedSplittedLines("  "))
+        \(String(describing: freeInvests).withPrefixedSplittedLines("  "))
+        \(String(describing: realEstates).withPrefixedSplittedLines("  "))
+        \(String(describing: scpis).withPrefixedSplittedLines("  "))
+        \(String(describing: sci).withPrefixedSplittedLines("  "))
         """
     }
 }
