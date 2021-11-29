@@ -20,13 +20,14 @@ extension OwnershipManager {
     ///   - year: année du décès
     func transferOwnershipOf(assets          : inout Assets,
                              liabilities     : inout Liabilities,
-                             of decedentName : String) {
+                             of decedentName : String,
+                             isFirstDecedent : Bool = true) {
         // rechercher un conjont survivant
         var spouseName         : String?
         var spouseFiscalOption : InheritanceFiscalOption?
-        if let _spouseName = family.spouseNameOf(decedentName),
+        if let _spouseName = family.spouseNameOf(decedentName), isFirstDecedent,
            let spouse = family.member(withName: _spouseName) as? Adult {
-            if spouse.isAlive(atEndOf: year) {
+            if spouse.isAlive(atEndOf: year - 1) {
                 spouseName = _spouseName
                 spouseFiscalOption = spouse.fiscalOption
             }

@@ -165,7 +165,7 @@ final class LegalSuccessionManagerTests: XCTestCase {
 
         let conjointSurvivant = Tests.family.adults.first(where: { $0.displayName == "Mme. Vanessa MICHAUD" })!
         let inheritance = Tests.manager
-            .spouseInheritance(masseSuccessorale : masse,
+            .spouseAndChildrenInheritance(masseSuccessorale : masse,
                                conjointSurvivant : conjointSurvivant)
         
         let brutChild = masse * childShare

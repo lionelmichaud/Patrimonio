@@ -122,7 +122,7 @@ public struct SuccessionManager {
         legal         = SuccessionsSynthesis()
         lifeInsurance = SuccessionsSynthesis()
         
-        /// (1) identification des personnes décédées dans l'année
+        /// (1) identification des personnes décédées dans l'année (ordonnés par âge décroissant)
         let adultDecedentsNames = family.deceasedAdults(during: year)
         
         guard adultDecedentsNames.isNotEmpty else { return }
@@ -176,10 +176,11 @@ public struct SuccessionManager {
         /// (1) Calculer les transmissions et les droits de transmission assurances vies
         /// sans exercer de clause à option
         var spouseName: String?
-        if let _spouseName = family.spouseNameOf(decedentName) {
-            if family.member(withName: _spouseName)!.isAlive(atEndOf: year) {
-                spouseName = _spouseName
-            }
+        if let _spouseName = family.spouseNameOf(decedentName), isFirstDecedent,
+           // pour le conjoint, il peut décéder la même année => il faut vérifier qu'il est vivant à la fin de l'année précédente
+           family.member(withName: _spouseName)!.isAlive(atEndOf: year - 1) {
+            spouseName = _spouseName
+            
         }
         let childrenAlive = family.childrenAliveName(atEndOf : year)
         var lifeInsSuccession =
@@ -208,9 +209,10 @@ public struct SuccessionManager {
         
         /// (3) Transférer les biens d'un défunt vers ses héritiers
         ownershipManager.transferOwnershipOf(
-            assets      : &patrimoine.assets,
-            liabilities : &patrimoine.liabilities,
-            of          : decedentName)
+            assets          : &patrimoine.assets,
+            liabilities     : &patrimoine.liabilities,
+            of              : decedentName,
+            isFirstDecedent : isFirstDecedent)
         
         /// (4) Modifier les clauses d'AV dont le défunt est un des donataires
         try! ownershipManager.modifyClausesWhereDecedentIsFuturRecipient(

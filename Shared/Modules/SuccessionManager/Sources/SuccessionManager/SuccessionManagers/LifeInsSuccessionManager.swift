@@ -155,10 +155,13 @@ struct LifeInsuranceSuccessionManager {
             print("Total des capitaux décès taxables assurance vie = \(totalTaxableValue.rounded())")
             print("Total des capitaux décès reçus d'assurance vie  = \(totalReceivedValue.rounded())")
         }
-
+        
         // calculer l'héritage de chaque membre de la famille autre que le défunt
         // à partir des capitaux décès taxables et des abattements
-        for member in family.members.items where member.isAlive(atEndOf: year) && member.displayName != decedentName {
+        // Pour le conjoint, il peut décéder la même année => il faut vérifier qu'il est vivant à la fin de l'année précédente
+        for member in family.members.items where
+            member.displayName != decedentName
+            && (member is Adult && member.isAlive(atEndOf: year-1) || member is Child && member.isAlive(atEndOf: year)) {
             let name = member.displayName
             if let capitauxTaxables = capitaux.taxable[name] {
                 // calculer les taxes de transmission

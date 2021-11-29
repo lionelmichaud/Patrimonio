@@ -47,7 +47,8 @@ extension LifeInsuranceSuccessionManager {
             }
         }
         if verbose {
-            print(abattementsDico)
+            print("Abattements des héritiers participants à des démembrements:")
+            print(String(describing: abattementsDico))
         }
         
         // les autres bénéficient de 100% d'abattement par personne
@@ -60,7 +61,8 @@ extension LifeInsuranceSuccessionManager {
             abattementsDico[spouseName!] = 1.0
         }
         if verbose {
-            print(abattementsDico)
+            print("Abattements des héritiers:")
+            print(String(describing: abattementsDico))
         }
         
         return abattementsDico

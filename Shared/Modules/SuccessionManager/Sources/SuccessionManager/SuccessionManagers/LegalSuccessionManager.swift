@@ -57,16 +57,16 @@ public struct LegalSuccessionManager {
             print("Masse successorale légale = \(_masseSuccessorale.rounded())")
         }
 
-        // Calculer la part d'héritage du conjoint
+        // Calculer la part d'héritage du conjoint (s'il est vivant à la fin de l'année précédente)
         // Rechercher l'option fiscale du conjoint survivant et calculer sa part d'héritage
         if let conjointSurvivant =
             family.members.items.first(where: { member in
-                member is Adult && member.isAlive(atEndOf: year) && member.displayName != decedentName
+                member is Adult && member.displayName != decedentName && member.isAlive(atEndOf: year - 1)
             }) {
             // il y a un conjoint survivant
-            let inheritances = spouseInheritance(masseSuccessorale : _masseSuccessorale,
-                                                 conjointSurvivant : conjointSurvivant as! Adult,
-                                                 verbose           : verbose)
+            let inheritances = spouseAndChildrenInheritance(masseSuccessorale : _masseSuccessorale,
+                                                            conjointSurvivant : conjointSurvivant as! Adult,
+                                                            verbose           : verbose)
             if verbose {
                 print("  Part totale = ", inheritances.sum(for: \.percentFiscal))
                 print("  Brut total  = ", inheritances.sum(for: \.brutFiscal).rounded())
@@ -113,9 +113,9 @@ public struct LegalSuccessionManager {
     ///   - conjointSurvivant: nom du conjoint survivant
     ///   - fiscalModel: model fiscal
     /// - Returns: héritage légal du conjoint
-    func spouseInheritance(masseSuccessorale : Double,
-                           conjointSurvivant : Adult,
-                           verbose           : Bool = false) -> [Inheritance] {
+    func spouseAndChildrenInheritance(masseSuccessorale : Double,
+                                      conjointSurvivant : Adult,
+                                      verbose           : Bool = false) -> [Inheritance] {
         // % d'héritage résultants de l'option fiscale retenue par le conjoint pour chacun des héritiers
         let inheritanceShares = conjointSurvivant
             .fiscalOption
@@ -180,9 +180,9 @@ public struct LegalSuccessionManager {
                                                 tax           : heritageOfChild.taxe,
                                                 received      : 0.0,
                                                 receivedNet   : 0.0 - heritageOfChild.taxe))
+                if verbose { print(String(describing: inheritances.last)) }
             }
         }
-        if verbose { print(String(describing: inheritances.last)) }
 
         return inheritances
     }
