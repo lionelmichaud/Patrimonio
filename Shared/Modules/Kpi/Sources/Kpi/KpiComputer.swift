@@ -205,6 +205,13 @@ public struct KpiComputer {
                     setKpiValue(kpiEnum        : .assetAt1stDeath,
                                 value          : netFinancialAssetsBeforeTransmission,
                                 kpiDictionnary : &kpiDictionnary)
+                    
+                    /// KPI n°6: décès du premier conjoint et mémoriser la valeur du KPI
+                    // mémoriser le montant des droits de succession des enfants au dernier décès
+                    let taxes = successionsChildrenTaxes(for: allSuccessions)
+                    setKpiValue(kpiEnum        : .successionTaxesAt1stDeath,
+                                value          : taxes,
+                                kpiDictionnary : &kpiDictionnary)
                 }
                 /// KPI n°2: décès du second conjoint et mémoriser la valeur du KPI
                 // mémoriser le montant de l'Actif Net (hors immobilier physique) des parents avant transmission

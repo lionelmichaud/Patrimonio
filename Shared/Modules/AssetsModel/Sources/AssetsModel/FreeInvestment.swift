@@ -236,7 +236,9 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     public func ownedValue(by ownerName      : String,
                            atEndOf year      : Int,
                            evaluationContext : EvaluationContext) -> Double {
-        // cas particuliers
+        var evaluatedValue : Double
+
+        // cas particuliers des décotes sur la valeur du bien
         switch evaluationContext {
             case .legalSuccession:
                 // le bien est-il une assurance vie ?
@@ -246,34 +248,34 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                         return 0
                         
                     default:
-                        // le défunt est-il usufruitier ?
-                        if ownership.hasAnUsufructOwner(named: ownerName) {
+                        // le défunt est-il usufruitier seulement usufruitier ?
+                        if ownership.isDismembered &&
+                            ownership.hasAnUsufructOwner(named: ownerName) &&
+                            !ownership.hasABareOwner(named: ownerName) {
                             // si oui alors l'usufruit rejoint la nu-propriété sans droit de succession
                             // l'usufruit n'est donc pas intégré à la masse successorale du défunt
                             return 0
                         }
-                        // pas de décote
+                        // prendre la valeur totale du bien sans aucune décote
+                        evaluatedValue = value(atEndOf: year)
                 }
                 
             case .lifeInsuranceSuccession, .lifeInsuranceTransmission:
                 // le bien est-il une assurance vie ?
                 switch type {
                     case .lifeInsurance:
-                        // pas de décote
-                        break
-                        
+                        // prendre la valeur totale du bien sans aucune décote
+                        evaluatedValue = value(atEndOf: year)
+
                     default:
                         // on recherche uniquement les assurances vies
                         return 0
                 }
                 
             case .ifi, .isf, .patrimoine:
-                // pas de décote
-                break
+                // prendre la valeur totale du bien sans aucune décote
+                evaluatedValue = value(atEndOf: year)
         }
-        
-        // prendre la valeur totale du bien sans aucune décote
-        let evaluatedValue = value(atEndOf: year)
         
         // calculer la part de propriété
         let value = evaluatedValue == 0 ? 0 : ownership.ownedValue(by                : ownerName,

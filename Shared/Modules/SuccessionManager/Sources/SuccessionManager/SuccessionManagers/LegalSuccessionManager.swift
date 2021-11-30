@@ -45,6 +45,7 @@ public struct LegalSuccessionManager {
     ///   - fiscalModel: modèle fiscal à utiliser
     /// - Returns: Succession légale du défunt incluant la table des héritages et droits de succession pour chaque héritier
     public func succession(of decedentName : String,
+                           isFirstDecedent : Bool = true,
                            with patrimoine : Patrimoin,
                            verbose         : Bool = false) -> Succession {
 
@@ -57,15 +58,15 @@ public struct LegalSuccessionManager {
             print("Masse successorale légale = \(_masseSuccessorale.rounded())")
         }
 
-        // Calculer la part d'héritage du conjoint (s'il est vivant à la fin de l'année précédente)
+        // Calculer la part d'héritage du conjoint (s'il est vivant à la fin de l'année précédente,
+        // et s'il n'est pas pré-décédé)
         // Rechercher l'option fiscale du conjoint survivant et calculer sa part d'héritage
-        if let conjointSurvivant =
-            family.members.items.first(where: { member in
-                member is Adult && member.displayName != decedentName && member.isAlive(atEndOf: year - 1)
-            }) {
+        if let conjointSurvivant = family.spouseOf(family.member(withName: decedentName)! as! Adult),
+           conjointSurvivant.isAlive(atEndOf: year - 1),
+           isFirstDecedent {
             // il y a un conjoint survivant
             let inheritances = spouseAndChildrenInheritance(masseSuccessorale : _masseSuccessorale,
-                                                            conjointSurvivant : conjointSurvivant as! Adult,
+                                                            conjointSurvivant : conjointSurvivant,
                                                             verbose           : verbose)
             if verbose {
                 print("  Part totale = ", inheritances.sum(for: \.percentFiscal))

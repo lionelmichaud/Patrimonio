@@ -214,15 +214,17 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
                            evaluationContext : EvaluationContext) -> Double {
         var evaluatedValue : Double
         
-        // cas particuliers
+        // cas particuliers des décotes sur la valeur du bien
         switch evaluationContext {
             case .ifi, .isf:
                 // appliquer la décote IFI
                 evaluatedValue = ifiValue(atEndOf: year)
                 
             case .legalSuccession:
-                // le défunt est-il usufruitier ?
-                if ownership.hasAnUsufructOwner(named: ownerName) {
+                // le défunt est-il seulement usufruitier ?
+                if ownership.isDismembered &&
+                    ownership.hasAnUsufructOwner(named: ownerName) &&
+                    !ownership.hasABareOwner(named: ownerName) {
                     // si oui alors l'usufruit rejoint la nu-propriété sans droit de succession
                     // l'usufruit n'est donc pas intégré à la masse successorale du défunt
                     return 0
@@ -239,11 +241,10 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
                 evaluatedValue = value(atEndOf: year)
         }
         // calculer la part de propriété
-        let value = evaluatedValue == 0 ? 0 :
-            ownership.ownedValue(by                : ownerName,
-                                 ofValue           : evaluatedValue,
-                                 atEndOf           : year,
-                                 evaluationContext : evaluationContext)
+        let value = evaluatedValue == 0 ? 0 : ownership.ownedValue(by                : ownerName,
+                                                                   ofValue           : evaluatedValue,
+                                                                   atEndOf           : year,
+                                                                   evaluationContext : evaluationContext)
         return value
     }
     

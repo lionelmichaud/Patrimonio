@@ -31,7 +31,7 @@ public struct Owner : Codable, Hashable {
     
     /// Calculer la quote part de valeur possédée
     /// - Parameter totalValue: Valeure totale du bien
-    func ownedValue(from totalValue: Double) -> Double {
+    func ownedFraction(from totalValue: Double) -> Double {
         return totalValue * fraction / 100.0
     }
 }

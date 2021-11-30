@@ -15,9 +15,10 @@ extension OwnershipManager {
 
     /// Transférer la propriété d'un `patrimoine` d'un défunt `decedent` vers ses héritiers
     /// - Parameters:
-    ///   - patrimoine: le patrimoine
+    ///   - assets: actifs du patrimoine
+    ///   - liabilities: passifs du patrimoine
     ///   - decedent: défunt
-    ///   - year: année du décès
+    ///   - isFirstDecedent: true si le défunt est le premier de la liste des défunts de l'année en cours
     func transferOwnershipOf(assets          : inout Assets,
                              liabilities     : inout Liabilities,
                              of decedentName : String,

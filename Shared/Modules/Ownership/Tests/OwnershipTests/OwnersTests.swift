@@ -26,7 +26,7 @@ class OwnerTests: XCTestCase {
                           fraction: 75.0)
         let assetValue = 1000.0
         
-        let ownedValue = owner.ownedValue(from: assetValue)
+        let ownedValue = owner.ownedFraction(from: assetValue)
         XCTAssertEqual(750.0, ownedValue)
     }
 }

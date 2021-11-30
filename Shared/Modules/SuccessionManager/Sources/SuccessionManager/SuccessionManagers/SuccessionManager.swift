@@ -156,7 +156,7 @@ public struct SuccessionManager {
     ///
     /// - Parameters:
     ///   - decedentName: Nom du défunt
-    ///   - isFirstDecedent: true si le défunt est le premier de la liste des défunts de l'année
+    ///   - isFirstDecedent: true si le défunt est le premier de la liste des défunts de l'année en cours
     ///   - nbOfDecedents: nombre de défunts de l'année
     mutating func manageSuccession(of decedentName : String,
                                    isFirstDecedent : Bool,
@@ -169,18 +169,19 @@ public struct SuccessionManager {
         /// (1) Calculer les successions et les droits de successions légales
         // sans exercer de clause à option
         let legalSuccession =
-            legalSuccessionManager.succession(of      : decedentName,
-                                              with    : patrimoine,
-                                              verbose : verbose)
+            legalSuccessionManager.succession(of              : decedentName,
+                                              isFirstDecedent : isFirstDecedent,
+                                              with            : patrimoine,
+                                              verbose         : verbose)
         
         /// (1) Calculer les transmissions et les droits de transmission assurances vies
         /// sans exercer de clause à option
         var spouseName: String?
-        if let _spouseName = family.spouseNameOf(decedentName), isFirstDecedent,
+        if let _spouseName = family.spouseNameOf(decedentName),
+           isFirstDecedent,
            // pour le conjoint, il peut décéder la même année => il faut vérifier qu'il est vivant à la fin de l'année précédente
            family.member(withName: _spouseName)!.isAlive(atEndOf: year - 1) {
             spouseName = _spouseName
-            
         }
         let childrenAlive = family.childrenAliveName(atEndOf : year)
         var lifeInsSuccession =

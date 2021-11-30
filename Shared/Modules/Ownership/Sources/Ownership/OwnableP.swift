@@ -44,7 +44,7 @@ public protocol OwnableP: NameableValuableP {
                     atEndOf year     : Int,
                     evaluationContext : EvaluationContext) -> Double
     
-    /// Calcule une fraction `evaluatedFraction` de la valeur du bien
+    /// Calcule une fraction `evaluatedFraction` de la valeur PATRIMONIALE du bien
     /// détenu en tout ou partie par la personne nommée `ownerName` et
     /// uniquement si la nature du bien répond au critère `withOwnershipNature`
     /// - Note:
@@ -56,7 +56,7 @@ public protocol OwnableP: NameableValuableP {
     ///   - year: date d'évaluation
     ///   - withOwnershipNature: nature de propriété sélectionnée
     ///   - evaluatedFraction: méthode d'évaluation sélectionnée
-    /// - Returns: fraction `evaluatedFraction` de la valeur du bien
+    /// - Returns: `evaluatedFraction` détenue  de la valeur PATRIMONIALE du bien
     func ownedValue(by ownerName        : String,
                     atEndOf year        : Int,
                     withOwnershipNature : OwnershipNature,
@@ -105,29 +105,34 @@ public extension OwnableP {
     func ownedValue(by ownerName      : String,
                     atEndOf year      : Int,
                     evaluationContext : EvaluationContext) -> Double {
-        // cas particuliers
+        var evaluatedValue : Double
+
+        // cas particuliers des décotes sur la valeur du bien
         switch evaluationContext {
             case .legalSuccession:
                 // cas particulier d'une succession:
-                //   le défunt est-il usufruitier ?
-                if ownership.isDismembered && ownership.hasAnUsufructOwner(named: ownerName) {
+                //   le défunt est-il seulement usufruitier ?
+                if ownership.isDismembered &&
+                    ownership.hasAnUsufructOwner(named: ownerName) &&
+                    !ownership.hasABareOwner(named: ownerName) {
                     // si oui alors l'usufruit rejoint la nu-propriété sans droit de succession
                     // l'usufruit n'est donc pas intégré à la masse successorale du défunt
                     return 0
                 }
-                
+                // prendre la valeur totale du bien sans aucune décote
+                evaluatedValue = value(atEndOf: year)
+
             case .lifeInsuranceSuccession, .lifeInsuranceTransmission:
                 // cas particulier d'une succession:
                 // dans ce contexte, on recherche uniquement les assurances vies
                 return 0
                 
             case .ifi, .isf, .patrimoine:
-                break
+                // prendre la valeur totale du bien sans aucune décote
+                evaluatedValue = value(atEndOf: year)
         }
         
         // cas général
-        // prendre la valeur totale du bien sans aucune décote
-        let evaluatedValue = value(atEndOf: year)
         // prendre la fraction possédée par ownerName
         let value = evaluatedValue == 0 ? 0 : ownership.ownedValue(by                : ownerName,
                                                                    ofValue           : evaluatedValue,
@@ -160,17 +165,18 @@ public extension OwnableP {
                      evaluationContext : EvaluationContext) -> NameValueDico {
         var dico: NameValueDico = [:]
         if ownership.isDismembered {
-            for owner in ownership.bareOwners {
-                dico[owner.name] = ownedValue(by                : owner.name,
-                                              atEndOf           : year,
-                                              evaluationContext : evaluationContext)
-            }
             for owner in ownership.usufructOwners {
                 dico[owner.name] = ownedValue(by                : owner.name,
                                               atEndOf           : year,
                                               evaluationContext : evaluationContext)
             }
-            
+            for owner in ownership.bareOwners where dico[owner.name] == nil {
+                // le NP n'est pas aussi UF (sinon le bloc ci-dessus à déjà calculé sa part)
+                dico[owner.name] = ownedValue(by                : owner.name,
+                                              atEndOf           : year,
+                                              evaluationContext : evaluationContext)
+            }
+
         } else {
             // valeur en pleine propriété
             for owner in ownership.fullOwners {
@@ -187,19 +193,20 @@ public extension OwnableP {
                      evaluationContext  : EvaluationContext) -> NameValueDico {
         var dico: NameValueDico = [:]
         if ownership.isDismembered {
-            for owner in ownership.bareOwners {
-                dico[owner.name] = ownership.ownedValue(by                : owner.name,
-                                                        ofValue           : totalValue,
-                                                        atEndOf           : year,
-                                                        evaluationContext : evaluationContext)
-            }
             for owner in ownership.usufructOwners {
                 dico[owner.name] = ownership.ownedValue(by                : owner.name,
                                                         ofValue           : totalValue,
                                                         atEndOf           : year,
                                                         evaluationContext : evaluationContext)
             }
-            
+            for owner in ownership.bareOwners where dico[owner.name] == nil {
+                // le NP n'est pas aussi UF (sinon le bloc ci-dessus à déjà calculé sa part)
+                dico[owner.name] = ownership.ownedValue(by                : owner.name,
+                                                        ofValue           : totalValue,
+                                                        atEndOf           : year,
+                                                        evaluationContext : evaluationContext)
+            }
+
         } else {
             // valeur en pleine propriété
             for owner in ownership.fullOwners {

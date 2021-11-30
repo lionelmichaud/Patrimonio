@@ -23,10 +23,10 @@ extension Ownership {
                              ofRevenue totalRevenue : Double) -> Double {
         if isDismembered {
             // part de la valeur actuelle détenue en UF par la personne
-            return usufructOwners[ownerName]?.ownedValue(from: totalRevenue) ?? 0
+            return usufructOwners[ownerName]?.ownedFraction(from: totalRevenue) ?? 0
         } else {
             // pleine propriété => part de la valeur actuelle détenue en PP par la personne
-            return fullOwners[ownerName]?.ownedValue(from: totalRevenue) ?? 0
+            return fullOwners[ownerName]?.ownedFraction(from: totalRevenue) ?? 0
         }
     }
     
@@ -81,12 +81,12 @@ extension Ownership {
                 case .ifi, .isf :
                     // calcul de la part d'usufruit détenue
                     // on prend en compte la valeur en pleine propriété
-                    return usufructOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
+                    return usufructOwners[ownerName]?.ownedFraction(from: totalValue) ?? 0
                     
                 case .lifeInsuranceTransmission:
                     // calcul de la part d'usufruit détenue = Quasi-Usufruit dans ce cas
                     // on prend en compte la valeur en pleine propriété pour la transmission en numéraire aux donatires
-                    return usufructOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
+                    return usufructOwners[ownerName]?.ownedFraction(from: totalValue) ?? 0
 
                 case .legalSuccession, .lifeInsuranceSuccession, .patrimoine:
                     // démembrement
@@ -111,7 +111,7 @@ extension Ownership {
                     // calcul de la valeur de la part de nue-propriété détenue
                     if let owner = bareOwners[ownerName] {
                         // on a trouvé un nue-propriétaire
-                        value += owner.ownedValue(from: bareValue)
+                        value += owner.ownedFraction(from: bareValue)
                     }
                     
                     // calcul de la valeur de la part d'usufuit détenue
@@ -132,7 +132,7 @@ extension Ownership {
             
         } else {
             // pleine propriété
-            return fullOwners[ownerName]?.ownedValue(from: totalValue) ?? 0
+            return fullOwners[ownerName]?.ownedFraction(from: totalValue) ?? 0
         }
     }
     
@@ -147,21 +147,22 @@ extension Ownership {
     public func ownedValues(ofValue totalValue : Double,
                             atEndOf year       : Int,
                             evaluationContext  : EvaluationContext) -> NameValueDico {
-        var dico = NameValueDico()
+        var dico: NameValueDico = [:]
         if isDismembered {
-            for owner in bareOwners {
-                dico[owner.name] = ownedValue(by                : owner.name,
-                                              ofValue           : totalValue,
-                                              atEndOf           : year,
-                                              evaluationContext : evaluationContext)
-            }
             for owner in usufructOwners {
                 dico[owner.name] = ownedValue(by                : owner.name,
                                               ofValue           : totalValue,
                                               atEndOf           : year,
                                               evaluationContext : evaluationContext)
             }
-            
+            for owner in bareOwners where dico[owner.name] == nil {
+                // le NP n'est pas aussi UF (sinon le bloc ci-dessus à déjà calculé sa part)
+                dico[owner.name] = ownedValue(by                : owner.name,
+                                              ofValue           : totalValue,
+                                              atEndOf           : year,
+                                              evaluationContext : evaluationContext)
+            }
+
         } else {
             // valeur en pleine propriété
             for owner in fullOwners {
