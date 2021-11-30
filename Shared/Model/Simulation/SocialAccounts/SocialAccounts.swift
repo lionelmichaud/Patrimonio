@@ -92,13 +92,16 @@ struct SocialAccounts {
             
             /// ajouter une nouvelle ligne pour une nouvelle année
             do {
-                let newCashFlowLine = try CashFlowLine(run                                   : run,
-                                                       withYear                              : year,
-                                                       withFamily                            : family,
-                                                       withExpenses                          : expenses,
-                                                       withPatrimoine                        : patrimoine,
-                                                       taxableIrppRevenueDelayedFromLastyear : lastYearDelayedTaxableIrppRevenue,
-                                                       using                                 : model)
+//                print(lifeInsSuccessions.last?.description)
+                let newCashFlowLine =
+                    try CashFlowLine(run                                   : run,
+                                     withYear                              : year,
+                                     withFamily                            : family,
+                                     withExpenses                          : expenses,
+                                     withPatrimoine                        : patrimoine,
+                                     taxableIrppRevenueDelayedFromLastyear : lastYearDelayedTaxableIrppRevenue,
+                                     previousSuccession                    : lifeInsSuccessions.last,
+                                     using                                 : model)
                 cashFlowArray.append(newCashFlowLine)
                 // ajouter les éventuelles successions survenues pendant l'année à la liste globale
                 legalSuccessions   += newCashFlowLine.legalSuccessions

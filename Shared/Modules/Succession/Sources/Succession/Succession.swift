@@ -71,6 +71,22 @@ public struct Succession: Identifiable {
         self.taxableValue = taxableValue
         self.inheritances = inheritances
     }
+    
+    // MARK: - Methods
+    
+    /// Créance de restitution fiscale de `name` inclue dans la succession `self`
+    /// - Parameter name: nom de l'héritier
+    /// - Returns: Créance de restitution fiscale
+    public func creanceRestit(of name: String) -> Double {
+        inheritances.reduce(0.0) { result, inheritance in
+            result + (inheritance.successorName == name ? inheritance.creanceRestit : 0.0)
+        }
+//        var total = 0.0
+//        inheritances.forEach { inheritance in
+//            total += inheritance.successorName == name ? inheritance.creanceRestit : 0.0
+//        }
+//        return total
+    }
 }
 extension Succession: SuccessionCsvVisitableP {
     public func accept(_ visitor: SuccessionCsvVisitorP) {

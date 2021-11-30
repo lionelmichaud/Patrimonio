@@ -26,13 +26,14 @@ struct FamilySummaryView: View {
         // sauvegarder l'état initial du patrimoine pour y revenir à la fin de chaque run
         patrimoine.saveState()
         //simulation.reset(withPatrimoine: patrimoine)
-        self.cashFlow = try? CashFlowLine(run           : 0,
-                                          withYear      : Date.now.year,
-                                          withFamily    : family,
-                                          withExpenses  : expenses,
-                                          withPatrimoine: patrimoine,
+        self.cashFlow = try? CashFlowLine(run                                   : 0,
+                                          withYear                              : Date.now.year,
+                                          withFamily                            : family,
+                                          withExpenses                          : expenses,
+                                          withPatrimoine                        : patrimoine,
                                           taxableIrppRevenueDelayedFromLastyear : 0,
-                                          using         : model)
+                                          previousSuccession                    : nil,
+                                          using                                 : model)
         patrimoine.restoreState()
     }
     

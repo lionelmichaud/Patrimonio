@@ -11,6 +11,7 @@ import FiscalModel
 import PersonModel
 import PatrimoineModel
 import FamilyModel
+import Succession
 import SuccessionManager
 
 extension CashFlowLine {
@@ -27,11 +28,13 @@ extension CashFlowLine {
     ///   - run: numéro du run en cours de calcul
     ///   - family: la famille dont il faut faire le bilan
     ///   - patrimoine: le patrimoine de la famille
+    ///   - previousSuccession: succession précédente pour les assuarnces vies
     ///   - fiscalModel: modèle fiscal
-    mutating func manageSuccession(run               : Int,
-                                   with patrimoine   : Patrimoin,
-                                   familyProvider    : FamilyProviderP,
-                                   using fiscalModel : Fiscal.Model) {
+    mutating func manageSuccession(run                : Int,
+                                   with patrimoine    : Patrimoin,
+                                   familyProvider     : FamilyProviderP,
+                                   previousSuccession : Succession?,
+                                   using fiscalModel  : Fiscal.Model) {
         // créer le manager délégué
         var successionManager = SuccessionManager(with           : patrimoine,
                                                   using          : fiscalModel,
@@ -40,7 +43,8 @@ extension CashFlowLine {
                                                   run            : run)
 
         /// Gérer les succession de l'année
-        successionManager.manageSuccessions(verbose: false)
+        successionManager.manageSuccessions(previousSuccession : previousSuccession,
+                                            verbose            : false)
 
         /// Incorporation des successions au CashFlow de l'année
         /// Récupérer les Successions de l'année pour le Cash-Flow de l'année

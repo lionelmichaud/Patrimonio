@@ -39,15 +39,16 @@ public struct LegalSuccessionManager {
     /// Calcule la succession légale d'un défunt `decedentName`et retourne
     /// une table des héritages et droits de succession pour chaque héritier
     /// - Parameters:
-    ///   - patrimoine: patrimoine
     ///   - decedentName: nom du défunt
-    ///   - year: année du décès
-    ///   - fiscalModel: modèle fiscal à utiliser
+    ///   - isFirstDecedent: true si le `decedentName` est le premier des défunts de l'année en cours
+    ///   - patrimoine: patrimoine
+    ///   - previousSuccession: succession précédente pour les assuarnces vies
     /// - Returns: Succession légale du défunt incluant la table des héritages et droits de succession pour chaque héritier
-    public func succession(of decedentName : String,
-                           isFirstDecedent : Bool = true,
-                           with patrimoine : Patrimoin,
-                           verbose         : Bool = false) -> Succession {
+    public func succession(of decedentName    : String,
+                           isFirstDecedent    : Bool = true,
+                           with patrimoine    : Patrimoin,
+                           previousSuccession : Succession?,
+                           verbose            : Bool = false) -> Succession {
 
         // Calcul de la masse successorale taxable du défunt
         // WARNING: prendre en compte la capital à la fin de l'année précédent le décès. Important pour FreeInvestement.
@@ -67,6 +68,7 @@ public struct LegalSuccessionManager {
             // il y a un conjoint survivant
             let inheritances = spouseAndChildrenInheritance(masseSuccessorale : _masseSuccessorale,
                                                             conjointSurvivant : conjointSurvivant,
+                                                            previousSuccession: previousSuccession,
                                                             verbose           : verbose)
             if verbose {
                 print("  Part totale = ", inheritances.sum(for: \.percentFiscal))
@@ -85,6 +87,7 @@ public struct LegalSuccessionManager {
             let inheritanceSharesForChild = InheritanceDonation.childShare(nbChildren: family.nbOfChildrenAlive(atEndOf: year))
             let inheritances = childrenInheritance(inheritanceShareForChild : inheritanceSharesForChild,
                                                    masseSuccessorale        : _masseSuccessorale,
+                                                   previousSuccession       : previousSuccession,
                                                    verbose                  : verbose)
             if verbose {
                 print("  Part totale = ", inheritances.sum(for: \.percentFiscal))
@@ -112,11 +115,12 @@ public struct LegalSuccessionManager {
     /// - Parameters:
     ///   - masseSuccessorale: masse successorale du défunt
     ///   - conjointSurvivant: nom du conjoint survivant
-    ///   - fiscalModel: model fiscal
+    ///   - previousSuccession: succession précédente pour les assuarnces vies
     /// - Returns: héritage légal du conjoint
-    func spouseAndChildrenInheritance(masseSuccessorale : Double,
-                                      conjointSurvivant : Adult,
-                                      verbose           : Bool = false) -> [Inheritance] {
+    func spouseAndChildrenInheritance(masseSuccessorale  : Double,
+                                      conjointSurvivant  : Adult,
+                                      previousSuccession : Succession?,
+                                      verbose            : Bool = false) -> [Inheritance] {
         // % d'héritage résultants de l'option fiscale retenue par le conjoint pour chacun des héritiers
         let inheritanceShares = conjointSurvivant
             .fiscalOption
@@ -126,26 +130,31 @@ public struct LegalSuccessionManager {
 
         // calculer la part d'héritage du conjoint
         let share = inheritanceShares.forSpouse
-        let brut  = masseSuccessorale * share
+        let brutBeforeCreanceRestit = masseSuccessorale * share
+        let creanceRestit           = min(previousSuccession?.creanceRestit(of : conjointSurvivant.displayName) ?? 0.0,
+                                          brutBeforeCreanceRestit)
+        let brutAfterCreanceRestit  = brutBeforeCreanceRestit - creanceRestit
 
         // calculer les droits de succession du conjoint
         // TODO: le sortir d'une fonction du modèle fiscal
         let tax = 0.0
-        let net = brut - tax
+        let net = brutAfterCreanceRestit - tax
 
         var inheritances = [Inheritance(personName    : conjointSurvivant.displayName,
                                         percentFiscal : share,
-                                        brutFiscal    : brut,
+                                        brutFiscal    : brutAfterCreanceRestit,
                                         abatFrac      : 1.0,
                                         netFiscal     : net,
                                         tax           : tax,
                                         received      : 0.0,
-                                        receivedNet   : 0.0 - tax)]
+                                        receivedNet   : 0.0 - tax,
+                                        creanceRestit : -creanceRestit)]
         if verbose { print(String(describing: inheritances.last)) }
 
         // les enfants
         inheritances += childrenInheritance(inheritanceShareForChild : inheritanceShares.forChild,
                                             masseSuccessorale        : masseSuccessorale,
+                                            previousSuccession       : previousSuccession,
                                             verbose                  : verbose)
 
         return inheritances
@@ -155,10 +164,11 @@ public struct LegalSuccessionManager {
     /// - Parameters:
     ///   - inheritanceShareForChild: part dévolue à chaque enfant
     ///   - masseSuccessorale: masse successorale du défunt
-    ///   - fiscalModel: model fiscal
+    ///   - previousSuccession: succession précédente pour les assuarnces vies
     /// - Returns: héritage légal des enfants
     func childrenInheritance(inheritanceShareForChild : Double,
                              masseSuccessorale        : Double,
+                             previousSuccession       : Succession?,
                              verbose                  : Bool = false) -> [Inheritance] {
         var inheritances: [Inheritance] = []
 
@@ -167,20 +177,25 @@ public struct LegalSuccessionManager {
             family.childrenAliveName(atEndOf: year)?.forEach { childName in
                 // un enfant
                 // calculer la part d'héritage d'un enfant
-                let share = inheritanceShareForChild
-                let brut  = masseSuccessorale * share
-
+                let share                   = inheritanceShareForChild
+                let brutBeforeCreanceRestit = masseSuccessorale * share
+                let creanceRestit           = min(previousSuccession?.creanceRestit(of : childName) ?? 0.0,
+                                                  brutBeforeCreanceRestit)
+                let brutAfterCreanceRestit  = brutBeforeCreanceRestit - creanceRestit
+                
                 // caluler les droits de succession du conjoint
-                let heritageOfChild = try! fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brut)
-
+                let heritageOfChild =
+                    try! fiscalModel.inheritanceDonation.heritageOfChild(partSuccession: brutAfterCreanceRestit)
+                
                 inheritances.append(Inheritance(personName    : childName,
                                                 percentFiscal : share,
-                                                brutFiscal    : brut,
+                                                brutFiscal    : brutAfterCreanceRestit,
                                                 abatFrac      : 1.0,
                                                 netFiscal     : heritageOfChild.netAmount,
                                                 tax           : heritageOfChild.taxe,
                                                 received      : 0.0,
-                                                receivedNet   : 0.0 - heritageOfChild.taxe))
+                                                receivedNet   : 0.0 - heritageOfChild.taxe,
+                                                creanceRestit : -creanceRestit))
                 if verbose { print(String(describing: inheritances.last)) }
             }
         }

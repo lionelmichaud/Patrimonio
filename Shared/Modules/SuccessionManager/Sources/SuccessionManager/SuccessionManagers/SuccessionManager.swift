@@ -117,7 +117,10 @@ public struct SuccessionManager {
     ///
     ///    * 3 - Cummuler les taxes de successions/transmissions et le Cash reçu de l'année.
     ///
-    public mutating func manageSuccessions(verbose: Bool = false) {
+    /// - Parameters:
+    ///   - previousSuccession: succession précédente pour les assuarnces vies
+    public mutating func manageSuccessions(previousSuccession : Succession?,
+                                           verbose            : Bool = false) {
         // tout remettre à 0 avant chaque calcul
         legal         = SuccessionsSynthesis()
         lifeInsurance = SuccessionsSynthesis()
@@ -129,10 +132,11 @@ public struct SuccessionManager {
         
         /// (2) pour chaque défunt
         adultDecedentsNames.forEach { decedentName in
-            manageSuccession(of              : decedentName,
-                             isFirstDecedent : decedentName == adultDecedentsNames.first,
-                             nbOfDecedents   : adultDecedentsNames.count,
-                             verbose         : verbose)
+            manageSuccession(of                 : decedentName,
+                             isFirstDecedent    : decedentName == adultDecedentsNames.first,
+                             nbOfDecedents      : adultDecedentsNames.count,
+                             previousSuccession : previousSuccession,
+                             verbose            : verbose)
         }
         
         /// (3) Cummuler les droits de successions/transmissions de l'année par personne et le Cash reçu
@@ -156,12 +160,14 @@ public struct SuccessionManager {
     ///
     /// - Parameters:
     ///   - decedentName: Nom du défunt
-    ///   - isFirstDecedent: true si le défunt est le premier de la liste des défunts de l'année en cours
+    ///   - isFirstDecedent: true si le `decedentName` est le premier des défunts de l'année en cours
     ///   - nbOfDecedents: nombre de défunts de l'année
-    mutating func manageSuccession(of decedentName : String,
-                                   isFirstDecedent : Bool,
-                                   nbOfDecedents   : Int,
-                                   verbose         : Bool = false) {
+    ///   - previousSuccession: succession précédente pour les assuarnces vies
+    mutating func manageSuccession(of decedentName    : String,
+                                   isFirstDecedent    : Bool,
+                                   nbOfDecedents      : Int,
+                                   previousSuccession : Succession?,
+                                   verbose            : Bool = false) {
         SimulationLogger.shared.log(run      : run,
                                     logTopic : .lifeEvent,
                                     message  : "Décès de \(decedentName) en \(year)")
@@ -174,12 +180,14 @@ public struct SuccessionManager {
             withAssets   : &patrimoine.assets)
         
         /// (2) Calculer les successions et les droits de successions légales
-        // sans exercer de clause à option
+        //    dernière succssion de l'année en cours ou, à défaut, des années précédentes
+        let lastLifeInsSuccession = lifeInsurance.successions.last ?? previousSuccession
         let legalSuccession =
-            legalSuccessionManager.succession(of              : decedentName,
-                                              isFirstDecedent : isFirstDecedent,
-                                              with            : patrimoine,
-                                              verbose         : verbose)
+            legalSuccessionManager.succession(of                 : decedentName,
+                                              isFirstDecedent    : isFirstDecedent,
+                                              with               : patrimoine,
+                                              previousSuccession : lastLifeInsSuccession,
+                                              verbose            : verbose)
         
         /// (2) Calculer les transmissions et les droits de transmission assurances vies
         /// sans exercer de clause à option

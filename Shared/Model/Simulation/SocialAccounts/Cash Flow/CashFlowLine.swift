@@ -138,6 +138,7 @@ struct CashFlowLine {
     ///   - expenses: dépenses de la famille
     ///   - patrimoine: le patrimoine de la famille
     ///   - taxableIrppRevenueDelayedFromLastyear: revenus taxable à l'IRPP en report d'imposition de l'année précédente
+    ///   - previousSuccession: succession précédente pour les assuarnces vies
     ///   - model: le modèle à utiliser
     /// - Throws: Si pas assez de capital -> `CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)`
     init(run                                   : Int,
@@ -146,8 +147,9 @@ struct CashFlowLine {
          withExpenses   expenses               : LifeExpensesDic,
          withPatrimoine patrimoine             : Patrimoin,
          taxableIrppRevenueDelayedFromLastyear : Double,
+         previousSuccession                    : Succession?,
          using model                           : Model) throws {
-        
+//        print(previousSuccession?.description)
         self.year = year
         let adultsNames = family.adultsAliveName(atEndOf: year) ?? []
         adultsRevenues
@@ -199,10 +201,11 @@ struct CashFlowLine {
             
             /// SUCCESSIONS: Calcul des droits de successions légales et assurances vies + peuple les successions de l'année
             ///              Transférer les biens des personnes décédées dans l'année vers ses héritiers
-            manageSuccession(run            : run,
-                             with           : patrimoine,
-                             familyProvider : family,
-                             using          : model.fiscalModel)
+            manageSuccession(run                : run,
+                             with               : patrimoine,
+                             familyProvider     : family,
+                             previousSuccession : previousSuccession,
+                             using              : model.fiscalModel)
             
             /// FREE INVEST: populate revenue, des investissements financiers libres et investir/retirer le solde net du cash flow de l'année
             try manageAdultsYearlyNetCashFlow(of                  : patrimoine,
