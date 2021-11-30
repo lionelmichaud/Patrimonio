@@ -35,12 +35,21 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     
     /// Situation annuelle de l'investissement
     public struct State: Codable, Equatable {
-        public var year       : Int
-        public var interest   : Double // portion of interests included in the Value
-        public var investment : Double // portion of investment included in the Value
+        public var year       : Int = 0
+        public var interest   : Double = 0 // portion of interests included in the Value
+        public var investment : Double = 0 // portion of investment included in the Value
         public var value      : Double { interest + investment } // valeur totale
     }
     
+    enum CodingKeys: CodingKey {
+        case name
+        case note
+        case ownership
+        case type
+        case interestRateType
+        case lastKnownState
+    }
+
     // MARK: - Static Properties
     
     static var defaultFileName : String = "FreeInvestement.json"
@@ -161,7 +170,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     }
     
     /// Constitution du capital à l'instant présent
-    var currentState: State
+    var currentState = State()
     
     /// Intérêts cumulés au cours du temps depuis la transmission de l'usufruit jusqu'à l'instant présent
     var currentStateAfterTransmission: State?
@@ -175,6 +184,8 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     private var cumulatedInterests: Double {
         currentState.interest
     }
+    
+    var isOpen: Bool = true
     
     // MARK: - Initialization
     
@@ -266,7 +277,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     }
     
     public func isOpen(in year: Int) -> Bool {
-        (lastKnownState.year...).contains(year)
+        (lastKnownState.year...).contains(year) && isOpen
     }
     
     /// Calcule la valeur d'un bien possédée par un personne donnée à une date donnée
@@ -354,6 +365,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     /// Remettre la valeur courante à la date de fin d'année passée
     public mutating func resetCurrentState() {
         currentStateAfterTransmission = nil
+        isOpen = true
         
         // calculer la valeur de currentState à la date de fin d'année passée
         let estimationYear = Date.now.year - 1
@@ -377,8 +389,8 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                               "estimationYear (\(estimationYear, privacy: .public)) < initialState.year")
                 fatalError("estimationYear (\(estimationYear)) < initialState.year (\(lastKnownState.year))")
             } catch {
-                customLog.log(level: .fault, "FinancialMathError")
-                fatalError("FinancialMathError")
+                customLog.log(level: .fault, "FinancialMathError.futurValue")
+                fatalError("FinancialMathError.futurValue")
             }
         }
     }
@@ -406,6 +418,7 @@ extension FreeInvestement: CustomStringConvertible {
         - Note:
         \(note.withPrefixedSplittedLines("    "))
         - Type:\(type.description.withPrefixedSplittedLines("  "))
+        - Ouvert à l'investissement: \(isOpen)
         - Droits de propriété:
         \(ownership.description.withPrefixedSplittedLines("  "))
         - Valeur (\(Date.now.year)): \(value(atEndOf: Date.now.year).€String)

@@ -34,11 +34,6 @@
             },
             "interestRateType" : {
                 "marketRate_stockRatio" : 100.0
-            },
-            "currentState" : {
-                "year"       : 0,
-                "interest"   : 0,
-                "investment" : 0
             }
         },
         
@@ -71,11 +66,6 @@
             },
             "interestRateType" : {
                 "marketRate_stockRatio" : 100.0
-            },
-            "currentState" : {
-                "year"       : 0,
-                "interest"   : 0,
-                "investment" : 0
             }
         },
         
@@ -108,11 +98,6 @@
             },
             "interestRateType" : {
                 "marketRate_stockRatio" : 100.0
-            },
-            "currentState" : {
-                "year"       : 0,
-                "interest"   : 0,
-                "investment" : 0
             }
         },
         
@@ -155,11 +140,6 @@
             },
             "interestRateType" : {
                 "marketRate_stockRatio" : 100.0
-            },
-            "currentState" : {
-                "year"       : 0,
-                "interest"   : 0,
-                "investment" : 0
             }
         },
         
@@ -203,11 +183,6 @@
             },
             "interestRateType" : {
                 "marketRate_stockRatio" : 0.0
-            },
-            "currentState" : {
-                "year"       : 0,
-                "interest"   : 0,
-                "investment" : 0
             }
         },
         
@@ -251,11 +226,6 @@
             },
             "interestRateType" : {
                 "marketRate_stockRatio" : 100.0
-            },
-            "currentState" : {
-                "year"       : 0,
-                "interest"   : 0,
-                "investment" : 0
             }
         },
         
@@ -299,11 +269,6 @@
             },
             "interestRateType" : {
                 "marketRate_stockRatio" : 45.0
-            },
-            "currentState" : {
-                "year"       : 0,
-                "interest"   : 0,
-                "investment" : 0
             }
         },
         
@@ -353,11 +318,6 @@
             },
             "interestRateType" : {
                 "marketRate_stockRatio" : 100.0
-            },
-            "currentState" : {
-                "year"       : 0,
-                "interest"   : 0,
-                "investment" : 0
             }
         },
         
@@ -407,11 +367,6 @@
             },
             "interestRateType" : {
                 "marketRate_stockRatio" : 75.0
-            },
-            "currentState" : {
-                "year"       : 0,
-                "interest"   : 0,
-                "investment" : 0
             }
         },
         
@@ -444,11 +399,6 @@
             },
             "interestRateType" : {
                 "contractualRate_fixedRate" : 0.5
-            },
-            "currentState" : {
-                "year"       : 0,
-                "interest"   : 0,
-                "investment" : 0
             }
         },
         
@@ -481,11 +431,6 @@
             },
             "interestRateType" : {
                 "contractualRate_fixedRate" : 0.5
-            },
-            "currentState" : {
-                "year"       : 0,
-                "interest"   : 0,
-                "investment" : 0
             }
         }
     ]

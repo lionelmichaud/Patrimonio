@@ -267,5 +267,9 @@ extension FreeInvestement {
         let withdrawal = split(removal: ownedValueDecedent)
         currentState.interest   -= withdrawal.interest
         currentState.investment -= withdrawal.investment
+        
+        if ownership.hasAUniqueFullOwner(named: decedentName) {
+            isOpen = false
+        }
     }
 }
