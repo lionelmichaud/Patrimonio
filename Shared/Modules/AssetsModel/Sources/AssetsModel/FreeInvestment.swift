@@ -120,11 +120,12 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         }
     }
     
+    /// Rendement en % avant charges sociales si prélevées à la source annuellement [0, 100%] et net d'inflation
     public var averageInterestRateNetOfInflation: Double {
         averageInterestRate - FreeInvestement.inflation
     }
     
-   /// Rendement en % après charges sociales si prélevées à la source annuellement [0, 100%]
+   /// Rendement en % après charges sociales si prélevées à la source annuellement [0, 100%] et net d'inflation
     public var averageInterestRateNetOfTaxesAndInflation: Double {
         switch type {
             case .lifeInsurance(let periodicSocialTaxes, _):
@@ -138,6 +139,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         }
     }
     
+    /// Rendement en % après charges sociales si prélevées à la source annuellement [0, 100%]
     public var averageInterestRateNetOfTaxes: Double { // % fixe après charges sociales si prélevées à la source annuellement
         switch type {
             case .lifeInsurance(let periodicSocialTaxes, _):
@@ -195,14 +197,16 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     
     // MARK: - Methods
     
-    /// Taux d'intérêt annuel en % net de  charges sociales si prélevées à la source annuellement
+    /// Taux d'intérêt annuel en %
+    /// net de charges sociales si prélevées à la source annuellement
+    /// net d'inflation annuelle
     /// - Parameter idx: [0, nb d'années simulées - 1]
-    /// - Returns: Taux d'intérêt annuel en % [0, 100%]
-    private func interestRateNet(in year: Int) -> Double {
+    /// - Returns: Taux d'intérêt annuel en % [0, 100%] net d'inflation annuelle et net de charges sociales si prélevées à la source annuellement
+    private func interestRate(in year: Int) -> Double {
         switch interestRateType {
             case .contractualRate(let fixedRate):
                 // taux contractuel fixe
-                return fixedRate - FreeInvestement.inflation
+                return fixedRate
                 
             case .marketRate(let stockRatio):
                 // taux de marché variable
@@ -210,15 +214,34 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                 let rates = FreeInvestement.rates(in: year)
                 // taux d'intérêt composite fonction de la composition du portefeuille
                 let rate = stock * rates.stockRate + (1.0 - stock) * rates.securedRate
-                return rate - FreeInvestement.inflation
+                return rate
+        }
+    }
+    
+    private func interestRateNetOfInflation(in year: Int) -> Double {
+        interestRate(in: year) - FreeInvestement.inflation
+    }
+
+    private func interestRateNetOfTaxesAndInflation(in year: Int) -> Double {
+        switch type {
+            case .lifeInsurance(let periodicSocialTaxes, _):
+                // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
+                return (periodicSocialTaxes ?
+                            FreeInvestement.fiscalModel.financialRevenuTaxes.net(interestRateNetOfInflation(in: year)) :
+                            interestRateNetOfInflation(in: year))
+            default:
+                // dans tous les autres cas: pas de charges sociales prélevées à la source anuellement (capitalisation et taxation à la sortie)
+                return interestRateNetOfInflation(in: year)
         }
     }
     
     /// Intérêts annuels en € du capital accumulé à l'instant présent
+    /// net de charges sociales si prélevées à la source annuellement
+    /// net d'inflation annuelle
     /// - Parameter idx: [0, nb d'années simulées - 1]
-    /// - Returns: Intérêts annuels en €
-    private func yearlyInterest(in year: Int) -> Double {
-        currentState.value * interestRateNet(in: year) / 100.0
+    /// - Returns: Intérêts annuels en € net d'inflation annuelle et net de charges sociales si prélevées à la source annuellement
+    private func yearlyInterestNetOfTaxesAndInflation(in year: Int) -> Double {
+        currentState.value * interestRateNetOfTaxesAndInflation(in: year) / 100.0
     }
     
     /// Fractionnement d'un retrait entre: versements cumulés et intérêts cumulés
@@ -320,7 +343,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                           "FreeInvestementError.capitalize: capitalisation sur un nombre d'année différent de 1")
             throw FreeInvestementError.IlegalOperation
         }
-        let interests = yearlyInterest(in: year)
+        let interests = yearlyInterestNetOfTaxesAndInflation(in: year)
         
         currentState.interest += interests
         currentState.year = year
