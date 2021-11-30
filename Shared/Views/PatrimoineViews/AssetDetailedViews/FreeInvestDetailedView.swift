@@ -57,7 +57,7 @@ struct FreeInvestDetailedView: View {
             Section(header: Text("RENTABILITE")) {
                 InterestRateTypeEditView(rateType: $localItem.interestRateType)
                 PercentView(label: "Rendement moyen net d'inflation",
-                            percent: localItem.averageInterestRateNet/100.0)
+                            percent: localItem.averageInterestRateNetOfTaxesAndInflation/100.0)
                     .foregroundColor(.secondary)
             }
         }

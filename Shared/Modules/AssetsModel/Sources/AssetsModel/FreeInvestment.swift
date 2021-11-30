@@ -103,11 +103,11 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     public var interestRateType: InterestRateKind
     
     /// Rendement en % avant charges sociales si prélevées à la source annuellement [0, 100%]
-    public var averageInterestRate  : Double {
+    public var averageInterestRate: Double {
         switch interestRateType {
             case .contractualRate(let fixedRate):
                 // taux contractuel fixe
-                return fixedRate - FreeInvestement.inflation
+                return fixedRate
                 
             case .marketRate(let stockRatio):
                 // taux de marché variable
@@ -116,12 +116,29 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                 let rate =
                     stock * FreeInvestement.rates.averageStockRate
                     + (1.0 - stock) * FreeInvestement.rates.averageSecuredRate
-                return rate - FreeInvestement.inflation
+                return rate
         }
     }
     
-    /// Rendement en % après charges sociales si prélevées à la source annuellement [0, 100%]
-    public var averageInterestRateNet: Double {
+    public var averageInterestRateNetOfInflation: Double {
+        averageInterestRate - FreeInvestement.inflation
+    }
+    
+   /// Rendement en % après charges sociales si prélevées à la source annuellement [0, 100%]
+    public var averageInterestRateNetOfTaxesAndInflation: Double {
+        switch type {
+            case .lifeInsurance(let periodicSocialTaxes, _):
+                // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
+                return (periodicSocialTaxes ?
+                            FreeInvestement.fiscalModel.financialRevenuTaxes.net(averageInterestRateNetOfInflation) :
+                            averageInterestRateNetOfInflation)
+            default:
+                // dans tous les autres cas: pas de charges sociales prélevées à la source anuellement (capitalisation et taxation à la sortie)
+                return averageInterestRateNetOfInflation
+        }
+    }
+    
+    public var averageInterestRateNetOfTaxes: Double { // % fixe après charges sociales si prélevées à la source annuellement
         switch type {
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
@@ -133,7 +150,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                 return averageInterestRate
         }
     }
-    
+
     /// Dernière constitution du capital connue (relevé bancaire)
     public var lastKnownState: State {
         didSet {
@@ -197,7 +214,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         }
     }
     
-    /// Intérêts annuels en € du capital accumulé à l'instant wprésent
+    /// Intérêts annuels en € du capital accumulé à l'instant présent
     /// - Parameter idx: [0, nb d'années simulées - 1]
     /// - Returns: Intérêts annuels en €
     private func yearlyInterest(in year: Int) -> Double {
@@ -217,12 +234,16 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         guard year == self.currentState.year else {
             // extrapoler la valeur à partir de la situation initiale avec un taux constant moyen
             return try! futurValue(payement     : 0,
-                                   interestRate : averageInterestRateNet/100,
+                                   interestRate : averageInterestRateNetOfTaxesAndInflation/100,
                                    nbPeriod     : year - lastKnownState.year,
                                    initialValue : lastKnownState.value)
         }
         // valeur de la dernière année simulée
         return currentState.value
+    }
+    
+    public func isOpen(in year: Int) -> Bool {
+        (lastKnownState.year...).contains(year)
     }
     
     /// Calcule la valeur d'un bien possédée par un personne donnée à une date donnée
@@ -321,7 +342,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
             // extrapoler la valeure à partir de la situation initiale
             do {
                 let futurVal = try futurValue(payement     : 0,
-                                              interestRate : averageInterestRateNet/100,
+                                              interestRate : averageInterestRateNetOfTaxesAndInflation/100,
                                               nbPeriod     : estimationYear - lastKnownState.year,
                                               initialValue : lastKnownState.value)
                 currentState = State(year       : estimationYear,
@@ -369,8 +390,8 @@ extension FreeInvestement: CustomStringConvertible {
         - Etat courant: (year: \(currentState.year), interest: \(currentState.interest.€String), invest: \(currentState.investment.€String), Value: \(currentState.value.€String))
         - Intérêt Cumulés depuis la transmission: (year: \(currentStateAfterTransmission?.year ?? 0), interest: \(currentStateAfterTransmission?.interest.€String ?? 0.€String))
         - \(interestRateType)
-        - Taux d'intérêt net d'inflation avant prélèvements sociaux:   \(averageInterestRate) %
-        - Taux d'intérêt net d'inflation, net de prélèvements sociaux: \(averageInterestRateNet) %
+        - Taux d'intérêt net d'inflation avant prélèvements sociaux:   \(averageInterestRateNetOfInflation) %
+        - Taux d'intérêt net d'inflation, net de prélèvements sociaux: \(averageInterestRateNetOfTaxesAndInflation) %
         """
     }
 }

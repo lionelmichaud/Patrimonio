@@ -238,9 +238,10 @@ public struct SuccessionManager {
             /// successions légales
             var taxe: Double = 0
             var cash: Double = 0
+            let mamberName = member.displayName
             legalSuccessions.forEach { succession in
                 succession.inheritances.forEach { inheritance in
-                    if inheritance.successorName == member.displayName {
+                    if inheritance.successorName == mamberName {
                         taxe += inheritance.tax
                         cash += inheritance.received
                     }
@@ -248,17 +249,17 @@ public struct SuccessionManager {
             }
             if member is Adult {
                 legal.taxesAdults
-                    .append(NamedValue(name  : member.displayName,
+                    .append(NamedValue(name  : mamberName,
                                        value : taxe))
                 legal.revenuesAdults
-                    .append(NamedValue(name  : member.displayName,
+                    .append(NamedValue(name  : mamberName,
                                        value : cash))
             } else {
                 legal.taxesChildren
-                    .append(NamedValue(name  : member.displayName,
+                    .append(NamedValue(name  : mamberName,
                                        value : taxe))
                 legal.revenuesChildren
-                    .append(NamedValue(name  : member.displayName,
+                    .append(NamedValue(name  : mamberName,
                                        value : cash))
             }
             
@@ -267,7 +268,7 @@ public struct SuccessionManager {
             cash = 0
             lifeInsSuccessions.forEach { succession in
                 succession.inheritances.forEach { inheritance in
-                    if inheritance.successorName == member.displayName {
+                    if inheritance.successorName == mamberName {
                         taxe += inheritance.tax
                         cash += inheritance.received
                     }
@@ -275,17 +276,17 @@ public struct SuccessionManager {
             }
             if member is Adult {
                 lifeInsurance.taxesAdults
-                    .append(NamedValue(name  : member.displayName,
+                    .append(NamedValue(name  : mamberName,
                                        value : taxe))
                 lifeInsurance.revenuesAdults
-                    .append(NamedValue(name  : member.displayName,
+                    .append(NamedValue(name  : mamberName,
                                        value : cash))
             } else {
                 lifeInsurance.taxesChildren
-                    .append(NamedValue(name  : member.displayName,
+                    .append(NamedValue(name  : mamberName,
                                        value : taxe))
                 lifeInsurance.revenuesChildren
-                    .append(NamedValue(name  : member.displayName,
+                    .append(NamedValue(name  : mamberName,
                                        value : cash))
             }
         }

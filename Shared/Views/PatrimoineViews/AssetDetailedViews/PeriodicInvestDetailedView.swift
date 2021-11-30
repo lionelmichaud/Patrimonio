@@ -55,7 +55,7 @@ struct PeriodicInvestDetailedView: View {
             Section(header: Text("RENTABILITE")) {
                 InterestRateTypeEditView(rateType: $localItem.interestRateType)
                 PercentView(label: "Rendement moyen net d'inflation",
-                            percent: localItem.averageInterestRateNet/100.0)
+                            percent: localItem.averageInterestRateNetOfTaxesAndInflation/100.0)
                     .foregroundColor(.secondary)
             }
             
@@ -203,7 +203,7 @@ struct PeriodicInvestDetailedView: View {
     }
     private var cumulatedInterests: Double {
         let liquidationDate = self.localItem.lastYear
-        return self.localItem.cumulatedInterests(atEndOf: liquidationDate)
+        return self.localItem.cumulatedInterestsNetOfInflation(atEndOf: liquidationDate)
     }
     private var netCmulatedInterests: Double {
         let liquidationDate = self.localItem.lastYear

@@ -84,8 +84,4 @@ class PeriodicInvestementTests: XCTestCase {
         print(str)
     }
     
-    func test() {
-        
-    }
-    
 }

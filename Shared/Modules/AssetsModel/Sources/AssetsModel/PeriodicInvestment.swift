@@ -106,21 +106,36 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     public var lastYear        : Int // au 31 décembre
     // rendement
     public var interestRateType       : InterestRateKind // type de taux de rendement
-    public var averageInterestRate    : Double {// % avant charges sociales si prélevées à la source annuellement
+    public var averageInterestRate: Double {// % avant charges sociales si prélevées à la source annuellement
         switch interestRateType {
             case .contractualRate( let fixedRate):
                 // taux contractuel fixe
-                return fixedRate - PeriodicInvestement.inflation
+                return fixedRate
                 
             case .marketRate(let stockRatio):
                 // taux de marché variable
                 let stock = stockRatio / 100.0
                 // taux d'intérêt composite fonction de la composition du portefeuille
                 let rate = stock * PeriodicInvestement.rates.averageStockRate + (1.0 - stock) * PeriodicInvestement.rates.averageSecuredRate
-                return rate - PeriodicInvestement.inflation
+                return rate
         }
     }
-    public var averageInterestRateNet : Double { // % fixe après charges sociales si prélevées à la source annuellement
+    public var averageInterestRateNetOfInflation: Double {// % avant charges sociales si prélevées à la source annuellement
+        averageInterestRate - PeriodicInvestement.inflation
+    }
+    public var averageInterestRateNetOfTaxesAndInflation: Double { // % fixe après charges sociales si prélevées à la source annuellement
+        switch type {
+            case .lifeInsurance(let periodicSocialTaxes, _):
+                // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
+                return (periodicSocialTaxes ?
+                            PeriodicInvestement.fiscalModel.financialRevenuTaxes.net(averageInterestRateNetOfInflation) :
+                            averageInterestRateNetOfInflation)
+            default:
+                // dans tous les autres cas: pas de charges sociales prélevées à la source anuellement (capitalisation et taxation à la sortie)
+                return averageInterestRateNetOfInflation
+        }
+    }
+    public var averageInterestRateNetOfTaxes: Double { // % fixe après charges sociales si prélevées à la source annuellement
         switch type {
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
@@ -164,6 +179,10 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     
     // MARK: - Methods
     
+    public func isOpen(in year: Int) -> Bool {
+        (firstYear...lastYear).contains(year)
+    }
+
     /// Remettre l'état courant à sa valeur initiale
     public mutating func resetReferenceState() {
         self.refState = State(firstYear         : firstYear,
@@ -187,10 +206,12 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
         return yearlyPayement + yearlyCost
     }
     
-    /// Valeur capitalisée à la date spécifiée
+    /// Valeur capitalisée à la date spécifiée (nette d'inflation annuelle)
     /// - Parameter year: fin de l'année
-    /// - Note: Les première et dernière années sont inclues
-    public func value (atEndOf year: Int) -> Double {
+    /// - Note:
+    ///   - Le taux d'inétrêt est NET d'inflation
+    ///   - Les première et dernière années sont inclues
+    public func value(atEndOf year: Int) -> Double {
         guard (firstYear...lastYear).contains(year) else {
             return 0.0
         }
@@ -200,11 +221,31 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
             fatalError()
         }
         return try! futurValue(payement     : yearlyPayement,
-                               interestRate : averageInterestRateNet/100,
+                               interestRate : averageInterestRateNetOfTaxesAndInflation/100,
                                nbPeriod     : year - refState.firstYear,
                                initialValue : refState.initialValue)
     }
     
+    /// Valeur capitalisée à la date spécifiée (sans tenir compte de l'inflation annuelle)
+    /// - Parameter year: fin de l'année
+    /// - Note:
+    ///   - Le taux d'inétrêt est BRUT d'inflation
+    ///   - Les première et dernière années sont inclues
+    private func fiscalValue(atEndOf year: Int) -> Double {
+        guard (firstYear...lastYear).contains(year) else {
+            return 0.0
+        }
+        guard year >= refState.firstYear else {
+            customLog.log(level: .error,
+                          "L'année d'évaluation \(year) est < à l'année de référence \(refState.firstYear)")
+            fatalError()
+        }
+        return try! futurValue(payement     : yearlyPayement,
+                               interestRate : averageInterestRateNetOfTaxes/100,
+                               nbPeriod     : year - refState.firstYear,
+                               initialValue : refState.initialValue)
+    }
+
     /// Calcule la valeur d'un bien possédée par un personne donnée à une date donnée
     /// selon la régle générale ou selon la règle de l'IFI, de l'ISF, de la succession...
     /// - Parameters:
@@ -266,10 +307,12 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
         return value
     }
     
-    /// Intérêts capitalisés à la date spécifiée
+    /// Intérêts capitalisés à la date spécifiée (net d'inflation annuelle)
     /// - Parameter year: fin de l'année
-    /// - Note: Les première et dernière années sont inclues
-    public func cumulatedInterests(atEndOf year: Int) -> Double {
+    /// - Note:
+    ///   - Les première et dernière années sont inclues
+    ///   - Le taux d'inétrêt est NET d'inflation
+    public func cumulatedInterestsNetOfInflation(atEndOf year: Int) -> Double {
         guard (firstYear...lastYear).contains(year) else {
             return 0.0
         }
@@ -280,6 +323,24 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
         }
         return refState.initialInterest +
             value(atEndOf: year) - (refState.initialValue + yearlyPayement * Double(year - refState.firstYear))
+    }
+    
+    /// Intérêts capitalisés à la date spécifiée (sans tenir compte de l'inflation annuelle)
+    /// - Parameter year: fin de l'année
+    /// - Note:
+    ///   - Les première et dernière années sont inclues
+    ///   - Le taux d'inétrêt est BRUT d'inflation
+    public func cumulatedInterests(atEndOf year: Int) -> Double {
+        guard (firstYear...lastYear).contains(year) else {
+            return 0.0
+        }
+        guard year >= refState.firstYear else {
+            customLog.log(level: .error,
+                          "L'année d'évaluation \(year) est < à l'année de référence \(refState.firstYear)")
+            fatalError()
+        }
+        return refState.initialInterest +
+            fiscalValue(atEndOf: year) - (refState.initialValue + yearlyPayement * Double(year - refState.firstYear))
     }
     
     /// valeur liquidative à la date de liquidation
@@ -338,7 +399,7 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
             fatalError()
         }
         let currentValue     = value(atEndOf: year)
-        let currentInterests = cumulatedInterests(atEndOf: year)
+        let currentInterests = cumulatedInterestsNetOfInflation(atEndOf: year)
         let deltaInterest   = amount * (currentInterests / currentValue)
         let deltaInvestment = amount - deltaInterest
         return (deltaInvestment, deltaInterest)
@@ -405,10 +466,10 @@ extension PeriodicInvestement: CustomStringConvertible {
         - Valeur initiale:     \(initialValue.€String) dont intérêts: \(initialInterest.€String)
         - Valeur de référence: \(refState.initialValue.€String) dont intérêts: \(refState.initialInterest.€String)
         - Versement annuel net de frais:  \(yearlyPayement.€String) Frais sur versements annuels: \(yearlyCost.€String)
-        - Valeur liquidative:  \(value(atEndOf: lastYear).€String) Intérêts cumulés: \(cumulatedInterests(atEndOf: lastYear).€String)
+        - Valeur liquidative:  \(value(atEndOf: lastYear).€String) Intérêts cumulés: \(cumulatedInterestsNetOfInflation(atEndOf: lastYear).€String)
         - \(interestRateType)
-        - Taux d'intérêt net d'inflation avant prélèvements sociaux:   \(averageInterestRate) %
-        - Taux d'intérêt net d'inflation, net de prélèvements sociaux: \(averageInterestRateNet) %
+        - Taux d'intérêt net d'inflation avant prélèvements sociaux:   \(averageInterestRateNetOfInflation) %
+        - Taux d'intérêt net d'inflation, net de prélèvements sociaux: \(averageInterestRateNetOfTaxesAndInflation) %
         """
     }
 }

@@ -114,7 +114,6 @@ extension OwnershipManager {
                     case .lifeInsurance(let periodicSocialTaxes, let clause):
                         var newClause = clause
                         // retirer les capitaux décès de l'AV si nécessaire
-                        // TODO: - faire de même pour PeriodicInvestment
                         assets.periodicInvests[idx]
                             .withdrawLifeInsuranceCapitalDeces(of      : decedentName,
                                                                atEndOf : year)

@@ -88,26 +88,26 @@ class FreeInvestementTests: XCTestCase {
     }
     
     func test_averageInterestRate() {
-        XCTAssertEqual(FreeInvestementTests.averageRateTheory, Tests.fi.averageInterestRate)
+        XCTAssertEqual(FreeInvestementTests.averageRateTheory, Tests.fi.averageInterestRateNetOfInflation)
         
         Tests.fi.interestRateType = .contractualRate(fixedRate: 2.5)
-        XCTAssertEqual(2.5 - FreeInvestementTests.inflation, Tests.fi.averageInterestRate)
+        XCTAssertEqual(2.5 - FreeInvestementTests.inflation, Tests.fi.averageInterestRateNetOfInflation)
     }
     
     func test_averageInterestRateNet() {
         Tests.fi.type = .lifeInsurance(periodicSocialTaxes : true,
                                  clause              : LifeInsuranceClause())
-        XCTAssertGreaterThan(FreeInvestementTests.averageRateTheory, Tests.fi.averageInterestRateNet)
+        XCTAssertGreaterThan(FreeInvestementTests.averageRateTheory, Tests.fi.averageInterestRateNetOfTaxesAndInflation)
         
         Tests.fi.type = .lifeInsurance(periodicSocialTaxes : false,
                                  clause              : LifeInsuranceClause())
-        XCTAssertEqual(Tests.fi.averageInterestRate, Tests.fi.averageInterestRateNet)
+        XCTAssertEqual(Tests.fi.averageInterestRateNetOfInflation, Tests.fi.averageInterestRateNet)
         
         Tests.fi.type = .pea
-        XCTAssertEqual(Tests.fi.averageInterestRate, Tests.fi.averageInterestRateNet)
+        XCTAssertEqual(Tests.fi.averageInterestRateNetOfInflation, Tests.fi.averageInterestRateNet)
         
         Tests.fi.type = .other
-        XCTAssertEqual(Tests.fi.averageInterestRate, Tests.fi.averageInterestRateNet)
+        XCTAssertEqual(Tests.fi.averageInterestRateNetOfInflation, Tests.fi.averageInterestRateNet)
     }
     
     func test_split() {

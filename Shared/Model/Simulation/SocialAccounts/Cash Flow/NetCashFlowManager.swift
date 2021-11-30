@@ -103,7 +103,7 @@ struct NetCashFlowManager {
                            in patrimoine  : Patrimoin,
                            for adultsName : [String]) {
         // trier par rendement décroissant
-        patrimoine.assets.freeInvests.items.sort(by: {$0.averageInterestRate > $1.averageInterestRate})
+        patrimoine.assets.freeInvests.items.sort(by: {$0.averageInterestRateNetOfInflation > $1.averageInterestRateNetOfInflation})
         
         // investir en priorité dans une assurance vie
         for idx in patrimoine.assets.freeInvests.items.indices {
@@ -312,7 +312,7 @@ struct NetCashFlowManager {
 //        }
 
         // trier par taux de rendement croissant
-        patrimoine.assets.freeInvests.items.sort(by: {$0.averageInterestRate < $1.averageInterestRate})
+        patrimoine.assets.freeInvests.items.sort(by: {$0.averageInterestRateNetOfInflation < $1.averageInterestRateNetOfInflation})
 
         if adultsName.count == 0 {
             // s'il n'y a plus d'adulte vivant on prend dans le premier actif qui vient

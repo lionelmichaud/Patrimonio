@@ -15,6 +15,8 @@ public protocol FinancialEnvelopP: OwnableP {
     var type            : InvestementKind { get set }
     var isLifeInsurance : Bool { get }
     var clause          : LifeInsuranceClause? { get }
+    
+    func isOpen(in year: Int) -> Bool
 }
 
 public extension FinancialEnvelopP {
