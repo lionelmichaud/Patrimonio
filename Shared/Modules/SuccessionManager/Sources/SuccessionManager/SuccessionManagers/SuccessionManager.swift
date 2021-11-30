@@ -148,10 +148,10 @@ public struct SuccessionManager {
     /// Gérer la succession de `decedentName`.
     ///
     /// - Note:
-    ///    1. Calculer les successions/transmissions et les droits associés.
-    ///    2. Modifier une clause d'AV pour permettre le payement des droits des enfants par les enfants
-    ///    3. Transférer les biens du défunt vers ses héritiers.
-    ///    4. Modifier les clauses d'AV dont le défunt est un des donataires
+    ///    1. Modifier les clauses d'AV dont le défunt est un des donataires
+    ///    2. Calculer les successions/transmissions et les droits associés.
+    ///    3. Modifier une clause d'AV pour permettre le payement des droits des enfants par les enfants
+    ///    4. Transférer les biens du défunt vers ses héritiers.
     ///    5. Vérifier que les actifs sont toujours valides après tous ces changements
     ///
     /// - Parameters:
@@ -166,7 +166,14 @@ public struct SuccessionManager {
                                     logTopic : .lifeEvent,
                                     message  : "Décès de \(decedentName) en \(year)")
         
-        /// (1) Calculer les successions et les droits de successions légales
+        /// (1) Modifier les clauses d'AV dont le défunt est un des donataires
+        let childrenAlive = family.childrenAliveName(atEndOf : year)
+        try! ownershipManager.modifyClausesWhereDecedentIsFuturRecipient(
+            decedentName : decedentName,
+            childrenName : childrenAlive,
+            withAssets   : &patrimoine.assets)
+        
+        /// (2) Calculer les successions et les droits de successions légales
         // sans exercer de clause à option
         let legalSuccession =
             legalSuccessionManager.succession(of              : decedentName,
@@ -174,7 +181,7 @@ public struct SuccessionManager {
                                               with            : patrimoine,
                                               verbose         : verbose)
         
-        /// (1) Calculer les transmissions et les droits de transmission assurances vies
+        /// (2) Calculer les transmissions et les droits de transmission assurances vies
         /// sans exercer de clause à option
         var spouseName: String?
         if let _spouseName = family.spouseNameOf(decedentName),
@@ -183,7 +190,6 @@ public struct SuccessionManager {
            family.member(withName: _spouseName)!.isAlive(atEndOf: year - 1) {
             spouseName = _spouseName
         }
-        let childrenAlive = family.childrenAliveName(atEndOf : year)
         var lifeInsSuccession =
             lifeInsuranceSuccessionManager.succession(
                 of           : decedentName,
@@ -192,7 +198,7 @@ public struct SuccessionManager {
                 childrenName : childrenAlive,
                 verbose      : verbose)
         
-        /// (2) Modifier une clause d'AV pour permettre le payement des droits des enfants par les enfants
+        /// (3) Modifier une clause d'AV pour permettre le payement des droits des enfants par les enfants
         // au premier décès parmis les adultes:
         // s'assurer que les enfants peuvent payer les droits de succession
         if isFirstDecedent && family.nbOfAdults == 2 &&
@@ -208,18 +214,12 @@ public struct SuccessionManager {
         legal.successions.append(legalSuccession)
         lifeInsurance.successions.append(lifeInsSuccession)
         
-        /// (3) Transférer les biens d'un défunt vers ses héritiers
+        /// (4) Transférer les biens d'un défunt vers ses héritiers
         ownershipManager.transferOwnershipOf(
             assets          : &patrimoine.assets,
             liabilities     : &patrimoine.liabilities,
             of              : decedentName,
             isFirstDecedent : isFirstDecedent)
-        
-        /// (4) Modifier les clauses d'AV dont le défunt est un des donataires
-        try! ownershipManager.modifyClausesWhereDecedentIsFuturRecipient(
-            decedentName : decedentName,
-            childrenName : childrenAlive,
-            withAssets   : &patrimoine.assets)
         
         /// (5) Vérifier que les actifs sont toujours valides après tous ces changements
         patrimoine.assets.checkValidity()
