@@ -10,12 +10,12 @@ import SwiftUI
 import EconomyModel
 import ModelEnvironment
 import Persistence
+import Statistics
 
 /// Affiche un graphique des fonctions de distribution des modèles statistiques
 struct ModelEconomyView: View {
     @EnvironmentObject private var model : Model
     @State private var modelChoice       : Economy.RandomVariable = .inflation
-    @State private var alertItem         : AlertItem?
 
     var body: some View {
         VStack {
@@ -23,14 +23,15 @@ struct ModelEconomyView: View {
             CasePicker(pickedCase: $modelChoice, label: "")
                 .padding(.horizontal)
                 .pickerStyle(SegmentedPickerStyle())
+            
             switch modelChoice {
                 case .inflation:
                     BetaRandomizerEditView(with: model.economyModel.randomizers.inflation) { viewModel in
                         viewModel.update(&model.economyModel.randomizers.inflation)
                         model.economy.persistenceSM.process(event: .onModify)
                     }
-                    onSaveToTemplate : { viewModel in
-                        applyChangesToTemplate(from: viewModel)
+                    applyChangesToModelClone: { viewModel, clone in
+                        viewModel.update(&clone.economyModel.randomizers.inflation)
                     }
 
                 case .securedRate:
@@ -38,8 +39,8 @@ struct ModelEconomyView: View {
                         viewModel.update(&model.economyModel.randomizers.securedRate)
                         model.economy.persistenceSM.process(event: .onModify)
                     }
-                    onSaveToTemplate : { viewModel in
-                        applyChangesToTemplate(from: viewModel)
+                    applyChangesToModelClone: { viewModel, clone in
+                        viewModel.update(&clone.economyModel.randomizers.securedRate)
                     }
 
                 case .stockRate:
@@ -47,39 +48,13 @@ struct ModelEconomyView: View {
                         viewModel.update(&model.economyModel.randomizers.stockRate)
                         model.economy.persistenceSM.process(event: .onModify)
                     }
-                    onSaveToTemplate : { viewModel in
-                        applyChangesToTemplate(from: viewModel)
+                    applyChangesToModelClone: { viewModel, clone in
+                        viewModel.update(&clone.economyModel.randomizers.stockRate)
                     }
             }
         }
-        .navigationTitle("Modèle Economique: Fonctions de Distribution")
+        .navigationTitle("Modèle Economique")
         .navigationBarTitleDisplayMode(.inline)
-        .alert(item: $alertItem, content: createAlert)
-    }
-
-    // MARK: - Methods
-    
-    /// Enregistrer la modification dans le répertoire Template (sur disque)
-    func applyChangesToTemplate(from viewModel: BetaRandomViewModel) {
-        guard let templateFolder = PersistenceManager.templateFolder() else {
-            alertItem =
-                AlertItem(title         : Text("Répertoire 'Modèle' absent"),
-                          dismissButton : .default(Text("OK")))
-            return
-        }
-        
-        viewModel.update(&model.economyModel.randomizers.inflation)
-        viewModel.update(&model.economyModel.randomizers.securedRate)
-        viewModel.update(&model.economyModel.randomizers.stockRate)
-        model.economy.persistenceSM.process(event: .onModify)
-
-        do {
-            try model.saveAsJSON(toFolder: templateFolder)
-        } catch {
-            alertItem =
-                AlertItem(title         : Text("Echec de l'enregistrement"),
-                          dismissButton : .default(Text("OK")))
-        }
     }
 }
 

@@ -24,35 +24,40 @@ struct KpisParametersEditView: View {
         .alert(item: $alertItem, content: createAlert)
         .toolbar {
             ToolbarItem(placement: .automatic) {
-                SaveToDiskButton(text: "Modèle", action: applyChangesToTemplate)
-                    .disabled(!simulation.isModified)
+                DiskButton(text   : "Enregistrer comme Modèle",
+                           action : applyChangesToTemplate)
+                    //.disabled(!simulation.isModified)
             }
         }
     }
-
+    
     /// Enregistrer la modification dans le répertoire Template (sur disque)
     func applyChangesToTemplate() {
-        guard let templateFolder = PersistenceManager.templateFolder() else {
-            alertItem =
-                AlertItem(title         : Text("Répertoire 'Modèle' absent"),
-                          dismissButton : .default(Text("OK")))
-            return
-        }
-        do {
-            try simulation.saveAsJSON(toFolder: templateFolder)
-            // le dossier reste modifié tant qu'on ne l'a pas enregistré dans son propre répertoire
-            simulation.persistenceSM.process(event: .onModify)
-        } catch {
-            alertItem =
-                AlertItem(title         : Text("Echec de l'enregistrement"),
-                          dismissButton : .default(Text("OK")))
-        }
+        alertItem =
+            AlertItem(title         : Text("Modèle"),
+                      message       : Text("Voulez-vous appliquer les modifications effectuées au modèle ?"),
+                      primaryButton : .default(Text("Appliquer")) {
+                        guard let templateFolder = PersistenceManager.templateFolder() else {
+                            alertItem =
+                                AlertItem(title         : Text("Répertoire 'Modèle' absent"),
+                                          dismissButton : .default(Text("OK")))
+                            return
+                        }
+                        do {
+                            try simulation.saveAsJSON(toFolder: templateFolder)
+                        } catch {
+                            alertItem =
+                                AlertItem(title         : Text("Echec de l'enregistrement"),
+                                          dismissButton : .default(Text("OK")))
+                        }
+                      },
+                      secondaryButton: .cancel())
     }
 }
 
 struct KpiGroupBox : View {
     @EnvironmentObject private var simulation : Simulation
-    @State private var kpi       : KPI
+    @State private var kpi : KPI
     
     var compareStr: String {
         switch kpi.comparator {
@@ -78,18 +83,21 @@ struct KpiGroupBox : View {
                                    amount : $kpi.objective)
                         .onChange(of: kpi.objective) { value in
                             simulation.kpis[KpiEnum(rawValue: kpi.name)!]?.objective = value
+                            // le dossier reste modifié tant qu'on ne l'a pas enregistré dans son propre répertoire
+                            simulation.persistenceSM.process(event: .onModify)
                         }
                     Spacer()
                 }
                 HStack {
-                    PercentEditView(label   : "Avec une probabilité de",
+                    PercentEditView(label   : "Avec une probabilité ≥ à",
                                     percent : $kpi.probaObjective)
                         .onChange(of: kpi.probaObjective) { value in
                             var kpiCopy = kpi
                             kpiCopy.probaObjective = value / 100.0
-                            simulation.setKpi(type  : KpiEnum(rawValue: kpi.name)!,
+                            simulation.setKpi(key   : KpiEnum(rawValue: kpi.name)!,
                                               value : kpiCopy)
-                            //simulation.kpis[KpiEnum(rawValue: kpi.name)!]?.probaObjective = value / 100.0
+                            // le dossier reste modifié tant qu'on ne l'a pas enregistré dans son propre répertoire
+                            simulation.persistenceSM.process(event: .onModify)
                         }
                     Spacer()
                 }

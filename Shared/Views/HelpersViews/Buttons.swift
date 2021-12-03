@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SaveToDiskButton: View {
+struct DiskButton: View {
     let action    : () -> Void
     let butonText : String
 
@@ -31,7 +31,7 @@ struct SaveToDiskButton: View {
     }
 }
 
-struct ApplyChangesButton: View {
+struct FolderButton: View {
     let action    : () -> Void
     let butonText : String
     
@@ -79,9 +79,9 @@ struct DuplicateButton: View {
 struct Buttons_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SaveToDiskButton(action: { print("saved") })
+            DiskButton(action: { print("saved") })
                 .previewLayout(.fixed(width: 200, height: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/))
-            ApplyChangesButton(action: { print("modified") })
+            FolderButton(action: { print("modified") })
                 .previewLayout(.fixed(width: 200, height: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/))
             DuplicateButton(action: { print("duplicated") })
                 .previewLayout(.fixed(width: 200, height: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/))

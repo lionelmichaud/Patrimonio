@@ -165,9 +165,9 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
         kpis.reset(withMode: mode)
     }
     
-    func setKpi(type  : KpiEnum,
+    func setKpi(key   : KpiEnum,
                 value : KPI) {
-        kpis[type] = value
+        kpis[key] = value
         notifyComputationInputsModification()
         persistenceSM.process(event: .onModify)
     }

@@ -14,65 +14,40 @@ import Persistence
 struct ModelSociologyView: View {
     @EnvironmentObject private var model : Model
     @State private var modelChoice       : SocioEconomy.RandomVariable = .pensionDevaluationRate
-    @State private var alertItem         : AlertItem?
-
+    
     var body: some View {
         VStack {
             // sélecteur: Actif / Passif / Tout
             CasePicker(pickedCase: $modelChoice, label: "")
                 .padding(.horizontal)
                 .pickerStyle(SegmentedPickerStyle())
-
+            
             switch modelChoice {
                 case .pensionDevaluationRate:
                     BetaRandomizerEditView(with: model.socioEconomyModel.pensionDevaluationRate) { viewModel in
                         viewModel.update(&model.socioEconomyModel.pensionDevaluationRate)
                         model.socioEconomy.persistenceSM.process(event: .onModify)
                     }
-                    onSaveToTemplate : { viewModel in
-                        applyChangesToTemplate(from: viewModel)
+                    applyChangesToModelClone: { viewModel, clone in
+                        viewModel.update(&clone.socioEconomyModel.pensionDevaluationRate)
                     }
-
+                    
                 case .nbTrimTauxPlein:
                     EmptyView()
                     DiscreteRandomizerView(randomizer: model.socioEconomyModel.nbTrimTauxPlein)
-
+                    
                 case .expensesUnderEvaluationRate:
                     BetaRandomizerEditView(with: model.socioEconomyModel.expensesUnderEvaluationRate) { viewModel in
                         viewModel.update(&model.socioEconomyModel.expensesUnderEvaluationRate)
                         model.socioEconomy.persistenceSM.process(event: .onModify)
                     }
-                    onSaveToTemplate : { viewModel in
-                        applyChangesToTemplate(from: viewModel)
+                    applyChangesToModelClone: { viewModel, clone in
+                        viewModel.update(&clone.socioEconomyModel.expensesUnderEvaluationRate)
                     }
             }
         }
-        .navigationTitle("Modèle Sociologique: Fonctions de Distribution")
+        .navigationTitle("Modèle Sociologique")
         .navigationBarTitleDisplayMode(.inline)
-    }
-
-    // MARK: - Methods
-    
-    /// Enregistrer la modification dans le répertoire Template (sur disque)
-    func applyChangesToTemplate(from viewModel: BetaRandomViewModel) {
-        guard let templateFolder = PersistenceManager.templateFolder() else {
-            alertItem =
-                AlertItem(title         : Text("Répertoire 'Modèle' absent"),
-                          dismissButton : .default(Text("OK")))
-            return
-        }
-        
-        viewModel.update(&model.socioEconomyModel.pensionDevaluationRate)
-        viewModel.update(&model.socioEconomyModel.expensesUnderEvaluationRate)
-        model.socioEconomy.persistenceSM.process(event: .onModify)
-
-        do {
-            try model.saveAsJSON(toFolder: templateFolder)
-        } catch {
-            alertItem =
-                AlertItem(title         : Text("Echec de l'enregistrement"),
-                          dismissButton : .default(Text("OK")))
-        }
     }
 }
 

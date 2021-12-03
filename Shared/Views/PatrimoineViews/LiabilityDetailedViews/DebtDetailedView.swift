@@ -47,7 +47,7 @@ struct DebtDetailedView: View {
                     .disabled((index == nil) || changeOccured)
             }
             ToolbarItem(placement: .automatic) {
-                ApplyChangesButton(action : applyChanges)
+                FolderButton(action : applyChanges)
                     .disabled(!changeOccured)
             }
         }

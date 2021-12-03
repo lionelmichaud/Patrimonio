@@ -50,9 +50,27 @@ public struct SocioEconomy: PersistableModelP {
     public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
     public final class Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP, SocioEconomyModelProviderP {
+
+        // MARK: - Properties
+        
         public var pensionDevaluationRate     : ModelRandomizer<BetaRandomGenerator>
         public var nbTrimTauxPlein            : ModelRandomizer<DiscreteRandomGenerator>
         public var expensesUnderEvaluationRate: ModelRandomizer<BetaRandomGenerator>
+        
+        // MARK: - Iitializers
+        
+        /// Créer un clone
+        /// - Parameter original: l'original à cloner
+        public init?(from original: SocioEconomy.Model?) {
+            guard let original = original else {
+                return nil
+            }
+            self.pensionDevaluationRate      = original.pensionDevaluationRate
+            self.nbTrimTauxPlein             = original.nbTrimTauxPlein
+            self.expensesUnderEvaluationRate = original.expensesUnderEvaluationRate
+        }
+        
+        // MARK: - Methods
         
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
         public final func initialized() -> Self {
@@ -162,5 +180,13 @@ public struct SocioEconomy: PersistableModelP {
     
     public init() {
         self.persistenceSM = PersistenceStateMachine()
+    }
+    
+    /// Créer un clone
+    /// - Parameter original: l'original à cloner
+    public init(from original: SocioEconomy) {
+        var clone = original
+        clone.model = SocioEconomy.Model(from: original.model)
+        self = clone
     }
 }

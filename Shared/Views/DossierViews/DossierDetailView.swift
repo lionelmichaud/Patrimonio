@@ -99,7 +99,7 @@ struct DossierDetailView: View {
             }
             /// Bouton: Sauvegarder
             ToolbarItem(placement: .automatic) {
-                SaveToDiskButton { save(dossier) }
+                DiskButton { save(dossier) }
                     .disabled(!savable)
             }
             /// Bouton: Dupliquer
@@ -135,8 +135,10 @@ struct DossierDetailView: View {
     /// True si le dossier est actif et a été modifié
     private var savable: Bool {
         dossier.isActive &&
-            (family.isModified || expenses.isModified ||
-                patrimoine.isModified || model.isModified ||
+            (family.isModified ||
+                expenses.isModified ||
+                patrimoine.isModified ||
+                model.isModified ||
                 simulation.isModified)
     }
     

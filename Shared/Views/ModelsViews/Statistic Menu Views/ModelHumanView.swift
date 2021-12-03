@@ -31,7 +31,7 @@ struct ModelHumanView: View {
                     DiscreteRandomizerView(randomizer: model.humanLifeModel.nbOfYearsOfdependency)
             }
         }
-        .navigationTitle("Modèle Humain: Fonctions de Distribution")
+        .navigationTitle("Modèle Humain")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

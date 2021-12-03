@@ -9,6 +9,7 @@ import SwiftUI
 import AppFoundation
 import ModelEnvironment
 import Statistics
+import Persistence
 
 // MARK: - Deterministic View Model
 
@@ -45,13 +46,25 @@ class BetaRandomViewModel: ObservableObject {
 
         isModified = false
     }
+    
+    func updateFrom(_ randomizer: ModelRandomizer<BetaRandomGenerator>) {
+        min   = randomizer.rndGenerator.minX!
+        max   = randomizer.rndGenerator.maxX!
+        alpha = randomizer.rndGenerator.alpha
+        beta  = randomizer.rndGenerator.beta
+        
+        isModified = false
+    }
 }
 
 struct BetaRandomizerEditView : View {
-    @StateObject private var viewModel : BetaRandomViewModel
-    @State private var betaRandomizer  : ModelRandomizer<BetaRandomGenerator>
-    let applyChanges                   : (_ viewModel : BetaRandomViewModel) -> Void
-    let applyChangesToTemplate         : (_ viewModel : BetaRandomViewModel) -> Void
+    let applyChangesToModel              : (_ viewModel : BetaRandomViewModel) -> Void
+    let applyChangesToModelClone         : (_ viewModel : BetaRandomViewModel, _ clone : Model) -> Void
+    @EnvironmentObject private var model : Model
+    @StateObject private var viewModel   : BetaRandomViewModel
+    @State private var betaRandomizer    : ModelRandomizer<BetaRandomGenerator>
+    private var initialBetaRandomizer    : ModelRandomizer<BetaRandomGenerator>!
+    @State private var alertItem         : AlertItem?
 
     var body: some View {
         HStack {
@@ -113,19 +126,24 @@ struct BetaRandomizerEditView : View {
                 betaRandomizer.rndGenerator.initialize()
                 viewModel.isModified = true
             }
-        }.padding(.horizontal)
+        }
+        .padding(.horizontal)
 
         BetaRandomizerView(randomizer: betaRandomizer)
             .toolbar {
                 ToolbarItem(placement: .automatic) {
-                    SaveToDiskButton(text   : "Modèle",
-                                     action : { applyChangesToTemplate(viewModel) })
+                    DiskButton(text   : "Enregistrer comme Modèle",
+                               action : applyChangesToTemplate)
                 }
                 ToolbarItem(placement: .automatic) {
-                    ApplyChangesButton(action : { applyChanges(viewModel) })
+                    FolderButton(action : applyChanges)
                         .disabled(!changeOccured)
                 }
             }
+            .onAppear {
+                viewModel.updateFrom(betaRandomizer)
+            }
+            .alert(item: $alertItem, content: createAlert)
     }
 
     // MARK: - Properties
@@ -136,24 +154,71 @@ struct BetaRandomizerEditView : View {
 
     // MARK: - Initialization
 
-    init(with betaRandomizer: ModelRandomizer<BetaRandomGenerator>,
-         onApply: @escaping (_ viewModel : BetaRandomViewModel) -> Void,
-         onSaveToTemplate: @escaping (_ viewModel : BetaRandomViewModel) -> Void) {
-        _viewModel             = StateObject(wrappedValue: BetaRandomViewModel(from: betaRandomizer))
-        _betaRandomizer        = State(initialValue: betaRandomizer)
-        applyChanges           = onApply
-        applyChangesToTemplate = onSaveToTemplate
+    init(with betaRandomizer     : ModelRandomizer<BetaRandomGenerator>,
+         applyChangesToModel     : @escaping (_ viewModel : BetaRandomViewModel) -> Void,
+         applyChangesToModelClone: @escaping (_ viewModel : BetaRandomViewModel, _ clone : Model) -> Void) {
+        _viewModel                    = StateObject(wrappedValue: BetaRandomViewModel(from : betaRandomizer))
+        _betaRandomizer               = State(initialValue: betaRandomizer)
+        initialBetaRandomizer         = betaRandomizer
+        self.applyChangesToModel      = applyChangesToModel
+        self.applyChangesToModelClone = applyChangesToModelClone
+    }
+    
+    /// Appliquer la modification au projet ouvert (en mémoire)
+    func applyChanges() {
+        alertItem =
+            AlertItem(title         : Text("Dossier Ouvert"),
+                      message       : Text("Voulez-vous appliquer les modifications effectuées au dossier ouvert ?"),
+                      primaryButton : .default(Text("Appliquer")) {
+                        // notifier de l'application de changements au modèle
+                        applyChangesToModel(viewModel)
+                      },
+                      secondaryButton: .cancel(Text("Revenir")) {
+                        viewModel.updateFrom(initialBetaRandomizer)
+                      })
+    }
+    
+    /// Enregistrer la modification dans le répertoire Template (sur disque)
+    /// Appliquer la modification au projet ouvert (en mémoire)
+    func applyChangesToTemplate() {
+        alertItem =
+            AlertItem(title         : Text("Modèle"),
+                      message       : Text("Voulez-vous appliquer les modifications effectuées au modèle ?"),
+                      primaryButton : .default(Text("Appliquer")) {
+                        guard let templateFolder = PersistenceManager.templateFolder() else {
+                            alertItem =
+                                AlertItem(title         : Text("Répertoire 'Modèle' absent"),
+                                          dismissButton : .default(Text("OK")))
+                            return
+                        }
+                        
+                        // notifier l'application de changements au modèle
+                        // créer une copie du modèle
+                        let copy = Model(from: model)
+                        let wasModified = viewModel.isModified
+                        applyChangesToModelClone(viewModel, copy)
+                        viewModel.isModified = wasModified
+
+                        do {
+                            try copy.saveAsJSON(toFolder: templateFolder)
+                        } catch {
+                            alertItem =
+                                AlertItem(title         : Text("Echec de l'enregistrement"),
+                                          dismissButton : .default(Text("OK")))
+                        }
+                      },
+                      secondaryButton: .cancel())
     }
 }
 
 struct BetaRandomizerEditView_Previews: PreviewProvider {
     static var model = Model(fromBundle: Bundle.main)
-    static func applyChanges(viewModel : BetaRandomViewModel) {}
-    static func applyChangesToTemplate(viewModel : BetaRandomViewModel) {}
+    static func applyChanges(_ viewModel : BetaRandomViewModel) {}
+    static func applyChangesToModelClone(_ viewModel : BetaRandomViewModel, _ clone: Model) {}
 
     static var previews: some View {
         BetaRandomizerEditView(with             : model.economyModel.randomizers.inflation,
-                               onApply          : applyChanges,
-                               onSaveToTemplate : applyChangesToTemplate)
+                               applyChangesToModel   : applyChanges,
+                               applyChangesToModelClone: applyChangesToModelClone)
     }
 }

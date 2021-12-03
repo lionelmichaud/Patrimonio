@@ -144,6 +144,20 @@ public struct Economy: PersistableModelP {
         var securedRateSamples : [Double] = [ ] // les échatillons tirés aléatoirement à chaque simulation
         var stockRateSamples   : [Double] = [ ] // les échatillons tirés aléatoirement à chaque simulation
         
+        // MARK: - Iitializers
+        
+        /// Créer un clone
+        /// - Parameter original: l'original à cloner
+        public init?(from original: Economy.Model?) {
+            guard let original = original else {
+                return nil
+            }
+            self.randomizers        = original.randomizers
+            self.firstYearSampled   = original.firstYearSampled
+            self.securedRateSamples = original.securedRateSamples
+            self.stockRateSamples   = original.stockRateSamples
+        }
+        
         // MARK: - Methods
         
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
@@ -338,5 +352,13 @@ public struct Economy: PersistableModelP {
     /// Cet init() n'est utile que pour pouvoir créer un StateObject dans App.main()
     public init() {
         self.persistenceSM = PersistenceStateMachine()
+    }
+
+    /// Créer un clone
+    /// - Parameter original: l'original à cloner
+    public init(from original: Economy) {
+        var clone = original
+        clone.model = Economy.Model(from: original.model)
+        self = clone
     }
 }
