@@ -70,6 +70,11 @@ public struct BetaRandomGenerator: RandomGeneratorP, DistributionP, Codable {
                 maxX  : Number?  = nil,
                 alpha : Double,
                 beta  : Double) {
+        precondition(alpha >= 0, "BetaRandomGenerator.init: alpha < 0")
+        precondition(beta >= 0, "BetaRandomGenerator.init: beta < 0")
+        if let minX = minX, let maxX = maxX {
+            precondition(minX < maxX, "BetaRandomGenerator.init: minX >= maxX")
+        }
         self.minX = minX
         self.maxX = maxX
         self.alpha = alpha
@@ -114,15 +119,18 @@ public struct UniformRandomGenerator: RandomGeneratorP, Codable {
     
     var minX : Number? // valeur minimale de X
     var maxX : Number? // valeur minimale de X
-
+    
     // MARK: - Initializer
-
+    
     public init(minX: Number? = nil,
                 maxX: Number? = nil) {
+        if let minX = minX, let maxX = maxX {
+            precondition(minX < maxX, "UniformRandomGenerator.init: minX >= maxX")
+        }
         self.minX = minX
         self.maxX = maxX
     }
-
+    
     // MARK: - Methods
     
     mutating public func next() -> Double {
@@ -141,7 +149,7 @@ public struct UniformRandomGenerator: RandomGeneratorP, Codable {
 /// Usage:
 ///
 ///         var randomGenerator = DiscreteRandomGenerator
-///                                   (distribution: [[1.0, 0.2], [3.0, 0.5], [4.0, 0.3]])
+///                                   (pdf: [[1.0, 0.2], [3.0, 0.5], [4.0, 0.3]])
 ///         let rnd = randomGenerator.next()
 ///         let sequence = randomGenerator.sequence(of: nbRandomSamples)
 ///
@@ -158,10 +166,10 @@ public struct DiscreteRandomGenerator: RandomGeneratorP, Codable {
     public var pdf : [Point]
     var cdf        : [Double]? // probabilité cumulée d'occurence (dernier = 100%)
     var minX       : Number? { // valeur minimale de X
-        pdf.min(by: { return ($0.x < $1.x) })?.x
+        pdf.min { $0.x < $1.x }?.x
     }
     var maxX       : Number? { // valeur minimale de X
-        pdf.max(by: { return ($0.x > $1.x) })?.x
+        pdf.max { $0.x < $1.x }?.x
     }
     public var cdfCurve : Curve? { // courbe CDF mémorisée au premier appel de initialize()
         precondition(cdf != nil, "DiscreteRandomGenerator.cdfCurve: propriété cdf non initialisée")

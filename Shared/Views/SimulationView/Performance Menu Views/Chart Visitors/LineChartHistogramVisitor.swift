@@ -28,7 +28,7 @@ class LineChartHistogramVisitor: HistogramChartVisitorP {
     }
 
     func buildChart(element: Histogram) {
-        /// PDF des échantillons
+        /// Distribution des échantillons en % de la case la plus remplie
         let maxCount = element.counts.max()!.double()
         element.xCounts.forEach {
             yVals1.append(ChartDataEntry(x: $0.x, y: $0.n.double() / maxCount))

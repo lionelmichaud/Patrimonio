@@ -14,68 +14,6 @@ public enum DistributionType: String, Codable {
     case discrete   = "Discrète"
 }
 
-// MARK: - Bucket
-
-struct Bucket: Codable {
-    
-    // MARK: - Properties
-    
-    let Xmin     : Double // limite inférieure de la case
-    let Xmed     : Double // milieu de la case
-    let Xmax     : Double // limite supérieure de la case
-    var sampleNb : Int = 0 // nombre d'échantillonsdans la case
-    
-    // MARK: - Initializer
-    
-    init(Xmin             : Double,
-         Xmax             : Double,
-         step             : Double?  = nil) {
-        self.Xmin = Xmin
-        if Xmin == -Double.infinity {
-            self.Xmed = step != nil ? Xmax - step! : Xmax
-        } else if Xmax == Double.infinity {
-            self.Xmed = step != nil ? Xmin + step! : Xmin
-        } else {
-            self.Xmed = (Xmax + Xmin) / 2
-        }
-        self.Xmax = Xmax
-    }
-    
-    // MARK: - Methods
-    
-    /// Incrémente le nb d'échantillons de la case
-    mutating func record() {
-        // incrémente le nombre d'échantillons dans la case
-        sampleNb += 1
-    }
-    /// Vide la case
-    mutating func empty() {
-        sampleNb = 0
-    }
-}
-
-typealias BucketsArray = [Bucket]
-extension BucketsArray {
-    /// Ajoute un échantillon à la bonne case
-    /// - Parameter data: échantillon
-    mutating func record(_ data: Double) {
-        // ranger l'échantillon dans une case
-        if let idx = self.lastIndex(where: { $0.Xmin <= data }) {
-            // incrémente le nombre d'échantillons dans la case
-            self[idx].record()
-        }
-    }
-    
-    /// Crée une copie avec toutes les cases vides
-    mutating func emptyCopy() -> BucketsArray {
-        self.map {
-            var newBucket = $0
-            newBucket.empty()
-            return newBucket
-        }
-    }
-}
-
 // MARK: - Histogram
 
 /// Histogramme d'échantillons
@@ -126,7 +64,7 @@ public struct Histogram: Codable {
     // MARK: - Properties
     
     public var name: String
-    // type de sitribution
+    // type de ditribution
     private var distributionType: DistributionType = .continuous
     // openEnds:true si les premières et derniers case s'étendent à l'infini
     private var openEnds : Bool = false
@@ -191,7 +129,7 @@ public struct Histogram: Codable {
         }
         return values
     } // computed
-    // densités de probabilité
+    // densités de probabilité: si une loi de probabilité a pour densité ƒ, alors l'intervalle infinitésimal [x, x + dx] a pour probabilité ƒ(x) dx.
     var PDF: [Double] { // en %
         precondition(isInitialized, "Histogram.PDF: histogramme non initialisé")
         var normalizer: Double
@@ -200,6 +138,7 @@ public struct Histogram: Codable {
                 normalizer = dataset.count.double()
                 
             case .continuous:
+                // l'intervalle infinitésimal [x, x + dx] a pour probabilité ƒ(x) dx.
                 normalizer = dataset.count.double() * Xstep
         }
         return buckets.map { $0.sampleNb.double() / normalizer }
@@ -270,10 +209,11 @@ public struct Histogram: Codable {
     ///   - bucketNb: nombre de cases (incluant les éventuelles cases s'étendant à l'infini)
     public init(name             : String = "",
                 distributionType : DistributionType,
-                openEnds         : Bool = true,
+                openEnds         : Bool = false,
                 Xmin             : Double,
                 Xmax             : Double,
                 bucketNb         : Int) {
+        precondition(Xmin < Xmax, "Histogram.init: Xmin >= Xmax")
         self.name = name
         initializeBuckets(distributionType : distributionType,
                           openEnds         : openEnds,
@@ -286,6 +226,7 @@ public struct Histogram: Codable {
     
     /// nombre d'échantillons dans la case idx
     public subscript(idx: Int) -> Int? {
+        precondition(isInitialized, "histogramme non initialisé")
         guard (0...buckets.count).contains(idx) else {
             return nil
         }
@@ -301,7 +242,7 @@ public struct Histogram: Codable {
     ///   - Xmin: valeure minimale du domaine de X
     ///   - Xmax: valeure maximale du domaine de X
     ///   - bucketNb: nombre de cases fermées sur le doamine de X
-    /// - Warning: bucketNb ne doit as iclure des 2 case s'étendant à l'inifini si openEnds = true
+    /// - Warning: bucketNb ne doit pas inclure les 2 case s'étendant à l'inifini si openEnds = true
     fileprivate mutating func initializeBuckets(distributionType : DistributionType,
                                                 openEnds         : Bool = false,
                                                 Xmin             : Double,
@@ -330,7 +271,7 @@ public struct Histogram: Codable {
             // créer une première case sétendant à l'infini
             buckets.append(Bucket(Xmin: -Double.infinity,
                                   Xmax: self.Xmin,
-                                  step: self.Xstep / 2))
+                                  borderBucketWidth: self.Xstep / 2))
             xValues.append(buckets.last!.Xmed)
         }
         // créer les cases fermées
@@ -343,7 +284,7 @@ public struct Histogram: Codable {
             // créer une dernière case sétendant à l'infini
             buckets.append(Bucket(Xmin: self.Xmax,
                                   Xmax: Double.infinity,
-                                  step: self.Xstep / 2))
+                                  borderBucketWidth: self.Xstep / 2))
             xValues.append(buckets.last!.Xmed)
         }
     }
@@ -363,6 +304,10 @@ public struct Histogram: Codable {
                               Xmin             : Double?  = nil,
                               Xmax             : Double?  = nil,
                               bucketNb         : Int) {
+        if let Xmin = Xmin, let Xmax = Xmax {
+            precondition(Xmin < Xmax, "Histogram.init: Xmin >= Xmax")
+        }
+        
         guard !dataset.isEmpty else {
             // pas d'échantillons à traiter
             return
@@ -381,9 +326,7 @@ public struct Histogram: Codable {
                           bucketNb         : bucketNb)
         
         // ranger les échantillons dans les cases
-        for data in dataset {
-            buckets.record(data)
-        }
+        buckets.record(dataset)
     }
     
     /// Ajoute un échantillon à l'histogramme
@@ -406,6 +349,9 @@ public struct Histogram: Codable {
     public mutating func reset() {
         // vider les échantillons
         dataset = [Double]()
+        Xmax    = 0
+        Xmin    = 0
+        Xstep   = 0
         // Supprimer toutes las cases
         buckets = [Bucket]()
         xValues = [Double]()
@@ -415,10 +361,11 @@ public struct Histogram: Codable {
     public mutating func resetDataset() {
         // vider les échantillons
         dataset = [Double]()
+        // vider les cases
         buckets = buckets.emptyCopy()
     }
     
-    /// Renvoie la valeur x telle que P(X<x) >= probability
+    /// Renvoie la valeur x telle que P(sample ≥ x) >= probability
     /// - Parameter probability: probabilité
     /// - Returns: x telle que P(X<x) >= probability
     /// - Warning: probability in [0, 1]
@@ -431,19 +378,49 @@ public struct Histogram: Codable {
         return Sigma.quantiles.method4(dataset, probability: probability)
     }
 
-    /// Renvoie la probabilité P telle que CDF(X) >= P
+    /// Renvoie la probabilité P(sample ≥ x)
     /// - Parameter x: valeure dont il faut rechercher la probabilité
-    /// - Returns: probabilité P telle que CDF(X) >= P
-    /// - Warning: x in [Xmin, Xmax]
+    /// - Returns: probabilité P(sample ≥ x)
     public func probability(for x: Double) -> Double? {
-        guard let idx = xCDF.firstIndex(where: { x <= $0.x }) else {
-            fatalError("Histogram.probability(x): x out of bound")
+        switch x {
+            case -Double.infinity..<Xmin:
+                // x ≤ à tous les échantillons => P = 1
+                return 1
+                
+            case Xmin...Xmax:
+                let sortedDataset = dataset.sorted()
+                if let lowestIdx = sortedDataset.firstIndex(where: { x <= $0 }) {
+                    let lowerCount  = lowestIdx
+                    let higherCount = dataset.count - lowerCount
+                    return higherCount.double() / dataset.count.double()
+                } else {
+                    return nil
+                }
+                
+            case Xmax...Double.infinity:
+                // tous les échantillons ≤ x => P = 0
+                return 0
+                
+            default:
+                return nil
         }
-        if idx > 0 {
-            let k = (x - xCDF[idx-1].x) / (xCDF[idx].x - xCDF[idx-1].x)
-            return xCDF[idx-1].p + k * (xCDF[idx].p - xCDF[idx-1].p)
-        } else {
-            return xCDF[idx].p
-        }
+    }
+}
+
+extension Histogram: CustomStringConvertible {
+    public var description: String {
+        """
+
+        Distribution: \(name)
+          Type: \(distributionType.rawValue)
+          Intervalles ouverts: \(openEnds.frenchString)
+          Nombre d'échantillons: \(dataset.count)
+          Statistiques initiialisée: \(isInitialized.frenchString)
+          Xmin: \(Xmin)
+          Xmax: \(Xmax)
+          Step: \(Xstep)
+          Nombre de cases: \(bucketNb)
+
+        """
     }
 }

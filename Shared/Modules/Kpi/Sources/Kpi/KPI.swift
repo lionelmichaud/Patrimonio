@@ -19,7 +19,7 @@ extension KpiDictionary: JsonCodableToFolderP {}
 
 public extension KpiDictionary {
     
-    mutating func setKpisName() {
+    mutating func setKpisNameFromEnum() {
         for key in KpiEnum.allCases {
             var kpi = self[key]
             kpi?.name = key.rawValue
@@ -94,7 +94,7 @@ public extension KpiDictionary {
 ///       // ou valeur statistique du KPI dépassée avec la proba objectif (withProbability)
 ///       let kpiValue = kpi.value()
 ///
-///       // valeur statistique du KPI dépassée avec la proba 90%
+///       // valeur statistique du KPI dépassée avec un proba ≥ 90%
 ///       let kpiValue = kpi.value(for: 0.90)
 ///
 ///       // remet à zéro l'historique du KPI
@@ -112,7 +112,7 @@ public struct KPI: Identifiable {
 
     // MARK: - Static Properties
     
-    static let nbBucketsInHistograms = 50
+    static let nbBucketsInHistograms = 100
     
     // MARK: - Properties
     
@@ -182,7 +182,7 @@ public struct KPI: Identifiable {
     ///
     mutating func sortHistogram() {
         histogram.sort(distributionType : .continuous,
-                       openEnds         : true,
+                       openEnds         : false,
                        bucketNb         : KPI.nbBucketsInHistograms)
     }
     
@@ -199,10 +199,11 @@ public struct KPI: Identifiable {
     ///     - retourne la valeur unique du KPI
     ///
     ///     Mode Aléatoire:
-    ///     - retourne la valeur X telle que la probabilité P(X>Objectif) ou P(X<Objectif)
-    ///     est = à la probabilité Pobjectif.
+    ///     - retourne la valeur X de l'indicateur telle que :
+    ///       - la probabilité P(x > X) est = à la probabilité Pobjectif (cas .maximize).
+    ///       - la probabilité P(x < X) est = à la probabilité Pobjectif (cas .minimize).
     ///
-    ///     P(X>Objectif) = 1 - P(X<=Objectif)
+    ///     P(x > X) = 1 - P((x ≤ X)
     ///
     public func value(withMode mode: SimulationModeEnum) -> Double? {
         switch mode {
@@ -239,10 +240,9 @@ public struct KPI: Identifiable {
         histogram.percentile(for: probability)
     }
     
-    /// Renvoie la probabilité P telle que CDF(X) >= P
-    /// - Parameter value: valeure dont il faut rechercher la probabilité
-    /// - Returns: probabilité P telle que CDF(X) >= P
-    /// - Warning: x in [Xmin, Xmax]
+    /// Renvoie la probabilité P(sample ≥ x)
+    /// - Parameter x: valeure dont il faut rechercher la probabilité
+    /// - Returns: probabilité P(sample ≥ x)
     public func probability(for value: Double) -> Double? {
         histogram.probability(for: value)
     }
@@ -296,12 +296,13 @@ public struct KPI: Identifiable {
     }
     
     /// Retourrne true si l'objectif de valeur est atteint lors du run unique (.deterministic)
-    /// ou statistiquement sur l'ensemble des runs (.random)
+    /// ou statistiquement (avec une probabilité minimale) sur l'ensemble des runs (.random)
     public func objectiveIsReached(withMode mode: SimulationModeEnum) -> Bool? {
         guard let value = self.value(withMode: mode) else {
             return nil
         }
-        return isBetterThanObjective(value, objective)
+        // est-ce que la probabilité obtenue est conforme à l'objectif ?
+        return objectiveIsReached(for: value)
     }
     
     /// Retourrne true si l'objectif de valeur est atteint lors du run unique (.deterministic)

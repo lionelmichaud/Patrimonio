@@ -86,7 +86,7 @@ struct KpiSummaryView: View {
                 if simulation.mode == .random {
                     HStack {
                         PercentView(label   : "Critère satisfait",
-                                    percent : 1.0 - (kpi.probability(for: kpi.objective) ?? Double.nan),
+                                    percent : kpi.probability(for: kpi.objective) ?? Double.nan,
                                     comment : "avec une probabilité de")
                         Image(systemName: kpi.objectiveIsReached(withMode: simulation.mode)! ? "checkmark.circle.fill" : "multiply.circle.fill")
                             .imageScale(.large)
