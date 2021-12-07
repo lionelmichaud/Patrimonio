@@ -25,7 +25,7 @@ public struct SuccessionManager {
     public struct SuccessionsSynthesis: CustomStringConvertible {
         /// Les successions légales / assurances vie survenues dans l'année
         public var successions      : [Succession] = []
-        /// Somme des revenus bruts des successions légales / assurances vie survenues dans l'année, par personne
+        /// Somme des revenus bruts (en cash) des successions légales / assurances vie survenues dans l'année, par personne
         public var revenuesAdults   = NamedValueArray()
         public var revenuesChildren = NamedValueArray()
         /// Somme des taxes sur les successions légales / assurances vie survenues dans l'année, par personne

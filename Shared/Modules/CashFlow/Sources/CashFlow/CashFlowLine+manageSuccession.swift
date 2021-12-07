@@ -14,7 +14,7 @@ import FamilyModel
 import Succession
 import SuccessionManager
 
-extension CashFlowLine {
+public extension CashFlowLine {
 
     /// Gérer les succession de l'année.
     ///

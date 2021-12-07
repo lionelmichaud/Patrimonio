@@ -7,6 +7,7 @@
 
 import Foundation
 import AppFoundation
+import CashFlow
 import Charts
 
 /// Dessiner un graphe à lignes : taux d'imposition marginal + taux d'imposition moyen

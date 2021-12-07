@@ -25,7 +25,7 @@
         "valeur objectif" : 200000,
         "probabilité minimum d'atteindre l'objectif" : 0.98,
         "comparateur avec l'objectif" : "plus grand que",
-        "note" : "Héritage total net reçu par les enfants après le dernier décès des parents."
+        "note" : "Héritage total net reçu par les enfants (en cash) après le dernier décès des parents."
     },
     "Droits suc. enfants 1er décès",
     {

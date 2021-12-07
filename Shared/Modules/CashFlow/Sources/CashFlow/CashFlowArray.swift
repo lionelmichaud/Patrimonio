@@ -11,11 +11,11 @@ import NamedValue
 
 // MARK: - CashFlowArray: Table des cash flow annuels
 
-typealias CashFlowArray = [CashFlowLine]
+public typealias CashFlowArray = [CashFlowLine]
 
 // MARK: - CashFlowArray extension for CSV export
 
-extension CashFlowArray {
+public extension CashFlowArray {
     /// Rend la ligne de Cash Flow pour une année donnée
     /// - Parameter year: l'année recherchée
     /// - Returns: le cash flow de l'année
@@ -79,43 +79,43 @@ extension CashFlowArray {
 // MARK: - Extensions for VISITORS
 
 extension CashFlowArray: CashFlowCsvVisitableP {
-    func accept(_ visitor: CashFlowCsvVisitorP) {
+    public func accept(_ visitor: CashFlowCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
 
 extension CashFlowArray: CashFlowLineChartVisitableP {
-    func accept(_ visitor: CashFlowLineChartVisitorP) {
+    public func accept(_ visitor: CashFlowLineChartVisitorP) {
         visitor.buildLineChart(element: self)
     }
 }
 
 extension CashFlowArray: CashFlowStackedBarChartVisitableP {
-    func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
+    public func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
         visitor.buildStackedBarChart(element: self)
     }
 }
 
 extension CashFlowArray: CashFlowIrppVisitableP {
-    func accept(_ visitor: CashFlowIrppVisitorP) {
+    public func accept(_ visitor: CashFlowIrppVisitorP) {
         visitor.buildIrppChart(element: self)
     }
 }
 
 extension CashFlowArray: CashFlowIrppRateVisitableP {
-    func accept(_ visitor: CashFlowIrppRateVisitorP) {
+    public func accept(_ visitor: CashFlowIrppRateVisitorP) {
         visitor.buildIrppRateChart(element: self)
     }
 }
 
 extension CashFlowArray: CashFlowIrppSliceVisitableP {
-    func accept(_ visitor: CashFlowIrppSliceVisitorP) {
+    public func accept(_ visitor: CashFlowIrppSliceVisitorP) {
         visitor.buildIrppSliceChart(element: self)
     }
 }
 
 extension CashFlowArray: CashFlowIsfVisitableP {
-    func accept(_ visitor: CashFlowIsfVisitorP) {
+    public func accept(_ visitor: CashFlowIsfVisitorP) {
         visitor.buildIsfChart(element: self)
     }
 }

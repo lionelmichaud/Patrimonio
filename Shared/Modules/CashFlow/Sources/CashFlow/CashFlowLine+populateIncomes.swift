@@ -12,7 +12,7 @@ import PersonModel
 import FamilyModel
 import NamedValue
 
-extension CashFlowLine {
+public extension CashFlowLine {
     /// Populate Ages and Work incomes
     /// - Parameter family: de la famille
     mutating func populateIncomes(of family   : Family,

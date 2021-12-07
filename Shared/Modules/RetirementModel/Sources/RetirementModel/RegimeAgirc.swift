@@ -495,7 +495,7 @@ public final class RegimeAgirc: Codable {
         }
     }
     
-    /// Calcul de la mojoration de pension en € pour enfants nés ou élevés
+    /// Calcul de la mojoration de pension en € pour enfants nés ou élevés (plafonnée)
     /// - Parameters:
     ///   - pensionBrute: montant de la pension brute
     ///   - nbEnfantNe: nombre d'enfants nés ou élevés

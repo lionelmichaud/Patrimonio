@@ -12,6 +12,7 @@ import LifeExpense
 import Persistence
 import PatrimoineModel
 import FamilyModel
+import CashFlow
 
 struct FamilySummaryView: View {
     @EnvironmentObject private var dataStore  : Store

@@ -368,7 +368,7 @@ public final class RegimeGeneral: Codable {
                 customLog.log(level: .default, "nbTrimAcquisApresPeriodNonIndemnise = nil")
                 return nil
             }
-            // la période d'indemnisation ne peut aller au-delà de l'age légal de départ en retraite (62 ans)
+            // la période d'accumulation ne peut aller au-delà de l'age légal de départ en retraite (62 ans)
             dateFinPeriodCotisationRetraite = min(nbTrimSupplementaires.quarters.from(dateFinAlloc)!,
                                                   dateAgeMinimumLegal(birthDate: birthDate)!)
         } else {

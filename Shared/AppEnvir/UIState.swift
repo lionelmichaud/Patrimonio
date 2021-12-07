@@ -11,6 +11,7 @@ import NamedValue
 import Persistence
 import LifeExpense
 import BalanceSheet
+import CashFlow
 
 final class UIState: ObservableObject {
     enum Tab: Int, Hashable {

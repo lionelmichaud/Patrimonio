@@ -11,6 +11,7 @@ import AppFoundation
 import NamedValue
 import Persistence
 import LifeExpense
+import CashFlow
 import Charts // https://github.com/danielgindi/Charts.git
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CategoryBarChartCashFlowVisitor")

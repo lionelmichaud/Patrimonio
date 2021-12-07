@@ -12,16 +12,16 @@ import NamedValue
 
 // MARK: - agrégat des Taxes
 
-struct ValuedTaxes: DictionaryOfNamedValueTableP {
+public struct ValuedTaxes: DictionaryOfNamedValueTableP {
     
     // MARK: - Properties
     
-    var name        : String                          = ""
-    var perCategory : [TaxeCategory: NamedValueTable] = [:]
-    var irpp        : IncomeTaxesModel.IRPP
-    var isf         : IsfModel.ISF
+    public var name        : String                          = ""
+    public var perCategory : [TaxeCategory: NamedValueTable] = [:]
+    public var irpp        : IncomeTaxesModel.IRPP
+    public var isf         : IsfModel.ISF
 
-    init() {
+    public init() {
         self.irpp = (amount         : 0,
                      familyQuotient : 0,
                      marginalRate   : 0,
@@ -47,37 +47,37 @@ extension ValuedTaxes: CustomStringConvertible {
 // MARK: - Extensions for VISITORS
 
 extension ValuedTaxes: CashFlowCsvVisitableP {
-    func accept(_ visitor: CashFlowCsvVisitorP) {
+    public func accept(_ visitor: CashFlowCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
 
 extension ValuedTaxes: CashFlowStackedBarChartVisitableP {
-    func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
+    public func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
         visitor.buildStackedBarChart(element: self)
     }
 }
 
 extension ValuedTaxes: CashFlowCategoryStackedBarChartVisitableP {
-    func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
+    public func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
         visitor.buildCategoryStackedBarChart(element: self)
     }
 }
 
 extension ValuedTaxes: CashFlowIsfVisitableP {
-    func accept(_ visitor: CashFlowIsfVisitorP) {
+    public func accept(_ visitor: CashFlowIsfVisitorP) {
         visitor.buildIsfChart(element: self)
     }
 }
 
 extension ValuedTaxes: CashFlowIrppRateVisitableP {
-    func accept(_ visitor: CashFlowIrppRateVisitorP) {
+    public func accept(_ visitor: CashFlowIrppRateVisitorP) {
         visitor.buildIrppRateChart(element: self)
     }
 }
 
 extension ValuedTaxes: CashFlowIrppVisitableP {
-    func accept(_ visitor: CashFlowIrppVisitorP) {
+    public func accept(_ visitor: CashFlowIrppVisitorP) {
         visitor.buildIrppChart(element: self)
     }
 }

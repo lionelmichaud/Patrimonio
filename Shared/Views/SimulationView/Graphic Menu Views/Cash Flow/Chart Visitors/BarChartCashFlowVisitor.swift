@@ -9,6 +9,7 @@ import Foundation
 import AppFoundation
 import Persistence
 import NamedValue
+import CashFlow
 import Charts // https://github.com/danielgindi/Charts.git
 
 // MARK: - Génération de graphiques - Détail par catégories - CASH FLOW

@@ -12,12 +12,12 @@ import ModelEnvironment
 import PatrimoineModel
 
 // ligne anuelle de cash flow de la SCI
-struct SciCashFlowLine {
+public struct SciCashFlowLine {
     
     // MARK: - Nested types
     
     /// Agrégat des revenus de la SCI
-    struct Revenues {
+    public struct Revenues {
         
         // MARK: - Properties
         
@@ -65,11 +65,11 @@ struct SciCashFlowLine {
     // TODO: Ajouter les dépenses de la SCI déductibles du revenu (comptable, gestion, banque...)
     
     /// Impôts sur les société dû par la SCI
-    let IS : Double
+    public let IS : Double
     
     /// Solde net des Revenus - IS de la SCI
     /// - INCLUS produit de ventes de l'année capitalisé en cours d'années
-    var netRevenues : Double { revenues.total - IS }
+    public var netRevenues : Double { revenues.total - IS }
     
     /// Solde net des Revenus - IS de la SCI
     /// - EXCLUS produit de ventes de l'année capitalisé en cours d'années
@@ -87,16 +87,16 @@ struct SciCashFlowLine {
     }
     
     /// tableau détaillé des noms
-    var namesFlatArray: [String] {
+    public var namesFlatArray: [String] {
         revenues.namesFlatArray + ["SCI-IS"]
     }
     
     /// tableau détaillé des valeurs
-    var valuesFlatArray: [Double] {
+    public var valuesFlatArray: [Double] {
         revenues.valuesFlatArray + [-IS]
     }
     
-    var summary: NamedValueTable {
+    public var summary: NamedValueTable {
         var table = NamedValueTable(tableName: "SCI")
         table.namedValues.append(NamedValue(name  : "Revenu SCI",
                                             value : netRevenues))
@@ -163,11 +163,11 @@ struct SciCashFlowLine {
     
     // MARK: - Methods
     
-    func summaryFiltredNames(with itemSelectionList: ItemSelectionList) -> [String] {
+    public func summaryFiltredNames(with itemSelectionList: ItemSelectionList) -> [String] {
         summary.filtredNames(with : itemSelectionList)
     }
     
-    func summaryFiltredValues(with itemSelectionList: ItemSelectionList) -> [Double] {
+    public func summaryFiltredValues(with itemSelectionList: ItemSelectionList) -> [Double] {
         summary.filtredValues(with : itemSelectionList)
     }
 }
@@ -175,25 +175,25 @@ struct SciCashFlowLine {
 // MARK: - Extensions for VISITORS
 
 extension SciCashFlowLine: CashFlowCsvVisitableP {
-    func accept(_ visitor: CashFlowCsvVisitorP) {
+    public func accept(_ visitor: CashFlowCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
 
 extension SciCashFlowLine: CashFlowStackedBarChartVisitableP {
-    func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
+    public func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
         visitor.buildStackedBarChart(element: self)
     }
 }
 
 extension SciCashFlowLine: CashFlowCategoryStackedBarChartVisitableP {
-    func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
+    public func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
         visitor.buildCategoryStackedBarChart(element: self)
     }
 }
 
 extension SciCashFlowLine.Revenues: CashFlowCsvVisitableP {
-    func accept(_ visitor: CashFlowCsvVisitorP) {
+    public func accept(_ visitor: CashFlowCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }

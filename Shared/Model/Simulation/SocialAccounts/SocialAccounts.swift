@@ -9,21 +9,11 @@ import LifeExpense
 import PatrimoineModel
 import FamilyModel
 import BalanceSheet
+import CashFlow
 import SimulationLogger
 import Kpi
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.SocialAccounts")
-
-/// Combinaisons possibles de séries sur le graphique de CashFlow
-enum CashCombination: String, PickableEnumP {
-    case revenues = "Revenu"
-    case expenses = "Dépense"
-    case both     = "Tout"
-    
-    var pickerString: String {
-        return self.rawValue
-    }
-}
 
 // MARK: - Comptes sociaux
 

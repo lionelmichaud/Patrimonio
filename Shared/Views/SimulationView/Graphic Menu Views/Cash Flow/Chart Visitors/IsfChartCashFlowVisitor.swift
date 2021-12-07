@@ -7,6 +7,7 @@
 
 import Foundation
 import AppFoundation
+import CashFlow
 import Charts
 
 // MARK: - Génération de graphiques - ISF - CASH FLOW

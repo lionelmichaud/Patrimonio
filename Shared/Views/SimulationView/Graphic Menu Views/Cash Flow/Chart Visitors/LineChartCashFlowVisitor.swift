@@ -8,6 +8,7 @@
 import Foundation
 import AppFoundation
 import Persistence
+import CashFlow
 import Charts
 
 // MARK: - Génération de graphiques - Synthèse - CASH FLOW

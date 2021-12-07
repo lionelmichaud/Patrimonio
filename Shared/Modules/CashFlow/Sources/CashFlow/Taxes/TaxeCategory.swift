@@ -12,7 +12,7 @@ import AppFoundation
 // MARK: - Catégories de taxe
 
 /// Catégories de dépenses
-enum TaxeCategory: String, PickableEnumP, Codable, Hashable {
+public enum TaxeCategory: String, PickableEnumP, Codable, Hashable {
     case irpp            = "IRPP"
     case isf             = "ISF"
     case legalSuccession = "Droits Succes. Légale"
@@ -22,7 +22,7 @@ enum TaxeCategory: String, PickableEnumP, Codable, Hashable {
 
     // properties
     
-    var pickerString: String {
+    public var pickerString: String {
         return self.rawValue
     }
 }

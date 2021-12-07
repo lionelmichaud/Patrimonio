@@ -10,7 +10,7 @@ import Foundation
 import PatrimoineModel
 import NamedValue
 
-extension CashFlowLine {
+public extension CashFlowLine {
     /// Populate produit de vente, dividendes, taxes sociales des SCPI hors de la SCI
     /// - Note:
     ///  - le produit de la vente se répartit entre UF et NP en cas de démembrement

@@ -33,7 +33,7 @@ extension RegimeGeneral {
                  majorationEnfant : Double,
                  dureeAssurance   : Int,
                  dureeDeReference : Int) -> Double {
-        // Salaire annuel moyen x Taux de la pension x Majoration enfant x(Durée d'assurance du salarié au régime général / Durée de référence pour obtenir une pension à taux plein)
+        // Salaire annuel moyen x Taux de la pension x Majoration enfant x (Durée d'assurance du salarié au régime général / Durée de référence pour obtenir une pension à taux plein)
         sam * tauxDePension/100 * (1.0 + majorationEnfant/100) * dureeAssurance.double() / dureeDeReference.double()
     }
     
@@ -87,7 +87,7 @@ extension RegimeGeneral {
                         dateOfEndOfUnemployAlloc : Date?,
                         dateOfPensionLiquid      : Date,
                         lastKnownSituation       : RegimeGeneralSituation,
-                        nbEnfantNe                 : Int,
+                        nbEnfantNe               : Int,
                         during year              : Int? = nil) ->
     (tauxDePension            : Double,
      majorationEnfant         : Double,

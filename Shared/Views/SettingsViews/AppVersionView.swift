@@ -24,13 +24,21 @@ struct AppVersionView: View {
                 .multilineTextAlignment(.center)
         }
         Form {
-            Text("resourcePath: \n" + Bundle.main.resourcePath!)
-            Text("Application: \n" + Folder.application!.path)
-            Text("Home: \n" +        Folder.home.path)
-            Text("Tempates: \n" +  (Dossier.templates?.folder?.path ?? "introuvable"))
-            Text("Documents: \n" + (Folder.documents?.path ?? "introuvable"))
-            Text("Library: \n" +   (Folder.library?.path ?? "introuvable"))
-            Text("temporary: \n" + Folder.temporary.path)
+            Section {
+                DisclosureGroup(
+                    content: {
+                        Text("resourcePath: \n" + Bundle.main.resourcePath!)
+                        Text("Application: \n" + Folder.application!.path)
+                        Text("Home: \n" +        Folder.home.path)
+                        Text("Tempates: \n" +  (Dossier.templates?.folder?.path ?? "introuvable"))
+                        Text("Documents: \n" + (Folder.documents?.path ?? "introuvable"))
+                        Text("Library: \n" +   (Folder.library?.path ?? "introuvable"))
+                        Text("temporary: \n" + Folder.temporary.path)
+                    },
+                    label: {
+                        Text("REPERTOIRES DE L'APPLICATION").font(.headline)
+                    })
+            }
         }
     }
 }

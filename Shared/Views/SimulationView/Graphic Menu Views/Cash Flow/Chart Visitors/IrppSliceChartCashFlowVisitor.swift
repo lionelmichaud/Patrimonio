@@ -9,6 +9,7 @@ import Foundation
 import AppFoundation
 import ModelEnvironment
 import Charts
+import CashFlow
 
 // MARK: - Génération de graphiques - Synthèse - FISCALITE IRPP
 

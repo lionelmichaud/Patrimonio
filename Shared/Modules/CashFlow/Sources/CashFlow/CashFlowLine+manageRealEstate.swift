@@ -10,7 +10,7 @@ import Foundation
 import PatrimoineModel
 import NamedValue
 
-extension CashFlowLine {
+public extension CashFlowLine {
     /// Populate loyers, produit de la vente et impots locaux des biens immobiliers
     /// - Note:
     ///  - le produit de la vente se répartit entre UF et NP en cas de démembrement

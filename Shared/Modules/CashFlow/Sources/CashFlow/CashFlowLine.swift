@@ -1,5 +1,6 @@
 import Foundation
 import os
+import AppFoundation
 import NamedValue
 import ModelEnvironment
 import LifeExpense
@@ -11,9 +12,20 @@ import SuccessionManager
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CashFlow")
 
+/// Combinaisons possibles de séries sur le graphique de CashFlow
+public enum CashCombination: String, PickableEnumP {
+    case revenues = "Revenu"
+    case expenses = "Dépense"
+    case both     = "Tout"
+
+    public var pickerString: String {
+        return self.rawValue
+    }
+}
+
 // MARK: - Ligne de cash flow annuel
 
-struct CashFlowLine {
+public struct CashFlowLine {
     
     // MARK: - Nested types
     
@@ -24,26 +36,26 @@ struct CashFlowLine {
     
     // MARK: - Properties
     
-    let year : Int
+    public let year : Int
     var ages = AgeTable()
     
     /// les comptes annuels de la SCI
-    let sciCashFlowLine : SciCashFlowLine
+    public let sciCashFlowLine : SciCashFlowLine
     
     // Les comptes annuels
     
     // Revenus
     
     /// Profits des Parents en report d'imposition d'une année sur l'autre
-    var taxableIrppRevenueDelayedToNextYear = Debt(name  : "REVENU IMPOSABLE REPORTE A L'ANNEE SUIVANTE",
-                                                   note  : "",
-                                                   value : 0)
+    public var taxableIrppRevenueDelayedToNextYear = Debt(name  : "REVENU IMPOSABLE REPORTE A L'ANNEE SUIVANTE",
+                                                          note  : "",
+                                                          value : 0)
     
     /// Agrégat des Revenus annuels des Parents (hors SCI)
-    var adultsRevenues = ValuedRevenues(name: "REVENUS PARENTS HORS SCI")
+    public var adultsRevenues = ValuedRevenues(name: "REVENUS PARENTS HORS SCI")
     
     /// Agrégat des Revenus annuels des Enfants
-    var childrenRevenues = ValuedRevenues(name: "REVENUS ENFANTS")
+    public var childrenRevenues = ValuedRevenues(name: "REVENUS ENFANTS")
     
     /// Total de tous les revenus nets de l'année des Parents, versé en compte courant
     ///  - avant taxes et impots
@@ -60,40 +72,40 @@ struct CashFlowLine {
     /// - avant taxes et impots
     /// - inclus revenus de la SCI
     /// - INCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
-    var sumOfAdultsRevenues: Double {
+    public var sumOfAdultsRevenues: Double {
         adultsRevenues.totalRevenue +
             sciCashFlowLine.netRevenues
     }
-    var sumOfChildrenRevenues: Double {
+    public var sumOfChildrenRevenues: Double {
         childrenRevenues.totalRevenue
     }
 
     // Dépenses
     
     /// Agrégat des Taxes annuelles payées par les Parents
-    var adultTaxes      = ValuedTaxes(name: "Taxes des parents")
+    public var adultTaxes      = ValuedTaxes(name: "Taxes des parents")
     
     /// Agrégat des Taxes annuelles payées par les Enfants
-    var childrenTaxes   = ValuedTaxes(name: "Taxes des enfants")
+    public var childrenTaxes   = ValuedTaxes(name: "Taxes des enfants")
     
     /// Dépenses de vie des Parents
-    var lifeExpenses    = NamedValueTable(tableName: "Dépenses de vie des parents")
+    public var lifeExpenses    = NamedValueTable(tableName: "Dépenses de vie des parents")
     
     /// remboursements d'emprunts ou de dettes des Parents
-    var debtPayements   = NamedValueTable(tableName: "Remb. dette des parents")
+    public var debtPayements   = NamedValueTable(tableName: "Remb. dette des parents")
     
     /// Versements périodiques des Parents sur des plan d'investissement périodiques
-    var investPayements = NamedValueTable(tableName: "Investissements des parents")
+    public var investPayements = NamedValueTable(tableName: "Investissements des parents")
     
     /// Total des dépenses annuelles des Parents
-    var sumOfAdultsExpenses: Double {
+    public var sumOfAdultsExpenses: Double {
         adultTaxes.total +
             lifeExpenses.total +
             debtPayements.total +
             investPayements.total
     }
     /// Total des dépenses annuelles des Enfants
-    var sumOfChildrenExpenses: Double {
+    public var sumOfChildrenExpenses: Double {
         childrenTaxes.total
     }
 
@@ -110,23 +122,23 @@ struct CashFlowLine {
     /// Solde net de tous les revenus - dépenses (y.c. ventes de bien en séparation de bien))
     /// - inclus revenus/dépenses de la SCI
     /// - INCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
-    var netAdultsCashFlow: Double {
+    public var netAdultsCashFlow: Double {
         sumOfAdultsRevenues - sumOfAdultsExpenses
     }
-    var netChildrenCashFlow: Double {
+    public var netChildrenCashFlow: Double {
         sumOfChildrenRevenues - sumOfChildrenExpenses
     }
 
     // Successions survenus dans l'année
     
     /// Les successions légales survenues dans l'année
-    var legalSuccessions   : [Succession] = []
+    public var legalSuccessions   : [Succession] = []
     
     /// Les transmissions d'assurances vie survenues dans l'année
-    var lifeInsSuccessions : [Succession] = []
+    public var lifeInsSuccessions : [Succession] = []
     
     /// Solde net des héritages reçus par les enfants dans l'année
-    var netChildrenInheritances: [Double] = [] // un seul élément ou aucun
+    public var netChildrenInheritances: [Double] = [] // un seul élément ou aucun
     
     // MARK: - Initialization
     
@@ -141,15 +153,15 @@ struct CashFlowLine {
     ///   - previousSuccession: succession précédente pour les assuarnces vies
     ///   - model: le modèle à utiliser
     /// - Throws: Si pas assez de capital -> `CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)`
-    init(run                                   : Int,
-         withYear       year                   : Int,
-         withFamily     family                 : Family,
-         withExpenses   expenses               : LifeExpensesDic,
-         withPatrimoine patrimoine             : Patrimoin,
-         taxableIrppRevenueDelayedFromLastyear : Double,
-         previousSuccession                    : Succession?,
-         using model                           : Model) throws {
-//        print(previousSuccession?.description)
+    public init(run                                   : Int,
+                withYear       year                   : Int,
+                withFamily     family                 : Family,
+                withExpenses   expenses               : LifeExpensesDic,
+                withPatrimoine patrimoine             : Patrimoin,
+                taxableIrppRevenueDelayedFromLastyear : Double,
+                previousSuccession                    : Succession?,
+                using model                           : Model) throws {
+        //        print(previousSuccession?.description)
         self.year = year
         let adultsNames = family.adultsAliveName(atEndOf: year) ?? []
         adultsRevenues

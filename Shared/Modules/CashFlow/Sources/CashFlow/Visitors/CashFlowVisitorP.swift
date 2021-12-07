@@ -10,7 +10,7 @@ import Foundation
 /// The Visitor Interface declares a set of visiting methods that correspond to
 /// component classes. The signature of a visiting method allows the visitor to
 /// identify the exact class of the component that it's dealing with.
-protocol CashFlowCsvVisitorP {
+public protocol CashFlowCsvVisitorP {
     // Elements de CASH FLOW
     func buildCsv(element: CashFlowArray)
     func buildCsv(element: CashFlowLine)
@@ -20,13 +20,13 @@ protocol CashFlowCsvVisitorP {
     func buildCsv(element: SciCashFlowLine.Revenues)
 }
 
-protocol CashFlowLineChartVisitorP {
+public protocol CashFlowLineChartVisitorP {
     // Elements de Bilan
     func buildLineChart(element: CashFlowArray)
     func buildLineChart(element: CashFlowLine)
 }
 
-protocol CashFlowStackedBarChartVisitorP {
+public protocol CashFlowStackedBarChartVisitorP {
     // Elements de Bilan
     func buildStackedBarChart(element: CashFlowArray)
     func buildStackedBarChart(element: CashFlowLine)
@@ -35,7 +35,7 @@ protocol CashFlowStackedBarChartVisitorP {
     func buildStackedBarChart(element: SciCashFlowLine)
 }
 
-protocol CashFlowCategoryStackedBarChartVisitorP {
+public protocol CashFlowCategoryStackedBarChartVisitorP {
     // Elements de Bilan
     func buildCategoryStackedBarChart(element: CashFlowArray)
     func buildCategoryStackedBarChart(element: CashFlowLine)
@@ -44,26 +44,26 @@ protocol CashFlowCategoryStackedBarChartVisitorP {
     func buildCategoryStackedBarChart(element: SciCashFlowLine)
 }
 
-protocol CashFlowIrppVisitorP {
+public protocol CashFlowIrppVisitorP {
     // Elements de Bilan
     func buildIrppChart(element: CashFlowArray)
     func buildIrppChart(element: CashFlowLine)
     func buildIrppChart(element: ValuedTaxes)
 }
 
-protocol CashFlowIrppRateVisitorP {
+public protocol CashFlowIrppRateVisitorP {
     // Elements de Bilan
     func buildIrppRateChart(element: CashFlowArray)
     func buildIrppRateChart(element: CashFlowLine)
     func buildIrppRateChart(element: ValuedTaxes)
 }
 
-protocol CashFlowIrppSliceVisitorP {
+public protocol CashFlowIrppSliceVisitorP {
     // Elements de Bilan
     func buildIrppSliceChart(element: CashFlowArray)
 }
 
-protocol CashFlowIsfVisitorP {
+public protocol CashFlowIsfVisitorP {
     // Elements de Bilan
     func buildIsfChart(element: CashFlowArray)
     func buildIsfChart(element: CashFlowLine)

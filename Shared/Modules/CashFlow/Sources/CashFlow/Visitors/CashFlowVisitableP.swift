@@ -9,34 +9,34 @@ import Foundation
 
 /// The Component interface declares an `accept` method that should take the
 /// base visitor interface as an argument.
-protocol CashFlowCsvVisitableP {
+public protocol CashFlowCsvVisitableP {
     func accept(_ visitor: CashFlowCsvVisitorP)
 }
 
-protocol CashFlowLineChartVisitableP {
+public protocol CashFlowLineChartVisitableP {
     func accept(_ visitor: CashFlowLineChartVisitorP)
 }
 
-protocol CashFlowStackedBarChartVisitableP {
+public protocol CashFlowStackedBarChartVisitableP {
     func accept(_ visitor: CashFlowStackedBarChartVisitorP)
 }
 
-protocol CashFlowCategoryStackedBarChartVisitableP {
+public protocol CashFlowCategoryStackedBarChartVisitableP {
     func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP)
 }
 
-protocol CashFlowIrppVisitableP {
+public protocol CashFlowIrppVisitableP {
     func accept(_ visitor: CashFlowIrppVisitorP)
 }
 
-protocol CashFlowIrppRateVisitableP {
+public protocol CashFlowIrppRateVisitableP {
     func accept(_ visitor: CashFlowIrppRateVisitorP)
 }
 
-protocol CashFlowIrppSliceVisitableP {
+public protocol CashFlowIrppSliceVisitableP {
     func accept(_ visitor: CashFlowIrppSliceVisitorP)
 }
 
-protocol CashFlowIsfVisitableP {
+public protocol CashFlowIsfVisitableP {
     func accept(_ visitor: CashFlowIsfVisitorP)
 }

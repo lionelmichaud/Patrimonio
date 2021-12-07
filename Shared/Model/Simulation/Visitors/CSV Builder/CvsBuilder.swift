@@ -11,6 +11,7 @@ import ModelEnvironment
 import Succession
 import Persistence
 import BalanceSheet
+import CashFlow
 
 // MARK: - Constructeur de fichier d'export CSV
 

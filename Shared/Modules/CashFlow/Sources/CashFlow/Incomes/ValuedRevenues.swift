@@ -12,12 +12,12 @@ import Liabilities
 
 // MARK: - agrégat des revenus hors SCI
 
-struct ValuedRevenues {
+public struct ValuedRevenues {
     
     // MARK: - Properties
 
-    var name : String
-    var perCategory: [RevenueCategory: RevenuesInCategory] = [:]
+    public var name : String
+    public var perCategory: [RevenueCategory: RevenuesInCategory] = [:]
     
     /// revenus imposable de l'année précédente et reporté à l'année courante
     var taxableIrppRevenueDelayedFromLastYear = Debt(name  : "REVENU IMPOSABLE REPORTE DE L'ANNEE PRECEDENTE",
@@ -25,7 +25,7 @@ struct ValuedRevenues {
                                                      value : 0)
     
     /// Total de tous les revenus nets de l'année versé en compte courant avant taxes et impots
-    var totalRevenue: Double {
+    public var totalRevenue: Double {
         perCategory.reduce(.zero, { result, element in
             result + element.value.credits.total
         })
@@ -43,7 +43,7 @@ struct ValuedRevenues {
     }
     
     /// total de tous les revenus de l'année imposables à l'IRPP
-    var totalTaxableIrpp: Double {
+    public var totalTaxableIrpp: Double {
         // ne pas oublier les revenus en report d'imposition
         perCategory.reduce(.zero, { result, element in
             result + element.value.taxablesIrpp.total
@@ -52,7 +52,7 @@ struct ValuedRevenues {
     }
     
     /// tableau des noms de catégories et valeurs total "créditée" des revenus de cette catégorie
-    var summary: NamedValueTable {
+    public var summary: NamedValueTable {
         var table = NamedValueTable(tableName: name)
         
         // itérer sur l'enum pour préserver l'ordre
@@ -112,11 +112,11 @@ struct ValuedRevenues {
         perCategory[inCategory]?.credits.valuesArray
     }
     
-    func summaryFiltredNames(with itemSelectionList: ItemSelectionList) -> [String] {
+    public func summaryFiltredNames(with itemSelectionList: ItemSelectionList) -> [String] {
         summary.filtredNames(with : itemSelectionList)
     }
     
-    func summaryFiltredValues(with itemSelectionList: ItemSelectionList) -> [Double] {
+    public func summaryFiltredValues(with itemSelectionList: ItemSelectionList) -> [Double] {
         summary.filtredValues(with : itemSelectionList)
     }
 }
@@ -135,15 +135,15 @@ extension ValuedRevenues: CustomStringConvertible {
 
 // MARK: Agrégat de tables des revenus (perçu, taxable) pour une catégorie nommée donnée
 
-struct RevenuesInCategory {
+public struct RevenuesInCategory {
     
     // MARK: - Properties
 
     /// nom de la catégorie de revenus
-    var name: String // category.displayString
+    public var name: String // category.displayString
     
     /// table des revenus versés en compte courant avant taxes, prélèvements sociaux et impots
-    var credits: NamedValueTable
+    public var credits: NamedValueTable
     
     /// table des fractions de revenus versés en compte courant qui est imposable à l'IRPP
     var taxablesIrpp: NamedValueTable
@@ -158,7 +158,7 @@ struct RevenuesInCategory {
 }
 
 extension RevenuesInCategory: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         """
 
         Nom: \(name)
@@ -171,19 +171,19 @@ extension RevenuesInCategory: CustomStringConvertible {
 // MARK: - Extensions for VISITORS
 
 extension ValuedRevenues: CashFlowCsvVisitableP {
-    func accept(_ visitor: CashFlowCsvVisitorP) {
+    public func accept(_ visitor: CashFlowCsvVisitorP) {
         visitor.buildCsv(element: self)
     }
 }
 
 extension ValuedRevenues: CashFlowStackedBarChartVisitableP {
-    func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
+    public func accept(_ visitor: CashFlowStackedBarChartVisitorP) {
         visitor.buildStackedBarChart(element: self)
     }
 }
 
 extension ValuedRevenues: CashFlowCategoryStackedBarChartVisitableP {
-    func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
+    public func accept(_ visitor: CashFlowCategoryStackedBarChartVisitorP) {
         visitor.buildCategoryStackedBarChart(element: self)
     }
 }

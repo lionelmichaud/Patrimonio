@@ -11,7 +11,7 @@ import AppFoundation
 import PatrimoineModel
 import NamedValue
 
-extension CashFlowLine {
+public extension CashFlowLine {
     /// Gère le produit de la vente des investissements financiers périodiques + les versements périodiques à réaliser
     /// - Note:
     ///  - le produit de la vente se répartit entre UF et NP en cas de démembrement

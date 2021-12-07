@@ -192,6 +192,16 @@ struct RetirementGeneralSectionView: View {
     @EnvironmentObject private var viewModel: RetirementViewModel
     @State private var alertItem     : AlertItem?
     @State private var showingSheet  = false
+    
+    let str =
+    """
+    Les périodes de chômage indemnisé
+     Cas général
+      On comptera 1 trimestre par période de 50 jours indemnisés, dans la limite de 4 trimestres par an.
+      Si vous avez cumulé travail à temps partiel et allocations chômage
+      On comptera d'abord à combien de trimestres vous donnent droit les cotisations payées sur vos revenus d'activité. Si vous n'avez pas gagné suffisamment pour valider 4 trimestres cotisés, vous bénéficierez du complément en trimestres assimilé pour le chômage.
+      Par exemple, si vous n'avez validé que 3 trimestres en travaillant à temps partiel et que vous perceviez un complément d'indemnisation, vous bénéficierez d'un 4e trimestre (assimilé) au titre du chômage indemnisé.
+    """
 
     var HeaderView: some View {
         HStack {
@@ -213,6 +223,29 @@ struct RetirementGeneralSectionView: View {
                 
                 Text("Coefficient de minoration / majoration").bold().padding(.bottom)
                 Image("Pension de base - minoration").resizable().aspectRatio(contentMode: .fit)
+                
+                Text("Périodes de chômage").bold().padding(.bottom)
+                Image("Chomage et retraite").resizable().aspectRatio(contentMode: .fit)
+                Text("""
+                Les périodes de chômage indemnisé
+                 Cas général
+                  - On comptera 1 trimestre par période de 50 jours indemnisés, dans la limite de 4 trimestres par an.
+                  - Si vous avez cumulé travail à temps partiel et allocations chômage
+                  - On comptera d'abord à combien de trimestres vous donnent droit les cotisations payées sur vos revenus d'activité. Si vous n'avez pas gagné suffisamment pour valider 4 trimestres cotisés, vous bénéficierez du complément en trimestres assimilé pour le chômage.
+                  - Par exemple, si vous n'avez validé que 3 trimestres en travaillant à temps partiel et que vous perceviez un complément d'indemnisation, vous bénéficierez d'un 4e trimestre (assimilé) au titre du chômage indemnisé.
+
+                Les périodes de chômage non indemnisé
+                 La 1ère période de chômage non indemnisé
+                  - Lors de la 1ère période de chômage non indemnisé dans une carrière, ne faisant pas suite à une période de chômage indemnisé, on peut valider des trimestres. On compte 1 trimestre par période de 50 jours de chômage, dans la limite de :
+                  6 trimestres à partir du 1er juillet 2011.
+                  - Les périodes suivantes
+                   - Une condition s'ajoute : il faut que la période de chômage non indemnisé succède immédiatement à une période de chômage indemnisé. Les trimestres comptent alors de la même façon dans la limite d'1 an. Si vous avez plus de 55 ans ET que vous avez cotisé au moins 20 ans à la retraite, la limite est portée à 5 années.
+                
+                Règles particulières pour le chômage non indemnisé
+                 - Il faut, de toute façon, avoir cotisé au régime général ou à la SSI avant la période de chômage pour valider des trimestres. Il n'y a pas de montant minimal, un simple job d'été suffit. Mais si vous cherchez du travail après vos études alors que vous n'avez jamais travaillé et cotisé, votre période de recherche ne comptera pas pour la retraite.
+                 - La 1ère période de chômage d'1 an 1/2 peut être « continue » ou « discontinue ». C'est-à-dire que si vous avez repris une activité pendant cette période, rémunérée mais pas suffisamment longue pour vous ouvrir des droits au chômage indemnisé, cela n'interrompt pas la validation ; vos trimestres de chômage au-delà de cette période de travail pourront bien être validés.
+                 - Pour les périodes suivantes, en revanche, le chômage non indemnisé doit être « continu » ; si vous retravaillez ne serait-ce qu'un jour, sans ouvrir de nouveaux droits au chômage, les périodes au-delà ne seront pas prises en compte.
+                """)
             }.padding()
         }
     }
@@ -302,7 +335,24 @@ struct RetirementAgircSectionView: View {
                 Si vous avez obtenu votre retraite de base à taux minoré et qu’il vous manque au minimum 20 trimestres pour bénéficier de la retraite de base à taux plein, la minoration appliquée est déterminée en fonction de votre âge ou du nombre de trimestres manquants.
                 La solution la plus favorable pour vous sera choisie.
                 """)
-                Image("coef_mino_agirc").resizable().aspectRatio(contentMode: .fit)
+                Image("coef_mino_agirc").resizable().aspectRatio(contentMode: .fit).padding(.bottom)
+                
+                Text("Majoration pour enfant né ou élevé").bold().padding(.bottom)
+                Image("Majoration pour enfant regime complementaire").resizable().aspectRatio(contentMode: .fit).padding(.bottom)
+
+                Text("Périodes de chômage").bold().padding(.bottom)
+                Text("""
+                Droits à la retraite complémentaire et chômage:
+                Les périodes de chômage comptent dans l’acquisition des droits à la retraite complémentaire. Comme c'est le cas dans le régime de base, seules les périodes de chômage indemnisé permettent à l'assuré d'acquérir des droits.
+                - L’acquisition de droits à la retraite complémentaire en période de chômage est soumise à deux conditions.
+                 - La période de chômage doit être succéder à une période pendant laquelle le salarié a acquis des droits à la retraite (périodes d’activité salariée, périodes d’incapacité de travail indemnisées…)
+                 - L’assuré est indemnisé par Pôle emploi.
+
+                Attribution des points AGIRC-ARRCO pendant les périodes de chômage:
+                - Pour chaque jour indemnisé par Pôle emploi, l’assuré acquiert des droits à la retraite complémentaire sous la forme de points.
+                - Les périodes de carence ou de différé d’indemnisation ne permettent plus l’acquisition des points de retraite complémentaire.
+                - C’est Pôle emploi qui informe votre caisse de retraite des périodes qu’il indemnise. Votre caisse de retraite calcule vos points en fonction des informations transmises.
+                """)
             }.padding()
         }
     }

@@ -138,8 +138,9 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
         let delta = Date.calendar.dateComponents([.year, .month, .day],
                                                  from: dateReleve,
                                                  to  : dateOfPensionLiquid)
-        var nbPointsAdded = delta.year! * pointsParAn
-        nbPointsAdded += Int((delta.month!.double() / 12.0) * pointsParAn.double()) // mois pleins
+        let nbPointsAdded =
+            delta.year! * pointsParAn +
+            Int((delta.month!.double() / 12.0) * pointsParAn.double()) // mois pleins
         let nbPointTheory = lastAgircKnownSituation.nbPoints + nbPointsAdded
         XCTAssertEqual(nbPointTheory, projectedNumberOfPoints)
         
@@ -159,7 +160,6 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
         
         // calcul pension avant majoration
         let pensionAvantMajorationPourEnfant = projectedNumberOfPoints.double() * valeurDuPoint * coefMinoration
-        XCTAssertEqual(28401.0, pensionAvantMajorationPourEnfant.rounded())
         print(pensionAvantMajorationPourEnfant)
         
         // Calcul de la majoration pour enfant nés
@@ -167,18 +167,24 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
         let coefEnfantNe = RegimeAgircTest.regimeAgirc
             .coefMajorationPourEnfantNe(nbEnfantNe: nbEnfantNe)
         XCTAssertEqual(1.1, coefEnfantNe)
+        // plafonnement
+        let majorationPourEnfantNe = min(pensionAvantMajorationPourEnfant * (coefEnfantNe - 1.0),
+                                         RegimeAgircTest.regimeAgirc.model.majorationPourEnfant.plafondMajoEnfantNe)
+        XCTAssertEqual(majorationPourEnfantNe, RegimeAgircTest.regimeAgirc.model.majorationPourEnfant.plafondMajoEnfantNe)
 
         // Calcul de la majoration pour enfant à charge (non plafonnée)
-        let nbEnfantACharge = 2 // 3 en 2026
+        var nbEnfantACharge = 2 // 2 jusqu'en 2029, 1 en 2030, 0 ensuite
         let coefEnfantACharge = RegimeAgircTest.regimeAgirc
             .coefMajorationPourEnfantACharge(nbEnfantACharge: nbEnfantACharge)
+        let majorationPourEnfantACharge = pensionAvantMajorationPourEnfant * (coefEnfantACharge - 1.0)
         XCTAssertEqual(1.1, coefEnfantACharge)
 
+        // on retient la plus favorable des deux majorations
+        let majorationPourEnfant = max(majorationPourEnfantNe, majorationPourEnfantACharge)
+
         // Pension = Nombre de points X Valeurs du point X Coefficient de minoration X Coefficient de majoration enfants
-        let pensionBrute = pensionAvantMajorationPourEnfant * coefEnfantACharge
-        XCTAssertEqual(31241.0, pensionBrute.rounded())
-        
-        let during = dateOfPensionLiquid.year
+        let pensionBrute = pensionAvantMajorationPourEnfant + majorationPourEnfant
+        var during = dateOfPensionLiquid.year // 2026
         let pension = try XCTUnwrap(RegimeAgircTest.regimeAgirc.pension(
                                         lastAgircKnownSituation  : lastAgircKnownSituation,
                                         birthDate                : birthDate,
@@ -191,26 +197,85 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
                                         during                   : during))
         XCTAssertEqual(pension.projectedNbOfPoints, projectedNumberOfPoints)
         XCTAssertEqual(pension.coefMinoration, coefMinoration)
-        XCTAssertEqual(pension.majorationPourEnfant, pensionAvantMajorationPourEnfant * (coefEnfantACharge-1.0))
+        XCTAssertEqual(pension.majorationPourEnfant, majorationPourEnfant)
         XCTAssertEqual(pension.pensionBrute, pensionBrute)
 
-        print("CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:")
-        print("  - Nombre de points projetés = \(pension.projectedNbOfPoints)")
-        print("  - Majoration pour enfants   = \(pension.majorationPourEnfant.€String)")
-        print("  - Coef de minoration        = \(coefMinoration)")
-        print("  Pension Brute annuelle  = \(pension.pensionBrute.€String)")
-        print("  Pension Brute mensuelle = \((pension.pensionBrute / 12.0).€String)")
-        print("  Pension Nette annuelle  = \(pension.pensionNette.€String)")
-        print("  Pension Nette mensuelle = \((pension.pensionNette / 12.0).€String)")
+        nbEnfantACharge = 0 // 2 jusqu'en 2029, 1 en 2030, 0 ensuite
+        during = 2030
+        let coefReavluation = RegimeAgircTest.regimeAgirc.revaluationCoef(
+            during              : during,
+            dateOfPensionLiquid : dateOfPensionLiquid)
+        let pensionBrute2030plus = (pensionAvantMajorationPourEnfant + majorationPourEnfantNe) * coefReavluation
+        let pension2030plus = try XCTUnwrap(RegimeAgircTest.regimeAgirc.pension(
+                                        lastAgircKnownSituation  : lastAgircKnownSituation,
+                                        birthDate                : birthDate,
+                                        lastKnownSituation       : lastKnownSituation,
+                                        dateOfRetirement         : dateOfRetirement,
+                                        dateOfEndOfUnemployAlloc : nil,
+                                        dateOfPensionLiquid      : dateOfPensionLiquid,
+                                        nbEnfantNe               : nbEnfantNe,
+                                        nbEnfantACharge          : nbEnfantACharge,
+                                        during                   : during))
+        XCTAssertEqual(pension2030plus.projectedNbOfPoints, projectedNumberOfPoints)
+        XCTAssertEqual(pension2030plus.coefMinoration, coefMinoration)
+        XCTAssertEqual(pension2030plus.majorationPourEnfant, majorationPourEnfantNe)
+        XCTAssertEqual(pension2030plus.pensionBrute, pensionBrute2030plus)
         
+        print("CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:")
+        print("  Situation de référence (général):")
+        print("  - Date = \(dateReleve.stringLongDate) ")
+        print("  - SAM  = \(lastKnownSituation.sam.€String)")
+        print("  - Nombre de trimestre acquis = \(nbTrimestreAcquis)")
+        print("  Situation de référence (AGIRC-ARCCO:")
+        print("  - Date = \(dateReleve.stringLongDate) ")
+        print("  - Nb de points acquis       = \(nbPoints) ")
+        print("  - Nb de points acquis / an  = \(pointsParAn)")
+        print("  Calcul situation future:")
+        print("  - Nombre de points projetés = \(pension.projectedNbOfPoints)")
+        print("  Calcul du taux:")
+        print("  - Taux de base avant majoration = \(coefMinoration*100.0) % (minoration de \(100.0 - coefMinoration*100.0) %)")
+        print("  - Majoration pour enfants nés (plafonnée) = \(majorationPourEnfantNe.€String) soit \(majorationPourEnfantNe/pensionAvantMajorationPourEnfant*100.0) %")
+        print("  - Majoration pour enfants à charge (2026) = \(majorationPourEnfantACharge.€String) soit \((coefEnfantACharge-1.0)*100.0) %")
+        print("  - Majoration pour enfants retenue  (2026) = \(majorationPourEnfant.€String) soit \(majorationPourEnfant/pensionAvantMajorationPourEnfant*100.0) %")
+        print("  - Majoration pour enfants retenue  (2030) = \(majorationPourEnfantNe.€String) soit \(majorationPourEnfantNe/pensionAvantMajorationPourEnfant*100.0) %")
+        print("  Jusqu'à 2029:")
+        print("  - Pension Brute annuelle (2026) = \(pension.pensionBrute.€String)")
+        print("  - Pension Brute mensuelle(2026) = \((pension.pensionBrute / 12.0).€String)")
+        print("  - Pension Nette annuelle (2026) = \(pension.pensionNette.€String)")
+        print("  - Pension Nette mensuelle(2026) = \((pension.pensionNette / 12.0).€String)")
+        print("  A partir de 2030:")
+        print("  - Pension Brute annuelle (2030) = \(pension2030plus.pensionBrute.€String)")
+        print("  - Pension Brute mensuelle(2030) = \((pension2030plus.pensionBrute / 12.0).€String)")
+        print("  - Pension Nette annuelle (2030) = \(pension2030plus.pensionNette.€String)")
+        print("  - Pension Nette mensuelle(2030) = \((pension2030plus.pensionNette / 12.0).€String)")
+
         //  CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:
-        //    - Nombre de points projetés = 24020
-        //    - Majoration pour enfants   = 2 840 €
-        //    - Coef de minoration        = 0.93
-        //  Pension Brute annuelle  = 31 241 €
-        //  Pension Brute mensuelle =  2 603 €
-        //  Pension Nette annuelle  = 28 086 €
-        //  Pension Nette mensuelle =  2 341 €
+        //  Situation de référence (général):
+        //  - Date = 31 décembre 2020
+        //  - SAM  = 37 054 €
+        //  - Nombre de trimestre acquis = 139
+        //  Situation de référence (AGIRC-ARCCO)
+        //  - Date = 31 décembre 2020
+        //  - Nb de points acquis       = 19484
+        //  - Nb de points acquis / an  = 789
+        //  Calcul situation future:
+        //  - Nombre de points projetés = 24020
+        //  Calcul du taux:
+        //  - Taux de base avant majoration = 93.0 % (minoration de 7.0 %)
+        //  - Majoration pour enfants nés (plafonnée) = 2 072 € soit 7.293962913109368 %
+        //  - Majoration pour enfants à charge (2026) = 2 840 € soit 10.000000000000009 %
+        //  - Majoration pour enfants retenue  (2026) = 2 840 € soit 10.000000000000009 %
+        //  - Majoration pour enfants retenue  (2030) = 2 072 € soit 7.293962913109368 %
+        //  Jusqu'à 2029:
+        //  - Pension Brute annuelle (2026) = 31 241 €
+        //  - Pension Brute mensuelle(2026) = 2 603 € (M@rel = 2 424 €) écart = -179 €
+        //  - Pension Nette annuelle (2026) = 28 086 €
+        //  - Pension Nette mensuelle(2026) = 2 341 € (M@rel = 2 181 €) écart = -160 €
+        //  A partir de 2030:
+        //  - Pension Brute annuelle (2030) = 29 272 €
+        //  - Pension Brute mensuelle(2030) = 2 439 €
+        //  - Pension Nette annuelle (2030) = 26 316 €
+        //  - Pension Nette mensuelle(2030) = 2 193 €
     }
     
     func test_cas_lionel_avec_chomage_62_ans() throws {
@@ -229,8 +294,197 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
                                                            nbPoints    : nbPoints,
                                                            pointsParAn : pointsParAn)
         
-        // Cessation d'activité à 62 ans + ce qu'il faut pour acquérir le dernier trimestre plein
+        // Cessation d'activité à fin 2021 (PSE)
+        let dateOfRetirement = lastDayOf(year: 2021)
+        
+        // Fin d'indemnisation après 3 ans de chômage
+        let dateOfEndOfUnemployAlloc = 3.years.from(dateOfRetirement)!
+        
+        // Liquidation de la pension à 62 ans + ce qu'il faut pour acquérir le dernier trimestre plein
         let dateOfPensionLiquid = (62.years + 10.days).from(birthDate)!
+
+        // valeur du point
+        let valeurDuPoint = RegimeAgircTest.regimeAgirc.valeurDuPoint
+        XCTAssertEqual(1.2714, valeurDuPoint)
+        
+        /// Projection du nombre de points Agirc sur la base du dernier relevé de points et de la prévision de carrière future
+        let projectedNumberOfPoints = try XCTUnwrap(RegimeAgircTest.regimeAgirc
+                                                        .projectedNumberOfPoints(
+                                                            lastAgircKnownSituation  : lastAgircKnownSituation,
+                                                            dateOfRetirement         : dateOfRetirement,
+                                                            dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc),
+                                                    "Failed projectedNumberOfPoints")
+        let dateReleve = lastDayOf(year: atEndOf)
+        let delta = Date.calendar.dateComponents([.year, .month, .day],
+                                                 from: dateReleve,
+                                                 to  : dateOfEndOfUnemployAlloc)
+        let nbPointsAdded =
+            delta.year! * pointsParAn +
+            Int((delta.month!.double() / 12.0) * pointsParAn.double()) // mois pleins
+        let nbPointTheory = lastAgircKnownSituation.nbPoints + nbPointsAdded
+        XCTAssertEqual(nbPointTheory, projectedNumberOfPoints)
+        
+        /// Calcul le coefficient de minoration ou de majoration de la pension complémentaire selon
+        let coefMinoration = try XCTUnwrap(RegimeAgircTest.regimeAgirc
+                                            .coefMinorationMajoration(
+                                                birthDate                : birthDate,
+                                                lastKnownSituation       : lastKnownSituation,
+                                                dateOfRetirement         : dateOfRetirement,
+                                                dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc,
+                                                dateOfPensionLiquid      : dateOfPensionLiquid,
+                                                during                   : dateOfPensionLiquid.year))
+        // 0.78: 20 trim manquant pour atteindre 67 ans
+        // 0.92:  8 trim manquant pour le taux plein à 63 ans et 9 mois
+        let coefTheory = max(0.92, 0.78)
+        XCTAssertEqual(coefTheory, coefMinoration)
+        
+        // calcul pension avant majoration
+        let pensionAvantMajorationPourEnfant = projectedNumberOfPoints.double() * valeurDuPoint * coefMinoration
+        print(pensionAvantMajorationPourEnfant)
+        
+        // Calcul de la majoration pour enfant nés
+        let nbEnfantNe = 3
+        let coefEnfantNe = RegimeAgircTest.regimeAgirc
+            .coefMajorationPourEnfantNe(nbEnfantNe: nbEnfantNe)
+        XCTAssertEqual(1.1, coefEnfantNe)
+        // plafonnement
+        let majorationPourEnfantNe = min(pensionAvantMajorationPourEnfant * (coefEnfantNe - 1.0),
+                                         RegimeAgircTest.regimeAgirc.model.majorationPourEnfant.plafondMajoEnfantNe)
+        XCTAssertEqual(majorationPourEnfantNe, RegimeAgircTest.regimeAgirc.model.majorationPourEnfant.plafondMajoEnfantNe)
+        
+        // Calcul de la majoration pour enfant à charge (non plafonnée)
+        var nbEnfantACharge = 2 // 2 jusqu'en 2029, 1 en 2030, 0 ensuite
+        let coefEnfantACharge = RegimeAgircTest.regimeAgirc
+            .coefMajorationPourEnfantACharge(nbEnfantACharge: nbEnfantACharge)
+        let majorationPourEnfantACharge = pensionAvantMajorationPourEnfant * (coefEnfantACharge - 1.0)
+        XCTAssertEqual(1.1, coefEnfantACharge)
+        
+        // on retient la plus favorable des deux majorations
+        let majorationPourEnfant = max(majorationPourEnfantNe, majorationPourEnfantACharge)
+        
+        // Pension = Nombre de points X Valeurs du point X Coefficient de minoration X Coefficient de majoration enfants
+        let pensionBrute = pensionAvantMajorationPourEnfant + majorationPourEnfant
+        var during = dateOfPensionLiquid.year // 2026
+        let pension = try XCTUnwrap(RegimeAgircTest.regimeAgirc.pension(
+                                        lastAgircKnownSituation  : lastAgircKnownSituation,
+                                        birthDate                : birthDate,
+                                        lastKnownSituation       : lastKnownSituation,
+                                        dateOfRetirement         : dateOfRetirement,
+                                        dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc,
+                                        dateOfPensionLiquid      : dateOfPensionLiquid,
+                                        nbEnfantNe               : nbEnfantNe,
+                                        nbEnfantACharge          : nbEnfantACharge,
+                                        during                   : during))
+        XCTAssertEqual(pension.projectedNbOfPoints, projectedNumberOfPoints)
+        XCTAssertEqual(pension.coefMinoration, coefMinoration)
+        XCTAssertEqual(pension.majorationPourEnfant, majorationPourEnfant)
+        XCTAssertEqual(pension.pensionBrute, pensionBrute)
+        
+        nbEnfantACharge = 0 // 2 jusqu'en 2029, 1 en 2030, 0 ensuite
+        during = 2030
+        let coefReavluation = RegimeAgircTest.regimeAgirc.revaluationCoef(
+            during              : during,
+            dateOfPensionLiquid : dateOfPensionLiquid)
+        let pensionBrute2030plus = (pensionAvantMajorationPourEnfant + majorationPourEnfantNe) * coefReavluation
+        let pension2030plus = try XCTUnwrap(RegimeAgircTest.regimeAgirc.pension(
+                                                lastAgircKnownSituation  : lastAgircKnownSituation,
+                                                birthDate                : birthDate,
+                                                lastKnownSituation       : lastKnownSituation,
+                                                dateOfRetirement         : dateOfRetirement,
+                                                dateOfEndOfUnemployAlloc : dateOfEndOfUnemployAlloc,
+                                                dateOfPensionLiquid      : dateOfPensionLiquid,
+                                                nbEnfantNe               : nbEnfantNe,
+                                                nbEnfantACharge          : nbEnfantACharge,
+                                                during                   : during))
+        XCTAssertEqual(pension2030plus.projectedNbOfPoints, projectedNumberOfPoints)
+        XCTAssertEqual(pension2030plus.coefMinoration, coefMinoration)
+        XCTAssertEqual(pension2030plus.majorationPourEnfant, majorationPourEnfantNe)
+        XCTAssertEqual(pension2030plus.pensionBrute, pensionBrute2030plus)
+        
+        print("CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:")
+        print("  Situation de référence (général):")
+        print("  - Date = \(dateReleve.stringLongDate) ")
+        print("  - SAM  = \(lastKnownSituation.sam.€String)")
+        print("  - Nombre de trimestre acquis = \(nbTrimestreAcquis)")
+        print("  Situation de référence (AGIRC-ARCCO:")
+        print("  - Date = \(dateReleve.stringLongDate) ")
+        print("  - Nb de points acquis       = \(nbPoints) ")
+        print("  - Nb de points acquis / an  = \(pointsParAn)")
+        print("  Calcul situation future:")
+        print("  - Nombre de points projetés = \(pension.projectedNbOfPoints)")
+        print("  Calcul du taux:")
+        print("  - Taux de base avant majoration = \(coefMinoration*100.0) % (minoration de \(100.0 - coefMinoration*100.0) %)")
+        print("  - Majoration pour enfants nés (plafonnée) = \(majorationPourEnfantNe.€String) soit \(majorationPourEnfantNe/pensionAvantMajorationPourEnfant*100.0) %")
+        print("  - Majoration pour enfants à charge (2026) = \(majorationPourEnfantACharge.€String) soit \((coefEnfantACharge-1.0)*100.0) %")
+        print("  - Majoration pour enfants retenue  (2026) = \(majorationPourEnfant.€String) soit \(majorationPourEnfant/pensionAvantMajorationPourEnfant*100.0) %")
+        print("  - Majoration pour enfants retenue  (2030) = \(majorationPourEnfantNe.€String) soit \(majorationPourEnfantNe/pensionAvantMajorationPourEnfant*100.0) %")
+        print("  Jusqu'à 2029:")
+        print("  - Pension Brute annuelle (2026) = \(pension.pensionBrute.€String)")
+        print("  - Pension Brute mensuelle(2026) = \((pension.pensionBrute / 12.0).€String)")
+        print("  - Pension Nette annuelle (2026) = \(pension.pensionNette.€String)")
+        print("  - Pension Nette mensuelle(2026) = \((pension.pensionNette / 12.0).€String)")
+        print("  A partir de 2030:")
+        print("  - Pension Brute annuelle (2030) = \(pension2030plus.pensionBrute.€String)")
+        print("  - Pension Brute mensuelle(2030) = \((pension2030plus.pensionBrute / 12.0).€String)")
+        print("  - Pension Nette annuelle (2030) = \(pension2030plus.pensionNette.€String)")
+        print("  - Pension Nette mensuelle(2030) = \((pension2030plus.pensionNette / 12.0).€String)")
+        
+        // CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:
+        //   Situation de référence (général):
+        //   - Date = 31 décembre 2020
+        //   - SAM  = 37 054 €
+        //   - Nombre de trimestre acquis = 139
+        //   Situation de référence (AGIRC-ARCCO:
+        //   - Date = 31 décembre 2020
+        //   - Nb de points acquis       = 19484
+        //   - Nb de points acquis / an  = 789
+        //   Calcul situation future:
+        //   - Nombre de points projetés = 22640 (M@rel = 22538)
+        //   Calcul du taux:
+        //   - Taux de base avant majoration = 92.0 % (minoration de 8.0 %) (M@rel = 14.50 %)
+        //   - Majoration pour enfants nés (plafonnée) = 2 072 € soit 7.822674370620724 %
+        //   - Majoration pour enfants à charge (2026) = 2 648 € soit 10.000000000000009 %
+        //   - Majoration pour enfants retenue  (2026) = 2 648 € soit 10.000000000000009 %
+        //   - Majoration pour enfants retenue  (2030) = 2 072 € soit 7.822674370620724 %
+        //   Jusqu'à 2029:
+        //   - Pension Brute annuelle (2026) = 29 130 €
+        //   - Pension Brute mensuelle(2026) = 2 427 € (M@rel = 2 062 €) écart = -365 €
+        //   - Pension Nette annuelle (2026) = 26 188 €
+        //   - Pension Nette mensuelle(2026) = 2 182 € (M@rel = 1855 €) écart = -327 €
+        //   A partir de 2030:
+        //   - Pension Brute annuelle (2030) = 27 428 €
+        //   - Pension Brute mensuelle(2030) = 2 286 €
+        //   - Pension Nette annuelle (2030) = 24 658 €
+        //   - Pension Nette mensuelle(2030) = 2 055 €
+        
+        // CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:
+        // (MAREL: ajout de trimestres pendant la période indemnisation seulement: 3 ans et non 5 ans):
+        //   Situation de référence (général):
+        //   - Date = 31 décembre 2020
+        //   - SAM  = 37 054 €
+        //   - Nombre de trimestre acquis = 139
+        //   Situation de référence (AGIRC-ARCCO:
+        //   - Date = 31 décembre 2020
+        //   - Nb de points acquis       = 19484
+        //   - Nb de points acquis / an  = 789
+        //   Calcul situation future:
+        //   - Nombre de points projetés = 22640 (M@rel = 22538)
+        //   Calcul du taux:
+        //   - Taux de base avant majoration = 85.5 % (minoration de 14.5 %) (M@rel = 14.50 %)
+        //   - Majoration pour enfants nés (plafonnée) = 2 072 € soit 8.417380609322885 %
+        //   - Majoration pour enfants à charge (2026) = 2 461 € soit 10.000000000000009 %
+        //   - Majoration pour enfants retenue  (2026) = 2 461 € soit 10.000000000000009 %
+        //   - Majoration pour enfants retenue  (2030) = 2 072 € soit 8.417380609322885 %
+        //   Jusqu'à 2029:
+        //   - Pension Brute annuelle (2026) = 27 072 €
+        //   - Pension Brute mensuelle(2026) = 2 256 € (M@rel = 2 062 €) écart = -194 €
+        //   - Pension Nette annuelle (2026) = 24 338 €
+        //   - Pension Nette mensuelle(2026) = 2 028 € (M@rel = 1855 €) écart = -173 €
+        //   A partir de 2030:
+        //   - Pension Brute annuelle (2030) = 25 631 €
+        //   - Pension Brute mensuelle(2030) = 2 136 € (M@rel = 2 062 €) écart = -74 €
+        //   - Pension Nette annuelle (2030) = 23 042 €
+        //   - Pension Nette mensuelle(2030) = 1 920 € (M@rel = 1855 €) écart = -65 €
     }
 
     // MARK: - FIN CAS REELS

@@ -160,6 +160,9 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         lastKnownSituation = RegimeGeneralSituation(atEndOf           : atEndOf,
                                                     nbTrimestreAcquis : nbTrimestreAcquis,
                                                     sam               : sam)
+        let dateAgeMinimumLegal = try XCTUnwrap(RegimeGeneralTest.regimeGeneral
+                                                    .dateAgeMinimumLegal(birthDate: birthDate),
+                                                "Cas réel avec chomage: dateAgeMinimumLegal failed")
         // Cessation d'activité à 62 ans + ce qu'il faut pour acquérir le dernier trimestre plein
         dateOfPensionLiquid = (62.years + 10.days).from(birthDate)!
         // nombre de trimestre restant à acquérir
@@ -233,26 +236,44 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         XCTAssertTrue(isApproximatelyEqual(brutTheory, pensionBrut), "Cas réel sans chomage: pension failed")
         
         print("CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:")
-        print("  - SAM                     = \(lastKnownSituation.sam.€String)")
-        print("  - Taux                    = \(taux) % (minoration de \(50.0 - taux) %)")
-        print("  - Majoration pour enfants = \(majorationEnfant) %")
-        print("  - Durée Assurance         = \(dureeAssurance.plafonne)")
-        print("  - Durée de référence      = \(dureeDeReference)")
-        print("  Pension Brute annuelle  = \(pensionBrut.€String)")
+        print("  Situation de référence:")
+        print("  - Date = \(dateReleve.stringLongDate) ")
+        print("  - SAM  = \(lastKnownSituation.sam.€String)")
+        print("  - Nombre de trimestre acquis = \(nbTrimestreAcquis)")
+        print("  Situation professionnelle:")
+        print("  - Date légale liquidation de pension = \(dateAgeMinimumLegal.stringLongDate)")
+        print("  Calcul des nb de trimestres:")
+        print("  - Nb trim restant à acquérir après date réf = \(nbTrim)")
+        print("  - Nb trim manquants                         = \(nbTrimPluMoins)")
+        print("  - Durée Assurance    = \(dureeAssurance.plafonne)")
+        print("  - Durée de référence = \(dureeDeReference)")
+        print("  Calcul du taux:")
+        print("  - Taux de base avant majoration = \(taux) % (minoration de \(50.0 - taux) %)")
+        print("  - Majoration pour enfants       = \(majorationEnfant) %")
+        print("  Pension Brute annuelle  = \(pensionBrut.€String) = SAM x Taux x Majoration x (Durée Assurance / Durée de référence)")
         print("  Pension Brute mensuelle = \((pensionBrut / 12.0).€String)")
         print("  Pension Nette annuelle  = \(pensionNet.€String)")
         print("  Pension Nette mensuelle = \((pensionNet / 12.0).€String)")
-        
-        //  CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:
-        //      - SAM                     = 37 054 €
-        //      - Taux                    = 45.625 % (minoration de 4.375 %)
-        //      - Majoration pour enfants = 10.0 %
-        //      - Durée Assurance         = 162
-        //      - Durée de référence      = 169
-        //  Pension Brute annuelle  = 17 826 €
-        //  Pension Brute mensuelle =  1 486 €  (M@rel = 1 551 €)
+
+        // CAS LIONEL SANS CHOMAGE JUSQU'A 62 ANS:
+        //  Situation de référence:
+        //  - Date = 31 décembre 2020
+        //  - SAM  = 37 054 €
+        //  - Nombre de trimestre acquis = 139
+        //  Situation professionnelle:
+        //  - Date légale liquidation de pension = 22 septembre 2026
+        //  Calcul des nb de trimestres:
+        //  - Nb trim restant à acquérir après date réf = 23
+        //  - Nb trim manquants                         = -7
+        //  - Durée Assurance    = 162
+        //  - Durée de référence = 169
+        //  Calcul du taux:
+        //  - Taux de base avant majoration = 45.625 % (minoration de 4.375 %)
+        //  - Majoration pour enfants       = 10.0 %
+        //  Pension Brute annuelle  = 17 826 € = SAM x Taux x Majoration x (Durée Assurance / Durée de référence)
+        //  Pension Brute mensuelle = 1 486 € (M@rel = 1 504 €)
         //  Pension Nette annuelle  = 16 204 €
-        //  Pension Nette mensuelle =  1 350 €  (M@rel = 1 410 €)
+        //  Pension Nette mensuelle = 1 350 € (M@rel = 1 367 €)  écart = +17 €
     }
     
     func test_cas_lionel_avec_chomage_62_ans() throws {
@@ -260,20 +281,17 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         let nbTrimestreAcquis = 139
         let atEndOf           = 2020
         let sam               = 37054.0
-        var lastKnownSituation       : RegimeGeneralSituation
-        var dateOfRetirement         : Date
-        var dateOfEndOfUnemployAlloc : Date
-        
+
         // dernier relevé connu des caisses de retraite
         let dateReleve = lastDayOf(year: atEndOf)
-        lastKnownSituation = RegimeGeneralSituation(atEndOf           : atEndOf,
-                                                    nbTrimestreAcquis : nbTrimestreAcquis,
-                                                    sam               : sam)
+        let lastKnownSituation = RegimeGeneralSituation(atEndOf           : atEndOf,
+                                                        nbTrimestreAcquis : nbTrimestreAcquis,
+                                                        sam               : sam)
         // Cessation d'activité à fin 2021 (PSE)
-        dateOfRetirement = lastDayOf(year: 2021)
+        let dateOfRetirement = lastDayOf(year: 2021)
         
         // Fin d'indemnisation après 3 ans de chômage
-        dateOfEndOfUnemployAlloc = 3.years.from(dateOfRetirement)!
+        let dateOfEndOfUnemployAlloc = 3.years.from(dateOfRetirement)!
         
         // Liquidation de pension à 62 ans + ce qu'il faut pour acquérir le dernier trimestre plein
         let dateAgeMinimumLegal = try XCTUnwrap(RegimeGeneralTest.regimeGeneral
@@ -282,11 +300,19 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         let date62ans = 62.years.from(birthDate)!
         XCTAssertEqual(date62ans, dateAgeMinimumLegal, "Cas réel avec chomage: dateAgeMinimumLegal failed")
         
-        // nombre de trimestre restant à acquérir
-        let delta = Date.calendar.dateComponents([.year, .month, .day],
-                                                 from: dateReleve,
+        // nombre de trimestre restant à acquérir compte tenu de la situation professionnelle future
+        //  = 3 ans d'ARE + 5 ans (+ de 55 ans et + de 20 ans de cotisation) = 8 x 4 = 32
+        //  plafonné au nb de trimestres permettant d'atteindre 62 ans
+        let deltaDeRefARetirement = Date.calendar.dateComponents([.year, .month, .day],
+                                                                from: dateReleve,
+                                                                to  : dateOfRetirement)
+        let nbTrimDeRefARetirement = deltaDeRefARetirement.year! * 4 + deltaDeRefARetirement.month! / 3 // 4
+        let deltaDeRetirementA62 = Date.calendar.dateComponents([.year, .month, .day],
+                                                 from: dateOfRetirement,
                                                  to  : dateAgeMinimumLegal)
-        let nbTrim = delta.year! * 4 + delta.month! / 3
+        let nbTrimDeRetirementA62 = deltaDeRetirementA62.year! * 4 + deltaDeRetirementA62.month! / 3 // 18
+        let nbTrimApresRetirement = min(nbTrimDeRetirementA62, (3 + 5) * 4) // 18
+        let nbTrim = nbTrimDeRefARetirement + nbTrimApresRetirement // 22
         
         /// Durée d'assurance
         
@@ -301,7 +327,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         XCTAssertEqual(161, theory)
         XCTAssertEqual(161, dureeAssurance.plafonne, "Cas réel avec chomage: dureeAssurance failed")
         XCTAssertEqual(161, dureeAssurance.deplafonne, "Cas réel avec chomage: dureeAssurance failed")
-        //dureeAssurance = (155, 155)
+        //dureeAssurance = (161, 161) et non pas 155 comme estimé par MAREL
         
         /// Durée d'assurance de référence
         let dureeDeReference = try XCTUnwrap(RegimeGeneralTest.regimeGeneral
@@ -354,36 +380,71 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         print(brutTheory)
         XCTAssertTrue(isApproximatelyEqual(brutTheory, pensionBrut), "Cas réel avec chomage: pension failed")
         print("CAS LIONEL AVEC 3 ANS DE CHOMAGE:")
-        print("  - SAM                     = \(lastKnownSituation.sam.€String)")
-        print("  - Taux                    = \(taux) % (minoration de \(50.0 - taux) %)")
-        print("  - Majoration pour enfants = \(majorationEnfant) %")
-        print("  - Durée Assurance         = \(dureeAssurance.plafonne)")
-        print("  - Durée de référence      = \(dureeDeReference)")
-        print("  Pension Brute annuelle  = \(pensionBrut.€String)")
+        print("  Situation de référence:")
+        print("  - Date = \(dateReleve.stringLongDate) ")
+        print("  - SAM  = \(lastKnownSituation.sam.€String)")
+        print("  - Nombre de trimestre acquis = \(nbTrimestreAcquis)")
+        print("  Situation professionnelle:")
+        print("  - Date de cessation d'activité       = \(dateOfRetirement.stringLongDate)")
+        print("  - Date de fin d'indemnisation        = \(dateOfEndOfUnemployAlloc.stringLongDate)")
+        print("  - Date légale liquidation de pension = \(dateAgeMinimumLegal.stringLongDate)")
+        print("  Calcul des nb de trimestres:")
+        print("  - Nb trim restant à acquérir après date réf = \(nbTrim)")
+        print("  - Nb trim manquants                         = \(nbTrimPluMoins)")
+        print("  - Durée Assurance    = \(dureeAssurance.plafonne)")
+        print("  - Durée de référence = \(dureeDeReference)")
+        print("  Calcul du taux:")
+        print("  - Taux de base avant majoration = \(taux) % (minoration de \(50.0 - taux) %)")
+        print("  - Majoration pour enfants       = \(majorationEnfant) %")
+        print("  Pension Brute annuelle  = \(pensionBrut.€String) = SAM x Taux x Majoration x (Durée Assurance / Durée de référence)")
         print("  Pension Brute mensuelle = \((pensionBrut / 12.0).€String)")
         print("  Pension Nette annuelle  = \(pensionNet.€String)")
         print("  Pension Nette mensuelle = \((pensionNet / 12.0).€String)")
         
-        // CAS REEL LIONEL 3 ANS DE CHOMAGE:
-        // - SAM                     = 37 054 €
-        // - Taux                    = 45.0 % (minoration de 5.0 %)
-        // - Majoration pour enfants = 10.0 %
-        // - Durée Assurance         = 161
-        // - Durée de référence      = 169
-        // Pension Brute annuelle  = 17 473 €
-        // Pension Brute mensuelle = 1 456 €
-        // Pension Nette annuelle  = 15 883 €
-        // Pension Nette mensuelle = 1 324 €
-        
-        // CAS REEL LIONEL 3 ANS DE CHOMAGE
-        // (ajout de trimestres pendant la période indemnisation seulement: 3 ans et non 5 ans):
-        // - SAM                     = 37 054 €
-        // - Taux                    = 41.25 % (minoration de 8.75 %)
-        // - Majoration pour enfants = 10.0 %
-        // - Durée Assurance         = 155
-        // - Durée de référence      = 169
-        // Pension Brute annuelle  = 15 420 €
-        // Pension Brute mensuelle = 1 285 €
+        // CAS LIONEL AVEC 3 ANS DE CHOMAGE:
+        //   Situation de référence:
+        //   - Date = 31 décembre 2020
+        //   - SAM  = 37 054 €
+        //   - Nombre de trimestre acquis = 139
+        //   Situation professionnelle:
+        //   - Date de cessation d'activité       = 31 décembre 2021
+        //   - Date de fin d'indemnisation        = 31 décembre 2024
+        //   - Date légale liquidation de pension = 22 septembre 2026
+        //   Calcul des nb de trimestres:
+        //   - Nb trim restant à acquérir après date réf = 22
+        //   - Nb trim manquants                         = -8
+        //   - Durée Assurance    = 161
+        //   - Durée de référence = 169
+        //   Calcul du taux:
+        //   - Taux de base avant majoration = 45.0 % (minoration de 5.0 %)
+        //   - Majoration pour enfants       = 10.0 %
+        //   Pension Brute annuelle  = 17 473 € = SAM x Taux x Majoration x (Durée Assurance / Durée de référence)
+        //   Pension Brute mensuelle = 1 456 €
+        //   Pension Nette annuelle  = 15 883 €
+        //   Pension Nette mensuelle = 1 324 €
+        //
+        // CAS LIONEL AVEC 3 ANS DE CHOMAGE:
+        // (MAREL: ajout de trimestres pendant la période indemnisation seulement: 3 ans et non 5 ans):
+        //   Situation de référence:
+        //   - Date = 31 décembre 2020
+        //   - SAM  = 37 054 €
+        //   - Nombre de trimestre acquis = 139
+        //   Situation professionnelle:
+        //   - Date de cessation d'activité       = 31 décembre 2021
+        //   - Date de fin d'indemnisation        = 31 décembre 2024
+        //   - Date légale liquidation de pension = 22 septembre 2026
+        //   Calcul des nb de trimestres:
+        //   - Nb trim restant à acquérir après date réf = 22
+        //   - Nb trim manquants                         = -14
+        //   - Durée Assurance    = 155
+        //   - Durée de référence = 169
+        //   Calcul du taux:
+        //   - Taux de base avant majoration = 41.25 % (minoration de 8.75 %)
+        //   - Majoration pour enfants       = 10.0 %
+        //   Pension Brute annuelle  = 15 420 € = SAM x Taux x Majoration x (Durée Assurance / Durée de référence)
+        //   Pension Brute mensuelle = 1 285 € (M@rel = 1 096 €) écart = -189 €
+        //   Pension Nette annuelle  = 14 017 €
+        //   Pension Nette mensuelle = 1 168 € (M@rel = 996 €) écart = -172 €
     }
     
     // MARK: - FIN CAS REELS
