@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Files
 import ModelEnvironment
 import LifeExpense
 import PersonModel
@@ -191,6 +192,7 @@ struct DossierDetailView: View {
     
     /// Rendre le Dossier sélectionné actif et charger ses données dans le modèle
     private func load() {
+
         guard let dossierIndex = dataStore.dossiers.firstIndex(of: dossier) else {
             self.alertItem = AlertItem(title         : Text("Impossible de trouver le Dossier !"),
                                        dismissButton : .default(Text("OK")))
@@ -199,7 +201,34 @@ struct DossierDetailView: View {
         
         /// charger les fichiers JSON
         do {
-            try dossier.loadDossierContentAsJSON { folder in
+            try load(dossier, withIndex: dossierIndex)
+        } catch {
+            if alertItem == nil {
+                self.alertItem = AlertItem(title         : Text((String(describing: error))),
+                                           dismissButton : .default(Text("OK")))
+            }
+            return
+        }
+    }
+    
+    private func load(_ dossier              : Dossier,
+                      withIndex dossierIndex : Int) throws {
+        var compatibility = false
+        
+        try dossier.loadDossierContentAsJSON { folder in
+            // Vérifier la compatibilité entre la version de l'app et la verison du répertoire `Library/template`.
+            do {
+                compatibility = try PersistenceManager.checkCompatibilityWithAppVersion(of: folder)
+                
+            } catch {
+                // la vérification de compatibilité de version s'est mal passée
+                let error = DossierError.failedToCheckCompatibility
+                self.alertItem = AlertItem(title         : Text("\(error.rawValue) !"),
+                                           dismissButton : .default(Text("OK")))
+                throw error
+            }
+            
+            if compatibility {
                 // injection de family dans la propriété statique de DateBoundary pour lier les évenements à des personnes
                 DateBoundary.setPersonEventYearProvider(family)
                 // injection de family dans la propriété statique de Expense
@@ -209,27 +238,84 @@ struct DossierDetailView: View {
                 // injection de family dans la propriété statique de Patrimoin
                 Patrimoin.familyProvider = family
                 
-                try model.loadFromJSON(fromFolder: folder)
-                try patrimoine.loadFromJSON(fromFolder: folder)
-                try expenses.loadFromJSON(fromFolder: folder)
-                try family.loadFromJSON(fromFolder: folder,
-                                        using     : model)
-                try simulation.loadFromJSON(fromFolder: folder)
+                do {
+                    try model.loadFromJSON(fromFolder: folder)
+                    try patrimoine.loadFromJSON(fromFolder: folder)
+                    try expenses.loadFromJSON(fromFolder: folder)
+                    try family.loadFromJSON(fromFolder: folder,
+                                            using     : model)
+                    try simulation.loadFromJSON(fromFolder: folder)
+                    
+                    /// gérer les dépendances entre le Modèle et les objets applicatifs
+                    DependencyInjector.manageDependencies(to: model)
+                    
+                    /// rendre le Dossier actif seulement si tout c'est bien passé
+                    dataStore.activate(dossierAtIndex: dossierIndex)
+                    
+                    /// remettre à zéro la simulation et sa vue
+                    simulation.notifyComputationInputsModification()
+                    uiState.resetSimulationView()
+                } catch {
+                    self.alertItem = AlertItem(title         : Text("Echec de chargement du fichier"),
+                                               dismissButton : .default(Text("OK")))
+                    throw error
+                }
+                
+            } else {
+                // version de dossier incompatible avec version d'Application
+                // tenter de rétablir la compatibilité en important les fichier Models de l'Application
+                self.alertItem =
+                    AlertItem(title         : Text("Attention").foregroundColor(.red),
+                              message       : Text("Le contenu de ce dossier est incompatible de cette version de l'application. Voulez-vous le mettre à jour. Si vous le mettez à jour, vous perdrai les éventuelles modifications qu'il contient."),
+                              primaryButton : .destructive(Text("Mettre à jour"),
+                                                           action: {
+                                                            importModelFilesFromApp(toFolder: folder)
+                                                            // injection de family dans la propriété statique de DateBoundary pour lier les évenements à des personnes
+                                                            DateBoundary.setPersonEventYearProvider(family)
+                                                            // injection de family dans la propriété statique de Expense
+                                                            LifeExpense.setMembersCountProvider(family)
+                                                            // injection de family dans la propriété statique de Adult
+                                                            Adult.setAdultRelativesProvider(family)
+                                                            // injection de family dans la propriété statique de Patrimoin
+                                                            Patrimoin.familyProvider = family
+                                                            
+                                                            do {
+                                                                try model.loadFromJSON(fromFolder: folder)
+                                                                try patrimoine.loadFromJSON(fromFolder: folder)
+                                                                try expenses.loadFromJSON(fromFolder: folder)
+                                                                try family.loadFromJSON(fromFolder: folder,
+                                                                                        using     : model)
+                                                                try simulation.loadFromJSON(fromFolder: folder)
+                                                                
+                                                                /// gérer les dépendances entre le Modèle et les objets applicatifs
+                                                                DependencyInjector.manageDependencies(to: model)
+                                                                
+                                                                /// rendre le Dossier actif seulement si tout c'est bien passé
+                                                                dataStore.activate(dossierAtIndex: dossierIndex)
+                                                                
+                                                                /// remettre à zéro la simulation et sa vue
+                                                                simulation.notifyComputationInputsModification()
+                                                                uiState.resetSimulationView()
+                                                            } catch {
+                                                                self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
+                                                                                           dismissButton : .default(Text("OK")))
+                                                            }
+                                                           }),
+                              secondaryButton: .cancel())
+            }
+        }
+    }
+    
+    private func importModelFilesFromApp(toFolder: Folder) {
+        do {
+            try PersistenceManager.duplicateFilesFromApp(toFolder: toFolder) { fromFolder, toFolder in
+                try model.loadFromJSON(fromFolder: fromFolder)
+                try model.saveAsJSON(toFolder: toFolder)
             }
         } catch {
-            self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
+            self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
                                        dismissButton : .default(Text("OK")))
         }
-        
-        /// gérer les dépendances entre le Modèle et les objets applicatifs
-        DependencyInjector.manageDependencies(to: model)
-        
-        /// rendre le Dossier actif seulement si tout c'est bien passé
-        dataStore.activate(dossierAtIndex: dossierIndex)
-        
-        /// remettre à zéro la simulation et sa vue
-        simulation.notifyComputationInputsModification()
-        uiState.resetSimulationView()
     }
     
     /// Dupliquer le Dossier sélectionné

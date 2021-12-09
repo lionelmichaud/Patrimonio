@@ -11,6 +11,9 @@ import os
 // MARK: - STORE
 
 public final class Store: ObservableObject {
+
+    // MARK: - Properties
+
     @Published public var dossiers                     : DossierArray
     @Published public var failedToLoadDossiers         : Bool
     @Published public var failedToUpdateTemplateFolder : Bool
@@ -18,6 +21,8 @@ public final class Store: ObservableObject {
     public var activeDossier : Dossier? {
         dossiers.first(where: { $0.isActive })
     }
+
+    // MARK: - Initializers
 
     /// Charger la liste des Dossiers utilisateur et
     /// mettre à jour le répertoire des templates à partir du Bundle App Main
@@ -35,15 +40,17 @@ public final class Store: ObservableObject {
             self.failedToLoadDossiers = true
         }
         
-        // mettre à jour le répertoire des templates à partir du Bundle App Main
-        // ceici permet prendre en compte toute évolution de l'app et de ses templates
+        // récupérer les fichiers manquant dans le dossier des templates à partir du Bundle App Main
+        // et vérifier la compatibilité entre la version de l'appli et celle du dossier template
         do {
-            try PersistenceManager.importTemplatesFromApp()
+            try PersistenceManager.importTemplatesFromAppAndCheckCompatibility()
             self.failedToUpdateTemplateFolder = false
         } catch {
             self.failedToUpdateTemplateFolder = true
         }
     }
+
+    // MARK: - Methods
 
     /// Activer le dossier situé à l'index 'index'.
     /// Désativer tous les autres.

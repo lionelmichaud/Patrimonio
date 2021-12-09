@@ -25,26 +25,32 @@ struct SettingsView: View {
                 NavigationLink(destination: AppVersionView()) {
                     Label("À propos ...", systemImage: "info.circle")
                 }
-                    .isDetailLink(true)
+                .isDetailLink(true)
                 
                 // Simulation settings
                 NavigationLink(destination: SimulationUserSettingsView(simulateVolatility: $simulateVolatility,
                                                                        ownership         : $kpiOwnership)) {
                     Label("Simulation", systemImage: "function")
                 }
-                    .isDetailLink(true)
-
+                .isDetailLink(true)
+                
                 // Graphics settings
                 NavigationLink(destination: GraphicUserSettingsView(ownership        : $graphicOwnership,
                                                                     evaluatedFraction: $graphicEvaluationMethod)) {
                     Label("Graphiques", systemImage: "chart.bar.xaxis")
                 }
-                    .isDetailLink(true)
-
+                .isDetailLink(true)
+                
                 // Export settings
                 NavigationLink(destination: ExportSettingsView(shareCsvFiles   : $shareCsvFiles,
                                                                shareImageFiles : $shareImageFiles)) {
                     Label("Export", systemImage: "square.and.arrow.up")
+                }
+                .isDetailLink(true)
+                
+                // Mise à jour settings
+                NavigationLink(destination: UpdateSettingsView()) {
+                    Label("Mise à jour", systemImage: "square.and.arrow.down")
                 }
                 .isDetailLink(true)
                 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import Files
 import Persistence
 

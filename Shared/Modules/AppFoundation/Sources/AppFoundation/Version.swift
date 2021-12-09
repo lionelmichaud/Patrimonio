@@ -22,10 +22,17 @@ public struct Version: Codable {
     
     // MARK: - Properties
     
-    public var name    : String?
-    public var version : String?// "Major.Minor.Patch"
-    public var date    : Date?  
-    public var comment : String?
+    public private(set) var name    : String?
+    public private(set) var version : String?// "Major.Minor.Patch"
+    public private(set) var date    : Date?
+    public private(set) var comment : String?
+    
+    public var semanticVersion: SemanticVersion? {
+        guard let version = version else {
+            return nil
+        }
+        return SemanticVersion(version: version)
+    }
     
     // MARK: - Initializers
     
@@ -46,7 +53,7 @@ public struct Version: Codable {
     public var minor   : Int? {
         guard let version = version else { return nil }
         let parts = version.split(whereSeparator: { $0 == "." })
-        if parts.count >= 1 {
+        if parts.count > 1 {
             return Int(parts[1])
         } else {
             return nil
@@ -55,7 +62,7 @@ public struct Version: Codable {
     public var patch   : Int? {
         guard let version = version else { return nil }
         let parts = version.split(whereSeparator: { $0 == "." })
-        if parts.count >= 2 {
+        if parts.count > 2 {
             return Int(parts[2])
         } else {
             return nil
@@ -66,12 +73,8 @@ public struct Version: Codable {
     
     public static func toVersion(major : Int,
                                  minor : Int,
-                                 patch : Int?) -> String {
-        if let patch = patch {
-            return String(major) + "." + String(minor) + "." + String(patch)
-        } else {
-            return String(major) + "." + String(minor)
-        }
+                                 patch : Int) -> String {
+        String(major) + "." + String(minor) + "." + String(patch)
     }
     
     // MARK: - Builders
@@ -99,7 +102,17 @@ public struct Version: Codable {
         new.version = version
         return new
     }
-
+    
+    func versioned(major : Int,
+                   minor : Int,
+                   patch : Int) -> Version {
+        var new = self
+        new.version = Version.toVersion(major: major,
+                                        minor: minor,
+                                        patch: patch)
+        return new
+    }
+    
     // MARK: - Methods
     
     public mutating func initializeWithBundleValues() {
@@ -112,5 +125,19 @@ public struct Version: Codable {
         if date == nil {
             date = Bundle.mainBuildDate
         }
+    }
+}
+
+extension Version: CustomStringConvertible {
+    public var description: String {
+        """
+
+        Version:
+          Nom: \(name ?? "?")
+          Version: \(version ?? "?")
+          Date: \(date?.stringLongDate ?? "?")
+          Description: \(comment ?? "?")
+
+        """
     }
 }

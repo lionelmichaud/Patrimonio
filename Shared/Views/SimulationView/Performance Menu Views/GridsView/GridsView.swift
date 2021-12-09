@@ -338,9 +338,9 @@ struct ShortGridView_Previews: PreviewProvider {
     static var uiState    = UIState()
     static var dataStore  = Store()
     static var simulation = Simulation()
-    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromApp())
-    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromApp())
-    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
+    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
+    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
 
     static var previews: some View {
         simulation.compute(using          : model,

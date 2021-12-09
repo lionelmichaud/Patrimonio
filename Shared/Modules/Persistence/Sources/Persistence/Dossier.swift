@@ -42,6 +42,7 @@ public enum DossierError: String, Error {
     case failedToSaveDossierContent    = "Echec de l'enregistrement du contenu du dossier"
     case failedToLoadDossierContent    = "Echec du chargement du contenu du dossier"
     case inconsistencyOwnerFolderName  = "Incohérence entre le nom du directory et le type de propriétaire du Dossier"
+    case failedToCheckCompatibility    = "Impossible de vérifier la compatibilité avec la version de l'application"
 }
 
 public struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
@@ -53,7 +54,7 @@ public struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
     // le dossier contenant les template à utiliser pour créer un nouveau dossier
     public static let templates : Dossier? = {
         do {
-            let templateFolder = try PersistenceManager.importTemplatesFromApp()
+            let templateFolder = try PersistenceManager.importTemplatesFromAppAndCheckCompatibility()
             return Dossier()
                 .pointingTo(templateFolder)
                 .namedAs(templateFolder.name)
@@ -283,8 +284,8 @@ public struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
     }
 
     /// Charger le contenu du Dossier
-    /// - Parameter loadDossierContentTo: closure
-    public func loadDossierContentAsJSON(loadDossierContentFrom: (Folder) throws -> Void) throws {
+    /// - Parameter loadDossierContentFrom: closure
+    public func loadDossierContentAsJSON(loadDossierContentFrom: (Folder) throws -> Void)  throws {
         // vérifier l'existence du Folder associé au Dossier
         guard let folder = self.folder else {
             customLog.log(level: .error,
@@ -293,13 +294,7 @@ public struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
         }
 
         // charger les données utilisateur depuis le Dossier
-        do {
-            try loadDossierContentFrom(folder)
-        } catch {
-            customLog.log(level: .error,
-                          "\(DossierError.failedToLoadDossierContent.rawValue)")
-            throw DossierError.failedToLoadDossierContent
-        }
+        try loadDossierContentFrom(folder)
     }
 
     /// Supprimer le contenu du directory et le dossier associé

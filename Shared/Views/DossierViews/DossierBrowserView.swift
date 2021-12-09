@@ -55,10 +55,6 @@ struct DossierBrowserView: View {
         .alert(item: $alertItem, content: createAlert)
     }
     
-    func activate(dossierIndex: Int) {
-        dataStore.activate(dossierAtIndex: dossierIndex)
-    }
-    
     func deleteDossier(at offsets: IndexSet) {
         self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
                                    message       : Text("La destruction du dossier est irréversible"),

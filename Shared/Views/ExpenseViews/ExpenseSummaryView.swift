@@ -224,7 +224,7 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
 
 struct ExpenseSummaryView_Previews: PreviewProvider {
     static let dataStore  = Store()
-    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromApp())
+    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
     static var uiState    = UIState()
     
     static var previews: some View {

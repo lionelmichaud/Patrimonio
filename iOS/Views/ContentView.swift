@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Persistence
 
 struct ContentView: View {
     
@@ -15,6 +16,7 @@ struct ContentView: View {
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var simulation : Simulation
     @SceneStorage("selectedTab") var selection = UIState.Tab.dossier
+    @State private var alertItem: AlertItem?
 
     // MARK: - Properties
 
@@ -54,6 +56,26 @@ struct ContentView: View {
                 .tabItem { Label("Préférences", systemImage: "gear") }
                 .tag(UIState.Tab.userSettings)
             
+        }
+        .onAppear(perform: checkCompatibility)
+        .alert(item: $alertItem, content: createAlert)
+    }
+    
+    func checkCompatibility() {
+        if !PersistenceManager.templateDirIsCompatibleWithAppVersion {
+            self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
+                                       message       : Text("Votre dossier Modèle n'est pas compatible de cette version de l'application. Voulez-vous le mettre à jour. Si vous le mettez à jour, vous perdrai les éventuelles modifications qu'il contient."),
+                                       primaryButton : .destructive(Text("Mettre à jour"),
+                                                                    action: {
+                                                                        /// insert alert 1 action here
+                                                                        do {
+                                                                            try PersistenceManager.forcedImportTemplatesFromApp()
+                                                                        } catch {
+                                                                            self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
+                                                                                                       dismissButton : .default(Text("OK")))
+                                                                        }
+                                                                    }),
+                                       secondaryButton: .cancel())
         }
     }
 }

@@ -11,14 +11,10 @@ import XCTest
 class VersionTest: XCTestCase {
 
     func test_toVersion() {
-        var version = Version.toVersion(major: 1,
+        let version = Version.toVersion(major: 1,
                                         minor: 2,
                                         patch: 3)
         XCTAssertEqual(version, "1.2.3")
-        version = Version.toVersion(major: 1,
-                                    minor: 2,
-                                    patch: nil)
-        XCTAssertEqual(version, "1.2")
     }
 
     func test_fromVersion() {
@@ -26,7 +22,7 @@ class VersionTest: XCTestCase {
         let vers = Version.toVersion(major: 1,
                                      minor: 2,
                                      patch: 3)
-        let version = Version()
+        var version = Version()
             .named("test")
             .dated(date)
             .versioned(vers)
@@ -35,6 +31,7 @@ class VersionTest: XCTestCase {
         XCTAssertEqual(version.date, date)
         XCTAssertEqual(version.version, vers)
         XCTAssertEqual(version.comment, "comment")
+        print(version)
 
         let major = version.major
         XCTAssertNotNil(major)
@@ -47,5 +44,29 @@ class VersionTest: XCTestCase {
         let patch = version.patch
         XCTAssertNotNil(patch)
         XCTAssertEqual(patch, 3)
+        
+        version = Version()
+            .versioned(major: 1,
+                       minor: 2,
+                       patch: 3)
+        XCTAssertEqual(version.version, vers)
+    }
+    
+    func test_semanticVersion () throws {
+        let version = Version()
+            .versioned(major: 1,
+                       minor: 2,
+                       patch: 3)
+        let semanticVersion = try XCTUnwrap(version.semanticVersion)
+        XCTAssertEqual(semanticVersion.major, 1)
+        XCTAssertEqual(semanticVersion.minor, 2)
+        XCTAssertEqual(semanticVersion.patch, 3)
+    }
+    
+    func test_invalid() {
+        let version = Version()
+        XCTAssertNil(version.major)
+        XCTAssertNil(version.minor)
+        XCTAssertNil(version.patch)
     }
 }

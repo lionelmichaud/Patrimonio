@@ -7,23 +7,23 @@
 //
 
 import Foundation
-import AppFoundation
 
-struct AppVersion: Decodable, VersionableP {
+public struct AppVersion: Codable, VersionableP {
     
     // MARK: - Singleton
     
-    static let shared = AppVersion()
+    public static let shared   = AppVersion()
+    public static let fileName = "AppVersion.json"
     
     // MARK: - Properties
     
-    var version: Version
+    public var version: Version
     
     // MARK: - Static Methods
     
     private init() {
         self = Bundle.main.loadFromJSON(AppVersion.self,
-                                        from                 : "AppVersion.json",
+                                        from                 : AppVersion.fileName,
                                         dateDecodingStrategy : .iso8601,
                                         keyDecodingStrategy  : .useDefaultKeys)
         version.initializeWithBundleValues()
