@@ -66,7 +66,7 @@ class SemanticVersionTest: XCTestCase {
         let v123 = SemanticVersion(major: 1, minor: 2, patch: 3)
         let next = v123.nextMinor
         XCTAssertEqual(next.asString, "1.3.0")
-        XCTAssertTrue(SemanticVersion(version: "1.2.9")!.upToNextMajor(from: "1.2.3"))
-        XCTAssertFalse(SemanticVersion(version: "1.3.0")!.upToNextMajor(from: "1.2.3"))
+        XCTAssertTrue(SemanticVersion(version: "1.2.9")!.upToNextMinor(from: "1.2.3"))
+        XCTAssertFalse(SemanticVersion(version: "1.3.0")!.upToNextMinor(from: "1.2.3"))
     }
 }

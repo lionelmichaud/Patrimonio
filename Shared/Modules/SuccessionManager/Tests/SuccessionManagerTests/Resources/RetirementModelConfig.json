@@ -299,7 +299,21 @@
                 "date"    : "2021-01-28T23:00:00+01:00",
                 "comment" : null
             },
-            "tauxReversion" : 70.0
+            "newModelSelected" : false,
+            "tauxReversion" : 70.0,
+            "oldModel" :
+            {
+                "general":
+                {
+                    "minimum": 3492.37,
+                    "majoration3enfants": 10.0
+                },
+                "agircArcco":
+                {
+                    "fractionConjoint": 60.0,
+                    "ageMinimum": 55
+                }
+            }
         }
     }
 }

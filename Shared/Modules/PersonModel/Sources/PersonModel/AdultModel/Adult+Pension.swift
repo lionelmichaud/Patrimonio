@@ -12,6 +12,7 @@ import RetirementModel
 import ModelEnvironment
 
 // MARK: - EXTENSION: Retraite Régime Général
+
 public extension Adult {
     // MARK: - Computed Properties
     
@@ -70,6 +71,7 @@ public extension Adult {
 }
 
 // MARK: - EXTENSION: Retraite Régime Complémentaire
+
 public extension Adult {
     // MARK: - Computed Properties
     
@@ -131,6 +133,7 @@ public extension Adult {
 }
 
 // MARK: - EXTENSION: Retraite Tous Régimes
+
 public extension Adult {
     /// Calcul de la pension de retraite
     /// - Parameter year: année
@@ -171,7 +174,7 @@ public extension Adult {
         let taxable = try! model.fiscalModel.pensionTaxes.taxable(brut: brut, net: net)
         return BrutNetTaxable(brut: brut, net: net, taxable: taxable)
     }
-    
+
     /// Calcul de la pension de réversion laissée au conjoint
     /// - Parameter year: année
     /// - Returns: pension de réversion laissée au conjoint
@@ -199,18 +202,24 @@ public extension Adult {
             // la personne n'était pas pensionnée avant son décès => pas de pension de réversion
             return nil
         }
-        let pensionDuDecede = self.pension(during      : yearBeforeDeath,
-                                           withReversion : false,
-                                           using         : model)
+        let pensionDuDecede = pension(during        : yearBeforeDeath,
+                                      withReversion : false,
+                                      using         : model)
+        let pensionCompDecedent = pensionRegimeAgirc(during: yearBeforeDeath, using: model)
         let pensionDuConjoint = spouse.pension(during        : year,
                                                withReversion : false,
                                                using         : model)
         let pensionTotaleAvantDeces = (brut: pensionDuDecede.brut + pensionDuConjoint.brut,
                                        net : pensionDuDecede.net  + pensionDuConjoint.net)
+        let bornChildrenNumber = Adult.adultRelativesProvider.nbOfBornChildren
+        let spouseAge          = spouse.age(atEndOf: year-1)
         // la pension du conjoint survivant, avec réversion, est limitée à un % de la somme des deux
         let pensionBruteApresDeces =
-            model.retirementModel.reversion.pensionReversion(pensionDecedent : pensionDuDecede.brut,
-                                                             pensionSpouse   : pensionDuConjoint.brut)
+            model.retirementModel.reversion.pensionReversion(pensionDecedent    : pensionDuDecede.brut,
+                                                             pensionSpouse      : pensionDuConjoint.brut,
+                                                             pensionCompDecedent: pensionCompDecedent.brut,
+                                                             spouseAge          : spouseAge,
+                                                             bornChildrenNumber : bornChildrenNumber)
         // le complément de réversion est calculé en conséquence
         let reversionBrut = zeroOrPositive(pensionBruteApresDeces - pensionDuConjoint.brut)
         let reversionNet  = reversionBrut * (pensionTotaleAvantDeces.net / pensionTotaleAvantDeces.brut)

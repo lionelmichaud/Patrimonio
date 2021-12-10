@@ -132,6 +132,7 @@ final class LegalSuccessionManagerTests: XCTestCase {
         let inheritance = Tests.manager
             .childrenInheritance(inheritanceShareForChild : share,
                                  masseSuccessorale        : masse,
+                                 previousSuccession       : nil,
                                  verbose                  : Tests.verbose)
         
         let brut = masse * share
@@ -166,7 +167,8 @@ final class LegalSuccessionManagerTests: XCTestCase {
         let conjointSurvivant = Tests.family.adults.first(where: { $0.displayName == "Mme. Vanessa MICHAUD" })!
         let inheritance = Tests.manager
             .spouseAndChildrenInheritance(masseSuccessorale : masse,
-                               conjointSurvivant : conjointSurvivant)
+                                          conjointSurvivant : conjointSurvivant,
+                                          previousSuccession: nil)
         
         let brutChild = masse * childShare
         var heritageOfChild: (netAmount: Double, taxe: Double) = (0.0, 0.0)
@@ -202,9 +204,10 @@ final class LegalSuccessionManagerTests: XCTestCase {
     
     func test_legalSuccession_avec_conjoint_survivant() {
         let succession = Tests.manager
-            .succession(of      : "M. Lionel MICHAUD",
-                             with    : Tests.patrimoin,
-                             verbose : Tests.verbose)
+            .succession(of                 : "M. Lionel MICHAUD",
+                        with               : Tests.patrimoin,
+                        previousSuccession : nil,
+                        verbose            : false)
         
         let masse = Tests.manager.masseSuccessorale(in      : Tests.patrimoin,
                                                     of      : "M. Lionel MICHAUD",
@@ -253,9 +256,10 @@ final class LegalSuccessionManagerTests: XCTestCase {
 
         let succession =
         Tests.manager
-            .succession(of      : "M. Lionel MICHAUD",
-                             with    : Tests.patrimoin,
-                             verbose : Tests.verbose)
+            .succession(of                 : "M. Lionel MICHAUD",
+                        with               : Tests.patrimoin,
+                        previousSuccession : nil,
+                        verbose            : Tests.verbose)
 
         let masse = Tests.manager.masseSuccessorale(in      : Tests.patrimoin,
                                                     of      : "M. Lionel MICHAUD",

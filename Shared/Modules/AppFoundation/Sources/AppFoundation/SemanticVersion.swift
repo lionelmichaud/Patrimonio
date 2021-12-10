@@ -69,7 +69,7 @@ public struct SemanticVersion: Codable, Equatable {
         guard let version = SemanticVersion(version: version) else {
             return false
         }
-        return self < version.nextMajor
+        return self < version.nextMinor
     }
 }
 

@@ -21,7 +21,7 @@
         "investment" : 90
     },
     "type" : {
-        "lifeInsurance_taxes"  : true,
+        "lifeInsurance_taxes"  : false,
         "lifeInsurance_clause" : {
             "isOptional"        : false,
             "isDismembered"     : true,

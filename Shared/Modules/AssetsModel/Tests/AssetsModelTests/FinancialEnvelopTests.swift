@@ -25,6 +25,9 @@ class FinancialEnvelopTests: XCTestCase {
             Swift.print("printed")
         }
         
+        func isOpen(in year: Int) -> Bool {
+            true
+        }
     }
     
     func test_isLifeInsurance() throws {
