@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 //import ActivityIndicatorView // https://github.com/exyte/ActivityIndicatorView.git
 
 // MARK: - Progress bar
@@ -15,29 +16,39 @@ struct ProgressBar: View {
     private let minValue          : Double
     private let maxValue          : Double
     private let backgroundEnabled : Bool
-    private let labelsEnabled     : Bool
+    private let externalLabels    : Bool
+    private let internalLabels    : Bool
     private let backgroundColor   : Color
     private let foregroundColor   : Color
+    private let valuePercent      : Bool
+    private let maxValuePercent   : Bool
     private let formater          : NumberFormatter?
     
     init(value             : Double,
-         minValue          : Double,
+         minValue          : Double = 0.0,
          maxValue          : Double,
          backgroundEnabled : Bool  = true,
-         labelsEnabled     : Bool  = false,
+         externalLabels    : Bool  = false,
+         internalLabels    : Bool  = false,
          backgroundColor   : Color = .secondary,
          foregroundColor   : Color = .blue,
+         valuePercent      : Bool  = false,
+         maxValuePercent   : Bool  = false,
          formater          : NumberFormatter? = nil) {
+        precondition(maxValue > minValue)
         self.value             = value.clamp(low: minValue, high: maxValue)
         self.minValue          = minValue
         self.maxValue          = max(minValue+0.01, maxValue)
         self.backgroundEnabled = backgroundEnabled
-        self.labelsEnabled     = labelsEnabled
+        self.externalLabels    = externalLabels
+        self.internalLabels    = internalLabels
         self.backgroundColor   = backgroundColor
         self.foregroundColor   = foregroundColor
+        self.valuePercent      = valuePercent
+        self.maxValuePercent   = maxValuePercent
         self.formater          = formater
     }
-    
+
     var body: some View {
         VStack(alignment: .center, spacing: 10) {
             GeometryReader { geometryReader in
@@ -54,32 +65,52 @@ struct ProgressBar: View {
                     
                     ZStack(alignment: .trailing) {
                         Capsule()
-                            .frame(width: self.progress(value: self.value,
-                                                        width: geometryReader.size.width),
+                            .frame(width: progress(value: value,
+                                                   width: geometryReader.size.width),
                                    height: 20)
                             .foregroundColor(self.foregroundColor)
                             .animation(.linear)
-                        Text("\(self.percentage(value: self.value))%")
-                            .foregroundColor(.white) // 6
-                            .font(.system(size: 14))
-                            .fontWeight(.bold)
-                            .padding(.trailing, 10)
+                        if internalLabels {
+                            if valuePercent {
+                                Text("\(percentageValue(value: value))%")
+                                    .foregroundColor(.white) // 6
+                                    .font(.system(size: 14))
+                                    .fontWeight(.bold)
+                                    .padding(.trailing, 10)
+                            } else if let formater = self.formater {
+                                Text(formater.string(from: value as NSNumber) ?? "")
+                                    .foregroundColor(.white) // 6
+                                    .font(.system(size: 14))
+                                    .fontWeight(.bold)
+                                    .padding(.trailing, 10)
+                            } else {
+                                Text(value.roundedString)
+                                    .foregroundColor(.white) // 6
+                                    .font(.system(size: 14))
+                                    .fontWeight(.bold)
+                                    .padding(.trailing, 10)
+                            }
+                        }
                     }
                 }
             }
             
-            if labelsEnabled {
+            if externalLabels {
                 HStack {
                     if let formater = self.formater {
                         Text(formater.string(from: minValue as NSNumber) ?? "")
                             .fontWeight(.bold)
-                        Spacer()
-                        Text(formater.string(from: maxValue as NSNumber) ?? "")
-                            .fontWeight(.bold)
                     } else {
                         Text(minValue.roundedString)
                             .fontWeight(.bold)
-                        Spacer()
+                    }
+                    Spacer()
+                    if maxValuePercent {
+                        Text("\(percentageMaxValue(value: value) ?? 0)%")
+                    } else if let formater = self.formater {
+                        Text(formater.string(from: maxValue as NSNumber) ?? "")
+                            .fontWeight(.bold)
+                    } else {
                         Text(maxValue.roundedString)
                             .fontWeight(.bold)
                     }
@@ -87,7 +118,7 @@ struct ProgressBar: View {
                 .font(.system(size: 14))
             }
         }
-        .frame(height: (labelsEnabled ? 40 : 20))
+        .frame(height: (externalLabels ? 40 : 20))
         
     }
     
@@ -96,8 +127,14 @@ struct ProgressBar: View {
         let percentage = (value - minValue) / (maxValue - minValue)
         return width *  CGFloat(percentage)
     }
-    private func percentage(value: Double) -> Int {
+    private func percentageValue(value: Double) -> Int {
         Int(100 * (value - minValue) / (maxValue - minValue))
+    }
+    private func percentageMaxValue(value: Double) -> Int? {
+        guard (value - minValue) != 0 else {
+            return nil
+        }
+        return Int(100.0 * (maxValue - minValue) / (value - minValue))
     }
 }
 
@@ -202,16 +239,48 @@ struct ProgressViews_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             Group {
-                ProgressBar(value             : 5,
+                ProgressBar(value             : 40000,
                             minValue          : 0,
-                            maxValue          : 10,
+                            maxValue          : 100000,
                             backgroundEnabled : true,
-                            labelsEnabled     : true,
+                            externalLabels    : true,
+                            internalLabels    : true,
                             backgroundColor   : .secondary,
-                            foregroundColor   : .blue)
+                            foregroundColor   : .blue,
+                            formater          : valueKilo€Formatter)
                     .previewLayout(PreviewLayout.fixed(width: 400, height: 100))
                     .padding()
                     .previewDisplayName("ProgressBar")
+                
+                ProgressBar(value             : 40000,
+                            minValue          : 0,
+                            maxValue          : 100000,
+                            backgroundEnabled : true,
+                            externalLabels    : true,
+                            internalLabels    : true,
+                            backgroundColor   : .secondary,
+                            foregroundColor   : .blue,
+                            valuePercent      : true,
+                            formater          : valueKilo€Formatter)
+                    .previewLayout(PreviewLayout.fixed(width: 400, height: 100))
+                    .padding()
+                    .previewDisplayName("ProgressBar")
+                
+                ProgressBar(value             : 40000,
+                            minValue          : 0,
+                            maxValue          : 100000,
+                            backgroundEnabled : true,
+                            externalLabels    : true,
+                            internalLabels    : true,
+                            backgroundColor   : .secondary,
+                            foregroundColor   : .blue,
+                            valuePercent      : false,
+                            maxValuePercent   : true,
+                            formater          : valueKilo€Formatter)
+                    .previewLayout(PreviewLayout.fixed(width: 400, height: 100))
+                    .padding()
+                    .previewDisplayName("ProgressBar")
+                
                 ProgressCircle(value             : 85.0,
                                minValue          : 50.0,
                                maxValue          : 100.0,
@@ -222,6 +291,7 @@ struct ProgressViews_Previews: PreviewProvider {
                     .previewLayout(PreviewLayout.fixed(width: 100, height: 100))
                     .padding()
                     .previewDisplayName("ProgressCircle")
+                
                 ActivityIndicator(shouldAnimate: .constant(true))
                     .previewLayout(PreviewLayout.fixed(width: 100, height: 100))
                     .padding()

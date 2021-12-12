@@ -47,7 +47,7 @@ struct SuccessionsSidebarSectionView: View {
     }
 }
 
-struct SimulationOthersView_Previews: PreviewProvider {
+struct SimulationSidebarOthersView_Previews: PreviewProvider {
     static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var family     = Family()

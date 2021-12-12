@@ -174,16 +174,12 @@ struct PatrimoineSummaryView: View {
 }
 
 struct PatrimoineSummaryView_Previews: PreviewProvider {
-    static let dataStore  = Store()
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-    static var uiState    = UIState()
-
     static var previews: some View {
-        PatrimoineSummaryView()
-            .environmentObject(dataStore)
-            .environmentObject(family)
-            .environmentObject(patrimoine)
-            .environmentObject(uiState)
+        loadTestFilesFromBundle()
+        return PatrimoineSummaryView()
+            .environmentObject(dataStoreTest)
+            .environmentObject(familyTest)
+            .environmentObject(patrimoineTest)
+            .environmentObject(uiStateTest)
     }
 }

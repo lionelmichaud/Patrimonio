@@ -10,7 +10,7 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 
-struct ComputationSideBarSectionView: View {
+struct ComputationSidebarSectionView: View {
     @EnvironmentObject private var simulation : Simulation
     @EnvironmentObject private var uiState    : UIState
     
@@ -25,17 +25,15 @@ struct ComputationSideBarSectionView: View {
     }
 }
 
-struct ComputationSideBarSectionView_Previews: PreviewProvider {
-    static let dataStore  = Store()
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-    static var simulation = Simulation()
-
+struct ComputationSidebarSectionView_Previews: PreviewProvider {
     static var previews: some View {
-        ComputationSideBarSectionView()
-            .environmentObject(dataStore)
-            .environmentObject(family)
-            .environmentObject(patrimoine)
-            .environmentObject(simulation)
+        loadTestFilesFromBundle()
+        return ComputationSidebarSectionView()
+            .environmentObject(modelTest)
+            .environmentObject(uiStateTest)
+            .environmentObject(dataStoreTest)
+            .environmentObject(familyTest)
+            .environmentObject(patrimoineTest)
+            .environmentObject(simulationTest)
     }
 }

@@ -205,30 +205,23 @@ struct CashFlowLineChartView: UIViewRepresentable {
 // MARK: - Preview
 
 struct CashFlowGlobalChartView_Previews: PreviewProvider {
-    static var model      = Model(fromBundle: Bundle.main)
-    static var uiState    = UIState()
-    static var dataStore  = Store()
-    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var simulation = Simulation()
-
     static var previews: some View {
+        loadTestFilesFromBundle()
         // calcul de simulation
-        simulation.compute(using          : model,
-                           nbOfYears      : 40,
-                           nbOfRuns       : 1,
-                           withFamily     : family,
-                           withExpenses   : expenses,
-                           withPatrimoine : patrimoine)
+        simulationTest.compute(using          : modelTest,
+                               nbOfYears      : 40,
+                               nbOfRuns       : 1,
+                               withFamily     : familyTest,
+                               withExpenses   : expensesTest,
+                               withPatrimoine : patrimoineTest)
         return NavigationView {
             List {
                 NavigationLink(destination : CashFlowGlobalChartView()
-                                .environmentObject(uiState)
-                                .environmentObject(dataStore)
-                                .environmentObject(family)
-                                .environmentObject(patrimoine)
-                                .environmentObject(simulation)
+                                .environmentObject(uiStateTest)
+                                .environmentObject(dataStoreTest)
+                                .environmentObject(familyTest)
+                                .environmentObject(patrimoineTest)
+                                .environmentObject(simulationTest)
                 ) {
                     Text("Cash Flow Global")
                 }

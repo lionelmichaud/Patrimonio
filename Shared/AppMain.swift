@@ -38,7 +38,7 @@ struct AppMain: App {
         
         #if os(macOS)
         Settings {
-            SettingsView()
+            SettingsSidebarView()
         }
         #endif
     }

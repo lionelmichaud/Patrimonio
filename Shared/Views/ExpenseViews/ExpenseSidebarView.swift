@@ -12,7 +12,7 @@ import LifeExpense
 import PatrimoineModel
 import FamilyModel
 
-struct ExpenseView: View {
+struct ExpenseSidebarView: View {
     @EnvironmentObject private var dataStore : Store
     @EnvironmentObject private var expenses  : LifeExpensesDic
     let simulationReseter: CanResetSimulationP
@@ -159,20 +159,17 @@ struct ExpenseView_Previews: PreviewProvider {
         }
     }
     static var simulationReseter = FakeSimulationReseter()
-    static let dataStore  = Store()
-    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var uiState    = UIState()
-
     static var previews: some View {
-        NavigationView {
-            ExpenseView(simulationReseter: simulationReseter)
-                .environmentObject(dataStore)
-                .environmentObject(family)
-                .environmentObject(expenses)
-                .environmentObject(patrimoine)
-                .environmentObject(uiState)
+        loadTestFilesFromBundle()
+        return TabView {
+            ExpenseSidebarView(simulationReseter: simulationReseter)
+                .tabItem { Label("Dépenses", systemImage: "cart.fill") }
+                .tag(UIState.Tab.expense)
+                .environmentObject(dataStoreTest)
+                .environmentObject(familyTest)
+                .environmentObject(expensesTest)
+                .environmentObject(patrimoineTest)
+                .environmentObject(uiStateTest)
         }
     }
 }

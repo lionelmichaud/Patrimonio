@@ -49,7 +49,20 @@ where ItemCategory: PickableEnumP,
     /// - Note: Utilisé à la création de l'App, avant que le dossier n'ait été sélectionné
     public init() {
     }
-
+    
+    /// Lire toutes les dépenses dans des fichiers au format JSON.
+    /// Un fichier par catégorie de dépense.
+    /// nom du fichier "Category_LifeExpense.json"
+    /// - Note: Utilisé seulement pour les Tests
+    /// - Parameter bundle: le bundle dans lequel se trouve les fichiers JSON
+    public init(fromBundle bundle : Bundle,
+                fileNamePrefix    : String = "") throws {
+        for category in ItemCategory.allCases {
+            // charger les Items de cette catégorie à partir du fichier JSON associé à cette catégorie
+            perCategory[category] = try ArrayOfItems(fileNamePrefix : category.pickerString + "_",
+                                                     fromBundle     : bundle)
+        }
+    }
     /// Lire toutes les dépenses dans des fichiers au format JSON.
     /// Un fichier par catégorie de dépense.
     /// nom du fichier "Category_LifeExpense.json"

@@ -130,6 +130,22 @@ public extension NameableValuableArrayP {
         persistenceSM.process(event: .onLoad)
     }
     
+    // used for Unit Testing
+    init(fileNamePrefix    : String,
+         fromBundle bundle : Bundle) throws {
+        // charger les données JSON
+        self = bundle.loadFromJSON(Self.self,
+                                   from                 : fileNamePrefix + String(describing: Item.self) + ".json",
+                                   dateDecodingStrategy : .iso8601,
+                                   keyDecodingStrategy  : .useDefaultKeys)
+        
+        // initialiser la StateMachine
+        persistenceSM = PersistenceStateMachine()
+        
+        // exécuter la transition
+        persistenceSM.process(event: .onLoad)
+    }
+    
     subscript(idx: Int) -> Item {
         get {
             precondition((items.startIndex..<items.endIndex).contains(idx), "NameableValuableArray[] : out of bounds")

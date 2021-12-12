@@ -319,6 +319,8 @@ extension Dossier: CustomStringConvertible {
             Dossier: \(name)
             Note:    \(note)
             Folder : \(folder?.description ?? "No folder")
+            Actif:   \(isActive.frenchString)
+            ID:      \(id)
 
             """
     }

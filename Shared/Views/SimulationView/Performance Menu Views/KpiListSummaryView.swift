@@ -8,6 +8,7 @@
 
 import SwiftUI
 import AppFoundation
+import Statistics
 import ModelEnvironment
 import Persistence
 import LifeExpense
@@ -26,9 +27,10 @@ struct KpiListSummaryView: View {
             Form {
                 ForEach(simulation.kpis.values) { kpi in
                     Section(header: Text(kpi.name)) {
-                        KpiSummaryView(kpi         : kpi,
-                                       withPadding : false,
-                                       withDetails : false)
+                        KpiSummaryView(kpi            : kpi,
+                                       simulationMode : simulation.mode,
+                                       withPadding    : false,
+                                       withDetails    : false)
                     }
                 }
             }
@@ -39,10 +41,10 @@ struct KpiListSummaryView: View {
 }
 
 struct KpiSummaryView: View {
-    @EnvironmentObject var simulation : Simulation
-    @State var kpi  : KPI
-    var withPadding : Bool
-    var withDetails : Bool
+    @State var kpi     : KPI
+    var simulationMode : SimulationModeEnum
+    var withPadding    : Bool
+    var withDetails    : Bool
     var maxiMiniStr : String {
         switch kpi.comparator {
             case .maximize:
@@ -72,7 +74,7 @@ struct KpiSummaryView: View {
     }
     
     var body: some View {
-        if kpi.hasValue(for: simulation.mode) {
+        if kpi.hasValue(for: simulationMode) {
             if withDetails {
                 Text(kpiNoteSubstituted(kpi.note))
                     .frame(maxWidth: .infinity)
@@ -81,39 +83,54 @@ struct KpiSummaryView: View {
                 AmountView(label   : "Valeur Objectif " + maxiMiniStr,
                            amount  : kpi.objective,
                            kEuro   : true,
-                           comment : simulation.mode == .random ? compareStr + " avec une probabilité ≥ \(kpi.probaObjective.percentStringRounded)" : "")
+                           comment : simulationMode == .random ? compareStr + " avec une probabilité ≥ \(kpi.probaObjective.percentStringRounded)" : "")
                     .padding(EdgeInsets(top: withPadding ? 3 : 0, leading: 0, bottom: withPadding ? 3 : 0, trailing: 0))
-                if simulation.mode == .random {
+                if simulationMode == .random {
                     HStack {
                         PercentView(label   : "Critère satisfait",
                                     percent : kpi.probability(for: kpi.objective) ?? Double.nan,
                                     comment : "avec une probabilité de")
-                        Image(systemName: kpi.objectiveIsReached(withMode: simulation.mode)! ? "checkmark.circle.fill" : "multiply.circle.fill")
+                        Image(systemName: kpi.objectiveIsReached(withMode: simulationMode)! ? "checkmark.circle.fill" : "multiply.circle.fill")
                             .imageScale(.large)
                     }
-                    .foregroundColor(kpi.objectiveIsReached(withMode: simulation.mode)! ? .green : .red)
+                    .foregroundColor(kpi.objectiveIsReached(withMode: simulationMode)! ? .green : .red)
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: withPadding ? 3 : 0, trailing: 0))
                 }
             }
             HStack {
                 AmountView(label   : "Valeur " + maxiMiniStr + " Atteinte",
-                           amount  : kpi.value(withMode: simulation.mode)!,
+                           amount  : kpi.value(withMode: simulationMode)!,
                            kEuro   : true,
-                           comment : simulation.mode == .random ? "avec une probabilité de \(kpi.probaObjective.percentStringRounded)" : "")
-                Image(systemName: kpi.objectiveIsReached(withMode: simulation.mode)! ? "checkmark.circle.fill" : "multiply.circle.fill")
-                    .imageScale(/*@START_MENU_TOKEN@*/.large/*@END_MENU_TOKEN@*/)
+                           comment : simulationMode == .random ? "avec une probabilité de \(kpi.probaObjective.percentStringRounded)" : "")
+                Image(systemName: kpi.objectiveIsReached(withMode: simulationMode)! ? "checkmark.circle.fill" : "multiply.circle.fill")
+                    .imageScale(.large)
             }
-            .foregroundColor(kpi.objectiveIsReached(withMode: simulation.mode)! ? .green : .red)
+            .foregroundColor(kpi.objectiveIsReached(withMode: simulationMode)! ? .green : .red)
             .padding(EdgeInsets(top: 0, leading: 0, bottom: withPadding ? 3 : 0, trailing: 0))
             // simulation déterministe
-            ProgressBar(value            : kpi.value(withMode: simulation.mode)!,
-                        minValue         : 0.0,
-                        maxValue         : kpi.objective,
-                        backgroundEnabled: false,
-                        labelsEnabled    : true,
-                        backgroundColor  : .secondary,
-                        foregroundColor  : kpi.objectiveIsReached(withMode: simulation.mode)! ? .green : .red,
-                        formater: value€Formatter)
+            if kpi.value(withMode: simulationMode)! < kpi.objective {
+                ProgressBar(value             : kpi.value(withMode: simulationMode)!,
+                            minValue          : 0.0,
+                            maxValue          : kpi.objective,
+                            backgroundEnabled : true,
+                            externalLabels    : true,
+                            internalLabels    : true,
+                            backgroundColor   : .secondary,
+                            foregroundColor   : kpi.objectiveIsReached(withMode: simulationMode)! ? .green : .red,
+                            valuePercent      : true,
+                            formater          : valueKilo€Formatter)
+            } else {
+                ProgressBar(value             : kpi.objective,
+                            minValue          : 0.0,
+                            maxValue          : kpi.value(withMode: simulationMode)!,
+                            backgroundEnabled : true,
+                            externalLabels    : true,
+                            internalLabels    : true,
+                            backgroundColor   : kpi.objectiveIsReached(withMode: simulationMode)! ? .green : .red,
+                            foregroundColor   : .gray,
+                            maxValuePercent      : true,
+                            formater          : valueKilo€Formatter)
+            }
             //.padding(.vertical)
             
         } else {
@@ -124,25 +141,73 @@ struct KpiSummaryView: View {
 }
 
 struct KpisSummaryView_Previews: PreviewProvider {
-    static var model      = Model(fromBundle: Bundle.main)
-    static var uiState    = UIState()
-    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var simulation = Simulation()
-
-    static var previews: some View {
-        simulation.compute(using          : model,
-                           nbOfYears      : 40,
-                           nbOfRuns       : 1,
-                           withFamily     : family,
-                           withExpenses   : expenses,
-                           withPatrimoine : patrimoine)
-        return VStack {
-            KpiListSummaryView()
+    static func kpiDeterPositif() -> KPI {
+        var kpi = KPI(name            : "KPI test",
+                      note            : "Note descriptive",
+                      objective       : 1000.0,
+                      withProbability : 0.5)
+        kpi.record(2000.0, withMode: .deterministic)
+        return kpi
+    }
+    static func kpiDeterNegatif() -> KPI {
+        var kpi = KPI(name            : "KPI test",
+                      note            : "Note descriptive",
+                      objective       : 1000.0,
+                      withProbability : 0.95)
+        kpi.record(200.0, withMode: .deterministic)
+        return kpi
+    }
+    static func kpiRandom() -> KPI {
+        var kpi = KPI(name: "KPI test",
+                      note: "description",
+                      objective: 1000.0,
+                      withProbability: 0.95)
+        for _ in 0...500 {
+            kpi.record(Double.random(in: 0.0 ... 5000.0), withMode: .random)
         }
-        .environmentObject(simulation)
-        .previewDevice("iPhone 11")
-        .preferredColorScheme(.dark)
+        kpi.histogram.sort(distributionType : .continuous,
+                           openEnds         : false,
+                           bucketNb         : 50)
+        return kpi
+    }
+    
+    static var previews: some View {
+        Group {
+            VStack {
+                KpiSummaryView(kpi            : kpiDeterPositif(),
+                               simulationMode : .deterministic,
+                               withPadding    : true,
+                               withDetails    : true)
+            }
+            .preferredColorScheme(.dark)
+            .previewLayout(.fixed(width: 700, height: /*@START_MENU_TOKEN@*/200.0/*@END_MENU_TOKEN@*/))
+            
+            VStack {
+                KpiSummaryView(kpi            : kpiRandom(),
+                               simulationMode : .random,
+                               withPadding    : true,
+                               withDetails    : true)
+            }
+            .previewLayout(.fixed(width: 700, height: 200.0))
+            .preferredColorScheme(.dark)
+
+            VStack {
+                KpiSummaryView(kpi            : kpiDeterPositif(),
+                               simulationMode : .deterministic,
+                               withPadding    : false,
+                               withDetails    : false)
+            }
+            .preferredColorScheme(.dark)
+            .previewLayout(.fixed(width: 700, height: /*@START_MENU_TOKEN@*/200.0/*@END_MENU_TOKEN@*/))
+            
+            VStack {
+                KpiSummaryView(kpi            : kpiRandom(),
+                               simulationMode : .random,
+                               withPadding    : false,
+                               withDetails    : false)
+            }
+            .previewLayout(.fixed(width: 700, height: 200.0))
+            .preferredColorScheme(.dark)
+        }
     }
 }

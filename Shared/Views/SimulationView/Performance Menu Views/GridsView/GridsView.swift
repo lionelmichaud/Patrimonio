@@ -88,71 +88,74 @@ struct ShortGridView: View {
             }
             .navigationTitle("Résultats des Runs de la Simulation")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                // menu de filtrage
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Menu {
-                        Picker(selection: $filter, label: Text("Filtering options")) {
-                            Label("Tous les résultats", systemImage: "checkmark.circle.fill").tag(RunFilterEnum.all)
-                            Label("Résultats négatifs", systemImage: "xmark.octagon.fill").tag(RunFilterEnum.someBad)
-                            Label("Résultats indéterminés", systemImage: "questionmark.circle").tag(RunFilterEnum.somUnknown)
-                        }
-                    }
-                    label: {
-                        Image(systemName: "loupe")
-                            .imageScale(.large)
-                            .padding(.leading)
-                    }
-                }
-                // menu de choix de critère de tri
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Menu {
-                        Picker(selection: $sortCriteria, label: Text("Sorting options")) {
-                            Text("Numéro de Run").tag(KpiSortCriteriaEnum.byRunNumber)
-                            Text("KPI Actif Minimum").tag(KpiSortCriteriaEnum.byKpi1)
-                            Text("KPI Actif au 1er Décès").tag(KpiSortCriteriaEnum.byKpi2)
-                            Text("KPI Actif au 2nd Décès").tag(KpiSortCriteriaEnum.byKpi3)
-                        }
-                    }
-                    label: {
-                        Image(systemName: "arrow.up.arrow.down.circle")
-                            .imageScale(.large)
-                            .padding(.leading)
-                    }
-                }
-                // menu de choix de l'ordre de tri
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { sortOrder.toggle() }) { // swiftlint:disable:this multiple_closures_with_trailing_closure
-                        Image(systemName: sortOrder.imageSystemName)
-                            .imageScale(.large)
-                    }
-                }
-                // sauvegarde du tableau
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: saveGrid ) {
-                        HStack(alignment: .center) {
-                            if busySaveWheelAnimate {
-                                ProgressView()
-                            }
-                            Label("Enregistrer", systemImage: "externaldrive.fill")
-                        }
-                    }
-                    .disabled(dataStore.activeDossier == nil)
-
-                }
-                // afficher info-bulle
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { self.showInfoPopover = true },
-                           label : {
-                            Image(systemName: "info.circle")
-                           })
-                }
-            }
+            .toolbar(content: myToolBarContent)
             .popover(isPresented: $showInfoPopover) {
                 PopOverContentView(title       : popOverTitle,
                                    description : popOverMessage)
             }
             .alert(item: $alertItem, content: createAlert)
+    }
+    
+    @ToolbarContentBuilder
+    func myToolBarContent() -> some ToolbarContent {
+        // menu de filtrage
+        ToolbarItem(placement: .navigationBarLeading) {
+            Menu {
+                Picker(selection: $filter, label: Text("Filtering options")) {
+                    Label("Tous les résultats", systemImage: "checkmark.circle.fill").tag(RunFilterEnum.all)
+                    Label("Résultats négatifs", systemImage: "xmark.octagon.fill").tag(RunFilterEnum.someBad)
+                    Label("Résultats indéterminés", systemImage: "questionmark.circle").tag(RunFilterEnum.somUnknown)
+                }
+            }
+            label: {
+                Image(systemName: "loupe")
+                    .imageScale(.large)
+                    .padding(.leading)
+            }
+        }
+        // menu de choix de critère de tri
+        ToolbarItem(placement: .navigationBarLeading) {
+            Menu {
+                Picker(selection: $sortCriteria, label: Text("Sorting options")) {
+                    Text("Numéro de Run").tag(KpiSortCriteriaEnum.byRunNumber)
+                    Text("KPI Actif Minimum").tag(KpiSortCriteriaEnum.byKpi1)
+                    Text("KPI Actif au 1er Décès").tag(KpiSortCriteriaEnum.byKpi2)
+                    Text("KPI Actif au 2nd Décès").tag(KpiSortCriteriaEnum.byKpi3)
+                }
+            }
+            label: {
+                Image(systemName: "arrow.up.arrow.down.circle")
+                    .imageScale(.large)
+                    .padding(.leading)
+            }
+        }
+        // menu de choix de l'ordre de tri
+        ToolbarItem(placement: .navigationBarLeading) {
+            Button(action: { sortOrder.toggle() }) { // swiftlint:disable:this multiple_closures_with_trailing_closure
+                Image(systemName: sortOrder.imageSystemName)
+                    .imageScale(.large)
+            }
+        }
+        // sauvegarde du tableau
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button(action: saveGrid ) {
+                HStack(alignment: .center) {
+                    if busySaveWheelAnimate {
+                        ProgressView()
+                    }
+                    Label("Enregistrer", systemImage: "externaldrive.fill")
+                }
+            }
+            .disabled(dataStore.activeDossier == nil)
+            
+        }
+        // afficher info-bulle
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button(action: { self.showInfoPopover = true },
+                   label : {
+                    Image(systemName: "info.circle")
+                   })
+        }
     }
     
     func saveGrid() {
@@ -334,30 +337,23 @@ struct ShortGridLineView : View {
 }
 
 struct ShortGridView_Previews: PreviewProvider {
-    static var model      = Model(fromBundle: Bundle.main)
-    static var uiState    = UIState()
-    static var dataStore  = Store()
-    static var simulation = Simulation()
-    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-
     static var previews: some View {
-        simulation.compute(using          : model,
-                           nbOfYears      : 25,
-                           nbOfRuns       : 10,
-                           withFamily     : family,
-                           withExpenses   : expenses,
-                           withPatrimoine : patrimoine)
+        loadTestFilesFromBundle()
+        simulationTest.compute(using          : modelTest,
+                               nbOfYears      : 25,
+                               nbOfRuns       : 10,
+                               withFamily     : familyTest,
+                               withExpenses   : expensesTest,
+                               withPatrimoine : patrimoineTest)
         return
             NavigationView {
                 NavigationLink(destination: ShortGridView()
-                                .environmentObject(uiState)
-                                .environmentObject(dataStore)
-                                .environmentObject(model)
-                                .environmentObject(family)
-                                .environmentObject(patrimoine)
-                                .environmentObject(simulation)
+                                .environmentObject(uiStateTest)
+                                .environmentObject(dataStoreTest)
+                                .environmentObject(modelTest)
+                                .environmentObject(familyTest)
+                                .environmentObject(patrimoineTest)
+                                .environmentObject(simulationTest)
                 ) {
                     Text("Synthèse")
                 }

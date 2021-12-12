@@ -223,14 +223,13 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
 }
 
 struct ExpenseSummaryView_Previews: PreviewProvider {
-    static let dataStore  = Store()
-    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var uiState    = UIState()
-    
     static var previews: some View {
-        ExpenseSummaryView()
-            .environmentObject(dataStore)
-            .environmentObject(family)
-            .environmentObject(uiState)
+        loadTestFilesFromBundle()
+        return ExpenseSummaryView()
+            .environmentObject(dataStoreTest)
+            .environmentObject(familyTest)
+            .environmentObject(expensesTest)
+            .environmentObject(patrimoineTest)
+            .environmentObject(uiStateTest)
     }
 }

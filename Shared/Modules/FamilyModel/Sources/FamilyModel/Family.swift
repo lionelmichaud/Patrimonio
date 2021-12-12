@@ -47,9 +47,11 @@ public final class Family: ObservableObject {
     /// - Note: Utilisé seulement pour les Tests
     /// - Parameter folder: dossier où se trouve le fichier JSON à utiliser
     /// - Throws: en cas d'échec de lecture des données
-    public convenience init(fromFolder folder: Folder) throws {
+    public convenience init(fromFolder folder : Folder,
+                            using model       : Model) throws {
         self.init()
-        members  = try PersistableArrayOfPerson(fromFolder: folder)
+        members  = try PersistableArrayOfPerson(fromFolder: folder,
+                                                using     : model)
     }
     
     /// Initiliser à partir d'un fichier JSON contenu dans le `bundle`

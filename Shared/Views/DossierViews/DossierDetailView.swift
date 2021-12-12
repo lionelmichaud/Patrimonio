@@ -216,7 +216,7 @@ struct DossierDetailView: View {
         var compatibility = false
         
         try dossier.loadDossierContentAsJSON { folder in
-            // Vérifier la compatibilité entre la version de l'app et la verison du répertoire `Library/template`.
+            // Vérifier la compatibilité entre la version de l'app et la version du répertoire `Library/template`.
             do {
                 compatibility = try PersistenceManager.checkCompatibilityWithAppVersion(of: folder)
                 
@@ -330,30 +330,19 @@ struct DossierDetailView: View {
 }
 
 struct DossierDetailView_Previews: PreviewProvider {
-    static var dataStore  = Store()
-    static var model      = Model(fromBundle: Bundle.main)
-    static var uiState    = UIState()
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-    static var simulation = Simulation()
-    
-    static let dossier = Dossier()
-        .namedAs("Nom du dossier")
-        .annotatedBy("note ligne 1\nligne 2")
-        .createdOn(Date.now)
-        .activated()
-    
     static var previews: some View {
-        NavigationView {
+        loadTestFilesFromBundle()
+        let dossier = dataStoreTest.dossiers[0]
+        return NavigationView {
             List {
                 NavigationLink(destination : DossierDetailView(dossier: dossier)
-                                .previewLayout(.sizeThatFits)
-                                .environmentObject(dataStore)
-                                .environmentObject(model)
-                                .environmentObject(uiState)
-                                .environmentObject(family)
-                                .environmentObject(patrimoine)
-                                .environmentObject(simulation)
+                                .environmentObject(dataStoreTest)
+                                .environmentObject(modelTest)
+                                .environmentObject(uiStateTest)
+                                .environmentObject(familyTest)
+                                .environmentObject(expensesTest)
+                                .environmentObject(patrimoineTest)
+                                .environmentObject(simulationTest)
                 ) {
                     Text("DossierDetailView")
                 }

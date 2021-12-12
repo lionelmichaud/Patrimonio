@@ -10,7 +10,7 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 
-struct RandomizerAssistantSectionView: View {
+struct RandomizerAssistantSidebarSectionView: View {
     @EnvironmentObject private var uiState: UIState
     
     var body: some View {
@@ -33,7 +33,7 @@ struct RandomizerAssistantSectionView_Previews: PreviewProvider {
     static var simulation = Simulation()
     
     static var previews: some View {
-        RandomizerAssistantSectionView()
+        RandomizerAssistantSidebarSectionView()
             .environmentObject(dataStore)
             .environmentObject(family)
             .environmentObject(patrimoine)

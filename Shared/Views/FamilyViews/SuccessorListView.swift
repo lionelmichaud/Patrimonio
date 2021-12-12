@@ -103,7 +103,10 @@ struct SuccessorGroupBox_Previews: PreviewProvider {
                                          received      : 2,
                                          receivedNet   : 1)
     static var previews: some View {
-        SuccessorGroupBox(successionKind : SuccessionKindEnum.lifeInsurance,
-                          inheritence    : inheritence)
+        loadTestFilesFromBundle()
+        return SuccessorGroupBox(successionKind : SuccessionKindEnum.lifeInsurance,
+                                 inheritence    : inheritence)
+            .environmentObject(modelTest)
+            .environmentObject(familyTest)
     }
 }

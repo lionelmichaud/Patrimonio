@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Statistics
 import ModelEnvironment
 import LifeExpense
 import Persistence
@@ -19,7 +20,8 @@ struct KpiListView : View {
     
     var body: some View {
         ForEach(simulation.kpis.values) { kpi in
-            NavigationLink(destination : KpiDetailedView(kpi: kpi)) {
+            NavigationLink(destination : KpiDetailedView(kpi: kpi,
+                                                         simulationMode: simulation.mode)) {
                 if let objectiveIsReached = kpi.objectiveIsReached(withMode: simulation.mode) {
                     Image(systemName: objectiveIsReached ? "checkmark.circle.fill" : "multiply.circle.fill")
                         .imageScale(.medium)
@@ -33,20 +35,21 @@ struct KpiListView : View {
 }
 
 struct KpiDetailedView: View {
-    @EnvironmentObject var simulation : Simulation
     @State var kpi: KPI
-    
+    var simulationMode : SimulationModeEnum
+
     var body: some View {
         VStack {
-            Section(header: Text("Mode de Calcul " + simulation.mode.displayString).bold()) {
+            Section(header: Text("Mode de Calcul " + simulationMode.displayString).bold()) {
                 // afficher le résumé
-                KpiSummaryView(kpi         : kpi,
-                               withPadding : true,
-                               withDetails : true)
+                KpiSummaryView(kpi            : kpi,
+                               simulationMode : simulationMode,
+                               withPadding    : true,
+                               withDetails    : true)
 
                 // afficher le détail
-                if kpi.hasValue(for: simulation.mode) {
-                    switch simulation.mode {
+                if kpi.hasValue(for: simulationMode) {
+                    switch simulationMode {
                         case .deterministic:
                             EmptyView()
                             
@@ -54,22 +57,22 @@ struct KpiDetailedView: View {
                             // simulation de Monté-Carlo
                             HStack {
                                 AmountView(label  : "Valeur Moyenne",
-                                           amount : kpi.average(withMode : simulation.mode) ?? Double.nan,
+                                           amount : kpi.average(withMode : simulationMode) ?? Double.nan,
                                            kEuro  : true)
                                     .padding(.trailing)
                                 AmountView(label  : "Valeur Médiane",
-                                           amount : kpi.median(withMode : simulation.mode) ?? Double.nan,
+                                           amount : kpi.median(withMode : simulationMode) ?? Double.nan,
                                            kEuro  : true)
                                     .padding(.leading)
                             }
                             .padding(.top, 3)
                             HStack {
                                 AmountView(label  : "Valeur Minimale",
-                                           amount : kpi.min(withMode : simulation.mode) ?? Double.nan,
+                                           amount : kpi.min(withMode : simulationMode) ?? Double.nan,
                                            kEuro  : true)
                                     .padding(.trailing)
                                 AmountView(label  : "Valeur Maximale",
-                                           amount : kpi.max(withMode : simulation.mode) ?? Double.nan,
+                                           amount : kpi.max(withMode : simulationMode) ?? Double.nan,
                                            kEuro  : true)
                                     .padding(.leading)
                             }
@@ -88,49 +91,51 @@ struct KpiDetailedView: View {
     }
 }
 
-struct KpiListView_Previews: PreviewProvider {
-    static var model      = Model(fromBundle: Bundle.main)
-    static var uiState    = UIState()
-    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var simulation = Simulation()
-
-    static func kpiDeter() -> KPI {
-        simulation.mode = .deterministic
-        var kpi = KPI(name: "KPI test",
-                      objective: 1000.0,
-                      withProbability: 0.95)
-        kpi.record(100.0, withMode: simulation.mode)
+struct KpiDetailedView_Previews: PreviewProvider {
+    static func kpiDeterPositif() -> KPI {
+        var kpi = KPI(name            : "KPI test",
+                      note            : "Note descriptive",
+                      objective       : 1000.0,
+                      withProbability : 0.5)
+        kpi.record(2000.0, withMode: .deterministic)
+        return kpi
+    }
+    static func kpiDeterNegatif() -> KPI {
+        var kpi = KPI(name            : "KPI test",
+                      note            : "Note descriptive",
+                      objective       : 1000.0,
+                      withProbability : 0.95)
+        kpi.record(200.0, withMode: .deterministic)
         return kpi
     }
     static func kpiRandom() -> KPI {
-        simulation.mode = .random
         var kpi = KPI(name: "KPI test",
                       note: "description",
                       objective: 1000.0,
                       withProbability: 0.95)
-        kpi.record(500.0, withMode: simulation.mode)
+        for _ in 0...500 {
+            kpi.record(Double.random(in: 0.0 ... 5000.0), withMode: .random)
+        }
         kpi.histogram.sort(distributionType : .continuous,
                            openEnds         : false,
                            bucketNb         : 50)
         return kpi
     }
+    
     static var previews: some View {
-        simulation.compute(using          : model,
-                           nbOfYears      : 40,
-                           nbOfRuns       : 1,
-                           withFamily     : family,
-                           withExpenses   : expenses,
-                           withPatrimoine : patrimoine)
-        return Group {
-            KpiDetailedView(kpi: kpiDeter())
-                .environmentObject(simulation)
+        Group {
+            KpiDetailedView(kpi: kpiDeterPositif(),
+                            simulationMode: .deterministic)
                 .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/500.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/200.0/*@END_MENU_TOKEN@*/))
                 .preferredColorScheme(.dark)
-//            KpiView(kpi: kpiRandom())
-//                .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/500.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/200.0/*@END_MENU_TOKEN@*/))
-//                .preferredColorScheme(.dark)
+            KpiDetailedView(kpi: kpiDeterNegatif(),
+                            simulationMode: .deterministic)
+                .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/500.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/200.0/*@END_MENU_TOKEN@*/))
+                .preferredColorScheme(.dark)
+            KpiDetailedView(kpi: kpiRandom(),
+                            simulationMode: .random)
+                .previewDevice("iPad Air (4th generation)")
+                .preferredColorScheme(.dark)
         }
     }
 }

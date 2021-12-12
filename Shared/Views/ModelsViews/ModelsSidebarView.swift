@@ -1,5 +1,5 @@
 //
-//  ScenarioView.swift
+//  ModelsSidebarView.swift
 //  Patrimoine
 //
 //  Created by Lionel MICHAUD on 02/04/2020.
@@ -12,7 +12,7 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 
-struct ModelsView: View {
+struct ModelsSidebarView: View {
     @EnvironmentObject private var dataStore : Store
     @EnvironmentObject private var model     : Model
     @EnvironmentObject private var uiState   : UIState
@@ -27,13 +27,13 @@ struct ModelsView: View {
             List {
                 if dataStore.activeDossier != nil {
                     // Modèle Déterministique
-                    DeterministicSectionView()
+                    DeterministicSidebarSectionView()
                     
                     // Modèle Statistique
-                    StatisticSectionView()
+                    StatisticSidebarSectionView()
                     
                     // Assistant modèle statistique
-                    RandomizerAssistantSectionView()
+                    RandomizerAssistantSidebarSectionView()
                 } else {
                     Text("Modèles")
                 }
@@ -64,12 +64,16 @@ struct ModelsView_Previews: PreviewProvider {
     
     static var previews: some View {
         dataStore.activate(dossierAtIndex: 0)
-        return ModelsView()
-            .environmentObject(dataStore)
-            .environmentObject(model)
-            .environmentObject(uiState)
-            .environmentObject(family)
-            .environmentObject(patrimoine)
-            .environmentObject(simulation)
+        return TabView {
+            ModelsSidebarView()
+                .tabItem { Label("Modèles", systemImage: "slider.horizontal.3") }
+                .tag(UIState.Tab.scenario)
+                .environmentObject(dataStore)
+                .environmentObject(model)
+                .environmentObject(uiState)
+                .environmentObject(family)
+                .environmentObject(patrimoine)
+                .environmentObject(simulation)
+        }
     }
 }

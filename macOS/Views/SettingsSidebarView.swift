@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SettingsView: View {
+struct SettingsSidebarView: View {
     @State private var ownership            = UserSettings.shared.ownershipSelection
     @State private var evaluationContext    = UserSettings.shared.assetEvaluationContext
 
@@ -57,6 +57,6 @@ struct GeneralSettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
+        SettingsSidebarView()
     }
 }

@@ -106,19 +106,18 @@ struct AgeDateView : View {
 }
 
 struct FamilyListView_Previews: PreviewProvider {
-    static var family     = Family()
-    static var patrimoin  = Patrimoin()
-    static var simulation = Simulation()
-    static var uiState    = UIState()
-    
     static var previews: some View {
-        NavigationView {
+        loadTestFilesFromBundle()
+        return NavigationView {
             List {
                 FamilySectionView(showingSheet: .constant(false))
-                    .environmentObject(family)
-                    .environmentObject(patrimoin)
-                    .environmentObject(simulation)
-                    .environmentObject(uiState)
+                    .environmentObject(dataStoreTest)
+                    .environmentObject(modelTest)
+                    .environmentObject(uiStateTest)
+                    .environmentObject(familyTest)
+                    .environmentObject(expensesTest)
+                    .environmentObject(patrimoineTest)
+                    .environmentObject(simulationTest)
             }
         }
         .preferredColorScheme(.dark)

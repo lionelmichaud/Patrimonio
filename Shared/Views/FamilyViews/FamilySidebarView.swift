@@ -12,7 +12,7 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 
-struct FamilyView: View {
+struct FamilySidebarView: View {
     @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
@@ -75,7 +75,7 @@ struct FamilyView_Previews: PreviewProvider {
     static let uiState    = UIState()
     
     static var previews: some View {
-        FamilyView()
+        FamilySidebarView()
             .environmentObject(dataStore)
             .environmentObject(model)
             .environmentObject(family)

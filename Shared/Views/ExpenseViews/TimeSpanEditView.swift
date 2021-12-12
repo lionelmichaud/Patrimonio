@@ -185,11 +185,13 @@ struct TimeSpanEditView: View {
 
 struct TimeSpanEditView_Previews: PreviewProvider {
     static var previews: some View {
-        TimeSpanEditView(
-            timeSpanVM: .constant(TimeSpanViewModel(from: TimeSpan.permanent))
-        )
+        Form {
+            TimeSpanEditView(
+                timeSpanVM: .constant(TimeSpanViewModel(from: TimeSpan.permanent))
+            )
             .previewLayout(PreviewLayout.sizeThatFits)
             .padding([.bottom, .top])
             .previewDisplayName("TimeSpanEditView")
+        }
     }
 }

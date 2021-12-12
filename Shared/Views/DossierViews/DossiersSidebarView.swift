@@ -8,7 +8,7 @@
 import SwiftUI
 import Persistence
 
-struct DossiersView: View {
+struct DossiersSidebarView: View {
     @EnvironmentObject var uiState   : UIState
     @EnvironmentObject var dataStore : Store
     @State private var alertItem     : AlertItem?
@@ -62,13 +62,19 @@ struct DossierHeaderView: View {
 }
 
 struct DossiersView_Previews: PreviewProvider {
-    static let uiState    = UIState()
-    static let dataStore  = Store()
-
     static var previews: some View {
-        DossiersView()
-            .environmentObject(dataStore)
-            .environmentObject(uiState)
-            .colorScheme(.dark)
+        loadTestFilesFromTemplate()
+        return TabView {
+            DossiersSidebarView()
+                .tabItem { Label("Dossiers", systemImage: "folder.fill.badge.person.crop") }
+                .tag(UIState.Tab.expense)
+            .environmentObject(dataStoreTest)
+            .environmentObject(modelTest)
+            .environmentObject(uiStateTest)
+            .environmentObject(familyTest)
+            .environmentObject(expensesTest)
+            .environmentObject(patrimoineTest)
+            .environmentObject(simulationTest)
+        }
     }
 }

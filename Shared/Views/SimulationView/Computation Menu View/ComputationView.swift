@@ -140,32 +140,24 @@ struct ComputationView: View {
 }
 
 struct ComputationView_Previews: PreviewProvider {
-    static var model      = Model(fromBundle: Bundle.main)
-    static var uiState    = UIState()
-    static var dataStore  = Store()
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-    static var simulation = Simulation()
-    
     static var previews: some View {
-        NavigationView {
+        loadTestFilesFromBundle()
+        return NavigationView {
             List {
                 // calcul de simulation
                 NavigationLink(destination : ComputationView()
-                                .environmentObject(model)
-                                .environmentObject(uiState)
-                                .environmentObject(dataStore)
-                                .environmentObject(family)
-                                .environmentObject(patrimoine)
-                                .environmentObject(simulation)
+                                .environmentObject(modelTest)
+                                .environmentObject(uiStateTest)
+                                .environmentObject(dataStoreTest)
+                                .environmentObject(familyTest)
+                                .environmentObject(expensesTest)
+                                .environmentObject(patrimoineTest)
+                                .environmentObject(simulationTest)
                 ) {
                     Text("Calculs")
                 }
                 .isDetailLink(true)
             }
-            //.colorScheme(.dark)
-            //.padding()
-            //.previewLayout(PreviewLayout.sizeThatFits)
         }
     }
 }

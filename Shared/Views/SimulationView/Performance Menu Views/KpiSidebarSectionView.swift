@@ -12,7 +12,7 @@ import LifeExpense
 import PatrimoineModel
 import FamilyModel
 
-struct KpiSectionView: View {
+struct KpiSidebarSectionView: View {
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
     @State private var isKpiExpanded  : Bool = false
@@ -23,6 +23,7 @@ struct KpiSectionView: View {
                 // synthèse des KPIs
                 DisclosureGroup(isExpanded: $isKpiExpanded,
                                 content: {
+                                    // Synthèse des KPIs
                                     NavigationLink(destination : KpiListSummaryView(),
                                                    tag         : .kpiSummaryView,
                                                    selection   : $uiState.simulationViewState.selectedItem) {
@@ -51,7 +52,7 @@ struct KpiSectionView: View {
     }
 }
 
-struct KpiView_Previews: PreviewProvider {
+struct KpiSidebarSectionView_Previews: PreviewProvider {
     static var model      = Model(fromBundle: Bundle.main)
     static var uiState    = UIState()
     static var family     = Family()
@@ -68,7 +69,7 @@ struct KpiView_Previews: PreviewProvider {
                            withPatrimoine : patrimoine)
         return
             NavigationView {
-                List {KpiSectionView()
+                List {KpiSidebarSectionView()
                     .environmentObject(uiState)
                     .environmentObject(family)
                     .environmentObject(patrimoine)

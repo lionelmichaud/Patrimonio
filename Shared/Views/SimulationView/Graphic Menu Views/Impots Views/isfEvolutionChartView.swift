@@ -193,30 +193,23 @@ struct IsfLineChartView: UIViewRepresentable {
 }
 
 struct IsfView_Previews: PreviewProvider {
-    static var model      = Model(fromBundle: Bundle.main)
-    static var uiState    = UIState()
-    static var dataStore  = Store()
-    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var simulation = Simulation()
-
     static var previews: some View {
-        simulation.compute(using          : model,
-                           nbOfYears      : 40,
-                           nbOfRuns       : 1,
-                           withFamily     : family,
-                           withExpenses   : expenses,
-                           withPatrimoine : patrimoine)
+        loadTestFilesFromBundle()
+        simulationTest.compute(using          : modelTest,
+                               nbOfYears      : 40,
+                               nbOfRuns       : 1,
+                               withFamily     : familyTest,
+                               withExpenses   : expensesTest,
+                               withPatrimoine : patrimoineTest)
         return NavigationView {
             List {
                 // calcul de simulation
                 NavigationLink(destination : IsfEvolutionChartView()
-                                .environmentObject(uiState)
-                                .environmentObject(dataStore)
-                                .environmentObject(family)
-                                .environmentObject(patrimoine)
-                                .environmentObject(simulation)
+                                .environmentObject(uiStateTest)
+                                .environmentObject(dataStoreTest)
+                                .environmentObject(familyTest)
+                                .environmentObject(patrimoineTest)
+                                .environmentObject(simulationTest)
                 ) {
                     Text("ISF")
                 }

@@ -105,6 +105,11 @@ public struct SciCashFlowLine {
     
     // MARK: - Initializers
     
+    init() {
+        year = Date.now.year
+        IS = 0.0
+    }
+    
     init(withYear year  : Int,
          of patrimoine  : Patrimoin,
          for adultsName : [String],

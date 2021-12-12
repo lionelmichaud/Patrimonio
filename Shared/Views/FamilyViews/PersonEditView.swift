@@ -183,18 +183,6 @@ private struct ScenarioSection: View {
     }
 }
 
-// MARK: - Saisie Adult / Section Activité
-struct ActivitySection: View {
-    @ObservedObject var adultViewModel: AdultViewModel
-    
-    var body: some View {
-        Section(header: Text("ACTIVITE")) {
-            RevenueEditView(adultViewModel: adultViewModel)
-            EndOfWorkingPeriodEditView(adultViewModel: adultViewModel)
-        }
-    }
-}
-
 // MARK: - Saisie Adult / Section Dépendance
 struct DepedanceSection: View {
     @ObservedObject var adultViewModel: AdultViewModel
@@ -208,6 +196,18 @@ struct DepedanceSection: View {
                     Text("\(adultViewModel.nbYearOfDepend) ans").foregroundColor(.secondary)
                 }
             }
+        }
+    }
+}
+
+// MARK: - Saisie Adult / Section Activité
+struct ActivitySection: View {
+    @ObservedObject var adultViewModel: AdultViewModel
+    
+    var body: some View {
+        Section(header: Text("ACTIVITE")) {
+            RevenueEditView(adultViewModel: adultViewModel)
+            EndOfWorkingPeriodEditView(adultViewModel: adultViewModel)
         }
     }
 }
@@ -309,26 +309,94 @@ struct ChildEditView : View {
 }
 
 struct PersonEditView_Previews: PreviewProvider {
-    static var model   = Model(fromBundle: Bundle.main)
-    static var family  = Family()
-    static var anAdult = family.members.items.first!
-    static var aChild  = family.members.items.last!
-
     static var previews: some View {
-        Group {
+        loadTestFilesFromBundle()
+        let anAdult = familyTest.members[0]
+        let aChild  = familyTest.members[2]
+
+        return Group {
             // adult
             PersonEditView(withInitialValueFrom : anAdult,
-                           using                : model)
-                .environmentObject(family)
+                           using                : modelTest)
+                .environmentObject(dataStoreTest)
+                .environmentObject(modelTest)
+                .environmentObject(uiStateTest)
+                .environmentObject(familyTest)
+                .environmentObject(expensesTest)
+                .environmentObject(patrimoineTest)
+                .environmentObject(simulationTest)
                 .environmentObject(anAdult)
             // child
             PersonEditView(withInitialValueFrom : aChild,
-                           using                : model)
-                .environmentObject(family)
+                           using                : modelTest)
+                .environmentObject(dataStoreTest)
+                .environmentObject(modelTest)
+                .environmentObject(uiStateTest)
+                .environmentObject(familyTest)
+                .environmentObject(expensesTest)
+                .environmentObject(patrimoineTest)
+                .environmentObject(simulationTest)
                 .environmentObject(aChild)
-            Form {
-                RevenueEditView(adultViewModel: AdultViewModel())
-            }
+        }
+    }
+}
+
+struct AdultEditView_Previews: PreviewProvider {
+    static var previews: some View {
+        loadTestFilesFromBundle()
+        return Form {
+            AdultEditView(authorizeDeathAgeModification : true,
+                          personViewModel               : PersonViewModel(),
+                          adultViewModel                : AdultViewModel())
+                .environmentObject(dataStoreTest)
+                .environmentObject(modelTest)
+                .environmentObject(uiStateTest)
+                .environmentObject(familyTest)
+                .environmentObject(expensesTest)
+                .environmentObject(patrimoineTest)
+                .environmentObject(simulationTest)
+        }
+    }
+}
+
+struct ScenarioSection_Previews: PreviewProvider {
+    static var previews: some View {
+        Form {
+            ScenarioSection(authorizeDeathAgeModification : true,
+                            personViewModel               : PersonViewModel(),
+                            adultViewModel                : AdultViewModel())
+        }
+    }
+}
+
+struct ActivitySection_Previews: PreviewProvider {
+    static var previews: some View {
+        Form {
+            ActivitySection(adultViewModel: AdultViewModel())
+        }
+    }
+}
+
+struct RevenueEditView_Previews: PreviewProvider {
+    static var previews: some View {
+        Form {
+            RevenueEditView(adultViewModel: AdultViewModel())
+        }
+    }
+}
+
+struct EndOfWorkingPeriodEditView_Previews: PreviewProvider {
+    static var previews: some View {
+        Form {
+            EndOfWorkingPeriodEditView(adultViewModel: AdultViewModel())
+        }
+    }
+}
+
+struct DepedanceSection_Previews: PreviewProvider {
+    static var previews: some View {
+        Form {
+            DepedanceSection(adultViewModel: AdultViewModel())
         }
     }
 }

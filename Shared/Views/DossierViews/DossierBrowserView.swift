@@ -19,8 +19,8 @@ struct DossierBrowserView: View {
     @EnvironmentObject private var expenses   : LifeExpensesDic
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var simulation : Simulation
-    @Binding var showingSheet        : Bool
-    @State private var alertItem     : AlertItem?
+    @Binding var showingSheet    : Bool
+    @State private var alertItem : AlertItem?
 
     var body: some View {
         // bouton "ajouter"
@@ -114,13 +114,13 @@ struct DossierRowView : View {
 
 struct DossierBrowserView_Previews: PreviewProvider {
     static let dataStore  = Store()
-
+    
     static var previews: some View {
         NavigationView {
-        List {
-        DossierBrowserView(showingSheet: .constant(false))
-            .environmentObject(dataStore)
-        }
+            List {
+                DossierBrowserView(showingSheet: .constant(false))
+                    .environmentObject(dataStore)
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ struct ContentView: View {
             List(selection: $uiState.selectedSideBarItem) {
                 /// composition de la famille
                 NavigationLink(
-                    destination: FamilyView(),
+                    destination: FamilySidebarView(),
                     tag: UIState.Tab.family,
                     selection: $uiState.selectedSideBarItem
                 ) {
@@ -32,7 +32,7 @@ struct ContentView: View {
 
                 /// dépenses de la famille
                 NavigationLink(
-                    destination: ExpenseView(simulationReseter: simulation),
+                    destination: ExpenseSidebarView(simulationReseter: simulation),
                     tag: UIState.Tab.expense,
                     selection: $uiState.selectedSideBarItem
                 ) {
@@ -42,7 +42,7 @@ struct ContentView: View {
 
                 /// actifs & passifs du patrimoine de la famille
                 NavigationLink(
-                    destination: PatrimoineView(),
+                    destination: PatrimoineSidebarView(),
                     tag: UIState.Tab.asset,
                     selection: $uiState.selectedSideBarItem
                 ) {
@@ -52,7 +52,7 @@ struct ContentView: View {
 
                 /// scenario paramètrique de simulation
                 NavigationLink(
-                    destination: ModelsView(),
+                    destination: ModelsSidebarView(),
                     tag: UIState.Tab.scenario,
                     selection: $uiState.selectedSideBarItem
                 ) {
@@ -62,7 +62,7 @@ struct ContentView: View {
 
                 /// calcul et présentation des résultats de simulation
                 NavigationLink(
-                    destination: SimulationView(),
+                    destination: SimulationSidebarView(),
                     tag: UIState.Tab.simulation,
                     selection: $uiState.selectedSideBarItem
                 ) {

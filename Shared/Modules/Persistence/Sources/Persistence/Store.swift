@@ -53,8 +53,11 @@ public final class Store: ObservableObject {
     // MARK: - Methods
 
     /// Activer le dossier situé à l'index 'index'.
-    /// Désativer tous les autres.
+    /// Désactiver tous les autres.
     public func activate(dossierAtIndex index: Int) {
+        guard dossiers.isNotEmpty else {
+            return
+        }
         for idx in dossiers.startIndex..<dossiers.endIndex {
             dossiers[idx].isActive = false
         }
@@ -90,7 +93,15 @@ extension Store: CustomStringConvertible {
     public var description: String {
         var str = ""
         dossiers.forEach { dossier in
-            str += String(describing: dossier).withPrefixedSplittedLines("  ") + "\n"
+            print("""
+
+                DATASTORE:
+                  Liste des dossiers chargée: \((!failedToLoadDossiers).frenchString)
+                  Mise à jour du dossier template réalisée: \((!failedToUpdateTemplateFolder).frenchString)
+                  Liste des dossiers:
+
+                """)
+            str += String(describing: dossier).withPrefixedSplittedLines("    ") + "\n"
         }
         return str
     }

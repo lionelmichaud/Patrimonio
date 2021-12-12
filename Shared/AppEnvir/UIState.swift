@@ -53,12 +53,12 @@ final class UIState: ObservableObject {
     
     // MARK: - Etat de la vue Scenario
     struct ModelViewState {
-        var selectedItem: ModelsView.PushedItem? = .deterministicModel
+        var selectedItem: ModelsSidebarView.PushedItem? = .deterministicModel
     }
     
     // MARK: - Etat de la vue Simulation
     struct SimulationViewState {
-        var selectedItem: SimulationView.PushedItem? = .computationView
+        var selectedItem: SimulationSidebarView.PushedItem? = .computationView
     }
     
     // MARK: - Etat de la vue Compute

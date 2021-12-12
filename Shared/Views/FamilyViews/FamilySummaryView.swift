@@ -166,19 +166,62 @@ struct SciSummarySection: View {
     }
 }
 
-struct FamilySummaryView_Previews: PreviewProvider {
-    static let dataStore  = Store()
-    static var model      = Model(fromBundle: Bundle.main)
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-    static var simulation = Simulation()
-    
+// MARK: - PREVIEWS
+
+struct FamilySummarySectionView_Previews: PreviewProvider {
     static var previews: some View {
-        FamilySummaryView()
-            .environmentObject(dataStore)
-            .environmentObject(model)
-            .environmentObject(family)
-            .environmentObject(patrimoine)
-            .environmentObject(simulation)
+        loadTestFilesFromBundle()
+        return Form {
+            FamilySummarySection()
+                .environmentObject(familyTest)
+        }
+        
     }
 }
+
+struct RevenuSummarySectionView_Previews: PreviewProvider {
+    static var previews: some View {
+        loadTestFilesFromBundle()
+        let cashFlowLine = CashFlowLine()
+        return Form {
+            RevenuSummarySection(cashFlow: cashFlowLine)
+                .environmentObject(familyTest)
+                .environmentObject(modelTest)
+        }
+    }
+}
+
+struct FiscalSummarySection_Previews: PreviewProvider {
+    static var previews: some View {
+        loadTestFilesFromBundle()
+        let cashFlowLine = CashFlowLine()
+        return Form {
+            FiscalSummarySection(cashFlow: cashFlowLine)
+                .environmentObject(familyTest)
+                .environmentObject(modelTest)
+        }
+    }
+}
+
+struct SciSummarySection_Previews: PreviewProvider {
+    static var previews: some View {
+        loadTestFilesFromBundle()
+        let cashFlowLine = CashFlowLine()
+        return Form {
+            SciSummarySection(cashFlow: cashFlowLine)
+        }
+    }
+}
+
+//struct FamilySummaryView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        loadTestFilesFromBundle()
+//        return FamilySummaryView()
+//            .environmentObject(dataStoreTest)
+//            .environmentObject(modelTest)
+//            .environmentObject(familyTest)
+//            .environmentObject(expensesTest)
+//            .environmentObject(patrimoineTest)
+//            .environmentObject(simulationTest)
+//    }
+//}

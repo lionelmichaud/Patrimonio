@@ -70,17 +70,15 @@ struct DossierSummaryView: View {
 }
 
 struct DossierSummaryView_Previews: PreviewProvider {
-    static let dataStore  = Store()
-    static var model      = Model(fromBundle: Bundle.main)
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-
     static var previews: some View {
-        dataStore.activate(dossierAtIndex: 0)
+        loadTestFilesFromBundle()
         return DossierSummaryView()
-            .environmentObject(dataStore)
-            .environmentObject(model)
-            .environmentObject(family)
-            .environmentObject(patrimoine)
+            .environmentObject(dataStoreTest)
+            .environmentObject(modelTest)
+            .environmentObject(uiStateTest)
+            .environmentObject(familyTest)
+            .environmentObject(expensesTest)
+            .environmentObject(patrimoineTest)
+            .environmentObject(simulationTest)
     }
 }

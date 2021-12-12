@@ -43,17 +43,13 @@ struct ChildDetailView: View {
 }
 
 struct ChildDetailView_Previews: PreviewProvider {
-    static var family  = Family()
-    static var model   = Model(fromBundle: Bundle.main)
-    static var anAdult = family.members.items.first!
-    static var aChild  = family.members.items.last!
-    
     static var previews: some View {
-        // child
-        Form {
+        loadTestFilesFromBundle()
+        let member = familyTest.members[2]
+        return Form {
             ChildDetailView()
-                .environmentObject(aChild)
-                .environmentObject(model)
+                .environmentObject(member)
+                .environmentObject(modelTest)
         }
     }
 }

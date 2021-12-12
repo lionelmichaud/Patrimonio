@@ -35,16 +35,17 @@ struct SimulationSidebarView: View {
                 
                 if dataStore.activeDossier != nil {
                     // affichage du scénario utilisé pour la simulation
-                    ScenarioSidebarSectionView()
+                    ScenarioSidebarSectionView(simulationMode       : simulation.mode,
+                                               simulationIsComputed : simulation.isComputed)
                     
                     // affichage des résultats des KPIs
-                    KpiSectionView()
+                    KpiSidebarSectionView()
                     
                     // affichage des résultats graphiques
-                    ChartsSectionView()
+                    ChartsSidebarSectionView()
                     
                     // affichage des autres résultats
-                    SuccessionsSectionView()
+                    SuccessionsSidebarSectionView()
                 }
             }
             //.defaultSideBarListStyle()
@@ -59,28 +60,23 @@ struct SimulationSidebarView: View {
     }
 }
 
-struct SimulationView_Previews: PreviewProvider {
-    static var model      = Model(fromBundle: Bundle.main)
-    static let dataStore  = Store()
-    static var uiState    = UIState()
-    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var simulation = Simulation()
-
+struct SimulationSidebarView_Previews: PreviewProvider {
     static var previews: some View {
-        simulation.compute(using          : model,
-                           nbOfYears      : 5,
-                           nbOfRuns       : 1,
-                           withFamily     : family,
-                           withExpenses   : expenses,
-                           withPatrimoine : patrimoine)
+        loadTestFilesFromBundle()
+        simulationTest.compute(using          : modelTest,
+                               nbOfYears      : 5,
+                               nbOfRuns       : 1,
+                               withFamily     : familyTest,
+                               withExpenses   : expensesTest,
+                               withPatrimoine : patrimoineTest)
         return
             SimulationSidebarView()
-            .environmentObject(dataStore)
-            .environmentObject(uiState)
-            .environmentObject(family)
-            .environmentObject(patrimoine)
-            .environmentObject(simulation)
+            .environmentObject(dataStoreTest)
+            .environmentObject(modelTest)
+            .environmentObject(uiStateTest)
+            .environmentObject(familyTest)
+            .environmentObject(expensesTest)
+            .environmentObject(patrimoineTest)
+            .environmentObject(simulationTest)
     }
 }

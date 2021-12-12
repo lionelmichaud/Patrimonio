@@ -31,7 +31,7 @@ struct DeterministicSidebarSectionView: View {
 struct DeterministicSectionView_Previews: PreviewProvider {
     
     static var previews: some View {
-        loadTestFiles()
+        loadTestFilesFromBundle()
         return DeterministicSidebarSectionView()
             .environmentObject(dataStoreTest)
             .environmentObject(modelTest)

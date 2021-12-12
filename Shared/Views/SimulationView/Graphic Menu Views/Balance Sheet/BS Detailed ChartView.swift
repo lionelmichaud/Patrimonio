@@ -104,40 +104,43 @@ struct BalanceSheetDetailedChartView: View {
         }
         .navigationTitle("Bilan Détaillé")
         .navigationBarTitleDisplayModeInline()
-        .toolbar {
-            //  menu slideover de filtrage
-            ToolbarItem(placement: .navigation) {
-                Button(action: { withAnimation { self.menuIsPresented.toggle() } },
-                       label: {
-                        if self.uiState.bsChartState.itemSelection.allCategoriesSelected() {
-                            Image(systemName: "magnifyingglass.circle")
-                        } else {
-                            Image(systemName: "magnifyingglass.circle.fill")
-                        }
-                       })//.capsuleButtonStyle()
-            }
-            // afficher/masquer le grpahique des événemnts de vie
-            ToolbarItem(placement: .automatic) {
-                Button(action: { withAnimation { lifeEventChatIsPresented.toggle() } },
-                       label : { Image(systemName: lifeEventChatIsPresented ? "rectangle" : "rectangle.split.1x2") })
-            }
-            // sauvergarder l'image dans l'album photo
-            ToolbarItem(placement: .automatic) {
-                Button(action: { BalanceSheetStackedBarChartView.saveImage(to: dataStore.activeDossier!.folder!) },
-                       label : { Image(systemName: "camera.circle") })
-                    .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
-            }
-            // afficher info-bulle
-            ToolbarItem(placement: .automatic) {
-                Button(action: { self.showInfoPopover = true },
-                       label : {
-                        Image(systemName: "info.circle")//.font(.largeTitle)
-                       })
-                    .popover(isPresented: $showInfoPopover) {
-                        PopOverContentView(title       : popOverTitle,
-                                           description : popOverMessage)
+        .toolbar(content: myToolBarContent)
+    }
+    
+    @ToolbarContentBuilder
+    func myToolBarContent() -> some ToolbarContent {
+        //  menu slideover de filtrage
+        ToolbarItem(placement: .navigation) {
+            Button(action: { withAnimation { self.menuIsPresented.toggle() } },
+                   label: {
+                    if self.uiState.bsChartState.itemSelection.allCategoriesSelected() {
+                        Image(systemName: "magnifyingglass.circle")
+                    } else {
+                        Image(systemName: "magnifyingglass.circle.fill")
                     }
-            }
+                   })//.capsuleButtonStyle()
+        }
+        // afficher/masquer le grpahique des événemnts de vie
+        ToolbarItem(placement: .automatic) {
+            Button(action: { withAnimation { lifeEventChatIsPresented.toggle() } },
+                   label : { Image(systemName: lifeEventChatIsPresented ? "rectangle" : "rectangle.split.1x2") })
+        }
+        // sauvergarder l'image dans l'album photo
+        ToolbarItem(placement: .automatic) {
+            Button(action: { BalanceSheetStackedBarChartView.saveImage(to: dataStore.activeDossier!.folder!) },
+                   label : { Image(systemName: "camera.circle") })
+                .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
+        }
+        // afficher info-bulle
+        ToolbarItem(placement: .automatic) {
+            Button(action: { self.showInfoPopover = true },
+                   label : {
+                    Image(systemName: "info.circle")//.font(.largeTitle)
+                   })
+                .popover(isPresented: $showInfoPopover) {
+                    PopOverContentView(title       : popOverTitle,
+                                       description : popOverMessage)
+                }
         }
     }
 }
@@ -279,30 +282,23 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
 // MARK: - Preview
 
 struct BalanceSheetDetailedChartView_Previews: PreviewProvider {
-    static var model      = Model(fromBundle: Bundle.main)
-    static var uiState    = UIState()
-    static var dataStore  = Store()
-    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var simulation = Simulation()
-
     static var previews: some View {
+        loadTestFilesFromBundle()
         // calcul de simulation
-        simulation.compute(using          : model,
-                           nbOfYears      : 40,
-                           nbOfRuns       : 1,
-                           withFamily     : family,
-                           withExpenses   : expenses,
-                           withPatrimoine : patrimoine)
+        simulationTest.compute(using          : modelTest,
+                               nbOfYears      : 40,
+                               nbOfRuns       : 1,
+                               withFamily     : familyTest,
+                               withExpenses   : expensesTest,
+                               withPatrimoine : patrimoineTest)
         return NavigationView {
             List {
                 NavigationLink(destination :BalanceSheetDetailedChartView()
-                                .environmentObject(uiState)
-                                .environmentObject(dataStore)
-                                .environmentObject(family)
-                                .environmentObject(patrimoine)
-                                .environmentObject(simulation)
+                                .environmentObject(uiStateTest)
+                                .environmentObject(dataStoreTest)
+                                .environmentObject(familyTest)
+                                .environmentObject(patrimoineTest)
+                                .environmentObject(simulationTest)
                 ) {
                     Text("Bilan Détaillé")
                 }

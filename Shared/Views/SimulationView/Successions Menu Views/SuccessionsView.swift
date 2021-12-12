@@ -147,21 +147,15 @@ struct SuccessorsDisclosureGroup: View {
 }
 
 struct SuccessionsView_Previews: PreviewProvider {
-    static var model      = Model(fromBundle: Bundle.main)
-    static var uiState    = UIState()
-    static var family     = try! Family(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var expenses   = try! LifeExpensesDic(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-    static var patrimoine = try! Patrimoin(fromFolder: try! PersistenceManager.importTemplatesFromAppAndCheckCompatibility())
-
     static func initializedSimulation() -> Simulation {
-        let simulation = Simulation()
-        simulation.compute(using          : model,
-                           nbOfYears      : 55,
-                           nbOfRuns       : 1,
-                           withFamily     : family,
-                           withExpenses   : expenses,
-                           withPatrimoine : patrimoine)
-        return simulation
+        loadTestFilesFromBundle()
+        simulationTest.compute(using          : modelTest,
+                               nbOfYears      : 55,
+                               nbOfRuns       : 1,
+                               withFamily     : familyTest,
+                               withExpenses   : expensesTest,
+                               withPatrimoine : patrimoineTest)
+        return simulationTest
     }
     
     static var previews: some View {
@@ -170,9 +164,9 @@ struct SuccessionsView_Previews: PreviewProvider {
         return SuccessionsView(title       : "Successions Légales",
                                successions : simulation.occuredLegalSuccessions)
             .preferredColorScheme(.dark)
-            .environmentObject(uiState)
-            .environmentObject(family)
-            .environmentObject(patrimoine)
-            .environmentObject(simulation)
+            .environmentObject(uiStateTest)
+            .environmentObject(familyTest)
+            .environmentObject(patrimoineTest)
+            .environmentObject(simulationTest)
     }
 }

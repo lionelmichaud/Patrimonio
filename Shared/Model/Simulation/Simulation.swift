@@ -115,6 +115,17 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
         persistenceSM.process(event: .onLoad)
     }
     
+    public init(fromFolder folder: Folder) throws {
+        kpis = try KpiDictionary(fromFile             : Simulation.defaultKpiFileName,
+                                 fromFolder           : folder,
+                                 dateDecodingStrategy : .iso8601,
+                                 keyDecodingStrategy  : .useDefaultKeys)
+        kpis.setKpisNameFromEnum()
+        
+        // exécuter la transition
+        persistenceSM.process(event: .onLoad)
+    }
+    
     // MARK: - Methods
     
     /// Lire à partir d'un fichier JSON contenu dans le dossier `fromFolder`

@@ -1,5 +1,5 @@
 //
-//  AssetListView.swift
+//  PatrimoineSidebarView.swift
 //  Patrimoine
 //
 //  Created by Lionel MICHAUD on 01/04/2020.
@@ -11,7 +11,7 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 
-struct PatrimoineView: View {
+struct PatrimoineSidebarView: View {
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var dataStore  : Store
@@ -93,20 +93,22 @@ struct PatrimoineHeaderView: View {
             NavigationLink(destination: PatrimoineSummaryView()) {
                 Text("Résumé").fontWeight(.bold)
             }.isDetailLink(true)
-            }
+        }
     }
 }
 
-struct AssetListView_Previews: PreviewProvider {
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-    static var uiState    = UIState()
-
+struct PatrimoineSidebarView_Previews: PreviewProvider {
     static var previews: some View {
-        PatrimoineView()
-            .environmentObject(family)
-            .environmentObject(patrimoine)
-            .environmentObject(uiState)
-        //.colorScheme(.dark)
+        loadTestFilesFromBundle()
+        return TabView {
+            PatrimoineSidebarView()
+                .tabItem { Label("Patrimoine", systemImage: "dollarsign.circle.fill") }
+                .tag(UIState.Tab.asset)
+                .environmentObject(dataStoreTest)
+                .environmentObject(familyTest)
+                .environmentObject(expensesTest)
+                .environmentObject(patrimoineTest)
+                .environmentObject(uiStateTest)
+        }
     }
 }

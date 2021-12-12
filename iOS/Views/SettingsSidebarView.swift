@@ -8,7 +8,7 @@
 import SwiftUI
 import Persistence
 
-struct SettingsView: View {
+struct SettingsSidebarView: View {
     @State private var simulateVolatility      = UserSettings.shared.simulateVolatility
     @State private var kpiOwnership            = UserSettings.shared.ownershipGraphicSelection
     @State private var kpiEvaluationMethod     = UserSettings.shared.assetGraphicEvaluatedFraction
@@ -68,6 +68,10 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
+        TabView {
+            SettingsSidebarView()
+                .tabItem { Label("Préférences", systemImage: "gear") }
+                .tag(UIState.Tab.userSettings)
+        }
     }
 }

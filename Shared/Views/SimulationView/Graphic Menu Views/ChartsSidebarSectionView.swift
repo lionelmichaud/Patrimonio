@@ -12,7 +12,7 @@ import LifeExpense
 import PatrimoineModel
 import FamilyModel
 
-struct ChartsSectionView: View {
+struct ChartsSidebarSectionView: View {
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
     @State private var isBsExpanded   : Bool = false
@@ -102,28 +102,22 @@ struct ChartsSectionView: View {
     }
 }
 
-struct ChartsView_Previews: PreviewProvider {
-    static var model      = Model(fromBundle: Bundle.main)
-    static var uiState    = UIState()
-    static var family     = Family()
-    static var expenses   = LifeExpensesDic()
-    static var patrimoine = Patrimoin()
-    static var simulation = Simulation()
-
+struct ChartsSidebarView_Previews: PreviewProvider {
     static var previews: some View {
-        simulation.compute(using          : model,
-                           nbOfYears      : 40,
-                           nbOfRuns       : 1,
-                           withFamily     : family,
-                           withExpenses   : expenses,
-                           withPatrimoine : patrimoine)
+        loadTestFilesFromBundle()
+        simulationTest.compute(using          : modelTest,
+                               nbOfYears      : 5,
+                               nbOfRuns       : 1,
+                               withFamily     : familyTest,
+                               withExpenses   : expensesTest,
+                               withPatrimoine : patrimoineTest)
         return NavigationView {
             List {
-                ChartsSectionView()
-                    .environmentObject(uiState)
-                    .environmentObject(family)
-                    .environmentObject(patrimoine)
-                    .environmentObject(simulation)
+                ChartsSidebarSectionView()
+                    .environmentObject(uiStateTest)
+                    .environmentObject(familyTest)
+                    .environmentObject(patrimoineTest)
+                    .environmentObject(simulationTest)
             }
         }
     }

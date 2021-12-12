@@ -142,6 +142,11 @@ public struct CashFlowLine {
     
     // MARK: - Initialization
     
+    public init() {
+        year = Date.now.year
+        sciCashFlowLine = SciCashFlowLine()
+    }
+    
     /// Création et peuplement d'un année de Cash Flow
     /// - Parameters:
     ///   - run: numéro du run en cours de calcul

@@ -104,40 +104,43 @@ struct CashFlowDetailedChartView: View {
         }
         .navigationTitle("Cash Flow Détaillé")
         .navigationBarTitleDisplayModeInline()
-        .toolbar {
-            //  menu slideover de filtrage
-            ToolbarItem(placement: .navigation) {
-                Button(action: { withAnimation { self.menuIsPresented.toggle() } },
-                       label: {
-                        if self.uiState.cfChartState.itemSelection.allCategoriesSelected() {
-                            Image(systemName: "magnifyingglass.circle")
-                        } else {
-                            Image(systemName: "magnifyingglass.circle.fill")
-                        }
-                       })//.capsuleButtonStyle()
-            }
-            // afficher/masquer le grpahique des événemnts de vie
-            ToolbarItem(placement: .automatic) {
-                Button(action: { withAnimation { lifeEventChatIsPresented.toggle() } },
-                       label : { Image(systemName: lifeEventChatIsPresented ? "rectangle" : "rectangle.split.1x2") })
-            }
-            // sauvergarder l'image dans l'album photo
-            ToolbarItem(placement: .automatic) {
-                Button(action: { CashFlowStackedBarChartView.saveImage(to: dataStore.activeDossier!.folder!) },
-                       label : { Image(systemName: "camera.circle") })
-                    .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
-            }
-            // afficher info-bulle
-            ToolbarItem(placement: .automatic) {
-                Button(action: { self.showInfoPopover = true },
-                       label : {
-                        Image(systemName: "info.circle")//.font(.largeTitle)
-                       })
-                    .popover(isPresented: $showInfoPopover) {
-                        PopOverContentView(title       : popOverTitle,
-                                           description : popOverMessage)
+        .toolbar(content: myToolBarContent)
+    }
+    
+    @ToolbarContentBuilder
+    func myToolBarContent() -> some ToolbarContent {
+        //  menu slideover de filtrage
+        ToolbarItem(placement: .navigation) {
+            Button(action: { withAnimation { self.menuIsPresented.toggle() } },
+                   label: {
+                    if self.uiState.cfChartState.itemSelection.allCategoriesSelected() {
+                        Image(systemName: "magnifyingglass.circle")
+                    } else {
+                        Image(systemName: "magnifyingglass.circle.fill")
                     }
-            }
+                   })//.capsuleButtonStyle()
+        }
+        // afficher/masquer le grpahique des événemnts de vie
+        ToolbarItem(placement: .automatic) {
+            Button(action: { withAnimation { lifeEventChatIsPresented.toggle() } },
+                   label : { Image(systemName: lifeEventChatIsPresented ? "rectangle" : "rectangle.split.1x2") })
+        }
+        // sauvergarder l'image dans l'album photo
+        ToolbarItem(placement: .automatic) {
+            Button(action: { CashFlowStackedBarChartView.saveImage(to: dataStore.activeDossier!.folder!) },
+                   label : { Image(systemName: "camera.circle") })
+                .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
+        }
+        // afficher info-bulle
+        ToolbarItem(placement: .automatic) {
+            Button(action: { self.showInfoPopover = true },
+                   label : {
+                    Image(systemName: "info.circle")//.font(.largeTitle)
+                   })
+                .popover(isPresented: $showInfoPopover) {
+                    PopOverContentView(title       : popOverTitle,
+                                       description : popOverMessage)
+                }
         }
     }
 }

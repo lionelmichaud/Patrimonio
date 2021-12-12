@@ -56,6 +56,7 @@ struct HistogramView : UIViewRepresentable {
         rightAxis.removeAllLimitLines()
 
         let xAxis = chartView.xAxis
+        xAxis.axisMinimum                     = 0
         xAxis.granularityEnabled              = true
         xAxis.valueFormatter                  = xAxisFormatterChoice.IaxisFormatter()
         xAxis.labelRotationAngle              = 45

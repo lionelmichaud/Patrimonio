@@ -51,9 +51,10 @@ struct ComputationForm: View {
                 ForEach(simulation.kpis.values) { kpi in
                     Section(header: Text(kpi.name)) {
                         if kpi.value(withMode: simulation.mode) != nil {
-                            KpiSummaryView(kpi         : kpi,
-                                           withPadding : false,
-                                           withDetails : false)
+                            KpiSummaryView(kpi            : kpi,
+                                           simulationMode : simulation.mode,
+                                           withPadding    : false,
+                                           withDetails    : false)
                         } else {
                             Text("Valeure indéfinie")
                                 .foregroundColor(.red)
@@ -136,8 +137,15 @@ struct ComputationForm: View {
     }
 }
 
-//struct ComputationForm_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ComputationForm()
-//    }
-//}
+struct ComputationForm_Previews: PreviewProvider {
+    static var previews: some View {
+        loadTestFilesFromBundle()
+        return ComputationForm()
+            .environmentObject(modelTest)
+            .environmentObject(uiStateTest)
+            .environmentObject(dataStoreTest)
+            .environmentObject(familyTest)
+            .environmentObject(patrimoineTest)
+            .environmentObject(simulationTest)
+    }
+}

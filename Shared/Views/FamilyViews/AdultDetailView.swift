@@ -19,16 +19,17 @@ import SuccessionManager
 // MARK: - MemberDetailView / AdultDetailView
 
 struct AdultDetailView: View {
+    @EnvironmentObject private var member : Person
     var body: some View {
         Group {
             /// Section: scénario
-            LifeScenarioSectionView()
+            LifeScenarioSectionView(member: member)
             
             /// Section: revenus
-            RevenuSectionView()
+            RevenuSectionView(member: member)
             
             /// Section: succession
-            InheritanceSectionView()
+            InheritanceSectionView(member: member)
         }
     }
 }
@@ -36,8 +37,8 @@ struct AdultDetailView: View {
 // MARK: - MemberDetailView / AdultDetailView / ScenarioSectionView
 
 private struct LifeScenarioSectionView: View {
-    @EnvironmentObject private var model  : Model
-    @EnvironmentObject private var member : Person
+    @EnvironmentObject private var model : Model
+    var member : Person
     
     var body: some View {
         Section {
@@ -97,6 +98,7 @@ private struct LifeScenarioSectionView: View {
 
 private struct RevenuSectionView: View {
     @EnvironmentObject private var model: Model
+    var member : Person
 
     // MARK: - View Model
     
@@ -148,7 +150,6 @@ private struct RevenuSectionView: View {
     
     // MARK: - Properties
     
-    @EnvironmentObject var member : Person
     @State var viewModel = ViewModel()
     
     var body: some View {
@@ -210,7 +211,7 @@ private struct RevenuSectionView: View {
 private struct InheritanceSectionView: View {
     @EnvironmentObject var model      : Model
     @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var member     : Person
+    var member: Person
     
     var body: some View {
         Section {
@@ -280,8 +281,8 @@ private struct InheritanceSectionView: View {
                            amount: -succession.tax)
                 AmountView(label : "Succession nette laissée aux héritiers",
                            amount: succession.netFiscal)
-                NavigationLink(destination                                  : SuccessorsListView(successionKind                                  : SuccessionKindEnum.legal,
-                                                               inheritances : succession.inheritances)) {
+                NavigationLink(destination  : SuccessorsListView(successionKind                                  : SuccessionKindEnum.legal,
+                               inheritances : succession.inheritances)) {
                     Text("Héritage")
                         .foregroundColor(.blue)
                 }
@@ -293,20 +294,64 @@ private struct InheritanceSectionView: View {
     }
 }
 
-struct AdultDetailView_Previews: PreviewProvider {
-    static var model     = Model(fromBundle: Bundle.main)
-    static var family    = Family()
-    static var patrimoin = Patrimoin()
-    static var anAdult   = family.members.items.first!
-    static var aChild    = family.members.items.last!
-    
+struct LifeScenarioSectionView_Previews: PreviewProvider {
     static var previews: some View {
+        loadTestFilesFromBundle()
+        let member = familyTest.members[0]
         // child
-        Form {
-            AdultDetailView()
-                .environmentObject(patrimoin)
-                .environmentObject(model)
-                .environmentObject(anAdult)
+        return Form {
+            LifeScenarioSectionView(member: member)
+                .environmentObject(modelTest)
         }
     }
 }
+
+struct RevenuSectionView_Previews: PreviewProvider {
+    static var previews: some View {
+        loadTestFilesFromBundle()
+        let member = familyTest.members[0]
+        // child
+        return Form {
+            RevenuSectionView(member: member)
+                .environmentObject(modelTest)
+                .environmentObject(patrimoineTest)
+        }
+    }
+}
+
+//struct InheritanceSectionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        loadTestFilesFromBundle()
+//        let member = familyTest.members[0]
+//        // child
+//        return Form {
+//            InheritanceSectionView(member: member)
+//                .environmentObject(dataStoreTest)
+//                .environmentObject(modelTest)
+//                .environmentObject(uiStateTest)
+//                .environmentObject(familyTest)
+//                .environmentObject(expensesTest)
+//                .environmentObject(patrimoineTest)
+//                .environmentObject(simulationTest)
+//        }
+//    }
+//}
+
+//struct AdultDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        loadTestFilesFromBundle()
+//        let member = familyTest.members[0]
+//        // child
+//        return Form {
+//            AdultDetailView()
+//                .environmentObject(dataStoreTest)
+//                .environmentObject(modelTest)
+//                .environmentObject(uiStateTest)
+//                .environmentObject(familyTest)
+//                .environmentObject(expensesTest)
+//                .environmentObject(patrimoineTest)
+//                .environmentObject(simulationTest)
+//                .environmentObject(member)
+//        }
+//    }
+//}

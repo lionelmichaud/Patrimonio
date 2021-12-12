@@ -49,23 +49,19 @@ struct DossierPropertiesView: View {
 }
 
 struct DossierPropertiesView_Previews: PreviewProvider {
-    static let dataStore  = Store()
-    static var model      = Model(fromBundle: Bundle.main)
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-
     static var previews: some View {
-        Form {
-            DossierPropertiesView(dossier: Dossier()
-                                    .namedAs("Un nom")
-                                    .annotatedBy("Une note")
-                                    .activated()
-                                    .createdOn(),
-                                  sectionHeader: "Header")
-                .environmentObject(dataStore)
-                .environmentObject(model)
-                .environmentObject(family)
-                .environmentObject(patrimoine)
+        loadTestFilesFromBundle()
+        let dossier = dataStoreTest.dossiers[0]
+        return Form {
+            DossierPropertiesView(dossier       : dossier,
+                                  sectionHeader : "Header")
+                .environmentObject(dataStoreTest)
+                .environmentObject(modelTest)
+                .environmentObject(uiStateTest)
+                .environmentObject(familyTest)
+                .environmentObject(expensesTest)
+                .environmentObject(patrimoineTest)
+                .environmentObject(simulationTest)
         }
     }
 }

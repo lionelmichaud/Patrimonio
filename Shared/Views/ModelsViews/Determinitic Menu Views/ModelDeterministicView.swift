@@ -126,14 +126,11 @@ struct ModelDeterministicView: View {
 }
 
 struct ModelDeterministicView_Previews: PreviewProvider {
-    static var dataStore = Store()
-    static var model     = Model(fromBundle : Bundle.main)
-    static var family    = Family()
-
     static var previews: some View {
-        dataStore.activate(dossierAtIndex: 0)
-        return ModelDeterministicView(using: model)
-            .environmentObject(model)
-            .environmentObject(family)
+        loadTestFilesFromBundle()
+        dataStoreTest.activate(dossierAtIndex: 0)
+        return ModelDeterministicView(using: modelTest)
+            .environmentObject(modelTest)
+            .environmentObject(familyTest)
     }
 }

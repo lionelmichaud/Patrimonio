@@ -53,16 +53,15 @@ struct PersonNameRow : View {
 }
 
 struct PersonPickerView_Previews: PreviewProvider {
-    static var family = Family()
-
     static var previews: some View {
-        Group {
+        loadTestFilesFromBundle()
+        return Group {
             PersonPickerView(name: .constant("name"),
                              event: .cessationActivite)
-                .environmentObject(family)
+                .environmentObject(familyTest)
             PersonPickerView(name: .constant("name"),
                              event: .deces)
-                .environmentObject(family)
+                .environmentObject(familyTest)
         }
     }
 }
