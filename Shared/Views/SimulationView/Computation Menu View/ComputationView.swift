@@ -57,10 +57,14 @@ struct ComputationView: View {
     }
     
     private func savingIsPossible() -> Bool {
-        simulation.isSavable // && !simulation.isSaved
+        simulation.resultIsValid
     }
     
     /// Exporter les résultats de la simulation
+    ///
+    /// Enregistrer les fichier CSV en tâche de fond dans le dossier `Document` de l'application
+    /// Partager les fichiers CSV et Image existants dans le dossier `Document` de l'application
+    ///
     private func exportSimulationResults() {
         busySaveWheelAnimate.toggle()
 
@@ -70,14 +74,39 @@ struct ComputationView: View {
         // Enregistrer les fichier CSV en tâche de fond dans le dossier `Document` de l'application
         saveSimulationToDocumentsDirectory(dicoOfCSV: dicoOfCsv)
         
-        // Paratager les fichiers CSV et Image existants dans le dossier `Document` de l'application
+        // Partager les fichiers CSV et Image existants dans le dossier `Document` de l'application
         if UserSettings.shared.shareCsvFiles || UserSettings.shared.shareImageFiles {
             shareSimulationResults()
         }
         
         self.busySaveWheelAnimate.toggle()
+        //Simulation.playSound()
     }
     
+    /// Enregistrer les fichier CSV en tâche de fond dans le dossier `Document` de l'application
+    private func saveSimulationToDocumentsDirectory(dicoOfCSV: [String:String]) {
+        // folder du dossier actif
+        guard let folder = dataStore.activeDossier?.folder else {
+            self.alertItem = AlertItem(title         : Text("La sauvegarde locale a échouée"),
+                                       dismissButton : .default(Text("OK")))
+            return
+        }
+        do {
+            for (name, csv) in dicoOfCSV {
+                try PersistenceManager.saveToCsvPath(to              : folder,
+                                                     fileName        : name,
+                                                     simulationTitle : simulation.title,
+                                                     csvString       : csv)
+            }
+            // mettre à jour les variables d'état dans le thread principal
+            self.simulation.process(event: .onSaveSuccessfulCompletion)
+        } catch {
+            // mettre à jour les variables d'état dans le thread principal
+            self.alertItem = AlertItem(title         : Text("La sauvegarde locale a échouée"),
+                                       dismissButton : .default(Text("OK")))
+        }
+    }
+
     /// Partager les fichiers CSV et Image existants  dans le dossier `Document` de l'application
     private func shareSimulationResults() {
         guard let folder = dataStore.activeDossier?.folder else {
@@ -112,33 +141,8 @@ struct ComputationView: View {
         
         Patrimonio.share(items: urls)
     }
-    
-    /// Enregistrer les fichier CSV en tâche de fond dans le dossier `Document` de l'application
-    private func saveSimulationToDocumentsDirectory(dicoOfCSV: [String:String]) {
-        // folder du dossier actif
-        guard let folder = dataStore.activeDossier?.folder else {
-            self.alertItem = AlertItem(title         : Text("La sauvegarde locale a échouée"),
-                                       dismissButton : .default(Text("OK")))
-            return
-        }
-        do {
-            for (name, csv) in dicoOfCSV {
-                try PersistenceManager.saveToCsvPath(to              : folder,
-                                                     fileName        : name,
-                                                     simulationTitle : simulation.title,
-                                                     csvString       : csv)
-            }
-            // mettre à jour les variables d'état dans le thread principal
-            self.simulation.process(event: .onSaveSuccessfulCompletion)
-            Simulation.playSound()
-        } catch {
-            // mettre à jour les variables d'état dans le thread principal
-            self.alertItem = AlertItem(title         : Text("La sauvegarde locale a échouée"),
-                                       dismissButton : .default(Text("OK")))
-        }
-    }
 }
-
+    
 struct ComputationView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()

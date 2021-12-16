@@ -470,17 +470,18 @@ public struct PersistenceManager {
             }
         } else {
             customLog.log(level: .fault,
-                          "Fault saving \(fileName, privacy: .public) : file not found")
+                          "Fault saving \(fileName, privacy: .public) : fileUrl not found")
         }
         #endif
         
         /// sauvegarder le fichier dans le fichier: data/Containers/Data/Application/xxx/Documents/Dossier en cours/simulationTitle/csv/fileName
         do {
-            // créer le fichier .csv dans le directory 'Documents/Dossier en cours/simulationTitle/csv/' de l'utilisateur
+            // créer le fichier .csv dans le directory 'Documents/Dossier_en_cours/simulationTitle/csv/' de l'utilisateur
             let csvFile = try folder.createFileIfNeeded(at: AppSettings.shared.csvPath(simulationTitle) + fileName)
             // y écrire le tableau au format csv
             try csvFile.write(csvString, encoding: .utf8)
-            #if DEBUG
+
+            #if targetEnvironment(simulator)
             customLog.log(level: .info,
                           "Saving \(fileName, privacy: .public) to: \(folder.path + AppSettings.shared.csvPath(simulationTitle) + fileName, privacy: .public)")
             #endif

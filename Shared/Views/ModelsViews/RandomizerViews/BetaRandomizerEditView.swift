@@ -58,13 +58,14 @@ class BetaRandomViewModel: ObservableObject {
 }
 
 struct BetaRandomizerEditView : View {
-    let applyChangesToModel              : (_ viewModel : BetaRandomViewModel) -> Void
-    let applyChangesToModelClone         : (_ viewModel : BetaRandomViewModel, _ clone : Model) -> Void
-    @EnvironmentObject private var model : Model
-    @StateObject private var viewModel   : BetaRandomViewModel
-    @State private var betaRandomizer    : ModelRandomizer<BetaRandomGenerator>
-    private var initialBetaRandomizer    : ModelRandomizer<BetaRandomGenerator>!
-    @State private var alertItem         : AlertItem?
+    let applyChangesToModel      : (_ viewModel: BetaRandomViewModel) -> Void
+    let applyChangesToModelClone : (_ viewModel: BetaRandomViewModel, _ clone: Model) -> Void
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var simulation : Simulation
+    @StateObject private var viewModel        : BetaRandomViewModel
+    @State private var betaRandomizer         : ModelRandomizer<BetaRandomGenerator>
+    private var initialBetaRandomizer         : ModelRandomizer<BetaRandomGenerator>!
+    @State private var alertItem              : AlertItem?
 
     var body: some View {
         HStack {
@@ -165,6 +166,10 @@ struct BetaRandomizerEditView : View {
     }
     
     /// Appliquer la modification au projet ouvert (en mémoire)
+    ///
+    /// - Warning:
+    ///     Ne suvegarde PAS la modification sur disque
+    ///
     func applyChanges() {
         alertItem =
             AlertItem(title         : Text("Dossier Ouvert"),
@@ -172,6 +177,8 @@ struct BetaRandomizerEditView : View {
                       primaryButton : .default(Text("Appliquer")) {
                         // notifier de l'application de changements au modèle
                         applyChangesToModel(viewModel)
+                        // invalider les résultats de simulation existants
+                        simulation.notifyComputationInputsModification()
                       },
                       secondaryButton: .cancel(Text("Revenir")) {
                         viewModel.updateFrom(initialBetaRandomizer)
@@ -179,7 +186,10 @@ struct BetaRandomizerEditView : View {
     }
     
     /// Enregistrer la modification dans le répertoire Template (sur disque)
-    /// Appliquer la modification au projet ouvert (en mémoire)
+    ///
+    /// - Warning:
+    ///     N'applique PAS la modification au projet ouvert (en mémoire)
+    ///
     func applyChangesToTemplate() {
         alertItem =
             AlertItem(title         : Text("Modèle"),
@@ -212,13 +222,14 @@ struct BetaRandomizerEditView : View {
 }
 
 struct BetaRandomizerEditView_Previews: PreviewProvider {
-    static var model = Model(fromBundle: Bundle.main)
     static func applyChanges(_ viewModel : BetaRandomViewModel) {}
     static func applyChangesToModelClone(_ viewModel : BetaRandomViewModel, _ clone: Model) {}
 
     static var previews: some View {
-        BetaRandomizerEditView(with             : model.economyModel.randomizers.inflation,
-                               applyChangesToModel   : applyChanges,
-                               applyChangesToModelClone: applyChangesToModelClone)
+        loadTestFilesFromBundle()
+        return BetaRandomizerEditView(with              : modelTest.economyModel.randomizers.inflation,
+                               applyChangesToModel      : applyChanges,
+                               applyChangesToModelClone : applyChangesToModelClone)
+            .environmentObject(simulationTest)
     }
 }

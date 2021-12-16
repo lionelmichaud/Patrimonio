@@ -19,11 +19,12 @@ import FamilyModel
 
 /// Affiche les valeurs déterministes retenues pour les paramètres des modèles dans une simulation "déterministe"
 struct ModelDeterministicView: View {
-    @EnvironmentObject private var dataStore : Store
-    @EnvironmentObject private var model     : Model
-    @EnvironmentObject private var family    : Family
-    @StateObject private var viewModel       : DeterministicViewModel
-    @State private var alertItem             : AlertItem?
+    @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var simulation : Simulation
+    @StateObject private var viewModel        : DeterministicViewModel
+    @State private var alertItem              : AlertItem?
 
     var body: some View {
         if dataStore.activeDossier != nil {
@@ -49,7 +50,7 @@ struct ModelDeterministicView: View {
                                    action : applyChangesToTemplate)
                     }
                     ToolbarItem(placement: .automatic) {
-                        FolderButton(action : applyChanges)
+                        FolderButton(action : applyChangesInMemory)
                             .disabled(!changeOccured)
                     }
                 }
@@ -76,16 +77,22 @@ struct ModelDeterministicView: View {
     
     // MARK: - Methods
     
-    /// Appliquer la modification au projet ouvert (en mémoire)
-    func applyChanges() {
+    /// Appliquer la modification au projet ouvert (en mémoire seulement)
+    ///
+    /// - Warning:
+    ///     Ne suvegarde PAS la modification sur disque
+    ///
+    func applyChangesInMemory() {
         alertItem =
             AlertItem(title         : Text("Dossier Ouvert"),
-                      message       : Text("Voulez-vous appliquer les modifications effectuées au dossier ouvert ?"),
+                      message       : Text("Voulez-vous appliquer les modifications effectuées au dossier ouvert ?\n Pensez à sauvegarder les modifications."),
                       primaryButton : .default(Text("Appliquer")) {
                         // mettre à jour le modèle avec les nouvelles valeurs
                         viewModel.update(model)
                         // mettre à jour les membres de la famille existants avec les nouvelles valeurs
                         viewModel.update(family)
+                        // invalider les résultats de simulation existants
+                        simulation.notifyComputationInputsModification()
                       },
                       secondaryButton: .cancel(Text("Revenir")) {
                         viewModel.updateFrom(model)
@@ -93,7 +100,10 @@ struct ModelDeterministicView: View {
     }
     
     /// Enregistrer la modification dans le répertoire Template (sur disque)
-    /// Appliquer la modification au projet ouvert (en mémoire)
+    ///
+    /// - Warning:
+    ///     N'applique PAS la modification au projet ouvert (en mémoire)
+    ///
     func applyChangesToTemplate() {
         alertItem =
             AlertItem(title         : Text("Modèle"),
@@ -113,6 +123,7 @@ struct ModelDeterministicView: View {
                         viewModel.update(copy)
                         viewModel.isModified = wasModified
 
+                        // sauvegarder la copie modifiée du modèle dans le dossier template
                         do {
                             try copy.saveAsJSON(toFolder: templateFolder)
                         } catch {
@@ -132,5 +143,6 @@ struct ModelDeterministicView_Previews: PreviewProvider {
         return ModelDeterministicView(using: modelTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
+            .environmentObject(simulationTest)
     }
 }

@@ -77,16 +77,27 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
     var computationState : SimulationComputationState {
         computationSM.currentState
     }
+    
     var persistenceState : SimulationPersistenceState {
         resultsPersistenceSM.currentState
     }
-    var isComputed     : Bool {
+    
+    var isComputed      : Bool {
         computationState == .completed
     }
-    var isSavable      : Bool {
+    
+    var resultIsValid   : Bool {
+        !(persistenceState == .invalid)
+    }
+    
+    var resultIsSavable : Bool {
         persistenceState == .savable
     }
-
+    
+    var resultIsSaved   : Bool {
+        persistenceState == .saved
+    }
+    
     var occuredLegalSuccessions   : [Succession] {
         socialAccounts.legalSuccessions
     }
@@ -164,6 +175,8 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
     ///  Famille,
     ///  Dépenses,
     ///  Patrimoine
+    ///  Model
+    ///  Définition des KPIs
     func notifyComputationInputsModification() {
         socialAccounts = SocialAccounts()
         process(event: .onComputationInputsModification)
@@ -176,6 +189,10 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
         kpis.reset(withMode: mode)
     }
     
+    /// Modifier la définition d'un KPI
+    /// - Parameters:
+    ///   - key: KPI à modifier
+    ///   - value: Nouvelle définition du KPI
     func setKpi(key   : KpiEnum,
                 value : KPI) {
         kpis[key] = value
@@ -218,6 +235,11 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
 
     // swiftlint:disable function_parameter_count
     /// Exécuter une simulation Déterministe ou Aléatoire
+    ///
+    /// - Sauvegarder l'état du patrimoine avant de lancer les claucls (et donc de modifier l'état du patrimoine
+    ///
+    /// - Restaurer l'état du patrimoine à la fin des calculs
+    ///
     /// - Parameters:
     ///   - model: modèle à utiliser
     ///   - nbOfYears: nombre d'années à construire
@@ -225,6 +247,7 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
     ///   - family: la famille
     ///   - expenses: les dépenses de la famille
     ///   - patrimoine: le patrimoine de la famille
+    ///
     func compute(using model               : Model,
                  nbOfYears                 : Int,
                  nbOfRuns                  : Int,
@@ -328,6 +351,7 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
                 }
             }
 
+            // restaurer l'état à la dernière valeur sauvegardée
             patrimoine.restoreState()
         }
 
@@ -336,8 +360,14 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
     // swiftlint:enable function_parameter_count
 
     /// Rejouer un run
+    ///
+    /// [- Sauvegarder l'état du patrimoine avant de lancer les claucls (et donc de modifier l'état du patrimoine] Pourquoi pas fait ?
+    ///
+    /// - Restaurer l'état du patrimoine à la fin des calculs
+    ///
     /// - Parameters:
     ///   - thisRun: paramètres du run à rejouer
+    ///
     func replay(thisRun                   : SimulationResultLine,
                 withFamily family         : Family,
                 withExpenses expenses     : LifeExpensesDic,
@@ -353,6 +383,9 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
         }
         
         process(event: .onComputationTrigger)
+
+        // sauvegarder l'état initial du patrimoine pour y revenir à la fin de chaque run
+        //patrimoine.saveState()
 
         // propriétés indépendantes du nombre de run
         firstYear = CalendarCst.thisYear
@@ -387,6 +420,8 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
                                  withKPIs       : &kpis,
                                  withMode       : mode,
                                  using          : model)
+
+        // restaurer l'état à la dernière valeur sauvegardée
         patrimoine.restoreState()
 
         process(event: .onComputationCompletion)
@@ -406,7 +441,7 @@ extension Simulation: CustomStringConvertible {
           Run en cours: \(String(describing: currentRunNb))
           - Modifié:  \(isModified.frenchString)
           - Terminé:  \(isComputed.frenchString)
-          - Sauvable: \(isSavable.frenchString)
+          - Sauvable: \(resultIsSavable.frenchString)
         \(String(describing: kpis).withPrefixedSplittedLines("  "))
         \(String(describing: socialAccounts).withPrefixedSplittedLines("  "))
         """
