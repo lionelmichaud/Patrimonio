@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import AppFoundation
 import Statistics
 import SocioEconomyModel
 import DateBoundary
@@ -111,7 +112,7 @@ final class LifeExpenseDicTests: XCTestCase {
         XCTAssertEqual(namedValuedTimeFrameTable[0].value, 10.0)
         XCTAssertEqual(namedValuedTimeFrameTable[0].prop, false)
         XCTAssertEqual(namedValuedTimeFrameTable[0].idx, 0)
-        XCTAssertEqual(namedValuedTimeFrameTable[0].firstYearDuration, [Date.now.year, 101])
+        XCTAssertEqual(namedValuedTimeFrameTable[0].firstYearDuration, [CalendarCst.thisYear, 101])
 
         namedValuedTimeFrameTable = LifeExpenseDicTests.expenseDico
             .namedValuedTimeFrameTable(category: nil)

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "1320"
+   version = "1.3">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AppFoundationTests"
+               BuildableName = "AppFoundationTests"
+               BlueprintName = "AppFoundationTests"
+               ReferencedContainer = "container:Shared/Modules/AppFoundation">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AssetsModelTests"
+               BuildableName = "AssetsModelTests"
+               BlueprintName = "AssetsModelTests"
+               ReferencedContainer = "container:Shared/Modules/AssetsModel">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BalanceSheetTests"
+               BuildableName = "BalanceSheetTests"
+               BlueprintName = "BalanceSheetTests"
+               ReferencedContainer = "container:Shared/Modules/BalanceSheet">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "CashFlowTests"
+               BuildableName = "CashFlowTests"
+               BlueprintName = "CashFlowTests"
+               ReferencedContainer = "container:Shared/Modules/CashFlow">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DateBoundaryTests"
+               BuildableName = "DateBoundaryTests"
+               BlueprintName = "DateBoundaryTests"
+               ReferencedContainer = "container:Shared/Modules/DateBoundary">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "EconomyModelTests"
+               BuildableName = "EconomyModelTests"
+               BlueprintName = "EconomyModelTests"
+               ReferencedContainer = "container:Shared/Modules/EconomyModel">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FamilyModelTests"
+               BuildableName = "FamilyModelTests"
+               BlueprintName = "FamilyModelTests"
+               ReferencedContainer = "container:Shared/Modules/FamilyModel">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FileAndFolderTests"
+               BuildableName = "FileAndFolderTests"
+               BlueprintName = "FileAndFolderTests"
+               ReferencedContainer = "container:Shared/Modules/FileAndFolder">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FiscalModelTests"
+               BuildableName = "FiscalModelTests"
+               BlueprintName = "FiscalModelTests"
+               ReferencedContainer = "container:Shared/Modules/FiscalModel">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "HumanLifeModelTests"
+               BuildableName = "HumanLifeModelTests"
+               BlueprintName = "HumanLifeModelTests"
+               ReferencedContainer = "container:Shared/Modules/HumanLifeModel">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "KpiTests"
+               BuildableName = "KpiTests"
+               BlueprintName = "KpiTests"
+               ReferencedContainer = "container:Shared/Modules/Kpi">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "LiabilitiesTests"
+               BuildableName = "LiabilitiesTests"
+               BlueprintName = "LiabilitiesTests"
+               ReferencedContainer = "container:Shared/Modules/Liabilities">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "LifeExpenseTests"
+               BuildableName = "LifeExpenseTests"
+               BlueprintName = "LifeExpenseTests"
+               ReferencedContainer = "container:Shared/Modules/LifeExpense">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ModelEnvironmentTests"
+               BuildableName = "ModelEnvironmentTests"
+               BlueprintName = "ModelEnvironmentTests"
+               ReferencedContainer = "container:Shared/Modules/ModelEnvironment">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "NamedValueTests"
+               BuildableName = "NamedValueTests"
+               BlueprintName = "NamedValueTests"
+               ReferencedContainer = "container:Shared/Modules/NamedValue">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "OwnershipTests"
+               BuildableName = "OwnershipTests"
+               BlueprintName = "OwnershipTests"
+               ReferencedContainer = "container:Shared/Modules/Ownership">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PatrimoineModelTests"
+               BuildableName = "PatrimoineModelTests"
+               BlueprintName = "PatrimoineModelTests"
+               ReferencedContainer = "container:Shared/Modules/PatrimoineModel">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PersistableTests"
+               BuildableName = "PersistableTests"
+               BlueprintName = "PersistableTests"
+               ReferencedContainer = "container:Shared/Modules/Persistable">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PersistenceTests"
+               BuildableName = "PersistenceTests"
+               BlueprintName = "PersistenceTests"
+               ReferencedContainer = "container:Shared/Modules/Persistence">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PersonModelTests"
+               BuildableName = "PersonModelTests"
+               BlueprintName = "PersonModelTests"
+               ReferencedContainer = "container:Shared/Modules/PersonModel">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "RetirementModelTests"
+               BuildableName = "RetirementModelTests"
+               BlueprintName = "RetirementModelTests"
+               ReferencedContainer = "container:Shared/Modules/RetirementModel">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SimulationLoggerTests"
+               BuildableName = "SimulationLoggerTests"
+               BlueprintName = "SimulationLoggerTests"
+               ReferencedContainer = "container:Shared/Modules/SimulationLogger">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SocioEconomyModelTests"
+               BuildableName = "SocioEconomyModelTests"
+               BlueprintName = "SocioEconomyModelTests"
+               ReferencedContainer = "container:Shared/Modules/SocioEconomyModel">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "StatefulTests"
+               BuildableName = "StatefulTests"
+               BlueprintName = "StatefulTests"
+               ReferencedContainer = "container:Shared/Modules/Stateful">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "StatisticsTests"
+               BuildableName = "StatisticsTests"
+               BlueprintName = "StatisticsTests"
+               ReferencedContainer = "container:Shared/Modules/Statistics">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SuccessionTests"
+               BuildableName = "SuccessionTests"
+               BlueprintName = "SuccessionTests"
+               ReferencedContainer = "container:Shared/Modules/Succession">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SuccessionManagerTests"
+               BuildableName = "SuccessionManagerTests"
+               BlueprintName = "SuccessionManagerTests"
+               ReferencedContainer = "container:Shared/Modules/SuccessionManager">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "UnemployementModelTests"
+               BuildableName = "UnemployementModelTests"
+               BlueprintName = "UnemployementModelTests"
+               ReferencedContainer = "container:Shared/Modules/UnemployementModel">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>

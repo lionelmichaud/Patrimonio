@@ -250,7 +250,7 @@ private struct InheritanceSectionView: View {
         DisclosureGroup(
             content: {
                 inheritanceDisclosure(label    : "A la date d'aujourd'hui",
-                                      atEndOf  : Date.now.year,
+                                      atEndOf  : CalendarCst.thisYear,
                                       decedent : decedent)
                 inheritanceDisclosure(label    : "A l'âge de décès estimé \(member.ageOfDeath) ans en \(String(member.yearOfDeath))",
                                       atEndOf  : member.yearOfDeath,

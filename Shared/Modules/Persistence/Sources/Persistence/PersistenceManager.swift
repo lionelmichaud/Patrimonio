@@ -447,7 +447,8 @@ public struct PersistenceManager {
                                      fileName        : String,
                                      simulationTitle : String,
                                      csvString       : String) throws {
-        #if DEBUG
+//        #if DEBUG
+        #if targetEnvironment(simulator)
         //        print(csvString)
         /// sauvegarder le fichier dans le répertoire Bundle.main
         if let fileUrl = Bundle.main.url(forResource   : fileName,

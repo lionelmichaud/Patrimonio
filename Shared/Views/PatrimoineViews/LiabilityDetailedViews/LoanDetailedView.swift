@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import Liabilities
 import PatrimoineModel
 import FamilyModel
@@ -31,17 +32,17 @@ struct LoanDetailedView: View {
             
             /// propriété
             OwnershipView(ownership  : $localItem.ownership,
-                          totalValue : localItem.value(atEndOf : Date.now.year))
+                          totalValue : localItem.value(atEndOf : CalendarCst.thisYear))
             
             // acquisition
             Section(header: Text("CARCTERISTIQUES")) {
                 AmountEditView(label  : "Montant emprunté",
                                amount : $localItem.loanedValue)
                 YearPicker(title     : "Première année (inclue)",
-                           inRange   : Date.now.year - 20 ... min(localItem.lastYear, Date.now.year + 50),
+                           inRange   : CalendarCst.thisYear - 20 ... min(localItem.lastYear, CalendarCst.thisYear + 50),
                            selection : $localItem.firstYear)
                 YearPicker(title     : "Dernière année (inclue)",
-                           inRange   : max(localItem.firstYear, Date.now.year - 20) ... Date.now.year + 50,
+                           inRange   : max(localItem.firstYear, CalendarCst.thisYear - 20) ... CalendarCst.thisYear + 50,
                            selection : $localItem.lastYear)
                 LabeledText(label: "Durée du prêt",
                                 text : "\(localItem.lastYear - localItem.firstYear + 1) ans")
@@ -59,8 +60,8 @@ struct LoanDetailedView: View {
                 AmountView(label  : "Remboursement mensuel (de janvier \(localItem.firstYear) à décembre \(localItem.lastYear))",
                            amount : localItem.yearlyPayement(localItem.firstYear)/12.0)
                     .foregroundColor(.secondary)
-                AmountView(label  : "Remboursement restant (au 31/12/\(Date.now.year))",
-                           amount : localItem.value(atEndOf: Date.now.year))
+                AmountView(label  : "Remboursement restant (au 31/12/\(CalendarCst.thisYear))",
+                           amount : localItem.value(atEndOf: CalendarCst.thisYear))
                     .foregroundColor(.secondary)
                 AmountView(label  : "Remboursement total",
                            amount : localItem.totalPayement)
@@ -97,8 +98,8 @@ struct LoanDetailedView: View {
             // specific
         } else {
             // création d'un nouvel élément
-            var newItem = Loan(firstYear : Date.now.year,
-                               lastYear  : Date.now.year)
+            var newItem = Loan(firstYear : CalendarCst.thisYear,
+                               lastYear  : CalendarCst.thisYear)
             // définir le délégué pour la méthode ageOf qui par défaut est nil à la création de l'objet
             newItem.ownership.setDelegateForAgeOf(delegate: family.ageOf)
             _localItem = State(initialValue: newItem)

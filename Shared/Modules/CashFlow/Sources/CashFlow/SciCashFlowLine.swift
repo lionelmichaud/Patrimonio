@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppFoundation
 import NamedValue
 import ModelEnvironment
 import PatrimoineModel
@@ -106,7 +107,7 @@ public struct SciCashFlowLine {
     // MARK: - Initializers
     
     init() {
-        year = Date.now.year
+        year = CalendarCst.thisYear
         IS = 0.0
     }
     

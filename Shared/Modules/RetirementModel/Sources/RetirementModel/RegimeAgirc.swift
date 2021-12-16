@@ -31,7 +31,7 @@ public struct RegimeAgircSituation: Codable {
     }
     
     public init() {
-        self.atEndOf     = Date.now.year
+        self.atEndOf     = CalendarCst.thisYear
         self.nbPoints    = 0
         self.pointsParAn = 0
     }

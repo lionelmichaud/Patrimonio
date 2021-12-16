@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import AssetsModel
 import PatrimoineModel
 import FamilyModel
@@ -31,7 +32,7 @@ struct PeriodicInvestDetailedView: View {
             
             /// propriété
             OwnershipView(ownership  : $localItem.ownership,
-                          totalValue : localItem.value(atEndOf  : Date.now.year))
+                          totalValue : localItem.value(atEndOf  : CalendarCst.thisYear))
             
             // acquisition
             Section(header: Text("TYPE")) {
@@ -44,7 +45,7 @@ struct PeriodicInvestDetailedView: View {
             
             Section(header: Text("INITIALISATION")) {
                 YearPicker(title: "Année de départ (fin d'année)",
-                           inRange: Date.now.year - 20...Date.now.year + 100,
+                           inRange: CalendarCst.thisYear - 20...CalendarCst.thisYear + 100,
                            selection: $localItem.firstYear)
                 AmountEditView(label: "Valeure initiale",
                                amount: $localItem.initialValue)
@@ -112,8 +113,8 @@ struct PeriodicInvestDetailedView: View {
             var newItem = PeriodicInvestement(name             : "",
                                               note             : "",
                                               type             : .other,
-                                              firstYear        : Date.now.year,
-                                              lastYear         : Date.now.year + 100,
+                                              firstYear        : CalendarCst.thisYear,
+                                              lastYear         : CalendarCst.thisYear + 100,
                                               interestRateType : .contractualRate(fixedRate: 0.0))
             // définir le délégué pour la méthode ageOf qui par défaut est nil à la création de l'objet
             newItem.ownership.setDelegateForAgeOf(delegate: family.ageOf)

@@ -35,7 +35,6 @@ struct ProgressBar: View {
          valuePercent      : Bool  = false,
          maxValuePercent   : Bool  = false,
          formater          : NumberFormatter? = nil) {
-        precondition(maxValue > minValue)
         self.value             = value.clamp(low: minValue, high: maxValue)
         self.minValue          = minValue
         self.maxValue          = max(minValue+0.01, maxValue)
@@ -50,75 +49,79 @@ struct ProgressBar: View {
     }
 
     var body: some View {
-        VStack(alignment: .center, spacing: 10) {
-            GeometryReader { geometryReader in
-                ZStack(alignment: .leading) {
-                    if self.backgroundEnabled {
-                        Capsule()
-                            .frame(height: 20)
-                            .foregroundColor(self.backgroundColor) // 4
-                    } else {
-                        Capsule()
-                            .stroke(self.backgroundColor)
-                            .frame(height: 20)
-                    }
-                    
-                    ZStack(alignment: .trailing) {
-                        Capsule()
-                            .frame(width: progress(value: value,
-                                                   width: geometryReader.size.width),
-                                   height: 20)
-                            .foregroundColor(self.foregroundColor)
-                            .animation(.linear)
-                        if internalLabels {
-                            if valuePercent {
-                                Text("\(percentageValue(value: value))%")
-                                    .foregroundColor(.white) // 6
-                                    .font(.system(size: 14))
-                                    .fontWeight(.bold)
-                                    .padding(.trailing, 10)
-                            } else if let formater = self.formater {
-                                Text(formater.string(from: value as NSNumber) ?? "")
-                                    .foregroundColor(.white) // 6
-                                    .font(.system(size: 14))
-                                    .fontWeight(.bold)
-                                    .padding(.trailing, 10)
-                            } else {
-                                Text(value.roundedString)
-                                    .foregroundColor(.white) // 6
-                                    .font(.system(size: 14))
-                                    .fontWeight(.bold)
-                                    .padding(.trailing, 10)
+        if minValue == maxValue {
+            EmptyView()
+        } else {
+            VStack(alignment: .center, spacing: 10) {
+                GeometryReader { geometryReader in
+                    ZStack(alignment: .leading) {
+                        if self.backgroundEnabled {
+                            Capsule()
+                                .frame(height: 20)
+                                .foregroundColor(self.backgroundColor) // 4
+                        } else {
+                            Capsule()
+                                .stroke(self.backgroundColor)
+                                .frame(height: 20)
+                        }
+
+                        ZStack(alignment: .trailing) {
+                            Capsule()
+                                .frame(width: progress(value: value,
+                                                       width: geometryReader.size.width),
+                                       height: 20)
+                                .foregroundColor(self.foregroundColor)
+                                .animation(.linear)
+                            if internalLabels {
+                                if valuePercent {
+                                    Text("\(percentageValue(value: value))%")
+                                        .foregroundColor(.white) // 6
+                                        .font(.system(size: 14))
+                                        .fontWeight(.bold)
+                                        .padding(.trailing, 10)
+                                } else if let formater = self.formater {
+                                    Text(formater.string(from: value as NSNumber) ?? "")
+                                        .foregroundColor(.white) // 6
+                                        .font(.system(size: 14))
+                                        .fontWeight(.bold)
+                                        .padding(.trailing, 10)
+                                } else {
+                                    Text(value.roundedString)
+                                        .foregroundColor(.white) // 6
+                                        .font(.system(size: 14))
+                                        .fontWeight(.bold)
+                                        .padding(.trailing, 10)
+                                }
                             }
                         }
                     }
                 }
-            }
-            
-            if externalLabels {
-                HStack {
-                    if let formater = self.formater {
-                        Text(formater.string(from: minValue as NSNumber) ?? "")
-                            .fontWeight(.bold)
-                    } else {
-                        Text(minValue.roundedString)
-                            .fontWeight(.bold)
+
+                if externalLabels {
+                    HStack {
+                        if let formater = self.formater {
+                            Text(formater.string(from: minValue as NSNumber) ?? "")
+                                .fontWeight(.bold)
+                        } else {
+                            Text(minValue.roundedString)
+                                .fontWeight(.bold)
+                        }
+                        Spacer()
+                        if maxValuePercent {
+                            Text("\(percentageMaxValue(value: value) ?? 0)%")
+                        } else if let formater = self.formater {
+                            Text(formater.string(from: maxValue as NSNumber) ?? "")
+                                .fontWeight(.bold)
+                        } else {
+                            Text(maxValue.roundedString)
+                                .fontWeight(.bold)
+                        }
                     }
-                    Spacer()
-                    if maxValuePercent {
-                        Text("\(percentageMaxValue(value: value) ?? 0)%")
-                    } else if let formater = self.formater {
-                        Text(formater.string(from: maxValue as NSNumber) ?? "")
-                            .fontWeight(.bold)
-                    } else {
-                        Text(maxValue.roundedString)
-                            .fontWeight(.bold)
-                    }
+                    .font(.system(size: 14))
                 }
-                .font(.system(size: 14))
             }
+            .frame(height: (externalLabels ? 40 : 20))
         }
-        .frame(height: (externalLabels ? 40 : 20))
         
     }
     

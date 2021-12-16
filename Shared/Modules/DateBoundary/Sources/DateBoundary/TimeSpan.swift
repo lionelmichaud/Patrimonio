@@ -112,14 +112,14 @@ public enum TimeSpan: Hashable {
         }
         switch self {
             case .permanent:
-                return Date.now.year
+                return CalendarCst.thisYear
                 
             case .ending(let to):
                 guard to.year != nil else {
                     customLog.log(level: .info, "firstYear: to.year = nil")
                     return nil
                 }
-                return min(Date.now.year, to.year! - 1)
+                return min(CalendarCst.thisYear, to.year! - 1)
                 
             case .periodic(let from, period: _, to: _),
                  .starting(let from),
@@ -137,7 +137,7 @@ public enum TimeSpan: Hashable {
         }
         switch self {
             case .permanent:
-                return Date.now.year + 100
+                return CalendarCst.thisYear + 100
                 
             case .periodic(from: _, period: _, to: let to),
                  .spanning(from: _,            to: let to),
@@ -149,7 +149,7 @@ public enum TimeSpan: Hashable {
                     customLog.log(level: .info, "lastYear: from.year = nil")
                     return nil
                 }
-                return Date.now.year + 100
+                return CalendarCst.thisYear + 100
                 
             case .exceptional(inYear: let inYear):
                 return inYear

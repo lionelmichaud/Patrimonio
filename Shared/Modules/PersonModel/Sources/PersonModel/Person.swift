@@ -174,7 +174,7 @@ public class Person : ObservableObject, Identifiable, Codable, CustomStringConve
                 ageOfDeath = Int(model.humanLife.model!.womenLifeExpectation.next())
         }
         // on ne peut mourire à un age < à celui que l'on a déjà
-        ageOfDeath = max(ageOfDeath, age(atEndOf: Date.now.year))
+        ageOfDeath = max(ageOfDeath, age(atEndOf: CalendarCst.thisYear))
     }
     
     /// Réinitialiser les prioriétés variables des membres de manière déterministe
@@ -187,7 +187,7 @@ public class Person : ObservableObject, Identifiable, Codable, CustomStringConve
                 ageOfDeath = Int(model.humanLifeModel.womenLifeExpectation.value(withMode: .deterministic))
         }
         // on ne peut mourire à un age < à celui que l'on a déjà
-        ageOfDeath = max(ageOfDeath, age(atEndOf: Date.now.year))
+        ageOfDeath = max(ageOfDeath, age(atEndOf: CalendarCst.thisYear))
     }
     
     /// Actualiser les propriétés d'une personne à partir des valeurs modifiées

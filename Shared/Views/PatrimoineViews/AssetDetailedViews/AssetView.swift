@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import PatrimoineModel
 import FamilyModel
 
@@ -18,7 +19,7 @@ struct AssetView: View {
         Section {
             LabeledValueRowView(colapse     : $uiState.patrimoineViewState.assetViewState.colapseAsset,
                                 label       : "Actif",
-                                value       : patrimoine.assets.value(atEndOf: Date.now.year),
+                                value       : patrimoine.assets.value(atEndOf: CalendarCst.thisYear),
                                 indentLevel : 0,
                                 header      : true)
             
@@ -26,8 +27,8 @@ struct AssetView: View {
                 // immobilier
                 LabeledValueRowView(colapse     : $uiState.patrimoineViewState.assetViewState.colapseImmobilier,
                                     label       : "Immobilier",
-                                    value       : patrimoine.assets.realEstates.value(atEndOf: Date.now.year) +
-                                        patrimoine.assets.scpis.value(atEndOf: Date.now.year),
+                                    value       : patrimoine.assets.realEstates.value(atEndOf: CalendarCst.thisYear) +
+                                        patrimoine.assets.scpis.value(atEndOf: CalendarCst.thisYear),
                                     indentLevel : 1,
                                     header      : true)
                 if !uiState.patrimoineViewState.assetViewState.colapseImmobilier {
@@ -38,8 +39,8 @@ struct AssetView: View {
                 // financier
                 LabeledValueRowView(colapse     : $uiState.patrimoineViewState.assetViewState.colapseFinancier,
                                     label       : "Financier",
-                                    value       : patrimoine.assets.periodicInvests.value(atEndOf: Date.now.year) +
-                                        patrimoine.assets.freeInvests.value(atEndOf: Date.now.year),
+                                    value       : patrimoine.assets.periodicInvests.value(atEndOf: CalendarCst.thisYear) +
+                                        patrimoine.assets.freeInvests.value(atEndOf: CalendarCst.thisYear),
                                     indentLevel : 1,
                                     header      : true)
                 if !uiState.patrimoineViewState.assetViewState.colapseFinancier {
@@ -50,7 +51,7 @@ struct AssetView: View {
                 // SCI
                 LabeledValueRowView(colapse     : $uiState.patrimoineViewState.assetViewState.colapseSCI,
                                     label       : "SCI",
-                                    value       : patrimoine.assets.sci.scpis.value(atEndOf: Date.now.year) +
+                                    value       : patrimoine.assets.sci.scpis.value(atEndOf: CalendarCst.thisYear) +
                                         patrimoine.assets.sci.bankAccount,
                                     indentLevel : 1,
                                     header      : true)
@@ -107,7 +108,7 @@ struct RealEstateView: View {
                                                                        patrimoine : patrimoine)) {
                         LabeledValueRowView(colapse     : self.$uiState.patrimoineViewState.assetViewState.colapseEstate,
                                             label       : item.name,
-                                            value       : item.value(atEndOf: Date.now.year),
+                                            value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
                                             header      : false)
                     }
@@ -179,7 +180,7 @@ struct ScpiView: View {
                                                                     self.patrimoine.assets.scpis.items.firstIndex(of: localItem) })) {
                         LabeledValueRowView(colapse     : self.$uiState.patrimoineViewState.assetViewState.colapseSCPI,
                                             label       : item.name,
-                                            value       : item.value(atEndOf: Date.now.year),
+                                            value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
                                             header      : false)
                     }
@@ -215,7 +216,7 @@ struct PeriodicInvestView: View {
             // label
             LabeledValueRowView(colapse     : $uiState.patrimoineViewState.assetViewState.colapsePeriodic,
                                 label       : "Invest Périodique",
-                                value       : patrimoine.assets.periodicInvests.value(atEndOf: Date.now.year),
+                                value       : patrimoine.assets.periodicInvests.value(atEndOf: CalendarCst.thisYear),
                                 indentLevel : 2,
                                 header      : true)
             // items
@@ -239,7 +240,7 @@ struct PeriodicInvestView: View {
                                                                            patrimoine : self.patrimoine)) {
                         LabeledValueRowView(colapse     : self.$uiState.patrimoineViewState.assetViewState.colapsePeriodic,
                                             label       : item.name,
-                                            value       : item.value(atEndOf: Date.now.year),
+                                            value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
                                             header      : false)
                     }
@@ -275,7 +276,7 @@ struct FreeInvestView: View {
             // label
             LabeledValueRowView(colapse     : $uiState.patrimoineViewState.assetViewState.colapseFree,
                                 label       : "Investissement Libre",
-                                value       : patrimoine.assets.freeInvests.value(atEndOf: Date.now.year),
+                                value       : patrimoine.assets.freeInvests.value(atEndOf: CalendarCst.thisYear),
                                 indentLevel : 2,
                                 header      : true)
             
@@ -300,7 +301,7 @@ struct FreeInvestView: View {
                                                                        patrimoine : self.patrimoine)) {
                         LabeledValueRowView(colapse     : self.$uiState.patrimoineViewState.assetViewState.colapseFree,
                                             label       : item.name,
-                                            value       : item.value(atEndOf: Date.now.year),
+                                            value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
                                             header      : false)
                     }
@@ -372,7 +373,7 @@ struct SciScpiView: View {
                                                                     self.patrimoine.assets.sci.scpis.items.firstIndex(of: localItem) })) {
                         LabeledValueRowView(colapse     : self.$uiState.patrimoineViewState.assetViewState.colapseSCISCPI,
                                             label       : item.name,
-                                            value       : item.value(atEndOf: Date.now.year),
+                                            value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
                                             header      : false)
                     }

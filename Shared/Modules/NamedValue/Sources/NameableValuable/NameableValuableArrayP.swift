@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppFoundation
 import Persistable
 import FileAndFolder
 import Files
@@ -96,7 +97,7 @@ public protocol NameableValuableArrayP: JsonCodableToFolderP, PersistableP {
 public extension NameableValuableArrayP {
 
     var currentValue      : Double {
-        items.sumOfValues(atEndOf : Date.now.year)
+        items.sumOfValues(atEndOf : CalendarCst.thisYear)
     }
     
     init(fileNamePrefix    : String,

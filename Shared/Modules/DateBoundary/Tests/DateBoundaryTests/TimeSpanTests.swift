@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import DateBoundary
+import AppFoundation
 
 class TimeSpanTests: XCTestCase {
     
@@ -57,13 +58,13 @@ class TimeSpanTests: XCTestCase {
         let ts = TimeSpan.starting(from: DateBoundary(fixedYear: 2020))
         XCTAssertTrue(ts.isValid)
         XCTAssertEqual(ts.firstYear, 2020)
-        XCTAssertEqual(ts.lastYear, Date.now.year + 100)
+        XCTAssertEqual(ts.lastYear, CalendarCst.thisYear + 100)
         XCTAssertTrue(ts.contains(2020))
         XCTAssertFalse(ts.contains(2019))
     }
 
     func test_ending() {
-        let datePassee = Date.now.year - 1
+        let datePassee = CalendarCst.thisYear - 1
         var ts = TimeSpan.ending(to: DateBoundary(fixedYear: datePassee))
         XCTAssertTrue(ts.isValid)
         XCTAssertEqual(ts.firstYear,datePassee - 1)
@@ -71,18 +72,18 @@ class TimeSpanTests: XCTestCase {
         XCTAssertTrue(ts.contains(datePassee - 1))
         XCTAssertFalse(ts.contains(datePassee))
 
-        let dateFutur = Date.now.year + 2
+        let dateFutur = CalendarCst.thisYear + 2
         ts = TimeSpan.ending(to: DateBoundary(fixedYear: dateFutur))
         XCTAssertTrue(ts.isValid)
-        XCTAssertEqual(Date.now.year, ts.firstYear)
+        XCTAssertEqual(CalendarCst.thisYear, ts.firstYear)
         XCTAssertEqual(dateFutur - 1, ts.lastYear)
         XCTAssertTrue(ts.contains(dateFutur - 1))
         XCTAssertFalse(ts.contains(dateFutur))
     }
     
     func test_spanning() {
-        let datePassee = Date.now.year - 1
-        let dateFutur  = Date.now.year + 2
+        let datePassee = CalendarCst.thisYear - 1
+        let dateFutur  = CalendarCst.thisYear + 2
         var ts = TimeSpan.spanning(from : DateBoundary(fixedYear: datePassee),
                                    to   : DateBoundary(fixedYear: dateFutur))
         XCTAssertTrue(ts.isValid)

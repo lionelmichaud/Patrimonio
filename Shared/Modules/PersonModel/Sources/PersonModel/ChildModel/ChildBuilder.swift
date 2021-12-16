@@ -35,7 +35,7 @@ public class ChildBuilder {
     }
     
     public func wasBorn(on birthDate: Date) -> ChildBuilder {
-        guard birthDate < Date.now else {
+        guard birthDate < CalendarCst.now else {
             fatalError("Cannot create a person born in the future")
         }
         child.birthDate = birthDate

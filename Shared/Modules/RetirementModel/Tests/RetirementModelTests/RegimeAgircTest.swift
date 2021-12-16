@@ -85,7 +85,7 @@ class RegimeAgircTest: XCTestCase { // swiftlint:disable:this type_body_length
     
     func test_calcul_revaluation_Coef() {
         let dateOfPensionLiquid : Date! = 10.years.ago
-        let thisYear = Date.now.year
+        let thisYear = CalendarCst.thisYear
         
         let devaluationRate = RegimeAgircTest.regimeAgirc.devaluationRate
         XCTAssertEqual(1.0, devaluationRate)

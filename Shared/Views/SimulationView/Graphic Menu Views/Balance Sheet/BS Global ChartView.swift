@@ -69,7 +69,7 @@ struct BalanceSheetGlobalChartView: View {
 
                 // Graphique Evénement de Vie
                 if lifeEventChatIsPresented {
-                    FamilyLifeEventChartView(endDate: lastYear ?? Date.now.year + 30)
+                    FamilyLifeEventChartView(endDate: lastYear ?? CalendarCst.thisYear + 30)
                         .frame(minHeight: 0, idealHeight: 100, maxHeight: geometry.size.height/4.0, alignment: .center)
                         .padding(.trailing, 4)
                 }

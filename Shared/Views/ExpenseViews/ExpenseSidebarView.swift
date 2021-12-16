@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import Persistence
 import LifeExpense
 import PatrimoineModel
@@ -69,7 +70,7 @@ struct ExpenseTotalView: View {
                                       design: Font.Design.default))
                     .fontWeight(.bold)
                 Spacer()
-                Text(expenses.value(atEndOf: Date.now.year).€String)
+                Text(expenses.value(atEndOf: CalendarCst.thisYear).€String)
                     .font(Font.system(size: 21,
                                       design: Font.Design.default))
             }
@@ -104,7 +105,7 @@ struct ExpenseListInCategory: View {
         Section {
             LabeledValueRowView(colapse     : $uiState.expenseViewState.colapseCategories[category.rawValue],
                                 label       : category.displayString,
-                                value       : expenses.perCategory[category]?.value(atEndOf: Date.now.year) ?? 0,
+                                value       : expenses.perCategory[category]?.value(atEndOf: CalendarCst.thisYear) ?? 0,
                                 indentLevel : 0,
                                 header      : true)
             if !uiState.expenseViewState.colapseCategories[category.rawValue] {
@@ -126,7 +127,7 @@ struct ExpenseListInCategory: View {
                                                                     simulationReseter : simulationReseter)) {
                         LabeledValueRowView(colapse     : .constant(true),
                                             label       : expense.name,
-                                            value       : expense.value(atEndOf: Date.now.year),
+                                            value       : expense.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
                                             header      : false)
                     }

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import AssetsModel
 import PatrimoineModel
 import FamilyModel
@@ -103,7 +104,7 @@ struct RealEstateDetailedView: View {
             
             /// propriété
             OwnershipView(ownership  : $localItem.ownership,
-                          totalValue : localItem.value(atEndOf : Date.now.year))
+                          totalValue : localItem.value(atEndOf : CalendarCst.thisYear))
             
             /// taxe
             Section(header: Text("TAXES")) {

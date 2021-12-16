@@ -89,7 +89,7 @@ extension Loan: CustomStringConvertible {
         \(note.withPrefixedSplittedLines("    "))
         - Droits de propriété:
         \(ownership.description.withPrefixedSplittedLines("  "))
-        - valeur(\(Date.now.year): \(value(atEndOf: Date.now.year).€String)
+        - valeur(\(CalendarCst.thisYear): \(value(atEndOf: CalendarCst.thisYear).€String)
         - first year:       \(firstYear) last year: \(lastYear)
         - loaned Value:     \(loanedValue) final Value: \(value(atEndOf: lastYear).€String)
         - yearly Payement:  \(yearlyPayement.€String)

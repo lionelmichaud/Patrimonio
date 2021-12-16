@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import Liabilities
 import PatrimoineModel
 import FamilyModel
@@ -31,7 +32,7 @@ struct DebtDetailedView: View {
             
             /// propriété
             OwnershipView(ownership  : $localItem.ownership,
-                          totalValue : localItem.value(atEndOf : Date.now.year))
+                          totalValue : localItem.value(atEndOf : CalendarCst.thisYear))
             
             /// acquisition
             Section(header: Text("CARCTERISTIQUES")) {

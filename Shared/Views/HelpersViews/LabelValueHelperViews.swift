@@ -479,9 +479,9 @@ struct LabelValueHelpersView_Previews: PreviewProvider {
                 .padding([.bottom, .top])
                 .previewDisplayName("AmountEditView")
             DateRangeEditView(fromLabel: "Label1",
-                              fromDate: .constant(Date.now),
+                              fromDate: .constant(CalendarCst.now),
                               toLabel: "Label2",
-                              toDate: .constant(Date.now),
+                              toDate: .constant(CalendarCst.now),
                               in: 1.months.ago!...3.years.fromNow!)
                 .previewLayout(PreviewLayout.sizeThatFits)
                 .padding([.bottom, .top])
@@ -536,9 +536,9 @@ struct LabelValueHelpersView_Library: LibraryContentProvider {
                     category: .control,
                     matchingSignature: "labeltexteditor")
         LibraryItem(DateRangeEditView(fromLabel: "Label1",
-                                      fromDate: .constant(Date.now),
+                                      fromDate: .constant(CalendarCst.now),
                                       toLabel: "Label2",
-                                      toDate: .constant(Date.now),
+                                      toDate: .constant(CalendarCst.now),
                                       in: 1.months.ago!...3.years.fromNow!),
                     title: "Date Range Edit View",
                     category: .control,

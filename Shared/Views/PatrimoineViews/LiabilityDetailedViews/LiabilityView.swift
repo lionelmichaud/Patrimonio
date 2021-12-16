@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import Liabilities
 import PatrimoineModel
 import FamilyModel
@@ -19,7 +20,7 @@ struct LiabilityView: View {
         Section {
             LabeledValueRowView(colapse     : $uiState.patrimoineViewState.liabViewState.colapseLiab,
                                 label       : "Passif",
-                                value       : patrimoine.liabilities.value(atEndOf: Date.now.year),
+                                value       : patrimoine.liabilities.value(atEndOf: CalendarCst.thisYear),
                                 indentLevel : 0,
                                 header      : true)
 
@@ -54,7 +55,7 @@ struct LoanView: View {
             // label
             LabeledValueRowView(colapse     : $uiState.patrimoineViewState.liabViewState.colapseEmpruntlist,
                                 label       : "Emprunt",
-                                value       : patrimoine.liabilities.loans.value(atEndOf: Date.now.year),
+                                value       : patrimoine.liabilities.loans.value(atEndOf: CalendarCst.thisYear),
                                 indentLevel : 1,
                                 header      : true)
             
@@ -79,7 +80,7 @@ struct LoanView: View {
                                                                  patrimoine : self.patrimoine)) {
                         LabeledValueRowView(colapse     : self.$uiState.patrimoineViewState.liabViewState.colapseEmpruntlist,
                                             label       : item.name,
-                                            value       : item.value(atEndOf: Date.now.year),
+                                            value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
                                             header      : false)
                     }
@@ -115,7 +116,7 @@ struct DebtView: View {
             // label
             LabeledValueRowView(colapse     : $uiState.patrimoineViewState.liabViewState.colapseDetteListe,
                                 label       : "Dette",
-                                value       : patrimoine.liabilities.debts.value(atEndOf: Date.now.year),
+                                value       : patrimoine.liabilities.debts.value(atEndOf: CalendarCst.thisYear),
                                 indentLevel : 1,
                                 header      : true)
             
@@ -140,7 +141,7 @@ struct DebtView: View {
                                                                  patrimoine : self.patrimoine)) {
                         LabeledValueRowView(colapse     : self.$uiState.patrimoineViewState.liabViewState.colapseDetteListe,
                                             label       : item.name,
-                                            value       : item.value(atEndOf: Date.now.year),
+                                            value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
                                             header      : false)
                     }

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import DateBoundary
 
 // MARK: - View Model for LifeExpenseTimeSpan
@@ -60,7 +61,7 @@ struct TimeSpanViewModel: Equatable {
             case .exceptional(let inYear):
                 self.inYear = inYear
             default:
-                self.inYear = Date.now.year
+                self.inYear = CalendarCst.thisYear
         }
         switch timeSpan {
             case .periodic(_, let period, _):
@@ -161,21 +162,21 @@ struct TimeSpanEditView: View {
                 ()
                 
             case TimeSpan.periodic(from: DateBoundary.empty, period: 0, to: DateBoundary.empty).id:
-                self.timeSpanVM.fromVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: Date.now.year))
-                self.timeSpanVM.toVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: Date.now.year))
+                self.timeSpanVM.fromVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: CalendarCst.thisYear))
+                self.timeSpanVM.toVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: CalendarCst.thisYear))
                 
             case TimeSpan.starting(from: DateBoundary.empty).id:
-                self.timeSpanVM.fromVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: Date.now.year))
+                self.timeSpanVM.fromVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: CalendarCst.thisYear))
                 
             case TimeSpan.ending(to: DateBoundary.empty).id:
-                self.timeSpanVM.toVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: Date.now.year))
+                self.timeSpanVM.toVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: CalendarCst.thisYear))
                 
             case TimeSpan.spanning(from: DateBoundary.empty, to: DateBoundary.empty).id:
-                self.timeSpanVM.fromVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: Date.now.year))
-                self.timeSpanVM.toVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: Date.now.year))
+                self.timeSpanVM.fromVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: CalendarCst.thisYear))
+                self.timeSpanVM.toVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: CalendarCst.thisYear))
                 
             case TimeSpan.exceptional(inYear:0).id:
-                self.timeSpanVM.inYear = Date.now.year
+                self.timeSpanVM.inYear = CalendarCst.thisYear
                 
             default:
                 ()

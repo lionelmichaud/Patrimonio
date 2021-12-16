@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppFoundation
 import Persistence
 
 struct DossierViewModel {
@@ -22,7 +23,7 @@ struct DossierViewModel {
             name = dossier.name
             note = dossier.note
         } else {
-            name = Date.now.stringShortDate
+            name = CalendarCst.now.stringShortDate
             note = ""
         }
     }

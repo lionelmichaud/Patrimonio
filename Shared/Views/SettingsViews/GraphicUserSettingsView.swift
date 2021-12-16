@@ -60,7 +60,7 @@ struct GraphicUserSettings_Previews: PreviewProvider {
     
     static func ageOf(_ name: String, _ year: Int) -> Int {
         let person = family.member(withName: name)
-        return person?.age(atEndOf: Date.now.year) ?? -1
+        return person?.age(atEndOf: CalendarCst.thisYear) ?? -1
     }
     
     static var previews: some View {

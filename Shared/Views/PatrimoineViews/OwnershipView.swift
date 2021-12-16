@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import Ownership
 import FamilyModel
 
@@ -30,8 +31,8 @@ struct OwnershipView: View {
                                     .environmentObject(family)) {
                         if ownership.isValid {
                             AmountView(label   : usufruitierStr+"s",
-                                       amount  : (try! ownership.demembrementPercentage(atEndOf : Date.now.year).usufructPercent / 100.0) * totalValue,
-                                       comment : try! ownership.demembrementPercentage(atEndOf : Date.now.year).usufructPercent.percentString(digit : 2)+"%")
+                                       amount  : (try! ownership.demembrementPercentage(atEndOf : CalendarCst.thisYear).usufructPercent / 100.0) * totalValue,
+                                       comment : try! ownership.demembrementPercentage(atEndOf : CalendarCst.thisYear).usufructPercent.percentString(digit : 2)+"%")
                                 .foregroundColor(.blue)
                         } else {
                             if !ownership.usufructOwners.isEmpty && ownership.usufructOwners.isvalid {
@@ -46,8 +47,8 @@ struct OwnershipView: View {
                                     .environmentObject(family)) {
                         if ownership.isValid {
                             AmountView(label   : nuPropStr+"s",
-                                       amount  : (try! ownership.demembrementPercentage(atEndOf : Date.now.year).bareValuePercent / 100.0) * totalValue,
-                                       comment : try! ownership.demembrementPercentage(atEndOf : Date.now.year).bareValuePercent.percentString(digit : 2)+"%")
+                                       amount  : (try! ownership.demembrementPercentage(atEndOf : CalendarCst.thisYear).bareValuePercent / 100.0) * totalValue,
+                                       comment : try! ownership.demembrementPercentage(atEndOf : CalendarCst.thisYear).bareValuePercent.percentString(digit : 2)+"%")
                                 .foregroundColor(.blue)
                         } else {
                             if !ownership.bareOwners.isEmpty && ownership.bareOwners.isvalid {
@@ -76,7 +77,7 @@ struct OwnershipView_Previews: PreviewProvider {
 
     static func ageOf(_ name: String, _ year: Int) -> Int {
         let person = family.member(withName: name)
-        return person?.age(atEndOf: Date.now.year) ?? -1
+        return person?.age(atEndOf: CalendarCst.thisYear) ?? -1
     }
     
     struct Container: View {
@@ -93,7 +94,7 @@ struct OwnershipView_Previews: PreviewProvider {
                         AmountView(label: member.displayName,
                                    amount: ownership.ownedValue(by     : member.displayName,
                                                                 ofValue: 100.0,
-                                                                atEndOf: Date.now.year,
+                                                                atEndOf: CalendarCst.thisYear,
                                                                 evaluationContext: .ifi) )
                     }
                 }

@@ -72,7 +72,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
     
     func test_calcul_revaluation_Coef() {
         let dateOfPensionLiquid : Date! = 10.years.ago
-        let thisYear = Date.now.year
+        let thisYear = CalendarCst.thisYear
         
         let coef = RegimeGeneralTest.regimeGeneral.revaluationCoef(during: thisYear,
                                                                    dateOfPensionLiquid: dateOfPensionLiquid)
@@ -581,7 +581,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
     }
     
     func test_calcul_nb_Trimestre_de_Decote() {
-        let now = Date.now
+        let now = CalendarCst.now
         var dureeAssurance      : Int
         var dureeDeReference    : Int
         var birthDate           : Date

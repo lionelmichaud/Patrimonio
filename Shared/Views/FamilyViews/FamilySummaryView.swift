@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import ModelEnvironment
 import LifeExpense
 import Persistence
@@ -28,7 +29,7 @@ struct FamilySummaryView: View {
         patrimoine.saveState()
         //simulation.reset(withPatrimoine: patrimoine)
         self.cashFlow = try? CashFlowLine(run                                   : 0,
-                                          withYear                              : Date.now.year,
+                                          withYear                              : CalendarCst.thisYear,
                                           withFamily                            : family,
                                           withExpenses                          : expenses,
                                           withPatrimoine                        : patrimoine,
@@ -60,7 +61,7 @@ private func header(_ trailingString: String) -> some View {
     HStack {
         Text(trailingString)
         Spacer()
-        Text("valorisation en \(Date.now.year)")
+        Text("valorisation en \(CalendarCst.thisYear)")
     }
 }
 
@@ -87,9 +88,9 @@ struct RevenuSummarySection: View {
         if cashFlow == nil {
             Section(header: header("REVENUS DU TRAVAIL")) {
                 AmountView(label : "Revenu net de charges sociales et d'assurance (à vivre)",
-                           amount: family.income(during: Date.now.year, using: model).netIncome)
+                           amount: family.income(during: CalendarCst.thisYear, using: model).netIncome)
                 AmountView(label : "Revenu imposable à l'IRPP",
-                           amount: family.income(during: Date.now.year, using: model).taxableIncome)
+                           amount: family.income(during: CalendarCst.thisYear, using: model).taxableIncome)
             }
         } else {
             Section(header: header("REVENUS")) {
@@ -116,9 +117,9 @@ struct FiscalSummarySection: View {
         if cashFlow == nil {
             Section(header: header("FISCALITE DES REVENUS DU TRAVAIL")) {
                 AmountView(label : "Montant de l'IRPP",
-                           amount: family.irpp(for: Date.now.year, using: model))
+                           amount: family.irpp(for: CalendarCst.thisYear, using: model))
                 IntegerView(label   : "Quotient familial",
-                            integer : Int(family.familyQuotient(during: Date.now.year, using: model)))
+                            integer : Int(family.familyQuotient(during: CalendarCst.thisYear, using: model)))
                     .padding(.leading)
             }
         } else {

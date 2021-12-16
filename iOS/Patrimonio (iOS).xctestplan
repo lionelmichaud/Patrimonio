@@ -19,6 +19,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/AppFoundation",
         "identifier" : "AppFoundationTests",
@@ -26,6 +27,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/EconomyModel",
         "identifier" : "EconomyModelTests",
@@ -33,6 +35,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/FileAndFolder",
         "identifier" : "FileAndFolderTests",
@@ -40,6 +43,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/FiscalModel",
         "identifier" : "FiscalModelTests",
@@ -47,6 +51,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/HumanLifeModel",
         "identifier" : "HumanLifeModelTests",
@@ -54,6 +59,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/NamedValue",
         "identifier" : "NamedValueTests",
@@ -61,6 +67,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/Persistable",
         "identifier" : "PersistableTests",
@@ -84,6 +91,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/UnemployementModel",
         "identifier" : "UnemployementModelTests",
@@ -91,6 +99,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/ModelEnvironment",
         "identifier" : "ModelEnvironmentTests",
@@ -98,6 +107,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/Statistics",
         "identifier" : "StatisticsTests",
@@ -137,6 +147,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/LifeExpense",
         "identifier" : "LifeExpenseTests",
@@ -144,6 +155,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/Succession",
         "identifier" : "SuccessionTests",
@@ -151,6 +163,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/Kpi",
         "identifier" : "KpiTests",
@@ -158,6 +171,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/FamilyModel",
         "identifier" : "FamilyModelTests",
@@ -165,6 +179,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/PatrimoineModel",
         "identifier" : "PatrimoineModelTests",
@@ -172,6 +187,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/Liabilities",
         "identifier" : "LiabilitiesTests",
@@ -179,6 +195,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/PersonModel",
         "identifier" : "PersonModelTests",
@@ -186,6 +203,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/SimulationLogger",
         "identifier" : "SimulationLoggerTests",
@@ -193,6 +211,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/SuccessionManager",
         "identifier" : "SuccessionManagerTests",
@@ -200,10 +219,19 @@
       }
     },
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Shared\/Modules\/BalanceSheet",
         "identifier" : "BalanceSheetTests",
         "name" : "BalanceSheetTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/CashFlow",
+        "identifier" : "CashFlowTests",
+        "name" : "CashFlowTests"
       }
     }
   ],

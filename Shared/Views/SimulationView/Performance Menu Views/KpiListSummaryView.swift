@@ -108,18 +108,9 @@ struct KpiSummaryView: View {
             .foregroundColor(kpi.objectiveIsReached(withMode: simulationMode)! ? .green : .red)
             .padding(EdgeInsets(top: 0, leading: 0, bottom: withPadding ? 3 : 0, trailing: 0))
             // simulation déterministe
-            if kpi.value(withMode: simulationMode)! < kpi.objective {
-                ProgressBar(value             : kpi.value(withMode: simulationMode)!,
-                            minValue          : 0.0,
-                            maxValue          : kpi.objective,
-                            backgroundEnabled : true,
-                            externalLabels    : true,
-                            internalLabels    : true,
-                            backgroundColor   : .secondary,
-                            foregroundColor   : kpi.objectiveIsReached(withMode: simulationMode)! ? .green : .red,
-                            valuePercent      : true,
-                            formater          : valueKilo€Formatter)
-            } else {
+            if (kpi.comparator == .maximize && kpi.value(withMode: simulationMode)! >= kpi.objective) ||
+                (kpi.comparator == .minimize && kpi.value(withMode: simulationMode)! <= kpi.objective) {
+                // Succès
                 ProgressBar(value             : kpi.objective,
                             minValue          : 0.0,
                             maxValue          : kpi.value(withMode: simulationMode)!,
@@ -129,6 +120,18 @@ struct KpiSummaryView: View {
                             backgroundColor   : kpi.objectiveIsReached(withMode: simulationMode)! ? .green : .red,
                             foregroundColor   : .gray,
                             maxValuePercent      : true,
+                            formater          : valueKilo€Formatter)
+            } else {
+                // Echec
+                ProgressBar(value             : kpi.value(withMode: simulationMode)!,
+                            minValue          : 0.0,
+                            maxValue          : kpi.objective,
+                            backgroundEnabled : true,
+                            externalLabels    : true,
+                            internalLabels    : true,
+                            backgroundColor   : .secondary,
+                            foregroundColor   : kpi.objectiveIsReached(withMode: simulationMode)! ? .green : .red,
+                            valuePercent      : true,
                             formater          : valueKilo€Formatter)
             }
             //.padding(.vertical)

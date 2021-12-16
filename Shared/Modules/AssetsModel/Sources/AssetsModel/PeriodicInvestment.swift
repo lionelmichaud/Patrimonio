@@ -461,7 +461,7 @@ extension PeriodicInvestement: CustomStringConvertible {
         - Type:\(type.description.withPrefixedSplittedLines("  "))
         - Droits de propriété:
         \(ownership.description.withPrefixedSplittedLines("  "))
-        - Valeur:              \(value(atEndOf: Date.now.year).€String)
+        - Valeur:              \(value(atEndOf: CalendarCst.thisYear).€String)
         - Première année:      \(firstYear) dernière année: \(lastYear)
         - Valeur initiale:     \(initialValue.€String) dont intérêts: \(initialInterest.€String)
         - Valeur de référence: \(refState.initialValue.€String) dont intérêts: \(refState.initialInterest.€String)

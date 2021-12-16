@@ -70,7 +70,6 @@
 		7920DC71262C700500536B03 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7920DC70262C700500536B03 /* Tests_macOS.swift */; };
 		7920DC77262C700500536B03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7920DC4C262C700500536B03 /* Assets.xcassets */; };
 		7920DC78262C700500536B03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7920DC4C262C700500536B03 /* Assets.xcassets */; };
-		7920DC92262C720D00536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC91262C720D00536B03 /* AppFoundation */; };
 		7920DC94262C721400536B03 /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7920DC93262C721400536B03 /* AppFoundation */; };
 		792874F426E130A20011913B /* FamilyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 792874F326E130A20011913B /* FamilyModel */; };
 		792874FA26E130BD0011913B /* FamilyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 792874F926E130BD0011913B /* FamilyModel */; };
@@ -181,6 +180,7 @@
 		7979012B2640B49E00104C1A /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797901292640B49E00104C1A /* TableView.swift */; };
 		797931A926416EA1000F8599 /* SimulationResultTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931A826416EA1000F8599 /* SimulationResultTable.swift */; };
 		797931AA26416EA1000F8599 /* SimulationResultTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797931A826416EA1000F8599 /* SimulationResultTable.swift */; };
+		797BD5F62767F70A00A9355B /* AppFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 797BD5F52767F70A00A9355B /* AppFoundation */; };
 		797E95B126BACBFB000E1070 /* Succession in Frameworks */ = {isa = PBXBuildFile; productRef = 797E95B026BACBFB000E1070 /* Succession */; };
 		797E95B326BACC09000E1070 /* Succession in Frameworks */ = {isa = PBXBuildFile; productRef = 797E95B226BACC09000E1070 /* Succession */; };
 		7988A96326E178E600E00861 /* SimulationLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 7988A96226E178E600E00861 /* SimulationLogger */; };
@@ -749,10 +749,10 @@
 				79155AD626E0FF6400757981 /* Liabilities in Frameworks */,
 				795F8AF526B9815D00E44A66 /* DateBoundary in Frameworks */,
 				79D3E9ED2661A8E4006FAA3F /* Stateful in Frameworks */,
-				7920DC92262C720D00536B03 /* AppFoundation in Frameworks */,
 				796A707726E6A0F500769D1E /* Kpi in Frameworks */,
 				799074242660524200F224F7 /* FileAndFolder in Frameworks */,
 				798E844D26E1722200854003 /* SuccessionManager in Frameworks */,
+				797BD5F62767F70A00A9355B /* AppFoundation in Frameworks */,
 				7935FFE52654492500AC1715 /* Files in Frameworks */,
 				79522AD8275C17FD00926726 /* CashFlow in Frameworks */,
 				79FC3D3B262C760A00A6184B /* Statistics in Frameworks */,
@@ -1551,7 +1551,6 @@
 			);
 			name = "Patrimonio (iOS)";
 			packageProductDependencies = (
-				7920DC91262C720D00536B03 /* AppFoundation */,
 				79FC3D3A262C760A00A6184B /* Statistics */,
 				79058370262C79050061F296 /* SocioEconomyModel */,
 				7970627E262C7B7C009A18F0 /* UnemployementModel */,
@@ -1581,6 +1580,7 @@
 				7988A96226E178E600E00861 /* SimulationLogger */,
 				796A707626E6A0F500769D1E /* Kpi */,
 				79522AD7275C17FD00926726 /* CashFlow */,
+				797BD5F52767F70A00A9355B /* AppFoundation */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -2664,10 +2664,6 @@
 			package = 791ED0E9263A0A1200701202 /* XCRemoteSwiftPackageReference "StepperView" */;
 			productName = StepperView;
 		};
-		7920DC91262C720D00536B03 /* AppFoundation */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AppFoundation;
-		};
 		7920DC93262C721400536B03 /* AppFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppFoundation;
@@ -2768,6 +2764,10 @@
 		797574AF26C13C9600842572 /* LifeExpense */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LifeExpense;
+		};
+		797BD5F52767F70A00A9355B /* AppFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppFoundation;
 		};
 		797E95B026BACBFB000E1070 /* Succession */ = {
 			isa = XCSwiftPackageProductDependency;

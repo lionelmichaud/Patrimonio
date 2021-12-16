@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import Charts // https://github.com/danielgindi/Charts.git
 import DateBoundary
 import FamilyModel
@@ -59,7 +60,7 @@ struct FamilyLifeEventChartView: UIViewRepresentable {
             let eventNamesYears = family.members.items.map {
                 ($0.displayName, $0.yearOf(event: event))
             }
-            for year in Date.now.year ... endDate {
+            for year in CalendarCst.thisYear ... endDate {
                 dataEntries.append(ChartDataEntry(x: year.double(),
                                                   y: nameIndex(year, eventNamesYears)))
             }

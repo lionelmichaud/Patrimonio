@@ -210,7 +210,7 @@ struct BoundaryEditView: View {
     
     func updateIsLinkedToEvent(newIsLinkedToEvent: Bool) {
         if !newIsLinkedToEvent {
-            boundaryVM.fixedYear = Date.now.year
+            boundaryVM.fixedYear = CalendarCst.thisYear
         }
     }
     

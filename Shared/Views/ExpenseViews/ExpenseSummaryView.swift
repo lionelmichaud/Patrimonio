@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import Persistence
 import LifeExpense
 import FamilyModel
@@ -16,8 +17,8 @@ struct ExpenseSummaryView: View {
     @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var expenses   : LifeExpensesDic
     @EnvironmentObject private var uiState    : UIState
-    let minDate = Date.now.year
-    let maxDate = Date.now.year + 40
+    let minDate = CalendarCst.thisYear
+    let maxDate = CalendarCst.thisYear + 40
     @State private var showInfoPopover = false
     let popOverTitle   = "Contenu du graphique:"
     let popOverMessage =
@@ -152,14 +153,14 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
         let leftAxis = chartView.leftAxis
         leftAxis.granularity          = 1    // à utiliser sans dépasser .labelCount
         leftAxis.labelCount           = 15   // nombre maxi
-        leftAxis.axisMinimum          = Date.now.year.double()
+        leftAxis.axisMinimum          = CalendarCst.thisYear.double()
         leftAxis.axisMaximum          = endDate
         
         //: ### RightAxis
         let rightAxis = chartView.rightAxis
         rightAxis.granularity          = 1    // à utiliser sans dépasser .labelCount
         rightAxis.labelCount           = 15   // nombre maxi
-        rightAxis.axisMinimum          = Date.now.year.double()
+        rightAxis.axisMinimum          = CalendarCst.thisYear.double()
         rightAxis.axisMaximum          = endDate
         
         // animer la transition

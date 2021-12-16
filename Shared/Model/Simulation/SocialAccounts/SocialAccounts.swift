@@ -24,8 +24,8 @@ struct SocialAccounts {
     
     var cashFlowArray = CashFlowArray()
     var balanceArray  = BalanceSheetArray()
-    var firstYear     = Date.now.year
-    var lastYear      = Date.now.year
+    var firstYear     = CalendarCst.thisYear
+    var lastYear      = CalendarCst.thisYear
     // les successions légales survenues depuis le début du run
     var legalSuccessions   : [Succession] = []
     // les transmissions d'assurances vie survenues depuis le début du run
@@ -64,7 +64,7 @@ struct SocialAccounts {
                                       family         : family)
         
         //-------------------------------------------------------------------------------------------
-        firstYear = Date.now.year
+        firstYear = CalendarCst.thisYear
         lastYear  = firstYear + nbOfYears - 1
         cashFlowArray.reserveCapacity(nbOfYears)
         balanceArray.reserveCapacity(nbOfYears)

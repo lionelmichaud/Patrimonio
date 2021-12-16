@@ -557,6 +557,26 @@
                ReferencedContainer = "container:Shared/Modules/PatrimoineModel">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7920DC60262C700500536B03"
+               BuildableName = "Tests iOS.xctest"
+               BlueprintName = "Tests iOS"
+               ReferencedContainer = "container:Patrimonio.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7920DC60262C700500536B03"
+               BuildableName = "Tests iOS.xctest"
+               BlueprintName = "Tests iOS"
+               ReferencedContainer = "container:Patrimonio.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

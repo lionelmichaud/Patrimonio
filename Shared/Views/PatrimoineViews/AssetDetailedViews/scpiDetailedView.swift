@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import Ownership
 import AssetsModel
 import ModelEnvironment
@@ -45,23 +46,23 @@ struct ScpiDetailedView: View {
 
             /// propriété
             OwnershipView(ownership  : $localItem.ownership,
-                          totalValue : localItem.value(atEndOf : Date.now.year))
+                          totalValue : localItem.value(atEndOf : CalendarCst.thisYear))
             
             /// rendement
             Section(header: Text("RENDEMENT")) {
                 PercentEditView(label: "Taux de rendement annuel brut",
                                 percent: $localItem.interestRate)
                 AmountView(label: "Revenu annuel brut déflaté (avant prélèvements sociaux et IRPP)",
-                           amount: localItem.yearlyRevenue(during: Date.now.year).revenue)
+                           amount: localItem.yearlyRevenue(during: CalendarCst.thisYear).revenue)
                     .foregroundColor(.secondary)
                 AmountView(label: "Charges sociales (si imposable à l'IRPP)",
-                           amount: localItem.yearlyRevenue(during: Date.now.year).socialTaxes)
+                           amount: localItem.yearlyRevenue(during: CalendarCst.thisYear).socialTaxes)
                     .foregroundColor(.secondary)
                 AmountView(label: "Revenu annuel déflaté net de charges sociales (imposable à l'IRPP)",
-                           amount: localItem.yearlyRevenue(during: Date.now.year).taxableIrpp)
+                           amount: localItem.yearlyRevenue(during: CalendarCst.thisYear).taxableIrpp)
                     .foregroundColor(.secondary)
                 AmountView(label: "Revenu annuel déflaté net d'IS (si imposable à l'IS)",
-                           amount: model.fiscalModel.companyProfitTaxes.net(localItem.yearlyRevenue(during: Date.now.year).revenue))
+                           amount: model.fiscalModel.companyProfitTaxes.net(localItem.yearlyRevenue(during: CalendarCst.thisYear).revenue))
                     .foregroundColor(.secondary)
                 PercentEditView(label: "Taux de réévaluation annuel",
                                 percent: $localItem.revaluatRate)
@@ -122,7 +123,7 @@ struct ScpiDetailedView: View {
             // specific
         } else {
             // création d'un nouvel élément
-            var newItem = SCPI(name: "", buyingDate: Date.now)
+            var newItem = SCPI(name: "", buyingDate: CalendarCst.now)
             // définir le délégué pour la méthode ageOf qui par défaut est nil à la création de l'objet
             newItem.ownership.setDelegateForAgeOf(delegate: family.ageOf)
             _localItem = State(initialValue: newItem)

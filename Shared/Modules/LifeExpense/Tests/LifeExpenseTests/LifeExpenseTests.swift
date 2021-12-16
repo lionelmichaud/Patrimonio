@@ -1,4 +1,5 @@
 import XCTest
+import AppFoundation
 import Statistics
 import SocioEconomyModel
 import DateBoundary
@@ -69,17 +70,17 @@ final class LifeExpenseTests: XCTestCase {
         XCTAssertEqual(expense.value, value)
         XCTAssertEqual(expense.proportional, false)
         XCTAssertEqual(expense.timeSpan, .permanent)
-        XCTAssertEqual(expense.firstYear, Date.now.year)
-        XCTAssertEqual(expense.lastYear, Date.now.year + 100)
+        XCTAssertEqual(expense.firstYear, CalendarCst.thisYear)
+        XCTAssertEqual(expense.lastYear, CalendarCst.thisYear + 100)
         LifeExpense.setSimulationMode(to: .deterministic)
-        XCTAssertEqual(expense.value(atEndOf: Date.now.year),
+        XCTAssertEqual(expense.value(atEndOf: CalendarCst.thisYear),
                        value * (1.0 + LifeExpenseTests
                                     .underEvaluationRateProvider
                                     .expensesUnderEvaluationRate(withMode: .deterministic) / 100.0)
         )
         
         LifeExpense.setSimulationMode(to: .random)
-        XCTAssertEqual(expense.value(atEndOf: Date.now.year),
+        XCTAssertEqual(expense.value(atEndOf: CalendarCst.thisYear),
                        value * (1.0 + LifeExpenseTests
                                     .underEvaluationRateProvider
                                     .expensesUnderEvaluationRate(withMode: .random) / 100.0)
@@ -144,7 +145,7 @@ final class LifeExpenseTests: XCTestCase {
         XCTAssertEqual(expense.proportional, false)
         XCTAssertEqual(expense.timeSpan, .starting(from: startYear))
         XCTAssertEqual(expense.firstYear, year)
-        XCTAssertEqual(expense.lastYear, Date.now.year + 100)
+        XCTAssertEqual(expense.lastYear, CalendarCst.thisYear + 100)
         LifeExpense.setSimulationMode(to: .deterministic)
         let deterministicValue =
             value * (1.0 + LifeExpenseTests
@@ -183,14 +184,14 @@ final class LifeExpenseTests: XCTestCase {
         XCTAssertEqual(expense.value, value)
         XCTAssertEqual(expense.proportional, false)
         XCTAssertEqual(expense.timeSpan, .ending(to: endYear))
-        XCTAssertEqual(expense.firstYear, Date.now.year)
+        XCTAssertEqual(expense.firstYear, CalendarCst.thisYear)
         XCTAssertEqual(expense.lastYear, year-1)
         LifeExpense.setSimulationMode(to: .deterministic)
         let deterministicValue =
             value * (1.0 + LifeExpenseTests
                         .underEvaluationRateProvider
                         .expensesUnderEvaluationRate(withMode: .deterministic) / 100.0)
-        XCTAssertEqual(expense.value(atEndOf: Date.now.year), deterministicValue)
+        XCTAssertEqual(expense.value(atEndOf: CalendarCst.thisYear), deterministicValue)
         XCTAssertEqual(expense.value(atEndOf: year - 1), deterministicValue)
         XCTAssertEqual(expense.value(atEndOf: year), 0.0) // la dernière année est exclue
         
@@ -312,14 +313,14 @@ final class LifeExpenseTests: XCTestCase {
             (3 + 2) * value * (1.0 + LifeExpenseTests
                                 .underEvaluationRateProvider
                                 .expensesUnderEvaluationRate(withMode: .deterministic) / 100.0)
-        XCTAssertEqual(expense.value(atEndOf: Date.now.year), deterministicValue)
+        XCTAssertEqual(expense.value(atEndOf: CalendarCst.thisYear), deterministicValue)
         
         LifeExpense.setSimulationMode(to: .random)
         let randomValue =
             (3 + 2) * value * (1.0 + LifeExpenseTests
                                 .underEvaluationRateProvider
                                 .expensesUnderEvaluationRate(withMode: .random) / 100.0)
-        XCTAssertTrue(isApproximatelyEqual(expense.value(atEndOf: Date.now.year), randomValue))
+        XCTAssertTrue(isApproximatelyEqual(expense.value(atEndOf: CalendarCst.thisYear), randomValue))
         
         print(String(describing: expense))
     }

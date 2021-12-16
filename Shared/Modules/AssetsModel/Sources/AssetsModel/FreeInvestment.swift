@@ -368,7 +368,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         isOpen = true
         
         // calculer la valeur de currentState à la date de fin d'année passée
-        let estimationYear = Date.now.year - 1
+        let estimationYear = CalendarCst.thisYear - 1
         
         if estimationYear == lastKnownState.year {
             currentState = lastKnownState
@@ -421,7 +421,7 @@ extension FreeInvestement: CustomStringConvertible {
         - Ouvert à l'investissement: \(isOpen)
         - Droits de propriété:
         \(ownership.description.withPrefixedSplittedLines("  "))
-        - Valeur (\(Date.now.year)): \(value(atEndOf: Date.now.year).€String)
+        - Valeur (\(CalendarCst.thisYear)): \(value(atEndOf: CalendarCst.thisYear).€String)
         - Etat initial: (year: \(lastKnownState.year), interest: \(lastKnownState.interest.€String), invest: \(lastKnownState.investment.€String), Value: \(lastKnownState.value.€String))
         - Etat courant: (year: \(currentState.year), interest: \(currentState.interest.€String), invest: \(currentState.investment.€String), Value: \(currentState.value.€String))
         - Intérêt Cumulés depuis la transmission: (year: \(currentStateAfterTransmission?.year ?? 0), interest: \(currentStateAfterTransmission?.interest.€String ?? 0.€String))

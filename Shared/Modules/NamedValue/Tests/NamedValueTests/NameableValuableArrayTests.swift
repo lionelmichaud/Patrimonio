@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import AppFoundation
 import Persistable
 @testable import NamedValue
 
@@ -90,7 +91,7 @@ class NameableValuableArrayTests: XCTestCase {
         let year = 2020
         XCTAssertEqual(Double(year * NameableValuableArrayTests.names.count),
                        NameableValuableArrayTests.tableOfItems.value(atEndOf: year))
-        XCTAssertEqual(Double(Date.now.year * NameableValuableArrayTests.names.count),
+        XCTAssertEqual(Double(CalendarCst.thisYear * NameableValuableArrayTests.names.count),
                        NameableValuableArrayTests.tableOfItems.currentValue)
         XCTAssertEqual("Test_Item 2",
                        NameableValuableArrayTests.tableOfItems[1].name)

@@ -22,7 +22,7 @@ public final class Family: ObservableObject {
     public var nbOfLivingChildren: Int { // computed
         var nb = 0
         for person in members.items where person is Child {
-            if person.isAlive(atEndOf: Date.now.year) { nb += 1 }
+            if person.isAlive(atEndOf: CalendarCst.thisYear) { nb += 1 }
         }
         return nb
     }

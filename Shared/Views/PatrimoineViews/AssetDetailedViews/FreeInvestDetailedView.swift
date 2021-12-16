@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import AssetsModel
 import PatrimoineModel
 import FamilyModel
@@ -32,7 +33,7 @@ struct FreeInvestDetailedView: View {
             
             /// propriété
             OwnershipView(ownership  : $localItem.ownership,
-                          totalValue : localItem.value(atEndOf  : Date.now.year))
+                          totalValue : localItem.value(atEndOf  : CalendarCst.thisYear))
             
             Section(header: Text("TYPE")) {
                 TypeInvestEditView(investType: $localItem.type)
@@ -40,7 +41,7 @@ struct FreeInvestDetailedView: View {
             
             Section(header: Text("INITIALISATION")) {
                 YearPicker(title    : "Année d'actualisation",
-                           inRange  : Date.now.year - 20...Date.now.year + 100,
+                           inRange  : CalendarCst.thisYear - 20...CalendarCst.thisYear + 100,
                            selection: $localItem.lastKnownState.year)
                 AmountEditView(label : "Valeure actualisée",
                                amount: $totalValue)
@@ -89,7 +90,7 @@ struct FreeInvestDetailedView: View {
             // specific
         } else {
             // création d'un nouvel élément
-            var newItem = FreeInvestement(year             : Date.now.year - 1,
+            var newItem = FreeInvestement(year             : CalendarCst.thisYear - 1,
                                           name             : "",
                                           note             : "",
                                           type             : .other,

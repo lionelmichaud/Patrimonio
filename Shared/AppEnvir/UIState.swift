@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppFoundation
 import NamedValue
 import Persistence
 import LifeExpense
@@ -38,7 +39,7 @@ final class UIState: ObservableObject {
         var colapseDetteListe  : Bool = true
     }
     struct PatrimoineViewState {
-        var evalDate       : Double = Date.now.year.double()
+        var evalDate       : Double = CalendarCst.thisYear.double()
         var assetViewState = AssetsViewState()
         var liabViewState  = LiabilitiesViewState()
     }
@@ -46,8 +47,8 @@ final class UIState: ObservableObject {
     // MARK: - Etat de la vue Expense
     struct ExpenseViewState {
         var colapseCategories : [Bool] = []
-        var endDate           : Double = (Date.now.year + 25).double()
-        var evalDate          : Double = Date.now.year.double()
+        var endDate           : Double = (CalendarCst.thisYear + 25).double()
+        var evalDate          : Double = CalendarCst.thisYear.double()
         var selectedCategory  : LifeExpenseCategory = .abonnements
     }
     
@@ -88,7 +89,7 @@ final class UIState: ObservableObject {
     
     // MARK: - Etat de la vue Expense
     struct FiscalChartState {
-        var evalDate: Double = Date.now.year.double()
+        var evalDate: Double = CalendarCst.thisYear.double()
     }
 
     @Published var selectedTab         : Tab  = Tab.dossier

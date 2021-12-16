@@ -32,6 +32,9 @@ public final class Child: Person {
                        month    : 09,
                        day      : 30)
     }
+    var yearAtEntryToUniversity: Int {
+        birthDate.year + ageOfUniversity
+    }
     
     @Published public var ageOfIndependence: Int = 24
     public var dateOfIndependence    : Date { // computed
@@ -42,6 +45,9 @@ public final class Child: Person {
                        year     : birthDate.year + ageOfIndependence,
                        month    : 09,
                        day      : 30)
+    }
+    var yearOfIndependence: Int {
+        birthDate.year + ageOfIndependence
     }
     public override var description: String {
         super.description +
@@ -83,13 +89,13 @@ public final class Child: Person {
     /// true si l'année est postérieure à l'année d'entrée à l'université et avant indépendance financière
     /// - Parameter year: année
     public final func isAtUniversity(during year: Int) -> Bool {
-        (dateOfUniversityComp.year! < year) && !isIndependant(during: year)
+        (yearAtEntryToUniversity < year) && !isIndependant(during: year)
     }
     
     /// true si l'année est postérieure à l'année d'indépendance financière
     /// - Parameter year: année
     public final func isIndependant(during year: Int) -> Bool {
-        dateOfIndependenceComp.year! < year
+        yearOfIndependence < year
     }
     
     /// True si l'enfant fait encore partie du foyer fiscal pendant l'année donnée

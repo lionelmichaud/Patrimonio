@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import Persistence
 import PatrimoineModel
 import FamilyModel
@@ -14,8 +15,8 @@ struct PatrimoineSummaryView: View {
     @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var uiState    : UIState
-    let minDate = Date.now.year
-    let maxDate = Date.now.year + 55
+    let minDate = CalendarCst.thisYear
+    let maxDate = CalendarCst.thisYear + 55
     
     var body: some View {
         if dataStore.activeDossier != nil {

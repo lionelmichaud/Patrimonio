@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import FiscalModel
 import HumanLifeModel
 import UnemployementModel
@@ -228,7 +229,7 @@ private struct RevenueEditView : View {
                 AmountEditView(label: "Salaire imposable", amount: $adultViewModel.revenueTaxable)
                 AmountEditView(label: "Coût de la mutuelle (protec. sup.)", amount: $adultViewModel.insurance)
                 DatePicker(selection           : $adultViewModel.fromDate,
-                           in                  : 50.years.ago!...Date.now,
+                           in                  : 50.years.ago!...CalendarCst.now,
                            displayedComponents : .date,
                            label               : { HStack {Text("Date d'embauche"); Spacer() } })
             } else {

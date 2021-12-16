@@ -143,7 +143,7 @@ public struct CashFlowLine {
     // MARK: - Initialization
     
     public init() {
-        year = Date.now.year
+        year = CalendarCst.thisYear
         sciCashFlowLine = SciCashFlowLine()
     }
     

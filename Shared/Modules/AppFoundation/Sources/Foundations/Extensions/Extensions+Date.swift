@@ -168,10 +168,10 @@ public extension Date {
 // MARK: - Date Utility
 // https://gist.github.com/Rawnly/2d0d8cf85048f0bc533afb19bdef5c1c
 public extension Date {
-    static var now: Date {
-        return self.init()
-    }
-    
+//    static var now: Date {
+//        return self.init()
+//    }
+
     /// "HH:MM"
     var stringTime: String {
         return getStringTime(showSeconds: false)

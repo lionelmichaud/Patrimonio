@@ -77,10 +77,10 @@ import NamedValue
             let childrenName = ["Mme. Isaline MICHAUD", "M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
             
             // créer les managers
-            let legalSuccessionManager =
-                LegalSuccessionManager(using          : Tests.fiscalModel,
-                                       familyProvider : Tests.family,
-                                       atEndOf        : 2021)
+//            let legalSuccessionManager =
+//                LegalSuccessionManager(using          : Tests.fiscalModel,
+//                                       familyProvider : Tests.family,
+//                                       atEndOf        : 2021)
             var lifeInsuranceSuccessionManager =
                 LifeInsuranceSuccessionManager(using          : Tests.fiscalModel,
                                                familyProvider : Tests.family,

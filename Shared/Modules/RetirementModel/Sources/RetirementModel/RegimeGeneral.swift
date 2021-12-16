@@ -30,7 +30,7 @@ public struct RegimeGeneralSituation: Codable {
     }
     
     public init() {
-        self.atEndOf           = Date.now.year
+        self.atEndOf           = CalendarCst.thisYear
         self.nbTrimestreAcquis = 0
         self.sam               = 0
     }

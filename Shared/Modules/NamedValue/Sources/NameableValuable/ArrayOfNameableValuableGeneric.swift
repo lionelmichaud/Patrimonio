@@ -34,7 +34,7 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, Pe
     // MARK: - Computed Properties
     
     public var currentValue    : Double {
-        items.sumOfValues(atEndOf: Date.now.year)
+        items.sumOfValues(atEndOf: CalendarCst.thisYear)
     } // computed
 
     // MARK: - Subscript

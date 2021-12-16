@@ -248,7 +248,7 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
         //propriétés indépendantes du nombre de run
         // mettre à jour les variables d'état dans le thread principal
 //        DispatchQueue.main.async {
-        firstYear = Date.now.year
+        firstYear = CalendarCst.thisYear
         lastYear  = firstYear + nbOfYears - 1
 //        } // Dispatcheue.main.async
 
@@ -355,7 +355,7 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
         process(event: .onComputationTrigger)
 
         // propriétés indépendantes du nombre de run
-        firstYear = Date.now.year
+        firstYear = CalendarCst.thisYear
         lastYear  = firstYear + nbOfYears - 1
 
         currentRunNb = 1

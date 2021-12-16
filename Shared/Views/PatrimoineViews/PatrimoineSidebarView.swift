@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import Persistence
 import PatrimoineModel
 import FamilyModel
@@ -56,7 +57,7 @@ struct PatrimoineSidebarView: View {
     private func reinitialize() {
         do {
             try self.patrimoine.loadFromJSON(fromFolder: dataStore.activeDossier!.folder!)
-            uiState.patrimoineViewState.evalDate = Date.now.year.double()
+            uiState.patrimoineViewState.evalDate = CalendarCst.thisYear.double()
         } catch {
             self.alertItem = AlertItem(title         : Text("Le chargement a échoué"),
                                        dismissButton : .default(Text("OK")))
@@ -76,7 +77,7 @@ struct PatrimoineTotalView: View {
                                       design: Font.Design.default))
                     .fontWeight(.bold)
                 Spacer()
-                Text(patrimoine.value(atEndOf: Date.now.year).€String)
+                Text(patrimoine.value(atEndOf: CalendarCst.thisYear).€String)
                     .font(Font.system(size: 17,
                                       design: Font.Design.default))
             }
