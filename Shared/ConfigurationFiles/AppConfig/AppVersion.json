@@ -1,7 +1,26 @@
 {
     "version" :
     {
-        "comment" : "Version de test"
-    }
+        "name" : null,
+        "comment" : null
+    },
+    
+    "revisionHistory" : [
+        {
+            "version" : "4.0.0",
+            "date"    : "2021-12-19T23:00:00+01:00",
+            "comment" : "Modification la structure de AppVersion"
+        },
+        {
+            "version" : "3.0.0",
+            "comment" : "Mise à jour du modèle fiscal"
+        },
+        {
+            "version" : "2.0.0"
+        },
+        {
+            "version" : "1.0.0"
+        }
+    ]
 }
 

@@ -263,7 +263,7 @@ struct DossierDetailView: View {
                 
             } else {
                 // version de dossier incompatible avec version d'Application
-                // tenter de rétablir la compatibilité en important les fichier Models de l'Application
+                // tenter de rétablir la compatibilité en important seulement les fichier Models de l'Application
                 self.alertItem =
                     AlertItem(title         : Text("Attention").foregroundColor(.red),
                               message       : Text("Le contenu de ce dossier est incompatible de cette version de l'application. Voulez-vous le mettre à jour. Si vous le mettez à jour, vous perdrai les éventuelles modifications qu'il contient."),

@@ -18,7 +18,7 @@ public protocol VersionableP {
 
 ///  - Note: [Reference](https://en.wikipedia.org/wiki/Software_versioning)
 
-public struct Version: Codable {
+public struct Version: Codable, Hashable {
     
     // MARK: - Properties
     
@@ -79,33 +79,33 @@ public struct Version: Codable {
     
     // MARK: - Builders
 
-     func named(_ name: String) -> Version {
+    public func named(_ name: String) -> Version {
         var new = self
         new.name = name
         return new
     }
 
-    func dated(_ date: Date) -> Version {
+    public func dated(_ date: Date) -> Version {
         var new = self
         new.date = date
         return new
     }
 
-    func commented(with comment: String) -> Version {
+    public func commented(with comment: String) -> Version {
         var new = self
         new.comment = comment
         return new
     }
 
-    func versioned(_ version: String) -> Version {
+    public func versioned(_ version: String) -> Version {
         var new = self
         new.version = version
         return new
     }
     
-    func versioned(major : Int,
-                   minor : Int,
-                   patch : Int) -> Version {
+    public func versioned(major : Int,
+                          minor : Int,
+                          patch : Int) -> Version {
         var new = self
         new.version = Version.toVersion(major: major,
                                         minor: minor,

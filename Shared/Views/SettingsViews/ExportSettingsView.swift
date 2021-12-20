@@ -27,6 +27,7 @@ struct ExportSettingsView: View {
                     }
             }
         }
+        .navigationTitle(Text("Export"))
     }
 }
 

@@ -17,7 +17,8 @@ public struct AppVersion: Codable, VersionableP {
     
     // MARK: - Properties
     
-    public var version: Version
+    public var version         : Version
+    public var revisionHistory : [Version]
     
     // MARK: - Static Methods
     

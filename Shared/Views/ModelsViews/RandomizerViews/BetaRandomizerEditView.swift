@@ -133,7 +133,7 @@ struct BetaRandomizerEditView : View {
         BetaRandomizerView(randomizer: betaRandomizer)
             .toolbar {
                 ToolbarItem(placement: .automatic) {
-                    DiskButton(text   : "Enregistrer comme Modèle",
+                    DiskButton(text   : "Modifier le Patron",
                                action : applyChangesToTemplate)
                 }
                 ToolbarItem(placement: .automatic) {

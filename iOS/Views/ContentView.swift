@@ -69,7 +69,7 @@ struct ContentView: View {
                                                                     action: {
                                                                         /// insert alert 1 action here
                                                                         do {
-                                                                            try PersistenceManager.forcedImportTemplatesFromApp()
+                                                                            try PersistenceManager.forcedImportAllTemplateFilesFromApp()
                                                                         } catch {
                                                                             self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
                                                                                                        dismissButton : .default(Text("OK")))

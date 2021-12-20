@@ -285,8 +285,9 @@ public struct PersistenceManager {
     
     /// Importer les fichiers template depuis le `Bundle Main` de l'Application
     /// vers le répertoire `Library/template` si'ils n'y sont pas présents.
-    /// Vérifier la compatibilité entre la version de l'app et la verison du répertoire `Library/template`.
+    /// Vérifier la compatibilité entre la version de l'app et la version du répertoire `Library/template`.
     /// - Returns: le dossier 'template' si l'import a réussi, 'nil' sinon
+    /// - Note: Le résultat du test de compatibilité est stocké dans `templateDirIsCompatibleWithAppVersion`
     @discardableResult
     public static func importTemplatesFromAppAndCheckCompatibility() throws -> Folder {
         guard let originFolder = Folder.application else {
@@ -317,8 +318,8 @@ public struct PersistenceManager {
     }
     
     /// Importer les fichiers template depuis le `Bundle Main` de l'Application
-    /// vers le répertoire `Library/template` si'ils n'y sont pas présents.
-    public static func forcedImportTemplatesFromApp() throws {
+    /// vers le répertoire `Library/template` même si'ils y sont déjà présents.
+    public static func forcedImportAllTemplateFilesFromApp() throws {
         guard let originFolder = Folder.application else {
             let error = FileError.failedToResolveAppBundle
             customLog.log(level: .fault,
@@ -345,14 +346,14 @@ public struct PersistenceManager {
         }
     }
     
-    /// Dupliquer certains fichiers du Bundle Application vers `toFolder`
+    /// Dupliquer certains fichiers du Bundle Application vers la destination `toFolder`
     /// Dupliquer le fichier "AppVersion.json" du Bundle Appli vers `toFolder`
     /// - Parameters:
     ///   - toFolder: répertoire de destination
-    ///   - readWriteFiles: closure de copie des fichiers souhaités
+    ///   - duplicateFiles: closure de duplication des fichiers souhaités de `Bundle Application` vers `toFolder`
     /// - Throws: FileError.failedToResolveAppBundle
     public static func duplicateFilesFromApp(toFolder       : Folder,
-                                             readWriteFiles : (Folder, Folder) throws -> Void) throws {
+                                             duplicateFiles : (Folder, Folder) throws -> Void) throws {
         guard let fromFolder = Folder.application else {
             let error = FileError.failedToResolveAppBundle
             customLog.log(level: .fault,
@@ -360,6 +361,7 @@ public struct PersistenceManager {
             throw error
         }
         
+        // Dupliquer le fichier "AppVersion.json" du Bundle Appli vers `toFolder`
         if fromFolder.containsFile(named: AppVersion.fileName) {
             // enregister la version de l'app dans le directory toFolder
             let file = try fromFolder.file(at: AppVersion.fileName)
@@ -369,11 +371,14 @@ public struct PersistenceManager {
                                     keyEncodingStrategy  : .useDefaultKeys)
         }
         
-        try readWriteFiles(fromFolder, toFolder)
+        // Dupliquer certains fichiers du Bundle Application vers la destination `toFolder`
+        try duplicateFiles(fromFolder, toFolder)
     }
     
-    /// Dupliquer tous les fichiers JSON présents dans le répertoire `originFolder`
-    /// vers le répertoire `targetFolder`
+    /// Dupliquer tous les fichiers JSON présents dans le répertoire `originFolder` vers le répertoire `targetFolder`
+    ///
+    /// Si `forceUpdate` = false : ne copie le fichier que s'il n'existe pas déjà dans `targetFolder`
+    ///
     /// - Parameters:
     ///   - originFolder: répertoire source
     ///   - targetFolder: répertoire destination
@@ -381,7 +386,7 @@ public struct PersistenceManager {
     /// - Throws:`FileError.withContentDuplicatedFrom`
     fileprivate static func duplicateAllJsonFiles(from originFolder : Folder,
                                                   to targetFolder   : Folder,
-                                                  forceUpdate: Bool = false) throws {
+                                                  forceUpdate       : Bool = false) throws {
         do {
             try originFolder.files.forEach { file in
                 if let ext = file.extension, ext == "json" {

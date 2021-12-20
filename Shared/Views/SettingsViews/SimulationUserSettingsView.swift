@@ -52,6 +52,7 @@ struct SimulationUserSettingsView: View {
 //                              })
 //            }
         }
+        .navigationTitle(Text("Simulation"))
     }
 }
 

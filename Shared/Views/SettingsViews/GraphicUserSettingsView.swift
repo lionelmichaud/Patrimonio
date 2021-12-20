@@ -51,6 +51,7 @@ struct GraphicUserSettingsView: View {
 //                    }
 //            }.padding(.top)
         }
+        .navigationTitle(Text("Graphiques"))
     }
 }
 
