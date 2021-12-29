@@ -128,7 +128,6 @@ public struct SuccessionManager {
         /// (1) identification des personnes décédées dans l'année (ordonnés par âge décroissant)
         let adultDecedentsNames = family.deceasedAdults(during: year)
         
-        guard adultDecedentsNames.isNotEmpty else { return }
         
         /// (2) pour chaque défunt
         adultDecedentsNames.forEach { decedentName in
@@ -144,7 +143,7 @@ public struct SuccessionManager {
                                      lifeInsSuccessions : lifeInsurance.successions,
                                      verbose            : verbose)
         
-        if verbose {
+        if verbose && adultDecedentsNames.isNotEmpty {
             print(String(describing: self))
         }
     }
@@ -242,7 +241,7 @@ public struct SuccessionManager {
     mutating func computeCashAndTaxesPerPerson(legalSuccessions   : [Succession],
                                                lifeInsSuccessions : [Succession],
                                                verbose            : Bool = false) {
-        family.members.items.forEach { member in
+        family.members.items.sorted(by:>).forEach { member in
             /// successions légales
             var taxe: Double = 0
             var cash: Double = 0

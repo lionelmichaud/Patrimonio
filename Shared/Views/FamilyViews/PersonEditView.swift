@@ -231,7 +231,7 @@ private struct RevenueEditView : View {
                 DatePicker(selection           : $adultViewModel.fromDate,
                            in                  : 50.years.ago!...CalendarCst.now,
                            displayedComponents : .date,
-                           label               : { HStack {Text("Date d'embauche"); Spacer() } })
+                           label               : { HStack { Text("Date d'embauche"); Spacer() } })
             } else {
                 AmountEditView(label: "BNC", amount: $adultViewModel.revenueBrut)
                 AmountEditView(label: "Charges (assurance, frais bancaires, services, CFE)", amount: $adultViewModel.insurance)

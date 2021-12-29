@@ -24,7 +24,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 /// might be helpful to store some intermediate state of the algorithm while
 /// executing visitor's methods over various objects of the structure.
 final class MonteCarloCsvTableVisitor: MonteCarloVisitorP {
-    private let separator = "; "
+    private let separator = ";"
     private let lineBreak = "\n"
     private var header  = ""
     private var table  = ""

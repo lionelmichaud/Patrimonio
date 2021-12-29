@@ -56,44 +56,44 @@ public extension CashFlowLine {
         adultsRevenues
             .perCategory[.legalSuccession]?
             .credits
-            .namedValues += successionManager.legal.revenuesAdults
+            .namedValues = successionManager.legal.revenuesAdults
         //   - pour les enfants
         childrenRevenues
             .perCategory[.legalSuccession]?
             .credits
-            .namedValues += successionManager.legal.revenuesChildren
+            .namedValues = successionManager.legal.revenuesChildren
         
         /// Revenus bruts des transmissions d'ASSURANCES VIES
         //   - pour les adultes
         adultsRevenues
             .perCategory[.liSuccession]?
             .credits
-            .namedValues += successionManager.lifeInsurance.revenuesAdults
+            .namedValues = successionManager.lifeInsurance.revenuesAdults
         //   - pour les enfants
         childrenRevenues
             .perCategory[.liSuccession]?
             .credits
-            .namedValues += successionManager.lifeInsurance.revenuesChildren
+            .namedValues = successionManager.lifeInsurance.revenuesChildren
         
         /// Droits de successions LEGAUX
         //   - imputables aux adultes (= 0 puisque le conjoint survivant est exonéré)
         adultTaxes
             .perCategory[.legalSuccession]?
-            .namedValues += successionManager.legal.taxesAdults
+            .namedValues = successionManager.legal.taxesAdults
         //   - imputables aux enfants (doit être prélevé sur l'héritage après transfert de propriété)
         childrenTaxes
             .perCategory[.legalSuccession]?
-            .namedValues += successionManager.legal.taxesChildren
+            .namedValues = successionManager.legal.taxesChildren
 
         /// Droits de transmission des ASSURANCES VIES
         //   - imputables aux adultes (= 0 puisque le conjoint survivant est exonéré)
         adultTaxes
             .perCategory[.liSuccession]?
-            .namedValues += successionManager.lifeInsurance.taxesAdults
+            .namedValues = successionManager.lifeInsurance.taxesAdults
         //   - imputables aux enfants
         childrenTaxes
             .perCategory[.liSuccession]?
-            .namedValues += successionManager.lifeInsurance.taxesChildren
+            .namedValues = successionManager.lifeInsurance.taxesChildren
         
         /// Solde net des héritages éventuellement reçus par les enfants dans l'année
         if successionManager.legal.revenuesChildren.isNotEmpty ||

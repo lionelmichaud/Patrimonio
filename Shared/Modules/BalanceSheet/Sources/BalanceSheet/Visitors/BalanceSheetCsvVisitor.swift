@@ -52,9 +52,9 @@ public final class BalanceSheetCsvTableVisitor: BalanceSheetCsvVisitorP {
             let namedValues = namedValueTable.namedValues
             table.append(namedValues
                             .map { $0.value.roundedString }
-                            .joined(separator: "; "))
+                            .joined(separator: ";"))
             // valeure cumulée de la catégorie
-            table.append("; \(namedValueTable.total.roundedString);")
+            table.append(";\(namedValueTable.total.roundedString);")
         }
     }
 
@@ -66,9 +66,9 @@ public final class BalanceSheetCsvTableVisitor: BalanceSheetCsvVisitorP {
             let namedValues = namedValueTable.namedValues
             table.append(namedValues
                             .map { $0.value.roundedString }
-                            .joined(separator: "; "))
+                            .joined(separator: ";"))
             // valeure cumulée de la catégorie
-            table.append("; \(namedValueTable.total.roundedString); ")
+            table.append(";\(namedValueTable.total.roundedString);")
         }
     }
 
@@ -78,7 +78,7 @@ public final class BalanceSheetCsvTableVisitor: BalanceSheetCsvVisitorP {
             guard let valuedAssets = element.assets[AppSettings.shared.allPersonsLabel] else { return }
             valuedAssets.accept(self)
             // total des ACTIFS
-            table.append("\(valuedAssets.total.roundedString); ")
+            table.append("\(valuedAssets.total.roundedString);")
         }
 
         func visitLiabilities() {
@@ -86,13 +86,13 @@ public final class BalanceSheetCsvTableVisitor: BalanceSheetCsvVisitorP {
             guard let valuedLiabilities = element.liabilities[AppSettings.shared.allPersonsLabel] else { return }
             valuedLiabilities.accept(self)
             // total des PASSIFS
-            table.append("\(valuedLiabilities.total.roundedString); ")
+            table.append("\(valuedLiabilities.total.roundedString);")
         }
 
-        table.append("\(element.year); ")
-        table.append("\(model.economyModel.randomizers.inflation.value(withMode: mode).percentString(digit: 1)); ")
-        table.append("\(model.economyModel.rates(in: element.year, withMode: mode, simulateVolatility: UserSettings.shared.simulateVolatility).securedRate.percentString(digit: 1)); ")
-        table.append("\(model.economyModel.rates(in: element.year, withMode: mode, simulateVolatility: UserSettings.shared.simulateVolatility).stockRate.percentString(digit: 1)); ")
+        table.append("\(element.year);")
+        table.append("\(model.economyModel.randomizers.inflation.value(withMode: mode).percentString(digit: 1));")
+        table.append("\(model.economyModel.rates(in: element.year, withMode: mode, simulateVolatility: UserSettings.shared.simulateVolatility).securedRate.percentString(digit: 1));")
+        table.append("\(model.economyModel.rates(in: element.year, withMode: mode, simulateVolatility: UserSettings.shared.simulateVolatility).stockRate.percentString(digit: 1));")
 
         // actifs
         visitAssets()
@@ -149,17 +149,17 @@ public final class BalanceSheetCsvHeaderVisitor: BalanceSheetCsvVisitorP {
             let namedValues = namedValueTable.namedValues
             header0.append(namedValues
                             .map { _ in "ACTIF" }
-                            .joined(separator: "; "))
+                            .joined(separator: ";"))
             header1.append(namedValues
                             .map { _ in namedValueTable.tableName.uppercased() }
-                            .joined(separator: "; "))
+                            .joined(separator: ";"))
             header2.append(namedValues
                             .map { $0.name }
-                            .joined(separator: "; "))
+                            .joined(separator: ";"))
             // valeure cumulée de la catégorie
-            header0.append("; ACTIF; ")
-            header1.append("; ; ")
-            header2.append("; \(namedValueTable.tableName.uppercased()) TOTAL; ")
+            header0.append(";TOTAL;")
+            header1.append(";ACTIF;")
+            header2.append(";\(namedValueTable.tableName.uppercased()) TOTAL;")
         }
     }
 
@@ -171,17 +171,17 @@ public final class BalanceSheetCsvHeaderVisitor: BalanceSheetCsvVisitorP {
             let namedValues = namedValueTable.namedValues
             header0.append(namedValues
                             .map { _ in "PASSIF" }
-                            .joined(separator: "; "))
+                            .joined(separator: ";"))
             header1.append(namedValues
                             .map { _ in namedValueTable.tableName.uppercased() }
-                            .joined(separator: "; "))
+                            .joined(separator: ";"))
             header2.append(namedValues
                             .map { $0.name }
-                            .joined(separator: "; "))
+                            .joined(separator: ";"))
             // valeure cumulée de la catégorie
-            header0.append("; PASSIF; ")
-            header1.append("; ; ")
-            header2.append("; \(namedValueTable.tableName.uppercased()) TOTAL; ")
+            header0.append(";TOTAL;")
+            header1.append(";PASSIF;")
+            header2.append(";\(namedValueTable.tableName.uppercased()) TOTAL;")
         }
     }
 
@@ -191,9 +191,9 @@ public final class BalanceSheetCsvHeaderVisitor: BalanceSheetCsvVisitorP {
             guard let valuedAssets = element.assets[AppSettings.shared.allPersonsLabel] else { return }
             valuedAssets.accept(self)
             // total des ACTIFS
-            header0.append("ACTIF; ")
-            header1.append("; ")
-            header2.append("ACTIF TOTAL; ")
+            header0.append("TOTAL;")
+            header1.append("ACTIF;")
+            header2.append("ACTIF TOTAL;")
         }
 
         func visitLiabilities() {
@@ -201,17 +201,17 @@ public final class BalanceSheetCsvHeaderVisitor: BalanceSheetCsvVisitorP {
             guard let valuedLiabilities = element.liabilities[AppSettings.shared.allPersonsLabel] else { return }
             valuedLiabilities.accept(self)
             // total des PASSIFS
-            header0.append("PASSIF; ")
-            header1.append("; ")
-            header2.append("PASSIF TOTAL; ")
+            header0.append("TOTAL;")
+            header1.append("PASSIF;")
+            header2.append("PASSIF TOTAL;")
         }
 
-        header0.append("; ; ; ; ")
-        header1.append("; ; ; ; ")
-        header2.append("YEAR; ")
-        header2.append("Inflation; ")
-        header2.append("Taux Oblig; ")
-        header2.append("Taux Action; ")
+        header0.append(";;INFO;INFO;")
+        header1.append(";;DATA;DATA;")
+        header2.append("YEAR;")
+        header2.append("Inflation;")
+        header2.append("Taux Oblig;")
+        header2.append("Taux Action;")
 
         // actifs
         visitAssets()
@@ -221,7 +221,7 @@ public final class BalanceSheetCsvHeaderVisitor: BalanceSheetCsvVisitorP {
 
         // net
         header0.append("BILAN")
-        header2.append("NET")
+        header2.append("BILAN NET")
     }
 
     public func buildCsv(element: BalanceSheetArray) {

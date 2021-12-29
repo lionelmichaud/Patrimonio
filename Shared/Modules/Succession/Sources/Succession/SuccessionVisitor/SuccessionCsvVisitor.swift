@@ -27,7 +27,7 @@ public class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
     private var successions: [Succession]
     private var firstSuccession = false
     private var firstHeritier   = false
-    private let separator = "; "
+    private let separator = ";"
     private let endOfLine = "\n"
 
     public init(successions: [Succession]) {
