@@ -1,15 +1,15 @@
 {
     "version" :
     {
-        "version" : "0.1",
-        "date"    : "2020-10-12T23:00:00+01:00",
+        "version" : "0.2",
+        "date"    : "2021-12-29T23:00:00+01:00",
         "comment" : null
     },
     "items" : [
         {
             "id"                      : "232D1AB2-D9B3-4D0A-A857-4153B3DCD6DA",
             "name"                    : "Maison Chatel",
-            "note"                    : "Actualisé le 11/09/2020",
+            "note"                    : "Actualisé le 29/12/2021",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -56,18 +56,18 @@
             },
             "rentalTo"     :
             {
-                "fixedYear": 2100
+                "fixedYear": 2022
             },
             "monthlyRentAfterCharges" : 710,
             
-            "willBeSold"              : false,
+            "willBeSold"              : true,
             "sellingYear"             :
             {
-                "fixedYear": 2100
+                "fixedYear": 2022
             },
-            "sellingNetPrice"         : 100000,
+            "sellingNetPrice"         : 121000,
             
-            "estimatedValue"          : 100000
+            "estimatedValue"          : 121000
         },
         
         

@@ -6,8 +6,8 @@
             "name"    : "Inflation",
             "version" :
             {
-                "version" : "0.1",
-                "date"    : "2020-10-12T23:00:00+01:00",
+                "version" : "0.2",
+                "date"    : "2021-12-30T23:00:00+01:00",
                 "comment" : null
             },
             "rndGenerator":
@@ -17,7 +17,7 @@
                 "alpha"    : 2.5,
                 "beta"     : 2.5
             },
-            "defaultValue" : 1.5
+            "defaultValue" : 2.0
         },
         
         "securedRate":
@@ -25,18 +25,18 @@
             "name"    : "Taux de rendement des placements sûrs",
             "version" :
             {
-                "version" : "0.1",
-                "date"    : "2020-10-12T23:00:00+01:00",
+                "version" : "0.2",
+                "date"    : "2021-12-30T23:00:00+01:00",
                 "comment" : null
             },
             "rndGenerator":
             {
-                "minX"     : 1.0,
+                "minX"     : 0.5,
                 "maxX"     : 2.5,
                 "alpha"    : 1.5,
                 "beta"     : 2.0
             },
-            "defaultValue" : 1.7
+            "defaultValue" : 1.65
         },
         
         "stockRate":
@@ -50,7 +50,7 @@
             },
             "rndGenerator":
             {
-                "minX"     : 5.0,
+                "minX"     : 3.0,
                 "maxX"     : 9.0,
                 "alpha"    : 2.0,
                 "beta"     : 2.5
@@ -58,7 +58,7 @@
             "defaultValue" : 5.0
         },
         
-        "securedVolatility" : 0.5,
+        "securedVolatility" : 0.25,
         "stockVolatility"   : 14.0
     }
 }

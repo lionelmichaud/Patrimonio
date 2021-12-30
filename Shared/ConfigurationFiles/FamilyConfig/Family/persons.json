@@ -21,7 +21,7 @@
         "age_Of_Pension_Liquid" : {
             "year" : 62,
             "month": 0,
-            "day"  : 10,
+            "day"  : 1,
             "calendar" : {
                 "locale" : {
                     "identifier" : "fr_FR"
@@ -42,7 +42,7 @@
         "age_Of_Agirc_Pension_Liquid" : {
             "year" : 62,
             "month": 0,
-            "day"  : 10,
+            "day"  : 1,
             "calendar" : {
                 "locale" : {
                     "identifier" : "fr_FR"
@@ -84,7 +84,7 @@
         "age_Of_Pension_Liquid" : {
             "year" : 62,
             "month": 0,
-            "day"  : 15,
+            "day"  : 1,
             "calendar" : {
                 "locale" : {
                     "identifier" : "fr_FR"
@@ -95,8 +95,7 @@
                 "identifier" : "gregorian",
                 "minimumDaysInFirstWeek" : 4,
                 "firstWeekday" : 2
-            },
-            "month" : 0
+            }
         },
         "regime_General_Situation" : {
             "atEndOf"           : 2020,
@@ -106,7 +105,7 @@
         "age_Of_Agirc_Pension_Liquid" : {
             "year" : 62,
             "month": 0,
-            "day"  : 20,
+            "day"  : 1,
             "calendar" : {
                 "locale" : {
                     "identifier" : "fr_FR"
@@ -117,8 +116,7 @@
                 "identifier" : "gregorian",
                 "minimumDaysInFirstWeek" : 4,
                 "firstWeekday" : 2
-            },
-            "month" : 0
+            }
         },
         "regime_Agirc_Situation" : {
             "atEndOf"     : 2013,

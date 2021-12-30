@@ -15,7 +15,7 @@ struct UpdateSettingsView: View {
     var body: some View {
         Form {
             Section(header:
-                        Text("Remplacer votre patron par la version par défaut contenue dans l'application")
+                        Text("Remplacer votre patron par la version par défaut fournie par l'application")
                         .textCase(.none)) {
                 Button(action: updateTemplateDirectoryFromApp,
                        label: { Text("Remplacer tout") })

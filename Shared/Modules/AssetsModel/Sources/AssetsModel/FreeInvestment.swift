@@ -349,17 +349,20 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     /// Capitaliser les intérêts d'une année: à faire une fois par an et apparaissent dans l'année courante
     /// - Note: Si la volatilité est prise en compte dans le modèle économique alors le taux change chaque année
     public mutating func capitalize(atEndOf year: Int) throws {
-        guard year == currentState.year + 1 else {
+        guard (currentState.year ... (currentState.year + 1)).contains(year) else {
             customLog.log(level: .error,
-                          "FreeInvestementError.capitalize: capitalisation sur un nombre d'année différent de 1")
+                          "FreeInvestementError.capitalize: capitalisation sur un nombre d'année différent de 0 et 1")
             throw FreeInvestementError.IlegalOperation
         }
-        let interests = yearlyInterestNetOfTaxesAndInflation(in: year)
         
-        currentState.interest += interests
-        currentState.year = year
-        
-        currentStateAfterTransmission?.interest += interests
+        if year == currentState.year + 1 {
+            let interests = yearlyInterestNetOfTaxesAndInflation(in: year)
+            
+            currentState.interest += interests
+            currentState.year = year
+            
+            currentStateAfterTransmission?.interest += interests
+        }
     }
     
     /// Remettre la valeur courante à la date de fin d'année passée
@@ -373,6 +376,13 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         if estimationYear == lastKnownState.year {
             currentState = lastKnownState
             
+        } else if estimationYear == lastKnownState.year - 1 {
+            // pour gérer le cas où on met à jour les données à la fin de l'année en cours
+            currentState = lastKnownState
+            let lastKnownStateYear = lastKnownState.year
+            customLog.log(level: .error,
+                          "estimationYear (\(estimationYear, privacy: .public)) < initialState.year (\(lastKnownStateYear))")
+            
         } else {
             // extrapoler la valeure à partir de la situation initiale
             do {
@@ -385,8 +395,9 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                                      investment : lastKnownState.investment)
             } catch FinancialMathError.negativeNbPeriod {
                 // on ne remonte pas le temps
+                let lastKnownStateYear = lastKnownState.year
                 customLog.log(level: .fault,
-                              "estimationYear (\(estimationYear, privacy: .public)) < initialState.year")
+                              "estimationYear (\(estimationYear, privacy: .public)) < initialState.year (\(lastKnownStateYear))")
                 fatalError("estimationYear (\(estimationYear)) < initialState.year (\(lastKnownState.year))")
             } catch {
                 customLog.log(level: .fault, "FinancialMathError.futurValue")
