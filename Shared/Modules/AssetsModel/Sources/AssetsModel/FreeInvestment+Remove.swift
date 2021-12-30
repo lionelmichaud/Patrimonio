@@ -261,12 +261,14 @@ extension FreeInvestement {
         let ownedValueDecedent = ownedValue(by                : decedentName,
                                             atEndOf           : currentState.year,
                                             evaluationContext : .lifeInsuranceSuccession)
-
+        
         // les capitaux décès sont retirés de l'assurance vie pour être distribuée en cash
         // décrémenter le capital (versement et intérêts) du montant retiré
-        let withdrawal = split(removal: ownedValueDecedent)
-        currentState.interest   -= withdrawal.interest
-        currentState.investment -= withdrawal.investment
+        if ownedValueDecedent != 0 {
+            let withdrawal = split(removal: ownedValueDecedent)
+            currentState.interest   -= withdrawal.interest
+            currentState.investment -= withdrawal.investment
+        }
         
         if ownership.hasAUniqueFullOwner(named: decedentName) {
             isOpen = false

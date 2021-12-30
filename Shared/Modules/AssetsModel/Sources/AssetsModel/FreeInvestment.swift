@@ -265,15 +265,20 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     
     /// somme des versements + somme des intérêts
     public func value(atEndOf year: Int) -> Double {
-        guard year == self.currentState.year else {
+        if year == self.currentState.year {
+            // valeur de la dernière année simulée
+            return currentState.value
+            
+        } else if year == self.lastKnownState.year - 1 {
+            return lastKnownState.value
+            
+        } else {
             // extrapoler la valeur à partir de la situation initiale avec un taux constant moyen
             return try! futurValue(payement     : 0,
                                    interestRate : averageInterestRateNetOfTaxesAndInflation/100,
                                    nbPeriod     : year - lastKnownState.year,
                                    initialValue : lastKnownState.value)
         }
-        // valeur de la dernière année simulée
-        return currentState.value
     }
     
     public func isOpen(in year: Int) -> Bool {

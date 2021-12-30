@@ -437,7 +437,10 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
         
         // les capitaux décès sont retirés de l'assurance vie pour être distribuée en cash
         // décrémenter le capital (versement et intérêts) du montant retiré
-        let withdrawal = split(removal: ownedValueDecedent, atEndOf: year)
+        var withdrawal = (investment: 0.0, interest: 0.0)
+        if ownedValueDecedent != 0 {
+            withdrawal = split(removal: ownedValueDecedent, atEndOf: year)
+        }
         refState = State(firstYear         : year,
                          initialInterest   : refState.initialInterest - withdrawal.interest,
                          initialInvestment : refState.initialInvestment - withdrawal.investment)
