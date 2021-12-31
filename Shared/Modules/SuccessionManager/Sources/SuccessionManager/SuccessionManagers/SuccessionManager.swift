@@ -128,7 +128,6 @@ public struct SuccessionManager {
         /// (1) identification des personnes décédées dans l'année (ordonnés par âge décroissant)
         let adultDecedentsNames = family.deceasedAdults(during: year)
         
-        
         /// (2) pour chaque défunt
         adultDecedentsNames.forEach { decedentName in
             manageSuccession(of                 : decedentName,

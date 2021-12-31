@@ -47,6 +47,24 @@ public enum EvaluationContext: String, PickableEnumP {
     public var pickerString: String {
         return self.rawValue
     }
+    
+    public var displayString: String {
+        switch self {
+            case .ifi:
+                return "Valeur fiscale IFI"
+            case .isf:
+                return "Valeur fiscale ISF"
+            case .legalSuccession:
+                return "Valeur fiscale Suc. Légale"
+            case .lifeInsuranceSuccession:
+                return "Valeur fiscale Suc. Ass. Vie"
+            case .lifeInsuranceTransmission:
+                return "Valeur transmise Suc. Ass. Vie"
+            case .patrimoine:
+                return "Valeur Patrimoniale"
+        }
+
+    }
 }
 
 // MARK: - La répartition des droits de propriété d'un bien entre personnes

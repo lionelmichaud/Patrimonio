@@ -95,7 +95,7 @@ extension BarChartView {
     }
 }
 
-// MARK: - Extension de LineChartView pour customizer la configuration des Graph de l'appli
+// MARK: - Extension de ScatterChartView pour customizer la configuration des Graph de l'appli
 
 extension ScatterChartView {
 
@@ -462,5 +462,55 @@ extension HorizontalBarChartView {
         self.chartDescription?.text    = title
         self.chartDescription?.enabled = true
         self.chartDescription?.font    = .systemFont(ofSize : 13)
+    }
+}
+
+// MARK: - Extension de LineChartView pour customizer la configuration des Graph de l'appli
+
+extension PieChartView {
+    
+    /// Création d'un LineChartView avec une présentation customisée
+    /// - Parameter title: Titre du graphique
+    convenience init(title         : String?,
+                     legendEnabled : Bool = true,
+                     smallLegend   : Bool = true) {
+        self.init()
+        
+        //: ### General
+        self.backgroundColor           = ChartThemes.DarkChartColors.backgroundColor
+        self.holeColor                 = ChartThemes.DarkChartColors.backgroundColor
+        self.drawSlicesUnderHoleEnabled = true
+        self.drawHoleEnabled            = true
+        self.drawCenterTextEnabled      = title != nil
+        //        self.centerText                 = title
+        
+        if let title = title {
+            let paragraphStyle           = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+            paragraphStyle.lineBreakMode = .byTruncatingTail
+            paragraphStyle.alignment     = .center
+            
+            let attrString = NSMutableAttributedString(string: title)
+            attrString.setAttributes([.foregroundColor: ChartThemes.DarkChartColors.legendColor,
+                                      .font: ChartThemes.ChartDefaults.titleFont,
+                                      .paragraphStyle: paragraphStyle],
+                                     range: NSRange(location: 0, length: attrString.length))
+            self.centerAttributedText = attrString
+        }
+        
+        //: ### Legend
+        let legend = self.legend
+        legend.enabled             = legendEnabled
+        legend.font                = smallLegend ? ChartThemes.ChartDefaults.smallLegendFont : ChartThemes.ChartDefaults.largeLegendFont
+        legend.textColor           = ChartThemes.DarkChartColors.legendColor
+        legend.form                = .square
+        legend.drawInside          = false
+        legend.orientation         = .horizontal
+        legend.verticalAlignment   = .bottom
+        legend.horizontalAlignment = .left
+        
+        //: ### Description
+        self.chartDescription?.enabled = false
+        self.chartDescription?.text    = title
+        self.chartDescription?.font    = ChartThemes.ChartDefaults.largeLegendFont
     }
 }
