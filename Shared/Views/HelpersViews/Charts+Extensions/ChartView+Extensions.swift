@@ -465,15 +465,23 @@ extension HorizontalBarChartView {
     }
 }
 
-// MARK: - Extension de LineChartView pour customizer la configuration des Graph de l'appli
+// MARK: - Extension de PieChartView pour customizer la configuration des Graph de l'appli
+
+enum LengendPosition {
+    case bottom
+    case left
+}
 
 extension PieChartView {
     
     /// Création d'un LineChartView avec une présentation customisée
     /// - Parameter title: Titre du graphique
-    convenience init(title         : String?,
-                     legendEnabled : Bool = true,
-                     smallLegend   : Bool = true) {
+    convenience init(chartDescription   : String?,
+                     centerText         : String?,
+                     descriptionEnabled : Bool = true,
+                     legendEnabled      : Bool = true,
+                     legendPosition     : LengendPosition = .bottom,
+                     smallLegend        : Bool = true) {
         self.init()
         
         //: ### General
@@ -481,15 +489,16 @@ extension PieChartView {
         self.holeColor                 = ChartThemes.DarkChartColors.backgroundColor
         self.drawSlicesUnderHoleEnabled = true
         self.drawHoleEnabled            = true
-        self.drawCenterTextEnabled      = title != nil
+        self.drawCenterTextEnabled      = centerText != nil
+        self.rotationAngle              = 0.0
         //        self.centerText                 = title
         
-        if let title = title {
+        if let centerText = centerText {
             let paragraphStyle           = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
             paragraphStyle.lineBreakMode = .byTruncatingTail
             paragraphStyle.alignment     = .center
             
-            let attrString = NSMutableAttributedString(string: title)
+            let attrString = NSMutableAttributedString(string: centerText)
             attrString.setAttributes([.foregroundColor: ChartThemes.DarkChartColors.legendColor,
                                       .font: ChartThemes.ChartDefaults.titleFont,
                                       .paragraphStyle: paragraphStyle],
@@ -504,13 +513,29 @@ extension PieChartView {
         legend.textColor           = ChartThemes.DarkChartColors.legendColor
         legend.form                = .square
         legend.drawInside          = false
-        legend.orientation         = .horizontal
-        legend.verticalAlignment   = .bottom
+        switch legendPosition {
+            case .left:
+                legend.orientation         = .vertical
+                legend.verticalAlignment   = .center
+            case .bottom:
+                legend.orientation         = .horizontal
+                legend.verticalAlignment   = .bottom
+        }
         legend.horizontalAlignment = .left
-        
+        legend.formSize = CGFloat(12.0)
+
         //: ### Description
-        self.chartDescription?.enabled = false
-        self.chartDescription?.text    = title
+        self.chartDescription?.enabled = descriptionEnabled
+        self.chartDescription?.text    = chartDescription
         self.chartDescription?.font    = ChartThemes.ChartDefaults.largeLegendFont
+        
+        // bulle d'info
+        let marker = BalloonMarker(color               : ChartThemes.BallonColors.color,
+                                   font                : ChartThemes.ChartDefaults.baloonfont,
+                                   textColor           : ChartThemes.BallonColors.textColor,
+                                   insets              : UIEdgeInsets(top: 8, left: 8, bottom: 20, right: 8))
+        marker.chartView   = self
+        marker.minimumSize = CGSize(width : 80, height : 40)
+        self.marker   = marker
     }
 }

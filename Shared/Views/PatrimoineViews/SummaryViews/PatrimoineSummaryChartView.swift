@@ -13,41 +13,42 @@ import PatrimoineModel
 import Charts
 
 struct PatrimoineSummaryChartView: View {
+    static let tous = "Tous"
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var uiState    : UIState
+    @State private var evaluationContext      : EvaluationContext = .patrimoine
+    @State private var selectedAdult          : String            = tous
     
     var body: some View {
         VStack {
             HStack {
-                FamilyMembersPatrimoineSharesView(title      : "REPARTITION\nDU\nPATRIMOINE",
-                                                  family     : family,
-                                                  patrimoine : patrimoine,
-                                                  year       : Int(uiState.patrimoineViewState.evalDate))
-                FamilyMembersPatrimoineSharesView(title      : "Titre",
-                                                  family     : family,
-                                                  patrimoine : patrimoine,
-                                                  year       : Int(uiState.patrimoineViewState.evalDate))
+                FamilyMembersPatrimoineSharesView(family            : family,
+                                                  patrimoine        : patrimoine,
+                                                  year              : Int(uiState.patrimoineViewState.evalDate),
+                                                  evaluationContext : $evaluationContext)
+                PatrimoineCategorySharesView(family            : family,
+                                             patrimoine        : patrimoine,
+                                             year              : Int(uiState.patrimoineViewState.evalDate),
+                                             evaluationContext : evaluationContext,
+                                             selectedAdult     : $selectedAdult)
             }
             HStack {
-                PatrimoineCategorySharesView(title      : "ACTIFS\nPAR\nCATÉGORIE",
-                                             patrimoine : patrimoine,
-                                             year       : Int(uiState.patrimoineViewState.evalDate))
-                FamilyMembersPatrimoineSharesView(title      : "Titre",
-                                                  family     : family,
-                                                  patrimoine : patrimoine,
-                                                  year       : Int(uiState.patrimoineViewState.evalDate))
+                PatrimoineSingleCategoryView(family            : family,
+                                             patrimoine        : patrimoine,
+                                             year              : Int(uiState.patrimoineViewState.evalDate),
+                                             evaluationContext : evaluationContext,
+                                             selectedAdult     : selectedAdult)
             }
         }
     }
 }
 
 struct FamilyMembersPatrimoineSharesView : View {
-    var title       : String
     var family      : Family
     var patrimoine  : Patrimoin
     var year        : Int
-    @State private var evaluationContext: EvaluationContext = .patrimoine
+    @Binding var evaluationContext: EvaluationContext
     
     var body: some View {
         VStack {
@@ -57,12 +58,16 @@ struct FamilyMembersPatrimoineSharesView : View {
                 Text(evaluationContext.displayString)
             }
             
-            PieChartTemplateView(title : title,
-                                 data  : data)
+            PieChartTemplateView(chartDescription   : nil,
+                                 centerText         : "REPARTITION\nDU\nPATRIMOINE\nNET DES\nADULTES",
+                                 descriptionEnabled : true,
+                                 legendEnabled      : false,
+                                 data               : data)
         }
         .padding(.top).border(Color.white)
     }
     
+    /// Données à afficher sur le graphique
     var data : [(label: String, value: Double)] {
         let membersName = family.adultsName
         let dataEntries: [(label: String, value: Double)] =
@@ -78,37 +83,272 @@ struct FamilyMembersPatrimoineSharesView : View {
 }
 
 struct PatrimoineCategorySharesView : View {
-    var title      : String
-    var patrimoine : Patrimoin
-    var year       : Int
+    var family                 : Family
+    var patrimoine             : Patrimoin
+    var year                   : Int
+    var evaluationContext      : EvaluationContext
+    @Binding var selectedAdult : String
+    private static let immobilier             = "Immobilier"
+    private static let scpi                   = "SCPI"
+    private static let freeInvest             = "Invest. Libres"
+    private static let perdiodInvest          = "Invest. Périodiques"
+    @State private var menuItems = [PatrimoineSummaryChartView.tous]
     
     var body: some View {
-        PieChartTemplateView(title : title,
-                             data  : data)
-            .padding(.top).border(Color.white)
+        VStack {
+            HStack {
+                Text("\(evaluationContext.displayString)")
+                Spacer()
+                Picker("Pour:", selection: $selectedAdult) {
+                    ForEach(menuItems, id: \.self) { name in
+                        Text(name)
+                    }
+                }.pickerStyle(MenuPickerStyle())
+                Text(selectedAdult)
+            }.padding(.horizontal)
+            
+            PieChartTemplateView(chartDescription   : nil,
+                                 centerText         : "ACTIFS\nPAR\nCATÉGORIE",
+                                 descriptionEnabled : true,
+                                 legendEnabled      : false,
+                                 data               : data)
+        }
+        .padding(.top).border(Color.white)
+        .onAppear(perform: buildMenu)
     }
     
     var data : [(label: String, value: Double)] {
         var dataEntries = [(label: String, value: Double)]()
         
-        let realEstates = (label: "Immobilier Physique",
-                           value: patrimoine.assets.realEstates.value(atEndOf: year))
-        dataEntries.append(realEstates)
+        if selectedAdult == PatrimoineSummaryChartView.tous {
+            var realEstatesTotal     = 0.0
+            var scpisTotal           = 0.0
+            var periodicInvestsTotal = 0.0
+            var freeInvestsTotal     = 0.0
+            
+            family.adultsName.forEach { name in
+                realEstatesTotal +=
+                    patrimoine.assets.realEstates.ownedValue(by: name,
+                                                             atEndOf: year,
+                                                             evaluationContext: evaluationContext)
+                scpisTotal +=
+                    patrimoine.assets.scpis.ownedValue(by: name,
+                                                       atEndOf: year,
+                                                       evaluationContext: evaluationContext) +
+                    patrimoine.assets.sci.scpis.ownedValue(by: name,
+                                                           atEndOf: year,
+                                                           evaluationContext: evaluationContext)
+                periodicInvestsTotal +=
+                    patrimoine.assets.periodicInvests.ownedValue(by: name,
+                                                                 atEndOf: year,
+                                                                 evaluationContext: evaluationContext)
+                freeInvestsTotal +=
+                    patrimoine.assets.freeInvests.ownedValue(by: name,
+                                                             atEndOf: year,
+                                                             evaluationContext: evaluationContext)
+            }
+            if realEstatesTotal != 0 {
+                let realEstates = (label: PatrimoineCategorySharesView.immobilier,
+                                   value: realEstatesTotal)
+                dataEntries.append(realEstates)
+            }
+            
+            if scpisTotal != 0 {
+                let scpis = (label: PatrimoineCategorySharesView.scpi,
+                             value: scpisTotal)
+                dataEntries.append(scpis)
+            }
+            
+            if periodicInvestsTotal != 0 {
+                let periodicInvests = (label: PatrimoineCategorySharesView.perdiodInvest,
+                                       value: periodicInvestsTotal)
+                dataEntries.append(periodicInvests)
+            }
+            
+            if freeInvestsTotal != 0 {
+                let freeInvests = (label: PatrimoineCategorySharesView.freeInvest,
+                                   value: freeInvestsTotal)
+                dataEntries.append(freeInvests)
+            }
+            
+        } else {
+            let realEstates = (label: PatrimoineCategorySharesView.immobilier,
+                               value: patrimoine.assets.realEstates.ownedValue(by: selectedAdult,
+                                                                               atEndOf: year,
+                                                                               evaluationContext: evaluationContext))
+            if realEstates.value != 0 {
+                dataEntries.append(realEstates)
+            }
+            
+            let scpis = (label: PatrimoineCategorySharesView.scpi,
+                         value: patrimoine.assets.scpis.ownedValue(by: selectedAdult,
+                                                                   atEndOf: year,
+                                                                   evaluationContext: evaluationContext) +
+                            patrimoine.assets.sci.scpis.ownedValue(by: selectedAdult,
+                                                                   atEndOf: year,
+                                                                   evaluationContext: evaluationContext))
+            if scpis.value != 0 {
+                dataEntries.append(scpis)
+            }
+            
+            let periodicInvests = (label: PatrimoineCategorySharesView.perdiodInvest,
+                                   value: patrimoine.assets.periodicInvests.ownedValue(by: selectedAdult,
+                                                                                       atEndOf: year,
+                                                                                       evaluationContext: evaluationContext))
+            if periodicInvests.value != 0 {
+                dataEntries.append(periodicInvests)
+            }
+            
+            let freeInvests = (label: PatrimoineCategorySharesView.freeInvest,
+                               value: patrimoine.assets.freeInvests.ownedValue(by: selectedAdult,
+                                                                               atEndOf: year,
+                                                                               evaluationContext: evaluationContext))
+            if freeInvests.value != 0 {
+                dataEntries.append(freeInvests)
+            }
+        }
         
-        let scpi = (label: "Immobilier SCPI",
-                    value: patrimoine.assets.scpis.value(atEndOf: year) +
-                        patrimoine.assets.sci.scpis.value(atEndOf: year))
-        dataEntries.append(scpi)
-        
-        let periodicInvests = (label: "Investis. Périodiques",
-                               value: patrimoine.assets.periodicInvests.value(atEndOf: year))
-        dataEntries.append(periodicInvests)
-
-        let freeInvests = (label: "Investis. Libres",
-                           value: patrimoine.assets.freeInvests.value(atEndOf: year))
-        dataEntries.append(freeInvests)
-
         return dataEntries
+    }
+    
+    func buildMenu() {
+        let adultsName = family.adultsName
+        menuItems += adultsName
+    }
+}
+
+/// Catégories d'actifs
+enum PieChartAssetsCategory: String, PickableEnumP, Codable {
+    case periodicInvests = "Invest. périodique"
+    case freeInvests     = "Invest. libre"
+    case realEstates     = "Immobilier"
+    case scpis           = "SCPI"
+    
+    // properties
+    
+    public var pickerString: String {
+        return self.rawValue
+    }
+}
+
+struct PatrimoineSingleCategoryView : View {
+    var family            : Family
+    var patrimoine        : Patrimoin
+    var year              : Int
+    var evaluationContext : EvaluationContext
+    var selectedAdult     : String
+    @State private var selectedCategory: PieChartAssetsCategory = .freeInvests
+    
+    var body: some View {
+        HStack {
+            PieChartTemplateView(chartDescription   : nil,
+                                 centerText         : "REPARTITION\nDANS UNE\nCATÉGORIE\nD'ACTIF",
+                                 descriptionEnabled : true,
+                                 legendEnabled      : true,
+                                 legendPosition     : .left,
+                                 smallLegend        : false,
+                                 data               : data)
+            
+            VStack {
+                VStack {
+                    Text("\(evaluationContext.displayString)")
+                        .padding(.top)
+                    Text("Pour: \(selectedAdult)")
+                        .padding(.top)
+                    HStack {
+                        CasePicker(pickedCase: $selectedCategory, label: "Categorie:")
+                            .pickerStyle(MenuPickerStyle())
+                        Text(selectedCategory.displayString)
+                    }.padding(.vertical)
+                }
+                .padding(.horizontal).border(Color.secondary)
+                .padding()
+                Spacer()
+            }
+        }.border(Color.white)
+        
+    }
+    
+    /// Données à afficher sur le graphique
+    var data : [(label: String, value: Double)] {
+        var dataEntries = [(label: String, value: Double)]()
+        
+        switch selectedCategory {
+            case .periodicInvests:
+                patrimoine.assets.periodicInvests.items.forEach { item in
+                    var value = 0.0
+                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                        
+                    } else {
+                        value = item.ownedValue(by                : selectedAdult,
+                                                atEndOf           : year,
+                                                evaluationContext : evaluationContext)
+                    }
+                    if value != 0 {
+                        dataEntries.append((label: item.name, value: value))
+                    }
+                }
+                
+            case .freeInvests:
+                patrimoine.assets.freeInvests.items.forEach { item in
+                    var value = 0.0
+                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                        
+                    } else {
+                        value = item.ownedValue(by                : selectedAdult,
+                                                atEndOf           : year,
+                                                evaluationContext : evaluationContext)
+                        if value != 0 {
+                            dataEntries.append((label: item.name, value: value))
+                        }
+                    }
+                }
+                
+            case .realEstates:
+                patrimoine.assets.realEstates.items.forEach { item in
+                    var value = 0.0
+                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                        
+                    } else {
+                        value = item.ownedValue(by                : selectedAdult,
+                                                atEndOf           : year,
+                                                evaluationContext : evaluationContext)
+                        if value != 0 {
+                            dataEntries.append((label: item.name, value: value))
+                        }
+                    }
+                }
+                
+            case .scpis:
+                patrimoine.assets.scpis.items.forEach { item in
+                    var value = 0.0
+                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                        
+                    } else {
+                        value = item.ownedValue(by                : selectedAdult,
+                                                atEndOf           : year,
+                                                evaluationContext : evaluationContext)
+                        if value != 0 {
+                            dataEntries.append((label: item.name, value: value))
+                        }
+                    }
+                }
+                patrimoine.assets.sci.scpis.items.forEach { item in
+                    var value = 0.0
+                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                        
+                    } else {
+                        value = item.ownedValue(by                : selectedAdult,
+                                                atEndOf           : year,
+                                                evaluationContext : evaluationContext)
+                    }
+                    if value != 0 {
+                        dataEntries.append((label: item.name, value: value))
+                    }
+                }
+        }
+        
+        return dataEntries.sortedReversed(by: \.value)
     }
 }
 

@@ -13,21 +13,36 @@ struct PieChartTemplateView: NSUIViewRepresentable {
 
     // MARK: - Properties
     
-    private var title  : String
-    private var data   : [(label   : String, value   : Double)]
-    private var uiView : PieChartView?
+    private var chartDescription   : String?
+    private var centerText         : String?
+    private var descriptionEnabled : Bool
+    private var legendEnabled      : Bool
+    private var legendPosition     : LengendPosition
+    private var smallLegend        : Bool
+    private var data               : [(label: String, value: Double)]
+    private var uiView             : PieChartView?
 
     // MARK: - Initializer
     
-    internal init(title : String,
-                  data  : [(label: String, value: Double)]) {
-        self.title = title
-        self.data  = data
+    internal init(chartDescription   : String?,
+                  centerText         : String?,
+                  descriptionEnabled : Bool = true,
+                  legendEnabled      : Bool = true,
+                  legendPosition     : LengendPosition = .bottom,
+                  smallLegend        : Bool = true,
+                  data               : [(label: String, value: Double)]) {
+        self.chartDescription   = chartDescription
+        self.centerText         = centerText
+        self.descriptionEnabled = descriptionEnabled
+        self.legendEnabled      = legendEnabled
+        self.legendPosition     = legendPosition
+        self.smallLegend        = smallLegend
+        self.data               = data
     }
     
     // MARK: - Methods
     
-    func makeDataSet() -> PieChartDataSet {
+    func makeDataSet(of chartView: PieChartView) -> PieChartDataSet {
         let totalValue = data.reduce(0.0) {
             $0 + $1.value
         }
@@ -37,9 +52,11 @@ struct PieChartTemplateView: NSUIViewRepresentable {
                                      label: entry.label + " (\(percent))")
         }
         
+        chartView.chartDescription?.text = chartDescription ?? "Total=\(totalValue.k€String)"
+        
         let dataSet = PieChartDataSet(entries : dataEntries,
-                                      label   : "Légende")
-        dataSet.colors = [NSUIColor](ChartThemes.pieChartColorsTable[0 ... dataEntries.endIndex-1])
+                                      label   : "")
+        dataSet.colors = [NSUIColor](ChartThemes.pieChartColorsTable)
         dataSet.entryLabelFont                   = ChartThemes.ChartDefaults.xLargeLabelFont
         dataSet.entryLabelColor                  = ChartThemes.DarkChartColors.valueColor
         dataSet.drawIconsEnabled                 = false
@@ -51,7 +68,7 @@ struct PieChartTemplateView: NSUIViewRepresentable {
     
     func updateData(of chartView: PieChartView) {
         // construire le DataSet
-        let dataSet = makeDataSet()
+        let dataSet = makeDataSet(of: chartView)
         
         // ajouter les DataSet au Chartdata
         let data = PieChartData(dataSet: dataSet)
@@ -68,9 +85,12 @@ struct PieChartTemplateView: NSUIViewRepresentable {
     /// - Returns: Graphique View
     func makeUIView(context: Context) -> PieChartView {
         // créer et configurer un nouveau graphique
-        let chartView = PieChartView(title         : title,
-                                     legendEnabled : false,
-                                     smallLegend   : false)
+        let chartView = PieChartView(chartDescription   : chartDescription,
+                                     centerText         : centerText,
+                                     descriptionEnabled : descriptionEnabled,
+                                     legendEnabled      : legendEnabled,
+                                     legendPosition     : legendPosition,
+                                     smallLegend        : smallLegend)
         
         // mémoriser la référence de la vue pour sauvegarde d'image ultérieure
         return chartView
@@ -92,7 +112,10 @@ struct PieChartTemplateView: NSUIViewRepresentable {
 
 struct PieChartTemplateView_Previews: PreviewProvider {
     static var previews: some View {
-        PieChartTemplateView(title: "Titre\ndu\ngraphique",
+        PieChartTemplateView(chartDescription   : "Description",
+                             centerText         : "Titre\nCentre\nGraphique",
+                             descriptionEnabled : true,
+                             legendEnabled      : true,
                              data: [(label: "Label 1", value:  5000.0),
                                     (label: "Label 2", value: 10000.0),
                                     (label: "Label 3", value: 15000.0)])
