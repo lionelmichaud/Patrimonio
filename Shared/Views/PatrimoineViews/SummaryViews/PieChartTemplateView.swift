@@ -116,6 +116,8 @@ struct PieChartTemplateView_Previews: PreviewProvider {
                              centerText         : "Titre\nCentre\nGraphique",
                              descriptionEnabled : true,
                              legendEnabled      : true,
+                             legendPosition     : .left,
+                             smallLegend        : false,
                              data: [(label: "Label 1", value:  5000.0),
                                     (label: "Label 2", value: 10000.0),
                                     (label: "Label 3", value: 15000.0)])

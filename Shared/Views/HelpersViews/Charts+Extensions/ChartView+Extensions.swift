@@ -530,7 +530,7 @@ extension PieChartView {
         self.chartDescription?.font    = ChartThemes.ChartDefaults.largeLegendFont
         
         // bulle d'info
-        let marker = BalloonMarker(color               : ChartThemes.BallonColors.color,
+        let marker = PieMarkerView(color               : ChartThemes.BallonColors.color,
                                    font                : ChartThemes.ChartDefaults.baloonfont,
                                    textColor           : ChartThemes.BallonColors.textColor,
                                    insets              : UIEdgeInsets(top: 8, left: 8, bottom: 20, right: 8))

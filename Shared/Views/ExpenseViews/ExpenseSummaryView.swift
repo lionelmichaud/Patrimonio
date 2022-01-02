@@ -66,7 +66,7 @@ struct ExpenseSummaryView: View {
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
-                .navigationTitle("Résumé")
+                .navigationTitle("Synthèse")
                 .navigationBarTitleDisplayModeInline()
                 .toolbar {
                     // afficher info-bulle

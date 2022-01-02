@@ -225,7 +225,7 @@
                 }
             },
             "interestRateType" : {
-                "marketRate_stockRatio" : 100.0
+                "marketRate_stockRatio" : 98.0
             }
         },
         
@@ -268,7 +268,7 @@
                 }
             },
             "interestRateType" : {
-                "marketRate_stockRatio" : 45.0
+                "marketRate_stockRatio" : 43.0
             }
         },
         
@@ -366,7 +366,7 @@
                 }
             },
             "interestRateType" : {
-                "marketRate_stockRatio" : 75.0
+                "marketRate_stockRatio" : 95.0
             }
         },
         

@@ -38,7 +38,7 @@ struct PatrimoineSummaryView: View {
                     PatrimoineSummaryChartView()
                 }
             }
-            .navigationTitle("Résumé")
+            .navigationTitle("Synthèse")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .automatic) {

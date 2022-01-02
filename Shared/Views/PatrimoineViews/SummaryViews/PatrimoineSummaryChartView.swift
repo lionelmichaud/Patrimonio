@@ -275,9 +275,23 @@ struct PatrimoineSingleCategoryView : View {
         
         switch selectedCategory {
             case .periodicInvests:
-                patrimoine.assets.periodicInvests.items.forEach { item in
+                patrimoine.assets.periodicInvests.items.sorted {
+                    ($0.type.rawValue < $1.type.rawValue) ||
+                        (($0.type.rawValue == $1.type.rawValue) &&
+                            $0.ownedValue(by                : selectedAdult,
+                                          atEndOf           : year,
+                                          evaluationContext : evaluationContext) >
+                            $1.ownedValue(by                : selectedAdult,
+                                          atEndOf           : year,
+                                          evaluationContext : evaluationContext))
+                }.forEach { item in
                     var value = 0.0
                     if selectedAdult == PatrimoineSummaryChartView.tous {
+                        family.adultsName.forEach { name in
+                            value += item.ownedValue(by                : name,
+                                                     atEndOf           : year,
+                                                     evaluationContext : evaluationContext)
+                        }
                         
                     } else {
                         value = item.ownedValue(by                : selectedAdult,
@@ -290,52 +304,23 @@ struct PatrimoineSingleCategoryView : View {
                 }
                 
             case .freeInvests:
-                patrimoine.assets.freeInvests.items.forEach { item in
+                patrimoine.assets.freeInvests.items.sorted {
+                    ($0.type.rawValue < $1.type.rawValue) ||
+                        (($0.type.rawValue == $1.type.rawValue) &&
+                            $0.ownedValue(by                : selectedAdult,
+                                          atEndOf           : year,
+                                          evaluationContext : evaluationContext) >
+                            $1.ownedValue(by                : selectedAdult,
+                                          atEndOf           : year,
+                                          evaluationContext : evaluationContext))
+                }.forEach { item in
                     var value = 0.0
                     if selectedAdult == PatrimoineSummaryChartView.tous {
-                        
-                    } else {
-                        value = item.ownedValue(by                : selectedAdult,
-                                                atEndOf           : year,
-                                                evaluationContext : evaluationContext)
-                        if value != 0 {
-                            dataEntries.append((label: item.name, value: value))
+                        family.adultsName.forEach { name in
+                            value += item.ownedValue(by                : name,
+                                                     atEndOf           : year,
+                                                     evaluationContext : evaluationContext)
                         }
-                    }
-                }
-                
-            case .realEstates:
-                patrimoine.assets.realEstates.items.forEach { item in
-                    var value = 0.0
-                    if selectedAdult == PatrimoineSummaryChartView.tous {
-                        
-                    } else {
-                        value = item.ownedValue(by                : selectedAdult,
-                                                atEndOf           : year,
-                                                evaluationContext : evaluationContext)
-                        if value != 0 {
-                            dataEntries.append((label: item.name, value: value))
-                        }
-                    }
-                }
-                
-            case .scpis:
-                patrimoine.assets.scpis.items.forEach { item in
-                    var value = 0.0
-                    if selectedAdult == PatrimoineSummaryChartView.tous {
-                        
-                    } else {
-                        value = item.ownedValue(by                : selectedAdult,
-                                                atEndOf           : year,
-                                                evaluationContext : evaluationContext)
-                        if value != 0 {
-                            dataEntries.append((label: item.name, value: value))
-                        }
-                    }
-                }
-                patrimoine.assets.sci.scpis.items.forEach { item in
-                    var value = 0.0
-                    if selectedAdult == PatrimoineSummaryChartView.tous {
                         
                     } else {
                         value = item.ownedValue(by                : selectedAdult,
@@ -344,6 +329,62 @@ struct PatrimoineSingleCategoryView : View {
                     }
                     if value != 0 {
                         dataEntries.append((label: item.name, value: value))
+                    }
+                }
+                return dataEntries
+                
+            case .realEstates:
+                patrimoine.assets.realEstates.items.forEach { item in
+                    var value = 0.0
+                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                        family.adultsName.forEach { name in
+                            value += item.ownedValue(by                : name,
+                                                     atEndOf           : year,
+                                                     evaluationContext : evaluationContext)
+                        }
+                    } else {
+                        value = item.ownedValue(by                : selectedAdult,
+                                                atEndOf           : year,
+                                                evaluationContext : evaluationContext)
+                    }
+                    if value != 0 {
+                        dataEntries.append((label: item.name, value: value))
+                    }
+                }
+                
+            case .scpis:
+                patrimoine.assets.scpis.items.forEach { item in
+                    var value = 0.0
+                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                        family.adultsName.forEach { name in
+                            value += item.ownedValue(by                : name,
+                                                     atEndOf           : year,
+                                                     evaluationContext : evaluationContext)
+                        }
+                    } else {
+                        value = item.ownedValue(by                : selectedAdult,
+                                                atEndOf           : year,
+                                                evaluationContext : evaluationContext)
+                    }
+                    if value != 0 {
+                        dataEntries.append((label: item.name, value: value))
+                    }
+                }
+                patrimoine.assets.sci.scpis.items.forEach { item in
+                    var value = 0.0
+                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                        family.adultsName.forEach { name in
+                            value += item.ownedValue(by                : name,
+                                                     atEndOf           : year,
+                                                     evaluationContext : evaluationContext)
+                        }
+                    } else {
+                        value = item.ownedValue(by                : selectedAdult,
+                                                atEndOf           : year,
+                                                evaluationContext : evaluationContext)
+                    }
+                    if value != 0 {
+                        dataEntries.append((label: "SCI_" + item.name, value: value))
                     }
                 }
         }
