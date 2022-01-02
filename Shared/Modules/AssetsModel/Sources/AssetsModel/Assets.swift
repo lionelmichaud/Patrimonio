@@ -246,10 +246,10 @@ public struct Assets {
     /// - Parameters:
     ///   - ownerName: nom de la personne recherchée
     ///   - year: date d'évaluation
-    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
+    ///   - evaluationContext: méthode d'évaluation de la valeur des biens
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
-    public func ownedValue(by ownerName     : String,
-                           atEndOf year     : Int,
+    public func ownedValue(by ownerName      : String,
+                           atEndOf year      : Int,
                            evaluationContext : EvaluationContext) -> Double {
         var total = 0.0
         forEachOwnable { ownable in
@@ -325,7 +325,7 @@ public struct Assets {
     ///   - Returns: assiette nette fiscale calculée selon la méthode choisie
     public func realEstateValue(atEndOf year        : Int,
                                 for fiscalHousehold : FiscalHouseholdSumatorP,
-                                evaluationContext    : EvaluationContext) -> Double {
+                                evaluationContext   : EvaluationContext) -> Double {
         switch evaluationContext {
             case .ifi, .isf :
                 /// on prend la valeure IFI des biens immobiliers

@@ -47,7 +47,7 @@ struct FamilySummaryView: View {
                 FiscalSummarySection(cashFlow: cashFlow)
                 SciSummarySection(cashFlow: cashFlow)
             }
-            .navigationTitle("Résumé")
+            .navigationTitle("Synthèse")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear(perform: computeCurrentYearCashFlow)
             .onDisappear(perform: self.patrimoine.resetInvestementsCurrentValue)

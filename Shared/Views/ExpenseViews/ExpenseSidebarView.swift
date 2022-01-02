@@ -85,7 +85,7 @@ struct ExpenseHeaderView: View {
     var body: some View {
         Section {
             NavigationLink(destination: ExpenseSummaryView()) {
-                Text("Résumé").fontWeight(.bold)
+                Text("Synthèse").fontWeight(.bold)
             }
             .isiOSDetailLink(true)
         }

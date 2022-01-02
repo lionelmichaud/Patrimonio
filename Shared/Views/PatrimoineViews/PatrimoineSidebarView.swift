@@ -92,7 +92,7 @@ struct PatrimoineHeaderView: View {
     var body: some View {
         Section {
             NavigationLink(destination: PatrimoineSummaryView()) {
-                Text("Résumé").fontWeight(.bold)
+                Text("Synthèse").fontWeight(.bold)
             }.isDetailLink(true)
         }
     }

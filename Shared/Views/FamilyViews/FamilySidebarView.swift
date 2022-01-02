@@ -60,7 +60,7 @@ struct FamilySidebarView: View {
 struct FamilyHeaderView: View {
     var body: some View {
         NavigationLink(destination: FamilySummaryView()) {
-            Text("Résumé").fontWeight(.bold)
+            Text("Synthèse").fontWeight(.bold)
         }
         .isDetailLink(true)
     }
