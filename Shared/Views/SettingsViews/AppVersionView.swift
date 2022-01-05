@@ -28,39 +28,42 @@ struct AppVersionView: View {
                     .font(.title3)
             }
             
-            // Historique des révisions
-            RevisionHistoryView(revisions: AppVersion.shared.revisionHistory)
-            
-            // Liste des directories utilisées par l'application
-            DirectoriesListView()
+            Form {
+                Section {
+                    // Historique des révisions
+                    RevisionHistoryView(revisions: AppVersion.shared.revisionHistory)
+                }
+                Section {
+                    // Liste des directories utilisées par l'application
+                    DirectoriesListView()
+                }
+            }
         }
         .navigationBarHidden(true)
-        
     }
 }
 
 struct RevisionHistoryView: View {
     var revisions: [Version]
-
+    @State private var expanded = true
+    
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Historique des révisions")
-                    .font(.headline)
-                    .fontWeight(.heavy)
+        DisclosureGroup(
+            isExpanded: $expanded,
+            content: {
                 ForEach(revisions, id: \.self) { revision in
                     RevisionView(revision: revision)
                 }
-            }
-            .padding(.horizontal)
-            Spacer()
-        }
+            },
+            label: {
+                Text("HISTORIQUE DES REVISIONS").font(.headline)
+            })
     }
 }
 
 struct RevisionView: View {
     var revision: Version
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -73,7 +76,7 @@ struct RevisionView: View {
                 }
             }
             .font(.subheadline)
-
+            
             Text(revision.comment ?? "")
                 .multilineTextAlignment(.leading)
                 .lineSpacing(10.0)
@@ -83,24 +86,23 @@ struct RevisionView: View {
 }
 
 struct DirectoriesListView: View {
+    @State private var expanded = false
+
     var body: some View {
-        Form {
-            Section {
-                DisclosureGroup(
-                    content: {
-                        Text("resourcePath: \n").font(.headline) + Text(Bundle.main.resourcePath!)
-                        Text("Application: \n").font(.headline) + Text(Folder.application!.path)
-                        Text("Home: \n").font(.headline) +      Text(Folder.home.path)
-                        Text("Tempates: \n").font(.headline) +  Text((Dossier.templates?.folder?.path ?? "introuvable"))
-                        Text("Documents: \n").font(.headline) + Text((Folder.documents?.path ?? "introuvable"))
-                        Text("Library: \n").font(.headline) +   Text((Folder.library?.path ?? "introuvable"))
-                        Text("temporary: \n").font(.headline) + Text(Folder.temporary.path)
-                    },
-                    label: {
-                        Text("REPERTOIRES DE L'APPLICATION").font(.headline)
-                    })
-            }
-        }
+        DisclosureGroup(
+            isExpanded: $expanded,
+            content: {
+                Text("resourcePath: \n").font(.headline) + Text(Bundle.main.resourcePath!)
+                Text("Application: \n").font(.headline) + Text(Folder.application!.path)
+                Text("Home: \n").font(.headline) +      Text(Folder.home.path)
+                Text("Tempates: \n").font(.headline) +  Text((Dossier.templates?.folder?.path ?? "introuvable"))
+                Text("Documents: \n").font(.headline) + Text((Folder.documents?.path ?? "introuvable"))
+                Text("Library: \n").font(.headline) +   Text((Folder.library?.path ?? "introuvable"))
+                Text("temporary: \n").font(.headline) + Text(Folder.temporary.path)
+            },
+            label: {
+                Text("REPERTOIRES DE L'APPLICATION").font(.headline)
+            })
     }
 }
 
@@ -129,6 +131,6 @@ struct RevisionHistoryView_Previews: PreviewProvider {
 struct DirectoriesListView_Previews: PreviewProvider {
     static var previews: some View {
         DirectoriesListView()
-            
+        
     }
 }
