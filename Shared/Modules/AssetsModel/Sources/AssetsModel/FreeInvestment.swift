@@ -29,7 +29,7 @@ public typealias FreeInvestmentArray = ArrayOfNameableValuable<FreeInvestement>
 /// Placement à versement et retrait libres et à taux fixe
 /// Les intérêts sont capitalisés lors de l'appel à capitalize()
 // conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
-public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP {
+public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP, Quotable {
     
     // MARK: - Nested Types
     
@@ -100,16 +100,55 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     public var id    = UUID()
     public var name  : String
     public var note  : String
-    // propriétaires
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
-    public var ownership: Ownership = Ownership()
-    
+    /// Droits de propriété sur le bien
+    public var ownership       : Ownership = Ownership()
+    /// Niveau de risque sur la valorisation du bien
+    public var riskLevel       : RiskLevel? {
+        switch interestRateType {
+            case .contractualRate:
+                // taux contractuel fixe
+                return .veryLow
+
+            case .marketRate(let stockRatio):
+                // taux de marché variable
+                let scale = [0.0, 20.0, 40.0, 60.0, 80.0]
+                let index = scale.lastIndex(where: { $0 <= stockRatio })!
+                return RiskLevel(rawValue: index)
+        }
+    }
+    /// Niveau de liquidité du bien
+    public var liquidityLevel  : LiquidityLevel? {
+        switch type {
+            case .lifeInsurance:
+                return .high
+
+            case .pea:
+                return .medium
+
+            case .other:
+                return .high
+        }
+    }
     /// Type de l'investissement
-    public var type: InvestementKind
-    
+    public var type            : InvestementKind
     /// Type de taux de rendement
     public var interestRateType: InterestRateKind
+    /// Dernière constitution du capital connue (relevé bancaire)
+    public var lastKnownState  : State {
+        didSet {
+            resetCurrentState()
+        }
+    }
+    /// Constitution du capital à l'instant présent
+    var currentState           : State = State()
+    /// Intérêts cumulés au cours du temps depuis la transmission de l'usufruit jusqu'à l'instant présent
+    var currentStateAfterTransmission: State?
+    /// Le bien est-il ouvert aux placements: un bien est fermé à l'investissement lorsque son unique propriétaire est décédé
+    var isOpen: Bool = true
+    
+    // MARK: - Computed Properties
     
     /// Rendement en % avant charges sociales si prélevées à la source annuellement [0, 100%]
     public var averageInterestRate: Double {
@@ -128,12 +167,10 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                 return rate
         }
     }
-    
     /// Rendement en % avant charges sociales si prélevées à la source annuellement [0, 100%] et net d'inflation
     public var averageInterestRateNetOfInflation: Double {
         averageInterestRate - FreeInvestement.inflation
     }
-    
    /// Rendement en % après charges sociales si prélevées à la source annuellement [0, 100%] et net d'inflation
     public var averageInterestRateNetOfTaxesAndInflation: Double {
         switch type {
@@ -147,7 +184,6 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                 return averageInterestRateNetOfInflation
         }
     }
-    
     /// Rendement en % après charges sociales si prélevées à la source annuellement [0, 100%]
     public var averageInterestRateNetOfTaxes: Double { // % fixe après charges sociales si prélevées à la source annuellement
         switch type {
@@ -161,32 +197,15 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                 return averageInterestRate
         }
     }
-
-    /// Dernière constitution du capital connue (relevé bancaire)
-    public var lastKnownState: State {
-        didSet {
-            resetCurrentState()
-        }
-    }
-    
-    /// Constitution du capital à l'instant présent
-    var currentState = State()
-    
-    /// Intérêts cumulés au cours du temps depuis la transmission de l'usufruit jusqu'à l'instant présent
-    var currentStateAfterTransmission: State?
-    
     /// Intérêts cumulés au cours du temps depuis la transmission de l'usufruit jusqu'à l'instant présent
     var cumulatedInterestsSinceSuccession: Double? {
         currentStateAfterTransmission?.interest
     }
-    
     /// Intérêts cumulés au cours du temps depuis l'origine jusqu'à l'instant présent
     private var cumulatedInterests: Double {
         currentState.interest
     }
-    
-    var isOpen: Bool = true
-    
+
     // MARK: - Initialization
     
     public init(year             : Int,
@@ -419,7 +438,8 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     }
 }
 
-// MARK: Extensions
+// MARK: - Extensions
+
 extension FreeInvestement: Comparable {
     public static func < (lhs: FreeInvestement, rhs: FreeInvestement) -> Bool {
         return (lhs.name < rhs.name)
@@ -433,6 +453,9 @@ extension FreeInvestement: CustomStringConvertible {
         INVESTISSEMENT LIBRE: \(name)
         - Note:
         \(note.withPrefixedSplittedLines("    "))
+        - Quotation:
+          - Risque:    \(riskLevel?.description ?? "indéfini")
+          - Liquidité: \(liquidityLevel?.description ?? "indéfini")
         - Type:\(type.description.withPrefixedSplittedLines("  "))
         - Ouvert à l'investissement: \(isOpen)
         - Droits de propriété:

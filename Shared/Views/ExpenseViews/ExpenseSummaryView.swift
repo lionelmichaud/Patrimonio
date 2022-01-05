@@ -180,11 +180,11 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
         data.setValueFont(ChartThemes.ChartDefaults.valueFont)
         data.barWidth = 0.5
         
-        // mettre à joure en fonction de la position du slider de plage de temps à afficher
+        // mettre à jour en fonction de la position du slider de plage de temps à afficher
         chartView.leftAxis.axisMaximum  = endDate
         chartView.rightAxis.axisMaximum = endDate
         
-        // mettre à joure en fonction de la position du slider de date d'évaluation
+        // mettre à jour en fonction de la position du slider de date d'évaluation
         let ll1 = ChartLimitLine(limit: evalDate+0.5, label: "date d'évaluation")
         ll1.lineWidth       = 2
         ll1.lineDashLengths = [10, 10]

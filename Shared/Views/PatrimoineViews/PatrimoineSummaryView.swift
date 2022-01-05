@@ -33,9 +33,11 @@ struct PatrimoineSummaryView: View {
                 if presentation == "Table" {
                     // vue tabulaire
                     PatrimoineSummaryTableView()
-                } else {
+                } else if presentation == "ShareChart" {
                     // vue graphique
-                    PatrimoineSummaryChartView()
+                    PatrimoineSummaryShareChartView()
+                } else if presentation == "RiskChart" {
+                    PatrimoineSummaryRiskChartView()
                 }
             }
             .navigationTitle("Synthèse")
@@ -44,7 +46,8 @@ struct PatrimoineSummaryView: View {
                 ToolbarItem(placement: .automatic) {
                     Picker("Présentation", selection: $presentation) {
                         Image(systemName: "tablecells").tag("Table")
-                        Image(systemName: "chart.pie").tag("Chart")
+                        Image(systemName: "chart.pie").tag("ShareChart")
+                        Image(systemName: "exclamationmark.triangle").tag("RiskChart")
                     }
                     .pickerStyle(SegmentedPickerStyle())
                 }

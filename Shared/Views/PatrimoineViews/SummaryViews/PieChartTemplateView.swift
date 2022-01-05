@@ -9,6 +9,7 @@ import SwiftUI
 import AppFoundation
 import Charts
 
+/// Wrapper de LineChartView
 struct PieChartTemplateView: NSUIViewRepresentable {
 
     // MARK: - Properties
@@ -19,6 +20,7 @@ struct PieChartTemplateView: NSUIViewRepresentable {
     private var legendEnabled      : Bool
     private var legendPosition     : LengendPosition
     private var smallLegend        : Bool
+    private var pieColors          : [NSUIColor]
     private var data               : [(label: String, value: Double)]
     private var uiView             : PieChartView?
 
@@ -30,6 +32,7 @@ struct PieChartTemplateView: NSUIViewRepresentable {
                   legendEnabled      : Bool = true,
                   legendPosition     : LengendPosition = .bottom,
                   smallLegend        : Bool = true,
+                  pieColors          : [NSUIColor] = ChartThemes.pieChartColorsTable,
                   data               : [(label: String, value: Double)]) {
         self.chartDescription   = chartDescription
         self.centerText         = centerText
@@ -37,6 +40,7 @@ struct PieChartTemplateView: NSUIViewRepresentable {
         self.legendEnabled      = legendEnabled
         self.legendPosition     = legendPosition
         self.smallLegend        = smallLegend
+        self.pieColors          = pieColors
         self.data               = data
     }
     
@@ -56,7 +60,7 @@ struct PieChartTemplateView: NSUIViewRepresentable {
         
         let dataSet = PieChartDataSet(entries : dataEntries,
                                       label   : "")
-        dataSet.colors = [NSUIColor](ChartThemes.pieChartColorsTable)
+        dataSet.colors                           = pieColors
         dataSet.entryLabelFont                   = ChartThemes.ChartDefaults.xLargeLabelFont
         dataSet.entryLabelColor                  = ChartThemes.DarkChartColors.valueColor
         dataSet.drawIconsEnabled                 = false
@@ -108,7 +112,8 @@ struct PieChartTemplateView: NSUIViewRepresentable {
         
         uiView.data?.notifyDataChanged()
         uiView.notifyDataSetChanged()
-    }}
+    }
+}
 
 struct PieChartTemplateView_Previews: PreviewProvider {
     static var previews: some View {

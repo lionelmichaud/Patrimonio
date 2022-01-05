@@ -29,7 +29,7 @@ public typealias PeriodicInvestementArray = ArrayOfNameableValuable<PeriodicInve
 /// Placement à versements périodiques, fixes, annuels et à taux fixe
 /// Tous les intérêts sont capitalisés
 // conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
-public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP {
+public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP, Quotable {
     
     // MARK: - Nested Types
     
@@ -41,6 +41,19 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
         public var initialValue      : Double { initialInterest + initialInvestment } // valeur totale
     }
     
+    enum CodingKeys: CodingKey {
+        case name
+        case note
+        case ownership
+        case type
+        case interestRateType
+        case firstYear
+        case lastYear
+        case initialInterest
+        case initialValue
+        case yearlyPayement
+    }
+
     // MARK: - Static Properties
     
     static var defaultFileName: String = "PeriodicInvestement.json"
@@ -88,23 +101,54 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     
     // MARK: - Properties
     
-    public var id              = UUID()
-    public var name            : String
-    public var note            : String = ""
-    // propriétaires
+    public var id   = UUID()
+    public var name : String
+    public var note : String = ""
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
+    /// Droits de propriété sur le bien
     public var ownership       : Ownership = Ownership()
+    /// Niveau de risque sur la valorisation du bien
+    public var riskLevel       : RiskLevel? {
+        switch interestRateType {
+            case .contractualRate:
+                // taux contractuel fixe
+                return .veryLow
+
+            case .marketRate(let stockRatio):
+                // taux de marché variable
+                let scale = [0.0, 20.0, 40.0, 60.0, 80.0]
+                let index = scale.lastIndex(where: { $0 < stockRatio })!
+                return RiskLevel(rawValue: index)
+        }
+    }
+    /// Niveau de liquidité du bien
+    public var liquidityLevel  : LiquidityLevel? {
+        switch type {
+            case .lifeInsurance:
+                return .low // tontines
+
+            case .pea:
+                return .medium
+
+            case .other:
+                return .high
+        }
+    }
+    /// Type de l'investissement
     public var type            : InvestementKind
-    public var yearlyPayement  : Double = 0.0 // versements nets de frais
-    public var yearlyCost      : Double = 0.0 // Frais sur versements
-    // date d'ouverture
+    /// Versements nets de frais
+    public var yearlyPayement  : Double = 0.0
+    /// Frais sur versements
+    public var yearlyCost      : Double = 0.0
+    /// Date d'ouverture
     public var firstYear       : Int // au 31 décembre
     public var initialValue    : Double = 0.0
-    public var initialInterest : Double = 0.0 // portion of interests included in the initialValue
-    // date de liquidation
+    /// Portion of interests included in the initialValue
+    public var initialInterest : Double = 0.0
+    /// Date de liquidation
     public var lastYear        : Int // au 31 décembre
-    // rendement
+    /// Type de taux de rendement
     public var interestRateType       : InterestRateKind // type de taux de rendement
     public var averageInterestRate: Double {// % avant charges sociales si prélevées à la source annuellement
         switch interestRateType {
@@ -147,7 +191,7 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
                 return averageInterestRate
         }
     }
-    // état de référence à partir duquel est calculé l'état courant
+    /// Etat de référence à partir duquel est calculé l'état courant
     var refState: State!
 
     // MARK: - Initializers
@@ -461,6 +505,9 @@ extension PeriodicInvestement: CustomStringConvertible {
         INVESTISSEMENT PERIODIQUE: \(name)
         - Note:
         \(note.withPrefixedSplittedLines("    "))
+        - Quotation:
+          - Risque:    \(riskLevel?.description ?? "indéfini")
+          - Liquidité: \(liquidityLevel?.description ?? "indéfini")
         - Type:\(type.description.withPrefixedSplittedLines("  "))
         - Droits de propriété:
         \(ownership.description.withPrefixedSplittedLines("  "))

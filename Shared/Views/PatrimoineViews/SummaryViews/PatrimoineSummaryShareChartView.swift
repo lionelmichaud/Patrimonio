@@ -12,7 +12,7 @@ import FamilyModel
 import PatrimoineModel
 import Charts
 
-struct PatrimoineSummaryChartView: View {
+struct PatrimoineSummaryShareChartView: View {
     static let tous = "Tous"
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
@@ -88,11 +88,11 @@ struct PatrimoineCategorySharesView : View {
     var year                   : Int
     var evaluationContext      : EvaluationContext
     @Binding var selectedAdult : String
-    private static let immobilier             = "Immobilier"
-    private static let scpi                   = "SCPI"
-    private static let freeInvest             = "Invest. Libres"
-    private static let perdiodInvest          = "Invest. Périodiques"
-    @State private var menuItems = [PatrimoineSummaryChartView.tous]
+    private static let immobilier    = "Immobilier"
+    private static let scpi          = "SCPI"
+    private static let freeInvest    = "Invest. Libres"
+    private static let perdiodInvest = "Invest. Périodiques"
+    @State private var menuItems = [PatrimoineSummaryShareChartView.tous]
     
     var body: some View {
         VStack {
@@ -120,7 +120,7 @@ struct PatrimoineCategorySharesView : View {
     var data : [(label: String, value: Double)] {
         var dataEntries = [(label: String, value: Double)]()
         
-        if selectedAdult == PatrimoineSummaryChartView.tous {
+        if selectedAdult == PatrimoineSummaryShareChartView.tous {
             var realEstatesTotal     = 0.0
             var scpisTotal           = 0.0
             var periodicInvestsTotal = 0.0
@@ -286,7 +286,7 @@ struct PatrimoineSingleCategoryView : View {
                                           evaluationContext : evaluationContext))
                 }.forEach { item in
                     var value = 0.0
-                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                    if selectedAdult == PatrimoineSummaryShareChartView.tous {
                         family.adultsName.forEach { name in
                             value += item.ownedValue(by                : name,
                                                      atEndOf           : year,
@@ -315,7 +315,7 @@ struct PatrimoineSingleCategoryView : View {
                                           evaluationContext : evaluationContext))
                 }.forEach { item in
                     var value = 0.0
-                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                    if selectedAdult == PatrimoineSummaryShareChartView.tous {
                         family.adultsName.forEach { name in
                             value += item.ownedValue(by                : name,
                                                      atEndOf           : year,
@@ -336,7 +336,7 @@ struct PatrimoineSingleCategoryView : View {
             case .realEstates:
                 patrimoine.assets.realEstates.items.forEach { item in
                     var value = 0.0
-                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                    if selectedAdult == PatrimoineSummaryShareChartView.tous {
                         family.adultsName.forEach { name in
                             value += item.ownedValue(by                : name,
                                                      atEndOf           : year,
@@ -355,7 +355,7 @@ struct PatrimoineSingleCategoryView : View {
             case .scpis:
                 patrimoine.assets.scpis.items.forEach { item in
                     var value = 0.0
-                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                    if selectedAdult == PatrimoineSummaryShareChartView.tous {
                         family.adultsName.forEach { name in
                             value += item.ownedValue(by                : name,
                                                      atEndOf           : year,
@@ -372,7 +372,7 @@ struct PatrimoineSingleCategoryView : View {
                 }
                 patrimoine.assets.sci.scpis.items.forEach { item in
                     var value = 0.0
-                    if selectedAdult == PatrimoineSummaryChartView.tous {
+                    if selectedAdult == PatrimoineSummaryShareChartView.tous {
                         family.adultsName.forEach { name in
                             value += item.ownedValue(by                : name,
                                                      atEndOf           : year,
@@ -396,7 +396,7 @@ struct PatrimoineSingleCategoryView : View {
 struct PatrimoineSummaryChartView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return PatrimoineSummaryChartView()
+        return PatrimoineSummaryShareChartView()
             .preferredColorScheme(.dark)
             .environmentObject(dataStoreTest)
             .environmentObject(familyTest)

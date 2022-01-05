@@ -17,7 +17,7 @@ public typealias RealEstateArray = ArrayOfNameableValuable<RealEstateAsset>
 
 // MARK: - Actif immobilier physique
 // conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
-public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
+public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quotable {
     
     // MARK: - Static Properties
     
@@ -43,10 +43,19 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP {
     public var id                   = UUID()
     public var name                 : String
     public var note                 : String = ""
-    // propriétaires
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
+    /// Droits de propriété sur le bien
     public var ownership            : Ownership = Ownership()
+    /// Niveau de risque sur la valorisation du bien
+    public var riskLevel            : RiskLevel? {
+        .low
+    }
+    /// Niveau de liquidité du bien
+    public var liquidityLevel       : LiquidityLevel? {
+        .low
+    }
+    /// Type de l'investissement
     // achat
     public var buyingYear           : DateBoundary = DateBoundary.empty // première année de possession (inclue)
     public var buyingPrice          : Double = 0.0
@@ -379,6 +388,9 @@ extension RealEstateAsset: CustomStringConvertible {
         - Acheté en \(buyingYear) au prix de \(buyingPrice.€String)
         - Note:
         \(note.withPrefixedSplittedLines("    "))
+        - Quotation:
+          - Risque:    \(riskLevel?.description ?? "indéfini")
+          - Liquidité: \(liquidityLevel?.description ?? "indéfini")
         - Droits de propriété:
         \(ownership.description.withPrefixedSplittedLines("  "))
         - Valeur vénale estimée: \(estimatedValue.€String)\n

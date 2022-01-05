@@ -19,8 +19,22 @@ public typealias ScpiArray = ArrayOfNameableValuable<SCPI>
 // MARK: - SCPI à revenus périodiques, annuels et fixes
 
 // conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
-public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
+public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, Quotable {
     
+    // MARK: - Nested Types
+    
+    enum CodingKeys: CodingKey {
+        case name
+        case note
+        case ownership
+        case buyingDate
+        case buyingPrice
+        case willBeSold
+        case sellingDate
+        case revaluatRate
+        case interestRate
+    }
+
     // MARK: - Static Properties
     
     static var defaultFileName : String = "SCPI.json"
@@ -57,10 +71,19 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP {
     public var id           = UUID()
     public var name         : String
     public var note         : String = ""
-    // propriétaires
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
+    /// Droits de propriété sur le bien
     public var ownership    : Ownership = Ownership()
+    /// Niveau de risque sur la valorisation du bien
+    public var riskLevel      : RiskLevel? {
+        .medium
+    }
+    /// Niveau de liquidité du bien
+    public var liquidityLevel : LiquidityLevel? {
+        .medium
+    }
+    /// Type de l'investissement
     // achat
     public var buyingDate   : Date
     public var buyingPrice  : Double = 0.0
@@ -241,6 +264,9 @@ extension SCPI: CustomStringConvertible {
         SCPI: \(name)
         - Note:
         \(note.withPrefixedSplittedLines("    "))
+        - Quotation:
+          - Risque:    \(riskLevel?.description ?? "indéfini")
+          - Liquidité: \(liquidityLevel?.description ?? "indéfini")
         - Droits de propriété:
         \(ownership.description.withPrefixedSplittedLines("  "))
         - Acheté le \(buyingDate.stringShortDate) au prix d'achat de: \(buyingPrice) €

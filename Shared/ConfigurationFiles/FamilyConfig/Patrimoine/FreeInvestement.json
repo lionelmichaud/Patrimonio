@@ -8,9 +8,8 @@
     
     "items" : [
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-DF076F9CA5B0",
-            "name"         : "PERCO",
-            "note"         : "Fiscalité proche PEA\nMis à jour le 29/12/2021\nFonds actions",
+            "name" : "PERCO",
+            "note" : "Fiscalité proche PEA\nMis à jour le 29/12/2021\nFonds actions",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -38,9 +37,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-EF076F9CA5B0",
-            "name"         : "PEE",
-            "note"         : "Fiscalité proche PEA\nMis à jour le 29/12/2021\nFonds actions",
+            "name" : "PEE",
+            "note" : "Fiscalité proche PEA\nMis à jour le 29/12/2021\nFonds actions",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -70,9 +68,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B0",
-            "name"         : "PEA Bourso",
-            "note"         : "Ouvert le 24/03/2014\nMis à jour le 29/12/2021\nFonds actions",
+            "name" : "PEA Bourso",
+            "note" : "Ouvert le 24/03/2014\nMis à jour le 29/12/2021\nFonds actions",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -102,9 +99,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B1",
-            "name"         : "AV Lionel Bourso",
-            "note"         : "Ouvert le 04/03/2012\nMis à jour le 30/12/2021\nFonds actions",
+            "name" : "AV Lionel Bourso",
+            "note" : "Ouvert le 04/03/2012\nMis à jour le 30/12/2021\nFonds actions",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -144,9 +140,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B2",
-            "name"         : "AV Lionel ASAC",
-            "note"         : "Ouvert le 13/01/2006\nMis à jour le 31/12/2020\nFond euro",
+            "name" : "AV Lionel ASAC",
+            "note" : "Ouvert le 13/01/2006\nMis à jour le 31/12/2020\nFond euro",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -187,9 +182,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B3",
-            "name"         : "AV Lionel AFER",
-            "note"         : "Ouvert le 30/06/1999\nMis à jour le 31/12/2020\nFonds actions",
+            "name" : "AV Lionel AFER",
+            "note" : "Ouvert le 30/06/1999\nMis à jour le 31/12/2020\nFonds actions",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -230,9 +224,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B4",
-            "name"         : "AV Lionel Conserv",
-            "note"         : "Ouvert le 29/04/2010\nMis à jour le 31/12/2020\nFond € à 60%",
+            "name" : "AV Lionel Conserv",
+            "note" : "Ouvert le 29/04/2010\nMis à jour le 31/12/2020\nFond € à 60%",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -273,9 +266,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B5",
-            "name"         : "AV Vanessa AFER",
-            "note"         : "Ouvert le 30/06/1999\nMis à jour le 30/12/2021\nFonds actions",
+            "name" : "AV Vanessa AFER",
+            "note" : "Ouvert le 30/06/1999\nMis à jour le 30/12/2021\nFonds actions",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -322,9 +314,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B6",
-            "name"         : "AV Vanessa Conserv",
-            "note"         : "Ouvert le 30/06/1999\nMis à jour le 30/12/2021\nFond € à 60%",
+            "name" : "AV Vanessa Conserv",
+            "note" : "Ouvert le 30/06/1999\nMis à jour le 30/12/2021\nFond € à 60%",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -371,9 +362,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B7",
-            "name"         : "Livret A Lionel Bourso",
-            "note"         : "Ouvert en 2016",
+            "name" : "Livret A Lionel Bourso",
+            "note" : "Ouvert en 2016",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -403,9 +393,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-AE076F9CA5B7",
-            "name"         : "Livret Lionel Bourso",
-            "note"         : "Ouvert en 2016",
+            "name" : "Livret Lionel Bourso",
+            "note" : "Ouvert en 2016",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -435,9 +424,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CA5B8",
-            "name"         : "LDD Lionel LCL",
-            "note"         : "",
+            "name" : "LDD Lionel LCL",
+            "note" : "",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -467,9 +455,8 @@
         },
         
         {
-            "id"           : "123440AE-3D5B-4F3E-BB23-CF076F9CA5B7",
-            "name"         : "Livret A Vanessa Bourso",
-            "note"         : "",
+            "name" : "Livret A Vanessa Bourso",
+            "note" : "",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -499,9 +486,8 @@
         },
         
         {
-            "id"           : "123440AE-3D5B-4F3E-BB23-AE076F9CA5B7",
-            "name"         : "Livret Vanessa Bourso",
-            "note"         : "",
+            "name" : "Livret Vanessa Bourso",
+            "note" : "",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -531,9 +517,8 @@
         },
         
         {
-            "id"           : "123440AE-3D5B-4F3E-BB23-CF076F9CA5B8",
-            "name"         : "LDD Vanessa Bourso",
-            "note"         : "",
+            "name" : "LDD Vanessa Bourso",
+            "note" : "",
             "ownership"               :
             {
                 "est_démembré"        : false,

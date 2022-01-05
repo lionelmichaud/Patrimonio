@@ -8,9 +8,8 @@
     },
     "items" : [
         {
-            "id"                      : "3AB17EE6-0D8D-4CE9-AB86-A2B40943CB38",
-            "name"                    : "Tontine vanessa périod",
-            "note"                    : "Ouvert le 01/04/2013\nActualisé le 18/09/2020",
+            "name" : "Tontine vanessa périod",
+            "note" : "Ouvert le 01/04/2013\nActualisé le 18/09/2020",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -56,9 +55,8 @@
         },
         
         {
-            "id"                      : "3AB17EE6-0D8D-4CE9-AB86-A2B41943CB38",
-            "name"                    : "Tontine vanessa 2",
-            "note"                    : "Ouvert le 01/04/2010\nActualisé le 18/09/2020",
+            "name" : "Tontine vanessa 2",
+            "note" : "Ouvert le 01/04/2010\nActualisé le 18/09/2020",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -106,9 +104,8 @@
         },
         
         {
-            "id"                      : "3AB17EE6-0D8D-4CE9-AB86-A2540943CB38",
-            "name"                    : "Tontine vanessa 3",
-            "note"                    : "Ouvert le 01/04/2010\nActualisé le 18/09/2020",
+            "name" : "Tontine vanessa 3",
+            "note" : "Ouvert le 01/04/2010\nActualisé le 18/09/2020",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -156,9 +153,8 @@
         },
         
        {
-           "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CB5B7",
-           "name"         : "Tontine Lionel 1",
-           "note"         : "Ouvert le 01/04/2010\nActualisé le 18/09/2020",
+           "name" : "Tontine Lionel 1",
+           "note" : "Ouvert le 01/04/2010\nActualisé le 18/09/2020",
            "ownership"               :
            {
                "est_démembré"        : false,
@@ -206,9 +202,8 @@
         },
        
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CB5B8",
-            "name"         : "Tontine Lionel 2",
-            "note"         : "Ouvert le 01/04/2010\nActualisé le 18/09/2020",
+            "name" : "Tontine Lionel 2",
+            "note" : "Ouvert le 01/04/2010\nActualisé le 18/09/2020",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -256,9 +251,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CB5B9",
-            "name"         : "Tontine Lionel 3",
-            "note"         : "Ouvert le 01/04/2010\nActualisé le 18/09/2020",
+            "name" : "Tontine Lionel 3",
+            "note" : "Ouvert le 01/04/2010\nActualisé le 18/09/2020",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -306,9 +300,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF176F9CB5B6",
-            "name"         : "Tontine Lionel 4",
-            "note"         : "Ouvert le 01/06/2013\nActualisé le 18/09/2020",
+            "name" : "Tontine Lionel 4",
+            "note" : "Ouvert le 01/06/2013\nActualisé le 18/09/2020",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -356,9 +349,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF276F9CB5B6",
-            "name"         : "Tontine Lionel 5",
-            "note"         : "Ouvert le 01/06/2013\nActualisé le 18/09/2020",
+            "name" : "Tontine Lionel 5",
+            "note" : "Ouvert le 01/06/2013\nActualisé le 18/09/2020",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -406,9 +398,8 @@
         },
         
         {
-            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF376F9CB5B6",
-            "name"         : "Tontine Lionel 6",
-            "note"         : "Ouvert le 01/06/2013\nActualisé le 18/09/2020",
+            "name" : "Tontine Lionel 6",
+            "note" : "Ouvert le 01/06/2013\nActualisé le 18/09/2020",
             "ownership"               :
             {
                 "est_démembré"        : false,

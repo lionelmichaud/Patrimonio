@@ -12,6 +12,7 @@ import Statistics
 import FiscalModel
 import Files
 import Ownership
+import NamedValue
 
 // MARK: - Actifs de la famille
 
@@ -46,7 +47,6 @@ public struct Assets {
     public var sci             : SCI
     public var allOwnableItems : [(ownable: OwnableP, category: AssetsCategory)] {
         var ownables = [(ownable: OwnableP, category: AssetsCategory)]()
-        
         ownables =
             periodicInvests
             .items
