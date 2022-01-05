@@ -7,9 +7,8 @@
     },
     "items" : [
         {
-            "id"           : "282CC28F-0BC2-4323-AEA3-1FD3FD6E0EBF",
-            "name"         : "EPARGNE PIERRE-Voisin",
-            "note"         : "353 parts\nActualisé le 29/12/2021",
+            "name" : "EPARGNE PIERRE-Voisin",
+            "note" : "353 parts\nActualisé le 29/12/2021",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -40,9 +39,8 @@
         },
         
         {
-            "id"           : "282CC28F-0BC2-4323-AEA3-1FD3FD6E0EBA",
-            "name"         : "PIERVAL SANTE-Euryale",
-            "note"         : "107 parts\nActualisé le 29/12/2021",
+            "name" : "PIERVAL SANTE-Euryale",
+            "note" : "107 parts\nActualisé le 29/12/2021",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -73,9 +71,8 @@
         },
         
         {
-            "id"           : "282CC28F-0BC2-4323-AEA3-1FD3FD6E0EBB",
-            "name"         : "EFIMMO 1-Sofidy",
-            "note"         : "275 parts\nActualisé le 15/02/2021",
+            "name" : "EFIMMO 1-Sofidy",
+            "note" : "275 parts\nActualisé le 15/02/2021",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -106,9 +103,8 @@
         },
         
         {
-            "id"           : "282CC28F-0BC2-4323-AEA3-1FD3FD6E0ECB",
-            "name"         : "IMMORENTE-Sofidy",
-            "note"         : "195 parts\nActualisé le 29/12/2021",
+            "name" : "IMMORENTE-Sofidy",
+            "note" : "195 parts\nActualisé le 29/12/2021",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -139,9 +135,8 @@
         },
         
         {
-            "id"           : "282CC28F-0BC2-4323-AEA3-1FD3FD6E0EDB",
-            "name"         : "PATRIMMO COMMERCE",
-            "note"         : "184 parts\nActualisé le 29/12/2021",
+            "name" : "PATRIMMO COMMERCE",
+            "note" : "184 parts\nActualisé le 29/12/2021",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -172,9 +167,8 @@
         },
         
         {
-            "id"           : "282CC28F-0BC2-4323-AEA3-0FD3FD6E0EAB",
-            "name"         : "FONCIÈRE DES PRATICIENS",
-            "note"         : "49 parts\nActualisé le 29/12/2021",
+            "name" : "FONCIÈRE DES PRATICIENS",
+            "note" : "49 parts\nActualisé le 29/12/2021",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -205,9 +199,8 @@
         },
         
         {
-            "id"           : "282AA28F-0BC2-4323-AEA3-0FD3FD6E0EAB",
-            "name"         : "CŒUR DE REGIONS-Sogenial",
-            "note"         : "78 parts\nActualisé le 29/12/2021",
+            "name" : "CŒUR DE REGIONS-Sogenial",
+            "note" : "78 parts\nActualisé le 29/12/2021",
             "ownership"               :
             {
                 "est_démembré"        : false,
