@@ -24,33 +24,35 @@ struct ComputationView: View {
     @EnvironmentObject private var simulation : Simulation
     @State private var busySaveWheelAnimate   : Bool = false
     @State private var alertItem              : AlertItem?
-
+    
     var body: some View {
         if dataStore.activeDossier != nil {
-            ComputationForm()
-                .navigationTitle("Calculs")
-                // barre de boutons
-                .toolbar {
-                    // bouton Exporter fichiers CSV
-                    ToolbarItem(placement: .automatic) {
-                        Button(action: exportSimulationResults,
-                               label: {
-                                HStack(alignment: .center) {
-                                    if busySaveWheelAnimate {
-                                        ProgressView()
+            GeometryReader { geometry in
+                ComputationForm()
+                    .navigationTitle("Calculs")
+                    // barre de boutons
+                    .toolbar {
+                        // bouton Exporter fichiers CSV
+                        ToolbarItem(placement: .automatic) {
+                            Button(action: { exportSimulationResults(geometry: geometry) },
+                                   label: {
+                                    HStack(alignment: .center) {
+                                        if busySaveWheelAnimate {
+                                            ProgressView()
+                                        }
+                                        Image(systemName: "square.and.arrow.up")
+                                            .imageScale(.large)
+                                        Text("Exporter")
                                     }
-                                    Image(systemName: "square.and.arrow.up")
-                                        .imageScale(.large)
-                                    Text("Exporter")
-                                }
-                               }
-                        )
-                        .capsuleButtonStyle()
-                        .shareContextMenu(items: ["Hello world!", "coucou"])
-                        .disabled(!savingIsPossible())
+                                   }
+                            )
+                            .capsuleButtonStyle()
+                            .shareContextMenu(items: ["Hello world!", "coucou"])
+                            .disabled(!savingIsPossible())
+                        }
                     }
-                }
-                .alert(item: $alertItem, content: createAlert)
+                    .alert(item: $alertItem, content: createAlert)
+            }
         } else {
             NoLoadedDossierView()
         }
@@ -65,7 +67,7 @@ struct ComputationView: View {
     /// Enregistrer les fichier CSV en tâche de fond dans le dossier `Document` de l'application
     /// Partager les fichiers CSV et Image existants dans le dossier `Document` de l'application
     ///
-    private func exportSimulationResults() {
+    private func exportSimulationResults(geometry: GeometryProxy) {
         busySaveWheelAnimate.toggle()
 
         let dicoOfCsv = CsvBuilder.simulationResultsCSV(from  : simulation,
@@ -76,7 +78,7 @@ struct ComputationView: View {
         
         // Partager les fichiers CSV et Image existants dans le dossier `Document` de l'application
         if UserSettings.shared.shareCsvFiles || UserSettings.shared.shareImageFiles {
-            shareSimulationResults()
+            shareSimulationResults(geometry: geometry)
         }
         
         self.busySaveWheelAnimate.toggle()
@@ -108,7 +110,7 @@ struct ComputationView: View {
     }
 
     /// Partager les fichiers CSV et Image existants  dans le dossier `Document` de l'application
-    private func shareSimulationResults() {
+    private func shareSimulationResults(geometry: GeometryProxy) {
         guard let folder = dataStore.activeDossier?.folder else {
             self.alertItem = AlertItem(title         : Text("Le partage a échoué"),
                                        dismissButton : .default(Text("OK")))
@@ -139,7 +141,8 @@ struct ComputationView: View {
             }
         }
         
-        Patrimonio.share(items: urls)
+        let sideBarWidth = 230.0
+        Patrimonio.share(items: urls, fromX: Double(geometry.size.width) + sideBarWidth, fromY: 32.0)
     }
 }
     

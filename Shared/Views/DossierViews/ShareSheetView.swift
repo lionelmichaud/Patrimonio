@@ -84,17 +84,23 @@ extension View {
     }
 }
 
-func share(items: [Any]) {
+func share(items      : [Any],
+           activities : [UIActivity]?  = nil,
+           animated   : Bool           = true,
+           fromX      : Double?        = nil,
+           fromY      : Double?        = nil) {
     let activityView = UIActivityViewController(activityItems: items,
-                                                applicationActivities: nil)
-    UIApplication.shared.windows.first?.rootViewController?.present(activityView, animated: true, completion: nil)
+                                                applicationActivities: activities)
+    UIApplication.shared.windows.first?.rootViewController?.present(activityView,
+                                                                    animated   : animated,
+                                                                    completion : nil)
     
     if UIDevice.current.userInterfaceIdiom == .pad {
         activityView.popoverPresentationController?.sourceView = UIApplication.shared.windows.first
         activityView.popoverPresentationController?.sourceRect = CGRect(
-            x: UIScreen.main.bounds.width / 2.1,
-            y: UIScreen.main.bounds.height / 2.3,
-            width: 200,
-            height: 200)
+            x: (fromX == nil) ? UIScreen.main.bounds.width / 2.1 : CGFloat(fromX!),
+            y: (fromY == nil) ? UIScreen.main.bounds.height / 2.3 : CGFloat(fromY!),
+            width: 32,
+            height: 32)
     }
 }
