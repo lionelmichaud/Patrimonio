@@ -13,33 +13,39 @@ struct BubbleChartTemplateView: NSUIViewRepresentable {
 
     // MARK: - Properties
     
-    private var title                   : String
+    private var title                   : String?
+    private var titleEnabled            : Bool
     private var legendEnabled           : Bool
     private var legendPosition          : LengendPosition
     private var smallLegend             : Bool
     private var averagesLinesEnabled    : Bool
     private var leftAxisFormatterChoice : AxisFormatterChoice
     private var xAxisFormatterChoice    : AxisFormatterChoice
+    private var markers                 : [[String]]?
     private var data                    : [(x: Double, y: Double, size: Double)]
     private var uiView                  : BubbleChartView?
     
     // MARK: - Initializer
     
-    init(title                   : String,
+    init(title                   : String? = nil,
+         titleEnabled            : Bool = false,
          legendEnabled           : Bool                = true,
          legendPosition          : LengendPosition     = .bottom,
          smallLegend             : Bool                = true,
          averagesLinesEnabled    : Bool                = false,
          leftAxisFormatterChoice : AxisFormatterChoice = .none,
          xAxisFormatterChoice    : AxisFormatterChoice = .none,
+         markers                 : [[String]]?         = nil,
          data                    : [(x: Double, y: Double, size: Double)]) {
         self.title                   = title
+        self.titleEnabled            = titleEnabled
         self.legendEnabled           = legendEnabled
         self.legendPosition          = legendPosition
         self.smallLegend             = smallLegend
         self.averagesLinesEnabled    = averagesLinesEnabled
         self.leftAxisFormatterChoice = leftAxisFormatterChoice
         self.xAxisFormatterChoice    = xAxisFormatterChoice
+        self.markers                 = markers
         self.data                    = data
     }
     
@@ -112,17 +118,22 @@ struct BubbleChartTemplateView: NSUIViewRepresentable {
 
         // ajouter le Chartdata au ChartView
         chartView.data = data
+        let marker = chartView.marker as! StringMarker
+        marker.markers = markers
     }
     
     /// Création de la vue du Graphique
     /// - Parameter context:
     /// - Returns: Graphique View
     func makeUIView(context: Context) -> BubbleChartView {
+        let title = titleEnabled ? (self.title == nil ? "TOTAL=\(total.k€String)" : self.title!) : ""
+        
         // créer et configurer un nouveau graphique
         let chartView = BubbleChartView(title                   : title,
                                         legendEnabled           : legendEnabled,
                                         legendPosition          : legendPosition,
                                         smallLegend             : smallLegend,
+                                        markers                 : markers,
                                         leftAxisFormatterChoice : leftAxisFormatterChoice,
                                         xAxisFormatterChoice    : xAxisFormatterChoice)
         
@@ -148,14 +159,17 @@ struct BubbleChartTemplateView: NSUIViewRepresentable {
 struct BubbleChartTemplateView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return BubbleChartTemplateView(title                   : "REPARTITION DU PATRIMOINE PAR NIVEAU DE LIQUIDITÉ",
+        return BubbleChartTemplateView(title                   : nil,
+                                       titleEnabled            : true,
                                        legendEnabled           : true,
                                        legendPosition          : .left,
                                        smallLegend             : false,
                                        leftAxisFormatterChoice : .name(names: ["Value 1", "Value 2"]),
                                        xAxisFormatterChoice    : .name(names: ["X 1", "X 2"]),
-                                       data                    : [(x: 0.0, y: 2.0, size: 15000.0),
-                                                                  (x: 1.0, y: 1.0, size: 10000.0)])
+                                       markers                 : [["M1", "M2"],
+                                                                  ["M3", "M4"]],
+                                       data                    : [(x: 0.0, y: 1.0, size: 15000.0),
+                                                                  (x: 1.0, y: 0.0, size: 10000.0)])
             .preferredColorScheme(.dark)
             .environmentObject(patrimoineTest)
             .environmentObject(uiStateTest)

@@ -42,7 +42,7 @@ struct ComputationView: View {
                                         }
                                         Image(systemName: "square.and.arrow.up")
                                             .imageScale(.large)
-                                        Text("Exporter")
+                                        //Text("Exporter")
                                     }
                                    }
                             )

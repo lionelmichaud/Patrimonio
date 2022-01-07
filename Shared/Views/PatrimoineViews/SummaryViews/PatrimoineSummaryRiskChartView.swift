@@ -12,6 +12,22 @@ import Ownership
 import AssetsModel
 import Charts
 
+let riskPopOverMessage =
+    """
+        Très élevé:\t\tProduit à taux fct répartition des actifs
+        Elevé:\t\t\tProduit à taux fct répartition des actifs
+        Moyen:\t\t\tSCPI, Produit à taux fct répartition des actifs
+        Faible:\t\t\tImmobilier physique, Produit à taux fct répartition des actifs
+        Très faible:\t\tTontine, Produit à taux garanti
+        """
+
+let liquidityPopOverMessage =
+    """
+        Elevé:\tLiquidité, Livret
+        Moyen:\tSCPI, PEA, PEE, PER, Assurance Vie
+        Faible:\tImmobilier, Tontine
+        """
+
 struct PatrimoineSummaryRiskChartView: View {
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var uiState    : UIState
@@ -40,7 +56,7 @@ struct PatrimoineRiskChartView: View {
     var patrimoine        : Patrimoin
     var year              : Int
     var evaluationContext : EvaluationContext
-    
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             PieChartTemplateView(chartDescription   : nil,
@@ -53,7 +69,7 @@ struct PatrimoineRiskChartView: View {
         }.border(Color.white)
     }
     
-    var data : [(label: String, value: Double)] {
+    private var data : [(label: String, value: Double)] {
         var dataEntries = [(label: String, value: Double)]()
 
         dataEntries =
@@ -93,7 +109,7 @@ struct PatrimoineLiquidityChartView: View {
         }.border(Color.white)
     }
     
-    var data : [(label: String, value: Double)] {
+    private var data : [(label: String, value: Double)] {
         var dataEntries = [(label: String, value: Double)]()
         
         dataEntries =
@@ -120,28 +136,66 @@ struct PatrimoineBubbleChartView: View {
     var patrimoine        : Patrimoin
     var year              : Int
     var evaluationContext : EvaluationContext
-
+    @State private var showRiskInfoPopover   = false
+    @State private var showLiquidInfoPopover = false
+    
     var body: some View {
         HStack {
-            Text("Liquidité").bold().rotationEffect(.degrees(-90))
+            HStack {
+                Text("Liquidité").bold()
+                Button(action: { self.showLiquidInfoPopover = true },
+                       label : {
+                        Image(systemName: "info.circle")
+                       })
+                    .rotationEffect(.degrees(90))
+                    .popover(isPresented: $showLiquidInfoPopover) {
+                        PopOverContentView(description: liquidityPopOverMessage)
+                    }
+            }.rotationEffect(.degrees(-90))
+            
             VStack {
-                BubbleChartTemplateView(title                   : "",
+                BubbleChartTemplateView(title                   : nil,
+                                        titleEnabled            : true,
                                         legendEnabled           : false,
                                         legendPosition          : .left,
                                         smallLegend             : true,
                                         averagesLinesEnabled    : true,
                                         leftAxisFormatterChoice : .name(names: LiquidityLevel.allCases.map { $0.displayString }),
                                         xAxisFormatterChoice    : .name(names: RiskLevel.allCases.map { $0.displayString }),
+                                        markers                 : markers,
                                         data                    : data)
-                Text("Niveau de Risque").bold()
+                HStack {
+                    Text("Niveau de Risque").bold()
+                    Button(action: { self.showRiskInfoPopover = true },
+                           label : {
+                            Image(systemName: "info.circle")
+                           })
+                        .popover(isPresented: $showRiskInfoPopover) {
+                            PopOverContentView(description: riskPopOverMessage)
+                        }
+                }
             }
         }
         .padding([.bottom,.trailing]).border(Color.white)
     }
     
-    var data : [(x: Double, y: Double, size: Double)] {
-        var dataEntries      = [(x: Double, y: Double, size: Double)]()
-
+    private var markers : [[String]] {
+        RiskLevel.allCases.map { risk in
+            LiquidityLevel.allCases.map { liquidity in
+                let markers = patrimoine.assets.namedValues(atEndOf           : year,
+                                                            witRiskLevel      : risk,
+                                                            witLiquidityLevel : liquidity)
+                                                        
+                return markers.map { namedValue in
+                    "\(namedValue.name): \(namedValue.value.k€String)"
+                }.joined(separator: "\n")
+            }
+        }
+    }
+    
+    private var data : [(x: Double, y: Double, size: Double)] {
+        var dataEntries = [(x: Double, y: Double, size: Double)]()
+        
         RiskLevel.allCases.forEach { risk in
             dataEntries += LiquidityLevel.allCases.map { liquidity in
                 var value = 0.0

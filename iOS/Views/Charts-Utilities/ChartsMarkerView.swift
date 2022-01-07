@@ -222,6 +222,31 @@ class PieMarkerView: BalloonMarker {
     }
 }
 
+// MARK: - Bulle d'info pour diagramme en Bubble
+
+/// Bulle d'info pour diagramme en en Bubble
+class StringMarker: BalloonMarker {
+    var markers: [[String]]?
+    
+    public init(color     : NSUIColor,
+                font      : NSUIFont,
+                textColor : NSUIColor,
+                insets    : UIEdgeInsets,
+                markers   : [[String]]?  = nil) {
+        self.markers = markers
+        super.init(color: color, font: font, textColor: textColor, insets: insets)
+    }
+    
+    public override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {
+        if let markers = markers {
+            let labels = markers[Int(entry.x)]
+            setLabel(labels[Int(entry.y)])
+        } else {
+            setLabel("?")
+        }
+    }
+}
+
 // MARK: - Bulle d'info pour diagramme en X-Y
 
 /// Bulle d'info pour diagramme en en X-Y

@@ -122,7 +122,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     public var liquidityLevel  : LiquidityLevel? {
         switch type {
             case .lifeInsurance:
-                return .high
+                return .medium
 
             case .pea:
                 return .medium

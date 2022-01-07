@@ -301,6 +301,37 @@ public struct Assets {
         try sci.forEachOwnable(body)
     }
     
+    /// retourne tous les actifs (nom, valeur) pour un niveau de risque et de liquidité recherché
+    /// - Parameters:
+    ///   - year: année d'évaluation
+    ///   - risk: niveau de risque
+    ///   - liquidity: niveau de liquidité
+    /// - Returns: tableau (nom, valeur) pour un iveau de risque et de liquidité recherché
+    public func namedValues(atEndOf year                : Int,
+                            witRiskLevel risk           : RiskLevel,
+                            witLiquidityLevel liquidity : LiquidityLevel) -> NamedValueArray {
+        var namedValues = NamedValueArray()
+        
+        forEachQuotableNameableValuable { quotable in
+            if quotable.liquidityLevel == liquidity &&
+                quotable.riskLevel == risk {
+                namedValues.append(NamedValue(name  : quotable.name,
+                                              value : quotable.value(atEndOf: year)))
+            }
+        }
+        
+        return namedValues
+    }
+    
+    /// Calls the given closure on each element in the sequence in the same order as a for-in loop
+    public func forEachQuotableNameableValuable(_ body: (QuotableNameableValuableP) throws -> Void) rethrows {
+        try periodicInvests.items.forEach(body)
+        try freeInvests.items.forEach(body)
+        try realEstates.items.forEach(body)
+        try scpis.items.forEach(body)
+        try sci.forEachQuotableNameableValuable(body)
+    }
+        
     /// Calcule  la valeur nette taxable du patrimoine immobilier de la famille selon la méthode de calcul choisie
     ///  - Note:
     ///  Pour l'IFI:

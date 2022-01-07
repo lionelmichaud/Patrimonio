@@ -89,6 +89,10 @@ public struct SCI {
         try scpis.items.forEach(body)
     }
     
+    public func forEachQuotableNameableValuable(_ body: (QuotableNameableValuableP) throws -> Void) rethrows {
+        try scpis.items.forEach(body)
+    }
+
     /// Transférer la propriété d'un bien d'un défunt vers ses héritiers en fonction de l'option
     ///  fiscale du conjoint survivant éventuel
     /// - Parameters:

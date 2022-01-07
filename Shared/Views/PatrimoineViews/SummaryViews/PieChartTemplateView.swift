@@ -56,7 +56,7 @@ struct PieChartTemplateView: NSUIViewRepresentable {
                                      label: entry.label + " (\(percent))")
         }
         
-        chartView.chartDescription?.text = chartDescription ?? "Total=\(totalValue.k€String)"
+        chartView.chartDescription?.text = chartDescription ?? "TOTAL=\(totalValue.k€String)"
         
         let dataSet = PieChartDataSet(entries : dataEntries,
                                       label   : "")

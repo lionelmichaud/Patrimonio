@@ -70,6 +70,9 @@ public typealias QuotableNameableValuableP = Quotable & NameableValuableP
 
 public extension Array where Element: QuotableNameableValuableP {
     /// Somme de toutes les valeurs d'un Array pour un niveau de risque donné
+    /// - Parameters:
+    ///   - year: année d'évaluation
+    ///   - risk: niveau de risque
     /// - Returns: Somme de toutes les valeurs pour un niveau de risque donné
     func sumOfValues (atEndOf year      : Int,
                       witRiskLevel risk : RiskLevel) -> Double {
@@ -82,6 +85,9 @@ public extension Array where Element: QuotableNameableValuableP {
         })
     }
     /// Somme de toutes les valeurs d'un Array pour un niveau de liquidité donné
+    /// - Parameters:
+    ///   - year: année d'évaluation
+    ///   - liquidity: niveau de liquidité
     /// - Returns: Somme de toutes les valeurs pour un niveau de liquidité donné
     func sumOfValues (atEndOf year : Int,
                       witLiquidityLevel liquidity : LiquidityLevel) -> Double {
@@ -94,6 +100,10 @@ public extension Array where Element: QuotableNameableValuableP {
         })
     }
     /// Somme de toutes les valeurs d'un Array pour un niveau de liquidité donné
+    /// - Parameters:
+    ///   - year: année d'évaluation
+    ///   - risk: niveau de risque
+    ///   - liquidity: niveau de liquidité
     /// - Returns: Somme de toutes les valeurs pour un niveau de liquidité donné
     func sumOfValues (atEndOf year : Int,
                       witRiskLevel risk : RiskLevel,
@@ -106,5 +116,24 @@ public extension Array where Element: QuotableNameableValuableP {
                 return result
             }
         })
+    }
+    /// retourne tous les biens (nom, valeur) pour un niveau de risque et de liquidité recherché
+    /// - Parameters:
+    ///   - year: année d'évaluation
+    ///   - risk: niveau de risque
+    ///   - liquidity: niveau de liquidité
+    /// - Returns: tableau (nom, valeur) pour un iveau de risque et de liquidité recherché
+    func namedValues (atEndOf year : Int,
+                      witRiskLevel risk : RiskLevel,
+                      witLiquidityLevel liquidity : LiquidityLevel) -> NamedValueArray {
+        compactMap { element in
+            if element.liquidityLevel == liquidity &&
+                element.riskLevel == risk {
+                return NamedValue(name  : element.name,
+                                  value : element.value(atEndOf: year))
+            } else {
+                return nil
+            }
+        }
     }
 }
