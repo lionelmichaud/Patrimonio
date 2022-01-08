@@ -18,10 +18,10 @@ struct KpisParametersEditView: View {
             ForEach(simulation.kpis.values) { kpi in
                 KpiGroupBox(kpi: kpi)
             }
+            .alert(item: $alertItem, content: createAlert)
         }
         .navigationTitle("Critères de performances")
         .navigationBarTitleDisplayMode(.inline)
-        .alert(item: $alertItem, content: createAlert)
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 DiskButton(text   : "Modifier le Patron",

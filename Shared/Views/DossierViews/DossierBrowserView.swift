@@ -13,7 +13,7 @@ import PatrimoineModel
 import FamilyModel
 
 struct DossierBrowserView: View {
-    @EnvironmentObject var dataStore : Store
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var expenses   : LifeExpensesDic

@@ -16,11 +16,36 @@ struct ComputationForm: View {
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var expenses   : LifeExpensesDic
     @EnvironmentObject private var patrimoine : Patrimoin
-    @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var simulation : Simulation
-    @State private var localAlertItem         : AlertItem?
+    @EnvironmentObject private var uiState    : UIState
     
-    var resultsSection: some View {
+    var body: some View {
+        VStack(alignment: .leading) {
+            // paramétrage de la simulation : cas général
+            ComputationParametersSectionView()
+
+            // bouton pour lancer le calcul de la simulation
+            HStack {
+                Spacer()
+                // Choix des paramètres des KPIs
+                EditKpisButtonView()
+                Spacer()
+                ComputationButonView()
+                Spacer()
+            }
+                .padding(.top)
+
+            Form {
+                // affichage des résultats
+                resultsSectionView
+                
+                // affichage des valeurs des KPI
+                kpiValuesView
+            }
+        }
+    }
+    
+    var resultsSectionView: some View {
         Section(header: Text("Résultats").font(.headline)) {
             // affichage du statut de la simulation
             if simulation.isComputed {
@@ -32,6 +57,14 @@ struct ComputationForm: View {
                         Spacer(minLength: 100)
                         IntegerView(label   : "Nombre de run exécutés",
                                     integer : simulation.mode == .deterministic ? 1  : simulation.currentRunNb)
+                    }
+                    Spacer()
+                    if simulation.kpis.allObjectivesAreReached(withMode: simulation.mode)! {
+                        Text("Tous les critères de performance sont satisfaits")
+                            .foregroundColor(.green)
+                    } else {
+                        Text("Certains critères de performance ne sont pas satisfaits")
+                            .foregroundColor(.red)
                     }
                 }
                 
@@ -64,39 +97,28 @@ struct ComputationForm: View {
             }
         }
     }
-    
+}
+
+struct ComputationButonView: View {
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var expenses   : LifeExpensesDic
+    @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var simulation : Simulation
+    @EnvironmentObject private var uiState    : UIState
+    @State private var localAlertItem         : AlertItem?
+
     var body: some View {
-        Form {
-            // paramétrage de la simulation : cas général
-            ComputationParametersSectionView()
-            
-            // bouton pour lancer le calcul de la simulation
-            HStack {
-                Spacer()
-                Button(action: computeSimulation,
-                       label: {
-                        HStack(alignment: .center) {
-                            Image(systemName: "function")
-                                .imageScale(.large)
-                            Text("Calculer")
-                        }
-                        .font(.title2)
-                        .padding(.vertical, 4.0)
-                       }
-                )
-                .capsuleButtonStyle(width: 200.0)
-                .alert(item: $localAlertItem, content: createAlert)
-                Spacer()
-            }
-            
-            // affichage des résultats
-            resultsSection
-            
-            // affichage des valeurs des KPI
-            kpiValuesView
-        }
+        Button(action: computeSimulation,
+               label: {
+                Label("Calculer", systemImage: "function")
+                    .font(.title2)
+                    .padding(.vertical, 4.0)
+               })
+            .capsuleButtonStyle(width: 200.0)
+            .alert(item: $localAlertItem, content: createAlert)
     }
-    
+
     /// Exécuter la simulation
     private func computeSimulation() {
         // busyCompWheelAnimate.toggle()
@@ -137,15 +159,36 @@ struct ComputationForm: View {
     }
 }
 
+struct EditKpisButtonView: View {
+    @State private var showKpiEditView: Bool = false
+
+    var body: some View {
+        HStack {
+            Button(action: { showKpiEditView = true },
+                   label : {
+                    Label("Critères de performances", systemImage: "thermometer")
+                        .font(.title2)
+                        .padding(.vertical, 4.0)
+                   })
+                .capsuleButtonStyle()
+            NavigationLink(destination: KpisParametersEditView(), isActive: $showKpiEditView) {
+                EmptyView()
+            }
+        }
+    }
+}
+
 struct ComputationForm_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
         return ComputationForm()
-            .environmentObject(modelTest)
-            .environmentObject(uiStateTest)
+            .preferredColorScheme(.dark)
             .environmentObject(dataStoreTest)
+            .environmentObject(modelTest)
             .environmentObject(familyTest)
+            .environmentObject(expensesTest)
             .environmentObject(patrimoineTest)
             .environmentObject(simulationTest)
+            .environmentObject(uiStateTest)
     }
 }
