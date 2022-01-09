@@ -9,16 +9,6 @@ import SwiftUI
 import Persistence
 
 struct SettingsSidebarView: View {
-    @State private var simulateVolatility      = UserSettings.shared.simulateVolatility
-    @State private var kpiOwnership            = UserSettings.shared.ownershipGraphicSelection
-    @State private var kpiEvaluationMethod     = UserSettings.shared.assetGraphicEvaluatedFraction
-    
-    @State private var graphicOwnership        = UserSettings.shared.ownershipGraphicSelection
-    @State private var graphicEvaluationMethod = UserSettings.shared.assetGraphicEvaluatedFraction
-    
-    @State private var shareCsvFiles           = UserSettings.shared.shareCsvFiles
-    @State private var shareImageFiles         = UserSettings.shared.shareImageFiles
-
     var body: some View {
         NavigationView {
             List {
@@ -28,22 +18,19 @@ struct SettingsSidebarView: View {
                 .isDetailLink(true)
                 
                 // Simulation settings
-                NavigationLink(destination: SimulationUserSettingsView(simulateVolatility: $simulateVolatility,
-                                                                       ownership         : $kpiOwnership)) {
+                NavigationLink(destination: SimulationUserSettingsView()) {
                     Label("Simulation", systemImage: "function")
                 }
                 .isDetailLink(true)
                 
                 // Graphics settings
-                NavigationLink(destination: GraphicUserSettingsView(ownership        : $graphicOwnership,
-                                                                    evaluatedFraction: $graphicEvaluationMethod)) {
+                NavigationLink(destination: GraphicUserSettingsView()) {
                     Label("Graphiques", systemImage: "chart.bar.xaxis")
                 }
                 .isDetailLink(true)
                 
                 // Export settings
-                NavigationLink(destination: ExportSettingsView(shareCsvFiles   : $shareCsvFiles,
-                                                               shareImageFiles : $shareImageFiles)) {
+                NavigationLink(destination: ExportSettingsView()) {
                     Label("Export", systemImage: "square.and.arrow.up")
                 }
                 .isDetailLink(true)

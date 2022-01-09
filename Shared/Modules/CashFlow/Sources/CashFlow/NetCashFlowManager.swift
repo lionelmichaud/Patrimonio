@@ -32,7 +32,7 @@ struct NetCashFlowManager {
     // swiftlint:disable cyclomatic_complexity
     /// Investir les capitaux dans des actifs financiers détenus en PP indivis par chaque Adulte récipiendaire des capitaux
     /// - Parameters:
-    ///   - ownedCapitals: [nom du détenteur, du capital]
+    ///   - ownedCapitals: capitaux à investir [nom du détenteur, du capital]
     ///   - year: année de l'investissement
     func investCapital(ownedCapitals : NameValueDico,
                        in patrimoine : Patrimoin,

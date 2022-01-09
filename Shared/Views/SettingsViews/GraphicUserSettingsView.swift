@@ -16,40 +16,25 @@ struct GraphicUserSettingsView: View {
     @EnvironmentObject var patrimoine : Patrimoin
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
-    // si la variable d'état est locale (@State) cela ne fonctionne pas correctement
-    @Binding var ownership         : OwnershipNature
-    @Binding var evaluatedFraction : EvaluatedFraction
-//    @State private var includeQuasiUsufruct: Bool = UserSettings.shared.cashFlowGraphicIncludeQuasiUsufruct
-    
+    @Preference(\.ownershipGraphicSelection)     var ownershipGraphicSelection
+    @Preference(\.assetGraphicEvaluatedFraction) var assetGraphicEvaluatedFraction
+
     var body: some View {
         Form {
             // Graphique Bilan
             Section(header: Text("Graphique Bilan".uppercased()),
                     footer: Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu ne prendra en compte que les biens satisfaisant à ce critère")) {
-                CasePicker(pickedCase: $ownership, label: "Filtrage des actifs et passifs du Bilan individuel")
+                CasePicker(pickedCase: $ownershipGraphicSelection, label: "Filtrage des actifs et passifs du Bilan individuel")
                     .pickerStyle(DefaultPickerStyle())
-                    .onChange(of: ownership) { newValue in
-                        UserSettings.shared.ownershipGraphicSelection = newValue
+                    .onChange(of: ownershipGraphicSelection) { newValue in
+                        Preferences.standard.ownershipGraphicSelection = newValue
                     }
             }
             
             Section(footer: Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu prendra en compte cette valorisation")) {
-                CasePicker(pickedCase: $evaluatedFraction, label: "Valorisation d'un bien dans un bilan individuel")
+                CasePicker(pickedCase: $assetGraphicEvaluatedFraction, label: "Valorisation d'un bien dans un bilan individuel")
                     .pickerStyle(DefaultPickerStyle())
-                    .onChange(of     : evaluatedFraction) { newValue in
-                        UserSettings.shared.assetGraphicEvaluatedFraction = newValue
-                    }
             }
-            
-            // Graphique Cash-Flow
-//            Section(header: Text("Graphique Cash-Flow".uppercased()),
-//                    footer: Text("Le graphique de l'évolution dans le temps du cash flow incluera les quasi-usufruits issus des transmissions d'assurances vie")) {
-//                // Graphique Cash Flow
-//                Toggle("Inclure les quasi-usufruits", isOn: $includeQuasiUsufruct)
-//                    .onChange(of     : includeQuasiUsufruct) { newValue in
-//                        UserSettings.shared.cashFlowGraphicIncludeQuasiUsufruct = newValue
-//                    }
-//            }.padding(.top)
         }
         .navigationTitle(Text("Graphiques"))
     }
@@ -66,8 +51,7 @@ struct GraphicUserSettings_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationView {
-            NavigationLink(destination: GraphicUserSettingsView(ownership         : .constant(.all),
-                                                                evaluatedFraction : .constant(.totalValue))
+            NavigationLink(destination: GraphicUserSettingsView()
                             .environmentObject(patrimoine)) {
                 Label("Graphiques", systemImage: "chart.bar.xaxis")
             }

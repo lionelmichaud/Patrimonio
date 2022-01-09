@@ -24,7 +24,9 @@ struct ComputationView: View {
     @EnvironmentObject private var simulation : Simulation
     @State private var busySaveWheelAnimate   : Bool = false
     @State private var alertItem              : AlertItem?
-    
+    @Preference(\.shareCsvFiles)   var shareCsvFiles
+    @Preference(\.shareImageFiles) var shareImageFiles
+
     var body: some View {
         if dataStore.activeDossier != nil {
             GeometryReader { geometry in
@@ -77,7 +79,7 @@ struct ComputationView: View {
         saveSimulationToDocumentsDirectory(dicoOfCSV: dicoOfCsv)
         
         // Partager les fichiers CSV et Image existants dans le dossier `Document` de l'application
-        if UserSettings.shared.shareCsvFiles || UserSettings.shared.shareImageFiles {
+        if shareCsvFiles || shareImageFiles {
             shareSimulationResults(geometry: geometry)
         }
         
@@ -119,7 +121,7 @@ struct ComputationView: View {
 
         // partage des fichiers CSV
         var urls = [URL]()
-        if UserSettings.shared.shareCsvFiles {
+        if shareCsvFiles {
             do {
                 let csvFolder = try PersistenceManager.csvFolder(in                 : folder,
                                                                  forSimulationTitle : simulation.title)
@@ -133,7 +135,7 @@ struct ComputationView: View {
         }
         
         // partage des fichiers PNG
-        if UserSettings.shared.shareImageFiles {
+        if shareImageFiles {
             let imageFolder = try? PersistenceManager.imageFolder(in                 : folder,
                                                                   forSimulationTitle : simulation.title)
             imageFolder?.files.forEach { file in

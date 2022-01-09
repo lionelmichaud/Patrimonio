@@ -96,7 +96,7 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
         stockRate   : Double) {
         PeriodicInvestement.economyModel.rates(in                 : year,
                                                withMode           : simulationMode,
-                                               simulateVolatility : UserSettings.shared.simulateVolatility)
+                                               simulateVolatility : Preferences.standard.simulateVolatility)
     }
     
     // MARK: - Properties

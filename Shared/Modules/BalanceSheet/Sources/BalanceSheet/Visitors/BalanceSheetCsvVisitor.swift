@@ -91,8 +91,8 @@ public final class BalanceSheetCsvTableVisitor: BalanceSheetCsvVisitorP {
 
         table.append("\(element.year);")
         table.append("\(model.economyModel.randomizers.inflation.value(withMode: mode).percentString(digit: 1));")
-        table.append("\(model.economyModel.rates(in: element.year, withMode: mode, simulateVolatility: UserSettings.shared.simulateVolatility).securedRate.percentString(digit: 1));")
-        table.append("\(model.economyModel.rates(in: element.year, withMode: mode, simulateVolatility: UserSettings.shared.simulateVolatility).stockRate.percentString(digit: 1));")
+        table.append("\(model.economyModel.rates(in: element.year, withMode: mode, simulateVolatility: Preferences.standard.simulateVolatility).securedRate.percentString(digit: 1));")
+        table.append("\(model.economyModel.rates(in: element.year, withMode: mode, simulateVolatility: Preferences.standard.simulateVolatility).stockRate.percentString(digit: 1));")
 
         // actifs
         visitAssets()

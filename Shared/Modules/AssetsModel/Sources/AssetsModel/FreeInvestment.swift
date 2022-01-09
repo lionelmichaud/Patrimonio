@@ -92,7 +92,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         stockRate   : Double) {
         FreeInvestement.economyModel.rates(in                 : year,
                                            withMode           : simulationMode,
-                                           simulateVolatility : UserSettings.shared.simulateVolatility)
+                                           simulateVolatility : Preferences.standard.simulateVolatility)
     }
     
     // MARK: - Properties

@@ -226,7 +226,7 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
         dicoOfAdultsRandomProperties = family.nextRun(using: model)
 
         // re-générer les propriétés aléatoires du modèle macro économique
-        dicoOfEconomyRandomVariables = try! model.economyModel.nextRun(simulateVolatility : UserSettings.shared.simulateVolatility,
+        dicoOfEconomyRandomVariables = try! model.economyModel.nextRun(simulateVolatility : Preferences.standard.simulateVolatility,
                                                                        firstYear          : firstYear!,
                                                                        lastYear           : lastYear!)
         // re-générer les propriétés aléatoires du modèle socio économique
@@ -399,7 +399,7 @@ final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
 
         // fixer tous les paramètres du run à rejouer
         try! model.economyModel.setRandomValue(to                 : thisRun.dicoOfEconomyRandomVariables,
-                                               simulateVolatility : UserSettings.shared.simulateVolatility,
+                                               simulateVolatility : Preferences.standard.simulateVolatility,
                                                firstYear          : firstYear!,
                                                lastYear           : lastYear!)
         model.socioEconomyModel.setRandomValue(to: thisRun.dicoOfSocioEconomyRandomVariables)

@@ -58,7 +58,9 @@ struct KpisParametersEditView: View {
 struct KpiGroupBox : View {
     @EnvironmentObject private var simulation : Simulation
     @State private var kpi : KPI
-    
+    @Preference(\.ownershipGraphicSelection) var ownershipGraphicSelection
+    @Preference(\.assetGraphicEvaluatedFraction) var assetGraphicEvaluatedFraction
+
     var compareStr: String {
         switch kpi.comparator {
             case .maximize: return " à atteindre"
@@ -115,10 +117,10 @@ struct KpiGroupBox : View {
     func kpiNoteSubstituted(_ note: String) -> String {
         var substituted: String = note
         substituted = substituted.replacingOccurrences(of    : "<<OwnershipNature>>",
-                                                       with  : UserSettings.shared.ownershipGraphicSelection.rawValue,
+                                                       with  : ownershipGraphicSelection.rawValue,
                                                        count : 1)
         substituted = substituted.replacingOccurrences(of    : "<<AssetEvaluationContext>>",
-                                                       with  : UserSettings.shared.assetGraphicEvaluatedFraction.rawValue,
+                                                       with  : assetGraphicEvaluatedFraction.rawValue,
                                                        count : 1)
         return substituted
     }

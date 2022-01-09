@@ -21,6 +21,7 @@ struct ScenarioSummaryView: View {
     var simulationMode : SimulationModeEnum
     @EnvironmentObject private var model  : Model
     @EnvironmentObject private var family : Family
+    @Preference(\.simulateVolatility) var simulateVolatility
 
     var body: some View {
         VStack {
@@ -49,13 +50,13 @@ struct ScenarioSummaryView: View {
                                 percent : model.economyModel.randomizers.inflation.value(withMode: simulationMode)/100.0)
                     PercentView(label   : "Rendement annuel moyen des Obligations sans risque",
                                 percent : model.economyModel.randomizers.securedRate.value(withMode: simulationMode)/100.0)
-                    if UserSettings.shared.simulateVolatility {
+                    if simulateVolatility {
                         PercentView(label   : "Volatilité des Obligations sans risque",
                                     percent : model.economyModel.randomizers.securedVolatility/100.0)
                     }
                     PercentView(label   : "Rendement annuel moyen des Actions",
                                 percent : model.economyModel.randomizers.stockRate.value(withMode: simulationMode)/100.0)
-                    if UserSettings.shared.simulateVolatility {
+                    if simulateVolatility {
                         PercentView(label   : "Volatilité des Actions",
                                     percent : model.economyModel.randomizers.stockVolatility/100.0)
                     }

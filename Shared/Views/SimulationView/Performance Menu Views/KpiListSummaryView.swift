@@ -42,6 +42,8 @@ struct KpiListSummaryView: View {
 
 struct KpiSummaryView: View {
     @State var kpi     : KPI
+    @Preference(\.ownershipGraphicSelection)     var ownershipGraphicSelection
+    @Preference(\.assetGraphicEvaluatedFraction) var assetGraphicEvaluatedFraction
     var simulationMode : SimulationModeEnum
     var withPadding    : Bool
     var withDetails    : Bool
@@ -65,10 +67,10 @@ struct KpiSummaryView: View {
     func kpiNoteSubstituted(_ note: String) -> String {
         var substituted: String = note
         substituted = substituted.replacingOccurrences(of    : "<<OwnershipNature>>",
-                                                       with  : UserSettings.shared.ownershipGraphicSelection.rawValue,
+                                                       with  : ownershipGraphicSelection.rawValue,
                                                        count : 1)
         substituted = substituted.replacingOccurrences(of    : "<<AssetEvaluationContext>>",
-                                                       with  : UserSettings.shared.assetGraphicEvaluatedFraction.rawValue,
+                                                       with  : assetGraphicEvaluatedFraction.rawValue,
                                                        count : 1)
         return substituted
     }

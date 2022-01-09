@@ -121,8 +121,8 @@ public struct BalanceSheetLine {
         adultsName.forEach { name in
             value += asset.ownedValue(by                  : name,
                                       atEndOf             : year,
-                                      withOwnershipNature : UserSettings.shared.ownershipGraphicSelection,
-                                      evaluatedFraction   : UserSettings.shared.assetGraphicEvaluatedFraction)
+                                      withOwnershipNature : Preferences.standard.ownershipGraphicSelection,
+                                      evaluatedFraction   : Preferences.standard.assetGraphicEvaluatedFraction)
         }
         assets[AppSettings.shared.adultsLabel]!
             .perCategory[category]?
@@ -134,8 +134,8 @@ public struct BalanceSheetLine {
         membersName.forEach { name in
             let value = asset.ownedValue(by                  : name,
                                          atEndOf             : year,
-                                         withOwnershipNature : UserSettings.shared.ownershipGraphicSelection,
-                                         evaluatedFraction   : UserSettings.shared.assetGraphicEvaluatedFraction)
+                                         withOwnershipNature : Preferences.standard.ownershipGraphicSelection,
+                                         evaluatedFraction   : Preferences.standard.assetGraphicEvaluatedFraction)
             
             assets[name]!
                 .perCategory[category]?
@@ -162,8 +162,8 @@ public struct BalanceSheetLine {
         adultsName.forEach { name in
             value += liability.ownedValue(by                  : name,
                                           atEndOf             : year,
-                                          withOwnershipNature : UserSettings.shared.ownershipGraphicSelection,
-                                          evaluatedFraction   : UserSettings.shared.assetGraphicEvaluatedFraction)
+                                          withOwnershipNature : Preferences.standard.ownershipGraphicSelection,
+                                          evaluatedFraction   : Preferences.standard.assetGraphicEvaluatedFraction)
         }
         liabilities[AppSettings.shared.adultsLabel]!
             .perCategory[category]?
@@ -175,8 +175,8 @@ public struct BalanceSheetLine {
         membersName.forEach { name in
             let value = liability.ownedValue(by                  : name,
                                              atEndOf             : year,
-                                             withOwnershipNature : UserSettings.shared.ownershipGraphicSelection,
-                                             evaluatedFraction   : UserSettings.shared.assetGraphicEvaluatedFraction)
+                                             withOwnershipNature : Preferences.standard.ownershipGraphicSelection,
+                                             evaluatedFraction   : Preferences.standard.assetGraphicEvaluatedFraction)
             liabilities[name]!
                 .perCategory[category]?
                 .namedValues
