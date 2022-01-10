@@ -13,12 +13,14 @@ import PatrimoineModel
 import Charts
 
 struct PatrimoineSummaryShareChartView: View {
-    static let tous = "Tous"
+    static let tous     = "Tous"
+    static let adults   = "Adultes"
+    static let children = "Enfants"
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var uiState    : UIState
     @State private var evaluationContext      : EvaluationContext = .patrimoine
-    @State private var selectedAdult          : String            = tous
+    @State private var selectedMembers        : String            = tous
     
     var body: some View {
         VStack {
@@ -31,14 +33,14 @@ struct PatrimoineSummaryShareChartView: View {
                                              patrimoine        : patrimoine,
                                              year              : Int(uiState.patrimoineViewState.evalDate),
                                              evaluationContext : evaluationContext,
-                                             selectedAdult     : $selectedAdult)
+                                             selectedMembers   : $selectedMembers)
             }
             HStack {
                 PatrimoineSingleCategoryView(family            : family,
                                              patrimoine        : patrimoine,
                                              year              : Int(uiState.patrimoineViewState.evalDate),
                                              evaluationContext : evaluationContext,
-                                             selectedAdult     : selectedAdult)
+                                             selectedMembers   : selectedMembers)
             }
         }
     }
@@ -87,7 +89,7 @@ struct PatrimoineCategorySharesView : View {
     var patrimoine             : Patrimoin
     var year                   : Int
     var evaluationContext      : EvaluationContext
-    @Binding var selectedAdult : String
+    @Binding var selectedMembers : String
     private static let immobilier    = "Immobilier"
     private static let scpi          = "SCPI"
     private static let freeInvest    = "Invest. Libres"
@@ -99,12 +101,12 @@ struct PatrimoineCategorySharesView : View {
             HStack {
                 Text("\(evaluationContext.displayString)")
                 Spacer()
-                Picker("Pour:", selection: $selectedAdult) {
+                Picker("Pour:", selection: $selectedMembers) {
                     ForEach(menuItems, id: \.self) { name in
                         Text(name)
                     }
                 }.pickerStyle(MenuPickerStyle())
-                Text(selectedAdult)
+                Text(selectedMembers)
             }.padding(.horizontal)
             
             PieChartTemplateView(chartDescription   : nil,
@@ -117,35 +119,55 @@ struct PatrimoineCategorySharesView : View {
         .onAppear(perform: buildMenu)
     }
     
-    var data : [(label: String, value: Double)] {
+    private var data : [(label: String, value: Double)] {
         var dataEntries = [(label: String, value: Double)]()
         
-        if selectedAdult == PatrimoineSummaryShareChartView.tous {
+        if !family.membersName.contains(selectedMembers) {
             var realEstatesTotal     = 0.0
             var scpisTotal           = 0.0
             var periodicInvestsTotal = 0.0
             var freeInvestsTotal     = 0.0
+            var membersName : [String]
             
-            family.adultsName.forEach { name in
+            switch selectedMembers {
+                case PatrimoineSummaryShareChartView.tous:
+                    membersName = family.membersName
+                    
+                case PatrimoineSummaryShareChartView.adults:
+                    membersName = family.adultsName
+                    
+                case PatrimoineSummaryShareChartView.children:
+                    membersName = family.childrenName
+                    
+                default:
+                    membersName = [ ]
+            }
+
+            membersName.forEach { name in
                 realEstatesTotal +=
-                    patrimoine.assets.realEstates.ownedValue(by: name,
-                                                             atEndOf: year,
-                                                             evaluationContext: evaluationContext)
+                    patrimoine.assets.realEstates
+                    .ownedValue(by                : name,
+                                atEndOf           : year,
+                                evaluationContext : evaluationContext)
                 scpisTotal +=
-                    patrimoine.assets.scpis.ownedValue(by: name,
-                                                       atEndOf: year,
-                                                       evaluationContext: evaluationContext) +
-                    patrimoine.assets.sci.scpis.ownedValue(by: name,
-                                                           atEndOf: year,
-                                                           evaluationContext: evaluationContext)
+                    patrimoine.assets.scpis
+                    .ownedValue(by                : name,
+                                atEndOf           : year,
+                                evaluationContext : evaluationContext) +
+                    patrimoine.assets.sci.scpis
+                    .ownedValue(by                : name,
+                                atEndOf           : year,
+                                evaluationContext : evaluationContext)
                 periodicInvestsTotal +=
-                    patrimoine.assets.periodicInvests.ownedValue(by: name,
-                                                                 atEndOf: year,
-                                                                 evaluationContext: evaluationContext)
+                    patrimoine.assets.periodicInvests
+                    .ownedValue(by                : name,
+                                atEndOf           : year,
+                                evaluationContext : evaluationContext)
                 freeInvestsTotal +=
-                    patrimoine.assets.freeInvests.ownedValue(by: name,
-                                                             atEndOf: year,
-                                                             evaluationContext: evaluationContext)
+                    patrimoine.assets.freeInvests
+                    .ownedValue(by                : name,
+                                atEndOf           : year,
+                                evaluationContext : evaluationContext)
             }
             if realEstatesTotal != 0 {
                 let realEstates = (label: PatrimoineCategorySharesView.immobilier,
@@ -173,7 +195,7 @@ struct PatrimoineCategorySharesView : View {
             
         } else {
             let realEstates = (label: PatrimoineCategorySharesView.immobilier,
-                               value: patrimoine.assets.realEstates.ownedValue(by: selectedAdult,
+                               value: patrimoine.assets.realEstates.ownedValue(by: selectedMembers,
                                                                                atEndOf: year,
                                                                                evaluationContext: evaluationContext))
             if realEstates.value != 0 {
@@ -181,10 +203,10 @@ struct PatrimoineCategorySharesView : View {
             }
             
             let scpis = (label: PatrimoineCategorySharesView.scpi,
-                         value: patrimoine.assets.scpis.ownedValue(by: selectedAdult,
+                         value: patrimoine.assets.scpis.ownedValue(by: selectedMembers,
                                                                    atEndOf: year,
                                                                    evaluationContext: evaluationContext) +
-                            patrimoine.assets.sci.scpis.ownedValue(by: selectedAdult,
+                            patrimoine.assets.sci.scpis.ownedValue(by: selectedMembers,
                                                                    atEndOf: year,
                                                                    evaluationContext: evaluationContext))
             if scpis.value != 0 {
@@ -192,7 +214,7 @@ struct PatrimoineCategorySharesView : View {
             }
             
             let periodicInvests = (label: PatrimoineCategorySharesView.perdiodInvest,
-                                   value: patrimoine.assets.periodicInvests.ownedValue(by: selectedAdult,
+                                   value: patrimoine.assets.periodicInvests.ownedValue(by: selectedMembers,
                                                                                        atEndOf: year,
                                                                                        evaluationContext: evaluationContext))
             if periodicInvests.value != 0 {
@@ -200,7 +222,7 @@ struct PatrimoineCategorySharesView : View {
             }
             
             let freeInvests = (label: PatrimoineCategorySharesView.freeInvest,
-                               value: patrimoine.assets.freeInvests.ownedValue(by: selectedAdult,
+                               value: patrimoine.assets.freeInvests.ownedValue(by: selectedMembers,
                                                                                atEndOf: year,
                                                                                evaluationContext: evaluationContext))
             if freeInvests.value != 0 {
@@ -211,10 +233,12 @@ struct PatrimoineCategorySharesView : View {
         return dataEntries
     }
     
-    func buildMenu() {
-        let adultsName   = family.adultsAliveName(atEndOf: year) ?? [ ]
-        let childrenName = family.childrenAliveName(atEndOf: year) ?? [ ]
-        menuItems = [PatrimoineSummaryShareChartView.tous] + adultsName + childrenName
+    private func buildMenu() {
+        menuItems =
+            [PatrimoineSummaryShareChartView.tous] +
+            [PatrimoineSummaryShareChartView.adults] +
+            [PatrimoineSummaryShareChartView.children] +
+            family.membersName
     }
 }
 
@@ -237,7 +261,7 @@ struct PatrimoineSingleCategoryView : View {
     var patrimoine        : Patrimoin
     var year              : Int
     var evaluationContext : EvaluationContext
-    var selectedAdult     : String
+    var selectedMembers   : String
     @State private var selectedCategory: PieChartAssetsCategory = .freeInvests
     
     var body: some View {
@@ -254,7 +278,7 @@ struct PatrimoineSingleCategoryView : View {
                 VStack {
                     Text("\(evaluationContext.displayString)")
                         .padding(.top)
-                    Text("Pour: \(selectedAdult)")
+                    Text("Pour: \(selectedMembers)")
                         .padding(.top)
                     HStack {
                         CasePicker(pickedCase: $selectedCategory, label: "Categorie:")
@@ -271,7 +295,7 @@ struct PatrimoineSingleCategoryView : View {
     }
     
     /// Données à afficher sur le graphique
-    var data : [(label: String, value: Double)] {
+    private var data : [(label: String, value: Double)] {
         var dataEntries = [(label: String, value: Double)]()
         
         switch selectedCategory {
@@ -279,23 +303,23 @@ struct PatrimoineSingleCategoryView : View {
                 patrimoine.assets.periodicInvests.items.sorted {
                     ($0.type.rawValue < $1.type.rawValue) ||
                         (($0.type.rawValue == $1.type.rawValue) &&
-                            $0.ownedValue(by                : selectedAdult,
+                            $0.ownedValue(by                : selectedMembers,
                                           atEndOf           : year,
                                           evaluationContext : evaluationContext) >
-                            $1.ownedValue(by                : selectedAdult,
+                            $1.ownedValue(by                : selectedMembers,
                                           atEndOf           : year,
                                           evaluationContext : evaluationContext))
                 }.forEach { item in
                     var value = 0.0
-                    if selectedAdult == PatrimoineSummaryShareChartView.tous {
-                        family.adultsName.forEach { name in
+                    if !family.membersName.contains(selectedMembers) {
+                        membersName.forEach { name in
                             value += item.ownedValue(by                : name,
                                                      atEndOf           : year,
                                                      evaluationContext : evaluationContext)
                         }
                         
                     } else {
-                        value = item.ownedValue(by                : selectedAdult,
+                        value = item.ownedValue(by                : selectedMembers,
                                                 atEndOf           : year,
                                                 evaluationContext : evaluationContext)
                     }
@@ -308,23 +332,23 @@ struct PatrimoineSingleCategoryView : View {
                 patrimoine.assets.freeInvests.items.sorted {
                     ($0.type.rawValue < $1.type.rawValue) ||
                         (($0.type.rawValue == $1.type.rawValue) &&
-                            $0.ownedValue(by                : selectedAdult,
+                            $0.ownedValue(by                : selectedMembers,
                                           atEndOf           : year,
                                           evaluationContext : evaluationContext) >
-                            $1.ownedValue(by                : selectedAdult,
+                            $1.ownedValue(by                : selectedMembers,
                                           atEndOf           : year,
                                           evaluationContext : evaluationContext))
                 }.forEach { item in
                     var value = 0.0
-                    if selectedAdult == PatrimoineSummaryShareChartView.tous {
-                        family.adultsName.forEach { name in
+                    if !family.membersName.contains(selectedMembers) {
+                        membersName.forEach { name in
                             value += item.ownedValue(by                : name,
                                                      atEndOf           : year,
                                                      evaluationContext : evaluationContext)
                         }
                         
                     } else {
-                        value = item.ownedValue(by                : selectedAdult,
+                        value = item.ownedValue(by                : selectedMembers,
                                                 atEndOf           : year,
                                                 evaluationContext : evaluationContext)
                     }
@@ -337,14 +361,14 @@ struct PatrimoineSingleCategoryView : View {
             case .realEstates:
                 patrimoine.assets.realEstates.items.forEach { item in
                     var value = 0.0
-                    if selectedAdult == PatrimoineSummaryShareChartView.tous {
-                        family.adultsName.forEach { name in
+                    if !family.membersName.contains(selectedMembers) {
+                        membersName.forEach { name in
                             value += item.ownedValue(by                : name,
                                                      atEndOf           : year,
                                                      evaluationContext : evaluationContext)
                         }
                     } else {
-                        value = item.ownedValue(by                : selectedAdult,
+                        value = item.ownedValue(by                : selectedMembers,
                                                 atEndOf           : year,
                                                 evaluationContext : evaluationContext)
                     }
@@ -356,14 +380,14 @@ struct PatrimoineSingleCategoryView : View {
             case .scpis:
                 patrimoine.assets.scpis.items.forEach { item in
                     var value = 0.0
-                    if selectedAdult == PatrimoineSummaryShareChartView.tous {
-                        family.adultsName.forEach { name in
+                    if !family.membersName.contains(selectedMembers) {
+                        membersName.forEach { name in
                             value += item.ownedValue(by                : name,
                                                      atEndOf           : year,
                                                      evaluationContext : evaluationContext)
                         }
                     } else {
-                        value = item.ownedValue(by                : selectedAdult,
+                        value = item.ownedValue(by                : selectedMembers,
                                                 atEndOf           : year,
                                                 evaluationContext : evaluationContext)
                     }
@@ -373,14 +397,14 @@ struct PatrimoineSingleCategoryView : View {
                 }
                 patrimoine.assets.sci.scpis.items.forEach { item in
                     var value = 0.0
-                    if selectedAdult == PatrimoineSummaryShareChartView.tous {
-                        family.adultsName.forEach { name in
+                    if !family.membersName.contains(selectedMembers) {
+                        membersName.forEach { name in
                             value += item.ownedValue(by                : name,
                                                      atEndOf           : year,
                                                      evaluationContext : evaluationContext)
                         }
                     } else {
-                        value = item.ownedValue(by                : selectedAdult,
+                        value = item.ownedValue(by                : selectedMembers,
                                                 atEndOf           : year,
                                                 evaluationContext : evaluationContext)
                     }
@@ -392,6 +416,23 @@ struct PatrimoineSingleCategoryView : View {
         
         return dataEntries.sortedReversed(by: \.value)
     }
+    
+    private var membersName : [String] {
+        switch selectedMembers {
+            case PatrimoineSummaryShareChartView.tous:
+                return family.membersName
+                
+            case PatrimoineSummaryShareChartView.adults:
+                return family.adultsName
+                
+            case PatrimoineSummaryShareChartView.children:
+                return family.childrenName
+                
+            default:
+                return [ ]
+        }
+    }
+
 }
 
 struct PatrimoineSummaryChartView_Previews: PreviewProvider {
