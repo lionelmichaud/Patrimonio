@@ -7,6 +7,7 @@
 
 import Foundation
 import Persistence
+import Ownership
 import FiscalModel
 import PersonModel
 import PatrimoineModel
@@ -51,7 +52,7 @@ public extension CashFlowLine {
         legalSuccessions   += successionManager.legal.successions
         lifeInsSuccessions += successionManager.lifeInsurance.successions
 
-        /// Revenus bruts des successions LEGALES
+        /// Revenus bruts (en cash) des successions LEGALES
         //   - pour les adultes
         adultsRevenues
             .perCategory[.legalSuccession]?
@@ -63,7 +64,7 @@ public extension CashFlowLine {
             .credits
             .namedValues = successionManager.legal.revenuesChildren
         
-        /// Revenus bruts des transmissions d'ASSURANCES VIES
+        /// Revenus bruts (en cash) des transmissions d'ASSURANCES VIES
         //   - pour les adultes
         adultsRevenues
             .perCategory[.liSuccession]?
@@ -95,7 +96,7 @@ public extension CashFlowLine {
             .perCategory[.liSuccession]?
             .namedValues = successionManager.lifeInsurance.taxesChildren
         
-        /// Solde net des héritages éventuellement reçus par les enfants dans l'année
+        /// Solde net total (en cash) des héritages éventuellement reçus par l'ensemble des enfants dans l'année
         if successionManager.legal.revenuesChildren.isNotEmpty ||
             successionManager.lifeInsurance.revenuesChildren.isNotEmpty {
             netChildrenInheritances.append(
@@ -103,5 +104,22 @@ public extension CashFlowLine {
                 (successionManager.lifeInsurance.revenuesChildren.sum(for: \.value) - successionManager.lifeInsurance.taxesChildren.sum(for: \.value)))
         }
         
+        /// Investissement du solde net (en cash) des héritages éventuellement reçus par chaque enfant
+        let netCashFlowManager = NetCashFlowManager()
+        var netChildrenIndividualInheritance = NameValueDico()
+        
+        familyProvider.childrenAliveName(atEndOf: year)?.forEach { childName in
+            let revenueLegal = successionManager.legal.revenuesChildren.first(\.value, where: \.name, ==, childName) ?? 0
+            let taxeLegal    = successionManager.legal.taxesChildren.first(\.value, where: \.name, ==, childName) ?? 0
+            let revenueLifeIns = successionManager.lifeInsurance.revenuesChildren.first(\.value, where: \.name, ==, childName) ?? 0
+            let taxeLifeIns    = successionManager.lifeInsurance.taxesChildren.first(\.value, where: \.name, ==, childName) ?? 0
+            let net = (revenueLegal + revenueLifeIns) - (taxeLegal + taxeLifeIns)
+            if net != 0 {
+                netChildrenIndividualInheritance[childName] = net
+            }
+        }
+        netCashFlowManager.investCapital(ownedCapitals : netChildrenIndividualInheritance,
+                                         in            : patrimoine,
+                                         atEndOf       : year)
     }
 }

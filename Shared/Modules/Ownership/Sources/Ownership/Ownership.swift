@@ -7,11 +7,21 @@
 import Foundation
 import os
 import AppFoundation
+import NamedValue
 import FiscalModel
 
 let customLogOwnership = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Ownership")
 
 public typealias NameValueDico = [String : Double]
+extension NameValueDico {
+    init(from namedValueArray: NamedValueArray) {
+        var dico = NameValueDico()
+        namedValueArray.forEach {
+            dico[$0.name] = $0.value
+        }
+        self = dico
+    }
+}
 
 // MARK: - Enumération de Nature d'une propriété
 
