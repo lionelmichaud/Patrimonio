@@ -545,7 +545,270 @@
             "interestRateType" : {
                 "contractualRate_fixedRate" : 0.5
             }
-        }
+        },
+        
+        {
+            "name" : "AV Arthur AFER",
+            "note" : "Ouvert le 12/02/2006\nMis à jour le 09/01/2022\nFonds actions",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "M. Arthur MICHAUD",
+                        "fraction" : 100
+                    }
+                ],
+                "nue_propriétaires"   :
+                [ ],
+                "usufruitiers"        :
+                [ ]
+            },
+            "lastKnownState" : {
+                "year"       : 2021,
+                "interest"   : 9659,
+                "investment" : 14400
+            },
+            "type" : {
+                "lifeInsurance_taxes" : true,
+                "lifeInsurance_clause" : {
+                    "isOptional"        : false,
+                    "isDismembered"     : false,
+                    "fullRecipients"    :
+                    [
+                        {
+                            "name"     : "Mme. Lou-Ann MICHAUD",
+                            "fraction" : 100
+                        }
+                    ],
+                    "usufructRecipient" : "",
+                    "bareRecipients"    : [ ]
+                }
+            },
+            "interestRateType" : {
+                "marketRate_stockRatio" : 83.0
+            }
+        },
 
+        {
+            "name" : "AV Arthur Bourso",
+            "note" : "Ouvert le 07/01/2022\nMis à jour le 09/01/2022\nFonds Croissance",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "M. Arthur MICHAUD",
+                        "fraction" : 100
+                    }
+                ],
+                "nue_propriétaires"   :
+                [ ],
+                "usufruitiers"        :
+                [ ]
+            },
+            "lastKnownState" : {
+                "year"       : 2021,
+                "interest"   : 0,
+                "investment" : 5000
+            },
+            "type" : {
+                "lifeInsurance_taxes" : true,
+                "lifeInsurance_clause" : {
+                    "isOptional"        : false,
+                    "isDismembered"     : false,
+                    "fullRecipients"    :
+                    [
+                        {
+                            "name"     : "Mme. Lou-Ann MICHAUD",
+                            "fraction" : 100
+                        }
+                    ],
+                    "usufructRecipient" : "",
+                    "bareRecipients"    : [ ]
+                }
+            },
+            "interestRateType" : {
+                "marketRate_stockRatio" : 0.0
+            }
+        },
+        
+        {
+            "name" : "AV Arthur AXA",
+            "note" : "Ouvert le 03/04/2018\nMis à jour le 09/01/2022\nFonds Croissance",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "M. Arthur MICHAUD",
+                        "fraction" : 100
+                    }
+                ],
+                "nue_propriétaires"   :
+                [ ],
+                "usufruitiers"        :
+                [ ]
+            },
+            "lastKnownState" : {
+                "year"       : 2021,
+                "interest"   : 6340,
+                "investment" : 110270
+            },
+            "type" : {
+                "lifeInsurance_taxes" : true,
+                "lifeInsurance_clause" : {
+                    "isOptional"        : false,
+                    "isDismembered"     : false,
+                    "fullRecipients"    :
+                    [
+                        {
+                            "name"     : "Mme. Lou-Ann MICHAUD",
+                            "fraction" : 100
+                        }
+                    ],
+                    "usufructRecipient" : "",
+                    "bareRecipients"    : [ ]
+                }
+            },
+            "interestRateType" : {
+                "marketRate_stockRatio" : 10.0
+            }
+        },
+        
+        {
+            "name" : "AV LouAnn AFER",
+            "note" : "Ouvert le 12/02/2006\nMis à jour le 09/01/2022\nFonds actions",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "Mme. Lou-Ann MICHAUD",
+                        "fraction" : 100
+                    }
+                ],
+                "nue_propriétaires"   :
+                [ ],
+                "usufruitiers"        :
+                [ ]
+            },
+            "lastKnownState" : {
+                "year"       : 2021,
+                "interest"   : 10100,
+                "investment" : 14600
+            },
+            "type" : {
+                "lifeInsurance_taxes" : true,
+                "lifeInsurance_clause" : {
+                    "isOptional"        : false,
+                    "isDismembered"     : false,
+                    "fullRecipients"    :
+                    [
+                        {
+                            "name"     : "M. Arthur MICHAUD",
+                            "fraction" : 100
+                        }
+                    ],
+                    "usufructRecipient" : "",
+                    "bareRecipients"    : [ ]
+                }
+            },
+            "interestRateType" : {
+                "marketRate_stockRatio" : 83.0
+            }
+        },
+        
+        {
+            "name" : "AV LouAnn Bourso",
+            "note" : "Ouvert le 07/01/2022\nMis à jour le 09/01/2022\nFonds Croissance",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "Mme. Lou-Ann MICHAUD",
+                        "fraction" : 100
+                    }
+                ],
+                "nue_propriétaires"   :
+                [ ],
+                "usufruitiers"        :
+                [ ]
+            },
+            "lastKnownState" : {
+                "year"       : 2021,
+                "interest"   : 0,
+                "investment" : 5000
+            },
+            "type" : {
+                "lifeInsurance_taxes" : true,
+                "lifeInsurance_clause" : {
+                    "isOptional"        : false,
+                    "isDismembered"     : false,
+                    "fullRecipients"    :
+                    [
+                        {
+                            "name"     : "M. Arthur MICHAUD",
+                            "fraction" : 100
+                        }
+                    ],
+                    "usufructRecipient" : "",
+                    "bareRecipients"    : [ ]
+                }
+            },
+            "interestRateType" : {
+                "marketRate_stockRatio" : 0.0
+            }
+        },
+        
+        {
+            "name" : "AV LouAnn AXA",
+            "note" : "Ouvert le 03/04/2018\nMis à jour le 09/01/2022\nFonds Croissance",
+            "ownership"               :
+            {
+                "est_démembré"        : false,
+                "plein_propriétaires" :
+                [
+                    {
+                        "name"     : "Mme. Lou-Ann MICHAUD",
+                        "fraction" : 100
+                    }
+                ],
+                "nue_propriétaires"   :
+                [ ],
+                "usufruitiers"        :
+                [ ]
+            },
+            "lastKnownState" : {
+                "year"       : 2021,
+                "interest"   : 6296,
+                "investment" : 110270
+            },
+            "type" : {
+                "lifeInsurance_taxes" : true,
+                "lifeInsurance_clause" : {
+                    "isOptional"        : false,
+                    "isDismembered"     : false,
+                    "fullRecipients"    :
+                    [
+                        {
+                            "name"     : "M. Arthur MICHAUD",
+                            "fraction" : 100
+                        }
+                    ],
+                    "usufructRecipient" : "",
+                    "bareRecipients"    : [ ]
+                }
+            },
+            "interestRateType" : {
+                "marketRate_stockRatio" : 10.0
+            }
+        }
     ]
 }

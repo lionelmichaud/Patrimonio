@@ -59,12 +59,14 @@ struct ComputationForm: View {
                                     integer : simulation.mode == .deterministic ? 1  : simulation.currentRunNb)
                     }
                     Spacer()
-                    if simulation.kpis.allObjectivesAreReached(withMode: simulation.mode)! {
-                        Text("Tous les critères de performance sont satisfaits")
-                            .foregroundColor(.green)
-                    } else {
-                        Text("Certains critères de performance ne sont pas satisfaits")
-                            .foregroundColor(.red)
+                    if let result = simulation.kpis.allObjectivesAreReached(withMode: simulation.mode) {
+                        if result {
+                            Text("Tous les critères de performance sont satisfaits")
+                                .foregroundColor(.green)
+                        } else {
+                            Text("Certains critères de performance ne sont pas satisfaits")
+                                .foregroundColor(.red)
+                        }
                     }
                 }
                 
