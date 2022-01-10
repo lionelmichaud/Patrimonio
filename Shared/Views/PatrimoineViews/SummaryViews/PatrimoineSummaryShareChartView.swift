@@ -92,7 +92,7 @@ struct PatrimoineCategorySharesView : View {
     private static let scpi          = "SCPI"
     private static let freeInvest    = "Invest. Libres"
     private static let perdiodInvest = "Invest. Périodiques"
-    @State private var menuItems = [PatrimoineSummaryShareChartView.tous]
+    @State private var menuItems     = [String]()
     
     var body: some View {
         VStack {
@@ -212,8 +212,9 @@ struct PatrimoineCategorySharesView : View {
     }
     
     func buildMenu() {
-        let adultsName = family.adultsName
-        menuItems += adultsName
+        let adultsName   = family.adultsAliveName(atEndOf: year) ?? [ ]
+        let childrenName = family.childrenAliveName(atEndOf: year) ?? [ ]
+        menuItems = [PatrimoineSummaryShareChartView.tous] + adultsName + childrenName
     }
 }
 
