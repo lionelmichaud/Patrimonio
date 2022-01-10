@@ -42,6 +42,18 @@ struct NetCashFlowManager {
                let member = Patrimoin.familyProvider?.member(withName: name),
                member.isAlive(atEndOf: year) {
                 
+                // trier par capital décroissant
+                patrimoine.assets.freeInvests.items.sort(by: {
+                    $0.ownedValue(by                  : name,
+                                  atEndOf             : year - 1,
+                                  withOwnershipNature : .all,
+                                  evaluatedFraction   : .ownedValue) >
+                        $1.ownedValue(by                  : name,
+                                      atEndOf             : year - 1,
+                                      withOwnershipNature : .all,
+                                      evaluatedFraction   : .ownedValue)
+                })
+                
                 // investir en priorité dans une assurance vie
                 for idx in patrimoine.assets.freeInvests.items.indices {
                     switch patrimoine.assets.freeInvests[idx].type {
