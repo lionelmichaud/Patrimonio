@@ -301,48 +301,59 @@ public struct Assets {
         try sci.forEachOwnable(body)
     }
     
-    /// retourne tous les actifs (nom, valeur) pour un niveau de risque et de liquidité recherché
+    /// Somme des valeurs de tous les actifs pour un niveau de risque et/ou de liquidité recherchés et
+    /// pour un ensemble de personnes donnée
     /// - Parameters:
+    ///   - ownerName: nom de la personne recherchée
     ///   - year: année d'évaluation
-    ///   - risk: niveau de risque
     ///   - liquidity: niveau de liquidité
-    /// - Returns: tableau (nom, valeur) pour un iveau de risque et de liquidité recherché
-    public func namedValues(atEndOf year                : Int,
-                            witRiskLevel risk           : RiskLevel,
-                            witLiquidityLevel liquidity : LiquidityLevel) -> NamedValueArray {
-        var namedValues = NamedValueArray()
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
+    public func sumOfValues (ownedBy ownersName          : [String],
+                             atEndOf year                : Int,
+                             witRiskLevel risk           : RiskLevel?       = nil,
+                             witLiquidityLevel liquidity : LiquidityLevel?  = nil,
+                             evaluationContext           : EvaluationContext) -> Double {
+        var value = 0.0
         
         forEachQuotableNameableValuable { asset in
-            if asset.liquidityLevel == liquidity &&
-                asset.riskLevel == risk {
-                let ownedValue = asset.value(atEndOf: year)
-                if ownedValue != 0 {
-                    namedValues.append(NamedValue(name  : asset.name,
-                                                  value : ownedValue))
+            let riskIsSatisfied      = risk == nil      || asset.riskLevel == risk
+            let liquidityIsSatisfied = liquidity == nil || asset.liquidityLevel == liquidity
+            
+            let selected = riskIsSatisfied && liquidityIsSatisfied
+            
+            if selected {
+                ownersName.forEach { ownerName in
+                    value += asset.ownedValue(by                : ownerName,
+                                              atEndOf           : year,
+                                              evaluationContext : evaluationContext)
                 }
             }
         }
         
-        return namedValues
+        return value
     }
-    /// retourne tous les biens (nom, valeur) pour un niveau de risque et de liquidité recherché et une personne donnée
+    /// Tous les actifs (nom, valeur) pour un niveau de risque et de liquidité recherché et des personnes données
     /// - Parameters:
     ///   - ownerName: nom de la personne recherchée
     ///   - year: année d'évaluation
     ///   - risk: niveau de risque
     ///   - liquidity: niveau de liquidité
     ///   - evaluationContext: méthode d'évaluation de la valeure des bien
-    /// - Returns: tableau (nom, valeur) pour un niveau de risque et de liquidité recherché
+    /// - Returns: tableau (nom, valeur) pour un niveau de risque et de liquidité recherché et des personnes données
     public func namedValues (ownedBy ownersName          : [String],
                              atEndOf year                : Int,
-                             witRiskLevel risk           : RiskLevel,
-                             witLiquidityLevel liquidity : LiquidityLevel,
+                             witRiskLevel risk           : RiskLevel?,
+                             witLiquidityLevel liquidity : LiquidityLevel?,
                              evaluationContext           : EvaluationContext) -> NamedValueArray {
         var namedValues = NamedValueArray()
         
         forEachQuotableNameableValuable { asset in
-            if asset.liquidityLevel == liquidity &&
-                asset.riskLevel == risk {
+            let riskIsSatisfied      = risk == nil      || asset.riskLevel == risk
+            let liquidityIsSatisfied = liquidity == nil || asset.liquidityLevel == liquidity
+            
+            let selected = riskIsSatisfied && liquidityIsSatisfied
+            
+            if selected {
                 var ownedValue = 0.0
                 ownersName.forEach { ownerName in
                     ownedValue += asset.ownedValue(by                : ownerName,

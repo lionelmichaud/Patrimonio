@@ -110,76 +110,35 @@ struct PatrimoineRiskChartView: View {
         }.border(Color.white)
     }
     
+    private var selectedMembersName: [String] {
+        switch selectedMembers {
+            case PatrimoineSummaryRiskChartView.tous:
+                return family.membersName
+                
+            case PatrimoineSummaryRiskChartView.adults:
+                return family.adultsName
+                
+            case PatrimoineSummaryRiskChartView.children:
+                return family.childrenName
+                
+            default:
+                return [selectedMembers]
+        }
+    }
+    
     private var data : [(label: String, value: Double)] {
         var dataEntries = [(label: String, value: Double)]()
         
-        if !family.membersName.contains(selectedMembers) {
-            var membersName : [String]
-
-            switch selectedMembers {
-                case PatrimoineSummaryRiskChartView.tous:
-                    membersName = family.membersName
-                    
-                case PatrimoineSummaryRiskChartView.adults:
-                    membersName = family.adultsName
-                    
-                case PatrimoineSummaryRiskChartView.children:
-                    membersName = family.childrenName
-                    
-                default:
-                    membersName = [ ]
+        dataEntries =
+            RiskLevel.allCases.map { level in
+                let value = patrimoine.assets.sumOfValues(ownedBy           : selectedMembersName,
+                                                          atEndOf           : year,
+                                                          witRiskLevel      : level,
+                                                          evaluationContext : evaluationContext)
+                return (label : "\(level.rawValue) : \(level.displayString)",
+                        value : value)
             }
-            
-            dataEntries =
-                RiskLevel.allCases.map { level in
-                    var value = 0.0
-                    membersName.forEach { name in
-                        value += sum(for: name, witRiskLevel: level)
-                    }
-                    return (label : "\(level.rawValue) : \(level.displayString)",
-                            value : value)
-                }
-            
-        } else {
-            dataEntries =
-                RiskLevel.allCases.map { level in
-                    let value = sum(for: selectedMembers, witRiskLevel: level)
-                    return (label : "\(level.rawValue) : \(level.displayString)",
-                            value : value)
-                }
-        }
         return dataEntries
-    }
-    
-    private func sum(for name           : String,
-                     witRiskLevel level : RiskLevel) -> Double {
-        var value = 0.0
-        value += patrimoine.assets.freeInvests.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witRiskLevel      : level,
-                         evaluationContext : evaluationContext)
-        value += patrimoine.assets.periodicInvests.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witRiskLevel      : level,
-                         evaluationContext : evaluationContext)
-        value += patrimoine.assets.realEstates.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witRiskLevel      : level,
-                         evaluationContext : evaluationContext)
-        value += patrimoine.assets.scpis.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witRiskLevel      : level,
-                         evaluationContext : evaluationContext)
-        value += patrimoine.assets.sci.scpis.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witRiskLevel      : level,
-                         evaluationContext : evaluationContext)
-        return value
     }
 }
 
@@ -202,76 +161,35 @@ struct PatrimoineLiquidityChartView: View {
         }.border(Color.white)
     }
     
+    private var selectedMembersName: [String] {
+        switch selectedMembers {
+            case PatrimoineSummaryRiskChartView.tous:
+                return family.membersName
+                
+            case PatrimoineSummaryRiskChartView.adults:
+                return family.adultsName
+                
+            case PatrimoineSummaryRiskChartView.children:
+                return family.childrenName
+                
+            default:
+                return [selectedMembers]
+        }
+    }
+    
     private var data : [(label: String, value: Double)] {
         var dataEntries = [(label: String, value: Double)]()
         
-        if !family.membersName.contains(selectedMembers) {
-            var membersName : [String]
-            
-            switch selectedMembers {
-                case PatrimoineSummaryRiskChartView.tous:
-                    membersName = family.membersName
-                    
-                case PatrimoineSummaryRiskChartView.adults:
-                    membersName = family.adultsName
-                    
-                case PatrimoineSummaryRiskChartView.children:
-                    membersName = family.childrenName
-                    
-                default:
-                    membersName = [ ]
+        dataEntries =
+            LiquidityLevel.allCases.map { level in
+                let value = patrimoine.assets.sumOfValues(ownedBy           : selectedMembersName,
+                                                          atEndOf           : year,
+                                                          witLiquidityLevel : level,
+                                                          evaluationContext : evaluationContext)
+                return (label : "\(level.rawValue) : \(level.displayString)",
+                        value : value)
             }
-            
-            dataEntries =
-                LiquidityLevel.allCases.map { level in
-                    var value = 0.0
-                    membersName.forEach { name in
-                        value += sum(for: name, witLiquidityLevel: level)
-                    }
-                    return (label : "\(level.rawValue) : \(level.displayString)",
-                            value : value)
-                }
-            
-        } else {
-            dataEntries =
-                LiquidityLevel.allCases.map { level in
-                    let value = sum(for: selectedMembers, witLiquidityLevel: level)
-                    return (label : "\(level.rawValue) : \(level.displayString)",
-                            value : value)
-                }
-        }
         return dataEntries
-    }
-    
-    private func sum(for name                : String,
-                     witLiquidityLevel level : LiquidityLevel) -> Double {
-        var value = 0.0
-        value += patrimoine.assets.freeInvests.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witLiquidityLevel : level,
-                         evaluationContext : evaluationContext)
-        value += patrimoine.assets.periodicInvests.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witLiquidityLevel : level,
-                         evaluationContext : evaluationContext)
-        value += patrimoine.assets.realEstates.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witLiquidityLevel : level,
-                         evaluationContext : evaluationContext)
-        value += patrimoine.assets.scpis.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witLiquidityLevel : level,
-                         evaluationContext : evaluationContext)
-        value += patrimoine.assets.sci.scpis.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witLiquidityLevel : level,
-                         evaluationContext : evaluationContext)
-        return value
     }
 }
 
@@ -324,26 +242,26 @@ struct PatrimoineBubbleChartView: View {
         .padding([.bottom,.trailing]).border(Color.white)
     }
     
-    private var markers : [[String]] {
-        var membersName : [String]
-        
+    private var selectedMembersName: [String] {
         switch selectedMembers {
             case PatrimoineSummaryRiskChartView.tous:
-                membersName = family.membersName
+                return family.membersName
                 
             case PatrimoineSummaryRiskChartView.adults:
-                membersName = family.adultsName
+                return family.adultsName
                 
             case PatrimoineSummaryRiskChartView.children:
-                membersName = family.childrenName
+                return family.childrenName
                 
             default:
-                membersName = [selectedMembers]
+                return [selectedMembers]
         }
-        
+    }
+    
+    private var markers : [[String]] {
         return RiskLevel.allCases.map { risk -> [String] in
             LiquidityLevel.allCases.map { liquidity -> String in
-                let markers = patrimoine.assets.namedValues(ownedBy           : membersName,
+                let markers = patrimoine.assets.namedValues(ownedBy           : selectedMembersName,
                                                             atEndOf           : year,
                                                             witRiskLevel      : risk,
                                                             witLiquidityLevel : liquidity,
@@ -359,90 +277,21 @@ struct PatrimoineBubbleChartView: View {
     private var data : [(x: Double, y: Double, size: Double)] {
         var dataEntries = [(x: Double, y: Double, size: Double)]()
         
-        if !family.membersName.contains(selectedMembers) {
-            var membersName : [String]
-            
-            switch selectedMembers {
-                case PatrimoineSummaryRiskChartView.tous:
-                    membersName = family.membersName
-                    
-                case PatrimoineSummaryRiskChartView.adults:
-                    membersName = family.adultsName
-                    
-                case PatrimoineSummaryRiskChartView.children:
-                    membersName = family.childrenName
-                    
-                default:
-                    membersName = [ ]
-            }
-            
-            RiskLevel.allCases.forEach { risk in
-                dataEntries +=
-                    LiquidityLevel.allCases.map { liquidity in
-                        var value = 0.0
-                        membersName.forEach { name in
-                            value += sum(for               : name,
-                                         witRiskLevel      : risk,
-                                         witLiquidityLevel : liquidity)
-                        }
-                        return (x    : risk.rawValue.double(),
-                                y    : liquidity.rawValue.double(),
-                                size : value)
-                    }
-            }
-            
-        } else {
-            RiskLevel.allCases.forEach { risk in
-                dataEntries +=
-                    LiquidityLevel.allCases.map { liquidity in
-                        let value = sum(for               : selectedMembers,
-                                        witRiskLevel      : risk,
-                                        witLiquidityLevel : liquidity)
-                        return (x    : risk.rawValue.double(),
-                                y    : liquidity.rawValue.double(),
-                                size : value)
-                    }
-            }
+        RiskLevel.allCases.forEach { risk in
+            dataEntries +=
+                LiquidityLevel.allCases.map { liquidity in
+                    let value = patrimoine.assets.sumOfValues(ownedBy           : selectedMembersName,
+                                                              atEndOf           : year,
+                                                              witRiskLevel      : risk,
+                                                              witLiquidityLevel : liquidity,
+                                                              evaluationContext : evaluationContext)
+                    return (x    : risk.rawValue.double(),
+                            y    : liquidity.rawValue.double(),
+                            size : value)
+                }
         }
         
         return dataEntries
-    }
-
-    private func sum(for name                    : String,
-                     witRiskLevel risk           : RiskLevel,
-                     witLiquidityLevel liquidity : LiquidityLevel) -> Double {
-        var value = 0.0
-        value += patrimoine.assets.freeInvests.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witRiskLevel      : risk,
-                         witLiquidityLevel : liquidity,
-                         evaluationContext : evaluationContext)
-        value += patrimoine.assets.periodicInvests.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witRiskLevel      : risk,
-                         witLiquidityLevel : liquidity,
-                         evaluationContext : evaluationContext)
-        value += patrimoine.assets.realEstates.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witRiskLevel      : risk,
-                         witLiquidityLevel : liquidity,
-                         evaluationContext : evaluationContext)
-        value += patrimoine.assets.scpis.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witRiskLevel      : risk,
-                         witLiquidityLevel : liquidity,
-                         evaluationContext : evaluationContext)
-        value += patrimoine.assets.sci.scpis.items
-            .sumOfValues(ownedBy           : name,
-                         atEndOf           : year,
-                         witRiskLevel      : risk,
-                         witLiquidityLevel : liquidity,
-                         evaluationContext : evaluationContext)
-        return value
     }
 }
 
