@@ -29,7 +29,7 @@ public typealias PeriodicInvestementArray = ArrayOfNameableValuable<PeriodicInve
 /// Placement à versements périodiques, fixes, annuels et à taux fixe
 /// Tous les intérêts sont capitalisés
 // conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
-public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP, Quotable {
+public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP, QuotableP {
     
     // MARK: - Nested Types
     

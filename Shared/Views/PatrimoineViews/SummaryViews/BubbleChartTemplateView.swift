@@ -115,11 +115,15 @@ struct BubbleChartTemplateView: NSUIViewRepresentable {
         data.setValueFont(ChartThemes.ChartDefaults.valueFont)
         data.setValueFormatter(DefaultValueFormatter(formatter: valueKilo€Formatter))
         data.setHighlightCircleWidth(1.5)
-
+        
         // ajouter le Chartdata au ChartView
         chartView.data = data
         let marker = chartView.marker as! StringMarker
         marker.markers = markers
+
+        // actualiser le titre
+        let title = titleEnabled ? (self.title == nil ? "TOTAL=\(total.k€String)" : self.title!) : ""
+        chartView.chartDescription?.text = title
     }
     
     /// Création de la vue du Graphique

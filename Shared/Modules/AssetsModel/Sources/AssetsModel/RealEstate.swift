@@ -17,7 +17,7 @@ public typealias RealEstateArray = ArrayOfNameableValuable<RealEstateAsset>
 
 // MARK: - Actif immobilier physique
 // conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
-public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quotable {
+public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     
     // MARK: - Static Properties
     

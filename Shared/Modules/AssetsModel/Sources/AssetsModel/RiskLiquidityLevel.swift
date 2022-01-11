@@ -8,6 +8,7 @@
 import Foundation
 import AppFoundation
 import NamedValue
+import Ownership
 
 // MARK: - Evaluation du niveau de risque
 
@@ -34,7 +35,7 @@ public enum RiskLevel: Int, Codable, PickableEnumP {
     }
 }
 
-public protocol RiskQuotable {
+public protocol RiskQuotableP {
     var riskLevel: RiskLevel? { get }
 }
 
@@ -57,14 +58,14 @@ public enum LiquidityLevel: Int, Codable, PickableEnumP {
     }
 }
 
-public protocol LiquidityQuotable {
+public protocol LiquidityQuotableP {
     var liquidityLevel: LiquidityLevel? { get }
 }
 
 // MARK: - Protocol d'évaluation des niveaux de risque & liquidité
 
-public typealias Quotable = RiskQuotable & LiquidityQuotable
-public typealias QuotableNameableValuableP = Quotable & NameableValuableP
+public typealias QuotableP = RiskQuotableP & LiquidityQuotableP
+public typealias QuotableNameableValuableP = QuotableP & NameableValuableP & OwnableP
 
 // MARK: - Extensions de Array
 
@@ -84,12 +85,33 @@ public extension Array where Element: QuotableNameableValuableP {
             }
         })
     }
+    /// Somme de toutes les valeurs d'un Array pour un niveau de risque donné et une personne donnée
+    /// - Parameters:
+    ///   - ownerName: nom de la personne recherchée
+    ///   - year: année d'évaluation
+    ///   - risk: niveau de risque
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
+    /// - Returns: Somme de toutes les valeurs pour un niveau de risque donné
+    func sumOfValues (ownedBy ownerName : String,
+                      atEndOf year      : Int,
+                      witRiskLevel risk : RiskLevel,
+                      evaluationContext : EvaluationContext) -> Double {
+        return reduce(.zero, {result, element in
+            if element.riskLevel == risk {
+                return result + element.ownedValue(by                : ownerName,
+                                                   atEndOf           : year,
+                                                   evaluationContext : evaluationContext)
+            } else {
+                return result
+            }
+        })
+    }
     /// Somme de toutes les valeurs d'un Array pour un niveau de liquidité donné
     /// - Parameters:
     ///   - year: année d'évaluation
     ///   - liquidity: niveau de liquidité
     /// - Returns: Somme de toutes les valeurs pour un niveau de liquidité donné
-    func sumOfValues (atEndOf year : Int,
+    func sumOfValues (atEndOf year                : Int,
                       witLiquidityLevel liquidity : LiquidityLevel) -> Double {
         return reduce(.zero, {result, element in
             if element.liquidityLevel == liquidity {
@@ -99,12 +121,33 @@ public extension Array where Element: QuotableNameableValuableP {
             }
         })
     }
-    /// Somme de toutes les valeurs d'un Array pour un niveau de liquidité donné
+    /// Somme de toutes les valeurs d'un Array pour un niveau de liquidité donné et une personne donnée
+    /// - Parameters:
+    ///   - ownerName: nom de la personne recherchée
+    ///   - year: année d'évaluation
+    ///   - liquidity: niveau de liquidité
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
+    /// - Returns: Somme de toutes les valeurs pour un niveau de liquidité donné
+    func sumOfValues (ownedBy ownerName           : String,
+                      atEndOf year                : Int,
+                      witLiquidityLevel liquidity : LiquidityLevel,
+                      evaluationContext           : EvaluationContext) -> Double {
+        return reduce(.zero, {result, element in
+            if element.liquidityLevel == liquidity {
+                return result + element.ownedValue(by                : ownerName,
+                                                   atEndOf           : year,
+                                                   evaluationContext : evaluationContext)
+            } else {
+                return result
+            }
+        })
+    }
+    /// Somme de toutes les valeurs d'un Array pour un niveau de liquidité/risque donné
     /// - Parameters:
     ///   - year: année d'évaluation
     ///   - risk: niveau de risque
     ///   - liquidity: niveau de liquidité
-    /// - Returns: Somme de toutes les valeurs pour un niveau de liquidité donné
+    /// - Returns: Somme de toutes les valeurs pour un niveau de liquidité/risque donné
     func sumOfValues (atEndOf year : Int,
                       witRiskLevel risk : RiskLevel,
                       witLiquidityLevel liquidity : LiquidityLevel) -> Double {
@@ -117,23 +160,28 @@ public extension Array where Element: QuotableNameableValuableP {
             }
         })
     }
-    /// retourne tous les biens (nom, valeur) pour un niveau de risque et de liquidité recherché
+    /// Somme de toutes les valeurs d'un Array pour un niveau de liquidité/risque donné et une personne donnée
     /// - Parameters:
+    ///   - ownerName: nom de la personne recherchée
     ///   - year: année d'évaluation
     ///   - risk: niveau de risque
     ///   - liquidity: niveau de liquidité
-    /// - Returns: tableau (nom, valeur) pour un iveau de risque et de liquidité recherché
-    func namedValues (atEndOf year : Int,
-                      witRiskLevel risk : RiskLevel,
-                      witLiquidityLevel liquidity : LiquidityLevel) -> NamedValueArray {
-        compactMap { element in
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
+   /// - Returns: Somme de toutes les valeurs pour un niveau de liquidité/risque donné
+    func sumOfValues (ownedBy ownerName           : String,
+                      atEndOf year                : Int,
+                      witRiskLevel risk           : RiskLevel,
+                      witLiquidityLevel liquidity : LiquidityLevel,
+                      evaluationContext           : EvaluationContext) -> Double {
+        return reduce(.zero, {result, element in
             if element.liquidityLevel == liquidity &&
                 element.riskLevel == risk {
-                return NamedValue(name  : element.name,
-                                  value : element.value(atEndOf: year))
+                return result + element.ownedValue(by                : ownerName,
+                                                   atEndOf           : year,
+                                                   evaluationContext : evaluationContext)
             } else {
-                return nil
+                return result
             }
-        }
+        })
     }
 }

@@ -252,8 +252,8 @@ public struct Assets {
                            atEndOf year      : Int,
                            evaluationContext : EvaluationContext) -> Double {
         var total = 0.0
-        forEachOwnable { ownable in
-            total += ownable.ownedValue(by                : ownerName,
+        forEachOwnable { asset in
+            total += asset.ownedValue(by                : ownerName,
                                         atEndOf           : year,
                                         evaluationContext : evaluationContext)
         }
@@ -281,8 +281,8 @@ public struct Assets {
 //        print("-> Owner recherché: \(ownerName)")
 //        print("-> nature de propriété sélectionnée : \(withOwnershipNature.displayString)")
 //        print("-> méthode d'évaluation sélectionnée: \(evaluatedFraction.displayString)")
-        forEachOwnable { ownable in
-            total += ownable.ownedValue(by                  : ownerName,
+        forEachOwnable { asset in
+            total += asset.ownedValue(by                  : ownerName,
                                         atEndOf             : year,
                                         withOwnershipNature : withOwnershipNature,
                                         evaluatedFraction   : evaluatedFraction)
@@ -312,11 +312,47 @@ public struct Assets {
                             witLiquidityLevel liquidity : LiquidityLevel) -> NamedValueArray {
         var namedValues = NamedValueArray()
         
-        forEachQuotableNameableValuable { quotable in
-            if quotable.liquidityLevel == liquidity &&
-                quotable.riskLevel == risk {
-                namedValues.append(NamedValue(name  : quotable.name,
-                                              value : quotable.value(atEndOf: year)))
+        forEachQuotableNameableValuable { asset in
+            if asset.liquidityLevel == liquidity &&
+                asset.riskLevel == risk {
+                let ownedValue = asset.value(atEndOf: year)
+                if ownedValue != 0 {
+                    namedValues.append(NamedValue(name  : asset.name,
+                                                  value : ownedValue))
+                }
+            }
+        }
+        
+        return namedValues
+    }
+    /// retourne tous les biens (nom, valeur) pour un niveau de risque et de liquidité recherché et une personne donnée
+    /// - Parameters:
+    ///   - ownerName: nom de la personne recherchée
+    ///   - year: année d'évaluation
+    ///   - risk: niveau de risque
+    ///   - liquidity: niveau de liquidité
+    ///   - evaluationContext: méthode d'évaluation de la valeure des bien
+    /// - Returns: tableau (nom, valeur) pour un niveau de risque et de liquidité recherché
+    public func namedValues (ownedBy ownersName          : [String],
+                             atEndOf year                : Int,
+                             witRiskLevel risk           : RiskLevel,
+                             witLiquidityLevel liquidity : LiquidityLevel,
+                             evaluationContext           : EvaluationContext) -> NamedValueArray {
+        var namedValues = NamedValueArray()
+        
+        forEachQuotableNameableValuable { asset in
+            if asset.liquidityLevel == liquidity &&
+                asset.riskLevel == risk {
+                var ownedValue = 0.0
+                ownersName.forEach { ownerName in
+                    ownedValue += asset.ownedValue(by                : ownerName,
+                                                   atEndOf           : year,
+                                                   evaluationContext : evaluationContext)
+                }
+                if ownedValue != 0 {
+                    namedValues.append(NamedValue(name  : asset.name,
+                                                  value : ownedValue))
+                }
             }
         }
         

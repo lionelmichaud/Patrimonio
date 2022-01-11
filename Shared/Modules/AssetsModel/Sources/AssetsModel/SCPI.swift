@@ -19,7 +19,7 @@ public typealias ScpiArray = ArrayOfNameableValuable<SCPI>
 // MARK: - SCPI à revenus périodiques, annuels et fixes
 
 // conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
-public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, Quotable {
+public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     
     // MARK: - Nested Types
     
