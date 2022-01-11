@@ -54,9 +54,8 @@ struct ComputationForm: View {
                         .font(.callout)
                     if simulation.mode == .random {
                         // affichage du nombre de run
-                        Spacer(minLength: 100)
-                        IntegerView(label   : "Nombre de run exécutés",
-                                    integer : simulation.mode == .deterministic ? 1  : simulation.currentRunNb)
+                        Spacer()
+                        Text("Nombre de run exécutés: \(simulation.mode == .deterministic ? 1  : simulation.currentRunNb)")
                     }
                     Spacer()
                     if let result = simulation.kpis.allObjectivesAreReached(withMode: simulation.mode) {
