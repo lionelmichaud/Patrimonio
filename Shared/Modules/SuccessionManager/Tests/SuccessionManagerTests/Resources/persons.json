@@ -156,19 +156,5 @@
         "birth_Date" : "2005-09-30T23:00:00+01:00",
         "age_Of_University"   : 21,
         "age_Of_Independence" : 24
-    },
-    
-    {
-        "__type_preserving_strategy" : 0,
-        "__preserved_type" : "Child.Type",
-        "name" : {
-            "familyName" : "MICHAUD",
-            "namePrefix" : "Mme.",
-            "givenName" : "Isaline"
-        },
-        "sexe" : 1,
-        "birth_Date" : "1930-03-29T22:00:00Z",
-        "age_Of_University"   : 21,
-        "age_Of_Independence" : 24
     }
 ]

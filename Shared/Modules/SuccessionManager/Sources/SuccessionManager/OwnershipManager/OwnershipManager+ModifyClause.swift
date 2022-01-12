@@ -215,12 +215,16 @@ extension OwnershipManager {
                 newClause.isOptional = false
                 newClause.fullRecipients = []
                 
-                //  - capital décès total versé aux enfants (somme)
-                let givenToChildren = min(decedentOwnedValue, missingCapital.values.sum())
+                //  - Capital décès total à verser aux enfants (somme) pour pouvoir payer les droits de succession
+                //    Chaque enfants vivant recevant la même part, la somme donnée à chaque enfant est alignée sur
+                //    celui qui a le plus grand besoin
+                let besoinMax = missingCapital.values.max()!
+                let childrenAlive  = family.childrenAliveName(atEndOf: year)
+                let besoinTotal = besoinMax * childrenAlive!.count.double()
+                let givenToChildren = min(decedentOwnedValue, besoinTotal)
                 
                 //  - part du capital décès versée aux enfants (somme) en PP
                 let partDesEnfants = givenToChildren * 100.0 / decedentOwnedValue
-                let childrenAlive  = family.childrenAliveName(atEndOf: year)
                 childrenAlive?.forEach { childrenName in
                     newClause.fullRecipients.append(Owner(name     : childrenName,
                                                           fraction : partDesEnfants / childrenAlive!.count.double()))

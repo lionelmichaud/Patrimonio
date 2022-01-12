@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import AppFoundation
 import Statistics
 import EconomyModel
 import FiscalModel
@@ -72,7 +73,7 @@ class FreeInvestementTests: XCTestCase {
         Tests.rates2021 =
             Tests
             .economyModelProvider
-            .rates(in: 2021, withMode: .deterministic, simulateVolatility: false)
+            .rates(in: CalendarCst.thisYear, withMode: .deterministic, simulateVolatility: false)
         Tests.averageRate2021Theory =
             (0.75 * Tests.rates2021.stockRate + 0.25 * Tests.rates2021.securedRate)
             - Tests.inflation
@@ -120,34 +121,34 @@ class FreeInvestementTests: XCTestCase {
     }
     
     func test_value() {
-        let value = Tests.fi.value(atEndOf: 2020)
+        let value = Tests.fi.value(atEndOf: CalendarCst.thisYear - 1)
         let expected = Tests.fi.currentState.value
 
         XCTAssertEqual(expected, value)
     }
     
     func test_deposit() {
-        let OldValue = Tests.fi.value(atEndOf: 2020)
+        let OldValue = Tests.fi.value(atEndOf: CalendarCst.thisYear - 1)
         let deposit = 100.0
         
         Tests.fi.deposit(deposit)
 
-        XCTAssertEqual(OldValue + deposit, Tests.fi.value(atEndOf: 2020))
+        XCTAssertEqual(OldValue + deposit, Tests.fi.value(atEndOf: CalendarCst.thisYear - 1))
     }
     
     func test_capitalize() throws {
-        let interest = Tests.fi.lastKnownState.value * Tests.averageRate2021Theory / 100.0
+        let newValue = Tests.fi.currentState.value * (1.0 + Tests.averageRate2021Theory / 100.0)
 
-        XCTAssertThrowsError(try Tests.fi.capitalize(atEndOf: 2020)) { error in
+        XCTAssertThrowsError(try Tests.fi.capitalize(atEndOf: CalendarCst.thisYear - 2)) { error in
             XCTAssertEqual(error as! FreeInvestementError, FreeInvestementError.IlegalOperation)
         }
-        XCTAssertThrowsError(try Tests.fi.capitalize(atEndOf: 2022)) { error in
+        XCTAssertThrowsError(try Tests.fi.capitalize(atEndOf: CalendarCst.thisYear + 1)) { error in
             XCTAssertEqual(error as! FreeInvestementError, FreeInvestementError.IlegalOperation)
         }
         
-        try Tests.fi.capitalize(atEndOf: 2021)
+        try Tests.fi.capitalize(atEndOf: CalendarCst.thisYear)
         
-        XCTAssertEqual(Tests.fi.lastKnownState.value + interest, Tests.fi.value(atEndOf: 2021))
+        XCTAssertEqual(newValue, Tests.fi.value(atEndOf: CalendarCst.thisYear))
     }
     
     func test_ownedValue() {
@@ -298,6 +299,7 @@ class FreeInvestementTests: XCTestCase {
         // cas n°3: AV
         Tests.fi = FreeInvestement(fromFile   : FreeInvestement.defaultFileName,
                                    fromBundle : Bundle.module)
+        Tests.fi.lastKnownState.year = CalendarCst.thisYear - 1
         type = Tests.fi.type
         switch type {
             case .lifeInsurance(_, let clause):

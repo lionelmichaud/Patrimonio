@@ -84,16 +84,16 @@ public struct KpiComputer {
     /// - Parameters:
     ///   - kpiDictionnary: les KPI à utiliser
     ///   - balanceArray: les bilans annuels
-    ///   - currentRunKpiResults: valeur des KPIs pour le run courant
-    public mutating func computeMinimumAssetKpiValue
-    (withKPIs kpiDictionnary       : inout KpiDictionary,
-     withBalanceArray balanceArray : BalanceSheetArray) {
+    ///   - initialNetAdultsFinancialAssets: valeur initiale du patrimoine financier net (hors immobilier)
+    public mutating func computeMinimumAssetKpiValue(withKPIs kpiDictionnary         : inout KpiDictionary,
+                                                     withBalanceArray balanceArray   : BalanceSheetArray,
+                                                     initialNetAdultsFinancialAssets : Double) {
         let minBalanceSheetLine = balanceArray.min { a, b in
             a.netAdultsFinancialAssets < b.netAdultsFinancialAssets
         }
         // KPI 3: mémoriser le minimum d'actif financier net des adultes au cours du temps
         setKpiValue(kpiEnum        : .minimumAdultsAssetExcludinRealEstates,
-                    value          : minBalanceSheetLine!.netAdultsFinancialAssets,
+                    value          : minBalanceSheetLine?.netAdultsFinancialAssets ?? initialNetAdultsFinancialAssets,
                     kpiDictionnary : &kpiDictionnary)
     }
     
@@ -108,10 +108,9 @@ public struct KpiComputer {
     ///   - kpiDictionnary: les KPI à utiliser
     ///   - currentRunKpiResults: valeur des KPIs pour le run courant
     ///   - withbalanceSheetLine: bilan de l'année
-    public mutating func computeKpisAtZeroCashAvailable
-    (year                    : Int,
-     withKPIs kpiDictionnary : inout KpiDictionary,
-     withBalanceSheetLine    : BalanceSheetLine?) {
+    public mutating func computeKpisAtZeroCashAvailable(year                    : Int,
+                                                        withKPIs kpiDictionnary : inout KpiDictionary,
+                                                        withBalanceSheetLine    : BalanceSheetLine?) {
         customLog.log(level: .info, "Arrêt de la construction de la table en \(year, privacy: .public) de Comptes sociaux: à court de cash dans \(Self.self, privacy: .public)")
         
         // Actif Net (hors immobilier physique)
@@ -168,6 +167,7 @@ public struct KpiComputer {
     ///   - kpiDictionnary: les KPI à utiliser
     ///   - currentRunKpiResults: valeur des KPIs pour le run courant
     ///   - balanceArray: les bilans annuels
+    ///   - initialNetAdultsFinancialAssets: Valeur initiale de l'actif financier net (hors immobilier) en début de 1ère année de simu
     ///   - balanceSheetLineAfterTransmission: Bilan après transmissions
     ///   - allSuccessions: ensemble des succssions ayant eu lieu à ce moment de la simulation
     ///   - netChildrenInheritances: soldes nets de l'héritage reçu par les enfants à chaque décès
@@ -175,6 +175,7 @@ public struct KpiComputer {
     (year                               : Int,
      withKPIs kpiDictionnary            : inout KpiDictionary,
      withBalanceArray balanceArray      : BalanceSheetArray,
+     initialNetAdultsFinancialAssets    : Double,
      balanceSheetLineAfterTransmission  : BalanceSheetLine,
      allSuccessions                     : [Succession],
      netChildrenInheritances            : [Double]) {
@@ -182,7 +183,7 @@ public struct KpiComputer {
         let netFinancialAssetsAfterTransmission = balanceSheetLineAfterTransmission.netAdultsFinancialAssets
         
         // Actif Net précédent (avant transmission en cas de décès dans l'année) (hors immobilier physique))
-        let netFinancialAssetsBeforeTransmission = balanceArray.last?.netAdultsFinancialAssets ?? netFinancialAssetsAfterTransmission
+        let netFinancialAssetsBeforeTransmission = balanceArray.last?.netAdultsFinancialAssets ?? initialNetAdultsFinancialAssets
         
         switch family.nbOfAdultAlive(atEndOf: year) {
             case 1: // il reste un conjoint survivant
@@ -221,8 +222,9 @@ public struct KpiComputer {
                 
                 /// KPI n°3 : on est arrivé à la fin de la simulation
                 // rechercher le minimum d'actif financier au cours du temps (hors immobilier physique)
-                computeMinimumAssetKpiValue(withKPIs             : &kpiDictionnary,
-                                            withBalanceArray     : balanceArray)
+                computeMinimumAssetKpiValue(withKPIs                        : &kpiDictionnary,
+                                            withBalanceArray                : balanceArray,
+                                            initialNetAdultsFinancialAssets : initialNetAdultsFinancialAssets)
                 
                 /// KPI n°4: décès du second conjoint et mémoriser la valeur du KPI
                 // mémoriser le montant de l'Héritage total net des enfants

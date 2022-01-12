@@ -74,7 +74,7 @@ import NamedValue
         func test_computeCashAndTaxesPerPerson() {
             let decedentName = "M. Lionel MICHAUD"
             let spouseName   = "Mme. Vanessa MICHAUD"
-            let childrenName = ["Mme. Isaline MICHAUD", "M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
+            let childrenName = ["M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
             
             // créer les managers
 //            let legalSuccessionManager =
@@ -167,8 +167,7 @@ import NamedValue
             
             let theory_lifeInsSuccessionsTaxesAdults = [NamedValue(name: decedentName, value: 0.0),
                                                         NamedValue(name: spouseName, value: 0.0)]
-            let theory_lifeInsSuccessionsTaxesChildren: NamedValueArray = [NamedValue(name: childrenName.first!, value: 0.0),
-                                                                           NamedValue(name: childrenName[1],     value: taxeEnfant),
+            let theory_lifeInsSuccessionsTaxesChildren: NamedValueArray = [NamedValue(name: childrenName.first!, value: taxeEnfant),
                                                                            NamedValue(name: childrenName.last!,  value: taxeEnfant)]
             XCTAssertTrue(theory_lifeInsSuccessionsTaxesAdults.containsSameElements(as: Tests.manager.lifeInsurance.taxesAdults))
             XCTAssertTrue(theory_lifeInsSuccessionsTaxesChildren.containsSameElements(as: Tests.manager.lifeInsurance.taxesChildren))
@@ -177,7 +176,7 @@ import NamedValue
         func test_totalChildrenInheritanceTaxe() {
             let decedentName = "M. Lionel MICHAUD"
             let spouseName   = "Mme. Vanessa MICHAUD"
-            let childrenName = ["Mme. Isaline MICHAUD", "M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
+            let childrenName = ["M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
             
             // créer les managers
             var lifeInsuranceSuccessionManager =
@@ -223,8 +222,7 @@ import NamedValue
                                                            lifeInsSuccession : lifeInsSuccession,
                                                            verbose           : Tests.verbose)
             
-            let theory = [childrenName.first : 0.0,
-                          childrenName[1]    : taxeEnfant,
+            let theory = [childrenName.first : taxeEnfant,
                           childrenName.last  : taxeEnfant]
             
             XCTAssertEqual(theory, childrenInheritancesTaxe)

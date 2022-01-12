@@ -69,6 +69,9 @@ struct SocialAccounts {
         cashFlowArray.reserveCapacity(nbOfYears)
         balanceArray.reserveCapacity(nbOfYears)
         
+        // mémoriser la valeur initiale du patrimoine financier net (hors immobilier)
+        let initialNetAdultsFinancialAssets = patrimoine.value(atEndOf: firstYear)
+
         for year in firstYear ... lastYear {
             // construire la ligne annuelle de Cash Flow
             //------------------------------------------
@@ -128,6 +131,7 @@ struct SocialAccounts {
                 kpiComputer.computeKpisAtDeath(year                               : year,
                                                withKPIs                           : &kpis,
                                                withBalanceArray                   : balanceArray,
+                                               initialNetAdultsFinancialAssets    : initialNetAdultsFinancialAssets,
                                                balanceSheetLineAfterTransmission  : newBalanceSheetLine,
                                                allSuccessions                     : legalSuccessions + lifeInsSuccessions,
                                                netChildrenInheritances            : netChildrenInheritances)
@@ -148,8 +152,9 @@ struct SocialAccounts {
         
         /// KPI n°3 : on est arrivé à la fin de la simulation
         // rechercher le minimum d'actif financier net au cours du temps
-        kpiComputer.computeMinimumAssetKpiValue(withKPIs             : &kpis,
-                                                withBalanceArray     : balanceArray)
+        kpiComputer.computeMinimumAssetKpiValue(withKPIs                        : &kpis,
+                                                withBalanceArray                : balanceArray,
+                                                initialNetAdultsFinancialAssets : initialNetAdultsFinancialAssets)
         SimulationLogger.shared.log(run      : run,
                                     logTopic : LogTopic.simulationEvent,
                                     message  : "Fin du run: date de fin de run atteinte en \(lastYear)")

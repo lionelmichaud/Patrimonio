@@ -233,6 +233,14 @@
         "identifier" : "CashFlowTests",
         "name" : "CashFlowTests"
       }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Shared\/Modules\/DependencyInjection",
+        "identifier" : "DependencyInjectionTests",
+        "name" : "DependencyInjectionTests"
+      }
     }
   ],
   "version" : 1
