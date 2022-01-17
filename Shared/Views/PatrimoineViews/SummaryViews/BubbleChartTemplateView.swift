@@ -81,26 +81,28 @@ struct BubbleChartTemplateView: NSUIViewRepresentable {
         dataSet.setColor(ChartColorTemplates.colorful()[0], alpha: 0.5)
         dataSets.append(dataSet)
         
-        let llX = ChartLimitLine(limit: xAverage, label: "label")
-        llX.lineWidth        = 2
-        llX.lineDashLengths  = [10, 10]
-        llX.drawLabelEnabled = false
-        llX.labelPosition    = .bottomRight
-        llX.valueFont        = .systemFont(ofSize : 10)
-        llX.valueTextColor   = ChartThemes.DarkChartColors.labelTextColor
-        chartView.xAxis.removeAllLimitLines()
-        chartView.xAxis.addLimitLine(llX)
-
-        let llY = ChartLimitLine(limit: yAverage, label: "label")
-        llY.lineWidth        = 2
-        llY.lineDashLengths  = [10, 10]
-        llY.drawLabelEnabled = false
-        llY.labelPosition    = .bottomRight
-        llY.valueFont        = .systemFont(ofSize : 10)
-        llY.valueTextColor   = ChartThemes.DarkChartColors.labelTextColor
-        chartView.leftAxis.removeAllLimitLines()
-        chartView.leftAxis.addLimitLine(llY)
-
+        if averagesLinesEnabled {
+            let llX = ChartLimitLine(limit: xAverage, label: "label")
+            llX.lineWidth        = 2
+            llX.lineDashLengths  = [10, 10]
+            llX.drawLabelEnabled = false
+            llX.labelPosition    = .bottomRight
+            llX.valueFont        = .systemFont(ofSize : 10)
+            llX.valueTextColor   = ChartThemes.DarkChartColors.labelTextColor
+            chartView.xAxis.removeAllLimitLines()
+            chartView.xAxis.addLimitLine(llX)
+            
+            let llY = ChartLimitLine(limit: yAverage, label: "label")
+            llY.lineWidth        = 2
+            llY.lineDashLengths  = [10, 10]
+            llY.drawLabelEnabled = false
+            llY.labelPosition    = .bottomRight
+            llY.valueFont        = .systemFont(ofSize : 10)
+            llY.valueTextColor   = ChartThemes.DarkChartColors.labelTextColor
+            chartView.leftAxis.removeAllLimitLines()
+            chartView.leftAxis.addLimitLine(llY)
+        }
+        
         return dataSets
     }
     

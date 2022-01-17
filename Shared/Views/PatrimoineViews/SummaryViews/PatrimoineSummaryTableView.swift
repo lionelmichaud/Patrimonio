@@ -6,9 +6,15 @@
 //
 
 import SwiftUI
+import AssetsModel
 import PatrimoineModel
 
 struct PatrimoineSummaryTableView: View {
+    static let riskColors = ChartThemes.riskColorsTable.map { Color($0) }
+    static let liquidityColors = ChartThemes.liquidityColorsTable.map { Color($0) }
+    static let riskLabel      = "Risque"
+    static let liquidityLabel = "Liquidité"
+
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var uiState    : UIState
     
@@ -30,28 +36,54 @@ struct PatrimoineSummaryTableView: View {
                                      value       : patrimoine.assets.realEstates.value(atEndOf: Int(uiState.patrimoineViewState.evalDate)) +
                                         patrimoine.assets.scpis.value(atEndOf: Int(uiState.patrimoineViewState.evalDate)),
                                      indentLevel : 0,
-                                     header      : true)
+                                     header      : true,
+                                     rating1     : { EmptyView() },
+                                     rating2     : { EmptyView() })
                     //      (1) Immeuble
                     ListTableRowView(label       : "Immeuble",
                                      value       : patrimoine.assets.realEstates.currentValue,
                                      indentLevel : 1,
-                                     header      : true)
+                                     header      : true,
+                                     rating1     : { EmptyView() },
+                                     rating2     : { EmptyView() })
                     ForEach(patrimoine.assets.realEstates.items) { item in
                         ListTableRowView(label       : item.name,
                                          value       : item.value(atEndOf: Int(self.uiState.patrimoineViewState.evalDate)),
                                          indentLevel : 2,
-                                         header      : false)
+                                         header      : false,
+                                         rating1: { RatingView(rating    : item.riskLevel?.rawValue ?? 0,
+                                                               maxRating : RiskLevel.allCases.count - 1,
+                                                               label     : PatrimoineSummaryTableView.riskLabel,
+                                                               font      : .callout,
+                                                               onColor   : PatrimoineSummaryTableView.riskColors) },
+                                         rating2: { RatingView(rating    : item.liquidityLevel?.rawValue ?? 0,
+                                                               maxRating : LiquidityLevel.allCases.count - 1,
+                                                               label     : PatrimoineSummaryTableView.liquidityLabel,
+                                                               font      : .callout,
+                                                               onColor   : PatrimoineSummaryTableView.liquidityColors) })
                     }
                     //      (1) SCPI
                     ListTableRowView(label       : "SCPI",
                                      value       : patrimoine.assets.scpis.currentValue,
                                      indentLevel : 1,
-                                     header      : true)
+                                     header      : true,
+                                     rating1     : { EmptyView() },
+                                     rating2     : { EmptyView() })
                     ForEach(patrimoine.assets.scpis.items) { item in
                         ListTableRowView(label       : item.name,
                                          value       : item.value(atEndOf: Int(self.uiState.patrimoineViewState.evalDate)),
                                          indentLevel : 2,
-                                         header      : false)
+                                         header      : false,
+                                         rating1: { RatingView(rating    : item.riskLevel?.rawValue ?? 0,
+                                                               maxRating : RiskLevel.allCases.count - 1,
+                                                               label     : PatrimoineSummaryTableView.riskLabel,
+                                                               font      : .callout,
+                                                               onColor   : PatrimoineSummaryTableView.riskColors) },
+                                         rating2: { RatingView(rating    : item.liquidityLevel?.rawValue ?? 0,
+                                                               maxRating : LiquidityLevel.allCases.count - 1,
+                                                               label     : PatrimoineSummaryTableView.liquidityLabel,
+                                                               font      : .callout,
+                                                               onColor   : PatrimoineSummaryTableView.liquidityColors) })
                     }
                 }
                 
@@ -61,48 +93,88 @@ struct PatrimoineSummaryTableView: View {
                                      value       : patrimoine.assets.periodicInvests.value(atEndOf: Int(uiState.patrimoineViewState.evalDate)) +
                                         patrimoine.assets.freeInvests.value(atEndOf: Int(uiState.patrimoineViewState.evalDate)),
                                      indentLevel : 0,
-                                     header      : true)
+                                     header      : true,
+                                     rating1     : { EmptyView() },
+                                     rating2     : { EmptyView() })
                     //      (1) Invest Périodique
                     ListTableRowView(label       : "Invest Périodique",
                                      value       : patrimoine.assets.periodicInvests.value(atEndOf: Int(uiState.patrimoineViewState.evalDate)),
                                      indentLevel : 1,
-                                     header      : true)
+                                     header      : true,
+                                     rating1     : { EmptyView() },
+                                     rating2     : { EmptyView() })
                     ForEach(patrimoine.assets.periodicInvests.items) { item in
                         ListTableRowView(label       : item.name,
                                          value       : item.value(atEndOf: Int(self.uiState.patrimoineViewState.evalDate)),
                                          indentLevel : 2,
-                                         header      : false)
-                    }
-                    //      (1) Investissement Libre
+                                         header      : false,
+                                         rating1: { RatingView(rating    : item.riskLevel?.rawValue ?? 0,
+                                                               maxRating : RiskLevel.allCases.count - 1,
+                                                               label     : PatrimoineSummaryTableView.riskLabel,
+                                                               font      : .callout,
+                                                               onColor   : PatrimoineSummaryTableView.riskColors) },
+                                         rating2: { RatingView(rating    : item.liquidityLevel?.rawValue ?? 0,
+                                                               maxRating : LiquidityLevel.allCases.count - 1,
+                                                               label     : PatrimoineSummaryTableView.liquidityLabel,
+                                                               font      : .callout,
+                                                               onColor   : PatrimoineSummaryTableView.liquidityColors) })
+                        }
+                                         //      (1) Investissement Libre
                     ListTableRowView(label       : "Investissement Libre",
                                      value       : patrimoine.assets.freeInvests.value(atEndOf: Int(uiState.patrimoineViewState.evalDate)),
                                      indentLevel : 1,
-                                     header      : true)
+                                     header      : true,
+                                     rating1     : { EmptyView() },
+                                     rating2     : { EmptyView() })
                     ForEach(patrimoine.assets.freeInvests.items) { item in
                         ListTableRowView(label       : item.name,
                                          value       : item.value(atEndOf: Int(self.uiState.patrimoineViewState.evalDate)),
                                          indentLevel : 2,
-                                         header      : false)
+                                         header      : false,
+                                         rating1: { RatingView(rating    : item.riskLevel?.rawValue ?? 0,
+                                                               maxRating : RiskLevel.allCases.count - 1,
+                                                               label     : PatrimoineSummaryTableView.riskLabel,
+                                                               font      : .callout,
+                                                               onColor   : PatrimoineSummaryTableView.riskColors) },
+                                         rating2: { RatingView(rating    : item.liquidityLevel?.rawValue ?? 0,
+                                                               maxRating : LiquidityLevel.allCases.count - 1,
+                                                               label     : PatrimoineSummaryTableView.liquidityLabel,
+                                                               font      : .callout,
+                                                               onColor   : PatrimoineSummaryTableView.liquidityColors) })
                     }
                 }
                 
                 Group {
                     // (0) SCI
                     ListTableRowView(label       : "SCI",
-                                     value       : patrimoine.assets.sci.scpis.value(atEndOf       : Int(uiState.patrimoineViewState.evalDate)) +
+                                     value       : patrimoine.assets.sci.scpis.value(atEndOf: Int(uiState.patrimoineViewState.evalDate)) +
                                         patrimoine.assets.sci.bankAccount,
                                      indentLevel : 0,
-                                     header      : true)
+                                     header      : true,
+                                     rating1     : { EmptyView() },
+                                     rating2     : { EmptyView() })
                     //      (1) SCPI
                     ListTableRowView(label       : "SCPI",
-                                     value       : patrimoine.assets.sci.scpis.value(atEndOf       : Int(uiState.patrimoineViewState.evalDate)),
+                                     value       : patrimoine.assets.sci.scpis.value(atEndOf: Int(uiState.patrimoineViewState.evalDate)),
                                      indentLevel : 1,
-                                     header      : true)
+                                     header      : true,
+                                     rating1     : { EmptyView() },
+                                     rating2     : { EmptyView() })
                     ForEach(patrimoine.assets.sci.scpis.items) { item in
                         ListTableRowView(label       : item.name,
                                          value       : item.value(atEndOf: Int(self.uiState.patrimoineViewState.evalDate)),
                                          indentLevel : 2,
-                                         header      : false)
+                                         header      : false,
+                                         rating1: { RatingView(rating    : item.riskLevel?.rawValue ?? 0,
+                                                               maxRating : RiskLevel.allCases.count - 1,
+                                                               label     : PatrimoineSummaryTableView.riskLabel,
+                                                               font      : .callout,
+                                                               onColor   : PatrimoineSummaryTableView.riskColors) },
+                                         rating2: { RatingView(rating    : item.liquidityLevel?.rawValue ?? 0,
+                                                               maxRating : LiquidityLevel.allCases.count - 1,
+                                                               label     : PatrimoineSummaryTableView.liquidityLabel,
+                                                               font      : .callout,
+                                                               onColor   : PatrimoineSummaryTableView.liquidityColors) })
                     }
                 }
             }
@@ -113,12 +185,16 @@ struct PatrimoineSummaryTableView: View {
                     ListTableRowView(label       : "Emprunt",
                                      value       : patrimoine.liabilities.loans.value(atEndOf: Int(uiState.patrimoineViewState.evalDate)),
                                      indentLevel : 0,
-                                     header      : true)
+                                     header      : true,
+                                     rating1     : { EmptyView() },
+                                     rating2     : { EmptyView() })
                     ForEach(patrimoine.liabilities.loans.items) { item in
                         ListTableRowView(label       : item.name,
                                          value       : item.value(atEndOf: Int(self.uiState.patrimoineViewState.evalDate)),
                                          indentLevel : 2,
-                                         header      : false)
+                                         header      : false,
+                                         rating1     : { EmptyView() },
+                                         rating2     : { EmptyView() })
                     }
                 }
                 
@@ -127,12 +203,16 @@ struct PatrimoineSummaryTableView: View {
                     ListTableRowView(label       : "Dette",
                                      value       : patrimoine.liabilities.debts.value(atEndOf: Int(uiState.patrimoineViewState.evalDate)),
                                      indentLevel : 0,
-                                     header      : true)
+                                     header      : true,
+                                     rating1     : { EmptyView() },
+                                     rating2     : { EmptyView() })
                     ForEach(patrimoine.liabilities.debts.items) { item in
                         ListTableRowView(label       : item.name,
                                          value       : item.value(atEndOf: Int(self.uiState.patrimoineViewState.evalDate)),
                                          indentLevel : 2,
-                                         header      : false)
+                                         header      : false,
+                                         rating1     : { EmptyView() },
+                                         rating2     : { EmptyView() })
                     }
                 }
             }

@@ -117,9 +117,7 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
 
             case .marketRate(let stockRatio):
                 // taux de marché variable
-                let scale = [0.0, 20.0, 40.0, 60.0, 80.0]
-                let index = scale.lastIndex(where: { $0 < stockRatio })!
-                return RiskLevel(rawValue: index)
+                return riskScale?.rating(stockRatio)
         }
     }
     /// Niveau de liquidité du bien

@@ -39,6 +39,10 @@ public protocol RiskQuotableP {
     var riskLevel: RiskLevel? { get }
 }
 
+let riskScale = DiscreteScale(scale       : [0.0, 20.0, 40.0, 60.0, 80.0],
+                              scaleOrder  : .ascending,
+                              firstRating : 0)
+
 // MARK: - Evaluation du niveau de liquidité
 
 public enum LiquidityLevel: Int, Codable, PickableEnumP {

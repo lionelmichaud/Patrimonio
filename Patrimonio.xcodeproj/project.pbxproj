@@ -366,6 +366,8 @@
 		79AB5446263241CF00FADBA7 /* AppSettings.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB540F263241CF00FADBA7 /* AppSettings.json */; };
 		79AB5447263241CF00FADBA7 /* AppVersion.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB5410263241CF00FADBA7 /* AppVersion.json */; };
 		79AB5448263241CF00FADBA7 /* AppVersion.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB5410263241CF00FADBA7 /* AppVersion.json */; };
+		79AFC4362794924000812E5D /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AFC4352794924000812E5D /* RatingView.swift */; };
+		79AFC4372794924000812E5D /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AFC4352794924000812E5D /* RatingView.swift */; };
 		79B164842651DD7200D0603C /* ScenarioSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B164812651DD7200D0603C /* ScenarioSummaryView.swift */; };
 		79B164852651DD7200D0603C /* ScenarioSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B164812651DD7200D0603C /* ScenarioSummaryView.swift */; };
 		79B164862651DD7200D0603C /* ScenarioSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B164812651DD7200D0603C /* ScenarioSummaryView.swift */; };
@@ -702,6 +704,7 @@
 		79AB540D263241CF00FADBA7 /* RetirementModelConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RetirementModelConfig.json; sourceTree = "<group>"; };
 		79AB540F263241CF00FADBA7 /* AppSettings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AppSettings.json; sourceTree = "<group>"; };
 		79AB5410263241CF00FADBA7 /* AppVersion.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AppVersion.json; sourceTree = "<group>"; };
+		79AFC4352794924000812E5D /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		79B164812651DD7200D0603C /* ScenarioSummaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScenarioSummaryView.swift; sourceTree = "<group>"; };
 		79B164822651DD7200D0603C /* ModelsSidebarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelsSidebarView.swift; sourceTree = "<group>"; };
 		79B2726D2634CC0000298E5D /* PersonPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonPickerView.swift; sourceTree = "<group>"; };
@@ -1577,6 +1580,7 @@
 				79C838302641E02B008B29BF /* MenuCollapsable.swift */,
 				79C838332641E04C008B29BF /* PopOverContentView.swift */,
 				79F4D12226B03D62009D91B9 /* Buttons.swift */,
+				79AFC4352794924000812E5D /* RatingView.swift */,
 			);
 			path = HelpersViews;
 			sourceTree = "<group>";
@@ -2010,6 +2014,7 @@
 				7935FFD726541AAB00AC1715 /* DossiersSidebarView.swift in Sources */,
 				79EC5E712640037400FF8263 /* DependencyInjector.swift in Sources */,
 				799DE8402654199600E96CF6 /* NoLoadedDossierView.swift in Sources */,
+				79AFC4362794924000812E5D /* RatingView.swift in Sources */,
 				79B2728C2634DBEB00298E5D /* AppThemes.swift in Sources */,
 				79C838272641DB80008B29BF /* Charts+AxisFormatter.swift in Sources */,
 				79B164842651DD7200D0603C /* ScenarioSummaryView.swift in Sources */,
@@ -2151,6 +2156,7 @@
 				799025AA2641F60300ED53D4 /* KpiListSummaryView.swift in Sources */,
 				798DE8C12635CD3C00C0C3B5 /* AlertView.swift in Sources */,
 				7921A64F2785C73A00A2BA93 /* HorizontalBarChartView+Extension.swift in Sources */,
+				79AFC4372794924000812E5D /* RatingView.swift in Sources */,
 				79735EED263242FA00CD952F /* ContentView.swift in Sources */,
 				79F222F3265ACC9F005EE0B9 /* DossierEditView.swift in Sources */,
 				792B2A0026EBC455005AFE29 /* ModelDeterministicRetirementView.swift in Sources */,

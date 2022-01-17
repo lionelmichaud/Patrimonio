@@ -7,12 +7,29 @@
 //
 
 import SwiftUI
+import AppFoundation
 
-struct ListTableRowView: View {
-    let label           : String
-    let value           : Double
-    let indentLevel     : Int
-    let header          : Bool
+struct ListTableRowView<Rating: View>: View {
+    let label       : String
+    let value       : Double
+    let indentLevel : Int
+    let header      : Bool
+    var rating1     : Rating
+    var rating2     : Rating
+
+    internal init(label                : String,
+                  value                : Double,
+                  indentLevel          : Int,
+                  header               : Bool,
+                  @ViewBuilder rating1 : () -> Rating,
+                  @ViewBuilder rating2 : () -> Rating) {
+        self.label       = label
+        self.value       = value
+        self.indentLevel = indentLevel
+        self.header      = header
+        self.rating1     = rating1()
+        self.rating2     = rating2()
+    }
 
     var body: some View {
         HStack {
@@ -29,9 +46,12 @@ struct ListTableRowView: View {
                                       design: Font.Design.default))
             }
             Spacer()
+            rating1.padding(.trailing)
+            rating2
             Text(value.€String)
                 .font(Font.system(size: ListTheme[indentLevel].valueFontSize,
                                   design: Font.Design.default))
+                .frame(width: 150)
         }
             .padding(EdgeInsets(top: 0,
                                 leading: ListTheme[indentLevel].indent,
@@ -46,7 +66,27 @@ struct TableView_Previews: PreviewProvider {
         ListTableRowView(label: "Titre",
                          value: 12345,
                          indentLevel: 0,
-                         header: true)
-            .previewDevice("iPhone 12")
+                         header: true,
+                         rating1: { RatingView(rating    : 1,
+                                               minRating : 0,
+                                               maxRating : 4,
+                                               label     : "Risque",
+                                               font      : .footnote,
+                                               offColor  : Color.gray,
+                                               onColor   : ChartThemes.riskColorsTable.map { Color($0) },
+                                               offImage  : Image(systemName : "square"),
+                                               onImage   : Image(systemName : "square.fill"))
+        },
+                         rating2: { RatingView(rating    : 2,
+                                               minRating : 0,
+                                               maxRating : 2,
+                                               label     : "Liquidité",
+                                               font      : .footnote,
+                                               offColor  : Color.gray,
+                                               onColor   : ChartThemes.liquidityColorsTable.map { Color($0) },
+                                               offImage  : Image(systemName : "square"),
+                                               onImage   : Image(systemName : "square.fill"))
+        })
+            .previewLayout(.fixed(width: 700, height: /*@START_MENU_TOKEN@*/50.0/*@END_MENU_TOKEN@*/))
     }
 }
