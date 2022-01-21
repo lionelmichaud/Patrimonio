@@ -116,7 +116,7 @@ public struct Assets {
         // initialiser le vecteur d'état de chaque FreeInvestement à la date courante
         initializeInvestementsCurrentValue()
         checkValidity()
-   }
+    }
     
     /// Initiliser à partir d'un fichier JSON contenu dans le `bundle`
     /// - Note: Utilisé seulement pour les Tests

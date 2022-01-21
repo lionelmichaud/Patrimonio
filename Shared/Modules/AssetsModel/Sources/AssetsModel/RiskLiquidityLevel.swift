@@ -66,6 +66,10 @@ public protocol LiquidityQuotableP {
     var liquidityLevel: LiquidityLevel? { get }
 }
 
+let liquidityScale = DiscreteScale(scale       : [0.0, 33.3, 66.6],
+                                   scaleOrder  : .ascending,
+                                   firstRating : 0)
+
 // MARK: - Protocol d'évaluation des niveaux de risque & liquidité
 
 public typealias QuotableP = RiskQuotableP & LiquidityQuotableP
@@ -74,6 +78,50 @@ public typealias QuotableNameableValuableP = QuotableP & NameableValuableP & Own
 // MARK: - Extensions de Array
 
 public extension Array where Element: QuotableNameableValuableP {
+    /// Niveau de risque moyen
+    /// - Parameters:
+    ///   - year: année d'évaluation
+    func averageRiskValue(atEndOf year: Int) -> Double {
+        var sum = 0.0
+        var weightedRisk = 0.0
+
+        forEach { element in
+            let value = element.value(atEndOf: year)
+            sum += value
+            weightedRisk += value * Double(element.riskLevel?.rawValue ?? 0)
+        }
+        if sum == 0 {
+            return 0
+        } else {
+            return weightedRisk / sum
+        }
+    }
+    func averageRiskLevel(atEndOf year: Int) -> RiskLevel? {
+        RiskLevel(rawValue: Int(averageRiskValue(atEndOf: year).rounded()))
+    }
+    
+    /// Niveau de liquidité moyen
+    /// - Parameters:
+    ///   - year: année d'évaluation
+    func averageLiquidityValue(atEndOf year: Int) -> Double {
+        var sum = 0.0
+        var weightedLiquidity = 0.0
+
+        forEach { element in
+            let value = element.value(atEndOf: year)
+            sum += value
+            weightedLiquidity += value * Double(element.liquidityLevel?.rawValue ?? 0)
+        }
+        if sum == 0 {
+            return 0
+        } else {
+            return weightedLiquidity / sum
+        }
+    }
+    func averageLiquidityLevel(atEndOf year: Int) -> LiquidityLevel? {
+        LiquidityLevel(rawValue: Int(averageLiquidityValue(atEndOf: year).rounded()))
+    }
+    
     /// Somme de toutes les valeurs d'un Array pour un niveau de risque donné
     /// - Parameters:
     ///   - year: année d'évaluation
@@ -89,6 +137,7 @@ public extension Array where Element: QuotableNameableValuableP {
             }
         })
     }
+
     /// Somme de toutes les valeurs d'un Array pour un niveau de risque donné et une personne donnée
     /// - Parameters:
     ///   - ownerName: nom de la personne recherchée
@@ -110,6 +159,7 @@ public extension Array where Element: QuotableNameableValuableP {
             }
         })
     }
+
     /// Somme de toutes les valeurs d'un Array pour un niveau de liquidité donné
     /// - Parameters:
     ///   - year: année d'évaluation
@@ -125,6 +175,7 @@ public extension Array where Element: QuotableNameableValuableP {
             }
         })
     }
+
     /// Somme de toutes les valeurs d'un Array pour un niveau de liquidité donné et une personne donnée
     /// - Parameters:
     ///   - ownerName: nom de la personne recherchée
@@ -146,6 +197,7 @@ public extension Array where Element: QuotableNameableValuableP {
             }
         })
     }
+
     /// Somme de toutes les valeurs d'un Array pour un niveau de liquidité/risque donné
     /// - Parameters:
     ///   - year: année d'évaluation
@@ -164,6 +216,7 @@ public extension Array where Element: QuotableNameableValuableP {
             }
         })
     }
+
     /// Somme de toutes les valeurs d'un Array pour un niveau de liquidité/risque donné et une personne donnée
     /// - Parameters:
     ///   - ownerName: nom de la personne recherchée

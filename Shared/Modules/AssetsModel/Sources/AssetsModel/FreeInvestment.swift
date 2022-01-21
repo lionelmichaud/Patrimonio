@@ -97,9 +97,9 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     
     // MARK: - Properties
     
-    public var id    = UUID()
-    public var name  : String
-    public var note  : String
+    public var id   = UUID()
+    public var name : String
+    public var note : String
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
     /// Droits de propriété sur le bien
