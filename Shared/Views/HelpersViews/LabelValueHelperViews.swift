@@ -64,22 +64,24 @@ struct LabeledValueRowView: View {
 
 // MARK: - Saisie d'un montant en €
 struct AmountEditView: View {
-    let label            : String
-    @Binding var amount  : Double
-
-    var body: some View {
-        let numberFormatter = NumberFormatter()
-        let textValueBinding = Binding<String>(
+    let label           : String
+    @Binding var amount : Double
+    @State var text     : String
+    var textValueBinding: Binding<String> {
+        Binding(
             get: {
-                String(Int(amount))
+                self.text
             },
             set: {
-                if let value = numberFormatter.number(from: $0) {
-                    self.amount = value.doubleValue
-                }
-            })
-        
-        return HStack {
+                self.text = $0
+                // actualiser la valeur numérique
+                self.amount = Double($0.replacingOccurrences(of: ",", with: ".")) ?? 0
+            }
+        )
+    }
+    
+    var body: some View {
+        HStack {
             Text(label)
             Spacer()
             TextField("montant",
@@ -88,6 +90,23 @@ struct AmountEditView: View {
                 .frame(maxWidth: 88)
                 .numbersAndPunctuationKeyboardType()
                 .multilineTextAlignment(.trailing)
+                .onChange(of: text) { newText in
+                    // filtrer les caractères non numériques
+                    var filtered = newText.filter { ",-0123456789".contains($0) }
+                    // filtrer `-` s'il n'est pas le premier caractère
+                    if filtered.count > 0 {
+                        filtered = filtered.replacingOccurrences(of: "-",
+                                                                 with: "",
+                                                                 range: filtered.index(filtered.startIndex, offsetBy: 1)..<filtered.endIndex)
+                    }
+                    if filtered != newText {
+                        self.text = filtered
+                    }
+                }
+                .onDisappear {
+                    print("Disappeared \(amount)")
+                    text = String(amount).replacingOccurrences(of: ".", with: ",")
+                }
             Text("€")
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -97,6 +116,8 @@ struct AmountEditView: View {
          amount : Binding<Double>) {
         self.label   = label
         self._amount = amount
+        _text = State(initialValue: String(amount.wrappedValue).replacingOccurrences(of: ".", with: ","))
+        print("created: value = \(amount); text = \(text)")
     }
 }
 

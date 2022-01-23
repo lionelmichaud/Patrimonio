@@ -52,11 +52,11 @@ public final class RegimeAgirc: Codable {
         var coef               : Double
     }
     
-    struct MajorationPourEnfant: Codable {
-        var majorPourEnfantsNes   : Double // % [0, 100]
-        var nbEnafntNesMin        : Int
-        var majorParEnfantACharge : Double // % [0, 100]
-        var plafondMajoEnfantNe   : Double // €
+    public struct MajorationPourEnfant: Codable {
+        public var majorPourEnfantsNes   : Double // % [0, 100]
+        public var nbEnafntNesMin        : Int
+        public var majorParEnfantACharge : Double // % [0, 100]
+        public var plafondMajoEnfantNe   : Double // €
     }
     
     public struct Model: JsonCodableToBundleP, VersionableP {
@@ -69,7 +69,7 @@ public final class RegimeAgirc: Codable {
         let gridApresAgelegal              : [SliceApresAgeLegal]
         var valeurDuPoint                  : Double // 1.2714
         var ageMinimum                     : Int    // 57
-        let majorationPourEnfant           : MajorationPourEnfant
+        var majorationPourEnfant           : MajorationPourEnfant
         // dependencies to other Models
         var regimeGeneral                  : RegimeGeneral!
         var netRegimeAgircProviderP        : NetRegimeAgircProviderP!
@@ -103,7 +103,12 @@ public final class RegimeAgirc: Codable {
         get { model.ageMinimum }
         set { model.ageMinimum = newValue }
     }
-    
+
+    public var majorationPourEnfant: MajorationPourEnfant {
+        get { model.majorationPourEnfant }
+        set { model.majorationPourEnfant = newValue }
+    }
+
     var devaluationRate: Double { // %
         model.pensionDevaluationRateProvider.pensionDevaluationRate(withMode: RegimeAgirc.simulationMode)
     }

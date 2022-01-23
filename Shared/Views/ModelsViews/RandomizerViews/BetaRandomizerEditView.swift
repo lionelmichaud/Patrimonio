@@ -144,7 +144,7 @@ struct BetaRandomizerEditView : View {
             .onAppear {
                 viewModel.updateFrom(betaRandomizer)
             }
-            .alert(item: $alertItem, content: createAlert)
+            .alert(item: $alertItem, content: newAlert)
     }
 
     // MARK: - Properties

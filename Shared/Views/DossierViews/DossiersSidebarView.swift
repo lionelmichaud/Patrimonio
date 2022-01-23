@@ -37,7 +37,7 @@ struct DossiersSidebarView: View {
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
         // Vue modale de saisie d'un nouveau membre de la famille
         .onAppear(perform: onAppear)
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
         .sheet(isPresented: $showingSheet) {
             DossierEditView(title: "Créer un nouveau dossier")
                 .environmentObject(self.dataStore)

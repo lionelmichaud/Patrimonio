@@ -135,7 +135,7 @@ struct RecipientsListView : View {
             }
         }
         .onChange(of: name, perform: addRecipient)
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
     }
     
     func addRecipient(newPersonName: String) {

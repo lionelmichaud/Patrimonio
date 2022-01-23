@@ -69,7 +69,7 @@ struct PersonAddView: View {
                             personViewModel.seniority = .enfant
                         }
                     }
-                    .alert(item: $alertItem, content: createAlert)
+                    .alert(item: $alertItem, content: newAlert)
 
                 if formIsValid() {
                     switch personViewModel.seniority {

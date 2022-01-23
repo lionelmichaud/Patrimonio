@@ -60,7 +60,7 @@ struct RetirementEditView: View {
                     }
                 }
         }
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
     }
 }
 

@@ -35,7 +35,7 @@ public protocol FinancialRatesProviderP {
 
 public typealias EconomyModelProviderP = InflationProviderP & FinancialRatesProviderP
 
-// MARK: - SINGLETON: Economy Model
+// MARK: - Economy Model
 
 public struct Economy: PersistableModelP {
     

@@ -22,7 +22,7 @@ struct UpdateSettingsView: View {
                 Button(action: updateModelFilesFromApp,
                        label: { Text("Remplacer seulement le modèle environemental") })
             }
-            .alert(item: $alertItem, content: createAlert)
+            .alert(item: $alertItem, content: newAlert)
         }
         .navigationTitle(Text("Mise à Jour"))
 

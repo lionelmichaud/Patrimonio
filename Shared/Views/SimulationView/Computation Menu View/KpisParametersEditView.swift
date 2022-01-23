@@ -18,7 +18,7 @@ struct KpisParametersEditView: View {
             ForEach(simulation.kpis.values) { kpi in
                 KpiGroupBox(kpi: kpi)
             }
-            .alert(item: $alertItem, content: createAlert)
+            .alert(item: $alertItem, content: newAlert)
         }
         .navigationTitle("Critères de performances")
         .navigationBarTitleDisplayMode(.inline)

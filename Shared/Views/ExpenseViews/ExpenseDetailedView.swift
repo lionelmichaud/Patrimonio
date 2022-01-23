@@ -109,7 +109,7 @@ struct ExpenseDetailedView: View {
                     .disabled(!changeOccured)
             }
         }
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
     }
     
     // MARK: - Initializers

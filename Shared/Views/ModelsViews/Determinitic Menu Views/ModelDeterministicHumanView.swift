@@ -14,7 +14,7 @@ struct ModelDeterministicHumanView: View {
     @ObservedObject var viewModel: DeterministicViewModel
     
     var body: some View {
-        Section(header: Text("Modèle Humain")) {
+        Section(header: Text("Modèle Humain").font(.headline)) {
             Stepper(value : $viewModel.menLifeExpectation,
                     in    : 50 ... 100) {
                 HStack {

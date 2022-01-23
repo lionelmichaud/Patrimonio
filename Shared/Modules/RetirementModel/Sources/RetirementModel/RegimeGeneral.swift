@@ -65,7 +65,8 @@ public final class RegimeGeneral: Codable {
     public struct Model: JsonCodableToBundleP, VersionableP {
         enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
             case version, dureeDeReferenceGrid, nbTrimNonIndemniseGrid, ageMinimumLegal,
-            nbOfYearForSAM, maxReversionRate, decoteParTrimestre, surcoteParTrimestre, maxNbTrimestreDecote
+            nbOfYearForSAM, maxReversionRate, decoteParTrimestre, surcoteParTrimestre, maxNbTrimestreDecote,
+            majorationTauxEnfant
         }
         
         public var version           : Version
@@ -73,10 +74,11 @@ public final class RegimeGeneral: Codable {
         let nbTrimNonIndemniseGrid   : [SliceUnemployement]
         var ageMinimumLegal          : Int    // 62
         let nbOfYearForSAM           : Int    // 25 pour le calcul du SAM
-        let maxReversionRate         : Double // 50.0 // % du SAM
-        let decoteParTrimestre       : Double // 0.625 // % par trimestre
-        let surcoteParTrimestre      : Double // 1.25  // % par trimestre
-        let maxNbTrimestreDecote     : Int    // 20 // plafond
+        var maxReversionRate         : Double // 50.0 // % du SAM [0, 100]
+        var decoteParTrimestre       : Double // 0.625 // % par trimestre [0, 100]
+        var surcoteParTrimestre      : Double // 1.25  // % par trimestre [0, 100]
+        var maxNbTrimestreDecote     : Int    // 20 // plafond
+        var majorationTauxEnfant     : Double // 10.0 // % [0, 100]
         var netRegimeGeneralProvider : NetRegimeGeneralProviderP!
         var socioEconomy             : SocioEconomyModelProviderP!
     }
@@ -138,6 +140,7 @@ public final class RegimeGeneral: Codable {
     
     // MARK: - Properties
     
+    /// dependency to model
     public var model: Model
     
     public var ageMinimumLegal: Int {
@@ -145,6 +148,31 @@ public final class RegimeGeneral: Codable {
         set { model.ageMinimumLegal = newValue }
     }
     
+    public var maxReversionRate: Double {
+        get { model.maxReversionRate }
+        set { model.maxReversionRate = newValue }
+    }
+
+    public var decoteParTrimestre: Double {
+        get { model.decoteParTrimestre }
+        set { model.decoteParTrimestre = newValue }
+    }
+
+    public var surcoteParTrimestre: Double {
+        get { model.surcoteParTrimestre }
+        set { model.surcoteParTrimestre = newValue }
+    }
+
+    public var maxNbTrimestreDecote: Int {
+        get { model.maxNbTrimestreDecote }
+        set { model.maxNbTrimestreDecote = newValue }
+    }
+
+    public var majorationTauxEnfant: Double {
+        get { model.majorationTauxEnfant }
+        set { model.majorationTauxEnfant = newValue }
+    }
+
     // MARK: - Initializer
     
     init(model: Model) {

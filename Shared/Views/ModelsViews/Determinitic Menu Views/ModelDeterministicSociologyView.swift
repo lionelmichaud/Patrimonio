@@ -14,7 +14,7 @@ struct ModelDeterministicSociologyView: View {
     @ObservedObject var viewModel: DeterministicViewModel
     
     var body: some View {
-        Section(header: Text("Modèle Sociologique")) {
+        Section(header: Text("Modèle Sociologique").font(.headline)) {
             Stepper(value : $viewModel.pensionDevaluationRate,
                     in    : 0 ... 10,
                     step  : 0.1) {

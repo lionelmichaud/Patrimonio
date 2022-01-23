@@ -58,7 +58,7 @@ struct ContentView: View {
             
         }
         .onAppear(perform: checkCompatibility)
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
     }
     
     func checkCompatibility() {

@@ -41,9 +41,15 @@ struct ModelDeterministicView: View {
                     
                     // modèle retraite
                     ModelDeterministicRetirementView(viewModel: viewModel)
+
+                    // modèle fiscal
+                    ModelDeterministicFiscalView(viewModel: viewModel)
+
+                    // modèle chômage
+                    ModelDeterministicUnemploymentView(viewModel: viewModel)
                 }
                 .navigationTitle("Modèle Déterministe")
-                .alert(item: $alertItem, content: createAlert)
+                .alert(item: $alertItem, content: newAlert)
                 .toolbar {
                     ToolbarItem(placement: .automatic) {
                         DiskButton(text   : "Modifier le Patron",

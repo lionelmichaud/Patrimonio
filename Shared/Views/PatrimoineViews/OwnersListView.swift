@@ -45,7 +45,7 @@ struct OwnersListView: View {
         }
         .onChange(of: name, perform: addOwner)
         .onAppear(perform: checkPercentageOfOwnership)
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
     }
     
     func checkPercentageOfOwnership() {
