@@ -12,7 +12,7 @@ struct ModelDeterministicUnemploymentView: View {
 
     var body: some View {
         Section(header: Text("Modèle Chômage").font(.headline)) {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            Text("A faire")
         }
     }
 }

@@ -8,6 +8,7 @@
 import Foundation
 import ModelEnvironment
 import RetirementModel
+import FiscalModel
 import FamilyModel
 
 // MARK: - Deterministic View Model
@@ -44,6 +45,8 @@ class DeterministicViewModel: ObservableObject {
     @Published var pensionDevaluationRate      : Double
     @Published var nbTrimTauxPlein             : Int
     @Published var expensesUnderEvaluationRate : Double
+    // model: Fiscal
+    @Published var fiscalModel : Fiscal.Model
 
     // MARK: - Initialization
     
@@ -74,6 +77,8 @@ class DeterministicViewModel: ObservableObject {
         pensionDevaluationRate      = model.socioEconomy.pensionDevaluationRateDeterministic
         nbTrimTauxPlein             = model.socioEconomy.nbTrimTauxPleinDeterministic
         expensesUnderEvaluationRate = model.socioEconomy.expensesUnderEvaluationRateDeterministic
+        
+        fiscalModel = model.fiscalModel
         
         isModified = false
     }
@@ -107,6 +112,8 @@ class DeterministicViewModel: ObservableObject {
         nbTrimTauxPlein             = model.socioEconomy.nbTrimTauxPleinDeterministic
         expensesUnderEvaluationRate = model.socioEconomy.expensesUnderEvaluationRateDeterministic
         
+        fiscalModel = model.fiscalModel
+
         isModified = false
     }
     
@@ -140,6 +147,8 @@ class DeterministicViewModel: ObservableObject {
         model.socioEconomy.nbTrimTauxPleinDeterministic             = nbTrimTauxPlein
         model.socioEconomy.expensesUnderEvaluationRateDeterministic = expensesUnderEvaluationRate
         //model.socioEconomy.persistenceSM.process(event: .onModify)
+
+        model.fiscalModel = fiscalModel
 
         isModified = false
     }
