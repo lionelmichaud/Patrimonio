@@ -64,10 +64,11 @@ struct LabeledValueRowView: View {
 
 // MARK: - Saisie d'un montant en €
 struct AmountEditView: View {
-    let label           : String
-    @Binding var amount : Double
-    @State var text     : String
-    var textValueBinding: Binding<String> {
+    let label            : String
+    let comment          : String?
+    @Binding var amount  : Double
+    @State var text      : String
+    var textValueBinding : Binding<String> {
         Binding(
             get: {
                 self.text
@@ -84,9 +85,9 @@ struct AmountEditView: View {
         HStack {
             Text(label)
             Spacer()
+            if comment != nil { Text(comment!).foregroundColor(.secondary) }
             TextField("montant",
                       text: textValueBinding)
-                //.textFieldStyle(RoundedBorderTextFieldStyle())
                 .frame(maxWidth: 88)
                 .numbersAndPunctuationKeyboardType()
                 .multilineTextAlignment(.trailing)
@@ -112,9 +113,11 @@ struct AmountEditView: View {
         .textFieldStyle(RoundedBorderTextFieldStyle())
     }
     
-    init(label  : String,
-         amount : Binding<Double>) {
+    init(label   : String,
+         comment : String? = nil,
+         amount  : Binding<Double>) {
         self.label   = label
+        self.comment = comment
         self._amount = amount
         _text = State(initialValue: String(amount.wrappedValue).replacingOccurrences(of: ".", with: ","))
         print("created: value = \(amount); text = \(text)")
