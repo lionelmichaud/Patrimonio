@@ -39,7 +39,7 @@ struct KpisParametersEditView: View {
                       primaryButton : .default(Text("Appliquer")) {
                         guard let templateFolder = PersistenceManager.templateFolder() else {
                             alertItem =
-                                AlertItem(title         : Text("Répertoire 'Modèle' absent"),
+                                AlertItem(title         : Text("Répertoire 'Patron' absent"),
                                           dismissButton : .default(Text("OK")))
                             return
                         }

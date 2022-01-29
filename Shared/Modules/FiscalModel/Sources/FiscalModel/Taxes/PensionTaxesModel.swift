@@ -34,14 +34,14 @@ public struct PensionTaxesModel: Codable, NetPensionProviderP {
     public struct Model: JsonCodableToBundleP, VersionableP {
         public static var defaultFileName : String = "PensionTaxesModel.json"
         public var version           : Version
-        let rebate            : Double // 10.0 // %
-        let minRebate         : Double // 393   // € par déclarant
-        public let maxRebate         : Double // 3_850 // € par foyer fiscal
-        let CSGdeductible     : Double // 5.9 // %
-        let CRDS              : Double // 0.5 // % https://www.agirc-arrco.fr/fileadmin/agircarrco/documents/Doc_specif_page/prelevements_sociaux_bareme.pdf
-        let CSG               : Double // 8.3 // % https://www.agirc-arrco.fr/fileadmin/agircarrco/documents/Doc_specif_page/prelevements_sociaux_bareme.pdf
-        let additionalContrib : Double // 0.3 // % https://www.agirc-arrco.fr/fileadmin/agircarrco/documents/Doc_specif_page/prelevements_sociaux_bareme.pdf
-        let healthInsurance   : Double // 1.0 // % https://www.agirc-arrco.fr/particuliers/vivre-retraite/prelevements-sociaux-prelevement-source/
+        public var rebate            : Double // 10.0 // %
+        public var minRebate         : Double // 393   // € par déclarant
+        public var maxRebate         : Double // 3_850 // € par foyer fiscal
+        public var CSGdeductible     : Double // 5.9 // %
+        public var CRDS              : Double // 0.5 // % https://www.agirc-arrco.fr/fileadmin/agircarrco/documents/Doc_specif_page/prelevements_sociaux_bareme.pdf
+        public var CSG               : Double // 8.3 // % https://www.agirc-arrco.fr/fileadmin/agircarrco/documents/Doc_specif_page/prelevements_sociaux_bareme.pdf
+        public var additionalContrib : Double // 0.3 // % https://www.agirc-arrco.fr/fileadmin/agircarrco/documents/Doc_specif_page/prelevements_sociaux_bareme.pdf
+        public var healthInsurance   : Double // 1.0 // % https://www.agirc-arrco.fr/particuliers/vivre-retraite/prelevements-sociaux-prelevement-source/
         var totalRegimeGeneral: Double {
             CRDS + CSG + additionalContrib // %
         }

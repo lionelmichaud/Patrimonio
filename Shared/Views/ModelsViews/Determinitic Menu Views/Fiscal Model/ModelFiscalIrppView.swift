@@ -7,19 +7,24 @@
 
 import SwiftUI
 import ModelEnvironment
-import Persistence
 import FamilyModel
 
 struct ModelFiscalIrppView: View {
-    @ObservedObject var viewModel             : DeterministicViewModel
+    @EnvironmentObject private var viewModel  : DeterministicViewModel
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
     @State private var alertItem              : AlertItem?
+    @State private var showingSheet = false
     
     var body: some View {
         Form {
             DisclosureGroup() {
+                NavigationLink(destination: RateGridView(label: "Barême IRPP",
+                                                         grid: $viewModel.fiscalModel.incomeTaxes.model.grid)
+                                .environmentObject(viewModel)) {
+                    Text("Barême")
+                }.isDetailLink(true)
                 Stepper(value : $viewModel.fiscalModel.incomeTaxes.model.salaryRebate,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
@@ -65,7 +70,8 @@ struct ModelFiscalIrppView: View {
             }
         }
         .alert(item: $alertItem, content: newAlert)
-        .toolbar {
+        /// barre d'outils
+       .toolbar {
             ToolbarItem(placement: .automatic) {
                 DiskButton(text   : "Modifier le Patron",
                                action : {
@@ -74,7 +80,7 @@ struct ModelFiscalIrppView: View {
                                 model: model,
                                 notifyTemplatFolderMissing: {
                                     alertItem =
-                                        AlertItem(title         : Text("Répertoire 'Modèle' absent"),
+                                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
                                                   dismissButton : .default(Text("OK")))
                                 },
                                 notifyFailure: {
@@ -87,25 +93,27 @@ struct ModelFiscalIrppView: View {
             ToolbarItem(placement: .automatic) {
                 FolderButton(action : {
                     alertItem = applyChangesToOpenDossierAlert(
-                        viewModel: viewModel,
-                        model: model,
-                        family: family,
-                        simulation: simulation)
+                        viewModel  : viewModel,
+                        model      : model,
+                        family     : family,
+                        simulation : simulation)
                 })
                 .disabled(!viewModel.isModified)
             }
         }
-        .navigationTitle("Imposition sur le Revenu")
+        .navigationTitle("Revenus du Travail")
     }
 }
 
 struct ModelFiscalIrppView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return ModelFiscalIrppView(viewModel: DeterministicViewModel(using: modelTest))
+        let viewModel = DeterministicViewModel(using: modelTest)
+        return ModelFiscalIrppView()
             .preferredColorScheme(.dark)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
+            .environmentObject(viewModel)
     }
 }

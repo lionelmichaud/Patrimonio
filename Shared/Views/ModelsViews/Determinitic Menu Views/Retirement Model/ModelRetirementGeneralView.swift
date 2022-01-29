@@ -13,7 +13,7 @@ import FamilyModel
 // MARK: - Deterministic Retirement Régime General View
 
 struct ModelRetirementGeneralView: View {
-    @ObservedObject var viewModel             : DeterministicViewModel
+    @EnvironmentObject private var viewModel : DeterministicViewModel
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -90,7 +90,7 @@ struct ModelRetirementGeneralView: View {
                                 model: model,
                                 notifyTemplatFolderMissing: {
                                     alertItem =
-                                        AlertItem(title         : Text("Répertoire 'Modèle' absent"),
+                                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
                                                   dismissButton : .default(Text("OK")))
                                 },
                                 notifyFailure: {
@@ -118,9 +118,12 @@ struct ModelRetirementGeneralView: View {
 struct ModelRetirementGeneralView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return ModelRetirementGeneralView(viewModel: DeterministicViewModel(using: modelTest))
+        let viewModel = DeterministicViewModel(using: modelTest)
+        return ModelRetirementGeneralView()
+            .preferredColorScheme(.dark)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
+            .environmentObject(viewModel)
     }
 }

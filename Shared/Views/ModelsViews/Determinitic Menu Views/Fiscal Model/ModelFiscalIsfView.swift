@@ -11,7 +11,7 @@ import Persistence
 import FamilyModel
 
 struct ModelFiscalIsfView: View {
-    @ObservedObject var viewModel             : DeterministicViewModel
+    @EnvironmentObject private var viewModel  : DeterministicViewModel
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -90,7 +90,7 @@ struct ModelFiscalIsfView: View {
                                 model: model,
                                 notifyTemplatFolderMissing: {
                                     alertItem =
-                                        AlertItem(title         : Text("Répertoire 'Modèle' absent"),
+                                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
                                                   dismissButton : .default(Text("OK")))
                                 },
                                 notifyFailure: {
@@ -118,10 +118,12 @@ struct ModelFiscalIsfView: View {
 struct ModelFiscalIsfView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return ModelFiscalIsfView(viewModel: DeterministicViewModel(using: modelTest))
+        let viewModel = DeterministicViewModel(using: modelTest)
+        return ModelFiscalIsfView()
             .preferredColorScheme(.dark)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
+            .environmentObject(viewModel)
     }
 }

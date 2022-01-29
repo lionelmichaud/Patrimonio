@@ -288,6 +288,18 @@
 		7990D8E6264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990D8E4264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift */; };
 		7990D8E7264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990D8E4264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift */; };
 		79933A0026E0F80B0081D378 /* Liabilities in Frameworks */ = {isa = PBXBuildFile; productRef = 799339FF26E0F80B0081D378 /* Liabilities */; };
+		79997189279DFA4800AF473E /* ModelFiscalTurnoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79997188279DFA4800AF473E /* ModelFiscalTurnoverView.swift */; };
+		7999718A279DFA4800AF473E /* ModelFiscalTurnoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79997188279DFA4800AF473E /* ModelFiscalTurnoverView.swift */; };
+		7999718C279DFC3100AF473E /* ModelFiscalImpotSocieteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7999718B279DFC3100AF473E /* ModelFiscalImpotSocieteView.swift */; };
+		7999718D279DFC3100AF473E /* ModelFiscalImpotSocieteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7999718B279DFC3100AF473E /* ModelFiscalImpotSocieteView.swift */; };
+		7999718F279E025200AF473E /* ModelFiscalImmobilierImpot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7999718E279E025200AF473E /* ModelFiscalImmobilierImpot.swift */; };
+		79997190279E025200AF473E /* ModelFiscalImmobilierImpot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7999718E279E025200AF473E /* ModelFiscalImmobilierImpot.swift */; };
+		79997192279E06BB00AF473E /* ModelFiscalImmobilierTaxeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79997191279E06BB00AF473E /* ModelFiscalImmobilierTaxeView.swift */; };
+		79997193279E06BB00AF473E /* ModelFiscalImmobilierTaxeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79997191279E06BB00AF473E /* ModelFiscalImmobilierTaxeView.swift */; };
+		79997195279E0AAE00AF473E /* ModelFiscalChomageChargeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79997194279E0AAD00AF473E /* ModelFiscalChomageChargeView.swift */; };
+		79997196279E0AAE00AF473E /* ModelFiscalChomageChargeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79997194279E0AAD00AF473E /* ModelFiscalChomageChargeView.swift */; };
+		79997198279E144C00AF473E /* RateGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79997197279E144C00AF473E /* RateGridView.swift */; };
+		79997199279E144C00AF473E /* RateGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79997197279E144C00AF473E /* RateGridView.swift */; };
 		799DE8402654199600E96CF6 /* NoLoadedDossierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799DE83F2654199600E96CF6 /* NoLoadedDossierView.swift */; };
 		79A8A19526565DBC00B23AD7 /* DossierAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A8A19426565DBC00B23AD7 /* DossierAddView.swift */; };
 		79A8A19626565DBC00B23AD7 /* DossierAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A8A19426565DBC00B23AD7 /* DossierAddView.swift */; };
@@ -693,6 +705,12 @@
 		7990D8DC264F0A6800078CB6 /* LineChartCashFlowVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartCashFlowVisitor.swift; sourceTree = "<group>"; };
 		7990D8E0264F1C4000078CB6 /* BarChartCashFlowVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartCashFlowVisitor.swift; sourceTree = "<group>"; };
 		7990D8E4264F37CA00078CB6 /* CategoryBarChartCashFlowVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBarChartCashFlowVisitor.swift; sourceTree = "<group>"; };
+		79997188279DFA4800AF473E /* ModelFiscalTurnoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelFiscalTurnoverView.swift; sourceTree = "<group>"; };
+		7999718B279DFC3100AF473E /* ModelFiscalImpotSocieteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelFiscalImpotSocieteView.swift; sourceTree = "<group>"; };
+		7999718E279E025200AF473E /* ModelFiscalImmobilierImpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelFiscalImmobilierImpot.swift; sourceTree = "<group>"; };
+		79997191279E06BB00AF473E /* ModelFiscalImmobilierTaxeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelFiscalImmobilierTaxeView.swift; sourceTree = "<group>"; };
+		79997194279E0AAD00AF473E /* ModelFiscalChomageChargeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelFiscalChomageChargeView.swift; sourceTree = "<group>"; };
+		79997197279E144C00AF473E /* RateGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateGridView.swift; sourceTree = "<group>"; };
 		799DE83F2654199600E96CF6 /* NoLoadedDossierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoLoadedDossierView.swift; sourceTree = "<group>"; };
 		79A8A19426565DBC00B23AD7 /* DossierAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierAddView.swift; sourceTree = "<group>"; };
 		79A9BE96265185AF00170A01 /* UniformDistributionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniformDistributionView.swift; sourceTree = "<group>"; };
@@ -1561,6 +1579,11 @@
 				79CEC548279DA9F100A6F9B5 /* ModelFiscalLifeInsuranceView.swift */,
 				79CEC54F279DAA6B00A6F9B5 /* ModelFiscalInheritanceDonationView.swift */,
 				79CEC556279DAAC200A6F9B5 /* ModelFiscalLifeInsInheritanceView.swift */,
+				79997188279DFA4800AF473E /* ModelFiscalTurnoverView.swift */,
+				7999718B279DFC3100AF473E /* ModelFiscalImpotSocieteView.swift */,
+				7999718E279E025200AF473E /* ModelFiscalImmobilierImpot.swift */,
+				79997191279E06BB00AF473E /* ModelFiscalImmobilierTaxeView.swift */,
+				79997194279E0AAD00AF473E /* ModelFiscalChomageChargeView.swift */,
 			);
 			path = "Fiscal Model";
 			sourceTree = "<group>";
@@ -1649,6 +1672,7 @@
 				79C838332641E04C008B29BF /* PopOverContentView.swift */,
 				79F4D12226B03D62009D91B9 /* Buttons.swift */,
 				79AFC4352794924000812E5D /* RatingView.swift */,
+				79997197279E144C00AF473E /* RateGridView.swift */,
 			);
 			path = HelpersViews;
 			sourceTree = "<group>";
@@ -2044,10 +2068,12 @@
 				79F222F5265AD0B9005EE0B9 /* DossierViewModel.swift in Sources */,
 				79BBE8E92646FEE70045E524 /* CF Detailed ChartView.swift in Sources */,
 				791ED0E7263A098000701202 /* PersonLifeLineView.swift in Sources */,
+				7999718F279E025200AF473E /* ModelFiscalImmobilierImpot.swift in Sources */,
 				79FC725226331E0A004F3BD2 /* PickerHelperViews.swift in Sources */,
 				791ED0DD2639FE2700701202 /* RetirementEditView.swift in Sources */,
 				796506CD2640866F0036E466 /* TypeInvestEditView.swift in Sources */,
 				79CCF8ED279CF1FD00338A2D /* ModelDeterministicFiscalView.swift in Sources */,
+				7999718C279DFC3100AF473E /* ModelFiscalImpotSocieteView.swift in Sources */,
 				79B5E8CA26EBBDB400C5EB21 /* ModelDeterministicHumanView.swift in Sources */,
 				79C8382A2641DC02008B29BF /* LineChartDataSet+Extension.swift in Sources */,
 				79B2726E2634CC0000298E5D /* PersonPickerView.swift in Sources */,
@@ -2056,6 +2082,7 @@
 				797901242640AEB600104C1A /* PatrimoineSidebarView.swift in Sources */,
 				792B29ED26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift in Sources */,
 				799025A72641F60300ED53D4 /* KpiSidebarSectionView.swift in Sources */,
+				79997189279DFA4800AF473E /* ModelFiscalTurnoverView.swift in Sources */,
 				79BE4A6B2651A2BA00BBF46C /* HistogramVisitable.swift in Sources */,
 				79794FC7277E32AE005D7CB2 /* PatrimoineSummaryShareChartView.swift in Sources */,
 				793FACA026EBE94E0033626E /* BetaRandomizerEditView.swift in Sources */,
@@ -2101,6 +2128,7 @@
 				791ED0EF263A173D00701202 /* PersonAddView.swift in Sources */,
 				7990D8DD264F0A6800078CB6 /* LineChartCashFlowVisitor.swift in Sources */,
 				79E842F82764E367005A0C41 /* LoadTestFiles.swift in Sources */,
+				79997192279E06BB00AF473E /* ModelFiscalImmobilierTaxeView.swift in Sources */,
 				790FF34826485BDE001B2653 /* CvsBuilder.swift in Sources */,
 				796506CF2640866F0036E466 /* FreeInvestDetailedView.swift in Sources */,
 				799025AF2641F60300ED53D4 /* IrppSliceView.swift in Sources */,
@@ -2193,7 +2221,9 @@
 				799025B72641F60300ED53D4 /* BS Global ChartView.swift in Sources */,
 				7921A65C2785C7D900A2BA93 /* BubbleChartView+Extension.swift in Sources */,
 				799025A12641F60300ED53D4 /* GridsView.swift in Sources */,
+				79997198279E144C00AF473E /* RateGridView.swift in Sources */,
 				799025C42642007300ED53D4 /* ProgressViews.swift in Sources */,
+				79997195279E0AAE00AF473E /* ModelFiscalChomageChargeView.swift in Sources */,
 				795049FE26679347000AAEF0 /* StatisticSidebarSectionView.swift in Sources */,
 				79CEC51E279D96C000A6F9B5 /* ModelRetirementAgircView.swift in Sources */,
 				797931A926416EA1000F8599 /* SimulationResultTable.swift in Sources */,
@@ -2260,6 +2290,7 @@
 				79B2727B2634D68E00298E5D /* BoundaryEditView.swift in Sources */,
 				79EC5E9926406ADA00FF8263 /* OwnershipView.swift in Sources */,
 				79FC724A26331CCD004F3BD2 /* GraphicUserSettingsView.swift in Sources */,
+				79997190279E025200AF473E /* ModelFiscalImmobilierImpot.swift in Sources */,
 				79AA5D772650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */,
 				7990D8D6264EBDB700078CB6 /* BarChartBalanceSheetVisitor.swift in Sources */,
 				791ED105263A20F600701202 /* SuccessorListView.swift in Sources */,
@@ -2291,6 +2322,7 @@
 				796506D62640866F0036E466 /* scpiDetailedView.swift in Sources */,
 				79CEC551279DAA6B00A6F9B5 /* ModelFiscalInheritanceDonationView.swift in Sources */,
 				796503D0265596E50093F10E /* DossierDetailView.swift in Sources */,
+				7999718D279DFC3100AF473E /* ModelFiscalImpotSocieteView.swift in Sources */,
 				79F222F6265AD0B9005EE0B9 /* DossierViewModel.swift in Sources */,
 				799025A42641F60300ED53D4 /* HistogramView.swift in Sources */,
 				79C1D9D8266932310028A729 /* ShareSheetView.swift in Sources */,
@@ -2336,6 +2368,7 @@
 				796506CE2640866F0036E466 /* TypeInvestEditView.swift in Sources */,
 				79B31E5C2784B6A70039C250 /* BarChartTemplateView.swift in Sources */,
 				79EC5EA026406F5200FF8263 /* OwnersListView.swift in Sources */,
+				79997199279E144C00AF473E /* RateGridView.swift in Sources */,
 				799025A82641F60300ED53D4 /* KpiSidebarSectionView.swift in Sources */,
 				79C8382E2641DCBC008B29BF /* ChartLimitLine+Extension.swift in Sources */,
 				7921A6332785C57300A2BA93 /* BarChartView+Extension.swift in Sources */,
@@ -2352,11 +2385,14 @@
 				79BBE8EA2646FEE70045E524 /* CF Detailed ChartView.swift in Sources */,
 				79CEC51F279D96C000A6F9B5 /* ModelRetirementAgircView.swift in Sources */,
 				7935FFDC265420FF00AC1715 /* DossierBrowserView.swift in Sources */,
+				79997193279E06BB00AF473E /* ModelFiscalImmobilierTaxeView.swift in Sources */,
 				799025B62641F60300ED53D4 /* ChartsSidebarSectionView.swift in Sources */,
 				79C838282641DB80008B29BF /* Charts+AxisFormatter.swift in Sources */,
 				7921A6412785C68500A2BA93 /* LineChartView+Extension.swift in Sources */,
+				7999718A279DFA4800AF473E /* ModelFiscalTurnoverView.swift in Sources */,
 				798E6F47274A98EC003610FB /* ComputationParametersSectionView.swift in Sources */,
 				794570D126E38E3700EE9C61 /* SimulationSateMachines.swift in Sources */,
+				79997196279E0AAE00AF473E /* ModelFiscalChomageChargeView.swift in Sources */,
 				79AA5D6B26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */,
 				79AA5D6F26507E9800B26D2C /* IrppChartCashFlowVisitor.swift in Sources */,
 				79BE4A842651CE7800BBF46C /* BetaRandomizerView.swift in Sources */,

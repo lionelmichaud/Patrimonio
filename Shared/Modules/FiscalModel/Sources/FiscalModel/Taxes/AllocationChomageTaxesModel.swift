@@ -22,20 +22,20 @@ public struct AllocationChomageTaxesModel: Codable, AllocationChomageTaxesProvid
         case outOfBounds
     }
     
-    struct Model: JsonCodableToBundleP, VersionableP {
+    public struct Model: JsonCodableToBundleP, VersionableP {
         static var defaultFileName : String = "AllocationChomageTaxesModel.json"
-        var version       : Version
-        let assiette      : Double // 98.5 // % du brut
-        let seuilCsgCrds  : Double // 50.0 // €, pas cotisation en deça
-        let CRDS          : Double // 0.5 // %
-        let CSG           : Double // 6.2 // %
-        let retraiteCompl : Double // 3.0 // % du salaire journalier de référence
-        let seuilRetCompl : Double // 29.26 // €
+        public var version       : Version
+        public var assiette      : Double // 98.5 // % du brut
+        public var seuilCsgCrds  : Double // 50.0 // €, pas cotisation en deça
+        public var CRDS          : Double // 0.5 // %
+        public var CSG           : Double // 6.2 // %
+        public var retraiteCompl : Double // 3.0 // % du salaire journalier de référence
+        public var seuilRetCompl : Double // 29.26 // €
     }
     
     // MARK: Properties
     
-    var model: Model
+    public var model: Model
     
     // MARK: Methods
     

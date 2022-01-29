@@ -40,7 +40,7 @@ struct PersonAddView: View {
     
     var body: some View {
         VStack {
-            /// Barre de titre
+            /// Barre de titre et boutons
             HStack {
                 Button(action: { self.presentationMode.wrappedValue.dismiss() },
                        label: { Text("Annuler") })

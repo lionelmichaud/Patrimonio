@@ -11,7 +11,7 @@ import Persistence
 import FamilyModel
 
 struct ModelFiscalLifeInsuranceView: View {
-    @ObservedObject var viewModel             : DeterministicViewModel
+    @EnvironmentObject private var viewModel  : DeterministicViewModel
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -19,7 +19,10 @@ struct ModelFiscalLifeInsuranceView: View {
     
     var body: some View {
         Form {
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            AmountEditView(label   : "Abattement par personne",
+                           comment : "annuel",
+                           amount  : $viewModel.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson)
+                .onChange(of: viewModel.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson) { _ in viewModel.isModified = true }
         }
         .alert(item: $alertItem, content: newAlert)
         .toolbar {
@@ -31,7 +34,7 @@ struct ModelFiscalLifeInsuranceView: View {
                                 model: model,
                                 notifyTemplatFolderMissing: {
                                     alertItem =
-                                        AlertItem(title         : Text("Répertoire 'Modèle' absent"),
+                                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
                                                   dismissButton : .default(Text("OK")))
                                 },
                                 notifyFailure: {
@@ -52,17 +55,19 @@ struct ModelFiscalLifeInsuranceView: View {
                 .disabled(!viewModel.isModified)
             }
         }
-        .navigationTitle("Régime Général")
+        .navigationTitle("Revenus d'Assurance Vie")
     }
 }
 
 struct ModelFiscalLifeInsuranceView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return ModelFiscalLifeInsuranceView(viewModel: DeterministicViewModel(using: modelTest))
+        let viewModel = DeterministicViewModel(using: modelTest)
+        return ModelFiscalLifeInsuranceView()
             .preferredColorScheme(.dark)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
+            .environmentObject(viewModel)
     }
 }

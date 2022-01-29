@@ -11,8 +11,8 @@ import ModelEnvironment
 // MARK: - Deterministic SocioEconomy View
 
 struct ModelDeterministicSociologyView: View {
-    @ObservedObject var viewModel: DeterministicViewModel
-    
+    @EnvironmentObject private var viewModel: DeterministicViewModel
+
     var body: some View {
         Section(header: Text("Modèle Sociologique").font(.headline)) {
             Stepper(value : $viewModel.pensionDevaluationRate,
@@ -53,8 +53,11 @@ struct ModelDeterministicSociologyView_Previews: PreviewProvider {
     static var model = Model(fromBundle: Bundle.main)
     
     static var previews: some View {
-        Form {
-            ModelDeterministicSociologyView(viewModel: DeterministicViewModel(using: model))
+        let viewModel = DeterministicViewModel(using: model)
+        return Form {
+            ModelDeterministicSociologyView()
+                .environmentObject(viewModel)
         }
+        .preferredColorScheme(.dark)
     }
 }

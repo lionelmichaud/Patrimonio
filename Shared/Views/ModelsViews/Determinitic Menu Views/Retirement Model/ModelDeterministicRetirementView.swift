@@ -10,19 +10,22 @@ import SwiftUI
 // MARK: - Deterministic Retirement View
 
 struct ModelDeterministicRetirementView: View {
-    @ObservedObject var viewModel: DeterministicViewModel
+    @EnvironmentObject private var viewModel : DeterministicViewModel
 
     var body: some View {
         Section(header: Text("Modèle Retraite").font(.headline)) {
-            NavigationLink(destination: ModelRetirementGeneralView(viewModel: viewModel)) {
+            NavigationLink(destination: ModelRetirementGeneralView()
+                            .environmentObject(viewModel)) {
                 Text("Pension du Régime Général")
             }
             
-            NavigationLink(destination: ModelRetirementAgircView(viewModel: viewModel)) {
+            NavigationLink(destination: ModelRetirementAgircView()
+                            .environmentObject(viewModel)) {
                 Text("Pension du Régime Complémentaire")
             }
 
-            NavigationLink(destination: ModelRetirementReversionView(viewModel: viewModel)) {
+            NavigationLink(destination: ModelRetirementReversionView()
+                            .environmentObject(viewModel)) {
                 Text("Pension de Réversion")
             }
         }
@@ -32,11 +35,14 @@ struct ModelDeterministicRetirementView: View {
 struct ModelDeterministicRetirementView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
+        let viewModel = DeterministicViewModel(using: modelTest)
         return Form {
-            ModelDeterministicRetirementView(viewModel: DeterministicViewModel(using: modelTest))
+            ModelDeterministicRetirementView()
                 .environmentObject(modelTest)
                 .environmentObject(familyTest)
                 .environmentObject(simulationTest)
+                .environmentObject(viewModel)
         }
+        .preferredColorScheme(.dark)
     }
 }

@@ -18,7 +18,7 @@ public struct LifeInsuranceTaxes: Codable {
         public static var defaultFileName : String = "LifeInsuranceTaxesModel.json"
         
         public var version        : Version
-        public let rebatePerPerson: Double // 4800.0 // euros
+        public var rebatePerPerson: Double // 4800.0 // euros
     }
     
     // MARK: Properties

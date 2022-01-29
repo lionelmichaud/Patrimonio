@@ -14,20 +14,20 @@ public struct FinancialRevenuTaxesModel: Codable {
     
     // MARK: Nested types
     
-    struct Model: JsonCodableToBundleP, VersionableP {
+    public struct Model: JsonCodableToBundleP, VersionableP {
         static var defaultFileName : String = "FinancialRevenuTaxesModel.json"
-        var version      : Version
-        let CRDS         : Double // 0.5 // %
-        let CSG          : Double // 9.2 // %
-        let prelevSocial : Double // 7.5  // %
-        var total        : Double {
+        public var version      : Version
+        public var CRDS         : Double // 0.5 // %
+        public var CSG          : Double // 9.2 // %
+        public var prelevSocial : Double // 7.5  // %
+        var total: Double {
             CRDS + CSG + prelevSocial // %
         }
     }
     
     // MARK: Properties
     
-    var model: Model
+    public var model: Model
     
     // MARK: Methods
     

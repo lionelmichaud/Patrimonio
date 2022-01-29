@@ -105,7 +105,7 @@ struct AmountEditView: View {
                     }
                 }
                 .onDisappear {
-                    print("Disappeared \(amount)")
+//                    print("Disappeared \(amount)")
                     text = String(amount).replacingOccurrences(of: ".", with: ",")
                 }
             Text("€")
@@ -120,7 +120,7 @@ struct AmountEditView: View {
         self.comment = comment
         self._amount = amount
         _text = State(initialValue: String(amount.wrappedValue).replacingOccurrences(of: ".", with: ","))
-        print("created: value = \(amount); text = \(text)")
+//        print("created: value = \(amount); text = \(text)")
     }
 }
 
@@ -183,6 +183,7 @@ struct AmountView: View {
 // MARK: - Saisie d'un Integer
 struct IntegerEditView: View {
     let label            : String
+    let comment          : String?
     @Binding var integer : Int
     
     var body: some View {
@@ -200,6 +201,7 @@ struct IntegerEditView: View {
         HStack {
             Text(label)
             Spacer()
+            if comment != nil { Text(comment!).foregroundColor(.secondary) }
             TextField("entier",
                       text: textValueBinding)
                 //.textFieldStyle(RoundedBorderTextFieldStyle())
@@ -210,9 +212,12 @@ struct IntegerEditView: View {
         .textFieldStyle(RoundedBorderTextFieldStyle())
     }
     
-    init(label: String, integer: Binding<Int>) {
-        self.label  = label
-        _integer    = integer
+    init(label   : String,
+         comment : String? = nil,
+         integer : Binding<Int>) {
+        self.label   = label
+        self.comment = comment
+        _integer     = integer
     }
 }
 

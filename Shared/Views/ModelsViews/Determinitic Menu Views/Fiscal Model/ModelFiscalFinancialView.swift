@@ -11,7 +11,7 @@ import Persistence
 import FamilyModel
 
 struct ModelFiscalFinancialView: View {
-    @ObservedObject var viewModel             : DeterministicViewModel
+    @EnvironmentObject private var viewModel  : DeterministicViewModel
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -19,7 +19,36 @@ struct ModelFiscalFinancialView: View {
     
     var body: some View {
         Form {
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.CRDS,
+                    in    : 0 ... 100.0,
+                    step  : 0.1) {
+                HStack {
+                    Text("CRDS")
+                    Spacer()
+                    Text("\(viewModel.fiscalModel.financialRevenuTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
+                }
+            }.onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.CRDS) { _ in viewModel.isModified = true }
+
+            Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.CSG,
+                    in    : 0 ... 100.0,
+                    step  : 0.1) {
+                HStack {
+                    Text("CSG")
+                    Spacer()
+                    Text("\(viewModel.fiscalModel.financialRevenuTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
+                }
+            }.onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.CSG) { _ in viewModel.isModified = true }
+
+            Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.prelevSocial,
+                    in    : 0 ... 100.0,
+                    step  : 0.1) {
+                HStack {
+                    Text("Prélèvement Sociaux")
+                    Spacer()
+                    Text("\(viewModel.fiscalModel.financialRevenuTaxes.model.prelevSocial.percentString(digit: 1)) %").foregroundColor(.secondary)
+                }
+            }.onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.prelevSocial) { _ in viewModel.isModified = true }
+
         }
         .alert(item: $alertItem, content: newAlert)
         .toolbar {
@@ -31,7 +60,7 @@ struct ModelFiscalFinancialView: View {
                                 model: model,
                                 notifyTemplatFolderMissing: {
                                     alertItem =
-                                        AlertItem(title         : Text("Répertoire 'Modèle' absent"),
+                                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
                                                   dismissButton : .default(Text("OK")))
                                 },
                                 notifyFailure: {
@@ -52,17 +81,19 @@ struct ModelFiscalFinancialView: View {
                 .disabled(!viewModel.isModified)
             }
         }
-        .navigationTitle("Régime Général")
+        .navigationTitle("Revenus Financiers")
     }
 }
 
 struct ModelFiscalFinancialView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return ModelFiscalFinancialView(viewModel: DeterministicViewModel(using: modelTest))
+        let viewModel = DeterministicViewModel(using: modelTest)
+        return ModelFiscalFinancialView()
             .preferredColorScheme(.dark)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
+            .environmentObject(viewModel)
     }
 }

@@ -11,7 +11,7 @@ import ModelEnvironment
 // MARK: - Deterministic Economy View
 
 struct ModelDeterministicEconomyView: View {
-    @ObservedObject var viewModel: DeterministicViewModel
+    @EnvironmentObject private var viewModel : DeterministicViewModel
     @State private var isExpandedSecuredRate : Bool = false
     @State private var isExpandedStockRate   : Bool = false
 
@@ -85,8 +85,11 @@ struct ModelDeterministicEconomyView_Previews: PreviewProvider {
     static var model = Model(fromBundle: Bundle.main)
     
     static var previews: some View {
-        Form {
-            ModelDeterministicEconomyView(viewModel: DeterministicViewModel(using: model))
+        let viewModel = DeterministicViewModel(using: model)
+        return Form {
+            ModelDeterministicEconomyView()
+                .environmentObject(viewModel)
         }
+        .preferredColorScheme(.dark)
     }
 }

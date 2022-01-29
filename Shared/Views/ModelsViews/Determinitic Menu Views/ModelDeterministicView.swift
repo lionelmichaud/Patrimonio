@@ -30,22 +30,28 @@ struct ModelDeterministicView: View {
         if dataStore.activeDossier != nil {
             Form {
                 // modèle vie humaine
-                ModelDeterministicHumanView(viewModel: viewModel)
-                
+                ModelDeterministicHumanView()
+                    .environmentObject(viewModel)
+
                 // modèle écnonomie
-                ModelDeterministicEconomyView(viewModel: viewModel)
-                
+                ModelDeterministicEconomyView()
+                    .environmentObject(viewModel)
+
                 // modèle sociologie
-                ModelDeterministicSociologyView(viewModel: viewModel)
-                
+                ModelDeterministicSociologyView()
+                    .environmentObject(viewModel)
+
                 // modèle retraite
-                ModelDeterministicRetirementView(viewModel: viewModel)
-                
+                ModelDeterministicRetirementView()
+                    .environmentObject(viewModel)
+
                 // modèle fiscal
-                ModelDeterministicFiscalView(viewModel: viewModel)
-                
+                ModelDeterministicFiscalView()
+                    .environmentObject(viewModel)
+
                 // modèle chômage
-                ModelDeterministicUnemploymentView(viewModel: viewModel)
+                ModelDeterministicUnemploymentView()
+                    .environmentObject(viewModel)
             }
             .navigationTitle("Modèle Déterministe")
             .alert(item: $alertItem, content: newAlert)
@@ -58,7 +64,7 @@ struct ModelDeterministicView: View {
                                     model: model,
                                     notifyTemplatFolderMissing: {
                                         alertItem =
-                                            AlertItem(title         : Text("Répertoire 'Modèle' absent"),
+                                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
                                                       dismissButton : .default(Text("OK")))
                                     },
                                     notifyFailure: {

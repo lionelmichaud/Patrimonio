@@ -15,29 +15,29 @@ public struct RealEstateCapitalGainTaxesModel: Codable {
     // MARK: - Nested types
     
     // tranche de barême de l'IRPP
-    struct ExonerationSlice: Codable {
+    public struct ExonerationSlice: Codable {
         let floor        : Int    // 0 // year
         let discountRate : Double // 0.0 // % par année de détention au-delà de floor
         let prevDiscount : Double // 0.0 // % cumul des tranches précédentes
     }
     
-    struct Model: JsonCodableToBundleP, VersionableP {
+    public struct Model: JsonCodableToBundleP, VersionableP {
         static var defaultFileName : String = "RealEstateCapitalGainTaxesModel.json"
-        var version         : Version
-        let discountTravaux : Double // 15 // %
-        let discountAfter   : Int // 5 // ans
-        let exoGrid         : [ExonerationSlice]
-        let CRDS            : Double // 0.5 // %
-        let CSG             : Double // 9.2 // %
-        let prelevSocial    : Double // 7.5 // %
-        var total           : Double {
+        public var version         : Version
+        public var discountTravaux : Double // 15 // %
+        public var discountAfter   : Int // 5 // ans
+        public var exoGrid         : [ExonerationSlice]
+        public var CRDS            : Double // 0.5 // %
+        public var CSG             : Double // 9.2 // %
+        public var prelevSocial    : Double // 7.5 // %
+        var total: Double {
             CRDS + CSG + prelevSocial // %
         }
     }
     
     // MARK: - Properties
     
-    var model: Model
+    public var model: Model
     
     // MARK: - Methods
     

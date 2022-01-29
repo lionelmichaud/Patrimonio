@@ -11,8 +11,8 @@ import ModelEnvironment
 // MARK: - Deterministic HumanLife View
 
 struct ModelDeterministicHumanView: View {
-    @ObservedObject var viewModel: DeterministicViewModel
-    
+    @EnvironmentObject private var viewModel : DeterministicViewModel
+
     var body: some View {
         Section(header: Text("Modèle Humain").font(.headline)) {
             Stepper(value : $viewModel.menLifeExpectation,
@@ -49,8 +49,11 @@ struct ModelDeterministicHumanView_Previews: PreviewProvider {
     static var model = Model(fromBundle: Bundle.main)
     
     static var previews: some View {
-        Form {
-            ModelDeterministicHumanView(viewModel: DeterministicViewModel(using: model))
+        let viewModel = DeterministicViewModel(using: model)
+        return Form {
+            ModelDeterministicHumanView()
+                .environmentObject(viewModel)
         }
+        .preferredColorScheme(.dark)
     }
 }

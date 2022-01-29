@@ -17,7 +17,7 @@ public struct TurnoverTaxesModel: Codable {
     public struct Model: JsonCodableToBundleP, VersionableP {
         public static var defaultFileName : String = "TurnoverTaxesModel.json"
         public var version: Version
-        let URSSAF : Double // 24 // %
+        public var URSSAF : Double // 24 // %
         var total  : Double {
             URSSAF // %
         }

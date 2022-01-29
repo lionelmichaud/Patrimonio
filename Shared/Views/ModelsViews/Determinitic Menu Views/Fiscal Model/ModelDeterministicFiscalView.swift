@@ -8,41 +8,92 @@
 import SwiftUI
 
 struct ModelDeterministicFiscalView: View {
-    @ObservedObject var viewModel: DeterministicViewModel
+    @EnvironmentObject private var viewModel: DeterministicViewModel
 
     var body: some View {
         Section(header: Text("Modèle Fiscal").font(.headline)) {
             AmountEditView(label  : "Plafond Annuel de la Sécurité Sociale",
+                           comment: "PASS",
                            amount : $viewModel.fiscalModel.PASS)
                 .onChange(of: viewModel.fiscalModel.PASS) { _ in viewModel.isModified = true }
+
+            DisclosureGroup(
+                content: {
+                    NavigationLink(destination: ModelFiscalIrppView()
+                                    .environmentObject(viewModel)) {
+                        Text("Revenus du Travail (IRPP)")
+                    }
+
+                    NavigationLink(destination: ModelFiscalIsfView()
+                                    .environmentObject(viewModel)) {
+                        Text("Capital (IFI)")
+                    }
+
+                    NavigationLink(destination: ModelFiscalImpotSocieteView()
+                                    .environmentObject(viewModel)) {
+                        Text("Bénéfice des Sociétés (IS)")
+                    }
+
+                    NavigationLink(destination: ModelFiscalImmobilierImpot()
+                                    .environmentObject(viewModel)) {
+                        Text("Plus-Value Immobilière")
+                    }
+                },
+                label: {
+                    Text("Impôts").bold().font(.headline)
+                })
+
+            DisclosureGroup(
+                content: {
+                    NavigationLink(destination: ModelFiscalPensionView()
+                                    .environmentObject(viewModel)) {
+                        Text("Pensions de Retraite")
+                    }
+
+                    NavigationLink(destination: ModelFiscalChomageChargeView()
+                                    .environmentObject(viewModel)) {
+                        Text("Allocation Chômage")
+                    }
+
+                    NavigationLink(destination: ModelFiscalFinancialView()
+                                    .environmentObject(viewModel)) {
+                        Text("Revenus Financiers")
+                    }
+
+                    NavigationLink(destination: ModelFiscalLifeInsuranceView()
+                                    .environmentObject(viewModel)) {
+                        Text("Revenus d'Assurance Vie")
+                    }
+
+                    NavigationLink(destination: ModelFiscalTurnoverView()
+                                    .environmentObject(viewModel)) {
+                        Text("Bénéfices Non Commerciaux (BNC)")
+                    }
+
+                    NavigationLink(destination: ModelFiscalImmobilierTaxeView()
+                                    .environmentObject(viewModel)) {
+                        Text("Plus-Value Immobilière")
+                    }
+                },
+                label: {
+                    Text("Charges Sociales").bold().font(.headline)
+                })
             
-            NavigationLink(destination: ModelFiscalIrppView(viewModel: viewModel)) {
-                Text("Imposition sur le Revenu (IRPP)")
-            }
-            
-            NavigationLink(destination: ModelFiscalIsfView(viewModel: viewModel)) {
-                Text("Imposition sur le Capital (IFI)")
-            }
-            
-            NavigationLink(destination: ModelFiscalPensionView(viewModel: viewModel)) {
-                Text("Imposition sur les Pensions de Retraite")
-            }
-            
-            NavigationLink(destination: ModelFiscalFinancialView(viewModel: viewModel)) {
-                Text("Imposition sur les Revenus Financiers")
-            }
-            
-            NavigationLink(destination: ModelFiscalLifeInsuranceView(viewModel: viewModel)) {
-                Text("Imposition sur les Revenus d'Assurance Vie")
-            }
-            
-            NavigationLink(destination: ModelFiscalInheritanceDonationView(viewModel: viewModel)) {
-                Text("Droits de Succession et Donation")
-            }
-            
-            NavigationLink(destination: ModelFiscalLifeInsInheritanceView(viewModel: viewModel)) {
-                Text("Taxes sur la Transmission des Assurances Vie")
-            }
+            DisclosureGroup(
+                content: {
+                    NavigationLink(destination: ModelFiscalInheritanceDonationView()
+                                    .environmentObject(viewModel)) {
+                        Text("Succession et Donation")
+                    }
+
+                    NavigationLink(destination: ModelFiscalLifeInsInheritanceView()
+                                    .environmentObject(viewModel)) {
+                        Text("Transmission des Assurances Vie")
+                    }
+                },
+                label: {
+                    Text("Taxes").bold().font(.headline)
+                })
         }
     }
 }
@@ -50,10 +101,15 @@ struct ModelDeterministicFiscalView: View {
 struct ModelDeterministicFiscalView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return ModelDeterministicFiscalView(viewModel: DeterministicViewModel(using: modelTest))
-            .preferredColorScheme(.dark)
-            .environmentObject(modelTest)
-            .environmentObject(familyTest)
-            .environmentObject(simulationTest)
+        let viewModel = DeterministicViewModel(using: modelTest)
+        return
+            Form {
+                ModelDeterministicFiscalView()
+                    .preferredColorScheme(.dark)
+                    .environmentObject(modelTest)
+                    .environmentObject(familyTest)
+                    .environmentObject(simulationTest)
+                    .environmentObject(viewModel)
+            }
     }
 }

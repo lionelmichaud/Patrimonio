@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ModelDeterministicUnemploymentView: View {
-    @ObservedObject var viewModel: DeterministicViewModel
+    @EnvironmentObject private var viewModel: DeterministicViewModel
 
     var body: some View {
         Section(header: Text("Modèle Chômage").font(.headline)) {

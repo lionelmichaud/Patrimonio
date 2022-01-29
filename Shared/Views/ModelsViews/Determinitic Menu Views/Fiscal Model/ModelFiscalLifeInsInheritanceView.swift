@@ -11,7 +11,7 @@ import Persistence
 import FamilyModel
 
 struct ModelFiscalLifeInsInheritanceView: View {
-    @ObservedObject var viewModel             : DeterministicViewModel
+    @EnvironmentObject private var viewModel  : DeterministicViewModel
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -31,7 +31,7 @@ struct ModelFiscalLifeInsInheritanceView: View {
                                 model: model,
                                 notifyTemplatFolderMissing: {
                                     alertItem =
-                                        AlertItem(title         : Text("Répertoire 'Modèle' absent"),
+                                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
                                                   dismissButton : .default(Text("OK")))
                                 },
                                 notifyFailure: {
@@ -52,17 +52,19 @@ struct ModelFiscalLifeInsInheritanceView: View {
                 .disabled(!viewModel.isModified)
             }
         }
-        .navigationTitle("Régime Général")
+        .navigationTitle("Transmission des Assurances Vie")
     }
 }
 
 struct ModelFiscalLifeInsInheritanceView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return ModelFiscalLifeInsInheritanceView(viewModel: DeterministicViewModel(using: modelTest))
+        let viewModel = DeterministicViewModel(using: modelTest)
+        return ModelFiscalLifeInsInheritanceView()
             .preferredColorScheme(.dark)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
+            .environmentObject(viewModel)
     }
 }
