@@ -162,7 +162,7 @@ struct RecipientsListView : View {
     }
     
     @ViewBuilder func menuAddLabel() -> some View {
-        Image(systemName: "plus")
+        Image(systemName: "plus.circle.fill")
             .imageScale(.large)
             .padding()
     }

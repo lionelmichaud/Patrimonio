@@ -65,36 +65,31 @@ struct ModelFiscalImmobilierTaxeView: View {
                 .onChange(of: viewModel.fiscalModel.estateCapitalGainTaxes.model.discountAfter) { _ in viewModel.isModified = true }
         }
         .alert(item: $alertItem, content: newAlert)
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                DiskButton(text   : "Modifier le Patron",
-                           action : {
-                    alertItem = applyChangesToTemplateAlert(
-                        viewModel: viewModel,
-                        model: model,
-                        notifyTemplatFolderMissing: {
-                            alertItem =
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(
+            applyChangesToTemplate: {
+                alertItem = applyChangesToTemplateAlert(
+                    viewModel : viewModel,
+                    model     : model,
+                    notifyTemplatFolderMissing: {
+                        alertItem =
                             AlertItem(title         : Text("Répertoire 'Patron' absent"),
                                       dismissButton : .default(Text("OK")))
-                        },
-                        notifyFailure: {
-                            alertItem =
+                    },
+                    notifyFailure: {
+                        alertItem =
                             AlertItem(title         : Text("Echec de l'enregistrement"),
                                       dismissButton : .default(Text("OK")))
-                        })
-                })
-            }
-            ToolbarItem(placement: .automatic) {
-                FolderButton(action : {
-                    alertItem = applyChangesToOpenDossierAlert(
-                        viewModel: viewModel,
-                        model: model,
-                        family: family,
-                        simulation: simulation)
-                })
-                    .disabled(!viewModel.isModified)
-            }
-        }
+                    })
+            },
+            applyChangesToDossier: {
+                alertItem = applyChangesToOpenDossierAlert(
+                    viewModel  : viewModel,
+                    model      : model,
+                    family     : family,
+                    simulation : simulation)
+            },
+            isModified: viewModel.isModified)
         .navigationTitle("Plus-Value Immobilière")
     }
 }

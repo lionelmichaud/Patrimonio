@@ -917,6 +917,7 @@
 		7901CF7926527AF5007DF85B /* Determinitic Menu Views */ = {
 			isa = PBXGroup;
 			children = (
+				79CEC516279D902000A6F9B5 /* ModelUpdateAlerts.swift */,
 				795049F2266792C2000AAEF0 /* DeterministicSidebarSectionView.swift */,
 				79D7C41526B6EFCA0057E343 /* ModelDeterministicViewModel.swift */,
 				79BE4A722651CE7800BBF46C /* ModelDeterministicView.swift */,
@@ -926,7 +927,6 @@
 				79CCF8EF279CF21600338A2D /* ModelDeterministicUnemploymentView.swift */,
 				79CEC52B279DA4D800A6F9B5 /* Fiscal Model */,
 				79CEC50A279D8EC800A6F9B5 /* Retirement Model */,
-				79CEC516279D902000A6F9B5 /* ModelUpdateAlerts.swift */,
 			);
 			path = "Determinitic Menu Views";
 			sourceTree = "<group>";

@@ -19,106 +19,104 @@ struct ModelFiscalPensionView: View {
     
     var body: some View {
         Form {
-            Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.rebate,
-                    in    : 0 ... 100.0,
-                    step  : 1.0) {
-                HStack {
-                    Text("Abattement")
-                    Spacer()
-                    Text("\(viewModel.fiscalModel.pensionTaxes.model.rebate.percentString(digit: 0)) %").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.fiscalModel.pensionTaxes.model.rebate) { _ in viewModel.isModified = true }
-
-            AmountEditView(label  : "Abattement minimum",
-                           amount : $viewModel.fiscalModel.pensionTaxes.model.minRebate)
-                .onChange(of: viewModel.fiscalModel.pensionTaxes.model.minRebate) { _ in viewModel.isModified = true }
-
-            AmountEditView(label  : "Abattement maximum",
-                           amount : $viewModel.fiscalModel.pensionTaxes.model.maxRebate)
-                .onChange(of: viewModel.fiscalModel.pensionTaxes.model.maxRebate) { _ in viewModel.isModified = true }
-
-            Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.CSGdeductible,
-                    in    : 0 ... 100.0,
-                    step  : 0.1) {
-                HStack {
-                    Text("CSG déductible")
-                    Spacer()
-                    Text("\(viewModel.fiscalModel.pensionTaxes.model.CSGdeductible.percentString(digit: 1)) %").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.fiscalModel.pensionTaxes.model.CSGdeductible) { _ in viewModel.isModified = true }
-
-            Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.CRDS,
-                    in    : 0 ... 100.0,
-                    step  : 0.1) {
-                HStack {
-                    Text("CRDS")
-                    Spacer()
-                    Text("\(viewModel.fiscalModel.pensionTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.fiscalModel.pensionTaxes.model.CRDS) { _ in viewModel.isModified = true }
-
-            Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.CSG,
-                    in    : 0 ... 100.0,
-                    step  : 0.1) {
-                HStack {
-                    Text("CSG")
-                    Spacer()
-                    Text("\(viewModel.fiscalModel.pensionTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.fiscalModel.pensionTaxes.model.CSG) { _ in viewModel.isModified = true }
-
-            Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.additionalContrib,
-                    in    : 0 ... 100.0,
-                    step  : 0.1) {
-                HStack {
-                    Text("Contribution additionnelle")
-                    Spacer()
-                    Text("\(viewModel.fiscalModel.pensionTaxes.model.additionalContrib.percentString(digit: 1)) %").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.fiscalModel.pensionTaxes.model.additionalContrib) { _ in viewModel.isModified = true }
-
-            Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.healthInsurance,
-                    in    : 0 ... 100.0,
-                    step  : 0.1) {
-                HStack {
-                    Text("Cotisation Assurance Santé")
-                    Spacer()
-                    Text("\(viewModel.fiscalModel.pensionTaxes.model.healthInsurance.percentString(digit: 1)) %").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.fiscalModel.pensionTaxes.model.healthInsurance) { _ in viewModel.isModified = true }
-
+            Section(header: Text("Abattement").font(.headline)) {
+                Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.rebate,
+                        in    : 0 ... 100.0,
+                        step  : 1.0) {
+                    HStack {
+                        Text("Abattement")
+                        Spacer()
+                        Text("\(viewModel.fiscalModel.pensionTaxes.model.rebate.percentString(digit: 0)) %").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.fiscalModel.pensionTaxes.model.rebate) { _ in viewModel.isModified = true }
+                
+                AmountEditView(label  : "Abattement minimum",
+                               amount : $viewModel.fiscalModel.pensionTaxes.model.minRebate)
+                    .onChange(of: viewModel.fiscalModel.pensionTaxes.model.minRebate) { _ in viewModel.isModified = true }
+                
+                AmountEditView(label  : "Abattement maximum",
+                               amount : $viewModel.fiscalModel.pensionTaxes.model.maxRebate)
+                    .onChange(of: viewModel.fiscalModel.pensionTaxes.model.maxRebate) { _ in viewModel.isModified = true }
+            }
+            
+            Section(header: Text("Taux de Cotisation").font(.headline)) {
+                Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.CSGdeductible,
+                        in    : 0 ... 100.0,
+                        step  : 0.1) {
+                    HStack {
+                        Text("CSG déductible")
+                        Spacer()
+                        Text("\(viewModel.fiscalModel.pensionTaxes.model.CSGdeductible.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.fiscalModel.pensionTaxes.model.CSGdeductible) { _ in viewModel.isModified = true }
+                
+                Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.CRDS,
+                        in    : 0 ... 100.0,
+                        step  : 0.1) {
+                    HStack {
+                        Text("CRDS")
+                        Spacer()
+                        Text("\(viewModel.fiscalModel.pensionTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.fiscalModel.pensionTaxes.model.CRDS) { _ in viewModel.isModified = true }
+                
+                Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.CSG,
+                        in    : 0 ... 100.0,
+                        step  : 0.1) {
+                    HStack {
+                        Text("CSG")
+                        Spacer()
+                        Text("\(viewModel.fiscalModel.pensionTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.fiscalModel.pensionTaxes.model.CSG) { _ in viewModel.isModified = true }
+                
+                Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.additionalContrib,
+                        in    : 0 ... 100.0,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Contribution additionnelle")
+                        Spacer()
+                        Text("\(viewModel.fiscalModel.pensionTaxes.model.additionalContrib.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.fiscalModel.pensionTaxes.model.additionalContrib) { _ in viewModel.isModified = true }
+                
+                Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.healthInsurance,
+                        in    : 0 ... 100.0,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Cotisation Assurance Santé")
+                        Spacer()
+                        Text("\(viewModel.fiscalModel.pensionTaxes.model.healthInsurance.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.fiscalModel.pensionTaxes.model.healthInsurance) { _ in viewModel.isModified = true }
+            }
         }
         .alert(item: $alertItem, content: newAlert)
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                DiskButton(text   : "Modifier le Patron",
-                           action : {
-                    alertItem = applyChangesToTemplateAlert(
-                        viewModel: viewModel,
-                        model: model,
-                        notifyTemplatFolderMissing: {
-                            alertItem =
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(
+            applyChangesToTemplate: {
+                alertItem = applyChangesToTemplateAlert(
+                    viewModel : viewModel,
+                    model     : model,
+                    notifyTemplatFolderMissing: {
+                        alertItem =
                             AlertItem(title         : Text("Répertoire 'Patron' absent"),
                                       dismissButton : .default(Text("OK")))
-                        },
-                        notifyFailure: {
-                            alertItem =
+                    },
+                    notifyFailure: {
+                        alertItem =
                             AlertItem(title         : Text("Echec de l'enregistrement"),
                                       dismissButton : .default(Text("OK")))
-                        })
-                })
-            }
-            ToolbarItem(placement: .automatic) {
-                FolderButton(action : {
-                    alertItem = applyChangesToOpenDossierAlert(
-                        viewModel: viewModel,
-                        model: model,
-                        family: family,
-                        simulation: simulation)
-                })
-                    .disabled(!viewModel.isModified)
-            }
-        }
+                    })
+            },
+            applyChangesToDossier: {
+                alertItem = applyChangesToOpenDossierAlert(
+                    viewModel  : viewModel,
+                    model      : model,
+                    family     : family,
+                    simulation : simulation)
+            },
+            isModified: viewModel.isModified)
         .navigationTitle("Pensions de Retraite")
     }
 }

@@ -24,11 +24,17 @@ struct ModelFiscalIsfView: View {
     
     var body: some View {
         Form {
-            AmountEditView(label  : "Seuil d'imposition",
-                           amount : $viewModel.fiscalModel.isf.model.seuil)
-                .onChange(of: viewModel.fiscalModel.isf.model.seuil) { _ in viewModel.isModified = true }
-            
-            Section(footer: Text(footnote)) {
+            NavigationLink(destination: RateGridView(label: "Barême ISF/IFI",
+                                                     grid: $viewModel.fiscalModel.isf.model.grid)
+                            .environmentObject(viewModel)) {
+                Text("Barême")
+            }.isDetailLink(true)
+
+            Section(header: Text("Calcul").font(.headline),
+                footer: Text(footnote)) {
+                AmountEditView(label  : "Seuil d'imposition",
+                               amount : $viewModel.fiscalModel.isf.model.seuil)
+                    .onChange(of: viewModel.fiscalModel.isf.model.seuil) { _ in viewModel.isModified = true }
                 AmountEditView(label  : "Limite supérieure de la tranche de transition",
                                amount : $viewModel.fiscalModel.isf.model.seuil2)
                     .onChange(of: viewModel.fiscalModel.isf.model.seuil2) { _ in viewModel.isModified = true }
@@ -48,7 +54,7 @@ struct ModelFiscalIsfView: View {
                 }.onChange(of: viewModel.fiscalModel.isf.model.decoteCoef) { _ in viewModel.isModified = true }
             }
             
-            Section {
+            Section(header: Text("Décotes Spécifiques").font(.headline)) {
                 Stepper(value : $viewModel.fiscalModel.isf.model.decoteResidence,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
@@ -81,36 +87,31 @@ struct ModelFiscalIsfView: View {
             }
         }
         .alert(item: $alertItem, content: newAlert)
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                DiskButton(text   : "Modifier le Patron",
-                           action : {
-                            alertItem = applyChangesToTemplateAlert(
-                                viewModel: viewModel,
-                                model: model,
-                                notifyTemplatFolderMissing: {
-                                    alertItem =
-                                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                                  dismissButton : .default(Text("OK")))
-                                },
-                                notifyFailure: {
-                                    alertItem =
-                                        AlertItem(title         : Text("Echec de l'enregistrement"),
-                                                  dismissButton : .default(Text("OK")))
-                                })
-                           })
-            }
-            ToolbarItem(placement: .automatic) {
-                FolderButton(action : {
-                    alertItem = applyChangesToOpenDossierAlert(
-                        viewModel: viewModel,
-                        model: model,
-                        family: family,
-                        simulation: simulation)
-                })
-                .disabled(!viewModel.isModified)
-            }
-        }
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(
+            applyChangesToTemplate: {
+                alertItem = applyChangesToTemplateAlert(
+                    viewModel : viewModel,
+                    model     : model,
+                    notifyTemplatFolderMissing: {
+                        alertItem =
+                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
+                                      dismissButton : .default(Text("OK")))
+                    },
+                    notifyFailure: {
+                        alertItem =
+                            AlertItem(title         : Text("Echec de l'enregistrement"),
+                                      dismissButton : .default(Text("OK")))
+                    })
+            },
+            applyChangesToDossier: {
+                alertItem = applyChangesToOpenDossierAlert(
+                    viewModel  : viewModel,
+                    model      : model,
+                    family     : family,
+                    simulation : simulation)
+            },
+            isModified: viewModel.isModified)
         .navigationTitle("Imposition sur le Capital")
     }
 }

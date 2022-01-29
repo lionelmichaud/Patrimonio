@@ -19,12 +19,13 @@ struct ModelFiscalIrppView: View {
     
     var body: some View {
         Form {
-            DisclosureGroup() {
+            Section(header: Text("Salaire").font(.headline)) {
                 NavigationLink(destination: RateGridView(label: "Barême IRPP",
                                                          grid: $viewModel.fiscalModel.incomeTaxes.model.grid)
                                 .environmentObject(viewModel)) {
                     Text("Barême")
                 }.isDetailLink(true)
+                
                 Stepper(value : $viewModel.fiscalModel.incomeTaxes.model.salaryRebate,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
@@ -47,11 +48,8 @@ struct ModelFiscalIrppView: View {
                                amount : $viewModel.fiscalModel.incomeTaxes.model.childRebate)
                     .onChange(of: viewModel.fiscalModel.incomeTaxes.model.childRebate) { _ in viewModel.isModified = true }
             }
-            label: {
-                Text("Salaire").textCase(.uppercase).font(.headline)
-            }
             
-            DisclosureGroup() {
+            Section(header: Text("BNC").font(.headline)) {
                 Stepper(value : $viewModel.fiscalModel.incomeTaxes.model.turnOverRebate,
                         in    : 0 ... 100.0) {
                     HStack {
@@ -65,42 +63,34 @@ struct ModelFiscalIrppView: View {
                                amount : $viewModel.fiscalModel.incomeTaxes.model.minTurnOverRebate)
                     .onChange(of: viewModel.fiscalModel.incomeTaxes.model.minTurnOverRebate) { _ in viewModel.isModified = true }
             }
-            label: {
-                Text("BNC").textCase(.uppercase).font(.headline)
-            }
         }
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils
-       .toolbar {
-            ToolbarItem(placement: .automatic) {
-                DiskButton(text   : "Modifier le Patron",
-                               action : {
-                            alertItem = applyChangesToTemplateAlert(
-                                viewModel: viewModel,
-                                model: model,
-                                notifyTemplatFolderMissing: {
-                                    alertItem =
-                                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                                  dismissButton : .default(Text("OK")))
-                                },
-                                notifyFailure: {
-                                    alertItem =
-                                        AlertItem(title         : Text("Echec de l'enregistrement"),
-                                                  dismissButton : .default(Text("OK")))
-                                })
-                           })
-            }
-            ToolbarItem(placement: .automatic) {
-                FolderButton(action : {
-                    alertItem = applyChangesToOpenDossierAlert(
-                        viewModel  : viewModel,
-                        model      : model,
-                        family     : family,
-                        simulation : simulation)
-                })
-                .disabled(!viewModel.isModified)
-            }
-        }
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(
+            applyChangesToTemplate: {
+                alertItem = applyChangesToTemplateAlert(
+                    viewModel : viewModel,
+                    model     : model,
+                    notifyTemplatFolderMissing: {
+                        alertItem =
+                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
+                                      dismissButton : .default(Text("OK")))
+                    },
+                    notifyFailure: {
+                        alertItem =
+                            AlertItem(title         : Text("Echec de l'enregistrement"),
+                                      dismissButton : .default(Text("OK")))
+                    })
+            },
+            applyChangesToDossier: {
+                alertItem = applyChangesToOpenDossierAlert(
+                    viewModel  : viewModel,
+                    model      : model,
+                    family     : family,
+                    simulation : simulation)
+            },
+            isModified: viewModel.isModified)
         .navigationTitle("Revenus du Travail")
     }
 }

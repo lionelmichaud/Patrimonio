@@ -25,36 +25,31 @@ struct ModelFiscalLifeInsuranceView: View {
                 .onChange(of: viewModel.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson) { _ in viewModel.isModified = true }
         }
         .alert(item: $alertItem, content: newAlert)
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                DiskButton(text   : "Modifier le Patron",
-                           action : {
-                            alertItem = applyChangesToTemplateAlert(
-                                viewModel: viewModel,
-                                model: model,
-                                notifyTemplatFolderMissing: {
-                                    alertItem =
-                                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                                  dismissButton : .default(Text("OK")))
-                                },
-                                notifyFailure: {
-                                    alertItem =
-                                        AlertItem(title         : Text("Echec de l'enregistrement"),
-                                                  dismissButton : .default(Text("OK")))
-                                })
-                           })
-            }
-            ToolbarItem(placement: .automatic) {
-                FolderButton(action : {
-                    alertItem = applyChangesToOpenDossierAlert(
-                        viewModel: viewModel,
-                        model: model,
-                        family: family,
-                        simulation: simulation)
-                })
-                .disabled(!viewModel.isModified)
-            }
-        }
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(
+            applyChangesToTemplate: {
+                alertItem = applyChangesToTemplateAlert(
+                    viewModel : viewModel,
+                    model     : model,
+                    notifyTemplatFolderMissing: {
+                        alertItem =
+                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
+                                      dismissButton : .default(Text("OK")))
+                    },
+                    notifyFailure: {
+                        alertItem =
+                            AlertItem(title         : Text("Echec de l'enregistrement"),
+                                      dismissButton : .default(Text("OK")))
+                    })
+            },
+            applyChangesToDossier: {
+                alertItem = applyChangesToOpenDossierAlert(
+                    viewModel  : viewModel,
+                    model      : model,
+                    family     : family,
+                    simulation : simulation)
+            },
+            isModified: viewModel.isModified)
         .navigationTitle("Revenus d'Assurance Vie")
     }
 }

@@ -10,7 +10,7 @@ import ModelEnvironment
 import Persistence
 import FamilyModel
 
-// MARK: - Methods
+// MARK: - Global Methods
 
 /// Appliquer la modification au projet ouvert (en mémoire seulement)
 ///
@@ -68,4 +68,23 @@ func applyChangesToTemplateAlert(viewModel                  : DeterministicViewM
                     }
                   },
                   secondaryButton: .cancel())
+}
+
+// MARK: - View Extensions
+
+extension View {
+    func modelChangesToolbar(applyChangesToTemplate: @escaping () -> Void,
+                             applyChangesToDossier : @escaping () -> Void,
+                             isModified            : Bool) -> some View {
+        self.toolbar {
+            ToolbarItem(placement: .automatic) {
+                DiskButton(text   : "Modifier le Patron",
+                           action : applyChangesToTemplate)
+            }
+            ToolbarItem(placement: .automatic) {
+                FolderButton(action : applyChangesToDossier)
+                    .disabled(!isModified)
+            }
+        }
+    }
 }

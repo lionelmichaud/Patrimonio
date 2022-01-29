@@ -19,68 +19,64 @@ struct ModelFiscalFinancialView: View {
     
     var body: some View {
         Form {
-            Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.CRDS,
-                    in    : 0 ... 100.0,
-                    step  : 0.1) {
-                HStack {
-                    Text("CRDS")
-                    Spacer()
-                    Text("\(viewModel.fiscalModel.financialRevenuTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.CRDS) { _ in viewModel.isModified = true }
-
-            Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.CSG,
-                    in    : 0 ... 100.0,
-                    step  : 0.1) {
-                HStack {
-                    Text("CSG")
-                    Spacer()
-                    Text("\(viewModel.fiscalModel.financialRevenuTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.CSG) { _ in viewModel.isModified = true }
-
-            Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.prelevSocial,
-                    in    : 0 ... 100.0,
-                    step  : 0.1) {
-                HStack {
-                    Text("Prélèvement Sociaux")
-                    Spacer()
-                    Text("\(viewModel.fiscalModel.financialRevenuTaxes.model.prelevSocial.percentString(digit: 1)) %").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.prelevSocial) { _ in viewModel.isModified = true }
-
+            Section(footer: Text("Appliquable à tous les revenus financiers")) {
+                Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.CRDS,
+                        in    : 0 ... 100.0,
+                        step  : 0.1) {
+                    HStack {
+                        Text("CRDS")
+                        Spacer()
+                        Text("\(viewModel.fiscalModel.financialRevenuTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.CRDS) { _ in viewModel.isModified = true }
+                
+                Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.CSG,
+                        in    : 0 ... 100.0,
+                        step  : 0.1) {
+                    HStack {
+                        Text("CSG")
+                        Spacer()
+                        Text("\(viewModel.fiscalModel.financialRevenuTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.CSG) { _ in viewModel.isModified = true }
+                
+                Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.prelevSocial,
+                        in    : 0 ... 100.0,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Prélèvement Sociaux")
+                        Spacer()
+                        Text("\(viewModel.fiscalModel.financialRevenuTaxes.model.prelevSocial.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.prelevSocial) { _ in viewModel.isModified = true }
+            }
         }
         .alert(item: $alertItem, content: newAlert)
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                DiskButton(text   : "Modifier le Patron",
-                           action : {
-                            alertItem = applyChangesToTemplateAlert(
-                                viewModel: viewModel,
-                                model: model,
-                                notifyTemplatFolderMissing: {
-                                    alertItem =
-                                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                                  dismissButton : .default(Text("OK")))
-                                },
-                                notifyFailure: {
-                                    alertItem =
-                                        AlertItem(title         : Text("Echec de l'enregistrement"),
-                                                  dismissButton : .default(Text("OK")))
-                                })
-                           })
-            }
-            ToolbarItem(placement: .automatic) {
-                FolderButton(action : {
-                    alertItem = applyChangesToOpenDossierAlert(
-                        viewModel: viewModel,
-                        model: model,
-                        family: family,
-                        simulation: simulation)
-                })
-                .disabled(!viewModel.isModified)
-            }
-        }
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(
+            applyChangesToTemplate: {
+                alertItem = applyChangesToTemplateAlert(
+                    viewModel : viewModel,
+                    model     : model,
+                    notifyTemplatFolderMissing: {
+                        alertItem =
+                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
+                                      dismissButton : .default(Text("OK")))
+                    },
+                    notifyFailure: {
+                        alertItem =
+                            AlertItem(title         : Text("Echec de l'enregistrement"),
+                                      dismissButton : .default(Text("OK")))
+                    })
+            },
+            applyChangesToDossier: {
+                alertItem = applyChangesToOpenDossierAlert(
+                    viewModel  : viewModel,
+                    model      : model,
+                    family     : family,
+                    simulation : simulation)
+            },
+            isModified: viewModel.isModified)
         .navigationTitle("Revenus Financiers")
     }
 }

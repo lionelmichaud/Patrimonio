@@ -19,18 +19,34 @@ struct ModelFiscalInheritanceDonationView: View {
     
     var body: some View {
         Form {
-            AmountEditView(label  : "Abattement sur Donation au Conjoint",
-                           amount : $viewModel.fiscalModel.inheritanceDonation.model.abatConjoint)
-                .onChange(of: viewModel.fiscalModel.inheritanceDonation.model.abatConjoint) { _ in viewModel.isModified = true }
-
-            AmountEditView(label  : "Abattement sur Donation/Succession en ligne directe",
-                           amount : $viewModel.fiscalModel.inheritanceDonation.model.abatLigneDirecte)
-                .onChange(of: viewModel.fiscalModel.inheritanceDonation.model.abatLigneDirecte) { _ in viewModel.isModified = true }
-
+            Section(header: Text("Entre Conjoint").font(.headline)) {
+                NavigationLink(destination: RateGridView(label: "Barême Donation Conjoint",
+                                                         grid: $viewModel.fiscalModel.inheritanceDonation.model.gridDonationConjoint)
+                                .environmentObject(viewModel)) {
+                    Text("Barême pour Donation entre Conjoint")
+                }.isDetailLink(true)
+                
+                AmountEditView(label  : "Abattement sur Donation au Conjoint",
+                               amount : $viewModel.fiscalModel.inheritanceDonation.model.abatConjoint)
+                    .onChange(of: viewModel.fiscalModel.inheritanceDonation.model.abatConjoint) { _ in viewModel.isModified = true }
+            }
+            
+            Section(header: Text("En Ligne Directe").font(.headline)) {
+                NavigationLink(destination: RateGridView(label: "Barême Donation Ligne Directe",
+                                                         grid: $viewModel.fiscalModel.inheritanceDonation.model.gridLigneDirecte)
+                                .environmentObject(viewModel)) {
+                    Text("Barême pour Donation en Ligne Directe")
+                }.isDetailLink(true)
+                
+                AmountEditView(label  : "Abattement sur Donation/Succession en ligne directe",
+                               amount : $viewModel.fiscalModel.inheritanceDonation.model.abatLigneDirecte)
+                    .onChange(of: viewModel.fiscalModel.inheritanceDonation.model.abatLigneDirecte) { _ in viewModel.isModified = true }
+            }
+            
             AmountEditView(label  : "Abattement sur Succession pour frais Funéraires",
                            amount : $viewModel.fiscalModel.inheritanceDonation.model.fraisFunéraires)
                 .onChange(of: viewModel.fiscalModel.inheritanceDonation.model.fraisFunéraires) { _ in viewModel.isModified = true }
-
+            
             Stepper(value : $viewModel.fiscalModel.inheritanceDonation.model.decoteResidence,
                     in    : 0 ... 100.0,
                     step  : 1.0) {
@@ -42,36 +58,31 @@ struct ModelFiscalInheritanceDonationView: View {
             }.onChange(of: viewModel.fiscalModel.inheritanceDonation.model.decoteResidence) { _ in viewModel.isModified = true }
         }
         .alert(item: $alertItem, content: newAlert)
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                DiskButton(text   : "Modifier le Patron",
-                           action : {
-                            alertItem = applyChangesToTemplateAlert(
-                                viewModel: viewModel,
-                                model: model,
-                                notifyTemplatFolderMissing: {
-                                    alertItem =
-                                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                                  dismissButton : .default(Text("OK")))
-                                },
-                                notifyFailure: {
-                                    alertItem =
-                                        AlertItem(title         : Text("Echec de l'enregistrement"),
-                                                  dismissButton : .default(Text("OK")))
-                                })
-                           })
-            }
-            ToolbarItem(placement: .automatic) {
-                FolderButton(action : {
-                    alertItem = applyChangesToOpenDossierAlert(
-                        viewModel: viewModel,
-                        model: model,
-                        family: family,
-                        simulation: simulation)
-                })
-                .disabled(!viewModel.isModified)
-            }
-        }
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(
+            applyChangesToTemplate: {
+                alertItem = applyChangesToTemplateAlert(
+                    viewModel : viewModel,
+                    model     : model,
+                    notifyTemplatFolderMissing: {
+                        alertItem =
+                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
+                                      dismissButton : .default(Text("OK")))
+                    },
+                    notifyFailure: {
+                        alertItem =
+                            AlertItem(title         : Text("Echec de l'enregistrement"),
+                                      dismissButton : .default(Text("OK")))
+                    })
+            },
+            applyChangesToDossier: {
+                alertItem = applyChangesToOpenDossierAlert(
+                    viewModel  : viewModel,
+                    model      : model,
+                    family     : family,
+                    simulation : simulation)
+            },
+            isModified: viewModel.isModified)
         .navigationTitle("Succession et Donation")
     }
 }
