@@ -34,7 +34,7 @@ struct ModelDeterministicFiscalView: View {
                         Text("Bénéfice des Sociétés (IS)")
                     }
 
-                    NavigationLink(destination: ModelFiscalImmobilierImpot()
+                    NavigationLink(destination: ModelFiscalImmobilierImpotView()
                                     .environmentObject(viewModel)) {
                         Text("Plus-Value Immobilière")
                     }

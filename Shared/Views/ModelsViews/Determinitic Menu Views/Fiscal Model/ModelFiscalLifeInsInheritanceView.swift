@@ -19,7 +19,11 @@ struct ModelFiscalLifeInsInheritanceView: View {
     
     var body: some View {
         Form {
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            NavigationLink(destination: RateGridView(label: "Barême Transmssion Assurance Vie",
+                                                     grid: $viewModel.fiscalModel.lifeInsuranceInheritance.model.grid)
+                            .environmentObject(viewModel)) {
+                Text("Barême Fiscal des Transmssions d'Assurance Vie")
+            }.isDetailLink(true)
         }
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView

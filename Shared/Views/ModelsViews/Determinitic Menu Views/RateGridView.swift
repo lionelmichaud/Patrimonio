@@ -7,88 +7,23 @@
 
 import SwiftUI
 import AppFoundation
-import ModelEnvironment
-import FamilyModel
 
-struct RateGridView: View {
-    let label: String
-    @Binding var grid: RateGrid
-    @EnvironmentObject private var viewModel  : DeterministicViewModel
-    @EnvironmentObject private var model      : Model
-    @EnvironmentObject private var family     : Family
-    @EnvironmentObject private var simulation : Simulation
-    @State private var selection : RateSlice?
-    @State private var alertItem : AlertItem?
-    @State private var showingAddSheet  = false
-    @State private var showingEditSheet = false
-    @State private var selectedSliceIdx : Int = 0
-    
-    var body: some View {
-        /// barre d'outils de la Liste
-        VStack(alignment: .leading) {
-            Button(action : { withAnimation { showingAddSheet = true } },
-                   label  : {
-                    Label("Ajouter un seuil", systemImage: "plus.circle.fill")
-                   })
-                .sheet(isPresented: $showingAddSheet) {
-                    RateSliceAddView(grid: $grid)
-                }
-                .padding([.horizontal,.top])
-            
-            /// Liste
-            List(selection: $selection) {
-                ForEach(grid, id: \.self) { slice in
-                    RateSliceView(slice: slice)
-                        .onTapGesture(count   : 2,
-                                      perform : {
-                                        selectedSliceIdx = grid.firstIndex(of: slice)!
-                                        showingEditSheet = true
-                                      })
-                        .sheet(isPresented: $showingEditSheet) {
-                            RateSliceEditView(grid : $grid,
-                                              idx  : selectedSliceIdx)
-                        }
-                }
-                .onDelete(perform: deleteSlices)
-                .onChange(of: grid) { _ in viewModel.isModified = true }
-            }
-        }
-        .alert(item: $alertItem, content: newAlert)
-        .navigationTitle(label)
-        /// barre d'outils de la NavigationView
-        .modelChangesToolbar(
-            applyChangesToTemplate: {
-                alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
-                    model     : model,
-                    notifyTemplatFolderMissing: {
-                        alertItem =
-                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                      dismissButton : .default(Text("OK")))
-                    },
-                    notifyFailure: {
-                        alertItem =
-                            AlertItem(title         : Text("Echec de l'enregistrement"),
-                                      dismissButton : .default(Text("OK")))
-                    })
-            },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
-                    family     : family,
-                    simulation : simulation)
-            },
-            isModified: viewModel.isModified)
-    }
-    
-    private func deleteSlices(at offsets: IndexSet) {
-        grid.remove(atOffsets: offsets)
-        try! grid.initialize()
+// MARK: - Editeur de Barême [seuil €, taux %]
+
+typealias RateGridView = GridView<RateSlice, RateSliceView, RateSliceAddView, RateSliceEditView>
+extension RateGridView {
+    init(label : String,
+         grid  : Binding<[RateSlice]>) {
+        self = RateGridView(label          : label,
+                            grid           : grid,
+                            initializeGrid : { grid in try! grid.initialize() },
+                            displayView    : { slice in RateSliceView(slice: slice) },
+                            addView        : { grid in RateSliceAddView(grid: grid) },
+                            editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) })
     }
 }
 
-// MARK: - Display a RateSlice
+// MARK: - Display a RateSlice [seuil €, taux %]
 
 struct RateSliceView: View {
     var slice: RateSlice
@@ -104,7 +39,7 @@ struct RateSliceView: View {
     }
 }
 
-// MARK: - Edit a RateSlice of the Grid
+// MARK: - Edit a RateSlice of the Grid [seuil €, taux %]
 
 struct RateSliceEditView: View {
     @Binding private var grid: RateGrid
@@ -121,16 +56,14 @@ struct RateSliceEditView: View {
                                                         rate  : grid[idx].wrappedValue.rate * 100.0))
     }
     
-    var toolBar: some View {
+    private var toolBar: some View {
         HStack {
             Button(action : { self.presentationMode.wrappedValue.dismiss() },
                    label  : { Text("Annuler") })
                 .capsuleButtonStyle()
-            
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
-            
             Button(action : updateSlice,
                    label  : { Text("OK") })
                 .capsuleButtonStyle()
@@ -160,7 +93,7 @@ struct RateSliceEditView: View {
     
     /// Vérifie que le formulaire est valide
     /// - Returns: vrai si le formulaire est valide
-    func formIsValid() -> Bool {
+    private func formIsValid() -> Bool {
         modifiedSlice.floor >= 0
     }
     
@@ -174,7 +107,7 @@ struct RateSliceEditView: View {
     }
 }
 
-// MARK: - Add a RateSlice to the Grid
+// MARK: - Add a RateSlice to the Grid [seuil €, taux %]
 
 struct RateSliceAddView: View {
     @Binding var grid: RateGrid
@@ -182,16 +115,14 @@ struct RateSliceAddView: View {
     @State private var newSlice = RateSlice(floor: 0, rate: 10)
     @State private var alertItem : AlertItem?
     
-    var toolBar: some View {
+    private var toolBar: some View {
         HStack {
             Button(action: { self.presentationMode.wrappedValue.dismiss() },
                    label: { Text("Annuler") })
                 .capsuleButtonStyle()
-            
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
-            
             Button(action: addSlice,
                    label: { Text("OK") })
                 .capsuleButtonStyle()
@@ -221,7 +152,7 @@ struct RateSliceAddView: View {
     
     /// Vérifie que le formulaire est valide
     /// - Returns: vrai si le formulaire est valide
-    func formIsValid() -> Bool {
+    private func formIsValid() -> Bool {
         newSlice.floor >= 0
     }
     
@@ -241,6 +172,8 @@ struct RateSliceAddView: View {
         self.presentationMode.wrappedValue.dismiss()
     }
 }
+
+// MARK: - Previews
 
 struct RateSliceView_Previews: PreviewProvider {
     static var previews: some View {

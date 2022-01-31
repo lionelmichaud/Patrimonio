@@ -10,7 +10,7 @@ import ModelEnvironment
 import Persistence
 import FamilyModel
 
-struct ModelFiscalImmobilierImpot: View {
+struct ModelFiscalImmobilierImpotView: View {
     @EnvironmentObject private var viewModel  : DeterministicViewModel
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
@@ -19,6 +19,12 @@ struct ModelFiscalImmobilierImpot: View {
     
     var body: some View {
         Form {
+            NavigationLink(destination: RealEstateExonerationGridView(label: "Barême de l'Impôts sur Plus-Values Immobilières",
+                                                                      grid: $viewModel.fiscalModel.estateCapitalGainIrpp.model.exoGrid)
+                            .environmentObject(viewModel)) {
+                Text("Barême de l'Impôts sur Plus-Values Immobilières")
+            }.isDetailLink(true)
+
             Stepper(value : $viewModel.fiscalModel.estateCapitalGainIrpp.model.irpp,
                     in    : 0 ... 100.0,
                     step  : 1.0) {
@@ -80,7 +86,7 @@ struct ModelFiscalImmobilierImpot_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
         let viewModel = DeterministicViewModel(using: modelTest)
-        return ModelFiscalImmobilierImpot()
+        return ModelFiscalImmobilierImpotView()
             .preferredColorScheme(.dark)
             .environmentObject(modelTest)
             .environmentObject(familyTest)

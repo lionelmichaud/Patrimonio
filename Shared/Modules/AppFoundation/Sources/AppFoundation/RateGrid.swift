@@ -51,6 +51,7 @@ public struct RateSlice: Codable, Hashable {
 }
 
 // MARK: - Barême fiscal
+
 public typealias RateGrid = [RateSlice]
 
 public extension RateGrid {

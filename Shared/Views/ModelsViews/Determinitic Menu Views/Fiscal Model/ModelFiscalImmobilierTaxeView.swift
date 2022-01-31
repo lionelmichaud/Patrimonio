@@ -19,6 +19,12 @@ struct ModelFiscalImmobilierTaxeView: View {
 
     var body: some View {
         Form {
+            NavigationLink(destination: RealEstateExonerationGridView(label: "Barême des taxes sur Plus-Values Immobilières",
+                                                                      grid: $viewModel.fiscalModel.estateCapitalGainTaxes.model.exoGrid)
+                            .environmentObject(viewModel)) {
+                Text("Barême des taxes sur Plus-Values Immobilières")
+            }.isDetailLink(true)
+
             Stepper(value : $viewModel.fiscalModel.estateCapitalGainTaxes.model.CRDS,
                     in    : 0 ... 100.0,
                     step  : 0.1) {

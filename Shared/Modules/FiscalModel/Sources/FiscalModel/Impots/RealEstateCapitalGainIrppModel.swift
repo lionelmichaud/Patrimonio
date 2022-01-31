@@ -9,19 +9,28 @@
 import Foundation
 import AppFoundation
 
+// MARK: - tranche de barême de décote
+
+public struct ExonerationSlice: Codable, Hashable {
+    public var floor        : Int // year
+    public var discountRate : Double // [0, 100%] // % par année de détention au-delà de floor
+    public var prevDiscount : Double // [0, 100%] // % cumul des tranches précédentes
+
+    public init(floor: Int, discountRate: Double, prevDiscount: Double) {
+        self.floor = floor
+        self.discountRate = discountRate
+        self.prevDiscount = prevDiscount
+    }
+}
+
+public typealias ExonerationGrid = [ExonerationSlice]
+
 // MARK: - Impôts sur plus-values immobilières
 /// impôts sur plus-values immobilières
 public struct RealEstateCapitalGainIrppModel: Codable {
     
     // MARK: - Nested types
 
-    // tranche de barême de l'IRPP
-    public struct ExonerationSlice: Codable {
-        let floor        : Int // year
-        let discountRate : Double // % par année de détention au-delà de floor
-        let prevDiscount : Double // % cumul des tranches précédentes
-    }
-    
     public struct Model: JsonCodableToBundleP, VersionableP {
         static var defaultFileName : String = "RealEstateCapitalGainIrppModel.json"
         public var version         : Version

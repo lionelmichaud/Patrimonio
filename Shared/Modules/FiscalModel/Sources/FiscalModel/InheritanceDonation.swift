@@ -176,16 +176,16 @@ public struct LifeInsuranceInheritance: Codable {
         case heritageOfChildSlicesIssue
     }
     
-    struct Model: JsonCodableToBundleP, VersionableP, RateGridableP {
+    public struct Model: JsonCodableToBundleP, VersionableP, RateGridableP {
         static var defaultFileName: String = "LifeInsuranceInheritanceModel.json"
         
-        var version : Version
-        var grid    : RateGrid
+        public var version : Version
+        public var grid    : RateGrid
     }
     
     // MARK: - Properties
 
-    var model: Model
+    public var model: Model
     
     // MARK: - Methods
 
