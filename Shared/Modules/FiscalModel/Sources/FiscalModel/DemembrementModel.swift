@@ -19,6 +19,9 @@ public protocol DemembrementProviderP {
 
 // MARK: - Démembrement de propriété
 
+public typealias DemembrementSlice = DemembrementModel.Slice
+public typealias DemembrementGrid = [DemembrementModel.Slice]
+
 ///  - Note: [Reference](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006310173/)
 public struct DemembrementModel: Codable, DemembrementProviderP {
 
@@ -30,16 +33,22 @@ public struct DemembrementModel: Codable, DemembrementProviderP {
     }
     
     // tranche de barême de l'IRPP
-    struct Slice: Codable {
-        let floor    : Int // ans
-        let usuFruit : Double // % [0, 1]
-        var nueProp  : Double // % [0, 1]
+    public struct Slice: Codable, Hashable {
+        public var floor    : Int // ans
+        public var usuFruit : Double // % [0, 1]
+        public var nueProp  : Double {
+            1.0 - usuFruit
+        }
+        public init(floor: Int, usuFruit: Double) {
+            self.floor = floor
+            self.usuFruit = usuFruit
+        }
     }
     
     public struct Model: JsonCodableToBundleP, VersionableP {
         public static var defaultFileName : String = "DemembrementModel.json"
         public var version : Version
-        var grid    : [Slice]
+        public var grid    : [Slice]
     }
     
     // MARK: - Initializer
@@ -50,7 +59,7 @@ public struct DemembrementModel: Codable, DemembrementProviderP {
 
     // MARK: - Properties
 
-    var model: Model
+    public var model: Model
     
     // MARK: - Methods
 

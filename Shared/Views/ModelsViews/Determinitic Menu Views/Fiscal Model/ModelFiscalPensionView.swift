@@ -19,6 +19,9 @@ struct ModelFiscalPensionView: View {
     
     var body: some View {
         Form {
+            VersionView(version: $viewModel.fiscalModel.pensionTaxes.model.version)
+                .onChange(of: viewModel.fiscalModel.pensionTaxes.model.version) { _ in viewModel.isModified = true }
+
             Section(header: Text("Abattement").font(.headline)) {
                 Stepper(value : $viewModel.fiscalModel.pensionTaxes.model.rebate,
                         in    : 0 ... 100.0,

@@ -19,6 +19,9 @@ struct ModelFiscalFinancialView: View {
     
     var body: some View {
         Form {
+            VersionView(version: $viewModel.fiscalModel.financialRevenuTaxes.model.version)
+                .onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.version) { _ in viewModel.isModified = true }
+
             Section(footer: Text("Appliquable à tous les revenus financiers")) {
                 Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.CRDS,
                         in    : 0 ... 100.0,

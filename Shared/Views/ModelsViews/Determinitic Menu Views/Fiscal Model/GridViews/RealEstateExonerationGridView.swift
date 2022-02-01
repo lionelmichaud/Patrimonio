@@ -210,8 +210,7 @@ struct RealEstateExonerationGridView_Previews: PreviewProvider {
         loadTestFilesFromBundle()
         let viewModel = DeterministicViewModel(using: modelTest)
         return RealEstateExonerationGridView(label: "Nom",
-                                             grid: .constant(grid()))
-            .preferredColorScheme(.dark)
+                                             grid : .constant(grid()))
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)

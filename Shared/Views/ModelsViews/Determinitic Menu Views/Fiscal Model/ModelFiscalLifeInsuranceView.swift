@@ -19,6 +19,9 @@ struct ModelFiscalLifeInsuranceView: View {
     
     var body: some View {
         Form {
+            VersionView(version: $viewModel.fiscalModel.lifeInsuranceTaxes.model.version)
+                .onChange(of: viewModel.fiscalModel.lifeInsuranceTaxes.model.version) { _ in viewModel.isModified = true }
+
             AmountEditView(label   : "Abattement par personne",
                            comment : "annuel",
                            amount  : $viewModel.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson)

@@ -114,6 +114,14 @@ public struct Version: Codable, Hashable {
     }
     
     // MARK: - Methods
+
+    public func toVersion() -> (major : Int?,
+                                minor : Int?,
+                                patch : Int?) {
+        (major: self.major,
+         minor: self.minor,
+         patch: self.patch)
+    }
     
     public mutating func initializeWithBundleValues() {
         if version == nil {

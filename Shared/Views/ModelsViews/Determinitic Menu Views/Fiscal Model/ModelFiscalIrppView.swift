@@ -19,6 +19,9 @@ struct ModelFiscalIrppView: View {
     
     var body: some View {
         Form {
+            VersionView(version: $viewModel.fiscalModel.incomeTaxes.model.version)
+                .onChange(of: viewModel.fiscalModel.incomeTaxes.model.version) { _ in viewModel.isModified = true }
+            
             Section(header: Text("Salaire").font(.headline)) {
                 NavigationLink(destination: RateGridView(label: "Barême IRPP",
                                                          grid: $viewModel.fiscalModel.incomeTaxes.model.grid)

@@ -19,6 +19,9 @@ struct ModelFiscalTurnoverView: View {
 
     var body: some View {
         Form {
+            VersionView(version: $viewModel.fiscalModel.turnoverTaxes.model.version)
+                .onChange(of: viewModel.fiscalModel.turnoverTaxes.model.version) { _ in viewModel.isModified = true }
+
             Stepper(value : $viewModel.fiscalModel.turnoverTaxes.model.URSSAF,
                     in    : 0 ... 100.0,
                     step  : 1.0) {

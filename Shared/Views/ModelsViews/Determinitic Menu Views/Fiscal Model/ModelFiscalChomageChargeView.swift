@@ -19,6 +19,9 @@ struct ModelFiscalChomageChargeView: View {
 
     var body: some View {
         Form {
+            VersionView(version: $viewModel.fiscalModel.allocationChomageTaxes.model.version)
+                .onChange(of: viewModel.fiscalModel.allocationChomageTaxes.model.version) { _ in viewModel.isModified = true }
+
             Stepper(value : $viewModel.fiscalModel.allocationChomageTaxes.model.assiette,
                     in    : 0 ... 100.0,
                     step  : 0.1) {

@@ -19,6 +19,9 @@ struct ModelFiscalImmobilierTaxeView: View {
 
     var body: some View {
         Form {
+            VersionView(version: $viewModel.fiscalModel.estateCapitalGainTaxes.model.version)
+                .onChange(of: viewModel.fiscalModel.estateCapitalGainTaxes.model.version) { _ in viewModel.isModified = true }
+
             NavigationLink(destination: RealEstateExonerationGridView(label: "Barême des taxes sur Plus-Values Immobilières",
                                                                       grid: $viewModel.fiscalModel.estateCapitalGainTaxes.model.exoGrid)
                             .environmentObject(viewModel)) {

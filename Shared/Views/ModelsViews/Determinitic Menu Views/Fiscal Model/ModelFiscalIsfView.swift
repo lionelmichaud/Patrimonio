@@ -24,6 +24,9 @@ struct ModelFiscalIsfView: View {
     
     var body: some View {
         Form {
+            VersionView(version: $viewModel.fiscalModel.isf.model.version)
+                .onChange(of: viewModel.fiscalModel.isf.model.version) { _ in viewModel.isModified = true }
+
             NavigationLink(destination: RateGridView(label: "Barême ISF/IFI",
                                                      grid: $viewModel.fiscalModel.isf.model.grid)
                             .environmentObject(viewModel)) {

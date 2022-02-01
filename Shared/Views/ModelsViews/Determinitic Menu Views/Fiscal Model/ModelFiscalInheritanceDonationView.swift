@@ -19,6 +19,9 @@ struct ModelFiscalInheritanceDonationView: View {
     
     var body: some View {
         Form {
+            VersionView(version: $viewModel.fiscalModel.inheritanceDonation.model.version)
+                .onChange(of: viewModel.fiscalModel.inheritanceDonation.model.version) { _ in viewModel.isModified = true }
+
             Section(header: Text("Entre Conjoint").font(.headline)) {
                 NavigationLink(destination: RateGridView(label: "Barême Donation Conjoint",
                                                          grid: $viewModel.fiscalModel.inheritanceDonation.model.gridDonationConjoint)
