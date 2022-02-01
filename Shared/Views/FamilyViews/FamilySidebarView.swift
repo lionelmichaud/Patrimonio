@@ -67,21 +67,15 @@ struct FamilyHeaderView: View {
 }
 
 struct FamilyView_Previews: PreviewProvider {
-    static let dataStore  = Store()
-    static var model      = Model(fromBundle: Bundle.main)
-    static let family     = Family()
-    static let simulation = Simulation()
-    static let patrimoine = Patrimoin()
-    static let uiState    = UIState()
-    
     static var previews: some View {
-        FamilySidebarView()
-            .environmentObject(dataStore)
-            .environmentObject(model)
-            .environmentObject(family)
-            .environmentObject(simulation)
-            .environmentObject(patrimoine)
-            .environmentObject(uiState)
+        loadTestFilesFromBundle()
+        return FamilySidebarView()
+            .environmentObject(dataStoreTest)
+            .environmentObject(modelTest)
+            .environmentObject(familyTest)
+            .environmentObject(simulationTest)
+            .environmentObject(patrimoineTest)
+            .environmentObject(uiStateTest)
             .colorScheme(.dark)
         //.previewLayout(.fixed(width: 1024, height: 768))
         //.previewLayout(.fixed(width: 896, height: 414))

@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Point(x, y)
 
-public struct Point: Codable, ExpressibleByArrayLiteral {
+public struct Point: Codable, Hashable, ExpressibleByArrayLiteral {
     public typealias ArrayLiteralElement = Double
     
     public var x: Double

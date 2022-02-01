@@ -163,12 +163,16 @@ public struct DiscreteRandomGenerator: RandomGeneratorP, Codable {
     
     // MARK: - Properties
     
-    public var pdf : [Point]
+    public var pdf : [Point] {
+        didSet {
+            initialize()
+        }
+    }
     var cdf        : [Double]? // probabilité cumulée d'occurence (dernier = 100%)
     var minX       : Number? { // valeur minimale de X
         pdf.min { $0.x < $1.x }?.x
     }
-    var maxX       : Number? { // valeur minimale de X
+    var maxX       : Number? { // valeur maximale de X
         pdf.max { $0.x < $1.x }?.x
     }
     public var cdfCurve : Curve? { // courbe CDF mémorisée au premier appel de initialize()

@@ -75,7 +75,8 @@ func applyChangesToTemplateAlert(viewModel                  : DeterministicViewM
 extension View {
     func modelChangesToolbar(applyChangesToTemplate: @escaping () -> Void,
                              applyChangesToDossier : @escaping () -> Void,
-                             isModified            : Bool) -> some View {
+                             isModified            : Bool,
+                             isValid               : Bool = true) -> some View {
         self.toolbar {
             ToolbarItem(placement: .automatic) {
                 DiskButton(text   : "Modifier le Patron",
@@ -83,7 +84,7 @@ extension View {
             }
             ToolbarItem(placement: .automatic) {
                 FolderButton(action : applyChangesToDossier)
-                    .disabled(!isModified)
+                    .disabled(!isModified || !isValid)
             }
         }
     }

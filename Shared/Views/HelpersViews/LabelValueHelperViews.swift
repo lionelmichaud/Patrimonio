@@ -66,6 +66,7 @@ struct LabeledValueRowView: View {
 struct AmountEditView: View {
     let label            : String
     let comment          : String?
+    let currency         : Bool
     @Binding var amount  : Double
     @State var text      : String
     var textValueBinding : Binding<String> {
@@ -108,17 +109,21 @@ struct AmountEditView: View {
 //                    print("Disappeared \(amount)")
                     text = String(amount).replacingOccurrences(of: ".", with: ",")
                 }
-            Text("€")
+            if currency {
+                Text("€")
+            }
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
     }
     
-    init(label   : String,
-         comment : String? = nil,
-         amount  : Binding<Double>) {
-        self.label   = label
-        self.comment = comment
-        self._amount = amount
+    init(label    : String,
+         comment  : String?  = nil,
+         amount   : Binding<Double>,
+         currency : Bool = true) {
+        self.label    = label
+        self.comment  = comment
+        self.currency = currency
+        self._amount  = amount
         _text = State(initialValue: String(amount.wrappedValue).replacingOccurrences(of: ".", with: ","))
 //        print("created: value = \(amount); text = \(text)")
     }

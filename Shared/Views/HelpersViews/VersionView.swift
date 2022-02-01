@@ -8,6 +8,8 @@
 import SwiftUI
 import AppFoundation
 
+// MARK: - Display & Edit the Version
+
 struct VersionView: View {
     @Binding var version: Version
     @State private var showingEditSheet = false
@@ -21,6 +23,8 @@ struct VersionView: View {
             }
     }
 }
+
+// MARK: - Display the Version
 
 struct VersionDetailView: View {
     var version: Version
@@ -42,6 +46,8 @@ struct VersionDetailView: View {
         }
     }
 }
+
+// MARK: - Edit the Version
 
 struct VersionEditView : View {
     @Binding private var version: Version

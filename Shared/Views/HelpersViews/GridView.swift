@@ -24,6 +24,7 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
     @State private var showingAddSheet  = false
     @State private var showingEditSheet = false
     @State private var selectedSliceIdx : Int = 0
+    private var gridIsValid    : ([S]) -> Bool
     private var initializeGrid : (inout [S]) -> Void
     private var displayView    : (S) -> DisplayView
     private var addView        : (Binding<[S]>) -> AddView
@@ -31,6 +32,7 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
 
     init(label                    : String,
          grid                     : Binding<[S]>,
+         gridIsValid              : @escaping ([S]) -> Bool = { _ in true },
          initializeGrid           : @escaping (inout [S]) -> Void,
          @ViewBuilder displayView : @escaping (S) -> DisplayView,
          @ViewBuilder addView     : @escaping (Binding<[S]>) -> AddView,
@@ -38,17 +40,18 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
         self.label          = label
         self._grid          = grid
         self.initializeGrid = initializeGrid
+        self.gridIsValid    = gridIsValid
         self.displayView    = displayView
         self.addView        = addView
         self.editView       = editView
     }
 
     var body: some View {
-        /// barre d'outils de la Liste
         VStack(alignment: .leading) {
+            /// barre d'outils de la Liste
             Button(action : { withAnimation { showingAddSheet = true } },
                    label  : {
-                Label("Ajouter un seuil", systemImage: "plus.circle.fill")
+                Label("Ajouter une ligne", systemImage: "plus.circle.fill")
             })
                 .sheet(isPresented: $showingAddSheet) {
                     addView($grid)
@@ -99,7 +102,8 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
                     family     : family,
                     simulation : simulation)
             },
-            isModified: viewModel.isModified)
+            isModified: viewModel.isModified,
+            isValid   : gridIsValid(grid))
     }
 
     private func deleteSlices(at offsets: IndexSet) {
@@ -114,22 +118,27 @@ struct GridView_Previews: PreviewProvider {
           RateSlice(floor: 1000.0, rate: 20.0),
           RateSlice(floor: 2000.0, rate: 30.0)]
     }
-
+    
     static var previews: some View {
         loadTestFilesFromBundle()
         let viewModel = DeterministicViewModel(using: modelTest)
-        return GridView(label          : "Nom",
-                        grid           : .constant(grid()),
-                        initializeGrid : { grid in try! grid.initialize() },
-                        displayView    : { slice in RateSliceView(slice: slice) },
-                        addView        : { grid in RateSliceAddView(grid: grid) },
-                        editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) })
+        return
+            NavigationView {
+                NavigationLink("Test", destination: GridView(label          : "Nom",
+                                                             grid           : .constant(grid()),
+                                                             gridIsValid    : { _ in true },
+                                                             initializeGrid : { grid in try! grid.initialize() },
+                                                             displayView    : { slice in RateSliceView(slice: slice) },
+                                                             addView        : { grid in RateSliceAddView(grid: grid) },
+                                                             editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) })
+                                .preferredColorScheme(.dark)
+                                .environmentObject(modelTest)
+                                .environmentObject(familyTest)
+                                .environmentObject(simulationTest)
+                                .environmentObject(viewModel))
+                
+            }
             .preferredColorScheme(.dark)
-            .environmentObject(modelTest)
-            .environmentObject(familyTest)
-            .environmentObject(simulationTest)
-            .environmentObject(viewModel)
-            .preferredColorScheme(.dark)
-            .previewLayout(.fixed(width: 500.0, height: 300.0))
+            .previewLayout(.fixed(width: 700.0, height: 400.0))
     }
 }

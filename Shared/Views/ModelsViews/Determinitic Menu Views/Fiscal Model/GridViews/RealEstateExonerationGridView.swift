@@ -205,16 +205,19 @@ struct RealEstateExonerationGridView_Previews: PreviewProvider {
                            discountRate : 0.04,
                            prevDiscount : 0.15)]
     }
-
+    
     static var previews: some View {
         loadTestFilesFromBundle()
         let viewModel = DeterministicViewModel(using: modelTest)
-        return RealEstateExonerationGridView(label: "Nom",
-                                             grid : .constant(grid()))
-            .environmentObject(modelTest)
-            .environmentObject(familyTest)
-            .environmentObject(simulationTest)
-            .environmentObject(viewModel)
+        return
+            NavigationView {
+                NavigationLink("Test", destination: RealEstateExonerationGridView(label: "Nom",
+                                                                                  grid : .constant(grid()))
+                                .environmentObject(modelTest)
+                                .environmentObject(familyTest)
+                                .environmentObject(simulationTest)
+                                .environmentObject(viewModel))
+            }
             .preferredColorScheme(.dark)
             .previewLayout(.fixed(width: 700.0, height: 400.0))
     }
