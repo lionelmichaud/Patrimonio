@@ -444,9 +444,6 @@
 		79BE4A6E2651A2C100BBF46C /* HistogramVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A6626519FED00BBF46C /* HistogramVisitor.swift */; };
 		79BE4A6F2651A2C100BBF46C /* HistogramVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A6626519FED00BBF46C /* HistogramVisitor.swift */; };
 		79BE4A702651A2C200BBF46C /* HistogramVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A6626519FED00BBF46C /* HistogramVisitor.swift */; };
-		79BE4A7A2651CE7800BBF46C /* ModelDeterministicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A722651CE7800BBF46C /* ModelDeterministicView.swift */; };
-		79BE4A7B2651CE7800BBF46C /* ModelDeterministicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A722651CE7800BBF46C /* ModelDeterministicView.swift */; };
-		79BE4A7C2651CE7800BBF46C /* ModelDeterministicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A722651CE7800BBF46C /* ModelDeterministicView.swift */; };
 		79BE4A7D2651CE7800BBF46C /* ModelHumanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A732651CE7800BBF46C /* ModelHumanView.swift */; };
 		79BE4A7E2651CE7800BBF46C /* ModelHumanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A732651CE7800BBF46C /* ModelHumanView.swift */; };
 		79BE4A7F2651CE7800BBF46C /* ModelHumanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BE4A732651CE7800BBF46C /* ModelHumanView.swift */; };
@@ -802,7 +799,6 @@
 		79BE4A6526519FED00BBF46C /* HistogramVisitable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramVisitable.swift; sourceTree = "<group>"; };
 		79BE4A6626519FED00BBF46C /* HistogramVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramVisitor.swift; sourceTree = "<group>"; };
 		79BE4A672651A2B400BBF46C /* LineChartHistogramVisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartHistogramVisitor.swift; sourceTree = "<group>"; };
-		79BE4A722651CE7800BBF46C /* ModelDeterministicView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelDeterministicView.swift; sourceTree = "<group>"; };
 		79BE4A732651CE7800BBF46C /* ModelHumanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelHumanView.swift; sourceTree = "<group>"; };
 		79BE4A752651CE7800BBF46C /* DiscreteRandomizerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscreteRandomizerView.swift; sourceTree = "<group>"; };
 		79BE4A762651CE7800BBF46C /* BetaRandomizerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BetaRandomizerView.swift; sourceTree = "<group>"; };
@@ -958,7 +954,6 @@
 				79CEC516279D902000A6F9B5 /* ModelUpdateAlerts.swift */,
 				795049F2266792C2000AAEF0 /* DeterministicSidebarSectionView.swift */,
 				79D7C41526B6EFCA0057E343 /* ModelDeterministicViewModel.swift */,
-				79BE4A722651CE7800BBF46C /* ModelDeterministicView.swift */,
 				79B5E8C926EBBDB400C5EB21 /* ModelDeterministicHumanView.swift */,
 				792B29EC26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift */,
 				792B29F726EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift */,
@@ -2294,7 +2289,6 @@
 				7990D8E1264F1C4000078CB6 /* BarChartCashFlowVisitor.swift in Sources */,
 				796506D12640866F0036E466 /* InterestRateTypeView.swift in Sources */,
 				796506CB2640866F0036E466 /* PeriodicInvestDetailedView.swift in Sources */,
-				79BE4A7A2651CE7800BBF46C /* ModelDeterministicView.swift in Sources */,
 				79BBE8E62646E9170045E524 /* BS Detailed ChartView.swift in Sources */,
 				791ED0E0263A049900701202 /* PersonViewModel.swift in Sources */,
 				792AAE5E27AB323000D3D4DF /* ModelUnemploymentAmountView.swift in Sources */,
@@ -2395,7 +2389,6 @@
 				799025BA2641F60300ED53D4 /* isfEvolutionChartView.swift in Sources */,
 				796506D9264094B00036E466 /* AssetView.swift in Sources */,
 				79E842F92764E367005A0C41 /* LoadTestFiles.swift in Sources */,
-				79BE4A7B2651CE7800BBF46C /* ModelDeterministicView.swift in Sources */,
 				796506D42640866F0036E466 /* EstateDetailedView.swift in Sources */,
 				797901252640AEB600104C1A /* PatrimoineSidebarView.swift in Sources */,
 				798DE8AC2635CA7100C0C3B5 /* ExpenseDetailedView.swift in Sources */,
@@ -2523,7 +2516,6 @@
 				79BE4A6D2651A2BC00BBF46C /* HistogramVisitable.swift in Sources */,
 				790FF34A26485BDE001B2653 /* CvsBuilder.swift in Sources */,
 				79A9BE9B265186A700170A01 /* DiscreteDistributionView.swift in Sources */,
-				79BE4A7C2651CE7800BBF46C /* ModelDeterministicView.swift in Sources */,
 				79BE4A6A2651A2B400BBF46C /* LineChartHistogramVisitor.swift in Sources */,
 				79BE4A7F2651CE7800BBF46C /* ModelHumanView.swift in Sources */,
 				79683FEB26B8995900F838BE /* LiabilitiesTests.swift in Sources */,

@@ -20,6 +20,9 @@ struct ModelDeterministicUnemploymentView: View {
 
     var body: some View {
         Form {
+            VersionView(version: $viewModel.unemploymentModel.allocationChomage.model.version)
+                .onChange(of: viewModel.unemploymentModel.allocationChomage.model.version) { _ in viewModel.isModified = true }
+
             NavigationLink(destination:
                             UnemploymentAreDurationGridView(label: "Barême de durée d'indemnisation",
                                                             grid: $viewModel.unemploymentModel.allocationChomage.model.durationGrid)
@@ -37,7 +40,7 @@ struct ModelDeterministicUnemploymentView: View {
                 Text("Allocation de Recherche d'Emploi (ARE)")
             }
         }
-        .navigationTitle("Modèle Economique")
+        .navigationTitle("Modèle Chômage")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(

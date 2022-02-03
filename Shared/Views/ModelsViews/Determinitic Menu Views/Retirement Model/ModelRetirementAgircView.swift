@@ -22,6 +22,9 @@ struct ModelRetirementAgircView: View {
     
     var body: some View {
         Form {
+            VersionView(version: $viewModel.retirementModel.regimeAgirc.model.version)
+                .onChange(of: viewModel.retirementModel.regimeAgirc.model.version) { _ in viewModel.isModified = true }
+
             Stepper(value : $viewModel.retirementModel.regimeAgirc.ageMinimum,
                     in    : 50 ... 100) {
                 HStack {

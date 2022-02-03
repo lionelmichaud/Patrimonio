@@ -43,7 +43,7 @@ struct ModelDeterministicRetirementView: View {
                 VersionText(version: viewModel.retirementModel.reversion.model.version)
             }
         }
-        .navigationTitle("Modèle Economique")
+        .navigationTitle("Modèle Retraite")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(

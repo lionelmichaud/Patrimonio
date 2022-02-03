@@ -52,7 +52,7 @@ struct ModelDeterministicSociologyView: View {
             }
                     .onChange(of: viewModel.socioEconomyModel.expensesUnderEvaluationRate.defaultValue) { _ in viewModel.isModified = true }
         }
-        .navigationTitle("Modèle Economique")
+        .navigationTitle("Modèle Sociologique")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(

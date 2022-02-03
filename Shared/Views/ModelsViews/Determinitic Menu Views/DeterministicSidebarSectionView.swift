@@ -18,13 +18,6 @@ struct DeterministicSidebarSectionView: View {
     
     var body: some View {
         Section(header: Text("Modèles Déterministe")) {
-//            NavigationLink(destination: ModelDeterministicView(using: model),
-//                           tag         : .deterministicModel,
-//                           selection   : $uiState.modelsViewState.selectedItem) {
-//                Text("Tous les Modèles")
-//            }
-//            .isDetailLink(true)
-//
             // modèle vie humaine
             NavigationLink(destination: ModelDeterministicHumanView(using: model),
                            tag         : .detHumanModel,
