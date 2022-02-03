@@ -6,15 +6,22 @@
 //
 
 import SwiftUI
+import Persistence
 import ModelEnvironment
+import FamilyModel
 
 // MARK: - Deterministic HumanLife View
 
 struct ModelDeterministicHumanView: View {
-    @EnvironmentObject private var viewModel : DeterministicViewModel
+    @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var simulation : Simulation
+    @StateObject private var viewModel        : DeterministicViewModel
+    @State private var alertItem              : AlertItem?
 
     var body: some View {
-        Section(header: Text("Modèle Humain").font(.headline)) {
+        Form {
             Stepper(value : $viewModel.humanLifeModel.menLifeExpectation.defaultValue,
                     in    : 50 ... 100) {
                 HStack {
@@ -42,18 +49,54 @@ struct ModelDeterministicHumanView: View {
                 }
             }.onChange(of: viewModel.humanLifeModel.nbOfYearsOfdependency.defaultValue) { _ in viewModel.isModified = true }
         }
+        .navigationTitle("Modèle Humain")
+        .alert(item: $alertItem, content: newAlert)
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(
+            applyChangesToTemplate: {
+                alertItem = applyChangesToTemplateAlert(
+                    viewModel : viewModel,
+                    model     : model,
+                    notifyTemplatFolderMissing: {
+                        alertItem =
+                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
+                                      dismissButton : .default(Text("OK")))
+                    },
+                    notifyFailure: {
+                        alertItem =
+                            AlertItem(title         : Text("Echec de l'enregistrement"),
+                                      dismissButton : .default(Text("OK")))
+                    })
+            },
+            applyChangesToDossier: {
+                alertItem = applyChangesToOpenDossierAlert(
+                    viewModel  : viewModel,
+                    model      : model,
+                    family     : family,
+                    simulation : simulation)
+            },
+            isModified: viewModel.isModified)
+        .onAppear {
+            viewModel.updateFrom(model)
+        }
+    }
+
+    // MARK: - Initialization
+    
+    init(using model: Model) {
+        _viewModel = StateObject(wrappedValue: DeterministicViewModel(using: model))
     }
 }
 
-struct ModelDeterministicHumanView_Previews: PreviewProvider {
-    static var model = Model(fromBundle: Bundle.main)
-    
-    static var previews: some View {
-        let viewModel = DeterministicViewModel(using: model)
-        return Form {
-            ModelDeterministicHumanView()
-                .environmentObject(viewModel)
-        }
-        .preferredColorScheme(.dark)
-    }
-}
+//struct ModelDeterministicHumanView_Previews: PreviewProvider {
+//    static var model = Model(fromBundle: Bundle.main)
+//
+//    static var previews: some View {
+//        let viewModel = DeterministicViewModel(using: model)
+//        return Form {
+//            ModelDeterministicHumanView()
+//                .environmentObject(viewModel)
+//        }
+//        .preferredColorScheme(.dark)
+//    }
+//}

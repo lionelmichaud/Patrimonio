@@ -30,28 +30,28 @@ struct ModelDeterministicView: View {
         if dataStore.activeDossier != nil {
             Form {
                 // modèle vie humaine
-                ModelDeterministicHumanView()
-                    .environmentObject(viewModel)
+//                ModelDeterministicHumanView()
+//                    .environmentObject(viewModel)
 
                 // modèle économie
-                ModelDeterministicEconomyView()
-                    .environmentObject(viewModel)
+//                ModelDeterministicEconomyView()
+//                    .environmentObject(viewModel)
 
                 // modèle sociologie
-                ModelDeterministicSociologyView()
-                    .environmentObject(viewModel)
+//                ModelDeterministicSociologyView()
+//                    .environmentObject(viewModel)
 
                 // modèle retraite
-                ModelDeterministicRetirementView()
-                    .environmentObject(viewModel)
+//                ModelDeterministicRetirementView()
+//                    .environmentObject(viewModel)
 
                 // modèle fiscal
-                ModelDeterministicFiscalView()
-                    .environmentObject(viewModel)
+//                ModelDeterministicFiscalView()
+//                    .environmentObject(viewModel)
 
                 // modèle chômage
-                ModelDeterministicUnemploymentView()
-                    .environmentObject(viewModel)
+//                ModelDeterministicUnemploymentView()
+//                    .environmentObject(viewModel)
             }
             .navigationTitle("Modèle Déterministe")
             .alert(item: $alertItem, content: newAlert)
