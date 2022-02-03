@@ -6,13 +6,30 @@
 //
 
 import SwiftUI
+import AppFoundation
 
 struct ModelDeterministicUnemploymentView: View {
     @EnvironmentObject private var viewModel: DeterministicViewModel
 
     var body: some View {
-        Section(header: Text("Modèle Chômage").font(.headline)) {
-            Text("A faire")
+        Section(header: headerWithVersion(label: "Modèle Chômage",
+                                          version: viewModel.unemploymentModel.allocationChomage.model.version)) {
+            NavigationLink(destination:
+                            UnemploymentAreDurationGridView(label: "Barême de durée d'indemnisation",
+                                                            grid: $viewModel.unemploymentModel.allocationChomage.model.durationGrid)
+                            .environmentObject(viewModel)) {
+                Text("Durée d'indemnisation")
+            }.isDetailLink(true)
+
+            NavigationLink(destination: ModelUnemploymentAmountView()
+                            .environmentObject(viewModel)) {
+                Text("Différés d'indemnisation")
+            }
+
+            NavigationLink(destination: ModelUnemploymentDiffereView()
+                            .environmentObject(viewModel)) {
+                Text("Allocation de Recherche d'Emploi (ARE)")
+            }
         }
     }
 }

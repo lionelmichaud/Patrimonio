@@ -36,6 +36,7 @@ struct RealEstateExonerationSliceView: View {
         VStack {
             IntegerView(label   : "A partir de",
                         integer : slice.floor,
+                        weight  : .bold,
                         comment : "ans")
             PercentView(label   : "Décote",
                         percent : slice.discountRate / 100.0,
@@ -113,8 +114,6 @@ struct RealEstateExonerationSliceEditView: View {
     }
 
     private func updateSlice() {
-//        modifiedSlice.discountRate /= 100.0 // [0, 100%] => [0, 1.0]
-//        modifiedSlice.prevDiscount /= 100.0 // [0, 100%] => [0, 1.0]
         grid[idx] = modifiedSlice
         grid.sort(by: { $0.floor < $1.floor })
 
@@ -184,8 +183,6 @@ struct RealEstateExonerationSliceAddView: View {
             return
         }
 
-//        newSlice.discountRate /= 100.0 // [0, 100%] => [0, 1.0]
-//        newSlice.prevDiscount /= 100.0 // [0, 100%] => [0, 1.0]
         grid.append(newSlice)
         grid.sort(by: { $0.floor < $1.floor })
 

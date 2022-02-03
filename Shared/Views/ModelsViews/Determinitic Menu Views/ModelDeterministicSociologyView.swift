@@ -15,36 +15,35 @@ struct ModelDeterministicSociologyView: View {
 
     var body: some View {
         Section(header: Text("Modèle Sociologique").font(.headline)) {
-            Stepper(value : $viewModel.pensionDevaluationRate,
+            Stepper(value : $viewModel.socioEconomyModel.pensionDevaluationRate.defaultValue,
                     in    : 0 ... 10,
                     step  : 0.1) {
                 HStack {
                     Text("Dévaluation anuelle des pensions par rapport à l'inflation")
                     Spacer()
-                    Text("\(viewModel.pensionDevaluationRate.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(viewModel.socioEconomyModel.pensionDevaluationRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
                 }
-            }
-            .onChange(of: viewModel.pensionDevaluationRate) { _ in viewModel.isModified = true }
+            }.onChange(of: viewModel.socioEconomyModel.pensionDevaluationRate.defaultValue) { _ in viewModel.isModified = true }
             
-            Stepper(value : $viewModel.nbTrimTauxPlein,
+            Stepper(value : $viewModel.socioEconomyModel.nbTrimTauxPlein.defaultValue,
                     in    : 0 ... 12) {
                 HStack {
                     Text("Nombre de trimestres additionels pour obtenir le taux plein")
                     Spacer()
-                    Text("\(viewModel.nbTrimTauxPlein) ans").foregroundColor(.secondary)
+                    Text("\(Int(viewModel.socioEconomyModel.nbTrimTauxPlein.defaultValue)) ans").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.menLifeExpectation) { _ in viewModel.isModified = true }
+            }.onChange(of: viewModel.socioEconomyModel.nbTrimTauxPlein.defaultValue) { _ in viewModel.isModified = true }
             
-            Stepper(value : $viewModel.expensesUnderEvaluationRate,
+            Stepper(value : $viewModel.socioEconomyModel.expensesUnderEvaluationRate.defaultValue,
                     in    : 0 ... 10,
                     step  : 0.1) {
                 HStack {
                     Text("Pénalisation des dépenses")
                     Spacer()
-                    Text("\(viewModel.expensesUnderEvaluationRate.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(viewModel.socioEconomyModel.expensesUnderEvaluationRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
                 }
             }
-            .onChange(of: viewModel.expensesUnderEvaluationRate) { _ in viewModel.isModified = true }
+                    .onChange(of: viewModel.socioEconomyModel.expensesUnderEvaluationRate.defaultValue) { _ in viewModel.isModified = true }
         }
     }
 }

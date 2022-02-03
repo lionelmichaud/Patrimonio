@@ -41,15 +41,28 @@ public final class RegimeAgirc: Codable {
     
     // MARK: - Nested types
     
-    struct SliceAvantAgeLegal: Codable {
-        var ndTrimAvantAgeLegal : Int
-        var coef                : Double
+    public struct SliceAvantAgeLegal: Codable, Hashable {
+        public var ndTrimAvantAgeLegal : Int
+        public var coef                : Double
+
+        public init(ndTrimAvantAgeLegal: Int, coef: Double) {
+            self.ndTrimAvantAgeLegal = ndTrimAvantAgeLegal
+            self.coef = coef
+        }
     }
     
-    struct SliceApresAgeLegal: Codable {
-        var nbTrimManquant     : Int
-        var ndTrimPostAgeLegal : Int
-        var coef               : Double
+    public struct SliceApresAgeLegal: Codable, Hashable {
+        public var nbTrimManquant     : Int
+        public var ndTrimPostAgeLegal : Int
+        public var coef               : Double
+
+        public init(nbTrimManquant     : Int,
+                    ndTrimPostAgeLegal : Int,
+                    coef               : Double) {
+            self.nbTrimManquant = nbTrimManquant
+            self.ndTrimPostAgeLegal = ndTrimPostAgeLegal
+            self.coef = coef
+        }
     }
     
     public struct MajorationPourEnfant: Codable {
@@ -65,8 +78,8 @@ public final class RegimeAgirc: Codable {
         }
         
         public var version                 : Version
-        let gridAvantAgeLegal              : [SliceAvantAgeLegal]
-        let gridApresAgelegal              : [SliceApresAgeLegal]
+        var gridAvantAgeLegal              : [SliceAvantAgeLegal]
+        var gridApresAgelegal              : [SliceApresAgeLegal]
         var valeurDuPoint                  : Double // 1.2714
         var ageMinimum                     : Int    // 57
         var majorationPourEnfant           : MajorationPourEnfant
@@ -93,6 +106,16 @@ public final class RegimeAgirc: Codable {
     public var model: Model
 
     // MARK: - Computed Properties
+
+    public var gridAvantAgeLegal: [SliceAvantAgeLegal] {
+        get { model.gridAvantAgeLegal }
+        set { model.gridAvantAgeLegal = newValue }
+    }
+
+    public var gridApresAgelegal: [SliceApresAgeLegal] {
+        get { model.gridApresAgelegal }
+        set { model.gridApresAgelegal = newValue }
+    }
 
     public var valeurDuPoint: Double {
         get { model.valeurDuPoint }

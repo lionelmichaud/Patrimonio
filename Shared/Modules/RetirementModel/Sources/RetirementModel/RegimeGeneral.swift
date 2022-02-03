@@ -51,15 +51,31 @@ public final class RegimeGeneral: Codable {
         }
     }
     
-    struct SliceRegimeLegal: Codable {
-        var birthYear   : Int
-        var ndTrimestre : Int // nb de trimestre pour bénéficer du taux plein
-        var ageTauxPlein: Int // age minimum pour bénéficer du taux plein sans avoir le nb de trimestres minimum
+    public struct SliceRegimeLegal: Codable, Hashable {
+        public var birthYear   : Int
+        /// nb de trimestre pour bénéficer du taux plein
+        public var ndTrimestre : Int
+        /// age minimum pour bénéficer du taux plein sans avoir le nb de trimestres minimum
+        public var ageTauxPlein: Int
+
+        public init(birthYear    : Int,
+                    ndTrimestre  : Int,
+                    ageTauxPlein : Int) {
+            self.birthYear = birthYear
+            self.ndTrimestre = ndTrimestre
+            self.ageTauxPlein = ageTauxPlein
+        }
     }
     
-    struct SliceUnemployement: Codable {
-        var nbTrimestreAcquis  : Int
-        var nbTrimNonIndemnise : Int
+    public struct SliceUnemployement: Codable, Hashable {
+        public var nbTrimestreAcquis  : Int
+        public var nbTrimNonIndemnise : Int
+
+        public init(nbTrimestreAcquis  : Int,
+                    nbTrimNonIndemnise : Int) {
+            self.nbTrimestreAcquis  = nbTrimestreAcquis
+            self.nbTrimNonIndemnise = nbTrimNonIndemnise
+        }
     }
     
     public struct Model: JsonCodableToBundleP, VersionableP {
@@ -70,8 +86,8 @@ public final class RegimeGeneral: Codable {
         }
         
         public var version           : Version
-        let dureeDeReferenceGrid     : [SliceRegimeLegal]
-        let nbTrimNonIndemniseGrid   : [SliceUnemployement]
+        var dureeDeReferenceGrid     : [SliceRegimeLegal]
+        var nbTrimNonIndemniseGrid   : [SliceUnemployement]
         var ageMinimumLegal          : Int    // 62
         let nbOfYearForSAM           : Int    // 25 pour le calcul du SAM
         var maxReversionRate         : Double // 50.0 // % du SAM [0, 100]
@@ -143,11 +159,21 @@ public final class RegimeGeneral: Codable {
     /// dependency to model
     public var model: Model
     
+    public var dureeDeReferenceGrid: [SliceRegimeLegal] {
+        get { model.dureeDeReferenceGrid }
+        set { model.dureeDeReferenceGrid = newValue }
+    }
+
+    public var nbTrimNonIndemniseGrid: [SliceUnemployement] {
+        get { model.nbTrimNonIndemniseGrid }
+        set { model.nbTrimNonIndemniseGrid = newValue }
+    }
+
     public var ageMinimumLegal: Int {
         get { model.ageMinimumLegal }
         set { model.ageMinimumLegal = newValue }
     }
-    
+
     public var maxReversionRate: Double {
         get { model.maxReversionRate }
         set { model.maxReversionRate = newValue }

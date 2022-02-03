@@ -46,28 +46,28 @@ func applyChangesToTemplateAlert(viewModel                  : DeterministicViewM
                                  notifyTemplatFolderMissing : @escaping () -> Void,
                                  notifyFailure              : @escaping () -> Void) -> AlertItem {
     AlertItem(title         : Text("Modèle"),
-                  message       : Text("Voulez-vous appliquer les modifications effectuées au modèle ?"),
-                  primaryButton : .default(Text("Appliquer")) {
-                    guard let templateFolder = PersistenceManager.templateFolder() else {
-                        notifyTemplatFolderMissing()
-                        return
-                    }
-                    
-                    // créer une copie du modèle
-                    let copy = Model(from: model)
-                    // mettre à jour la copie du modèle avec les nouvelles valeurs
-                    let wasModified = viewModel.isModified
-                    viewModel.update(copy)
-                    viewModel.isModified = wasModified
-                    
-                    // sauvegarder la copie modifiée du modèle dans le dossier template
-                    do {
-                        try copy.saveAsJSON(toFolder: templateFolder)
-                    } catch {
-                        notifyFailure()
-                    }
-                  },
-                  secondaryButton: .cancel())
+              message       : Text("Voulez-vous appliquer les modifications effectuées au modèle ?"),
+              primaryButton : .default(Text("Appliquer")) {
+        guard let templateFolder = PersistenceManager.templateFolder() else {
+            notifyTemplatFolderMissing()
+            return
+        }
+
+        // créer une copie du modèle
+        let copy = Model(from: model)
+        // mettre à jour la copie du modèle avec les nouvelles valeurs
+        let wasModified = viewModel.isModified
+        viewModel.update(copy)
+        viewModel.isModified = wasModified
+
+        // sauvegarder la copie modifiée du modèle dans le dossier template
+        do {
+            try copy.saveAsJSON(toFolder: templateFolder)
+        } catch {
+            notifyFailure()
+        }
+    },
+              secondaryButton: .cancel())
 }
 
 // MARK: - View Extensions

@@ -8,6 +8,32 @@
 import SwiftUI
 import AppFoundation
 
+// MARK: - Text View describing a Version
+
+struct VersionText : View {
+    var version: Version
+
+    var body: some View {
+        HStack {
+            Text("v\(version.version ?? "")")
+                .foregroundColor(.secondary)
+            Text("du \(version.date.stringShortDate)")
+                .foregroundColor(.secondary)
+        }
+    }
+}
+
+@ViewBuilder func headerWithVersion(label: String, version: Version) -> some View {
+    HStack {
+        Text(label)
+        Spacer()
+        Text("v\(version.version ?? "")")
+            .foregroundColor(.secondary).textCase(.lowercase)
+        Text("du \(version.date.stringShortDate)")
+            .foregroundColor(.secondary).textCase(.lowercase)
+    }.font(.headline)
+}
+
 // MARK: - Display & Edit the Version
 
 struct VersionView: View {

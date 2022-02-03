@@ -33,7 +33,7 @@ struct ModelDeterministicView: View {
                 ModelDeterministicHumanView()
                     .environmentObject(viewModel)
 
-                // modèle écnonomie
+                // modèle économie
                 ModelDeterministicEconomyView()
                     .environmentObject(viewModel)
 

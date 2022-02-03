@@ -15,32 +15,32 @@ struct ModelDeterministicHumanView: View {
 
     var body: some View {
         Section(header: Text("Modèle Humain").font(.headline)) {
-            Stepper(value : $viewModel.menLifeExpectation,
+            Stepper(value : $viewModel.humanLifeModel.menLifeExpectation.defaultValue,
                     in    : 50 ... 100) {
                 HStack {
                     Text("Espérance de vie d'un Homme")
                     Spacer()
-                    Text("\(viewModel.menLifeExpectation) ans").foregroundColor(.secondary)
+                    Text("\(Int(viewModel.humanLifeModel.menLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.menLifeExpectation) { _ in viewModel.isModified = true }
+            }.onChange(of: viewModel.humanLifeModel.menLifeExpectation.defaultValue) { _ in viewModel.isModified = true }
             
-            Stepper(value : $viewModel.womenLifeExpectation,
+            Stepper(value : $viewModel.humanLifeModel.womenLifeExpectation.defaultValue,
                     in    : 50 ... 100) {
                 HStack {
                     Text("Espérance de vie d'une Femme")
                     Spacer()
-                    Text("\(viewModel.womenLifeExpectation) ans").foregroundColor(.secondary)
+                    Text("\(Int(viewModel.humanLifeModel.womenLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.womenLifeExpectation) { _ in viewModel.isModified = true }
+            }.onChange(of: viewModel.humanLifeModel.womenLifeExpectation.defaultValue) { _ in viewModel.isModified = true }
             
-            Stepper(value : $viewModel.nbOfYearsOfdependency,
+            Stepper(value : $viewModel.humanLifeModel.nbOfYearsOfdependency.defaultValue,
                     in    : 0 ... 10) {
                 HStack {
                     Text("Nombre d'années de dépendance")
                     Spacer()
-                    Text("\(viewModel.nbOfYearsOfdependency) ans").foregroundColor(.secondary)
+                    Text("\(Int(viewModel.humanLifeModel.nbOfYearsOfdependency.defaultValue)) ans").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.nbOfYearsOfdependency) { _ in viewModel.isModified = true }
+            }.onChange(of: viewModel.humanLifeModel.nbOfYearsOfdependency.defaultValue) { _ in viewModel.isModified = true }
         }
     }
 }

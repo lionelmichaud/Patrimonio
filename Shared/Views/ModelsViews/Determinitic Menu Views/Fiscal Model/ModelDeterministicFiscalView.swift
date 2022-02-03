@@ -23,40 +23,28 @@ struct ModelDeterministicFiscalView: View {
                                     .environmentObject(viewModel)) {
                         Text("Revenus du Travail (IRPP)")
                         Spacer()
-                        Text("v\(viewModel.fiscalModel.incomeTaxes.model.version.version ?? "")")
-                            .foregroundColor(.secondary)
-                        Text("du \(viewModel.fiscalModel.incomeTaxes.model.version.date.stringShortDate)")
-                            .foregroundColor(.secondary)
+                        VersionText(version: viewModel.fiscalModel.incomeTaxes.model.version)
                     }
 
                     NavigationLink(destination: ModelFiscalIsfView()
                                     .environmentObject(viewModel)) {
                         Text("Capital (IFI)")
                         Spacer()
-                        Text("v\(viewModel.fiscalModel.isf.model.version.version ?? "")")
-                            .foregroundColor(.secondary)
-                        Text("du \(viewModel.fiscalModel.isf.model.version.date.stringShortDate)")
-                            .foregroundColor(.secondary)
+                        VersionText(version: viewModel.fiscalModel.isf.model.version)
                     }
 
                     NavigationLink(destination: ModelFiscalImpotSocieteView()
                                     .environmentObject(viewModel)) {
                         Text("Bénéfice des Sociétés (IS)")
                         Spacer()
-                        Text("v\(viewModel.fiscalModel.companyProfitTaxes.model.version.version ?? "")")
-                            .foregroundColor(.secondary)
-                        Text("du \(viewModel.fiscalModel.companyProfitTaxes.model.version.date.stringShortDate)")
-                            .foregroundColor(.secondary)
+                        VersionText(version: viewModel.fiscalModel.companyProfitTaxes.model.version)
                     }
 
                     NavigationLink(destination: ModelFiscalImmobilierImpotView()
                                     .environmentObject(viewModel)) {
                         Text("Plus-Value Immobilière")
                         Spacer()
-                        Text("v\(viewModel.fiscalModel.estateCapitalGainIrpp.model.version.version ?? "")")
-                            .foregroundColor(.secondary)
-                        Text("du \(viewModel.fiscalModel.estateCapitalGainIrpp.model.version.date.stringShortDate)")
-                            .foregroundColor(.secondary)
+                        VersionText(version: viewModel.fiscalModel.estateCapitalGainIrpp.model.version)
                     }
                 },
                 label: {
@@ -69,60 +57,42 @@ struct ModelDeterministicFiscalView: View {
                                     .environmentObject(viewModel)) {
                         Text("Pensions de Retraite")
                         Spacer()
-                        Text("v\(viewModel.fiscalModel.pensionTaxes.model.version.version ?? "")")
-                            .foregroundColor(.secondary)
-                        Text("du \(viewModel.fiscalModel.pensionTaxes.model.version.date.stringShortDate)")
-                            .foregroundColor(.secondary)
+                        VersionText(version: viewModel.fiscalModel.pensionTaxes.model.version)
                     }
 
                     NavigationLink(destination: ModelFiscalChomageChargeView()
                                     .environmentObject(viewModel)) {
                         Text("Allocation Chômage")
                         Spacer()
-                        Text("v\(viewModel.fiscalModel.allocationChomageTaxes.model.version.version ?? "")")
-                            .foregroundColor(.secondary)
-                        Text("du \(viewModel.fiscalModel.allocationChomageTaxes.model.version.date.stringShortDate)")
-                            .foregroundColor(.secondary)
+                        VersionText(version: viewModel.fiscalModel.allocationChomageTaxes.model.version)
                     }
 
                     NavigationLink(destination: ModelFiscalFinancialView()
                                     .environmentObject(viewModel)) {
                         Text("Revenus Financiers")
                         Spacer()
-                        Text("v\(viewModel.fiscalModel.financialRevenuTaxes.model.version.version ?? "")")
-                            .foregroundColor(.secondary)
-                        Text("du \(viewModel.fiscalModel.financialRevenuTaxes.model.version.date.stringShortDate)")
-                            .foregroundColor(.secondary)
+                        VersionText(version: viewModel.fiscalModel.financialRevenuTaxes.model.version)
                     }
 
                     NavigationLink(destination: ModelFiscalLifeInsuranceView()
                                     .environmentObject(viewModel)) {
                         Text("Revenus d'Assurance Vie")
                         Spacer()
-                        Text("v\(viewModel.fiscalModel.lifeInsuranceTaxes.model.version.version ?? "")")
-                            .foregroundColor(.secondary)
-                        Text("du \(viewModel.fiscalModel.lifeInsuranceTaxes.model.version.date.stringShortDate)")
-                            .foregroundColor(.secondary)
+                        VersionText(version: viewModel.fiscalModel.lifeInsuranceTaxes.model.version)
                     }
 
                     NavigationLink(destination: ModelFiscalTurnoverView()
                                     .environmentObject(viewModel)) {
                         Text("Bénéfices Non Commerciaux (BNC)")
                         Spacer()
-                        Text("v\(viewModel.fiscalModel.turnoverTaxes.model.version.version ?? "")")
-                            .foregroundColor(.secondary)
-                        Text("du \(viewModel.fiscalModel.turnoverTaxes.model.version.date.stringShortDate)")
-                            .foregroundColor(.secondary)
+                        VersionText(version: viewModel.fiscalModel.turnoverTaxes.model.version)
                     }
 
                     NavigationLink(destination: ModelFiscalImmobilierTaxeView()
                                     .environmentObject(viewModel)) {
                         Text("Plus-Value Immobilière")
                         Spacer()
-                        Text("v\(viewModel.fiscalModel.estateCapitalGainTaxes.model.version.version ?? "")")
-                            .foregroundColor(.secondary)
-                        Text("du \(viewModel.fiscalModel.estateCapitalGainTaxes.model.version.date.stringShortDate)")
-                            .foregroundColor(.secondary)
+                        VersionText(version: viewModel.fiscalModel.estateCapitalGainTaxes.model.version)
                     }
                 },
                 label: {
@@ -141,20 +111,14 @@ struct ModelDeterministicFiscalView: View {
                                     .environmentObject(viewModel)) {
                         Text("Succession et Donation")
                         Spacer()
-                        Text("v\(viewModel.fiscalModel.inheritanceDonation.model.version.version ?? "")")
-                            .foregroundColor(.secondary)
-                        Text("du \(viewModel.fiscalModel.inheritanceDonation.model.version.date.stringShortDate)")
-                            .foregroundColor(.secondary)
+                        VersionText(version: viewModel.fiscalModel.inheritanceDonation.model.version)
                     }
 
                     NavigationLink(destination: ModelFiscalLifeInsInheritanceView()
                                     .environmentObject(viewModel)) {
                         Text("Transmission des Assurances Vie")
                         Spacer()
-                        Text("v\(viewModel.fiscalModel.lifeInsuranceInheritance.model.version.version ?? "")")
-                            .foregroundColor(.secondary)
-                        Text("du \(viewModel.fiscalModel.lifeInsuranceInheritance.model.version.date.stringShortDate)")
-                            .foregroundColor(.secondary)
+                        VersionText(version: viewModel.fiscalModel.lifeInsuranceInheritance.model.version)
                     }
                 },
                 label: {

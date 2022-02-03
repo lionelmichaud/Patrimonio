@@ -130,6 +130,7 @@ struct AmountEditView: View {
 }
 
 // MARK: - Affichage d'un montant en €
+
 /// Affichage d'une valeur numérique Double
 /// - Parameter:
 ///   - label: Libellé à gauche

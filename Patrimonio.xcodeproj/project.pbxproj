@@ -89,6 +89,16 @@
 		7921A65D2785C7D900A2BA93 /* BubbleChartView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7921A65B2785C7D900A2BA93 /* BubbleChartView+Extension.swift */; };
 		792874F426E130A20011913B /* FamilyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 792874F326E130A20011913B /* FamilyModel */; };
 		792874FA26E130BD0011913B /* FamilyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 792874F926E130BD0011913B /* FamilyModel */; };
+		792AAE5727AB182100D3D4DF /* AgircApresAgeLegalGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792AAE5627AB182100D3D4DF /* AgircApresAgeLegalGridView.swift */; };
+		792AAE5827AB182100D3D4DF /* AgircApresAgeLegalGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792AAE5627AB182100D3D4DF /* AgircApresAgeLegalGridView.swift */; };
+		792AAE5A27AB274A00D3D4DF /* AgircAvantAgeLegalGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792AAE5927AB274A00D3D4DF /* AgircAvantAgeLegalGridView.swift */; };
+		792AAE5B27AB274A00D3D4DF /* AgircAvantAgeLegalGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792AAE5927AB274A00D3D4DF /* AgircAvantAgeLegalGridView.swift */; };
+		792AAE5E27AB323000D3D4DF /* ModelUnemploymentAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792AAE5D27AB323000D3D4DF /* ModelUnemploymentAmountView.swift */; };
+		792AAE5F27AB323000D3D4DF /* ModelUnemploymentAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792AAE5D27AB323000D3D4DF /* ModelUnemploymentAmountView.swift */; };
+		792AAE6127AB324700D3D4DF /* ModelUnemploymentDiffereView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792AAE6027AB324700D3D4DF /* ModelUnemploymentDiffereView.swift */; };
+		792AAE6227AB324700D3D4DF /* ModelUnemploymentDiffereView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792AAE6027AB324700D3D4DF /* ModelUnemploymentDiffereView.swift */; };
+		792AAE6427AB4C8C00D3D4DF /* UnemploymentAreDurationGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792AAE6327AB4C8C00D3D4DF /* UnemploymentAreDurationGridView.swift */; };
+		792AAE6527AB4C8C00D3D4DF /* UnemploymentAreDurationGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792AAE6327AB4C8C00D3D4DF /* UnemploymentAreDurationGridView.swift */; };
 		792B29ED26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792B29EC26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift */; };
 		792B29EE26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792B29EC26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift */; };
 		792B29F826EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792B29F726EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift */; };
@@ -178,6 +188,10 @@
 		796A707926E6A11D00769D1E /* Kpi in Frameworks */ = {isa = PBXBuildFile; productRef = 796A707826E6A11D00769D1E /* Kpi */; };
 		796F2F90262C8553002D20D1 /* HumanLifeModel in Frameworks */ = {isa = PBXBuildFile; productRef = 796F2F8F262C8553002D20D1 /* HumanLifeModel */; };
 		7970271B27A9DB3B00C06BBF /* DiscreteRandomizerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7970271A27A9DB3B00C06BBF /* DiscreteRandomizerEditView.swift */; };
+		7970271E27AA092000C06BBF /* DureeRefGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7970271D27AA092000C06BBF /* DureeRefGridView.swift */; };
+		7970271F27AA092000C06BBF /* DureeRefGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7970271D27AA092000C06BBF /* DureeRefGridView.swift */; };
+		7970272127AA1A0700C06BBF /* NbTrimUnemployementGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7970272027AA1A0700C06BBF /* NbTrimUnemployementGridView.swift */; };
+		7970272227AA1A0700C06BBF /* NbTrimUnemployementGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7970272027AA1A0700C06BBF /* NbTrimUnemployementGridView.swift */; };
 		7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 7970627E262C7B7C009A18F0 /* UnemployementModel */; };
 		79706281262C7B82009A18F0 /* UnemployementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79706280262C7B82009A18F0 /* UnemployementModel */; };
 		7971B9C62638CAF3009CF0F7 /* NSUIViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7971B9C52638CAF3009CF0F7 /* NSUIViewRepresentable.swift */; };
@@ -620,6 +634,11 @@
 		7921A64D2785C73A00A2BA93 /* HorizontalBarChartView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HorizontalBarChartView+Extension.swift"; sourceTree = "<group>"; };
 		7921A6542785C77B00A2BA93 /* PieChartView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PieChartView+Extension.swift"; sourceTree = "<group>"; };
 		7921A65B2785C7D900A2BA93 /* BubbleChartView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BubbleChartView+Extension.swift"; sourceTree = "<group>"; };
+		792AAE5627AB182100D3D4DF /* AgircApresAgeLegalGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgircApresAgeLegalGridView.swift; sourceTree = "<group>"; };
+		792AAE5927AB274A00D3D4DF /* AgircAvantAgeLegalGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgircAvantAgeLegalGridView.swift; sourceTree = "<group>"; };
+		792AAE5D27AB323000D3D4DF /* ModelUnemploymentAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelUnemploymentAmountView.swift; sourceTree = "<group>"; };
+		792AAE6027AB324700D3D4DF /* ModelUnemploymentDiffereView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelUnemploymentDiffereView.swift; sourceTree = "<group>"; };
+		792AAE6327AB4C8C00D3D4DF /* UnemploymentAreDurationGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnemploymentAreDurationGridView.swift; sourceTree = "<group>"; };
 		792B29EC26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDeterministicEconomyView.swift; sourceTree = "<group>"; };
 		792B29F726EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDeterministicSociologyView.swift; sourceTree = "<group>"; };
 		792B29FE26EBC455005AFE29 /* ModelDeterministicRetirementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDeterministicRetirementView.swift; sourceTree = "<group>"; };
@@ -672,6 +691,8 @@
 		7968402126B8999000F838BE /* RealEstateCapitalGainTaxesModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RealEstateCapitalGainTaxesModel.json; sourceTree = "<group>"; };
 		7968402326B8999000F838BE /* PensionTaxesModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PensionTaxesModel.json; sourceTree = "<group>"; };
 		7970271A27A9DB3B00C06BBF /* DiscreteRandomizerEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscreteRandomizerEditView.swift; sourceTree = "<group>"; };
+		7970271D27AA092000C06BBF /* DureeRefGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DureeRefGridView.swift; sourceTree = "<group>"; };
+		7970272027AA1A0700C06BBF /* NbTrimUnemployementGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NbTrimUnemployementGridView.swift; sourceTree = "<group>"; };
 		7971B9C52638CAF3009CF0F7 /* NSUIViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSUIViewRepresentable.swift; sourceTree = "<group>"; };
 		79735EE8263242FA00CD952F /* AppMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppMain.swift; sourceTree = "<group>"; };
 		79735EE9263242FA00CD952F /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -943,6 +964,7 @@
 				792B29F726EBC3DB005AFE29 /* ModelDeterministicSociologyView.swift */,
 				79CCF8EF279CF21600338A2D /* ModelDeterministicUnemploymentView.swift */,
 				79CEC52B279DA4D800A6F9B5 /* Fiscal Model */,
+				792AAE5C27AB320F00D3D4DF /* Unemployment Model */,
 				79CEC50A279D8EC800A6F9B5 /* Retirement Model */,
 			);
 			path = "Determinitic Menu Views";
@@ -1125,6 +1147,16 @@
 			path = "Tests macOS";
 			sourceTree = "<group>";
 		};
+		792AAE5C27AB320F00D3D4DF /* Unemployment Model */ = {
+			isa = PBXGroup;
+			children = (
+				792AAE5D27AB323000D3D4DF /* ModelUnemploymentAmountView.swift */,
+				792AAE6027AB324700D3D4DF /* ModelUnemploymentDiffereView.swift */,
+				792AAE6327AB4C8C00D3D4DF /* UnemploymentAreDurationGridView.swift */,
+			);
+			path = "Unemployment Model";
+			sourceTree = "<group>";
+		};
 		7935FFE6265461FA00AC1715 /* Patrimoine */ = {
 			isa = PBXGroup;
 			children = (
@@ -1218,6 +1250,17 @@
 				7968402326B8999000F838BE /* PensionTaxesModel.json */,
 			);
 			path = Ressources;
+			sourceTree = "<group>";
+		};
+		7970271C27AA061600C06BBF /* GridViews */ = {
+			isa = PBXGroup;
+			children = (
+				7970271D27AA092000C06BBF /* DureeRefGridView.swift */,
+				7970272027AA1A0700C06BBF /* NbTrimUnemployementGridView.swift */,
+				792AAE5627AB182100D3D4DF /* AgircApresAgeLegalGridView.swift */,
+				792AAE5927AB274A00D3D4DF /* AgircAvantAgeLegalGridView.swift */,
+			);
+			path = GridViews;
 			sourceTree = "<group>";
 		};
 		7971B9C22638B745009CF0F7 /* Views */ = {
@@ -1589,6 +1632,7 @@
 		79CEC50A279D8EC800A6F9B5 /* Retirement Model */ = {
 			isa = PBXGroup;
 			children = (
+				7970271C27AA061600C06BBF /* GridViews */,
 				792B29FE26EBC455005AFE29 /* ModelDeterministicRetirementView.swift */,
 				79CEC50B279D8EFF00A6F9B5 /* ModelRetirementGeneralView.swift */,
 				79CEC51D279D96C000A6F9B5 /* ModelRetirementAgircView.swift */,
@@ -2122,10 +2166,12 @@
 				799025B32641F60300ED53D4 /* StatisticsChartView.swift in Sources */,
 				797390772782202B00543B74 /* PatrimoineSummaryRiskChartView.swift in Sources */,
 				79735EEA263242FA00CD952F /* AppMain.swift in Sources */,
+				792AAE5A27AB274A00D3D4DF /* AgircAvantAgeLegalGridView.swift in Sources */,
 				792B29FF26EBC455005AFE29 /* ModelDeterministicRetirementView.swift in Sources */,
 				79C8382D2641DCBC008B29BF /* ChartLimitLine+Extension.swift in Sources */,
 				79BE4A862651CE7800BBF46C /* ModelSociologyView.swift in Sources */,
 				79CEC557279DAAC200A6F9B5 /* ModelFiscalLifeInsInheritanceView.swift in Sources */,
+				792AAE5727AB182100D3D4DF /* AgircApresAgeLegalGridView.swift in Sources */,
 				79AA5D762650831800B26D2C /* IrppSliceChartCashFlowVisitor.swift in Sources */,
 				79A8A19526565DBC00B23AD7 /* DossierAddView.swift in Sources */,
 				79BE4A6E2651A2C100BBF46C /* HistogramVisitor.swift in Sources */,
@@ -2138,7 +2184,9 @@
 				79CEC549279DA9F100A6F9B5 /* ModelFiscalLifeInsuranceView.swift in Sources */,
 				79EF934E2637636D00C1BE5B /* ChartsFormaters.swift in Sources */,
 				79CEC550279DAA6B00A6F9B5 /* ModelFiscalInheritanceDonationView.swift in Sources */,
+				792AAE6427AB4C8C00D3D4DF /* UnemploymentAreDurationGridView.swift in Sources */,
 				798DE8C02635CD3C00C0C3B5 /* AlertView.swift in Sources */,
+				7970271E27AA092000C06BBF /* DureeRefGridView.swift in Sources */,
 				798E6F46274A98EC003610FB /* ComputationParametersSectionView.swift in Sources */,
 				79D7C41626B6EFCA0057E343 /* ModelDeterministicViewModel.swift in Sources */,
 				79EC5EAA26406FD900FF8263 /* OwnerGroupBox.swift in Sources */,
@@ -2146,6 +2194,7 @@
 				79EC5E9F26406F5200FF8263 /* OwnersListView.swift in Sources */,
 				7921A6392785C62300A2BA93 /* ScatterChartView+Extension.swift in Sources */,
 				79FC722326330D2C004F3BD2 /* AppCommands.swift in Sources */,
+				7970272127AA1A0700C06BBF /* NbTrimUnemployementGridView.swift in Sources */,
 				7935FFD726541AAB00AC1715 /* DossiersSidebarView.swift in Sources */,
 				79EC5E712640037400FF8263 /* DependencyInjector.swift in Sources */,
 				799DE8402654199600E96CF6 /* NoLoadedDossierView.swift in Sources */,
@@ -2169,6 +2218,7 @@
 				799025AF2641F60300ED53D4 /* IrppSliceView.swift in Sources */,
 				793D17A22761307800CB0F69 /* UpdateSettingsView.swift in Sources */,
 				798DE8AB2635CA7100C0C3B5 /* ExpenseDetailedView.swift in Sources */,
+				792AAE6127AB324700D3D4DF /* ModelUnemploymentDiffereView.swift in Sources */,
 				79CEC517279D902000A6F9B5 /* ModelUpdateAlerts.swift in Sources */,
 				7921A6472785C6EA00A2BA93 /* CombinedChartView+Extension.swift in Sources */,
 				797901272640AF0400104C1A /* PatrimoineSummaryView.swift in Sources */,
@@ -2247,6 +2297,7 @@
 				79BE4A7A2651CE7800BBF46C /* ModelDeterministicView.swift in Sources */,
 				79BBE8E62646E9170045E524 /* BS Detailed ChartView.swift in Sources */,
 				791ED0E0263A049900701202 /* PersonViewModel.swift in Sources */,
+				792AAE5E27AB323000D3D4DF /* ModelUnemploymentAmountView.swift in Sources */,
 				799025A32641F60300ED53D4 /* HistogramView.swift in Sources */,
 				799025BB2641F60300ED53D4 /* CF Global ChartView.swift in Sources */,
 				79AA5D6A26505D5600B26D2C /* IsfChartCashFlowVisitor.swift in Sources */,
@@ -2278,6 +2329,8 @@
 				79AA5D732650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift in Sources */,
 				793D17A32761307800CB0F69 /* UpdateSettingsView.swift in Sources */,
 				79B2726F2634CC0000298E5D /* PersonPickerView.swift in Sources */,
+				792AAE6527AB4C8C00D3D4DF /* UnemploymentAreDurationGridView.swift in Sources */,
+				792AAE5827AB182100D3D4DF /* AgircApresAgeLegalGridView.swift in Sources */,
 				791ED0FC263A1EB700701202 /* PersonDetailView.swift in Sources */,
 				7921A65D2785C7D900A2BA93 /* BubbleChartView+Extension.swift in Sources */,
 				79735EEB263242FA00CD952F /* AppMain.swift in Sources */,
@@ -2294,6 +2347,7 @@
 				79CEC50D279D8EFF00A6F9B5 /* ModelRetirementGeneralView.swift in Sources */,
 				798DE8A526357CF500C0C3B5 /* SwiftUIconditional.swift in Sources */,
 				7901CF7F26528399007DF85B /* ScenarioSidebarSectionView.swift in Sources */,
+				792AAE5B27AB274A00D3D4DF /* AgircAvantAgeLegalGridView.swift in Sources */,
 				79BE4A6F2651A2C100BBF46C /* HistogramVisitor.swift in Sources */,
 				79B5E8CB26EBBDB400C5EB21 /* ModelDeterministicHumanView.swift in Sources */,
 				791ED0F6263A1C5E00701202 /* ButtonStyles.swift in Sources */,
@@ -2320,6 +2374,7 @@
 				79EC5EAB26406FD900FF8263 /* OwnerGroupBox.swift in Sources */,
 				7990D8E2264F1C4000078CB6 /* BarChartCashFlowVisitor.swift in Sources */,
 				79F4D12426B03D62009D91B9 /* Buttons.swift in Sources */,
+				792AAE6227AB324700D3D4DF /* ModelUnemploymentDiffereView.swift in Sources */,
 				791ED0F0263A173D00701202 /* PersonAddView.swift in Sources */,
 				7990D8DE264F0A6800078CB6 /* LineChartCashFlowVisitor.swift in Sources */,
 				799025AC2641F60300ED53D4 /* ComputationView.swift in Sources */,
@@ -2381,6 +2436,7 @@
 				791ED100263A1EF800701202 /* AdultDetailView.swift in Sources */,
 				79CEC526279D986500A6F9B5 /* ModelRetirementReversionView.swift in Sources */,
 				79BE4A812651CE7800BBF46C /* DiscreteRandomizerView.swift in Sources */,
+				792AAE5F27AB323000D3D4DF /* ModelUnemploymentAmountView.swift in Sources */,
 				791ED0DE2639FE2700701202 /* RetirementEditView.swift in Sources */,
 				791ED102263A1EF800701202 /* ChildDetailView.swift in Sources */,
 				79EC5E9226406AAD00FF8263 /* LoanDetailedView.swift in Sources */,
@@ -2399,6 +2455,8 @@
 				792B29EE26EBC2F9005AFE29 /* ModelDeterministicEconomyView.swift in Sources */,
 				79B272822634D77D00298E5D /* LabelValueHelperViews.swift in Sources */,
 				799025A62641F60300ED53D4 /* KpiListView.swift in Sources */,
+				7970271F27AA092000C06BBF /* DureeRefGridView.swift in Sources */,
+				7970272227AA1A0700C06BBF /* NbTrimUnemployementGridView.swift in Sources */,
 				796506D22640866F0036E466 /* InterestRateTypeView.swift in Sources */,
 				799025C02641F60300ED53D4 /* SuccessionsSidebarSectionView.swift in Sources */,
 				79CEC54A279DA9F100A6F9B5 /* ModelFiscalLifeInsuranceView.swift in Sources */,

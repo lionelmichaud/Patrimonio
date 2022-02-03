@@ -17,16 +17,22 @@ struct ModelDeterministicRetirementView: View {
             NavigationLink(destination: ModelRetirementGeneralView()
                             .environmentObject(viewModel)) {
                 Text("Pension du Régime Général")
+                Spacer()
+                VersionText(version: viewModel.retirementModel.regimeGeneral.model.version)
             }
             
             NavigationLink(destination: ModelRetirementAgircView()
                             .environmentObject(viewModel)) {
                 Text("Pension du Régime Complémentaire")
+                Spacer()
+                VersionText(version: viewModel.retirementModel.regimeAgirc.model.version)
             }
 
             NavigationLink(destination: ModelRetirementReversionView()
                             .environmentObject(viewModel)) {
                 Text("Pension de Réversion")
+                Spacer()
+                VersionText(version: viewModel.retirementModel.reversion.model.version)
             }
         }
     }

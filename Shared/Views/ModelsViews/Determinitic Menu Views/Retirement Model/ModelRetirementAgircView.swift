@@ -22,54 +22,66 @@ struct ModelRetirementAgircView: View {
     
     var body: some View {
         Form {
-            Stepper(value : $viewModel.ageMinimumAGIRC,
+            Stepper(value : $viewModel.retirementModel.regimeAgirc.ageMinimum,
                     in    : 50 ... 100) {
                 HStack {
                     Text("Age minimum de liquidation")
                     Spacer()
-                    Text("\(viewModel.ageMinimumAGIRC) ans").foregroundColor(.secondary)
+                    Text("\(viewModel.retirementModel.regimeAgirc.ageMinimum) ans").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.ageMinimumAGIRC) { _ in viewModel.isModified = true }
+            }.onChange(of: viewModel.retirementModel.regimeAgirc.ageMinimum) { _ in viewModel.isModified = true }
             
             AmountEditView(label  : "Valeur du point",
-                           amount : $viewModel.valeurDuPointAGIRC)
-                .onChange(of: viewModel.valeurDuPointAGIRC) { _ in viewModel.isModified = true }
+                           amount : $viewModel.retirementModel.regimeAgirc.valeurDuPoint)
+                .onChange(of: viewModel.retirementModel.regimeAgirc.valeurDuPoint) { _ in viewModel.isModified = true }
             
+            NavigationLink(destination: AgircAvantAgeLegalGridView(label: "Réduction pour trimestres manquant avant l'âge légale",
+                                                                   grid: $viewModel.retirementModel.regimeAgirc.gridAvantAgeLegal)
+                            .environmentObject(viewModel)) {
+                Text("Réduction pour trimestres manquant avant l'âge légale")
+            }.isDetailLink(true)
+
+            NavigationLink(destination: AgircApresAgeLegalGridView(label: "Réduction pour trimestres manquant après l'âge légale",
+                                                                   grid: $viewModel.retirementModel.regimeAgirc.gridApresAgelegal)
+                            .environmentObject(viewModel)) {
+                Text("Réduction pour trimestres manquant après l'âge légale")
+            }.isDetailLink(true)
+
             Section(header: Text("Majoration pour Enfants").font(.headline)) {
-                Stepper(value : $viewModel.majorationPourEnfant.majorPourEnfantsNes,
+                Stepper(value : $viewModel.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes,
                         in    : 0 ... 20.0,
                         step  : 1.0) {
                     HStack {
                         Text("Surcote pour enfants nés")
                         Spacer()
-                        Text("\(viewModel.majorationPourEnfant.majorPourEnfantsNes.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(viewModel.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes.percentString(digit: 0)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.majorationPourEnfant.majorPourEnfantsNes) { _ in viewModel.isModified = true }
+                }.onChange(of: viewModel.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes) { _ in viewModel.isModified = true }
                 
-                Stepper(value : $viewModel.majorationPourEnfant.nbEnafntNesMin,
+                Stepper(value : $viewModel.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin,
                         in    : 1 ... 4,
                         step  : 1) {
                     HStack {
                         Text("Nombre d'enfants nés pour obtenir la majoration")
                         Spacer()
-                        Text("\(viewModel.majorationPourEnfant.nbEnafntNesMin) enfants").foregroundColor(.secondary)
+                        Text("\(viewModel.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin) enfants").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.majorationPourEnfant.nbEnafntNesMin) { _ in viewModel.isModified = true }
+                }.onChange(of: viewModel.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin) { _ in viewModel.isModified = true }
                 
                 AmountEditView(label   : "Plafond pour enfants nés",
                                comment : "annuel",
-                               amount  : $viewModel.majorationPourEnfant.plafondMajoEnfantNe)
-                    .onChange(of: viewModel.majorationPourEnfant.plafondMajoEnfantNe) { _ in viewModel.isModified = true }
+                               amount  : $viewModel.retirementModel.regimeAgirc.majorationPourEnfant.plafondMajoEnfantNe)
+                    .onChange(of: viewModel.retirementModel.regimeAgirc.majorationPourEnfant.plafondMajoEnfantNe) { _ in viewModel.isModified = true }
                 
-                Stepper(value : $viewModel.majorationPourEnfant.majorParEnfantACharge,
+                Stepper(value : $viewModel.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge,
                         in    : 0 ... 20.0,
                         step  : 1.0) {
                     HStack {
                         Text("Surcote pour enfants à charge")
                         Spacer()
-                        Text("\(viewModel.majorationPourEnfant.majorParEnfantACharge.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(viewModel.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge.percentString(digit: 0)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.majorationPourEnfant.majorParEnfantACharge) { _ in viewModel.isModified = true }
+                }.onChange(of: viewModel.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge) { _ in viewModel.isModified = true }
             }
         }
         .alert(item: $alertItem, content: newAlert)

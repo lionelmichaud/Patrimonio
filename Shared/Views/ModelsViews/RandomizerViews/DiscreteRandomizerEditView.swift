@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import ModelEnvironment
 
 struct DiscreteRandomizerEditView: View {
+    @EnvironmentObject private var model : Model
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        DiscreteRandomizerView(randomizer: model.socioEconomyModel.nbTrimTauxPlein)
     }
 }
 

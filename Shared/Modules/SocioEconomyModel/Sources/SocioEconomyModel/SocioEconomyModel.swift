@@ -152,30 +152,30 @@ public struct SocioEconomy: PersistableModelP {
     public var model         : Model?
     public var persistenceSM : PersistenceStateMachine
     
-    public var pensionDevaluationRateDeterministic: Double {
-        get { model!.pensionDevaluationRate.defaultValue }
-        set {
-            model?.pensionDevaluationRate.defaultValue = newValue
-            // mémoriser la modification
-            persistenceSM.process(event: .onModify)
-        }
-    }
-    public var nbTrimTauxPleinDeterministic: Int {
-        get { Int(model!.nbTrimTauxPlein.defaultValue.rounded()) }
-        set {
-            model?.nbTrimTauxPlein.defaultValue = newValue.double()
-            // mémoriser la modification
-            persistenceSM.process(event: .onModify)
-        }
-    }
-    public var expensesUnderEvaluationRateDeterministic: Double {
-        get { model!.expensesUnderEvaluationRate.defaultValue }
-        set {
-            model?.expensesUnderEvaluationRate.defaultValue = newValue
-            // mémoriser la modification
-            persistenceSM.process(event: .onModify)
-        }
-    }
+//    public var pensionDevaluationRateDeterministic: Double {
+//        get { model!.pensionDevaluationRate.defaultValue }
+//        set {
+//            model?.pensionDevaluationRate.defaultValue = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//    public var nbTrimTauxPleinDeterministic: Int {
+//        get { Int(model!.nbTrimTauxPlein.defaultValue.rounded()) }
+//        set {
+//            model?.nbTrimTauxPlein.defaultValue = newValue.double()
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//    public var expensesUnderEvaluationRateDeterministic: Double {
+//        get { model!.expensesUnderEvaluationRate.defaultValue }
+//        set {
+//            model?.expensesUnderEvaluationRate.defaultValue = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
     // MARK: - Initializer
     
     public init() {

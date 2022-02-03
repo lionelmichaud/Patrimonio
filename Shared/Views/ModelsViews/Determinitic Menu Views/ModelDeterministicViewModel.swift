@@ -8,7 +8,10 @@
 import Foundation
 import ModelEnvironment
 import RetirementModel
+import SocioEconomyModel
 import FiscalModel
+import HumanLifeModel
+import UnemployementModel
 import FamilyModel
 
 // MARK: - Deterministic View Model
@@ -19,22 +22,9 @@ class DeterministicViewModel: ObservableObject {
 
     @Published var isModified : Bool
     // model: HumanLife
-    @Published var menLifeExpectation    : Int
-    @Published var womenLifeExpectation  : Int
-    @Published var nbOfYearsOfdependency : Int
+    @Published var humanLifeModel : HumanLife.Model
     // model: Retirement
-    @Published var ageMinimumLegal     : Int
-    @Published var maxReversionRate    : Double
-    @Published var decoteParTrimestre  : Double
-    @Published var surcoteParTrimestre : Double
-    @Published var maxNbTrimestreDecote: Int
-    @Published var majorationTauxEnfant: Double
-    @Published var ageMinimumAGIRC     : Int
-    @Published var valeurDuPointAGIRC  : Double
-    @Published var majorationPourEnfant: RegimeAgirc.MajorationPourEnfant
-    @Published var newModelSelected    : Bool
-    @Published var newTauxReversion    : Double
-    @Published var oldReversionModel   : PensionReversion.Old
+    @Published var retirementModel : Retirement.Model
     // model: Economy
     @Published var inflation         : Double
     @Published var securedRate       : Double
@@ -42,65 +32,38 @@ class DeterministicViewModel: ObservableObject {
     @Published var securedVolatility : Double
     @Published var stockVolatility   : Double
     // model: SocioEconomy
-    @Published var pensionDevaluationRate      : Double
-    @Published var nbTrimTauxPlein             : Int
-    @Published var expensesUnderEvaluationRate : Double
+    @Published var socioEconomyModel : SocioEconomy.Model
     // model: Fiscal
     @Published var fiscalModel : Fiscal.Model
+    // model: Chômage
+    @Published var unemploymentModel : Unemployment.Model
 
     // MARK: - Initialization
     
     init(using model: Model) {
-        menLifeExpectation    = model.humanLife.menLifeExpectationDeterministic
-        womenLifeExpectation  = model.humanLife.womenLifeExpectationDeterministic
-        nbOfYearsOfdependency = model.humanLife.nbOfYearsOfdependencyDeterministic
-        
-        ageMinimumLegal      = model.retirement.ageMinimumLegal
-        maxReversionRate     = model.retirement.maxReversionRate
-        decoteParTrimestre   = model.retirement.decoteParTrimestre
-        surcoteParTrimestre  = model.retirement.surcoteParTrimestre
-        maxNbTrimestreDecote = model.retirement.maxNbTrimestreDecote
-        majorationTauxEnfant = model.retirement.majorationTauxEnfant
-        ageMinimumAGIRC      = model.retirement.ageMinimumAGIRC
-        valeurDuPointAGIRC   = model.retirement.valeurDuPointAGIRC
-        majorationPourEnfant = model.retirement.majorationPourEnfant
-        newModelSelected     = model.retirement.newModelSelected
-        newTauxReversion     = model.retirement.newTauxReversion
-        oldReversionModel    = model.retirement.oldReversionModel
+        humanLifeModel    = model.humanLifeModel
+        retirementModel   = model.retirementModel
+        socioEconomyModel = model.socioEconomyModel
+        fiscalModel       = model.fiscalModel
+        unemploymentModel = model.unemploymentModel
 
         inflation         = model.economy.inflation
         securedRate       = model.economy.securedRate
         stockRate         = model.economy.stockRate
         securedVolatility = model.economy.securedVolatility
         stockVolatility   = model.economy.stockVolatility
-        
-        pensionDevaluationRate      = model.socioEconomy.pensionDevaluationRateDeterministic
-        nbTrimTauxPlein             = model.socioEconomy.nbTrimTauxPleinDeterministic
-        expensesUnderEvaluationRate = model.socioEconomy.expensesUnderEvaluationRateDeterministic
-        
-        fiscalModel = model.fiscalModel
-        
+
         isModified = false
     }
     
     // MARK: - methods
     
     func updateFrom(_ model: Model) {
-        menLifeExpectation    = model.humanLife.menLifeExpectationDeterministic
-        womenLifeExpectation  = model.humanLife.womenLifeExpectationDeterministic
-        nbOfYearsOfdependency = model.humanLife.nbOfYearsOfdependencyDeterministic
-        
-        ageMinimumLegal      = model.retirement.ageMinimumLegal
-        maxReversionRate     = model.retirement.maxReversionRate
-        decoteParTrimestre   = model.retirement.decoteParTrimestre
-        surcoteParTrimestre  = model.retirement.surcoteParTrimestre
-        maxNbTrimestreDecote = model.retirement.maxNbTrimestreDecote
-        majorationTauxEnfant = model.retirement.majorationTauxEnfant
-        ageMinimumAGIRC      = model.retirement.ageMinimumAGIRC
-        valeurDuPointAGIRC   = model.retirement.valeurDuPointAGIRC
-        majorationPourEnfant = model.retirement.majorationPourEnfant
-        newModelSelected     = model.retirement.newModelSelected
-        newTauxReversion     = model.retirement.newTauxReversion
+        humanLifeModel    = model.humanLifeModel
+        retirementModel   = model.retirementModel
+        socioEconomyModel = model.socioEconomyModel
+        fiscalModel       = model.fiscalModel
+        unemploymentModel = model.unemploymentModel
 
         inflation         = model.economy.inflation
         securedRate       = model.economy.securedRate
@@ -108,57 +71,31 @@ class DeterministicViewModel: ObservableObject {
         securedVolatility = model.economy.securedVolatility
         stockVolatility   = model.economy.stockVolatility
 
-        pensionDevaluationRate      = model.socioEconomy.pensionDevaluationRateDeterministic
-        nbTrimTauxPlein             = model.socioEconomy.nbTrimTauxPleinDeterministic
-        expensesUnderEvaluationRate = model.socioEconomy.expensesUnderEvaluationRateDeterministic
-        
-        fiscalModel = model.fiscalModel
-
         isModified = false
     }
     
     func update(_ model: Model) {
-        model.humanLife.menLifeExpectationDeterministic    = menLifeExpectation
-        model.humanLife.womenLifeExpectationDeterministic  = womenLifeExpectation
-        model.humanLife.nbOfYearsOfdependencyDeterministic = nbOfYearsOfdependency
-        //model.humanLife.persistenceSM.process(event: .onModify)
-
-        model.retirement.ageMinimumLegal      = ageMinimumLegal
-        model.retirement.maxReversionRate     = maxReversionRate
-        model.retirement.decoteParTrimestre   = decoteParTrimestre
-        model.retirement.surcoteParTrimestre  = surcoteParTrimestre
-        model.retirement.maxNbTrimestreDecote = maxNbTrimestreDecote
-        model.retirement.majorationTauxEnfant = majorationTauxEnfant
-        model.retirement.ageMinimumAGIRC      = ageMinimumAGIRC
-        model.retirement.valeurDuPointAGIRC   = valeurDuPointAGIRC
-        model.retirement.majorationPourEnfant = majorationPourEnfant
-        model.retirement.newModelSelected     = newModelSelected
-        model.retirement.newTauxReversion     = newTauxReversion
-        //model.retirement.persistenceSM.process(event : .onModify)
+        model.humanLifeModel    = humanLifeModel
+        model.retirementModel   = retirementModel
+        model.socioEconomyModel = socioEconomyModel
+        model.fiscalModel       = fiscalModel
+        model.unemploymentModel = unemploymentModel
 
         model.economy.inflation         = inflation
         model.economy.securedRate       = securedRate
         model.economy.stockRate         = stockRate
         model.economy.securedVolatility = securedVolatility
         model.economy.stockVolatility   = stockVolatility
-        //model.economy.persistenceSM.process(event: .onModify)
-
-        model.socioEconomy.pensionDevaluationRateDeterministic      = pensionDevaluationRate
-        model.socioEconomy.nbTrimTauxPleinDeterministic             = nbTrimTauxPlein
-        model.socioEconomy.expensesUnderEvaluationRateDeterministic = expensesUnderEvaluationRate
-        //model.socioEconomy.persistenceSM.process(event: .onModify)
-
-        model.fiscalModel = fiscalModel
 
         isModified = false
     }
     
     func update(_ family: Family) {
         family.updateMembersDterministicValues(
-            menLifeExpectation,
-            womenLifeExpectation,
-            nbOfYearsOfdependency,
-            ageMinimumLegal,
-            ageMinimumAGIRC)
+            Int(humanLifeModel.menLifeExpectation.defaultValue.rounded()),
+            Int(humanLifeModel.womenLifeExpectation.defaultValue.rounded()),
+            Int(humanLifeModel.nbOfYearsOfdependency.defaultValue.rounded()),
+            retirementModel.regimeGeneral.ageMinimumLegal,
+            retirementModel.regimeAgirc.ageMinimum)
     }
 }
