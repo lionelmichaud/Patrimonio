@@ -29,7 +29,7 @@ struct DossierSummaryView: View {
                                       sectionHeader: "Dossier en cours")
             }
             .navigationTitle(Text("Dossier en cours d'utilisation"))
-            .alert(item: $alertItem, content: createAlert)
+            .alert(item: $alertItem, content: newAlert)
             .toolbar {
                 /// Bouton: Sauvegarder
                 ToolbarItem(placement: .automatic) {

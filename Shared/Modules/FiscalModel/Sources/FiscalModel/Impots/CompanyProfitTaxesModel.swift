@@ -14,15 +14,15 @@ public struct CompanyProfitTaxesModel: Codable {
     
     // MARK: Nested types
     
-    struct Model: JsonCodableToBundleP, VersionableP {
+    public struct Model: JsonCodableToBundleP, VersionableP {
         static var defaultFileName : String = "CompanyProfitTaxesModel.json"
-        var version : Version
-        let rate    : Double // 15.0 // %
+        public var version : Version
+        public var rate    : Double // 15.0 // %
     }
     
     // MARK: Properties
     
-    var model: Model
+    public var model: Model
     
     // MARK: Methods
     

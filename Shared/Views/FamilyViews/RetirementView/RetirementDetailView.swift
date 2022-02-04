@@ -215,7 +215,7 @@ struct RetirementGeneralSectionView: View {
                 Text("\(viewModel.general.pensionNette.€String)").bold()
             }
         }
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
         .sheet(isPresented: $showingSheet) {
             ScrollView(.vertical, showsIndicators: true) {
                 Text("Calcul du montant").bold().padding(.bottom)
@@ -313,7 +313,7 @@ struct RetirementAgircSectionView: View {
                 Text("\(viewModel.agirc.pensionNette.€String)").bold()
             }
         }
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
         .sheet(isPresented: $showingSheet) {
             ScrollView(.vertical, showsIndicators: true) {
                 Text("Age de départ à taux plein: Coefficient de solidarité").bold().padding(.bottom)

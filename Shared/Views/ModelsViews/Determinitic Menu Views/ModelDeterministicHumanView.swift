@@ -6,51 +6,109 @@
 //
 
 import SwiftUI
+import Persistence
 import ModelEnvironment
+import FamilyModel
 
 // MARK: - Deterministic HumanLife View
 
 struct ModelDeterministicHumanView: View {
-    @ObservedObject var viewModel: DeterministicViewModel
-    
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var simulation : Simulation
+    @StateObject private var viewModel        : DeterministicViewModel
+    @State private var alertItem              : AlertItem?
+
     var body: some View {
-        Section(header: Text("Modèle Humain")) {
-            Stepper(value : $viewModel.menLifeExpectation,
-                    in    : 50 ... 100) {
-                HStack {
-                    Text("Espérance de vie d'un Homme")
-                    Spacer()
-                    Text("\(viewModel.menLifeExpectation) ans").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.menLifeExpectation) { _ in viewModel.isModified = true }
-            
-            Stepper(value : $viewModel.womenLifeExpectation,
-                    in    : 50 ... 100) {
-                HStack {
-                    Text("Espérance de vie d'une Femme")
-                    Spacer()
-                    Text("\(viewModel.womenLifeExpectation) ans").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.womenLifeExpectation) { _ in viewModel.isModified = true }
-            
-            Stepper(value : $viewModel.nbOfYearsOfdependency,
-                    in    : 0 ... 10) {
-                HStack {
-                    Text("Nombre d'années de dépendance")
-                    Spacer()
-                    Text("\(viewModel.nbOfYearsOfdependency) ans").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.nbOfYearsOfdependency) { _ in viewModel.isModified = true }
+        Form {
+            Section(header: Text("Homme").font(.headline)) {
+                VersionEditableView(version: $viewModel.humanLifeModel.menLifeExpectation.version)
+                    .onChange(of: viewModel.humanLifeModel.menLifeExpectation.version) { _ in viewModel.isModified = true }
+
+                Stepper(value : $viewModel.humanLifeModel.menLifeExpectation.defaultValue,
+                        in    : 50 ... 100) {
+                    HStack {
+                        Text("Espérance de vie d'un Homme")
+                        Spacer()
+                        Text("\(Int(viewModel.humanLifeModel.menLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.humanLifeModel.menLifeExpectation.defaultValue) { _ in viewModel.isModified = true }
+            }
+
+            Section(header: Text("Femme").font(.headline)) {
+                VersionEditableView(version: $viewModel.humanLifeModel.womenLifeExpectation.version)
+                    .onChange(of: viewModel.humanLifeModel.womenLifeExpectation.version) { _ in viewModel.isModified = true }
+
+                Stepper(value : $viewModel.humanLifeModel.womenLifeExpectation.defaultValue,
+                        in    : 50 ... 100) {
+                    HStack {
+                        Text("Espérance de vie d'une Femme")
+                        Spacer()
+                        Text("\(Int(viewModel.humanLifeModel.womenLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.humanLifeModel.womenLifeExpectation.defaultValue) { _ in viewModel.isModified = true }
+            }
+
+            Section(header: Text("Dépendance").font(.headline)) {
+                VersionEditableView(version: $viewModel.humanLifeModel.nbOfYearsOfdependency.version)
+                    .onChange(of: viewModel.humanLifeModel.nbOfYearsOfdependency.version) { _ in viewModel.isModified = true }
+
+                Stepper(value : $viewModel.humanLifeModel.nbOfYearsOfdependency.defaultValue,
+                        in    : 0 ... 10) {
+                    HStack {
+                        Text("Nombre d'années de dépendance")
+                        Spacer()
+                        Text("\(Int(viewModel.humanLifeModel.nbOfYearsOfdependency.defaultValue)) ans").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.humanLifeModel.nbOfYearsOfdependency.defaultValue) { _ in viewModel.isModified = true }
+            }
         }
+        .navigationTitle("Modèle Humain")
+        .alert(item: $alertItem, content: newAlert)
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(
+            applyChangesToTemplate: {
+                alertItem = applyChangesToTemplateAlert(
+                    viewModel : viewModel,
+                    model     : model,
+                    notifyTemplatFolderMissing: {
+                        alertItem =
+                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
+                                  dismissButton : .default(Text("OK")))
+                    },
+                    notifyFailure: {
+                        alertItem =
+                        AlertItem(title         : Text("Echec de l'enregistrement"),
+                                  dismissButton : .default(Text("OK")))
+                    })
+            },
+            applyChangesToDossier: {
+                alertItem = applyChangesToOpenDossierAlert(
+                    viewModel  : viewModel,
+                    model      : model,
+                    family     : family,
+                    simulation : simulation)
+            },
+            isModified: viewModel.isModified)
+        .onAppear {
+            viewModel.updateFrom(model)
+        }
+    }
+
+    // MARK: - Initialization
+    
+    init(using model: Model) {
+        _viewModel = StateObject(wrappedValue: DeterministicViewModel(using: model))
     }
 }
 
 struct ModelDeterministicHumanView_Previews: PreviewProvider {
-    static var model = Model(fromBundle: Bundle.main)
-    
     static var previews: some View {
-        Form {
-            ModelDeterministicHumanView(viewModel: DeterministicViewModel(using: model))
-        }
+        loadTestFilesFromBundle()
+        return ModelDeterministicHumanView(using: modelTest)
+            .environmentObject(modelTest)
+            .environmentObject(familyTest)
+            .environmentObject(simulationTest)
+            .preferredColorScheme(.dark)
     }
 }

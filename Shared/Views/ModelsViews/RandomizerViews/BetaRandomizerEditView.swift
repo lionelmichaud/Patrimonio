@@ -144,7 +144,7 @@ struct BetaRandomizerEditView : View {
             .onAppear {
                 viewModel.updateFrom(betaRandomizer)
             }
-            .alert(item: $alertItem, content: createAlert)
+            .alert(item: $alertItem, content: newAlert)
     }
 
     // MARK: - Properties
@@ -197,7 +197,7 @@ struct BetaRandomizerEditView : View {
                       primaryButton : .default(Text("Appliquer")) {
                         guard let templateFolder = PersistenceManager.templateFolder() else {
                             alertItem =
-                                AlertItem(title         : Text("Répertoire 'Modèle' absent"),
+                                AlertItem(title         : Text("Répertoire 'Patron' absent"),
                                           dismissButton : .default(Text("OK")))
                             return
                         }

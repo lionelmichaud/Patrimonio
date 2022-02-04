@@ -13,33 +13,50 @@ public struct PensionReversion: Codable {
     
     // MARK: - Nested types
     
-    struct OldRegimeGeneral: Codable {
-        let minimum: Double // minimum absolu
-        let majoration3enfants: Double // [0, 100] 10%
+    public struct OldRegimeGeneral: Codable {
+        public var minimum: Double // minimum absolu
+        public var majoration3enfants: Double // [0, 100] 10%
     }
     
-    struct OldAgircArcco: Codable {
-        let fractionConjoint: Double // [0, 100] 60% des points du conjoint décédé
-        let ageMinimum      : Int // 55 ans
+    public struct OldAgircArcco: Codable {
+        public var fractionConjoint: Double // [0, 100] 60% des points du conjoint décédé
+        public var ageMinimum      : Int // 55 ans
     }
     
-    struct Old: Codable {
-        var general    : OldRegimeGeneral
-        var agircArcco : OldAgircArcco
+    public struct Old: Codable {
+        public var general    : OldRegimeGeneral
+        public var agircArcco : OldAgircArcco
     }
     
     // https://www.retraite.com/dossier-retraite/pension-de-reversion/evolution-de-la-pension-de-reversion-dans-la-reforme-des-retraites.html
     public struct Model: JsonCodableToBundleP, VersionableP {
         public var version: Version
-        let newModelSelected : Bool
-        let tauxReversion    : Double // [0, 100] // 70% de la somme des deux pensions
-        let oldModel         : Old
+        var newModelSelected : Bool
+        var tauxReversion    : Double // [0, 100] // 70% de la somme des deux pensions
+        var oldModel         : Old
     }
     
     // MARK: - Properties
     
     public var model: Model
     
+    // MARK: - Computed Properties
+
+    public var newModelSelected: Bool {
+        get { model.newModelSelected }
+        set { model.newModelSelected = newValue }
+    }
+
+    public var newTauxReversion: Double {
+        get { model.tauxReversion }
+        set { model.tauxReversion = newValue }
+    }
+
+    public var oldModel: Old {
+        get { model.oldModel }
+        set { model.oldModel = newValue }
+    }
+
     // MARK: - Initializer
     
     init(model: Model) {

@@ -53,7 +53,7 @@ struct ComputationView: View {
                             .disabled(!savingIsPossible())
                         }
                     }
-                    .alert(item: $alertItem, content: createAlert)
+                    .alert(item: $alertItem, content: newAlert)
             }
         } else {
             NoLoadedDossierView()

@@ -308,48 +308,39 @@
             "grid" : [
                 {
                     "floor"    : 0,
-                    "usuFruit" : 0.9,
-                    "nueProp"  : 0.1
+                    "usuFruit" : 0.9
                 },
                 {
                     "floor"    : 20,
-                    "usuFruit" : 0.8,
-                    "nueProp"  : 0.2
+                    "usuFruit" : 0.8
                 },
                 {
                     "floor"    : 30,
-                    "usuFruit" : 0.7,
-                    "nueProp"  : 0.3
+                    "usuFruit" : 0.7
                 },
                 {
                     "floor"    : 40,
-                    "usuFruit" : 0.6,
-                    "nueProp"  : 0.4
+                    "usuFruit" : 0.6
                 },
                 {
                     "floor"    : 50,
-                    "usuFruit" : 0.5,
-                    "nueProp"  : 0.5
+                    "usuFruit" : 0.5
                 },
                 {
                     "floor"    : 60,
-                    "usuFruit" : 0.4,
-                    "nueProp"  : 0.6
+                    "usuFruit" : 0.4
                 },
                 {
                     "floor"    : 70,
-                    "usuFruit" : 0.3,
-                    "nueProp"  : 0.7
+                    "usuFruit" : 0.3
                 },
                 {
                     "floor"    : 80,
-                    "usuFruit" : 0.2,
-                    "nueProp"  : 0.8
+                    "usuFruit" : 0.2
                 },
                 {
                     "floor"    : 90,
-                    "usuFruit" : 0.1,
-                    "nueProp"  : 0.9
+                    "usuFruit" : 0.1
                 }
             ]
         }

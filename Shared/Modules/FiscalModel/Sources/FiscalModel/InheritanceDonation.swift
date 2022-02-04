@@ -98,13 +98,13 @@ public struct InheritanceDonation: Codable {
     public struct Model: JsonCodableToBundleP, VersionableP {
         public static var defaultFileName: String = "InheritanceDonationModel.json"
         
-        public var version          : Version
-        var gridDonationConjoint    : RateGrid
-        var abatConjoint            : Double //  80_724€
-        var gridLigneDirecte        : RateGrid
-        public var abatLigneDirecte : Double // 100_000€
-        public let fraisFunéraires  : Double //   1_500€
-        public let decoteResidence  : Double // 20% // %
+        public var version              : Version
+        public var gridDonationConjoint : RateGrid
+        public var abatConjoint         : Double //  80_724€
+        public var gridLigneDirecte     : RateGrid
+        public var abatLigneDirecte     : Double // 100_000€
+        public var fraisFunéraires      : Double //   1_500€
+        public var decoteResidence      : Double // 20% // %
     }
     
     // MARK: - Properties
@@ -176,16 +176,16 @@ public struct LifeInsuranceInheritance: Codable {
         case heritageOfChildSlicesIssue
     }
     
-    struct Model: JsonCodableToBundleP, VersionableP, RateGridableP {
+    public struct Model: JsonCodableToBundleP, VersionableP, RateGridableP {
         static var defaultFileName: String = "LifeInsuranceInheritanceModel.json"
         
-        var version : Version
-        var grid    : RateGrid
+        public var version : Version
+        public var grid    : RateGrid
     }
     
     // MARK: - Properties
 
-    var model: Model
+    public var model: Model
     
     // MARK: - Methods
 

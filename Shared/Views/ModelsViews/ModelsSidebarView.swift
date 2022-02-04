@@ -18,7 +18,17 @@ struct ModelsSidebarView: View {
     @EnvironmentObject private var uiState   : UIState
     
     enum PushedItem {
-        case deterministicModel, humanModel, economyModel, sociologyModel, statisticsAssistant
+        case deterministicModel,
+             detHumanModel,
+             detEconomyModel,
+             detSociologyModel,
+             detRetirementModel,
+             detFiscalModel,
+             detUnemploymentModel,
+             statHumanModel,
+             statEconomyModel,
+             statSociologyModel,
+             statisticsAssistant
     }
     
     var body: some View {
@@ -45,7 +55,7 @@ struct ModelsSidebarView: View {
             
             /// vue par défaut
             if dataStore.activeDossier != nil {
-                ModelDeterministicView(using: model)
+                ModelDeterministicHumanView(using: model)
             } else {
                 NoLoadedDossierView()
             }

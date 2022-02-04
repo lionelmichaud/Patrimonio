@@ -15,11 +15,30 @@ enum RateGridError: Error {
 }
 
 // MARK: - Tranche de barême
-public struct RateSlice: Codable {
-    public let floor : Double // euro
-    public let rate  : Double // %
+public struct RateSlice: Codable, Hashable {
+
+    // MARK: - Properties
+
+    public var floor : Double // euro
+    public var rate  : Double // %
     var disc  : Double // euro
-    
+
+    // MARK: - Initializers
+
+    public init(floor: Double, rate: Double) {
+        self.floor = floor
+        self.rate  = rate
+        self.disc  = 0.0
+    }
+
+    public init(floor: Double, rate: Double, disc: Double) {
+        self.floor = floor
+        self.rate = rate
+        self.disc = disc
+    }
+
+    // MARK: - Methods
+
     /// Calcule la taxe ou l'impôt pour un montant taxable donné situé dans cette tranche
     /// - Parameter taxableValue: montant taxable
     /// - Returns: montant de la taxe ou de l'impôt
@@ -32,6 +51,7 @@ public struct RateSlice: Codable {
 }
 
 // MARK: - Barême fiscal
+
 public typealias RateGrid = [RateSlice]
 
 public extension RateGrid {

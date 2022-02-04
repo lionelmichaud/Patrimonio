@@ -117,7 +117,7 @@ struct ComputationButonView: View {
                     .padding(.vertical, 4.0)
                })
             .capsuleButtonStyle(width: 200.0)
-            .alert(item: $localAlertItem, content: createAlert)
+            .alert(item: $localAlertItem, content: newAlert)
     }
 
     /// Exécuter la simulation

@@ -48,38 +48,118 @@ public struct Retirement: PersistableModelP {
         RegimeGeneral.setSimulationMode(to: simulationMode)
         RegimeAgirc.setSimulationMode(to: simulationMode)
     }
-        
+
     // MARK: - Properties
     
     public var model         : Model?
     public var persistenceSM : PersistenceStateMachine
 
-    public var ageMinimumLegal: Int {
-        get { model!.regimeGeneral.ageMinimumLegal }
-        set {
-            model?.regimeGeneral.ageMinimumLegal = newValue
-            // mémoriser la modification
-            persistenceSM.process(event: .onModify)
-        }
-    }
-
-    public var valeurDuPointAGIRC: Double {
-        get { model!.regimeAgirc.valeurDuPoint }
-        set {
-            model?.regimeAgirc.valeurDuPoint = newValue
-            // mémoriser la modification
-            persistenceSM.process(event: .onModify)
-        }
-    }
-
-    public var ageMinimumAGIRC: Int {
-        get { model!.regimeAgirc.ageMinimum }
-        set {
-            model?.regimeAgirc.ageMinimum = newValue
-            // mémoriser la modification
-            persistenceSM.process(event: .onModify)
-        }
-    }
+//    public var ageMinimumLegal: Int {
+//        get { model!.regimeGeneral.ageMinimumLegal }
+//        set {
+//            model?.regimeGeneral.ageMinimumLegal = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//
+//    public var maxReversionRate: Double {
+//        get { model!.regimeGeneral.maxReversionRate }
+//        set {
+//            model?.regimeGeneral.maxReversionRate = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//
+//    public var decoteParTrimestre: Double {
+//        get { model!.regimeGeneral.decoteParTrimestre }
+//        set {
+//            model?.regimeGeneral.decoteParTrimestre = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//
+//    public var surcoteParTrimestre: Double {
+//        get { model!.regimeGeneral.surcoteParTrimestre }
+//        set {
+//            model?.regimeGeneral.surcoteParTrimestre = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//
+//    public var maxNbTrimestreDecote: Int {
+//        get { model!.regimeGeneral.maxNbTrimestreDecote }
+//        set {
+//            model?.regimeGeneral.maxNbTrimestreDecote = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//
+//    public var majorationTauxEnfant: Double {
+//        get { model!.regimeGeneral.majorationTauxEnfant }
+//        set {
+//            model?.regimeGeneral.majorationTauxEnfant = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//
+//    public var valeurDuPointAGIRC: Double {
+//        get { model!.regimeAgirc.valeurDuPoint }
+//        set {
+//            model?.regimeAgirc.valeurDuPoint = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//
+//    public var ageMinimumAGIRC: Int {
+//        get { model!.regimeAgirc.ageMinimum }
+//        set {
+//            model?.regimeAgirc.ageMinimum = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//
+//    public var majorationPourEnfant: RegimeAgirc.MajorationPourEnfant {
+//        get { model!.regimeAgirc.majorationPourEnfant }
+//        set {
+//            model?.regimeAgirc.majorationPourEnfant = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//
+//    public var newModelSelected: Bool {
+//        get { model!.reversion.newModelSelected }
+//        set {
+//            model?.reversion.newModelSelected = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//    public var newTauxReversion: Double {
+//        get { model!.reversion.newTauxReversion }
+//        set {
+//            model?.reversion.newTauxReversion = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
+//
+//    public var oldReversionModel: PensionReversion.Old {
+//        get { model!.reversion.oldModel }
+//        set {
+//            model?.reversion.oldModel = newValue
+//            // mémoriser la modification
+//            persistenceSM.process(event: .onModify)
+//        }
+//    }
 
     // MARK: - Initializers
     

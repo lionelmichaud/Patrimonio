@@ -22,11 +22,16 @@ where R: Codable,
     // MARK: - Properties
 
     public var version       : Version
+    /// Nom de la valeur aléatoire
     public var name          : String
+    /// Générateur aléatoire
     public var rndGenerator  : R
-    public var defaultValue  : Double = 0 // valeur par defaut déterministe
-    private var randomValue  : Double = 0 // dernière valeur randomisée
-    public var randomHistory : [Double]? // historique des tirages aléatoires
+    /// Valeur par defaut déterministe
+    public var defaultValue  : Double = 0
+    /// Dernière valeur randomisée
+    private var randomValue  : Double = 0
+    /// Historique des tirages aléatoires
+    public var randomHistory : [Double]?
 
     // MARK: - Methods
     

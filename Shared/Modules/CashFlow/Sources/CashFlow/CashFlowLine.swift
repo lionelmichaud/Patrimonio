@@ -238,6 +238,7 @@ public struct CashFlowLine {
     
     fileprivate mutating func computeIrpp(of family   : Family,
                                           using model : Model) {
+        // TODO: - il faudrait traiter différement les produit finacier en report d'imposition (flat taxe et non pas IRPP)
         adultTaxes.irpp = try! model.fiscalModel.incomeTaxes.irpp(taxableIncome : adultsRevenues.totalTaxableIrpp,
                                                                   nbAdults      : family.nbOfAdultAlive(atEndOf: year),
                                                                   nbChildren    : family.nbOfFiscalChildren(during: year))

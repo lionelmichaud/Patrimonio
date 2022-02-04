@@ -135,7 +135,7 @@ struct RecipientsListView : View {
             }
         }
         .onChange(of: name, perform: addRecipient)
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
     }
     
     func addRecipient(newPersonName: String) {
@@ -162,7 +162,7 @@ struct RecipientsListView : View {
     }
     
     @ViewBuilder func menuAddLabel() -> some View {
-        Image(systemName: "plus")
+        Image(systemName: "plus.circle.fill")
             .imageScale(.large)
             .padding()
     }

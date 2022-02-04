@@ -9,32 +9,41 @@
 import Foundation
 import AppFoundation
 
+// MARK: - tranche de barême de décote
+
+public struct ExonerationSlice: Codable, Hashable {
+    public var floor        : Int // year
+    public var discountRate : Double // [0, 100%] // % par année de détention au-delà de floor
+    public var prevDiscount : Double // [0, 100%] // % cumul des tranches précédentes
+
+    public init(floor: Int, discountRate: Double, prevDiscount: Double) {
+        self.floor = floor
+        self.discountRate = discountRate
+        self.prevDiscount = prevDiscount
+    }
+}
+
+public typealias ExonerationGrid = [ExonerationSlice]
+
 // MARK: - Impôts sur plus-values immobilières
 /// impôts sur plus-values immobilières
 public struct RealEstateCapitalGainIrppModel: Codable {
     
     // MARK: - Nested types
 
-    // tranche de barême de l'IRPP
-    struct ExonerationSlice: Codable {
-        let floor        : Int // year
-        let discountRate : Double // % par année de détention au-delà de floor
-        let prevDiscount : Double // % cumul des tranches précédentes
-    }
-    
-    struct Model: JsonCodableToBundleP, VersionableP {
+    public struct Model: JsonCodableToBundleP, VersionableP {
         static var defaultFileName : String = "RealEstateCapitalGainIrppModel.json"
-        var version         : Version
-        let exoGrid         : [ExonerationSlice]
-        let irpp            : Double // 19.0 // %
-        let discountTravaux : Double // 15 // %
-        let discountAfter   : Int // 5 // ans
+        public var version         : Version
+        public var exoGrid         : [ExonerationSlice]
+        public var irpp            : Double // 19.0 // %
+        public var discountTravaux : Double // 15.0 // %
+        public var discountAfter   : Int // 5 // ans
     }
     
     // MARK: - Properties
     
     // barême de l'exoneration de charges sociale sur les plus-values immobilières
-    var model: Model
+    public var model: Model
     
     // MARK: - Methods
     

@@ -26,40 +26,52 @@ public final class UnemploymentCompensation: Codable {
     
     // MARK: - Nested types
 
-    struct DurationSlice: Codable {
-        let fromAge             : Int
-        let maxDuration         : Int // nb de mois d'indemnisation
-        let reduction           : Double // % de dégressivité après le délai de reductionAfter
-        let reductionAfter      : Int // nd de mois d'indemnisation avant dégressivité
-        let reductionSeuilAlloc : Double // € d'allocation SJR min pour se voir appliqué la dégressivité
+    public struct DurationSlice: Codable, Hashable {
+        public var fromAge             : Int
+        public var maxDuration         : Int // nb de mois d'indemnisation
+        public var reduction           : Double // % de dégressivité après le délai de reductionAfter
+        public var reductionAfter      : Int // nb de mois d'indemnisation avant dégressivité
+        public var reductionSeuilAlloc : Double // € d'allocation SJR min pour se voir appliqué la dégressivité
+
+        public init(fromAge             : Int,
+                    maxDuration         : Int,
+                    reduction           : Double,
+                    reductionAfter      : Int,
+                    reductionSeuilAlloc : Double) {
+            self.fromAge = fromAge
+            self.maxDuration = maxDuration
+            self.reduction = reduction
+            self.reductionAfter = reductionAfter
+            self.reductionSeuilAlloc = reductionSeuilAlloc
+        }
     }
     
-    struct DelayModel: Codable {
-        let delaiAttente                        : Int // 7 // L'ARE ne peut pas être versée avant la fin d'un délai d'attente, fixé à 7 jours
-        let ratioDiffereSpecifique              : Double // 94,4 // nombre de jours obtenu en divisant le montant de l'indemnité prise en compte par 94,4
-        let maxDiffereSpecifique                : Int // 150 // le différé ne doit pas dépasser 150 jours calendaires (5 mois)
-        let maxDiffereSpecifiqueLicenciementEco : Int // 75 // ou, en cas de licenciement pour motif économique, 75 jours calendaires.
+    public struct DelayModel: Codable {
+        public var delaiAttente                        : Int // 7 // L'ARE ne peut pas être versée avant la fin d'un délai d'attente, fixé à 7 jours
+        public var ratioDiffereSpecifique              : Double // 94,4 // nombre de jours obtenu en divisant le montant de l'indemnité prise en compte par 94,4
+        public var maxDiffereSpecifique                : Int // 150 // le différé ne doit pas dépasser 150 jours calendaires (5 mois)
+        public var maxDiffereSpecifiqueLicenciementEco : Int // 75 // ou, en cas de licenciement pour motif économique, 75 jours calendaires.
     }
     
-    struct AmountModel: Codable {
-        let case1Rate          : Double // 40.4 // % du salaire journalier de référence
-        let case1Fix           : Double // 12.0 // € par jour
-        let case2Rate          : Double // 57.0 // % du salaire journalier de référence
-        let minAllocationEuro  : Double // 29.26 // € par jour
-        let maxAllocationPcent : Double // 75.0 // % du salaire journalier de référence
-        let maxAllocationEuro  : Double // 253.14 // en €
+    public struct AmountModel: Codable {
+        public var case1Rate          : Double // 40.4 // % du salaire journalier de référence
+        public var case1Fix           : Double // 12.0 // € par jour
+        public var case2Rate          : Double // 57.0 // % du salaire journalier de référence
+        public var minAllocationEuro  : Double // 29.26 // € par jour
+        public var maxAllocationPcent : Double // 75.0 // % du salaire journalier de référence
+        public var maxAllocationEuro  : Double // 253.14 // en €
     }
     
-    struct Model: JsonCodableToBundleP, VersionableP {
+    public struct Model: JsonCodableToBundleP, VersionableP {
         enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
             case version, durationGrid, delayModel, amountModel
         }
         static var defaultFileName: String = "UnemploymentCompensationModel.json"
         
-        var version      : Version
-        let durationGrid : [DurationSlice]
-        let delayModel   : DelayModel
-        let amountModel  : AmountModel
+        public var version      : Version
+        public var durationGrid : [DurationSlice]
+        public var delayModel   : DelayModel
+        public var amountModel  : AmountModel
         // dependencies to other Models
         var allocationChomageTaxesProvider : AllocationChomageTaxesProviderP!
     }
@@ -72,7 +84,7 @@ public final class UnemploymentCompensation: Codable {
     
     // MARK: - Properties
 
-    var model: Model
+    public var model: Model
     
     // MARK: - Methods
 

@@ -34,20 +34,20 @@ public struct IsfModel: Codable {
     
     public struct Model: JsonCodableToBundleP, VersionableP, RateGridableP {
         public static var defaultFileName : String = "IsfModel.json"
-        public var version         : Version
-        public var grid            : RateGrid // barême de l'ISF
-        public let seuil           : Double // 1_300_000 // €
-        var seuil2          : Double // 1_400_000 // €
+        public var version          : Version
+        public var grid             : RateGrid // barême de l'ISF
+        public var seuil            : Double // 1_300_000 // €
+        public var seuil2           : Double // 1_400_000 // €
         // Un système de décote a été mis en place pour les patrimoines nets taxables compris entre 1,3 million et 1,4 million d’euros.
         // Le montant de la décote est calculé selon la formule 17 500 – (1,25 % x montant du patrimoine net taxable).
-        let decote€         : Double // 17_500 // €
-        let decoteCoef      : Double // 1.25 // %
+        public var decote€          : Double // 17_500 // €
+        public var decoteCoef       : Double // 1.25 // %
         // décote sur la résidence principale
-        public let decoteResidence : Double // 30% // %
+        public var decoteResidence  : Double // 30% // %
         // décote d'un bien en location
-        public let decoteLocation  : Double // 10% à 30% // %
-        // décote d'un bien en location
-        let decoteIndivision: Double // 30% // %
+        public var decoteLocation   : Double // 10% à 30% // %
+        // décote d'un bien en indivision
+        public var decoteIndivision : Double // 30% // %
     }
     
     // MARK: - Properties

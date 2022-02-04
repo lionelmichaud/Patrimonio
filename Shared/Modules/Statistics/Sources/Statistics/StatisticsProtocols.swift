@@ -33,10 +33,14 @@ public protocol DistributionP {
     
     // MARK: - Properties
     
-    var minX     : Number? { get set } // valeur minimale de X
-    var maxX     : Number? { get set } // valeur minimale de X
-    var pdfMax   : Number? { get set } // valeur max mémorisée au premier appel de initialize()
-    var cdfCurve : Curve? { get set } // courbe CDF mémorisée au premier appel de initialize()
+    /// valeur minimale de X
+    var minX     : Number? { get set }
+    /// valeur maximale de X
+    var maxX     : Number? { get set }
+    /// valeur max de la PDF, calculée et mémorisée au premier appel de initialize()
+    var pdfMax   : Number? { get set }
+    /// courbe CDF, calculée et mémorisée au premier appel de initialize()
+    var cdfCurve : Curve? { get set }
     
     // MARK: - Methods
     

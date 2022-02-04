@@ -65,42 +65,72 @@ struct LabeledValueRowView: View {
 // MARK: - Saisie d'un montant en €
 struct AmountEditView: View {
     let label            : String
+    let comment          : String?
+    let currency         : Bool
     @Binding var amount  : Double
-
-    var body: some View {
-        let numberFormatter = NumberFormatter()
-        let textValueBinding = Binding<String>(
+    @State var text      : String
+    var textValueBinding : Binding<String> {
+        Binding(
             get: {
-                String(Int(amount))
+                self.text
             },
             set: {
-                if let value = numberFormatter.number(from: $0) {
-                    self.amount = value.doubleValue
-                }
-            })
-        
-        return HStack {
+                self.text = $0
+                // actualiser la valeur numérique
+                self.amount = Double($0.replacingOccurrences(of: ",", with: ".")) ?? 0
+            }
+        )
+    }
+    
+    var body: some View {
+        HStack {
             Text(label)
             Spacer()
+            if comment != nil { Text(comment!).foregroundColor(.secondary) }
             TextField("montant",
                       text: textValueBinding)
-                //.textFieldStyle(RoundedBorderTextFieldStyle())
                 .frame(maxWidth: 88)
                 .numbersAndPunctuationKeyboardType()
                 .multilineTextAlignment(.trailing)
-            Text("€")
+                .onChange(of: text) { newText in
+                    // filtrer les caractères non numériques
+                    var filtered = newText.filter { ",-0123456789".contains($0) }
+                    // filtrer `-` s'il n'est pas le premier caractère
+                    if filtered.count > 0 {
+                        filtered = filtered.replacingOccurrences(of: "-",
+                                                                 with: "",
+                                                                 range: filtered.index(filtered.startIndex, offsetBy: 1)..<filtered.endIndex)
+                    }
+                    if filtered != newText {
+                        self.text = filtered
+                    }
+                }
+                .onDisappear {
+//                    print("Disappeared \(amount)")
+                    text = String(amount).replacingOccurrences(of: ".", with: ",")
+                }
+            if currency {
+                Text("€")
+            }
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
     }
     
-    init(label  : String,
-         amount : Binding<Double>) {
-        self.label   = label
-        self._amount = amount
+    init(label    : String,
+         comment  : String?  = nil,
+         amount   : Binding<Double>,
+         currency : Bool = true) {
+        self.label    = label
+        self.comment  = comment
+        self.currency = currency
+        self._amount  = amount
+        _text = State(initialValue: String(amount.wrappedValue).replacingOccurrences(of: ".", with: ","))
+//        print("created: value = \(amount); text = \(text)")
     }
 }
 
 // MARK: - Affichage d'un montant en €
+
 /// Affichage d'une valeur numérique Double
 /// - Parameter:
 ///   - label: Libellé à gauche
@@ -159,6 +189,7 @@ struct AmountView: View {
 // MARK: - Saisie d'un Integer
 struct IntegerEditView: View {
     let label            : String
+    let comment          : String?
     @Binding var integer : Int
     
     var body: some View {
@@ -176,6 +207,7 @@ struct IntegerEditView: View {
         HStack {
             Text(label)
             Spacer()
+            if comment != nil { Text(comment!).foregroundColor(.secondary) }
             TextField("entier",
                       text: textValueBinding)
                 //.textFieldStyle(RoundedBorderTextFieldStyle())
@@ -186,9 +218,12 @@ struct IntegerEditView: View {
         .textFieldStyle(RoundedBorderTextFieldStyle())
     }
     
-    init(label: String, integer: Binding<Int>) {
-        self.label  = label
-        _integer    = integer
+    init(label   : String,
+         comment : String? = nil,
+         integer : Binding<Int>) {
+        self.label   = label
+        self.comment = comment
+        _integer     = integer
     }
 }
 

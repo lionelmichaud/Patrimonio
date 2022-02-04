@@ -293,7 +293,7 @@ struct NetCashFlowManager {
     ///   - adultsName: personnes à qui l'on va retirer le cash demandé.
     ///   - taxes: taxes à payer sur les retraits de cash
     /// - Throws: Si pas assez de capital -> CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)
-    /// - Returns: taxable Interests
+    /// - Returns: somme des intérets taxables générés par les retraits (en report d'mposition sur lannée suivante)
     func getCashFromInvestement(thisAmount amount   : Double,
                                 in patrimoine       : Patrimoin,
                                 atEndOf year        : Int,

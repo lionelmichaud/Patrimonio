@@ -96,7 +96,7 @@ struct PeriodicInvestDetailedView: View {
                     .disabled(!changeOccured)
             }
         }
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
     }
     
     init(item       : PeriodicInvestement?,

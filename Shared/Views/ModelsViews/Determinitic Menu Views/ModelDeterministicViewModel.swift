@@ -7,6 +7,12 @@
 
 import Foundation
 import ModelEnvironment
+import RetirementModel
+import EconomyModel
+import SocioEconomyModel
+import FiscalModel
+import HumanLifeModel
+import UnemployementModel
 import FamilyModel
 
 // MARK: - Deterministic View Model
@@ -17,90 +23,61 @@ class DeterministicViewModel: ObservableObject {
 
     @Published var isModified : Bool
     // model: HumanLife
-    @Published var menLifeExpectation    : Int
-    @Published var womenLifeExpectation  : Int
-    @Published var nbOfYearsOfdependency : Int
+    @Published var humanLifeModel    : HumanLife.Model
     // model: Retirement
-    @Published var ageMinimumLegal    : Int
-    @Published var ageMinimumAGIRC    : Int
-    @Published var valeurDuPointAGIRC : Double
-    // model: Economy
-    @Published var inflation         : Double
-    @Published var securedRate       : Double
-    @Published var stockRate         : Double
+    @Published var retirementModel   : Retirement.Model
     // model: SocioEconomy
-    @Published var pensionDevaluationRate      : Double
-    @Published var nbTrimTauxPlein             : Int
-    @Published var expensesUnderEvaluationRate : Double
+    @Published var socioEconomyModel : SocioEconomy.Model
+    // model: Fiscal
+    @Published var fiscalModel       : Fiscal.Model
+    // model: Chômage
+    @Published var unemploymentModel : Unemployment.Model
+    // model: Economy
+    @Published var economyModel      : Economy.Model
 
     // MARK: - Initialization
     
     init(using model: Model) {
-        menLifeExpectation    = model.humanLife.menLifeExpectationDeterministic
-        womenLifeExpectation  = model.humanLife.womenLifeExpectationDeterministic
-        nbOfYearsOfdependency = model.humanLife.nbOfYearsOfdependencyDeterministic
-        ageMinimumLegal    = model.retirement.ageMinimumLegal
-        ageMinimumAGIRC    = model.retirement.ageMinimumAGIRC
-        valeurDuPointAGIRC = model.retirement.valeurDuPointAGIRC
-        inflation         = model.economy.inflation
-        securedRate       = model.economy.securedRate
-        stockRate         = model.economy.stockRate
-        pensionDevaluationRate      = model.socioEconomy.pensionDevaluationRateDeterministic
-        nbTrimTauxPlein             = model.socioEconomy.nbTrimTauxPleinDeterministic
-        expensesUnderEvaluationRate = model.socioEconomy.expensesUnderEvaluationRateDeterministic
-        
+        humanLifeModel    = model.humanLifeModel
+        retirementModel   = model.retirementModel
+        socioEconomyModel = model.socioEconomyModel
+        fiscalModel       = model.fiscalModel
+        unemploymentModel = model.unemploymentModel
+        economyModel      = model.economyModel
+
         isModified = false
     }
     
     // MARK: - methods
     
     func updateFrom(_ model: Model) {
-        menLifeExpectation    = model.humanLife.menLifeExpectationDeterministic
-        womenLifeExpectation  = model.humanLife.womenLifeExpectationDeterministic
-        nbOfYearsOfdependency = model.humanLife.nbOfYearsOfdependencyDeterministic
-        ageMinimumLegal    = model.retirement.ageMinimumLegal
-        ageMinimumAGIRC    = model.retirement.ageMinimumAGIRC
-        valeurDuPointAGIRC = model.retirement.valeurDuPointAGIRC
-        inflation         = model.economy.inflation
-        securedRate       = model.economy.securedRate
-        stockRate         = model.economy.stockRate
-        pensionDevaluationRate      = model.socioEconomy.pensionDevaluationRateDeterministic
-        nbTrimTauxPlein             = model.socioEconomy.nbTrimTauxPleinDeterministic
-        expensesUnderEvaluationRate = model.socioEconomy.expensesUnderEvaluationRateDeterministic
-        
+        humanLifeModel    = model.humanLifeModel
+        retirementModel   = model.retirementModel
+        socioEconomyModel = model.socioEconomyModel
+        fiscalModel       = model.fiscalModel
+        unemploymentModel = model.unemploymentModel
+        economyModel      = model.economyModel
+
         isModified = false
     }
     
     func update(_ model: Model) {
-        model.humanLife.menLifeExpectationDeterministic    = menLifeExpectation
-        model.humanLife.womenLifeExpectationDeterministic  = womenLifeExpectation
-        model.humanLife.nbOfYearsOfdependencyDeterministic = nbOfYearsOfdependency
-        model.humanLife.persistenceSM.process(event: .onModify)
-
-        model.retirement.ageMinimumLegal    = ageMinimumLegal
-        model.retirement.ageMinimumAGIRC    = ageMinimumAGIRC
-        model.retirement.valeurDuPointAGIRC = valeurDuPointAGIRC
-        model.retirement.persistenceSM.process(event: .onModify)
-
-        model.economy.inflation         = inflation
-        model.economy.securedRate       = securedRate
-        model.economy.stockRate         = stockRate
-        model.economy.persistenceSM.process(event: .onModify)
-
-        model.socioEconomy.pensionDevaluationRateDeterministic      = pensionDevaluationRate
-        model.socioEconomy.nbTrimTauxPleinDeterministic             = nbTrimTauxPlein
-        model.socioEconomy.expensesUnderEvaluationRateDeterministic = expensesUnderEvaluationRate
-        model.socioEconomy.persistenceSM.process(event: .onModify)
+        model.humanLifeModel    = humanLifeModel
+        model.retirementModel   = retirementModel
+        model.socioEconomyModel = socioEconomyModel
+        model.fiscalModel       = fiscalModel
+        model.unemploymentModel = unemploymentModel
+        model.economyModel      = economyModel
 
         isModified = false
     }
     
     func update(_ family: Family) {
         family.updateMembersDterministicValues(
-            menLifeExpectation,
-            womenLifeExpectation,
-            nbOfYearsOfdependency,
-            ageMinimumLegal,
-            ageMinimumAGIRC)
+            Int(humanLifeModel.menLifeExpectation.defaultValue.rounded()),
+            Int(humanLifeModel.womenLifeExpectation.defaultValue.rounded()),
+            Int(humanLifeModel.nbOfYearsOfdependency.defaultValue.rounded()),
+            retirementModel.regimeGeneral.ageMinimumLegal,
+            retirementModel.regimeAgirc.ageMinimum)
     }
 }

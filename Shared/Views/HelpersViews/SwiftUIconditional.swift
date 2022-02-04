@@ -18,6 +18,8 @@ public extension NavigationLink {
     }
 }
 
+// MARK: - View Extensions
+
 public extension View {
     /// Sets the style for lists within this view.
     func defaultSideBarListStyle() -> some View {

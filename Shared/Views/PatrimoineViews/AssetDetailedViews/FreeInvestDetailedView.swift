@@ -75,7 +75,7 @@ struct FreeInvestDetailedView: View {
                     .disabled(!changeOccured)
             }
         }
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
     }
     
     init(item       : FreeInvestement?,

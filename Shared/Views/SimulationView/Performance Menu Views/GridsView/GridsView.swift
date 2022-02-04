@@ -93,7 +93,7 @@ struct ShortGridView: View {
                 PopOverContentView(title       : popOverTitle,
                                    description : popOverMessage)
             }
-            .alert(item: $alertItem, content: createAlert)
+            .alert(item: $alertItem, content: newAlert)
     }
     
     @ToolbarContentBuilder

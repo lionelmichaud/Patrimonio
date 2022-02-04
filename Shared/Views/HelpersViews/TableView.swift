@@ -9,20 +9,20 @@
 import SwiftUI
 import AppFoundation
 
-struct ListTableRowView<Rating1: View, Rating2: View>: View {
-    let label       : String
-    let value       : Double
-    let indentLevel : Int
-    let header      : Bool
-    var rating1     : Rating1
-    var rating2     : Rating2
+struct ListTableRowView<RatingView1: View, RatingView2: View>: View {
+    private let label       : String
+    private let value       : Double
+    private let indentLevel : Int
+    private let header      : Bool
+    private var rating1     : RatingView1
+    private var rating2     : RatingView2
 
     internal init(label                : String,
                   value                : Double,
                   indentLevel          : Int,
                   header               : Bool,
-                  @ViewBuilder rating1 : () -> Rating1,
-                  @ViewBuilder rating2 : () -> Rating2) {
+                  @ViewBuilder rating1 : () -> RatingView1,
+                  @ViewBuilder rating2 : () -> RatingView2) {
         self.label       = label
         self.value       = value
         self.indentLevel = indentLevel

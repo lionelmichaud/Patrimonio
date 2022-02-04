@@ -37,12 +37,12 @@ public struct IncomeTaxesModel: Codable {
         public static var defaultFileName : String = "IncomeTaxesModel.json"
         public var version           : Version
         public var grid              : RateGrid
-        let turnOverRebate    : Double // 34.0 %
-        let minTurnOverRebate : Double // 305 €
-        let salaryRebate      : Double // 10.0 %
-        let minSalaryRebate   : Double // 441 €
-        let maxSalaryRebate   : Double // 12_627 €
-        let childRebate       : Double // 1_512.0 €
+        public var turnOverRebate    : Double // 34.0 %
+        public var minTurnOverRebate : Double // 305 €
+        public var salaryRebate      : Double // 10.0 %
+        public var minSalaryRebate   : Double // 441 €
+        public var maxSalaryRebate   : Double // 12_627 €
+        public var childRebate       : Double // 1_512.0 €
     }
     
     // MARK: - Properties

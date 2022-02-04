@@ -52,7 +52,7 @@ struct DossierBrowserView: View {
             .onMove(perform: moveDossier)
             .listStyle(SidebarListStyle())
         }
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
     }
     
     func deleteDossier(at offsets: IndexSet) {

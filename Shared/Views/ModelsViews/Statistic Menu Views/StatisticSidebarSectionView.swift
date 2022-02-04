@@ -17,21 +17,21 @@ struct StatisticSidebarSectionView: View {
     var body: some View {
         Section(header: Text("Modèles Statistiques")) {
             NavigationLink(destination: ModelHumanView(),
-                           tag         : .humanModel,
+                           tag         : .statHumanModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Modèle Humain")
             }
             .isDetailLink(true)
             
             NavigationLink(destination: ModelEconomyView(),
-                           tag         : .economyModel,
+                           tag         : .statEconomyModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Modèle Economique")
             }
             .isDetailLink(true)
             
             NavigationLink(destination: ModelSociologyView(),
-                           tag         : .sociologyModel,
+                           tag         : .statSociologyModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Modèle Sociologique")
             }

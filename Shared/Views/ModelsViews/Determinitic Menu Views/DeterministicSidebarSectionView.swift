@@ -18,25 +18,68 @@ struct DeterministicSidebarSectionView: View {
     
     var body: some View {
         Section(header: Text("Modèles Déterministe")) {
-            NavigationLink(destination: ModelDeterministicView(using: model),
-                           tag         : .deterministicModel,
+            // modèle vie humaine
+            NavigationLink(destination: ModelDeterministicHumanView(using: model),
+                           tag         : .detHumanModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Tous les Modèles")
+                Text("Modèle Humain")
             }
             .isDetailLink(true)
-        }
+            
+            // modèle économie
+            NavigationLink(destination: ModelDeterministicEconomyView(using: model),
+                           tag         : .detEconomyModel,
+                           selection   : $uiState.modelsViewState.selectedItem) {
+                Text("Modèle Economique")
+            }
+            .isDetailLink(true)
+            
+            // modèle sociologie
+            NavigationLink(destination: ModelDeterministicSociologyView(using: model),
+                           tag         : .detSociologyModel,
+                           selection   : $uiState.modelsViewState.selectedItem) {
+                Text("Modèle Sociologique")
+            }
+            .isDetailLink(true)
+            
+            // modèle sociologie
+            NavigationLink(destination: ModelDeterministicRetirementView(using: model),
+                           tag         : .detRetirementModel,
+                           selection   : $uiState.modelsViewState.selectedItem) {
+                Text("Modèle Retraite")
+            }
+            .isDetailLink(true)
+            
+            // modèle sociologie
+            NavigationLink(destination: ModelDeterministicFiscalView(using: model),
+                           tag         : .detFiscalModel,
+                           selection   : $uiState.modelsViewState.selectedItem) {
+                Text("Modèle Fiscal")
+            }
+            .isDetailLink(true)
+            
+            // modèle sociologie
+            NavigationLink(destination: ModelDeterministicUnemploymentView(using: model),
+                           tag         : .detUnemploymentModel,
+                           selection   : $uiState.modelsViewState.selectedItem) {
+                Text("Modèle Chômage")
+            }
+            .isDetailLink(true)
+
+       }
     }
 }
 
 struct DeterministicSectionView_Previews: PreviewProvider {
-    
     static var previews: some View {
         loadTestFilesFromBundle()
-        return DeterministicSidebarSectionView()
-            .environmentObject(dataStoreTest)
-            .environmentObject(modelTest)
-            .environmentObject(familyTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(simulationTest)
+        return
+            NavigationView {
+                DeterministicSidebarSectionView()
+                    .environmentObject(modelTest)
+                    .environmentObject(uiStateTest)
+                    .environmentObject(simulationTest)
+                EmptyView()
+            }
     }
 }

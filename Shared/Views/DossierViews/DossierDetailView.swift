@@ -69,7 +69,7 @@ struct DossierDetailView: View {
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
         .navigationTitle(Text("Dossier"))
-        .alert(item: $alertItem, content: createAlert)
+        .alert(item: $alertItem, content: newAlert)
         .sheet(isPresented: $showingSheet) {
             DossierEditView(title        : "Modifier le Dossier",
                             originalItem : dossier)
