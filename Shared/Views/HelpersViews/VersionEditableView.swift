@@ -7,27 +7,14 @@
 
 import SwiftUI
 import AppFoundation
-
-// MARK: - Text View describing a Version
-
-struct VersionText : View {
-    var version: Version
-
-    var body: some View {
-        HStack {
-            Text("v\(version.version ?? "")")
-                .foregroundColor(.secondary)
-            Text("du \(version.date.stringShortDate)")
-                .foregroundColor(.secondary)
-        }
-    }
-}
+import ModelEnvironment
+import FamilyModel
 
 @ViewBuilder func headerWithVersion(label: String, version: Version) -> some View {
     HStack {
         Text(label)
         Spacer()
-        Text("v\(version.version ?? "")")
+        Text("Version v\(version.version ?? "")")
             .foregroundColor(.secondary).textCase(.lowercase)
         Text("du \(version.date.stringShortDate)")
             .foregroundColor(.secondary).textCase(.lowercase)
@@ -36,23 +23,24 @@ struct VersionText : View {
 
 // MARK: - Display & Edit the Version
 
-struct VersionView: View {
+struct VersionEditableView: View {
     @Binding var version: Version
     @State private var showingEditSheet = false
 
     var body: some View {
-        VersionDetailView(version: version)
-            .onTapGesture(count   : 2,
+        VersionText(version: version, withDetails: true)
+            .foregroundColor(.blue)
+            .onTapGesture(count   : 1,
                           perform : { showingEditSheet = true })
             .sheet(isPresented: $showingEditSheet) {
-                VersionEditView(version: $version)
+                VersionEditSheet(version: $version)
             }
     }
 }
 
-// MARK: - Display the Version
+// MARK: - Display the Version as a Section
 
-struct VersionDetailView: View {
+struct VersionSection: View {
     var version: Version
 
     var body: some View {
@@ -73,16 +61,49 @@ struct VersionDetailView: View {
     }
 }
 
-// MARK: - Edit the Version
+// MARK: - Display the Version as a VStack
 
-struct VersionEditView : View {
+struct VersionText : View {
+    var version: Version
+    var withDetails: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text("Version:").bold()
+                Text("v\(version.version ?? "")")
+                Text("du \(version.date.stringShortDate)")
+            }
+            if withDetails {
+                VStack(alignment: .leading, spacing: 4) {
+                    if let name = version.name {
+                        HStack {
+                            Divider()
+                            Text("Nom: ").bold() + Text(name)
+                        }
+                    }
+                    if let comment = version.comment {
+                        HStack {
+                            Divider()
+                            Text("Note: ").bold() + Text(comment)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Sheet to Edit the Version
+
+struct VersionEditSheet : View {
     @Binding private var version: Version
     @Environment(\.presentationMode) var presentationMode
-    @State var name    : String
-    @State var comment : String
-    @State var major   : Int
-    @State var minor   : Int
-    @State var patch   : Int
+    @State private var name    : String
+    @State private var comment : String
+    @State private var major   : Int
+    @State private var minor   : Int
+    @State private var patch   : Int
 
     init(version: Binding<Version>) {
         _version = version
@@ -176,7 +197,7 @@ struct VersionView_Previews: PreviewProvider {
 
     static var previews: some View {
         Form {
-            VersionView(version: .constant(version))
+            VersionEditableView(version: .constant(version))
         }
         .previewLayout(.fixed(width: 500, height: 300))
     }

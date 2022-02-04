@@ -99,6 +99,13 @@ struct ModelUnemploymentAmountView: View {
 
 struct ModelUnemploymentDelayView_Previews: PreviewProvider {
     static var previews: some View {
-        ModelUnemploymentAmountView()
+        loadTestFilesFromBundle()
+        let viewModel = DeterministicViewModel(using: modelTest)
+        return ModelUnemploymentAmountView()
+            .environmentObject(viewModel)
+            .environmentObject(modelTest)
+            .environmentObject(familyTest)
+            .environmentObject(simulationTest)
+            .preferredColorScheme(.dark)
     }
 }

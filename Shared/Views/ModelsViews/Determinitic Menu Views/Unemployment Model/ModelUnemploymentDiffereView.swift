@@ -90,17 +90,14 @@ struct ModelUnemploymentDiffereView: View {
 }
 
 struct ModelUnemploymentAmountView_Previews: PreviewProvider {
-    static var model = Model(fromBundle: Bundle.main)
-
     static var previews: some View {
-        let viewModel = DeterministicViewModel(using: model)
-        return Form {
-            ModelUnemploymentDiffereView()
-                .environmentObject(viewModel)
-                .environmentObject(modelTest)
-                .environmentObject(familyTest)
-                .environmentObject(simulationTest)
-        }
-        .preferredColorScheme(.dark)
+        loadTestFilesFromBundle()
+        let viewModel = DeterministicViewModel(using: modelTest)
+        return ModelUnemploymentDiffereView()
+            .environmentObject(viewModel)
+            .environmentObject(modelTest)
+            .environmentObject(familyTest)
+            .environmentObject(simulationTest)
+            .preferredColorScheme(.dark)
     }
 }

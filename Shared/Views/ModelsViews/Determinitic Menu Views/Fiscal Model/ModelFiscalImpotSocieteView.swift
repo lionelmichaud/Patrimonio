@@ -19,7 +19,7 @@ struct ModelFiscalImpotSocieteView: View {
 
     var body: some View {
         Form {
-            VersionView(version: $viewModel.fiscalModel.companyProfitTaxes.model.version)
+            VersionEditableView(version: $viewModel.fiscalModel.companyProfitTaxes.model.version)
                 .onChange(of: viewModel.fiscalModel.companyProfitTaxes.model.version) { _ in viewModel.isModified = true }
 
             Stepper(value : $viewModel.fiscalModel.companyProfitTaxes.model.rate,

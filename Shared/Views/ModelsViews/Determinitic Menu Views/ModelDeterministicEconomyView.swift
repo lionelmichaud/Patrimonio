@@ -13,7 +13,6 @@ import FamilyModel
 // MARK: - Deterministic Economy View
 
 struct ModelDeterministicEconomyView: View {
-    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -22,63 +21,74 @@ struct ModelDeterministicEconomyView: View {
 
     var body: some View {
         Form {
-            Stepper(value : $viewModel.inflation,
-                    in    : 0 ... 10,
-                    step  : 0.1) {
-                HStack {
-                    Text("Inflation")
-                    Spacer()
-                    Text("\(viewModel.inflation.percentString(digit: 1)) %").foregroundColor(.secondary)
+            Section(header: Text("Inflation").font(.headline)) {
+                VersionEditableView(version: $viewModel.economyModel.randomizers.inflation.version)
+                    .onChange(of: viewModel.economyModel.randomizers.inflation.version) { _ in viewModel.isModified = true }
+
+                Stepper(value : $viewModel.economyModel.randomizers.inflation.defaultValue,
+                        in    : 0 ... 10,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Inflation")
+                        Spacer()
+                        Text("\(viewModel.economyModel.randomizers.inflation.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
                 }
+                        .onChange(of: viewModel.economyModel.randomizers.inflation.defaultValue) { _ in viewModel.isModified = true }
             }
-            .onChange(of: viewModel.inflation) { _ in viewModel.isModified = true }
-            
+
             Section(header: Text("Placements sans Risque").font(.headline)) {
-                Stepper(value : $viewModel.securedRate,
+                VersionEditableView(version: $viewModel.economyModel.randomizers.securedRate.version)
+                    .onChange(of: viewModel.economyModel.randomizers.securedRate.version) { _ in viewModel.isModified = true }
+
+                Stepper(value : $viewModel.economyModel.randomizers.securedRate.defaultValue,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Rendement")
                         Spacer()
-                        Text("\(viewModel.securedRate.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(viewModel.economyModel.randomizers.securedRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: viewModel.securedRate) { _ in viewModel.isModified = true }
+                .onChange(of: viewModel.economyModel.randomizers.securedRate.defaultValue) { _ in viewModel.isModified = true }
                 
-                Stepper(value : $viewModel.securedVolatility,
+                Stepper(value : $viewModel.economyModel.randomizers.securedVolatility,
                         in    : 0 ... 5,
                         step  : 0.1) {
                     HStack {
                         Text("Volatilité")
                         Spacer()
-                        Text("\(viewModel.securedVolatility.percentString(digit: 2)) %").foregroundColor(.secondary)
+                        Text("\(viewModel.economyModel.randomizers.securedVolatility.percentString(digit: 2)) %").foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: viewModel.securedVolatility) { _ in viewModel.isModified = true }
+                .onChange(of: viewModel.economyModel.randomizers.securedVolatility) { _ in viewModel.isModified = true }
             }
             
             Section(header: Text("Placements Actions").font(.headline)) {
-                Stepper(value : $viewModel.stockRate,
+                VersionEditableView(version: $viewModel.economyModel.randomizers.stockRate.version)
+                    .onChange(of: viewModel.economyModel.randomizers.stockRate.version) { _ in viewModel.isModified = true }
+
+                Stepper(value : $viewModel.economyModel.randomizers.stockRate.defaultValue,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Rendement")
                         Spacer()
-                        Text("\(viewModel.stockRate.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(viewModel.economyModel.randomizers.stockRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: viewModel.stockRate) { _ in viewModel.isModified = true }
+                .onChange(of: viewModel.economyModel.randomizers.stockRate.defaultValue) { _ in viewModel.isModified = true }
                 
-                Stepper(value : $viewModel.stockVolatility,
+                Stepper(value : $viewModel.economyModel.randomizers.stockVolatility,
                         in    : 0 ... 20,
                         step  : 1.0) {
                     HStack {
                         Text("Volatilité")
                         Spacer()
-                        Text("\(viewModel.stockVolatility.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(viewModel.economyModel.randomizers.stockVolatility.percentString(digit: 0)) %").foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: viewModel.stockVolatility) { _ in viewModel.isModified = true }
+                .onChange(of: viewModel.economyModel.randomizers.stockVolatility) { _ in viewModel.isModified = true }
             }
         }
         .navigationTitle("Modèle Economique")
@@ -120,15 +130,13 @@ struct ModelDeterministicEconomyView: View {
     }
 }
 
-//struct ModelDeterministicEconomyView_Previews: PreviewProvider {
-//    static var model = Model(fromBundle: Bundle.main)
-//
-//    static var previews: some View {
-//        let viewModel = DeterministicViewModel(using: model)
-//        return Form {
-//            ModelDeterministicEconomyView()
-//                .environmentObject(viewModel)
-//        }
-//        .preferredColorScheme(.dark)
-//    }
-//}
+struct ModelDeterministicEconomyView_Previews: PreviewProvider {
+    static var previews: some View {
+        loadTestFilesFromBundle()
+        return ModelDeterministicEconomyView(using: modelTest)
+            .environmentObject(modelTest)
+            .environmentObject(familyTest)
+            .environmentObject(simulationTest)
+            .preferredColorScheme(.dark)
+    }
+}

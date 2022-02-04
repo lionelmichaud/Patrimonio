@@ -19,9 +19,11 @@ struct ModelFiscalImmobilierImpotView: View {
     
     var body: some View {
         Form {
-            VersionView(version: $viewModel.fiscalModel.estateCapitalGainIrpp.model.version)
-                .onChange(of: viewModel.fiscalModel.estateCapitalGainIrpp.model.version) { _ in viewModel.isModified = true }
-
+            Section {
+                VersionEditableView(version: $viewModel.fiscalModel.estateCapitalGainIrpp.model.version)
+                    .onChange(of: viewModel.fiscalModel.estateCapitalGainIrpp.model.version) { _ in viewModel.isModified = true }
+            }
+            
             NavigationLink(destination: RealEstateExonerationGridView(label: "Barême de l'Impôts sur Plus-Values Immobilières",
                                                                       grid: $viewModel.fiscalModel.estateCapitalGainIrpp.model.exoGrid)
                             .environmentObject(viewModel)) {

@@ -22,12 +22,14 @@ struct ModelRetirementReversionView : View {
     @State private var isExpandedCurrentAgirc   : Bool = false
     @State private var isExpandedFutur          : Bool = false
     @State private var alertItem                : AlertItem?
-
+    
     var body: some View {
         Form {
-            VersionView(version: $viewModel.retirementModel.reversion.model.version)
-                .onChange(of: viewModel.retirementModel.reversion.model.version) { _ in viewModel.isModified = true }
-
+            Section {
+                VersionEditableView(version: $viewModel.retirementModel.reversion.model.version)
+                    .onChange(of: viewModel.retirementModel.reversion.model.version) { _ in viewModel.isModified = true }
+            }
+            
             Toggle("Utiliser la réforme des retraites",
                    isOn: $viewModel.retirementModel.reversion.newModelSelected)
                 .onChange(of: viewModel.retirementModel.reversion.newModelSelected) { _ in viewModel.isModified = true }

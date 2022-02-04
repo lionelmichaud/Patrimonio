@@ -8,6 +8,7 @@
 import Foundation
 import ModelEnvironment
 import RetirementModel
+import EconomyModel
 import SocioEconomyModel
 import FiscalModel
 import HumanLifeModel
@@ -22,21 +23,17 @@ class DeterministicViewModel: ObservableObject {
 
     @Published var isModified : Bool
     // model: HumanLife
-    @Published var humanLifeModel : HumanLife.Model
+    @Published var humanLifeModel    : HumanLife.Model
     // model: Retirement
-    @Published var retirementModel : Retirement.Model
-    // model: Economy
-    @Published var inflation         : Double
-    @Published var securedRate       : Double
-    @Published var stockRate         : Double
-    @Published var securedVolatility : Double
-    @Published var stockVolatility   : Double
+    @Published var retirementModel   : Retirement.Model
     // model: SocioEconomy
     @Published var socioEconomyModel : SocioEconomy.Model
     // model: Fiscal
-    @Published var fiscalModel : Fiscal.Model
+    @Published var fiscalModel       : Fiscal.Model
     // model: Chômage
     @Published var unemploymentModel : Unemployment.Model
+    // model: Economy
+    @Published var economyModel      : Economy.Model
 
     // MARK: - Initialization
     
@@ -46,12 +43,7 @@ class DeterministicViewModel: ObservableObject {
         socioEconomyModel = model.socioEconomyModel
         fiscalModel       = model.fiscalModel
         unemploymentModel = model.unemploymentModel
-
-        inflation         = model.economy.inflation
-        securedRate       = model.economy.securedRate
-        stockRate         = model.economy.stockRate
-        securedVolatility = model.economy.securedVolatility
-        stockVolatility   = model.economy.stockVolatility
+        economyModel      = model.economyModel
 
         isModified = false
     }
@@ -64,12 +56,7 @@ class DeterministicViewModel: ObservableObject {
         socioEconomyModel = model.socioEconomyModel
         fiscalModel       = model.fiscalModel
         unemploymentModel = model.unemploymentModel
-
-        inflation         = model.economy.inflation
-        securedRate       = model.economy.securedRate
-        stockRate         = model.economy.stockRate
-        securedVolatility = model.economy.securedVolatility
-        stockVolatility   = model.economy.stockVolatility
+        economyModel      = model.economyModel
 
         isModified = false
     }
@@ -80,12 +67,7 @@ class DeterministicViewModel: ObservableObject {
         model.socioEconomyModel = socioEconomyModel
         model.fiscalModel       = fiscalModel
         model.unemploymentModel = unemploymentModel
-
-        model.economy.inflation         = inflation
-        model.economy.securedRate       = securedRate
-        model.economy.stockRate         = stockRate
-        model.economy.securedVolatility = securedVolatility
-        model.economy.stockVolatility   = stockVolatility
+        model.economyModel      = economyModel
 
         isModified = false
     }

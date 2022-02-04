@@ -19,7 +19,7 @@ struct ModelFiscalLifeInsInheritanceView: View {
     
     var body: some View {
         Form {
-            VersionView(version: $viewModel.fiscalModel.lifeInsuranceInheritance.model.version)
+            VersionEditableView(version: $viewModel.fiscalModel.lifeInsuranceInheritance.model.version)
                 .onChange(of: viewModel.fiscalModel.lifeInsuranceInheritance.model.version) { _ in viewModel.isModified = true }
 
             NavigationLink(destination: RateGridView(label: "Barême Transmssion Assurance Vie",

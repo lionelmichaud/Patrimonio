@@ -11,7 +11,6 @@ import ModelEnvironment
 import FamilyModel
 
 struct ModelDeterministicUnemploymentView: View {
-    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -20,7 +19,7 @@ struct ModelDeterministicUnemploymentView: View {
 
     var body: some View {
         Form {
-            VersionView(version: $viewModel.unemploymentModel.allocationChomage.model.version)
+            VersionEditableView(version: $viewModel.unemploymentModel.allocationChomage.model.version)
                 .onChange(of: viewModel.unemploymentModel.allocationChomage.model.version) { _ in viewModel.isModified = true }
 
             NavigationLink(destination:
@@ -79,8 +78,13 @@ struct ModelDeterministicUnemploymentView: View {
     }
 }
 
-//struct ModelDeterministicUnemploymentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ModelDeterministicUnemploymentView()
-//    }
-//}
+struct ModelDeterministicUnemploymentView_Previews: PreviewProvider {
+    static var previews: some View {
+        loadTestFilesFromBundle()
+        return ModelDeterministicUnemploymentView(using: modelTest)
+            .environmentObject(modelTest)
+            .environmentObject(familyTest)
+            .environmentObject(simulationTest)
+            .preferredColorScheme(.dark)
+    }
+}

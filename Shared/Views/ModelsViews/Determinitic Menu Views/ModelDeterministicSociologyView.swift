@@ -13,7 +13,6 @@ import FamilyModel
 // MARK: - Deterministic SocioEconomy View
 
 struct ModelDeterministicSociologyView: View {
-    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -22,35 +21,50 @@ struct ModelDeterministicSociologyView: View {
 
     var body: some View {
         Form {
-            Stepper(value : $viewModel.socioEconomyModel.pensionDevaluationRate.defaultValue,
-                    in    : 0 ... 10,
-                    step  : 0.1) {
-                HStack {
-                    Text("Dévaluation anuelle des pensions par rapport à l'inflation")
-                    Spacer()
-                    Text("\(viewModel.socioEconomyModel.pensionDevaluationRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.socioEconomyModel.pensionDevaluationRate.defaultValue) { _ in viewModel.isModified = true }
-            
-            Stepper(value : $viewModel.socioEconomyModel.nbTrimTauxPlein.defaultValue,
-                    in    : 0 ... 12) {
-                HStack {
-                    Text("Nombre de trimestres additionels pour obtenir le taux plein")
-                    Spacer()
-                    Text("\(Int(viewModel.socioEconomyModel.nbTrimTauxPlein.defaultValue)) ans").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.socioEconomyModel.nbTrimTauxPlein.defaultValue) { _ in viewModel.isModified = true }
-            
-            Stepper(value : $viewModel.socioEconomyModel.expensesUnderEvaluationRate.defaultValue,
-                    in    : 0 ... 10,
-                    step  : 0.1) {
-                HStack {
-                    Text("Pénalisation des dépenses")
-                    Spacer()
-                    Text("\(viewModel.socioEconomyModel.expensesUnderEvaluationRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
-                }
+            Section(header: Text("Dévaluation des pensions").font(.headline)) {
+                VersionEditableView(version: $viewModel.socioEconomyModel.pensionDevaluationRate.version)
+                    .onChange(of: viewModel.socioEconomyModel.pensionDevaluationRate.version) { _ in viewModel.isModified = true }
+
+                Stepper(value : $viewModel.socioEconomyModel.pensionDevaluationRate.defaultValue,
+                        in    : 0 ... 10,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Évolution anuelle des pensions de retraite")
+                        Spacer()
+                        Text("\(viewModel.socioEconomyModel.pensionDevaluationRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.socioEconomyModel.pensionDevaluationRate.defaultValue) { _ in viewModel.isModified = true }
             }
-                    .onChange(of: viewModel.socioEconomyModel.expensesUnderEvaluationRate.defaultValue) { _ in viewModel.isModified = true }
+
+            Section(header: Text("Évolution du nombre de trimestres requis").font(.headline)) {
+                VersionEditableView(version: $viewModel.socioEconomyModel.nbTrimTauxPlein.version)
+                    .onChange(of: viewModel.socioEconomyModel.nbTrimTauxPlein.version) { _ in viewModel.isModified = true }
+
+                Stepper(value : $viewModel.socioEconomyModel.nbTrimTauxPlein.defaultValue,
+                        in    : 0 ... 12) {
+                    HStack {
+                        Text("Nombre de trimestres additionels pour obtenir le taux plein")
+                        Spacer()
+                        Text("\(Int(viewModel.socioEconomyModel.nbTrimTauxPlein.defaultValue)) ans").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.socioEconomyModel.nbTrimTauxPlein.defaultValue) { _ in viewModel.isModified = true }
+            }
+
+            Section(header: Text("Sous-estimation du niveau des dépenses").font(.headline)) {
+                VersionEditableView(version: $viewModel.socioEconomyModel.expensesUnderEvaluationRate.version)
+                    .onChange(of: viewModel.socioEconomyModel.expensesUnderEvaluationRate.version) { _ in viewModel.isModified = true }
+
+                Stepper(value : $viewModel.socioEconomyModel.expensesUnderEvaluationRate.defaultValue,
+                        in    : 0 ... 10,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Pénalisation des dépenses")
+                        Spacer()
+                        Text("\(viewModel.socioEconomyModel.expensesUnderEvaluationRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
+                }
+                        .onChange(of: viewModel.socioEconomyModel.expensesUnderEvaluationRate.defaultValue) { _ in viewModel.isModified = true }
+            }
         }
         .navigationTitle("Modèle Sociologique")
         .alert(item: $alertItem, content: newAlert)
@@ -91,15 +105,13 @@ struct ModelDeterministicSociologyView: View {
     }
 }
 
-//struct ModelDeterministicSociologyView_Previews: PreviewProvider {
-//    static var model = Model(fromBundle: Bundle.main)
-//    
-//    static var previews: some View {
-//        let viewModel = DeterministicViewModel(using: model)
-//        return Form {
-//            ModelDeterministicSociologyView()
-//                .environmentObject(viewModel)
-//        }
-//        .preferredColorScheme(.dark)
-//    }
-//}
+struct ModelDeterministicSociologyView_Previews: PreviewProvider {
+    static var previews: some View {
+        loadTestFilesFromBundle()
+        return ModelDeterministicSociologyView(using: modelTest)
+            .environmentObject(modelTest)
+            .environmentObject(familyTest)
+            .environmentObject(simulationTest)
+            .preferredColorScheme(.dark)
+    }
+}

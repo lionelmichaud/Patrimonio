@@ -71,14 +71,15 @@ struct DeterministicSidebarSectionView: View {
 }
 
 struct DeterministicSectionView_Previews: PreviewProvider {
-    
     static var previews: some View {
         loadTestFilesFromBundle()
-        return DeterministicSidebarSectionView()
-            .environmentObject(dataStoreTest)
-            .environmentObject(modelTest)
-            .environmentObject(familyTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(simulationTest)
+        return
+            NavigationView {
+                DeterministicSidebarSectionView()
+                    .environmentObject(modelTest)
+                    .environmentObject(uiStateTest)
+                    .environmentObject(simulationTest)
+                EmptyView()
+            }
     }
 }

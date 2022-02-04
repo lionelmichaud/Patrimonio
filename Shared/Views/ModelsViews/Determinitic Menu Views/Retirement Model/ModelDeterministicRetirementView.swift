@@ -13,7 +13,6 @@ import FamilyModel
 // MARK: - Deterministic Retirement View
 
 struct ModelDeterministicRetirementView: View {
-    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -26,21 +25,24 @@ struct ModelDeterministicRetirementView: View {
                             .environmentObject(viewModel)) {
                 Text("Pension du Régime Général")
                 Spacer()
-                VersionText(version: viewModel.retirementModel.regimeGeneral.model.version)
+                VersionText(version: viewModel.retirementModel.regimeGeneral.model.version,
+                            withDetails: false)
             }
             
             NavigationLink(destination: ModelRetirementAgircView()
                             .environmentObject(viewModel)) {
                 Text("Pension du Régime Complémentaire")
                 Spacer()
-                VersionText(version: viewModel.retirementModel.regimeAgirc.model.version)
+                VersionText(version: viewModel.retirementModel.regimeAgirc.model.version,
+                            withDetails: false)
             }
             
             NavigationLink(destination: ModelRetirementReversionView()
                             .environmentObject(viewModel)) {
                 Text("Pension de Réversion")
                 Spacer()
-                VersionText(version: viewModel.retirementModel.reversion.model.version)
+                VersionText(version: viewModel.retirementModel.reversion.model.version,
+                            withDetails: false)
             }
         }
         .navigationTitle("Modèle Retraite")
@@ -82,17 +84,13 @@ struct ModelDeterministicRetirementView: View {
     }
 }
 
-//struct ModelDeterministicRetirementView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        loadTestFilesFromBundle()
-//        let viewModel = DeterministicViewModel(using: modelTest)
-//        return Form {
-//            ModelDeterministicRetirementView()
-//                .environmentObject(modelTest)
-//                .environmentObject(familyTest)
-//                .environmentObject(simulationTest)
-//                .environmentObject(viewModel)
-//        }
-//        .preferredColorScheme(.dark)
-//    }
-//}
+struct ModelDeterministicRetirementView_Previews: PreviewProvider {
+    static var previews: some View {
+        loadTestFilesFromBundle()
+        return ModelDeterministicRetirementView(using: modelTest)
+            .environmentObject(modelTest)
+            .environmentObject(familyTest)
+            .environmentObject(simulationTest)
+            .preferredColorScheme(.dark)
+    }
+}
