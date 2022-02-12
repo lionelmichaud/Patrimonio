@@ -55,7 +55,7 @@ struct ModelsSidebarView: View {
             
             /// vue par défaut
             if dataStore.activeDossier != nil {
-                ModelDeterministicHumanView(using: model)
+                ModelDeterministicHumanView()
             } else {
                 NoLoadedDossierView()
             }

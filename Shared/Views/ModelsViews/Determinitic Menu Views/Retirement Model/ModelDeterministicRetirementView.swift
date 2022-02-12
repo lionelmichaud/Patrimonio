@@ -13,35 +13,35 @@ import FamilyModel
 // MARK: - Deterministic Retirement View
 
 struct ModelDeterministicRetirementView: View {
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
-    @StateObject private var viewModel        : DeterministicViewModel
     @State private var alertItem              : AlertItem?
-    
+
     var body: some View {
         Form {
             NavigationLink(destination: ModelRetirementGeneralView()
-                            .environmentObject(viewModel)) {
+                            .environmentObject(model)) {
                 Text("Pension du Régime Général")
                 Spacer()
-                VersionText(version: viewModel.retirementModel.regimeGeneral.model.version,
+                VersionText(version: model.retirementModel.regimeGeneral.model.version,
                             withDetails: false)
             }
             
             NavigationLink(destination: ModelRetirementAgircView()
-                            .environmentObject(viewModel)) {
+                            .environmentObject(model)) {
                 Text("Pension du Régime Complémentaire")
                 Spacer()
-                VersionText(version: viewModel.retirementModel.regimeAgirc.model.version,
+                VersionText(version: model.retirementModel.regimeAgirc.model.version,
                             withDetails: false)
             }
             
             NavigationLink(destination: ModelRetirementReversionView()
-                            .environmentObject(viewModel)) {
+                            .environmentObject(model)) {
                 Text("Pension de Réversion")
                 Spacer()
-                VersionText(version: viewModel.retirementModel.reversion.model.version,
+                VersionText(version: model.retirementModel.reversion.model.version,
                             withDetails: false)
             }
         }
@@ -51,7 +51,6 @@ struct ModelDeterministicRetirementView: View {
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
@@ -64,30 +63,22 @@ struct ModelDeterministicRetirementView: View {
                                       dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .onAppear {
-            viewModel.updateFrom(model)
-        }
-    }
-    
-    // MARK: - Initialization
-    
-    init(using model: Model) {
-        _viewModel = StateObject(wrappedValue: DeterministicViewModel(using: model))
+            isModified: model.isModified)
     }
 }
 
 struct ModelDeterministicRetirementView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return ModelDeterministicRetirementView(using: modelTest)
+        return ModelDeterministicRetirementView()
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppFoundation
+import Persistence
 import ModelEnvironment
 import FamilyModel
 
@@ -15,7 +16,7 @@ import FamilyModel
 struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> : View {
     let label: String
     @Binding var grid: [S]
-    @EnvironmentObject private var viewModel  : DeterministicViewModel
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -73,7 +74,10 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
                         }
                 }
                 .onDelete(perform: deleteSlices)
-                .onChange(of: grid) { _ in viewModel.isModified = true }
+                .onChange(of: grid) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             }
         }
         .alert(item: $alertItem, content: newAlert)
@@ -82,28 +86,26 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
-                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                  dismissButton : .default(Text("OK")))
+                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
+                                      dismissButton : .default(Text("OK")))
                     },
                     notifyFailure: {
                         alertItem =
-                        AlertItem(title         : Text("Echec de l'enregistrement"),
-                                  dismissButton : .default(Text("OK")))
+                            AlertItem(title         : Text("Echec de l'enregistrement"),
+                                      dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified,
-            isValid   : gridIsValid(grid))
+            isModified: model.isModified)
     }
 
     private func deleteSlices(at offsets: IndexSet) {
@@ -121,7 +123,6 @@ struct GridView_Previews: PreviewProvider {
     
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return
             NavigationView {
                 NavigationLink("Test", destination: GridView(label          : "Nom",
@@ -132,11 +133,11 @@ struct GridView_Previews: PreviewProvider {
                                                              addView        : { grid in RateSliceAddView(grid: grid) },
                                                              editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) })
                                 .preferredColorScheme(.dark)
+                                .environmentObject(dataStoreTest)
                                 .environmentObject(modelTest)
                                 .environmentObject(familyTest)
-                                .environmentObject(simulationTest)
-                                .environmentObject(viewModel))
-                
+                                .environmentObject(simulationTest))
+
             }
             .preferredColorScheme(.dark)
             .previewLayout(.fixed(width: 700.0, height: 400.0))

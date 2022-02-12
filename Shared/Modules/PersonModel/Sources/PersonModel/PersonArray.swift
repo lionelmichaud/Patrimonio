@@ -55,11 +55,7 @@ public extension PersistableArrayOfPerson {
         }
         
         // initialiser les propriétés des Personnes qui ne peuvent pas être lues dans le fichier JSON
-        self.items.forEach { person in
-            // initialiser l'age de décès avec la valeur moyenne déterministe
-            // initialiser le nombre d'années de dépendence
-            person.initialize(using: model)
-        }
+        initialize(using: model)
         
         // exécuter la transition
         persistenceSM.process(event: .onLoad)
@@ -114,12 +110,8 @@ public extension PersistableArrayOfPerson {
         }
         
         // initialiser les propriétés des Personnes qui ne peuvent pas être lues dans le fichier JSON
-        self.items.forEach { person in
-            // initialiser l'age de décès avec la valeur moyenne déterministe
-            // initialiser le nombre d'années de dépendence
-            person.initialize(using: model)
-        }
-        
+        initialize(using: model)
+
         // exécuter la transition
         persistenceSM.process(event: .onLoad)
     }
@@ -155,5 +147,13 @@ public extension PersistableArrayOfPerson {
         }
         // exécuter la transition
         persistenceSM.process(event: .onSave)
+    }
+    
+    func initialize(using model: Model) {
+        self.items.forEach { person in
+            // initialiser l'age de décès avec la valeur moyenne déterministe
+            // initialiser le nombre d'années de dépendence
+            person.initialize(using: model)
+        }
     }
 }

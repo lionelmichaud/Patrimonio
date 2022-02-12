@@ -323,6 +323,7 @@ public final class Adult: Person {
     
     /// Réinitialiser les prioriétés variables des membres de manière déterministe
     public override final func setRandomPropertiesDeterministicaly(using model: Model) {
+        // initialiser l'age de décès
         super.setRandomPropertiesDeterministicaly(using: model)
         
         // initialiser le nombre d'années de dépendence
@@ -330,6 +331,19 @@ public final class Adult: Person {
         let modelValue = Int(model.humanLifeModel.nbOfYearsOfdependency.value(withMode: .deterministic))
         nbOfYearOfDependency =
             min(modelValue, zeroOrPositive(self.ageOfDeath - 65)) // pas de dépendance avant l'âge de 65 ans
+        
+        // vérifier la cohérence entre les âges de liquidation de pension du fichier person.json et
+        // avec les âges au plus tôt du fichier RetirementModelConfig.json
+        // Modifier les premières au besoin
+        let ageMinimumLegal = model.retirementModel.regimeGeneral.ageMinimumLegal
+        var ageLiquidationPension = max(ageOfPensionLiquidComp.year!, ageMinimumLegal)
+        ageOfPensionLiquidComp = DateComponents(calendar: Date.calendar,
+                                                year: ageLiquidationPension, month: 0, day: 1)
+        
+        let ageMinimumAGIRC = model.retirementModel.regimeAgirc.ageMinimum
+        ageLiquidationPension = max(ageOfAgircPensionLiquidComp.year!, ageMinimumAGIRC)
+        ageOfAgircPensionLiquidComp = DateComponents(calendar: Date.calendar,
+                                                     year: ageLiquidationPension, month: 0, day: 1)
     }
     
     /// RETRAITE: pension évaluée l'année de la liquidation de la pension (non révaluée)
@@ -340,32 +354,5 @@ public final class Adult: Person {
         let net            = pensionGeneral.net  + pensionAgirc.net
         let taxable        = try! model.fiscalModel.pensionTaxes.taxable(brut: brut, net:net)
         return BrutNetTaxable(brut: brut, net: net, taxable: taxable)
-    }
-    
-    /// Actualiser les propriétés d'une personne à partir des valeurs modifiées
-    /// des paramètres du modèle (valeur déterministes modifiées par l'utilisateur).
-    public override final func updateMembersDterministicValues(
-        _ menLifeExpectation    : Int,
-        _ womenLifeExpectation  : Int,
-        _ nbOfYearsOfdependency : Int,
-        _ ageMinimumLegal       : Int,
-        _ ageMinimumAGIRC       : Int
-    ) {
-        super.updateMembersDterministicValues(
-            menLifeExpectation,
-            womenLifeExpectation,
-            nbOfYearsOfdependency,
-            ageMinimumLegal,
-            ageMinimumAGIRC)
-        
-        nbOfYearOfDependency = nbOfYearsOfdependency
-        
-        var ageLiquidationPension = max(ageOfPensionLiquidComp.year!, ageMinimumLegal)
-        ageOfPensionLiquidComp = DateComponents(calendar: Date.calendar,
-                                                year: ageLiquidationPension, month: 0, day: 1)
-        
-        ageLiquidationPension = max(ageOfAgircPensionLiquidComp.year!, ageMinimumAGIRC)
-        ageOfAgircPensionLiquidComp = DateComponents(calendar: Date.calendar,
-                                                     year: ageLiquidationPension, month: 0, day: 1)
     }
 }

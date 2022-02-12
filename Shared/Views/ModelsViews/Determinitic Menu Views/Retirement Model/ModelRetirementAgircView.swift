@@ -13,88 +13,113 @@ import FamilyModel
 // MARK: - Deterministic Retirement Régime Complémentaire View
 
 struct ModelRetirementAgircView: View {
-    @EnvironmentObject private var viewModel  : DeterministicViewModel
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
-    @State private var isExpandedMajoration   : Bool = false
     @State private var alertItem              : AlertItem?
+    @State private var isExpandedMajoration   : Bool = false
     
     var body: some View {
         Form {
             Section {
-                VersionEditableView(version: $viewModel.retirementModel.regimeAgirc.model.version)
-                    .onChange(of: viewModel.retirementModel.regimeAgirc.model.version) { _ in viewModel.isModified = true }
+                VersionEditableView(version: $model.retirementModel.regimeAgirc.model.version)
+                    .onChange(of: model.retirementModel.regimeAgirc.model.version) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
             }
             
-            Stepper(value : $viewModel.retirementModel.regimeAgirc.ageMinimum,
+            Stepper(value : $model.retirementModel.regimeAgirc.ageMinimum,
                     in    : 50 ... 100) {
                 HStack {
                     Text("Age minimum de liquidation")
                     Spacer()
-                    Text("\(viewModel.retirementModel.regimeAgirc.ageMinimum) ans").foregroundColor(.secondary)
+                    Text("\(model.retirementModel.regimeAgirc.ageMinimum) ans").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.retirementModel.regimeAgirc.ageMinimum) { _ in viewModel.isModified = true }
-            
+            }
+            .onChange(of: model.retirementModel.regimeAgirc.ageMinimum) { _ in
+                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                model.manageInternalDependencies()
+            }
+
             AmountEditView(label  : "Valeur du point",
-                           amount : $viewModel.retirementModel.regimeAgirc.valeurDuPoint)
-                .onChange(of: viewModel.retirementModel.regimeAgirc.valeurDuPoint) { _ in viewModel.isModified = true }
-            
+                           amount : $model.retirementModel.regimeAgirc.valeurDuPoint)
+                .onChange(of: model.retirementModel.regimeAgirc.valeurDuPoint) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
+
             NavigationLink(destination: AgircAvantAgeLegalGridView(label: "Réduction pour trimestres manquant avant l'âge légale",
-                                                                   grid: $viewModel.retirementModel.regimeAgirc.gridAvantAgeLegal)
-                            .environmentObject(viewModel)) {
+                                                                   grid: $model.retirementModel.regimeAgirc.gridAvantAgeLegal)
+                            .environmentObject(model)) {
                 Text("Réduction pour trimestres manquant avant l'âge légale")
             }.isDetailLink(true)
 
             NavigationLink(destination: AgircApresAgeLegalGridView(label: "Réduction pour trimestres manquant après l'âge légale",
-                                                                   grid: $viewModel.retirementModel.regimeAgirc.gridApresAgelegal)
-                            .environmentObject(viewModel)) {
+                                                                   grid: $model.retirementModel.regimeAgirc.gridApresAgelegal)
+                            .environmentObject(model)) {
                 Text("Réduction pour trimestres manquant après l'âge légale")
             }.isDetailLink(true)
 
             Section(header: Text("Majoration pour Enfants").font(.headline)) {
-                Stepper(value : $viewModel.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes,
+                Stepper(value : $model.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes,
                         in    : 0 ... 20.0,
                         step  : 1.0) {
                     HStack {
                         Text("Surcote pour enfants nés")
                         Spacer()
-                        Text("\(viewModel.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes.percentString(digit: 0)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes) { _ in viewModel.isModified = true }
-                
-                Stepper(value : $viewModel.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin,
+                }
+                .onChange(of: model.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
+
+                Stepper(value : $model.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin,
                         in    : 1 ... 4,
                         step  : 1) {
                     HStack {
                         Text("Nombre d'enfants nés pour obtenir la majoration")
                         Spacer()
-                        Text("\(viewModel.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin) enfants").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin) enfants").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin) { _ in viewModel.isModified = true }
-                
+                }
+                .onChange(of: model.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
+
                 AmountEditView(label   : "Plafond pour enfants nés",
                                comment : "annuel",
-                               amount  : $viewModel.retirementModel.regimeAgirc.majorationPourEnfant.plafondMajoEnfantNe)
-                    .onChange(of: viewModel.retirementModel.regimeAgirc.majorationPourEnfant.plafondMajoEnfantNe) { _ in viewModel.isModified = true }
-                
-                Stepper(value : $viewModel.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge,
+                               amount  : $model.retirementModel.regimeAgirc.majorationPourEnfant.plafondMajoEnfantNe)
+                    .onChange(of: model.retirementModel.regimeAgirc.majorationPourEnfant.plafondMajoEnfantNe) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
+
+                Stepper(value : $model.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge,
                         in    : 0 ... 20.0,
                         step  : 1.0) {
                     HStack {
                         Text("Surcote pour enfants à charge")
                         Spacer()
-                        Text("\(viewModel.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge.percentString(digit: 0)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             }
         }
+        .navigationTitle("Régime Général")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
@@ -107,27 +132,25 @@ struct ModelRetirementAgircView: View {
                                       dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .navigationTitle("Régime Général")
+            isModified: model.isModified)
     }
 }
 
 struct ModelRetirementAgircView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return ModelRetirementAgircView()
             .preferredColorScheme(.dark)
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
-            .environmentObject(viewModel)
     }
 }

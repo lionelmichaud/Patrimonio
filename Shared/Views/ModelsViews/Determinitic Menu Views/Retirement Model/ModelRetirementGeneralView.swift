@@ -6,137 +6,163 @@
 //
 
 import SwiftUI
+import Persistence
 import ModelEnvironment
 import FamilyModel
 
 // MARK: - Deterministic Retirement Régime General View
 
 struct ModelRetirementGeneralView: View {
-    @EnvironmentObject private var viewModel  : DeterministicViewModel
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
     @State private var alertItem              : AlertItem?
-    
+
     var body: some View {
         Form {
             Section {
-                VersionEditableView(version: $viewModel.retirementModel.regimeGeneral.model.version)
-                    .onChange(of: viewModel.retirementModel.regimeGeneral.model.version) { _ in viewModel.isModified = true }
+                VersionEditableView(version: $model.retirementModel.regimeGeneral.model.version)
+                    .onChange(of: model.retirementModel.regimeGeneral.model.version) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
             }
             
-            Stepper(value : $viewModel.retirementModel.regimeGeneral.ageMinimumLegal,
+            Stepper(value : $model.retirementModel.regimeGeneral.ageMinimumLegal,
                     in    : 50 ... 100) {
                 HStack {
                     Text("Age minimum légal de liquidation")
                     Spacer()
-                    Text("\(viewModel.retirementModel.regimeGeneral.ageMinimumLegal) ans").foregroundColor(.secondary)
+                    Text("\(model.retirementModel.regimeGeneral.ageMinimumLegal) ans").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.retirementModel.regimeGeneral.ageMinimumLegal) { _ in viewModel.isModified = true }
+            }
+            .onChange(of: model.retirementModel.regimeGeneral.ageMinimumLegal) { _ in
+                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                model.manageInternalDependencies()
+            }
 
             NavigationLink(destination: DureeRefGridView(label: "Durée de référence",
-                                                         grid: $viewModel.retirementModel.regimeGeneral.dureeDeReferenceGrid)
-                            .environmentObject(viewModel)) {
+                                                         grid: $model.retirementModel.regimeGeneral.dureeDeReferenceGrid)
+                            .environmentObject(model)) {
                 Text("Durée de référence")
             }.isDetailLink(true)
 
             NavigationLink(destination: NbTrimUnemployementGridView(label: "Trimestres pour chômage non indemnisé",
-                                                                    grid: $viewModel.retirementModel.regimeGeneral.nbTrimNonIndemniseGrid)
-                            .environmentObject(viewModel)) {
+                                                                    grid: $model.retirementModel.regimeGeneral.nbTrimNonIndemniseGrid)
+                            .environmentObject(model)) {
                 Text("Trimestres pour chômage non indemnisé")
             }.isDetailLink(true)
 
-            Stepper(value : $viewModel.retirementModel.regimeGeneral.maxReversionRate,
+            Stepper(value : $model.retirementModel.regimeGeneral.maxReversionRate,
                     in    : 50 ... 100,
                     step  : 1.0) {
                 HStack {
                     Text("Taux maximum")
                     Spacer()
-                    Text("\(viewModel.retirementModel.regimeGeneral.maxReversionRate.percentString(digit: 0)) %").foregroundColor(.secondary)
+                    Text("\(model.retirementModel.regimeGeneral.maxReversionRate.percentString(digit: 0)) %").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.retirementModel.regimeGeneral.maxReversionRate) { _ in viewModel.isModified = true }
+            }
+            .onChange(of: model.retirementModel.regimeGeneral.maxReversionRate) { _ in
+                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                model.manageInternalDependencies()
+            }
 
             Section(header: Text("Décote / Surcote").font(.headline)) {
-                Stepper(value : $viewModel.retirementModel.regimeGeneral.decoteParTrimestre,
+                Stepper(value : $model.retirementModel.regimeGeneral.decoteParTrimestre,
                         in    : 0 ... 1.5,
                         step  : 0.025) {
                     HStack {
                         Text("Décote par trimestre manquant")
                         Spacer()
-                        Text("\(viewModel.retirementModel.regimeGeneral.decoteParTrimestre.percentString(digit: 3)) %").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeGeneral.decoteParTrimestre.percentString(digit: 3)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.retirementModel.regimeGeneral.decoteParTrimestre) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.retirementModel.regimeGeneral.decoteParTrimestre) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
 
-                Stepper(value : $viewModel.retirementModel.regimeGeneral.surcoteParTrimestre,
+                Stepper(value : $model.retirementModel.regimeGeneral.surcoteParTrimestre,
                         in    : 0 ... 2.5,
                         step  : 0.25) {
                     HStack {
                         Text("Surcote par trimestre supplémentaire")
                         Spacer()
-                        Text("\(viewModel.retirementModel.regimeGeneral.surcoteParTrimestre.percentString(digit: 2)) %").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeGeneral.surcoteParTrimestre.percentString(digit: 2)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.retirementModel.regimeGeneral.surcoteParTrimestre) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.retirementModel.regimeGeneral.surcoteParTrimestre) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
 
-                Stepper(value : $viewModel.retirementModel.regimeGeneral.maxNbTrimestreDecote,
+                Stepper(value : $model.retirementModel.regimeGeneral.maxNbTrimestreDecote,
                         in    : 10 ... 30,
                         step  : 1) {
                     HStack {
                         Text("Nombre de trimestres maximum de décote")
                         Spacer()
-                        Text("\(viewModel.retirementModel.regimeGeneral.maxNbTrimestreDecote) trimestres").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeGeneral.maxNbTrimestreDecote) trimestres").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.retirementModel.regimeGeneral.maxNbTrimestreDecote) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.retirementModel.regimeGeneral.maxNbTrimestreDecote) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
 
-                Stepper(value : $viewModel.retirementModel.regimeGeneral.majorationTauxEnfant,
+                Stepper(value : $model.retirementModel.regimeGeneral.majorationTauxEnfant,
                         in    : 0 ... 20.0,
                         step  : 1.0) {
                     HStack {
                         Text("Surcote pour trois enfants nés")
                         Spacer()
-                        Text("\(viewModel.retirementModel.regimeGeneral.majorationTauxEnfant.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeGeneral.majorationTauxEnfant.percentString(digit: 0)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.retirementModel.regimeGeneral.majorationTauxEnfant) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.retirementModel.regimeGeneral.majorationTauxEnfant) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             }
         }
+        .navigationTitle("Régime Général")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
-                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                  dismissButton : .default(Text("OK")))
+                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
+                                      dismissButton : .default(Text("OK")))
                     },
                     notifyFailure: {
                         alertItem =
-                        AlertItem(title         : Text("Echec de l'enregistrement"),
-                                  dismissButton : .default(Text("OK")))
+                            AlertItem(title         : Text("Echec de l'enregistrement"),
+                                      dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .navigationTitle("Régime Général")
+            isModified: model.isModified)
     }
 }
 
 struct ModelRetirementGeneralView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return ModelRetirementGeneralView()
             .preferredColorScheme(.dark)
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
-            .environmentObject(viewModel)
     }
 }

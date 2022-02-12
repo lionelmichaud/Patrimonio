@@ -11,31 +11,34 @@ import ModelEnvironment
 import FamilyModel
 
 struct ModelDeterministicUnemploymentView: View {
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
-    @StateObject private var viewModel        : DeterministicViewModel
     @State private var alertItem              : AlertItem?
 
     var body: some View {
         Form {
-            VersionEditableView(version: $viewModel.unemploymentModel.allocationChomage.model.version)
-                .onChange(of: viewModel.unemploymentModel.allocationChomage.model.version) { _ in viewModel.isModified = true }
+            VersionEditableView(version: $model.unemploymentModel.allocationChomage.model.version)
+                .onChange(of: model.unemploymentModel.allocationChomage.model.version) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
 
             NavigationLink(destination:
                             UnemploymentAreDurationGridView(label: "Barême de durée d'indemnisation",
-                                                            grid: $viewModel.unemploymentModel.allocationChomage.model.durationGrid)
-                            .environmentObject(viewModel)) {
+                                                            grid: $model.unemploymentModel.allocationChomage.model.durationGrid)
+                            .environmentObject(model)) {
                 Text("Durée d'indemnisation")
             }.isDetailLink(true)
 
             NavigationLink(destination: ModelUnemploymentAmountView()
-                            .environmentObject(viewModel)) {
+                            .environmentObject(model)) {
                 Text("Différés d'indemnisation")
             }
 
             NavigationLink(destination: ModelUnemploymentDiffereView()
-                            .environmentObject(viewModel)) {
+                            .environmentObject(model)) {
                 Text("Allocation de Recherche d'Emploi (ARE)")
             }
         }
@@ -45,7 +48,6 @@ struct ModelDeterministicUnemploymentView: View {
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
@@ -58,30 +60,22 @@ struct ModelDeterministicUnemploymentView: View {
                                       dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .onAppear {
-            viewModel.updateFrom(model)
-        }
-    }
-    
-    // MARK: - Initialization
-    
-    init(using model: Model) {
-        _viewModel = StateObject(wrappedValue: DeterministicViewModel(using: model))
+            isModified: model.isModified)
     }
 }
 
 struct ModelDeterministicUnemploymentView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return ModelDeterministicUnemploymentView(using: modelTest)
+        return ModelDeterministicUnemploymentView()
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)

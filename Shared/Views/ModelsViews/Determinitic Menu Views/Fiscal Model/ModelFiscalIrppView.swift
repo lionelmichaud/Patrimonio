@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import Persistence
 import ModelEnvironment
 import FamilyModel
 
 struct ModelFiscalIrppView: View {
-    @EnvironmentObject private var viewModel  : DeterministicViewModel
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -19,61 +20,83 @@ struct ModelFiscalIrppView: View {
     
     var body: some View {
         Form {
-            VersionEditableView(version: $viewModel.fiscalModel.incomeTaxes.model.version)
-                .onChange(of: viewModel.fiscalModel.incomeTaxes.model.version) { _ in viewModel.isModified = true }
-            
+            VersionEditableView(version: $model.fiscalModel.incomeTaxes.model.version)
+                .onChange(of: model.fiscalModel.incomeTaxes.model.version) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
+
             Section(header: Text("Salaire").font(.headline)) {
                 NavigationLink(destination: RateGridView(label: "Barême IRPP",
-                                                         grid: $viewModel.fiscalModel.incomeTaxes.model.grid)
-                                .environmentObject(viewModel)) {
+                                                         grid: $model.fiscalModel.incomeTaxes.model.grid)
+                                .environmentObject(model)) {
                     Text("Barême")
                 }.isDetailLink(true)
                 
-                Stepper(value : $viewModel.fiscalModel.incomeTaxes.model.salaryRebate,
+                Stepper(value : $model.fiscalModel.incomeTaxes.model.salaryRebate,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
                     HStack {
                         Text("Abattement")
                         Spacer()
-                        Text("\(viewModel.fiscalModel.incomeTaxes.model.salaryRebate.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.incomeTaxes.model.salaryRebate.percentString(digit: 0)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.fiscalModel.incomeTaxes.model.salaryRebate) { _ in viewModel.isModified = true }
-                
+                }
+                .onChange(of: model.fiscalModel.incomeTaxes.model.salaryRebate) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
+
                 AmountEditView(label  : "Abattement minimum",
-                               amount : $viewModel.fiscalModel.incomeTaxes.model.minSalaryRebate)
-                    .onChange(of: viewModel.fiscalModel.incomeTaxes.model.minSalaryRebate) { _ in viewModel.isModified = true }
-                
+                               amount : $model.fiscalModel.incomeTaxes.model.minSalaryRebate)
+                    .onChange(of: model.fiscalModel.incomeTaxes.model.minSalaryRebate) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
+
                 AmountEditView(label  : "Abattement maximum",
-                               amount : $viewModel.fiscalModel.incomeTaxes.model.maxSalaryRebate)
-                    .onChange(of: viewModel.fiscalModel.incomeTaxes.model.maxSalaryRebate) { _ in viewModel.isModified = true }
-                
+                               amount : $model.fiscalModel.incomeTaxes.model.maxSalaryRebate)
+                    .onChange(of: model.fiscalModel.incomeTaxes.model.maxSalaryRebate) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
+
                 AmountEditView(label  : "Plafond de Réduction d'Impôt par Enfant",
-                               amount : $viewModel.fiscalModel.incomeTaxes.model.childRebate)
-                    .onChange(of: viewModel.fiscalModel.incomeTaxes.model.childRebate) { _ in viewModel.isModified = true }
+                               amount : $model.fiscalModel.incomeTaxes.model.childRebate)
+                    .onChange(of: model.fiscalModel.incomeTaxes.model.childRebate) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
             }
             
             Section(header: Text("BNC").font(.headline)) {
-                Stepper(value : $viewModel.fiscalModel.incomeTaxes.model.turnOverRebate,
+                Stepper(value : $model.fiscalModel.incomeTaxes.model.turnOverRebate,
                         in    : 0 ... 100.0) {
                     HStack {
                         Text("Abattement")
                         Spacer()
-                        Text("\(viewModel.fiscalModel.incomeTaxes.model.turnOverRebate.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.incomeTaxes.model.turnOverRebate.percentString(digit: 0)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.fiscalModel.incomeTaxes.model.turnOverRebate) { _ in viewModel.isModified = true }
-                
+                }
+                .onChange(of: model.fiscalModel.incomeTaxes.model.turnOverRebate) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
+
                 AmountEditView(label  : "Abattement minimum",
-                               amount : $viewModel.fiscalModel.incomeTaxes.model.minTurnOverRebate)
-                    .onChange(of: viewModel.fiscalModel.incomeTaxes.model.minTurnOverRebate) { _ in viewModel.isModified = true }
+                               amount : $model.fiscalModel.incomeTaxes.model.minTurnOverRebate)
+                    .onChange(of: model.fiscalModel.incomeTaxes.model.minTurnOverRebate) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
             }
         }
+        .navigationTitle("Revenus du Travail")
         .alert(item: $alertItem, content: newAlert)
-        /// barre d'outils
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
@@ -86,27 +109,25 @@ struct ModelFiscalIrppView: View {
                                       dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .navigationTitle("Revenus du Travail")
+            isModified: model.isModified)
     }
 }
 
 struct ModelFiscalIrppView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return ModelFiscalIrppView()
-            .preferredColorScheme(.dark)
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
-            .environmentObject(viewModel)
+            .preferredColorScheme(.dark)
     }
 }

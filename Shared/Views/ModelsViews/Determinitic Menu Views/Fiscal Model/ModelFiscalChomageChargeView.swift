@@ -11,7 +11,7 @@ import Persistence
 import FamilyModel
 
 struct ModelFiscalChomageChargeView: View {
-    @EnvironmentObject private var viewModel  : DeterministicViewModel
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -20,66 +20,91 @@ struct ModelFiscalChomageChargeView: View {
     var body: some View {
         Form {
             Section {
-                VersionEditableView(version: $viewModel.fiscalModel.allocationChomageTaxes.model.version)
-                    .onChange(of: viewModel.fiscalModel.allocationChomageTaxes.model.version) { _ in viewModel.isModified = true }
+                VersionEditableView(version: $model.fiscalModel.allocationChomageTaxes.model.version)
+                    .onChange(of: model.fiscalModel.allocationChomageTaxes.model.version) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
             }
             
-            Stepper(value : $viewModel.fiscalModel.allocationChomageTaxes.model.assiette,
+            Stepper(value : $model.fiscalModel.allocationChomageTaxes.model.assiette,
                     in    : 0 ... 100.0,
                     step  : 0.1) {
                 HStack {
                     Text("Assiette")
                     Spacer()
-                    Text("\(viewModel.fiscalModel.allocationChomageTaxes.model.assiette.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.allocationChomageTaxes.model.assiette.percentString(digit: 1)) %").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.fiscalModel.allocationChomageTaxes.model.assiette) { _ in viewModel.isModified = true }
+            }
+            .onChange(of: model.fiscalModel.allocationChomageTaxes.model.assiette) { _ in
+                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                model.manageInternalDependencies()
+            }
 
             AmountEditView(label  : "Seuil de Taxation CSG/CRDS",
                            comment: "journalier",
-                           amount : $viewModel.fiscalModel.allocationChomageTaxes.model.seuilCsgCrds)
-                .onChange(of: viewModel.fiscalModel.allocationChomageTaxes.model.seuilCsgCrds) { _ in viewModel.isModified = true }
+                           amount : $model.fiscalModel.allocationChomageTaxes.model.seuilCsgCrds)
+                .onChange(of: model.fiscalModel.allocationChomageTaxes.model.seuilCsgCrds) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
 
-            Stepper(value : $viewModel.fiscalModel.allocationChomageTaxes.model.CRDS,
+            Stepper(value : $model.fiscalModel.allocationChomageTaxes.model.CRDS,
                     in    : 0 ... 100.0,
                     step  : 0.1) {
                 HStack {
                     Text("CRDS")
                     Spacer()
-                    Text("\(viewModel.fiscalModel.allocationChomageTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.allocationChomageTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.fiscalModel.allocationChomageTaxes.model.CRDS) { _ in viewModel.isModified = true }
+            }
+            .onChange(of: model.fiscalModel.allocationChomageTaxes.model.CRDS) { _ in
+                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                model.manageInternalDependencies()
+            }
 
-            Stepper(value : $viewModel.fiscalModel.allocationChomageTaxes.model.CSG,
+            Stepper(value : $model.fiscalModel.allocationChomageTaxes.model.CSG,
                     in    : 0 ... 100.0,
                     step  : 0.1) {
                 HStack {
                     Text("CSG")
                     Spacer()
-                    Text("\(viewModel.fiscalModel.allocationChomageTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.allocationChomageTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.fiscalModel.allocationChomageTaxes.model.CSG) { _ in viewModel.isModified = true }
+            }
+            .onChange(of: model.fiscalModel.allocationChomageTaxes.model.CSG) { _ in
+                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                model.manageInternalDependencies()
+            }
 
-            Stepper(value : $viewModel.fiscalModel.allocationChomageTaxes.model.retraiteCompl,
+            Stepper(value : $model.fiscalModel.allocationChomageTaxes.model.retraiteCompl,
                     in    : 0 ... 100.0,
                     step  : 0.1) {
                 HStack {
                     Text("Cotisation de Retraite Complémentaire")
                     Spacer()
-                    Text("\(viewModel.fiscalModel.allocationChomageTaxes.model.retraiteCompl.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.allocationChomageTaxes.model.retraiteCompl.percentString(digit: 1)) %").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.fiscalModel.allocationChomageTaxes.model.retraiteCompl) { _ in viewModel.isModified = true }
+            }
+            .onChange(of: model.fiscalModel.allocationChomageTaxes.model.retraiteCompl) { _ in
+                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                model.manageInternalDependencies()
+            }
 
             AmountEditView(label  : "Seuil de Taxation Retraite Complémentaire",
                            comment: "journalier",
-                           amount : $viewModel.fiscalModel.allocationChomageTaxes.model.seuilRetCompl)
-                .onChange(of: viewModel.fiscalModel.allocationChomageTaxes.model.seuilRetCompl) { _ in viewModel.isModified = true }
+                           amount : $model.fiscalModel.allocationChomageTaxes.model.seuilRetCompl)
+                .onChange(of: model.fiscalModel.allocationChomageTaxes.model.seuilRetCompl) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
         }
+        .navigationTitle("Allocation Chômage")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
@@ -92,27 +117,25 @@ struct ModelFiscalChomageChargeView: View {
                                       dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .navigationTitle("Allocation Chômage")
+            isModified: model.isModified)
     }
 }
 
 struct ModelFiscalChomageChargeView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return ModelFiscalChomageChargeView()
             .preferredColorScheme(.dark)
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
-            .environmentObject(viewModel)
     }
 }

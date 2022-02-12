@@ -13,54 +13,67 @@ import FamilyModel
 // MARK: - Deterministic HumanLife View
 
 struct ModelDeterministicHumanView: View {
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
-    @StateObject private var viewModel        : DeterministicViewModel
     @State private var alertItem              : AlertItem?
-
+    
     var body: some View {
         Form {
             Section(header: Text("Homme").font(.headline)) {
-                VersionEditableView(version: $viewModel.humanLifeModel.menLifeExpectation.version)
-                    .onChange(of: viewModel.humanLifeModel.menLifeExpectation.version) { _ in viewModel.isModified = true }
-
-                Stepper(value : $viewModel.humanLifeModel.menLifeExpectation.defaultValue,
+                VersionEditableView(version: $model.humanLifeModel.menLifeExpectation.version)
+                    .onChange(of: model.humanLifeModel.menLifeExpectation.version) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
+                
+                Stepper(value : $model.humanLifeModel.menLifeExpectation.defaultValue,
                         in    : 50 ... 100) {
                     HStack {
                         Text("Espérance de vie d'un Homme")
                         Spacer()
-                        Text("\(Int(viewModel.humanLifeModel.menLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
+                        Text("\(Int(model.humanLifeModel.menLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.humanLifeModel.menLifeExpectation.defaultValue) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.humanLifeModel.menLifeExpectation.defaultValue) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             }
 
             Section(header: Text("Femme").font(.headline)) {
-                VersionEditableView(version: $viewModel.humanLifeModel.womenLifeExpectation.version)
-                    .onChange(of: viewModel.humanLifeModel.womenLifeExpectation.version) { _ in viewModel.isModified = true }
+                VersionEditableView(version: $model.humanLifeModel.womenLifeExpectation.version)
 
-                Stepper(value : $viewModel.humanLifeModel.womenLifeExpectation.defaultValue,
+                Stepper(value : $model.humanLifeModel.womenLifeExpectation.defaultValue,
                         in    : 50 ... 100) {
                     HStack {
                         Text("Espérance de vie d'une Femme")
                         Spacer()
-                        Text("\(Int(viewModel.humanLifeModel.womenLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
+                        Text("\(Int(model.humanLifeModel.womenLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.humanLifeModel.womenLifeExpectation.defaultValue) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.humanLifeModel.womenLifeExpectation.defaultValue) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             }
 
             Section(header: Text("Dépendance").font(.headline)) {
-                VersionEditableView(version: $viewModel.humanLifeModel.nbOfYearsOfdependency.version)
-                    .onChange(of: viewModel.humanLifeModel.nbOfYearsOfdependency.version) { _ in viewModel.isModified = true }
+                VersionEditableView(version: $model.humanLifeModel.nbOfYearsOfdependency.version)
 
-                Stepper(value : $viewModel.humanLifeModel.nbOfYearsOfdependency.defaultValue,
+                Stepper(value : $model.humanLifeModel.nbOfYearsOfdependency.defaultValue,
                         in    : 0 ... 10) {
                     HStack {
                         Text("Nombre d'années de dépendance")
                         Spacer()
-                        Text("\(Int(viewModel.humanLifeModel.nbOfYearsOfdependency.defaultValue)) ans").foregroundColor(.secondary)
+                        Text("\(Int(model.humanLifeModel.nbOfYearsOfdependency.defaultValue)) ans").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.humanLifeModel.nbOfYearsOfdependency.defaultValue) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.humanLifeModel.nbOfYearsOfdependency.defaultValue) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             }
         }
         .navigationTitle("Modèle Humain")
@@ -69,7 +82,6 @@ struct ModelDeterministicHumanView: View {
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
@@ -82,30 +94,22 @@ struct ModelDeterministicHumanView: View {
                                   dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .onAppear {
-            viewModel.updateFrom(model)
-        }
-    }
-
-    // MARK: - Initialization
-    
-    init(using model: Model) {
-        _viewModel = StateObject(wrappedValue: DeterministicViewModel(using: model))
+            isModified: model.isModified)
     }
 }
 
 struct ModelDeterministicHumanView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return ModelDeterministicHumanView(using: modelTest)
+        return ModelDeterministicHumanView()
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)

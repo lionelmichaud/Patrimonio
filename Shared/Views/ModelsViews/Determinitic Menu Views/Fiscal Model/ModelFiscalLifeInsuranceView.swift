@@ -11,7 +11,7 @@ import Persistence
 import FamilyModel
 
 struct ModelFiscalLifeInsuranceView: View {
-    @EnvironmentObject private var viewModel  : DeterministicViewModel
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -19,20 +19,26 @@ struct ModelFiscalLifeInsuranceView: View {
     
     var body: some View {
         Form {
-            VersionEditableView(version: $viewModel.fiscalModel.lifeInsuranceTaxes.model.version)
-                .onChange(of: viewModel.fiscalModel.lifeInsuranceTaxes.model.version) { _ in viewModel.isModified = true }
+            VersionEditableView(version: $model.fiscalModel.lifeInsuranceTaxes.model.version)
+                .onChange(of: model.fiscalModel.lifeInsuranceTaxes.model.version) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
 
             AmountEditView(label   : "Abattement par personne",
                            comment : "annuel",
-                           amount  : $viewModel.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson)
-                .onChange(of: viewModel.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson) { _ in viewModel.isModified = true }
+                           amount  : $model.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson)
+                .onChange(of: model.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
         }
+        .navigationTitle("Revenus d'Assurance Vie")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
@@ -45,27 +51,25 @@ struct ModelFiscalLifeInsuranceView: View {
                                       dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .navigationTitle("Revenus d'Assurance Vie")
+            isModified: model.isModified)
     }
 }
 
 struct ModelFiscalLifeInsuranceView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return ModelFiscalLifeInsuranceView()
             .preferredColorScheme(.dark)
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
-            .environmentObject(viewModel)
     }
 }

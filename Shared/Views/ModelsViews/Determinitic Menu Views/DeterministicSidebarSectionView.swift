@@ -19,7 +19,7 @@ struct DeterministicSidebarSectionView: View {
     var body: some View {
         Section(header: Text("Modèles Déterministe")) {
             // modèle vie humaine
-            NavigationLink(destination: ModelDeterministicHumanView(using: model),
+            NavigationLink(destination: ModelDeterministicHumanView(),
                            tag         : .detHumanModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Modèle Humain")
@@ -27,7 +27,7 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle économie
-            NavigationLink(destination: ModelDeterministicEconomyView(using: model),
+            NavigationLink(destination: ModelDeterministicEconomyView(),
                            tag         : .detEconomyModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Modèle Economique")
@@ -35,7 +35,7 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle sociologie
-            NavigationLink(destination: ModelDeterministicSociologyView(using: model),
+            NavigationLink(destination: ModelDeterministicSociologyView(),
                            tag         : .detSociologyModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Modèle Sociologique")
@@ -43,7 +43,7 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle sociologie
-            NavigationLink(destination: ModelDeterministicRetirementView(using: model),
+            NavigationLink(destination: ModelDeterministicRetirementView(),
                            tag         : .detRetirementModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Modèle Retraite")
@@ -51,7 +51,7 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle sociologie
-            NavigationLink(destination: ModelDeterministicFiscalView(using: model),
+            NavigationLink(destination: ModelDeterministicFiscalView(),
                            tag         : .detFiscalModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Modèle Fiscal")
@@ -59,7 +59,7 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle sociologie
-            NavigationLink(destination: ModelDeterministicUnemploymentView(using: model),
+            NavigationLink(destination: ModelDeterministicUnemploymentView(),
                            tag         : .detUnemploymentModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Modèle Chômage")

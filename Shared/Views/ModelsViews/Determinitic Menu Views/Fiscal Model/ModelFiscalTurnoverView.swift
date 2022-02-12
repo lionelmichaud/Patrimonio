@@ -11,7 +11,7 @@ import Persistence
 import FamilyModel
 
 struct ModelFiscalTurnoverView: View {
-    @EnvironmentObject private var viewModel  : DeterministicViewModel
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -19,25 +19,32 @@ struct ModelFiscalTurnoverView: View {
 
     var body: some View {
         Form {
-            VersionEditableView(version: $viewModel.fiscalModel.turnoverTaxes.model.version)
-                .onChange(of: viewModel.fiscalModel.turnoverTaxes.model.version) { _ in viewModel.isModified = true }
+            VersionEditableView(version: $model.fiscalModel.turnoverTaxes.model.version)
+                .onChange(of: model.fiscalModel.turnoverTaxes.model.version) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
 
-            Stepper(value : $viewModel.fiscalModel.turnoverTaxes.model.URSSAF,
+            Stepper(value : $model.fiscalModel.turnoverTaxes.model.URSSAF,
                     in    : 0 ... 100.0,
                     step  : 1.0) {
                 HStack {
                     Text("URSAAF")
                     Spacer()
-                    Text("\(viewModel.fiscalModel.turnoverTaxes.model.URSSAF.percentString(digit: 0)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.turnoverTaxes.model.URSSAF.percentString(digit: 0)) %").foregroundColor(.secondary)
                 }
-            }.onChange(of: viewModel.fiscalModel.turnoverTaxes.model.URSSAF) { _ in viewModel.isModified = true }
+            }
+            .onChange(of: model.fiscalModel.turnoverTaxes.model.URSSAF) { _ in
+                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                model.manageInternalDependencies()
+            }
         }
+        .navigationTitle("Bénéfices Non Commerciaux (BNC)")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
@@ -50,27 +57,25 @@ struct ModelFiscalTurnoverView: View {
                                       dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .navigationTitle("Bénéfices Non Commerciaux (BNC)")
+            isModified: model.isModified)
     }
 }
 
 struct ModelFiscalTurnoverView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return ModelFiscalTurnoverView()
             .preferredColorScheme(.dark)
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
-            .environmentObject(viewModel)
     }
 }

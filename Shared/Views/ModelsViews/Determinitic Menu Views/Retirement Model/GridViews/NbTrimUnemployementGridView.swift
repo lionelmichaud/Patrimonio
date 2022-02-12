@@ -188,15 +188,14 @@ struct NbTrimUnemployementGridView_Previews: PreviewProvider {
 
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return
             NavigationView {
             NavigationLink("Test", destination: NbTrimUnemployementGridView(label: "Nom",
                                                                             grid : .constant(grid()))
+                            .environmentObject(dataStoreTest)
                             .environmentObject(modelTest)
                             .environmentObject(familyTest)
-                            .environmentObject(simulationTest)
-                            .environmentObject(viewModel))
+                            .environmentObject(simulationTest))
         }
         .preferredColorScheme(.dark)
         .previewLayout(.fixed(width: 700.0, height: 400.0))

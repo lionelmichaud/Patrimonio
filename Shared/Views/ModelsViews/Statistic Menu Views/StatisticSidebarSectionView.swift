@@ -7,10 +7,12 @@
 
 import SwiftUI
 import Persistence
+import ModelEnvironment
 import PatrimoineModel
 import FamilyModel
 
 struct StatisticSidebarSectionView: View {
+    @EnvironmentObject private var model      : Model
     @EnvironmentObject private var simulation : Simulation
     @EnvironmentObject private var uiState    : UIState
     
@@ -45,6 +47,7 @@ struct StatisticSectionView_Previews: PreviewProvider {
         loadTestFilesFromBundle()
         return StatisticSidebarSectionView()
             .environmentObject(dataStoreTest)
+            .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(patrimoineTest)
             .environmentObject(simulationTest)

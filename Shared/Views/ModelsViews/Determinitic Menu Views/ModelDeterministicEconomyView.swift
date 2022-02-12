@@ -13,82 +13,106 @@ import FamilyModel
 // MARK: - Deterministic Economy View
 
 struct ModelDeterministicEconomyView: View {
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
-    @StateObject private var viewModel        : DeterministicViewModel
     @State private var alertItem              : AlertItem?
-
+    
     var body: some View {
         Form {
             Section(header: Text("Inflation").font(.headline)) {
-                VersionEditableView(version: $viewModel.economyModel.randomizers.inflation.version)
-                    .onChange(of: viewModel.economyModel.randomizers.inflation.version) { _ in viewModel.isModified = true }
-
-                Stepper(value : $viewModel.economyModel.randomizers.inflation.defaultValue,
+                VersionEditableView(version: $model.economyModel.randomizers.inflation.version)
+                    .onChange(of: model.economyModel.randomizers.inflation.version) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
+                
+                Stepper(value : $model.economyModel.randomizers.inflation.defaultValue,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Inflation")
                         Spacer()
-                        Text("\(viewModel.economyModel.randomizers.inflation.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.economyModel.randomizers.inflation.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
                     }
                 }
-                        .onChange(of: viewModel.economyModel.randomizers.inflation.defaultValue) { _ in viewModel.isModified = true }
+                .onChange(of: model.economyModel.randomizers.inflation.defaultValue) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             }
-
+            
             Section(header: Text("Placements sans Risque").font(.headline)) {
-                VersionEditableView(version: $viewModel.economyModel.randomizers.securedRate.version)
-                    .onChange(of: viewModel.economyModel.randomizers.securedRate.version) { _ in viewModel.isModified = true }
-
-                Stepper(value : $viewModel.economyModel.randomizers.securedRate.defaultValue,
+                VersionEditableView(version: $model.economyModel.randomizers.securedRate.version)
+                    .onChange(of: model.economyModel.randomizers.securedRate.version) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
+                
+                Stepper(value : $model.economyModel.randomizers.securedRate.defaultValue,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Rendement")
                         Spacer()
-                        Text("\(viewModel.economyModel.randomizers.securedRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.economyModel.randomizers.securedRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: viewModel.economyModel.randomizers.securedRate.defaultValue) { _ in viewModel.isModified = true }
+                .onChange(of: model.economyModel.randomizers.securedRate.defaultValue) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
                 
-                Stepper(value : $viewModel.economyModel.randomizers.securedVolatility,
+                Stepper(value : $model.economyModel.randomizers.securedVolatility,
                         in    : 0 ... 5,
                         step  : 0.1) {
                     HStack {
                         Text("Volatilité")
                         Spacer()
-                        Text("\(viewModel.economyModel.randomizers.securedVolatility.percentString(digit: 2)) %").foregroundColor(.secondary)
+                        Text("\(model.economyModel.randomizers.securedVolatility.percentString(digit: 2)) %").foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: viewModel.economyModel.randomizers.securedVolatility) { _ in viewModel.isModified = true }
+                .onChange(of: model.economyModel.randomizers.securedVolatility) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             }
             
             Section(header: Text("Placements Actions").font(.headline)) {
-                VersionEditableView(version: $viewModel.economyModel.randomizers.stockRate.version)
-                    .onChange(of: viewModel.economyModel.randomizers.stockRate.version) { _ in viewModel.isModified = true }
-
-                Stepper(value : $viewModel.economyModel.randomizers.stockRate.defaultValue,
+                VersionEditableView(version: $model.economyModel.randomizers.stockRate.version)
+                    .onChange(of: model.economyModel.randomizers.stockRate.version) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
+                
+                Stepper(value : $model.economyModel.randomizers.stockRate.defaultValue,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Rendement")
                         Spacer()
-                        Text("\(viewModel.economyModel.randomizers.stockRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.economyModel.randomizers.stockRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: viewModel.economyModel.randomizers.stockRate.defaultValue) { _ in viewModel.isModified = true }
+                .onChange(of: model.economyModel.randomizers.stockRate.defaultValue) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
                 
-                Stepper(value : $viewModel.economyModel.randomizers.stockVolatility,
+                Stepper(value : $model.economyModel.randomizers.stockVolatility,
                         in    : 0 ... 20,
                         step  : 1.0) {
                     HStack {
                         Text("Volatilité")
                         Spacer()
-                        Text("\(viewModel.economyModel.randomizers.stockVolatility.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.economyModel.randomizers.stockVolatility.percentString(digit: 0)) %").foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: viewModel.economyModel.randomizers.stockVolatility) { _ in viewModel.isModified = true }
+                .onChange(of: model.economyModel.randomizers.stockVolatility) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             }
         }
         .navigationTitle("Modèle Economique")
@@ -97,7 +121,6 @@ struct ModelDeterministicEconomyView: View {
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
@@ -110,30 +133,22 @@ struct ModelDeterministicEconomyView: View {
                                       dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .onAppear {
-            viewModel.updateFrom(model)
-        }
-    }
-    
-    // MARK: - Initialization
-    
-    init(using model: Model) {
-        _viewModel = StateObject(wrappedValue: DeterministicViewModel(using: model))
+            isModified: model.isModified)
     }
 }
 
 struct ModelDeterministicEconomyView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return ModelDeterministicEconomyView(using: modelTest)
+        return ModelDeterministicEconomyView()
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)

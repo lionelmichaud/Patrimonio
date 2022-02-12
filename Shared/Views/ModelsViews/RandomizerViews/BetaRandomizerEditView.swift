@@ -66,87 +66,89 @@ struct BetaRandomizerEditView : View {
     @State private var betaRandomizer         : ModelRandomizer<BetaRandomGenerator>
     private var initialBetaRandomizer         : ModelRandomizer<BetaRandomGenerator>!
     @State private var alertItem              : AlertItem?
-
+    
     var body: some View {
-        HStack {
-            Stepper(value : $viewModel.min,
-                    in    : 0 ... 10,
-                    step  : 0.1) {
-                HStack {
-                    Text("Minimum")
-                    Spacer()
-                    Text("\(viewModel.min.percentString(digit: 1)) %").foregroundColor(.secondary)
+        VStack {
+            HStack {
+                Stepper(value : $viewModel.min,
+                        in    : 0 ... 10,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Minimum")
+                        Spacer()
+                        Text("\(viewModel.min.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
+                }.padding(.trailing)
+                .onChange(of: viewModel.min) { value in
+                    betaRandomizer.rndGenerator.minX = value
+                    betaRandomizer.rndGenerator.initialize()
+                    viewModel.isModified = true
                 }
-            }.padding(.trailing)
-            .onChange(of: viewModel.min) { value in
-                betaRandomizer.rndGenerator.minX = value
-                betaRandomizer.rndGenerator.initialize()
-                viewModel.isModified = true
-            }
-
-            Stepper(value : $viewModel.max,
-                    in    : 0 ... 10,
-                    step  : 0.1) {
-                HStack {
-                    Text("Maximum")
-                    Spacer()
-                    Text("\(viewModel.max.percentString(digit: 1)) %").foregroundColor(.secondary)
+                
+                Stepper(value : $viewModel.max,
+                        in    : 0 ... 10,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Maximum")
+                        Spacer()
+                        Text("\(viewModel.max.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    }
+                }.padding(.trailing)
+                .onChange(of: viewModel.max) { value in
+                    betaRandomizer.rndGenerator.maxX = value
+                    betaRandomizer.rndGenerator.initialize()
+                    viewModel.isModified = true
                 }
-            }.padding(.trailing)
-            .onChange(of: viewModel.max) { value in
-                betaRandomizer.rndGenerator.maxX = value
-                betaRandomizer.rndGenerator.initialize()
-                viewModel.isModified = true
-            }
-
-            Stepper(value : $viewModel.alpha,
-                    in    : 0 ... 10,
-                    step  : 0.1) {
-                HStack {
-                    Text("Alpha")
-                    Spacer()
-                    Text("\(viewModel.alpha as NSNumber, formatter: decimalFormatter)").foregroundColor(.secondary)
+                
+                Stepper(value : $viewModel.alpha,
+                        in    : 0 ... 10,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Alpha")
+                        Spacer()
+                        Text("\(viewModel.alpha as NSNumber, formatter: decimalFormatter)").foregroundColor(.secondary)
+                    }
+                }.padding(.trailing)
+                .onChange(of: viewModel.alpha) { value in
+                    betaRandomizer.rndGenerator.alpha = value
+                    betaRandomizer.rndGenerator.initialize()
+                    viewModel.isModified = true
                 }
-            }.padding(.trailing)
-            .onChange(of: viewModel.alpha) { value in
-                betaRandomizer.rndGenerator.alpha = value
-                betaRandomizer.rndGenerator.initialize()
-                viewModel.isModified = true
+                
+                Stepper(value : $viewModel.beta,
+                        in    : 0 ... 10,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Beta")
+                        Spacer()
+                        Text("\(viewModel.beta as NSNumber, formatter: decimalFormatter)").foregroundColor(.secondary)
+                    }
+                }.onChange(of: viewModel.beta) { value in
+                    betaRandomizer.rndGenerator.beta = value
+                    betaRandomizer.rndGenerator.initialize()
+                    viewModel.isModified = true
+                }
             }
+            .padding(.horizontal)
             
-            Stepper(value : $viewModel.beta,
-                    in    : 0 ... 10,
-                    step  : 0.1) {
-                HStack {
-                    Text("Beta")
-                    Spacer()
-                    Text("\(viewModel.beta as NSNumber, formatter: decimalFormatter)").foregroundColor(.secondary)
-                }
-            }.onChange(of: viewModel.beta) { value in
-                betaRandomizer.rndGenerator.beta = value
-                betaRandomizer.rndGenerator.initialize()
-                viewModel.isModified = true
+            BetaRandomizerView(randomizer: betaRandomizer)
+        }
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                DiskButton(text   : "Modifier le Patron",
+                           action : applyChangesToTemplate)
+            }
+            ToolbarItem(placement: .automatic) {
+                FolderButton(action : applyChanges)
+                    .disabled(!changeOccured)
             }
         }
-        .padding(.horizontal)
-
-        BetaRandomizerView(randomizer: betaRandomizer)
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    DiskButton(text   : "Modifier le Patron",
-                               action : applyChangesToTemplate)
-                }
-                ToolbarItem(placement: .automatic) {
-                    FolderButton(action : applyChanges)
-                        .disabled(!changeOccured)
-                }
-            }
-            .onAppear {
-                viewModel.updateFrom(betaRandomizer)
-            }
-            .alert(item: $alertItem, content: newAlert)
+        .onAppear {
+            viewModel.updateFrom(betaRandomizer)
+        }
+        .alert(item: $alertItem, content: newAlert)
     }
-
+    
     // MARK: - Properties
 
     var changeOccured: Bool {

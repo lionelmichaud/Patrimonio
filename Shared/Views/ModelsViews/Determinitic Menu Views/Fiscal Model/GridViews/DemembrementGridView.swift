@@ -198,13 +198,12 @@ struct DemembrementGridView_Previews: PreviewProvider {
 
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return DemembrementGridView(label: "Nom",
                                     grid : .constant(grid()))
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
-            .environmentObject(viewModel)
             .preferredColorScheme(.dark)
             .previewLayout(.fixed(width: 1000.0, height: 400.0))
     }

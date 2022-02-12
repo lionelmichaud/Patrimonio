@@ -242,15 +242,14 @@ struct PointGridView_Previews: PreviewProvider {
     
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return
             NavigationView {
                 NavigationLink("Test", destination: PointGridView(label: "Nom",
                                                                   grid: .constant(grid()))
+                                .environmentObject(dataStoreTest)
                                 .environmentObject(modelTest)
                                 .environmentObject(familyTest)
-                                .environmentObject(simulationTest)
-                                .environmentObject(viewModel))
+                                .environmentObject(simulationTest))
             }
             .preferredColorScheme(.dark)
             .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/500.0/*@END_MENU_TOKEN@*/, height: 300.0))
@@ -266,15 +265,14 @@ struct VerifiedPointGridView_Previews: PreviewProvider {
     
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return
             NavigationView {
                 NavigationLink("Test", destination: VerifiedPointGridView(label: "Courbe",
                                                                           grid: .constant(grid()))
+                                .environmentObject(dataStoreTest)
                                 .environmentObject(modelTest)
                                 .environmentObject(familyTest)
-                                .environmentObject(simulationTest)
-                                .environmentObject(viewModel))
+                                .environmentObject(simulationTest))
             }
         .preferredColorScheme(.dark)
         .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/500.0/*@END_MENU_TOKEN@*/, height: 300.0))

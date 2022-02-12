@@ -17,23 +17,20 @@ import FamilyModel
 /// - Warning:
 ///     Ne suvegarde PAS la modification sur disque
 ///
-func applyChangesToOpenDossierAlert(viewModel  : DeterministicViewModel,
-                                    model      : Model,
-                                    family     : Family,
-                                    simulation : Simulation) -> AlertItem {
-    AlertItem(title         : Text("Dossier Ouvert"),
-              message       : Text("Voulez-vous appliquer les modifications effectuées au dossier ouvert ?\n Pensez à sauvegarder les modifications."),
-              primaryButton : .default(Text("Appliquer")) {
-                // mettre à jour le modèle avec les nouvelles valeurs
-                viewModel.update(model)
-                // mettre à jour les membres de la famille existants avec les nouvelles valeurs
-                viewModel.update(family)
-                // invalider les résultats de simulation existants
-                simulation.notifyComputationInputsModification()
+func cancelChanges(to model   : Model,
+                   family     : Family,
+                   simulation : Simulation,
+                   dataStore  : Store) -> AlertItem {
+    AlertItem(title         : Text("Revenir au dossier sauvegardé"),
+              message       : Text("Voulez-vous vraiement annuler toutes les modifications effectuées sur le modèle depuis l'ouverture du dossier ?"),
+              primaryButton : .destructive(Text("Appliquer")) {
+                /// recharger le modèle depuis le fichier JSON
+                try! model.loadFromJSON(fromFolder: dataStore.activeDossier!.folder!)
+                DependencyInjector.updateDependenciesToModel(model      : model,
+                                                             family     : family,
+                                                             simulation : simulation)
               },
-              secondaryButton: .cancel(Text("Revenir")) {
-                viewModel.updateFrom(model)
-              })
+              secondaryButton: .cancel())
 }
 
 /// Enregistrer la modification dans le répertoire Template (sur disque)
@@ -41,32 +38,24 @@ func applyChangesToOpenDossierAlert(viewModel  : DeterministicViewModel,
 /// - Warning:
 ///     N'applique PAS la modification au projet ouvert (en mémoire)
 ///
-func applyChangesToTemplateAlert(viewModel                  : DeterministicViewModel,
-                                 model                      : Model,
+func applyChangesToTemplateAlert(model                      : Model,
                                  notifyTemplatFolderMissing : @escaping () -> Void,
                                  notifyFailure              : @escaping () -> Void) -> AlertItem {
     AlertItem(title         : Text("Modèle"),
               message       : Text("Voulez-vous appliquer les modifications effectuées au modèle ?"),
-              primaryButton : .default(Text("Appliquer")) {
-        guard let templateFolder = PersistenceManager.templateFolder() else {
-            notifyTemplatFolderMissing()
-            return
-        }
-
-        // créer une copie du modèle
-        let copy = Model(from: model)
-        // mettre à jour la copie du modèle avec les nouvelles valeurs
-        let wasModified = viewModel.isModified
-        viewModel.update(copy)
-        viewModel.isModified = wasModified
-
-        // sauvegarder la copie modifiée du modèle dans le dossier template
-        do {
-            try copy.saveAsJSON(toFolder: templateFolder)
-        } catch {
-            notifyFailure()
-        }
-    },
+              primaryButton : .destructive(Text("Appliquer")) {
+                guard let templateFolder = PersistenceManager.templateFolder() else {
+                    notifyTemplatFolderMissing()
+                    return
+                }
+                
+                // sauvegarder la copie modifiée du modèle dans le dossier template
+                do {
+                    try model.saveAsJSON(toFolder: templateFolder)
+                } catch {
+                    notifyFailure()
+                }
+              },
               secondaryButton: .cancel())
 }
 
@@ -74,7 +63,7 @@ func applyChangesToTemplateAlert(viewModel                  : DeterministicViewM
 
 extension View {
     func modelChangesToolbar(applyChangesToTemplate: @escaping () -> Void,
-                             applyChangesToDossier : @escaping () -> Void,
+                             cancelChanges         : @escaping () -> Void,
                              isModified            : Bool,
                              isValid               : Bool = true) -> some View {
         self.toolbar {
@@ -83,8 +72,18 @@ extension View {
                            action : applyChangesToTemplate)
             }
             ToolbarItem(placement: .automatic) {
-                FolderButton(action : applyChangesToDossier)
-                    .disabled(!isModified || !isValid)
+                Button(
+                    action: cancelChanges,
+                    label: {
+                        HStack {
+                            Image(systemName: "arrowshape.turn.up.backward")
+                                .imageScale(.large)
+                            Text("Revenir")
+                        }
+                    }
+                )
+                .capsuleButtonStyle()
+                .disabled(!isModified || !isValid)
             }
         }
     }

@@ -11,55 +11,70 @@ import Persistence
 import FamilyModel
 
 struct ModelFiscalFinancialView: View {
-    @EnvironmentObject private var viewModel  : DeterministicViewModel
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
     @State private var alertItem              : AlertItem?
-    
+
     var body: some View {
         Form {
-            VersionEditableView(version: $viewModel.fiscalModel.financialRevenuTaxes.model.version)
-                .onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.version) { _ in viewModel.isModified = true }
+            VersionEditableView(version: $model.fiscalModel.financialRevenuTaxes.model.version)
+                .onChange(of: model.fiscalModel.financialRevenuTaxes.model.version) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
 
             Section(footer: Text("Appliquable à tous les revenus financiers")) {
-                Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.CRDS,
+                Stepper(value : $model.fiscalModel.financialRevenuTaxes.model.CRDS,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
                     HStack {
                         Text("CRDS")
                         Spacer()
-                        Text("\(viewModel.fiscalModel.financialRevenuTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.financialRevenuTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.CRDS) { _ in viewModel.isModified = true }
-                
-                Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.CSG,
+                }
+                .onChange(of: model.fiscalModel.financialRevenuTaxes.model.CRDS) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
+
+                Stepper(value : $model.fiscalModel.financialRevenuTaxes.model.CSG,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
                     HStack {
                         Text("CSG")
                         Spacer()
-                        Text("\(viewModel.fiscalModel.financialRevenuTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.financialRevenuTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.CSG) { _ in viewModel.isModified = true }
-                
-                Stepper(value : $viewModel.fiscalModel.financialRevenuTaxes.model.prelevSocial,
+                }
+                .onChange(of: model.fiscalModel.financialRevenuTaxes.model.CSG) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
+
+                Stepper(value : $model.fiscalModel.financialRevenuTaxes.model.prelevSocial,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
                     HStack {
                         Text("Prélèvement Sociaux")
                         Spacer()
-                        Text("\(viewModel.fiscalModel.financialRevenuTaxes.model.prelevSocial.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.financialRevenuTaxes.model.prelevSocial.percentString(digit: 1)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.fiscalModel.financialRevenuTaxes.model.prelevSocial) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.fiscalModel.financialRevenuTaxes.model.prelevSocial) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             }
         }
+        .navigationTitle("Revenus Financiers")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
@@ -72,27 +87,25 @@ struct ModelFiscalFinancialView: View {
                                       dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .navigationTitle("Revenus Financiers")
+            isModified: model.isModified)
     }
 }
 
 struct ModelFiscalFinancialView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return ModelFiscalFinancialView()
             .preferredColorScheme(.dark)
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
-            .environmentObject(viewModel)
     }
 }

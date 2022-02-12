@@ -11,7 +11,7 @@ import Persistence
 import FamilyModel
 
 struct ModelFiscalIsfView: View {
-    @EnvironmentObject private var viewModel  : DeterministicViewModel
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
@@ -25,78 +25,104 @@ struct ModelFiscalIsfView: View {
     var body: some View {
         Form {
             Section {
-                VersionEditableView(version: $viewModel.fiscalModel.isf.model.version)
-                    .onChange(of: viewModel.fiscalModel.isf.model.version) { _ in viewModel.isModified = true }
+                VersionEditableView(version: $model.fiscalModel.isf.model.version)
+                    .onChange(of: model.fiscalModel.isf.model.version) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
             }
             
             NavigationLink(destination: RateGridView(label: "Barême ISF/IFI",
-                                                     grid: $viewModel.fiscalModel.isf.model.grid)
-                            .environmentObject(viewModel)) {
+                                                     grid: $model.fiscalModel.isf.model.grid)
+                            .environmentObject(model)) {
                 Text("Barême")
             }.isDetailLink(true)
-
+            
             Section(header: Text("Calcul").font(.headline),
-                footer: Text(footnote)) {
+                    footer: Text(footnote)) {
                 AmountEditView(label  : "Seuil d'imposition",
-                               amount : $viewModel.fiscalModel.isf.model.seuil)
-                    .onChange(of: viewModel.fiscalModel.isf.model.seuil) { _ in viewModel.isModified = true }
+                               amount : $model.fiscalModel.isf.model.seuil)
+                    .onChange(of: model.fiscalModel.isf.model.seuil) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
                 AmountEditView(label  : "Limite supérieure de la tranche de transition",
-                               amount : $viewModel.fiscalModel.isf.model.seuil2)
-                    .onChange(of: viewModel.fiscalModel.isf.model.seuil2) { _ in viewModel.isModified = true }
-                
+                               amount : $model.fiscalModel.isf.model.seuil2)
+                    .onChange(of: model.fiscalModel.isf.model.seuil2) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
                 AmountEditView(label  : "Décote maximale",
-                               amount : $viewModel.fiscalModel.isf.model.decote€)
-                    .onChange(of: viewModel.fiscalModel.isf.model.decote€) { _ in viewModel.isModified = true }
-                
-                Stepper(value : $viewModel.fiscalModel.isf.model.decoteCoef,
+                               amount : $model.fiscalModel.isf.model.decote€)
+                    .onChange(of: model.fiscalModel.isf.model.decote€) { _ in
+                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                        model.manageInternalDependencies()
+                    }
+                Stepper(value : $model.fiscalModel.isf.model.decoteCoef,
                         in    : 0 ... 100.0,
                         step  : 0.25) {
                     HStack {
                         Text("Abattement")
                         Spacer()
-                        Text("\(viewModel.fiscalModel.isf.model.decoteCoef.percentString(digit: 2)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.isf.model.decoteCoef.percentString(digit: 2)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.fiscalModel.isf.model.decoteCoef) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.fiscalModel.isf.model.decoteCoef) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             }
             
             Section(header: Text("Décotes Spécifiques").font(.headline)) {
-                Stepper(value : $viewModel.fiscalModel.isf.model.decoteResidence,
+                Stepper(value : $model.fiscalModel.isf.model.decoteResidence,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
                     HStack {
                         Text("Décote sur la valeur de la résidence principale")
                         Spacer()
-                        Text("\(viewModel.fiscalModel.isf.model.decoteResidence.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.isf.model.decoteResidence.percentString(digit: 0)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.fiscalModel.isf.model.decoteResidence) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.fiscalModel.isf.model.decoteResidence) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
                 
-                Stepper(value : $viewModel.fiscalModel.isf.model.decoteLocation,
+                Stepper(value : $model.fiscalModel.isf.model.decoteLocation,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
                     HStack {
                         Text("Décote sur la valeur d'un bien immobilier en location")
                         Spacer()
-                        Text("\(viewModel.fiscalModel.isf.model.decoteLocation.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.isf.model.decoteLocation.percentString(digit: 0)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.fiscalModel.isf.model.decoteLocation) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.fiscalModel.isf.model.decoteLocation) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
                 
-                Stepper(value : $viewModel.fiscalModel.isf.model.decoteIndivision,
+                Stepper(value : $model.fiscalModel.isf.model.decoteIndivision,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
                     HStack {
                         Text("Décote sur la valeur d'un bien immobilier en indivision")
                         Spacer()
-                        Text("\(viewModel.fiscalModel.isf.model.decoteIndivision.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.isf.model.decoteIndivision.percentString(digit: 0)) %").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.fiscalModel.isf.model.decoteIndivision) { _ in viewModel.isModified = true }
+                }
+                .onChange(of: model.fiscalModel.isf.model.decoteIndivision) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             }
         }
+        .navigationTitle("Imposition sur le Capital")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
@@ -109,27 +135,25 @@ struct ModelFiscalIsfView: View {
                                       dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .navigationTitle("Imposition sur le Capital")
+            isModified: model.isModified)
     }
 }
 
 struct ModelFiscalIsfView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        let viewModel = DeterministicViewModel(using: modelTest)
         return ModelFiscalIsfView()
-            .preferredColorScheme(.dark)
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)
-            .environmentObject(viewModel)
+            .preferredColorScheme(.dark)
     }
 }

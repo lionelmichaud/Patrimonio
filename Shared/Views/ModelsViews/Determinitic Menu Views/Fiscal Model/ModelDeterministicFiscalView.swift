@@ -11,123 +11,126 @@ import ModelEnvironment
 import FamilyModel
 
 struct ModelDeterministicFiscalView: View {
+    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
-    @StateObject private var viewModel        : DeterministicViewModel
     @State private var alertItem              : AlertItem?
-    
+
     var body: some View {
         Form {
             AmountEditView(label  : "Plafond Annuel de la Sécurité Sociale",
                            comment: "PASS",
-                           amount : $viewModel.fiscalModel.PASS)
-                .onChange(of: viewModel.fiscalModel.PASS) { _ in viewModel.isModified = true }
+                           amount : $model.fiscalModel.PASS)
+                .onChange(of: model.fiscalModel.PASS) { _ in
+                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                    model.manageInternalDependencies()
+                }
             
             Section(header: Text("Impôts").font(.headline)) {
                 NavigationLink(destination: ModelFiscalIrppView()
-                                .environmentObject(viewModel)) {
+                                .environmentObject(model)) {
                     Text("Revenus du Travail (IRPP)")
                     Spacer()
-                    VersionText(version: viewModel.fiscalModel.incomeTaxes.model.version,
+                    VersionText(version: model.fiscalModel.incomeTaxes.model.version,
                                 withDetails: false)
                 }
                 
                 NavigationLink(destination: ModelFiscalIsfView()
-                                .environmentObject(viewModel)) {
+                                .environmentObject(model)) {
                     Text("Capital (IFI)")
                     Spacer()
-                    VersionText(version: viewModel.fiscalModel.isf.model.version,
+                    VersionText(version: model.fiscalModel.isf.model.version,
                                 withDetails: false)
                 }
                 
                 NavigationLink(destination: ModelFiscalImpotSocieteView()
-                                .environmentObject(viewModel)) {
+                                .environmentObject(model)) {
                     Text("Bénéfice des Sociétés (IS)")
                     Spacer()
-                    VersionText(version: viewModel.fiscalModel.companyProfitTaxes.model.version,
+                    VersionText(version: model.fiscalModel.companyProfitTaxes.model.version,
                                 withDetails: false)
                 }
                 
                 NavigationLink(destination: ModelFiscalImmobilierImpotView()
-                                .environmentObject(viewModel)) {
+                                .environmentObject(model)) {
                     Text("Plus-Value Immobilière")
                     Spacer()
-                    VersionText(version: viewModel.fiscalModel.estateCapitalGainIrpp.model.version,
+                    VersionText(version: model.fiscalModel.estateCapitalGainIrpp.model.version,
                                 withDetails: false)
                 }
             }
             
             Section(header: Text("Charges Sociales").font(.headline)) {
                 NavigationLink(destination: ModelFiscalPensionView()
-                                .environmentObject(viewModel)) {
+                                .environmentObject(model)) {
                     Text("Pensions de Retraite")
                     Spacer()
-                    VersionText(version: viewModel.fiscalModel.pensionTaxes.model.version,
+                    VersionText(version: model.fiscalModel.pensionTaxes.model.version,
                                 withDetails: false)
                 }
                 
                 NavigationLink(destination: ModelFiscalChomageChargeView()
-                                .environmentObject(viewModel)) {
+                                .environmentObject(model)) {
                     Text("Allocation Chômage")
                     Spacer()
-                    VersionText(version: viewModel.fiscalModel.allocationChomageTaxes.model.version,
+                    VersionText(version: model.fiscalModel.allocationChomageTaxes.model.version,
                                 withDetails: false)
                 }
                 
                 NavigationLink(destination: ModelFiscalFinancialView()
-                                .environmentObject(viewModel)) {
+                                .environmentObject(model)) {
                     Text("Revenus Financiers")
                     Spacer()
-                    VersionText(version: viewModel.fiscalModel.financialRevenuTaxes.model.version,
+                    VersionText(version: model.fiscalModel.financialRevenuTaxes.model.version,
                                 withDetails: false)
                 }
                 
                 NavigationLink(destination: ModelFiscalLifeInsuranceView()
-                                .environmentObject(viewModel)) {
+                                .environmentObject(model)) {
                     Text("Revenus d'Assurance Vie")
                     Spacer()
-                    VersionText(version: viewModel.fiscalModel.lifeInsuranceTaxes.model.version,
+                    VersionText(version: model.fiscalModel.lifeInsuranceTaxes.model.version,
                                 withDetails: false)
                 }
                 
                 NavigationLink(destination: ModelFiscalTurnoverView()
-                                .environmentObject(viewModel)) {
+                                .environmentObject(model)) {
                     Text("Bénéfices Non Commerciaux (BNC)")
                     Spacer()
-                    VersionText(version: viewModel.fiscalModel.turnoverTaxes.model.version,
+                    VersionText(version: model.fiscalModel.turnoverTaxes.model.version,
                                 withDetails: false)
                 }
                 
                 NavigationLink(destination: ModelFiscalImmobilierTaxeView()
-                                .environmentObject(viewModel)) {
+                                .environmentObject(model)) {
                     Text("Plus-Value Immobilière")
                     Spacer()
-                    VersionText(version: viewModel.fiscalModel.estateCapitalGainTaxes.model.version,
+                    VersionText(version: model.fiscalModel.estateCapitalGainTaxes.model.version,
                                 withDetails: false)
                 }
             }
             
             Section(header: Text("Taxes").font(.headline)) {
                 NavigationLink(destination: DemembrementGridView(label: "Barême de Démembrement",
-                                                                 grid: $viewModel.fiscalModel.demembrement.model.grid)
-                                .environmentObject(viewModel)) {
+                                                                 grid: $model.fiscalModel.demembrement.model.grid)
+                                .environmentObject(model)) {
                     Text("Barême de Démembrement")
                 }.isDetailLink(true)
                 
                 NavigationLink(destination: ModelFiscalInheritanceDonationView()
-                                .environmentObject(viewModel)) {
+                                .environmentObject(model)) {
                     Text("Succession et Donation")
                     Spacer()
-                    VersionText(version: viewModel.fiscalModel.inheritanceDonation.model.version,
+                    VersionText(version: model.fiscalModel.inheritanceDonation.model.version,
                                 withDetails: false)
                 }
                 
                 NavigationLink(destination: ModelFiscalLifeInsInheritanceView()
-                                .environmentObject(viewModel)) {
+                                .environmentObject(model)) {
                     Text("Transmission des Assurances Vie")
                     Spacer()
-                    VersionText(version: viewModel.fiscalModel.lifeInsuranceInheritance.model.version,
+                    VersionText(version: model.fiscalModel.lifeInsuranceInheritance.model.version,
                                 withDetails: false)
                 }
             }
@@ -138,7 +141,6 @@ struct ModelDeterministicFiscalView: View {
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    viewModel : viewModel,
                     model     : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
@@ -151,30 +153,22 @@ struct ModelDeterministicFiscalView: View {
                                       dismissButton : .default(Text("OK")))
                     })
             },
-            applyChangesToDossier: {
-                alertItem = applyChangesToOpenDossierAlert(
-                    viewModel  : viewModel,
-                    model      : model,
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
                     family     : family,
-                    simulation : simulation)
+                    simulation : simulation,
+                    dataStore  : dataStore)
             },
-            isModified: viewModel.isModified)
-        .onAppear {
-            viewModel.updateFrom(model)
-        }
-    }
-    
-    // MARK: - Initialization
-    
-    init(using model: Model) {
-        _viewModel = StateObject(wrappedValue: DeterministicViewModel(using: model))
+            isModified: model.isModified)
     }
 }
 
 struct ModelDeterministicFiscalView_Previews: PreviewProvider {
     static var previews: some View {
         loadTestFilesFromBundle()
-        return ModelDeterministicFiscalView(using: modelTest)
+        return ModelDeterministicFiscalView()
+            .environmentObject(dataStoreTest)
             .environmentObject(modelTest)
             .environmentObject(familyTest)
             .environmentObject(simulationTest)

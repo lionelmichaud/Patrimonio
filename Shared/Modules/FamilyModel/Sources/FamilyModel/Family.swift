@@ -217,28 +217,6 @@ public final class Family: ObservableObject {
         }
     }
     
-    /// Actualiser les propriétés d'une personne à partir des valeurs modifiées
-    /// des paramètres du modèle (valeur déterministes modifiées par l'utilisateur).
-    /// Mémoriser l'existence d'une modification pour ne sauvegarde ultérieure.
-    public func updateMembersDterministicValues(
-        _ menLifeExpectation    : Int,
-        _ womenLifeExpectation  : Int,
-        _ nbOfYearsOfdependency : Int,
-        _ ageMinimumLegal       : Int,
-        _ ageMinimumAGIRC       : Int
-    ) {
-        members.items.forEach { member in
-            member.updateMembersDterministicValues(
-                menLifeExpectation,
-                womenLifeExpectation,
-                nbOfYearsOfdependency,
-                ageMinimumLegal,
-                ageMinimumAGIRC)
-        }
-        // exécuter la transition
-        members.persistenceSM.process(event: .onModify)
-    }
-    
     /// Ajouter un membre à la famille
     /// - Parameter person: personne à ajouter
     public func addMember(_ person: Person) {
