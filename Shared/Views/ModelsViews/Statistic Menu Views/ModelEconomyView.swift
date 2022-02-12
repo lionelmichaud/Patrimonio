@@ -16,14 +16,14 @@ import Statistics
 /// Affiche un graphique des fonctions de distribution des modèles statistiques
 struct ModelEconomyView: View {
     @EnvironmentObject private var dataStore  : Store
-    @EnvironmentObject private var model : Model
+    @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
     @State private var alertItem         : AlertItem?
     @State private var modelChoice       : Economy.RandomVariable = .inflation
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             // sélecteur: inflation / securedRate / stockRate
             CasePicker(pickedCase: $modelChoice, label: "")
                 .padding(.horizontal)
@@ -31,15 +31,15 @@ struct ModelEconomyView: View {
             
             switch modelChoice {
                 case .inflation:
-                    HStack {
+                    //VStack {
                         VersionEditableView(version: $model.economyModel.randomizers.inflation.version)
                             .onChange(of: model.economyModel.randomizers.inflation.version) { _ in
                                 DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                                 model.manageInternalDependencies()
                             }
-                        Spacer()
-                    }
-                    .frame(minHeight: 0, maxHeight: 100)
+                        //Spacer()
+                    //}
+                    //.frame(minHeight: 0, maxHeight: 100)
                     .padding(.horizontal)
                     BetaRandomizerEditView(with: model.economyModel.randomizers.inflation) { viewModel in
                         viewModel.update(&model.economyModel.randomizers.inflation)

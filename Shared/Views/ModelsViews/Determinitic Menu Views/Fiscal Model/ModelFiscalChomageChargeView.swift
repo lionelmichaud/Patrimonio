@@ -20,7 +20,7 @@ struct ModelFiscalChomageChargeView: View {
     var body: some View {
         Form {
             Section {
-                VersionEditableView(version: $model.fiscalModel.allocationChomageTaxes.model.version)
+                VersionEditableViewInForm(version: $model.fiscalModel.allocationChomageTaxes.model.version)
                     .onChange(of: model.fiscalModel.allocationChomageTaxes.model.version) { _ in
                         DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                         model.manageInternalDependencies()

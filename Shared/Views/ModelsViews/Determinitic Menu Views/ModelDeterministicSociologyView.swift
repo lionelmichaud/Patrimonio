@@ -22,7 +22,7 @@ struct ModelDeterministicSociologyView: View {
     var body: some View {
         Form {
             Section(header: Text("Dévaluation des pensions").font(.headline)) {
-                VersionEditableView(version: $model.socioEconomyModel.pensionDevaluationRate.version)
+                VersionEditableViewInForm(version: $model.socioEconomyModel.pensionDevaluationRate.version)
                     .onChange(of: model.socioEconomyModel.pensionDevaluationRate.version) { _ in
                         DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                         model.manageInternalDependencies()
@@ -44,7 +44,7 @@ struct ModelDeterministicSociologyView: View {
             }
             
             Section(header: Text("Évolution du nombre de trimestres requis").font(.headline)) {
-                VersionEditableView(version: $model.socioEconomyModel.nbTrimTauxPlein.version)
+                VersionEditableViewInForm(version: $model.socioEconomyModel.nbTrimTauxPlein.version)
                     .onChange(of: model.socioEconomyModel.nbTrimTauxPlein.version) { _ in
                         DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                         model.manageInternalDependencies()
@@ -65,7 +65,7 @@ struct ModelDeterministicSociologyView: View {
             }
             
             Section(header: Text("Sous-estimation du niveau des dépenses").font(.headline)) {
-                VersionEditableView(version: $model.socioEconomyModel.expensesUnderEvaluationRate.version)
+                VersionEditableViewInForm(version: $model.socioEconomyModel.expensesUnderEvaluationRate.version)
                     .onChange(of: model.socioEconomyModel.expensesUnderEvaluationRate.version) { _ in
                         DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                         model.manageInternalDependencies()

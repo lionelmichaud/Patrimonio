@@ -19,7 +19,7 @@ struct ModelFiscalImpotSocieteView: View {
 
     var body: some View {
         Form {
-            VersionEditableView(version: $model.fiscalModel.companyProfitTaxes.model.version)
+            VersionEditableViewInForm(version: $model.fiscalModel.companyProfitTaxes.model.version)
                 .onChange(of: model.fiscalModel.companyProfitTaxes.model.version) { _ in
                     DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                     model.manageInternalDependencies()

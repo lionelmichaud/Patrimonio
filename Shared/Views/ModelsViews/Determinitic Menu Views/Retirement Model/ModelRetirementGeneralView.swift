@@ -22,7 +22,7 @@ struct ModelRetirementGeneralView: View {
     var body: some View {
         Form {
             Section {
-                VersionEditableView(version: $model.retirementModel.regimeGeneral.model.version)
+                VersionEditableViewInForm(version: $model.retirementModel.regimeGeneral.model.version)
                     .onChange(of: model.retirementModel.regimeGeneral.model.version) { _ in
                         DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                         model.manageInternalDependencies()

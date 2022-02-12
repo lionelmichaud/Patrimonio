@@ -19,7 +19,7 @@ struct ModelFiscalLifeInsInheritanceView: View {
 
     var body: some View {
         Form {
-            VersionEditableView(version: $model.fiscalModel.lifeInsuranceInheritance.model.version)
+            VersionEditableViewInForm(version: $model.fiscalModel.lifeInsuranceInheritance.model.version)
                 .onChange(of: model.fiscalModel.lifeInsuranceInheritance.model.version) { _ in
                     DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                     model.manageInternalDependencies()

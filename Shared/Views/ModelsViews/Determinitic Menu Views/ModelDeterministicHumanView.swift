@@ -22,7 +22,7 @@ struct ModelDeterministicHumanView: View {
     var body: some View {
         Form {
             Section(header: Text("Homme").font(.headline)) {
-                VersionEditableView(version: $model.humanLifeModel.menLifeExpectation.version)
+                VersionEditableViewInForm(version: $model.humanLifeModel.menLifeExpectation.version)
                     .onChange(of: model.humanLifeModel.menLifeExpectation.version) { _ in
                         DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                         model.manageInternalDependencies()
@@ -43,7 +43,7 @@ struct ModelDeterministicHumanView: View {
             }
 
             Section(header: Text("Femme").font(.headline)) {
-                VersionEditableView(version: $model.humanLifeModel.womenLifeExpectation.version)
+                VersionEditableViewInForm(version: $model.humanLifeModel.womenLifeExpectation.version)
 
                 Stepper(value : $model.humanLifeModel.womenLifeExpectation.defaultValue,
                         in    : 50 ... 100) {
@@ -60,7 +60,7 @@ struct ModelDeterministicHumanView: View {
             }
 
             Section(header: Text("Dépendance").font(.headline)) {
-                VersionEditableView(version: $model.humanLifeModel.nbOfYearsOfdependency.version)
+                VersionEditableViewInForm(version: $model.humanLifeModel.nbOfYearsOfdependency.version)
 
                 Stepper(value : $model.humanLifeModel.nbOfYearsOfdependency.defaultValue,
                         in    : 0 ... 10) {

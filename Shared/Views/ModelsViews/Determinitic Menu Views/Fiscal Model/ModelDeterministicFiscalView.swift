@@ -32,7 +32,7 @@ struct ModelDeterministicFiscalView: View {
                                 .environmentObject(model)) {
                     Text("Revenus du Travail (IRPP)")
                     Spacer()
-                    VersionText(version: model.fiscalModel.incomeTaxes.model.version,
+                    VersionVStackView(version: model.fiscalModel.incomeTaxes.model.version,
                                 withDetails: false)
                 }
                 
@@ -40,7 +40,7 @@ struct ModelDeterministicFiscalView: View {
                                 .environmentObject(model)) {
                     Text("Capital (IFI)")
                     Spacer()
-                    VersionText(version: model.fiscalModel.isf.model.version,
+                    VersionVStackView(version: model.fiscalModel.isf.model.version,
                                 withDetails: false)
                 }
                 
@@ -48,7 +48,7 @@ struct ModelDeterministicFiscalView: View {
                                 .environmentObject(model)) {
                     Text("Bénéfice des Sociétés (IS)")
                     Spacer()
-                    VersionText(version: model.fiscalModel.companyProfitTaxes.model.version,
+                    VersionVStackView(version: model.fiscalModel.companyProfitTaxes.model.version,
                                 withDetails: false)
                 }
                 
@@ -56,7 +56,7 @@ struct ModelDeterministicFiscalView: View {
                                 .environmentObject(model)) {
                     Text("Plus-Value Immobilière")
                     Spacer()
-                    VersionText(version: model.fiscalModel.estateCapitalGainIrpp.model.version,
+                    VersionVStackView(version: model.fiscalModel.estateCapitalGainIrpp.model.version,
                                 withDetails: false)
                 }
             }
@@ -66,7 +66,7 @@ struct ModelDeterministicFiscalView: View {
                                 .environmentObject(model)) {
                     Text("Pensions de Retraite")
                     Spacer()
-                    VersionText(version: model.fiscalModel.pensionTaxes.model.version,
+                    VersionVStackView(version: model.fiscalModel.pensionTaxes.model.version,
                                 withDetails: false)
                 }
                 
@@ -74,7 +74,7 @@ struct ModelDeterministicFiscalView: View {
                                 .environmentObject(model)) {
                     Text("Allocation Chômage")
                     Spacer()
-                    VersionText(version: model.fiscalModel.allocationChomageTaxes.model.version,
+                    VersionVStackView(version: model.fiscalModel.allocationChomageTaxes.model.version,
                                 withDetails: false)
                 }
                 
@@ -82,7 +82,7 @@ struct ModelDeterministicFiscalView: View {
                                 .environmentObject(model)) {
                     Text("Revenus Financiers")
                     Spacer()
-                    VersionText(version: model.fiscalModel.financialRevenuTaxes.model.version,
+                    VersionVStackView(version: model.fiscalModel.financialRevenuTaxes.model.version,
                                 withDetails: false)
                 }
                 
@@ -90,7 +90,7 @@ struct ModelDeterministicFiscalView: View {
                                 .environmentObject(model)) {
                     Text("Revenus d'Assurance Vie")
                     Spacer()
-                    VersionText(version: model.fiscalModel.lifeInsuranceTaxes.model.version,
+                    VersionVStackView(version: model.fiscalModel.lifeInsuranceTaxes.model.version,
                                 withDetails: false)
                 }
                 
@@ -98,7 +98,7 @@ struct ModelDeterministicFiscalView: View {
                                 .environmentObject(model)) {
                     Text("Bénéfices Non Commerciaux (BNC)")
                     Spacer()
-                    VersionText(version: model.fiscalModel.turnoverTaxes.model.version,
+                    VersionVStackView(version: model.fiscalModel.turnoverTaxes.model.version,
                                 withDetails: false)
                 }
                 
@@ -106,7 +106,7 @@ struct ModelDeterministicFiscalView: View {
                                 .environmentObject(model)) {
                     Text("Plus-Value Immobilière")
                     Spacer()
-                    VersionText(version: model.fiscalModel.estateCapitalGainTaxes.model.version,
+                    VersionVStackView(version: model.fiscalModel.estateCapitalGainTaxes.model.version,
                                 withDetails: false)
                 }
             }
@@ -122,7 +122,7 @@ struct ModelDeterministicFiscalView: View {
                                 .environmentObject(model)) {
                     Text("Succession et Donation")
                     Spacer()
-                    VersionText(version: model.fiscalModel.inheritanceDonation.model.version,
+                    VersionVStackView(version: model.fiscalModel.inheritanceDonation.model.version,
                                 withDetails: false)
                 }
                 
@@ -130,7 +130,7 @@ struct ModelDeterministicFiscalView: View {
                                 .environmentObject(model)) {
                     Text("Transmission des Assurances Vie")
                     Spacer()
-                    VersionText(version: model.fiscalModel.lifeInsuranceInheritance.model.version,
+                    VersionVStackView(version: model.fiscalModel.lifeInsuranceInheritance.model.version,
                                 withDetails: false)
                 }
             }

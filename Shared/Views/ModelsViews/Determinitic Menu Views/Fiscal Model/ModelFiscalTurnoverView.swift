@@ -19,7 +19,7 @@ struct ModelFiscalTurnoverView: View {
 
     var body: some View {
         Form {
-            VersionEditableView(version: $model.fiscalModel.turnoverTaxes.model.version)
+            VersionEditableViewInForm(version: $model.fiscalModel.turnoverTaxes.model.version)
                 .onChange(of: model.fiscalModel.turnoverTaxes.model.version) { _ in
                     DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                     model.manageInternalDependencies()

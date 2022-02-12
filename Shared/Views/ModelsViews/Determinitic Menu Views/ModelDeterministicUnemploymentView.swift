@@ -19,7 +19,7 @@ struct ModelDeterministicUnemploymentView: View {
 
     var body: some View {
         Form {
-            VersionEditableView(version: $model.unemploymentModel.allocationChomage.model.version)
+            VersionEditableViewInForm(version: $model.unemploymentModel.allocationChomage.model.version)
                 .onChange(of: model.unemploymentModel.allocationChomage.model.version) { _ in
                     DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                     model.manageInternalDependencies()

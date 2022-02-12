@@ -25,7 +25,7 @@ struct ModelDeterministicRetirementView: View {
                             .environmentObject(model)) {
                 Text("Pension du Régime Général")
                 Spacer()
-                VersionText(version: model.retirementModel.regimeGeneral.model.version,
+                VersionVStackView(version: model.retirementModel.regimeGeneral.model.version,
                             withDetails: false)
             }
             
@@ -33,7 +33,7 @@ struct ModelDeterministicRetirementView: View {
                             .environmentObject(model)) {
                 Text("Pension du Régime Complémentaire")
                 Spacer()
-                VersionText(version: model.retirementModel.regimeAgirc.model.version,
+                VersionVStackView(version: model.retirementModel.regimeAgirc.model.version,
                             withDetails: false)
             }
             
@@ -41,7 +41,7 @@ struct ModelDeterministicRetirementView: View {
                             .environmentObject(model)) {
                 Text("Pension de Réversion")
                 Spacer()
-                VersionText(version: model.retirementModel.reversion.model.version,
+                VersionVStackView(version: model.retirementModel.reversion.model.version,
                             withDetails: false)
             }
         }

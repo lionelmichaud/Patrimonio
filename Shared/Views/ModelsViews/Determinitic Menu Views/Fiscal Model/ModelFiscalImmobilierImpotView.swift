@@ -20,7 +20,7 @@ struct ModelFiscalImmobilierImpotView: View {
     var body: some View {
         Form {
             Section {
-                VersionEditableView(version: $model.fiscalModel.estateCapitalGainIrpp.model.version)
+                VersionEditableViewInForm(version: $model.fiscalModel.estateCapitalGainIrpp.model.version)
                     .onChange(of: model.fiscalModel.estateCapitalGainIrpp.model.version) { _ in
                         DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                         model.manageInternalDependencies()

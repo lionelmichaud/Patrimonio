@@ -21,14 +21,14 @@ import FamilyModel
     }.font(.headline)
 }
 
-// MARK: - Display & Edit the Version
+// MARK: - Display & Edit the Version from inside a Form
 
-struct VersionEditableView: View {
+struct VersionEditableViewInForm: View {
     @Binding var version: Version
     @State private var showingEditSheet = false
 
     var body: some View {
-        VersionText(version: version, withDetails: true)
+        VersionVStackView(version: version, withDetails: true)
             .foregroundColor(.blue)
             .onTapGesture(count   : 1,
                           perform : { showingEditSheet = true })
@@ -38,9 +38,35 @@ struct VersionEditableView: View {
     }
 }
 
+// MARK: - Display the Version as a VStack
+
+struct VersionVStackView : View {
+    var version: Version
+    var withDetails: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text("Version: ").bold() + Text("v\(version.version ?? "") du \(version.date.stringShortDate)")
+                if let name = version.name, withDetails {
+                    HStack {
+                        Text("Nom: ").bold() + Text(name)
+                    }.padding(.leading)
+                }
+            }
+            if let comment = version.comment, withDetails {
+                HStack {
+                    Divider()
+                    Text("Note: ").bold() + Text(comment)
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Display the Version as a Section
 
-struct VersionSection: View {
+struct VersionSectionView: View {
     var version: Version
 
     var body: some View {
@@ -61,33 +87,44 @@ struct VersionSection: View {
     }
 }
 
-// MARK: - Display the Version as a VStack
+// MARK: - Display & Edit the Version from inside another View (not a Form/List)
 
-struct VersionText : View {
+struct VersionEditableView: View {
+    @Binding var version: Version
+    @State private var showingEditSheet = false
+    
+    var body: some View {
+        VersionListView(version: version, withDetails: true)
+            .frame(maxHeight: version.comment == nil ? 40 : 80)
+            .foregroundColor(.blue)
+            .onTapGesture(count   : 1,
+                          perform : { showingEditSheet = true })
+            .sheet(isPresented: $showingEditSheet) {
+                VersionEditSheet(version: $version)
+            }
+    }
+}
+
+// MARK: - Display the Version as a List
+
+struct VersionListView : View {
     var version: Version
     var withDetails: Bool
-
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        List {
             HStack {
-                Text("Version:").bold()
-                Text("v\(version.version ?? "")")
-                Text("du \(version.date.stringShortDate)")
+                Text("Version: ").bold() + Text("v\(version.version ?? "") du \(version.date.stringShortDate)")
+                if let name = version.name, withDetails {
+                    HStack {
+                        Text("Nom: ").bold() + Text(name)
+                    }.padding(.leading)
+                }
             }
-            if withDetails {
-                VStack(alignment: .leading, spacing: 4) {
-                    if let name = version.name {
-                        HStack {
-                            Divider()
-                            Text("Nom: ").bold() + Text(name)
-                        }
-                    }
-                    if let comment = version.comment {
-                        HStack {
-                            Divider()
-                            Text("Note: ").bold() + Text(comment)
-                        }
-                    }
+            if let comment = version.comment, withDetails {
+                HStack {
+                    Divider()
+                    Text("Note: ").bold() + Text(comment)
                 }
             }
         }
@@ -197,7 +234,7 @@ struct VersionView_Previews: PreviewProvider {
 
     static var previews: some View {
         Form {
-            VersionEditableView(version: .constant(version))
+            VersionEditableViewInForm(version: .constant(version))
         }
         .previewLayout(.fixed(width: 500, height: 300))
     }

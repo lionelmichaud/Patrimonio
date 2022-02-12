@@ -23,7 +23,7 @@ struct ModelRetirementAgircView: View {
     var body: some View {
         Form {
             Section {
-                VersionEditableView(version: $model.retirementModel.regimeAgirc.model.version)
+                VersionEditableViewInForm(version: $model.retirementModel.regimeAgirc.model.version)
                     .onChange(of: model.retirementModel.regimeAgirc.model.version) { _ in
                         DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                         model.manageInternalDependencies()

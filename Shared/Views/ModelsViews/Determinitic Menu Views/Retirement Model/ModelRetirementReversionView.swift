@@ -26,7 +26,7 @@ struct ModelRetirementReversionView : View {
     var body: some View {
         Form {
             Section {
-                VersionEditableView(version: $model.retirementModel.reversion.model.version)
+                VersionEditableViewInForm(version: $model.retirementModel.reversion.model.version)
                     .onChange(of: model.retirementModel.reversion.model.version) { _ in
                         DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                         model.manageInternalDependencies()

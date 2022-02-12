@@ -22,7 +22,7 @@ struct ModelDeterministicEconomyView: View {
     var body: some View {
         Form {
             Section(header: Text("Inflation").font(.headline)) {
-                VersionEditableView(version: $model.economyModel.randomizers.inflation.version)
+                VersionEditableViewInForm(version: $model.economyModel.randomizers.inflation.version)
                     .onChange(of: model.economyModel.randomizers.inflation.version) { _ in
                         DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                         model.manageInternalDependencies()
@@ -44,7 +44,7 @@ struct ModelDeterministicEconomyView: View {
             }
             
             Section(header: Text("Placements sans Risque").font(.headline)) {
-                VersionEditableView(version: $model.economyModel.randomizers.securedRate.version)
+                VersionEditableViewInForm(version: $model.economyModel.randomizers.securedRate.version)
                     .onChange(of: model.economyModel.randomizers.securedRate.version) { _ in
                         DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                         model.manageInternalDependencies()
@@ -80,7 +80,7 @@ struct ModelDeterministicEconomyView: View {
             }
             
             Section(header: Text("Placements Actions").font(.headline)) {
-                VersionEditableView(version: $model.economyModel.randomizers.stockRate.version)
+                VersionEditableViewInForm(version: $model.economyModel.randomizers.stockRate.version)
                     .onChange(of: model.economyModel.randomizers.stockRate.version) { _ in
                         DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                         model.manageInternalDependencies()
