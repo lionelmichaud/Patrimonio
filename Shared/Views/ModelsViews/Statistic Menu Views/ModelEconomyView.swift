@@ -28,44 +28,28 @@ struct ModelEconomyView: View {
             CasePicker(pickedCase: $modelChoice, label: "")
                 .padding(.horizontal)
                 .pickerStyle(SegmentedPickerStyle())
-            
+
+            // éditeur + graphique
             switch modelChoice {
                 case .inflation:
-                    //VStack {
-                        VersionEditableView(version: $model.economyModel.randomizers.inflation.version)
-                            .onChange(of: model.economyModel.randomizers.inflation.version) { _ in
-                                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                                model.manageInternalDependencies()
-                            }
-                        //Spacer()
-                    //}
-                    //.frame(minHeight: 0, maxHeight: 100)
-                    .padding(.horizontal)
-                    BetaRandomizerEditView(with: model.economyModel.randomizers.inflation) { viewModel in
-                        viewModel.update(&model.economyModel.randomizers.inflation)
-                        model.economy.persistenceSM.process(event: .onModify)
-                    }
-                    applyChangesToModelClone: { viewModel, clone in
-                        viewModel.update(&clone.economyModel.randomizers.inflation)
-                    }
-                    //.frame(minHeight: 0, maxHeight: .infinity)
+                    //VersionEditableView(version: $model.economyModel.randomizers.inflation.version)
+                    BetaRandomizerEditView(betaRandomizer: $model.economyModel.randomizers.inflation) //{ viewModel in
+                        .onChange(of: model.economyModel.randomizers.inflation) { _ in
+                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                            model.manageInternalDependencies()
+                        }
                 case .securedRate:
-                    BetaRandomizerEditView(with: model.economyModel.randomizers.securedRate) { viewModel in
-                        viewModel.update(&model.economyModel.randomizers.securedRate)
-                        model.economy.persistenceSM.process(event: .onModify)
-                    }
-                    applyChangesToModelClone: { viewModel, clone in
-                        viewModel.update(&clone.economyModel.randomizers.securedRate)
-                    }
-
+                    BetaRandomizerEditView(betaRandomizer: $model.economyModel.randomizers.securedRate) //{ viewModel in
+                        .onChange(of: model.economyModel.randomizers.securedRate) { _ in
+                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                            model.manageInternalDependencies()
+                        }
                 case .stockRate:
-                    BetaRandomizerEditView(with: model.economyModel.randomizers.stockRate) { viewModel in
-                        viewModel.update(&model.economyModel.randomizers.stockRate)
-                        model.economy.persistenceSM.process(event: .onModify)
-                    }
-                    applyChangesToModelClone: { viewModel, clone in
-                        viewModel.update(&clone.economyModel.randomizers.stockRate)
-                    }
+                    BetaRandomizerEditView(betaRandomizer: $model.economyModel.randomizers.stockRate) //{ viewModel in
+                        .onChange(of: model.economyModel.randomizers.stockRate) { _ in
+                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                            model.manageInternalDependencies()
+                        }
             }
         }
         .navigationTitle("Modèle Economique")

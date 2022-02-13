@@ -67,3 +67,14 @@ where R: Codable,
         }
     }
 }
+
+extension ModelRandomizer: Equatable {
+    public static func == (lhs: ModelRandomizer, rhs: ModelRandomizer) -> Bool {
+        return lhs.version == rhs.version &&
+        lhs.name == rhs.name &&
+        lhs.rndGenerator == rhs.rndGenerator &&
+        lhs.defaultValue == rhs.defaultValue &&
+        lhs.randomValue == rhs.randomValue &&
+        lhs.randomHistory == rhs.randomHistory
+    }
+}

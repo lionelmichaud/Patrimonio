@@ -54,12 +54,25 @@ public struct BetaRandomGenerator: RandomGeneratorP, DistributionP, Codable {
     
     public static var cdfCurveSamplesNumber : Int = 1000
     
+    // MARK: - Type Methods
+
+    public static func == (lhs: BetaRandomGenerator, rhs: BetaRandomGenerator) -> Bool {
+        return lhs.minX == rhs.minX &&
+        lhs.maxX == rhs.maxX &&
+        lhs.alpha == rhs.alpha &&
+        lhs.beta == rhs.beta
+    }
+
     // MARK: - Properties
     
-    public var minX     : Number? // valeur minimale de X
-    public var maxX     : Number? // valeur minimale de X
-    public var pdfMax   : Number? // valeur max mémorisée au premier appel de initialize()
-    public var cdfCurve : Curve?  // courbe CDF mémorisée au premier appel de initialize()
+    /// valeur minimale de X
+    public var minX     : Number?
+    /// valeur maximale de X
+    public var maxX     : Number?
+    /// valeur max mémorisée au premier appel de initialize()
+    public var pdfMax   : Number?
+    /// courbe CDF mémorisée au premier appel de initialize()
+    public var cdfCurve : Curve?
 
     public var alpha : Double
     public var beta  : Double
@@ -153,7 +166,7 @@ public struct UniformRandomGenerator: RandomGeneratorP, Codable {
 ///         let rnd = randomGenerator.next()
 ///         let sequence = randomGenerator.sequence(of: nbRandomSamples)
 ///
-public struct DiscreteRandomGenerator: RandomGeneratorP, Codable {
+public struct DiscreteRandomGenerator: RandomGeneratorP, Codable, Equatable {
     public typealias Number = Double
     public typealias Curve  = [PointReal<Number>]
 
@@ -161,6 +174,12 @@ public struct DiscreteRandomGenerator: RandomGeneratorP, Codable {
         case pdf
     }
     
+    // MARK: - Static Methods
+
+    public static func == (lhs: DiscreteRandomGenerator, rhs:DiscreteRandomGenerator) -> Bool {
+        lhs.pdf == rhs.pdf
+    }
+
     // MARK: - Properties
     
     public var pdf : [Point] {

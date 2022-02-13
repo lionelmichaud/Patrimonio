@@ -58,180 +58,85 @@ class BetaRandomViewModel: ObservableObject {
 }
 
 struct BetaRandomizerEditView : View {
-    let applyChangesToModel      : (_ viewModel: BetaRandomViewModel) -> Void
-    let applyChangesToModelClone : (_ viewModel: BetaRandomViewModel, _ clone: Model) -> Void
-    @EnvironmentObject private var model      : Model
-    @EnvironmentObject private var simulation : Simulation
-    @StateObject private var viewModel        : BetaRandomViewModel
-    @State private var betaRandomizer         : ModelRandomizer<BetaRandomGenerator>
-    private var initialBetaRandomizer         : ModelRandomizer<BetaRandomGenerator>!
-    @State private var alertItem              : AlertItem?
-    
+    @Binding var betaRandomizer: ModelRandomizer<BetaRandomGenerator>
+    @State var minX: Double
+    @State var maxX: Double
+
     var body: some View {
         VStack {
+            VersionEditableViewInForm(version: $betaRandomizer.version)
+                .frame(maxHeight: betaRandomizer.version.comment == nil ? 40 : 80)
+
             HStack {
-                Stepper(value : $viewModel.min,
+                Stepper(value : $minX,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Minimum")
                         Spacer()
-                        Text("\(viewModel.min.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(minX.percentString(digit: 1)) %").foregroundColor(.secondary)
                     }
                 }.padding(.trailing)
-                .onChange(of: viewModel.min) { value in
+                .onChange(of: minX) { value in
                     betaRandomizer.rndGenerator.minX = value
                     betaRandomizer.rndGenerator.initialize()
-                    viewModel.isModified = true
                 }
                 
-                Stepper(value : $viewModel.max,
+                Stepper(value : $maxX,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Maximum")
                         Spacer()
-                        Text("\(viewModel.max.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(maxX.percentString(digit: 1)) %").foregroundColor(.secondary)
                     }
                 }.padding(.trailing)
-                .onChange(of: viewModel.max) { value in
+                .onChange(of: maxX) { value in
                     betaRandomizer.rndGenerator.maxX = value
                     betaRandomizer.rndGenerator.initialize()
-                    viewModel.isModified = true
                 }
                 
-                Stepper(value : $viewModel.alpha,
+                Stepper(value : $betaRandomizer.rndGenerator.alpha,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Alpha")
                         Spacer()
-                        Text("\(viewModel.alpha as NSNumber, formatter: decimalFormatter)").foregroundColor(.secondary)
+                        Text("\(betaRandomizer.rndGenerator.alpha as NSNumber, formatter: decimalFormatter)").foregroundColor(.secondary)
                     }
                 }.padding(.trailing)
-                .onChange(of: viewModel.alpha) { value in
-                    betaRandomizer.rndGenerator.alpha = value
+                .onChange(of: betaRandomizer.rndGenerator.alpha) { _ in
                     betaRandomizer.rndGenerator.initialize()
-                    viewModel.isModified = true
                 }
                 
-                Stepper(value : $viewModel.beta,
+                Stepper(value : $betaRandomizer.rndGenerator.beta,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Beta")
                         Spacer()
-                        Text("\(viewModel.beta as NSNumber, formatter: decimalFormatter)").foregroundColor(.secondary)
+                        Text("\(betaRandomizer.rndGenerator.beta as NSNumber, formatter: decimalFormatter)").foregroundColor(.secondary)
                     }
-                }.onChange(of: viewModel.beta) { value in
-                    betaRandomizer.rndGenerator.beta = value
+                }.onChange(of: betaRandomizer.rndGenerator.beta) { _ in
                     betaRandomizer.rndGenerator.initialize()
-                    viewModel.isModified = true
                 }
             }
             .padding(.horizontal)
             
             BetaRandomizerView(randomizer: betaRandomizer)
         }
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                DiskButton(text   : "Modifier le Patron",
-                           action : applyChangesToTemplate)
-            }
-            ToolbarItem(placement: .automatic) {
-                FolderButton(action : applyChanges)
-                    .disabled(!changeOccured)
-            }
-        }
-        .onAppear {
-            viewModel.updateFrom(betaRandomizer)
-        }
-        .alert(item: $alertItem, content: newAlert)
     }
     
-    // MARK: - Properties
-
-    var changeOccured: Bool {
-        viewModel.isModified
-    }
-
-    // MARK: - Initialization
-
-    init(with betaRandomizer     : ModelRandomizer<BetaRandomGenerator>,
-         applyChangesToModel     : @escaping (_ viewModel : BetaRandomViewModel) -> Void,
-         applyChangesToModelClone: @escaping (_ viewModel : BetaRandomViewModel, _ clone : Model) -> Void) {
-        _viewModel                    = StateObject(wrappedValue: BetaRandomViewModel(from : betaRandomizer))
-        _betaRandomizer               = State(initialValue: betaRandomizer)
-        initialBetaRandomizer         = betaRandomizer
-        self.applyChangesToModel      = applyChangesToModel
-        self.applyChangesToModelClone = applyChangesToModelClone
-    }
-    
-    /// Appliquer la modification au projet ouvert (en mémoire)
-    ///
-    /// - Warning:
-    ///     Ne suvegarde PAS la modification sur disque
-    ///
-    func applyChanges() {
-        alertItem =
-            AlertItem(title         : Text("Dossier Ouvert"),
-                      message       : Text("Voulez-vous appliquer les modifications effectuées au dossier ouvert ?"),
-                      primaryButton : .default(Text("Appliquer")) {
-                        // notifier de l'application de changements au modèle
-                        applyChangesToModel(viewModel)
-                        // invalider les résultats de simulation existants
-                        simulation.notifyComputationInputsModification()
-                      },
-                      secondaryButton: .cancel(Text("Revenir")) {
-                        viewModel.updateFrom(initialBetaRandomizer)
-                      })
-    }
-    
-    /// Enregistrer la modification dans le répertoire Template (sur disque)
-    ///
-    /// - Warning:
-    ///     N'applique PAS la modification au projet ouvert (en mémoire)
-    ///
-    func applyChangesToTemplate() {
-        alertItem =
-            AlertItem(title         : Text("Modèle"),
-                      message       : Text("Voulez-vous appliquer les modifications effectuées au modèle ?"),
-                      primaryButton : .default(Text("Appliquer")) {
-                        guard let templateFolder = PersistenceManager.templateFolder() else {
-                            alertItem =
-                                AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                          dismissButton : .default(Text("OK")))
-                            return
-                        }
-                        
-                        // notifier l'application de changements au modèle
-                        // créer une copie du modèle
-                        let copy = Model(from: model)
-                        let wasModified = viewModel.isModified
-                        applyChangesToModelClone(viewModel, copy)
-                        viewModel.isModified = wasModified
-
-                        do {
-                            try copy.saveAsJSON(toFolder: templateFolder)
-                        } catch {
-                            alertItem =
-                                AlertItem(title         : Text("Echec de l'enregistrement"),
-                                          dismissButton : .default(Text("OK")))
-                        }
-                      },
-                      secondaryButton: .cancel())
+    init(betaRandomizer: Binding<ModelRandomizer<BetaRandomGenerator>>) {
+        self._betaRandomizer = betaRandomizer
+        self._minX = State(initialValue: betaRandomizer.wrappedValue.rndGenerator.minX ?? 0)
+        self._maxX = State(initialValue: betaRandomizer.wrappedValue.rndGenerator.maxX ?? 1)
     }
 }
 
 struct BetaRandomizerEditView_Previews: PreviewProvider {
-    static func applyChanges(_ viewModel : BetaRandomViewModel) {}
-    static func applyChangesToModelClone(_ viewModel : BetaRandomViewModel, _ clone: Model) {}
-
     static var previews: some View {
         loadTestFilesFromBundle()
-        return BetaRandomizerEditView(with              : modelTest.economyModel.randomizers.inflation,
-                               applyChangesToModel      : applyChanges,
-                               applyChangesToModelClone : applyChangesToModelClone)
-            .environmentObject(simulationTest)
+        return BetaRandomizerEditView(betaRandomizer: .constant(modelTest.economyModel.randomizers.inflation))
     }
 }

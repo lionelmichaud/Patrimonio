@@ -24,26 +24,26 @@ struct ModelSociologyView: View {
             
             switch modelChoice {
                 case .pensionDevaluationRate:
-                    BetaRandomizerEditView(with: model.socioEconomyModel.pensionDevaluationRate) { viewModel in
-                        viewModel.update(&model.socioEconomyModel.pensionDevaluationRate)
-                        model.socioEconomy.persistenceSM.process(event: .onModify)
-                    }
-                    applyChangesToModelClone: { viewModel, clone in
-                        viewModel.update(&clone.socioEconomyModel.pensionDevaluationRate)
-                    }
+                    BetaRandomizerEditView(betaRandomizer: $model.socioEconomyModel.pensionDevaluationRate) //{ viewModel in
+//                        viewModel.update(&model.socioEconomyModel.pensionDevaluationRate)
+//                        model.socioEconomy.persistenceSM.process(event: .onModify)
+//                    }
+//                    applyChangesToModelClone: { viewModel, clone in
+//                        viewModel.update(&clone.socioEconomyModel.pensionDevaluationRate)
+//                    }
                     
                 case .nbTrimTauxPlein:
                     EmptyView()
                     DiscreteRandomizerView(randomizer: model.socioEconomyModel.nbTrimTauxPlein)
                     
                 case .expensesUnderEvaluationRate:
-                    BetaRandomizerEditView(with: model.socioEconomyModel.expensesUnderEvaluationRate) { viewModel in
-                        viewModel.update(&model.socioEconomyModel.expensesUnderEvaluationRate)
-                        model.socioEconomy.persistenceSM.process(event: .onModify)
-                    }
-                    applyChangesToModelClone: { viewModel, clone in
-                        viewModel.update(&clone.socioEconomyModel.expensesUnderEvaluationRate)
-                    }
+                    BetaRandomizerEditView(betaRandomizer: $model.socioEconomyModel.expensesUnderEvaluationRate) //{ viewModel in
+//                        viewModel.update(&model.socioEconomyModel.expensesUnderEvaluationRate)
+//                        model.socioEconomy.persistenceSM.process(event: .onModify)
+//                    }
+//                    applyChangesToModelClone: { viewModel, clone in
+//                        viewModel.update(&clone.socioEconomyModel.expensesUnderEvaluationRate)
+//                    }
             }
         }
         .navigationTitle("Modèle Sociologique")

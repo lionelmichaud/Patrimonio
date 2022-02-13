@@ -95,7 +95,7 @@ struct VersionEditableView: View {
     
     var body: some View {
         VersionListView(version: version, withDetails: true)
-            .frame(maxHeight: version.comment == nil ? 40 : 80)
+            .frame(maxHeight: version.comment == nil ? 60 : 120)
             .foregroundColor(.blue)
             .onTapGesture(count   : 1,
                           perform : { showingEditSheet = true })

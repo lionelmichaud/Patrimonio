@@ -144,7 +144,7 @@ public extension DistributionP {
 
 // MARK: - Protocol Générateur Aléatoire
 
-public protocol RandomGeneratorP {
+public protocol RandomGeneratorP: Equatable {
     associatedtype Number: Real
     
     // MARK: - Methods
