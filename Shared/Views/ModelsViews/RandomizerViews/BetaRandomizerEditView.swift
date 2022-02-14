@@ -11,62 +11,19 @@ import ModelEnvironment
 import Statistics
 import Persistence
 
-// MARK: - Deterministic View Model
-
-class BetaRandomViewModel: ObservableObject {
-
-    // MARK: - Properties
-
-    @Published var isModified : Bool
-    @Published var min   : Double = 0.0
-    @Published var max   : Double = 0.0
-    @Published var alpha : Double = 0.0
-    @Published var beta  : Double = 0.0
-
-    // MARK: - Initialization
-
-    init(from randomizer: ModelRandomizer<BetaRandomGenerator>) {
-        min   = randomizer.rndGenerator.minX!
-        max   = randomizer.rndGenerator.maxX!
-        alpha = randomizer.rndGenerator.alpha
-        beta  = randomizer.rndGenerator.beta
-
-        isModified = false
-    }
-
-    // MARK: - methods
-    
-    func update(_ randomizer: inout ModelRandomizer<BetaRandomGenerator>) {
-        randomizer.rndGenerator.minX  = min
-        randomizer.rndGenerator.maxX  = max
-        randomizer.rndGenerator.alpha = alpha
-        randomizer.rndGenerator.beta  = beta
-        
-        randomizer.rndGenerator.initialize()
-
-        isModified = false
-    }
-    
-    func updateFrom(_ randomizer: ModelRandomizer<BetaRandomGenerator>) {
-        min   = randomizer.rndGenerator.minX!
-        max   = randomizer.rndGenerator.maxX!
-        alpha = randomizer.rndGenerator.alpha
-        beta  = randomizer.rndGenerator.beta
-        
-        isModified = false
-    }
-}
-
 struct BetaRandomizerEditView : View {
     @Binding var betaRandomizer: ModelRandomizer<BetaRandomGenerator>
     @State var minX: Double
     @State var maxX: Double
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
+            // édition de la version
             VersionEditableViewInForm(version: $betaRandomizer.version)
-                .frame(maxHeight: betaRandomizer.version.comment == nil ? 40 : 80)
+                .frame(maxHeight: betaRandomizer.version.comment == nil ? 30 : 60)
+                .padding(.leading)
 
+            // édition des paramètres de la loi beta
             HStack {
                 Stepper(value : $minX,
                         in    : 0 ... 10,
@@ -123,6 +80,7 @@ struct BetaRandomizerEditView : View {
             }
             .padding(.horizontal)
             
+            // graphique
             BetaRandomizerView(randomizer: betaRandomizer)
         }
     }

@@ -25,3 +25,7 @@ public struct Point: Codable, Hashable, ExpressibleByArrayLiteral {
         self.y = y
     }
 }
+
+// MARK: - Array of Point(x, y)
+
+public typealias ArrayOfPoint = [Point]

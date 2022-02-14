@@ -86,7 +86,7 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
         .modelChangesToolbar(
             applyChangesToTemplate: {
                 alertItem = applyChangesToTemplateAlert(
-                    model     : model,
+                    model : model,
                     notifyTemplatFolderMissing: {
                         alertItem =
                             AlertItem(title         : Text("Répertoire 'Patron' absent"),
@@ -105,12 +105,15 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
                     simulation : simulation,
                     dataStore  : dataStore)
             },
-            isModified: model.isModified)
+            isModified : model.isModified,
+            isValid    : gridIsValid(grid))
     }
 
     private func deleteSlices(at offsets: IndexSet) {
-        grid.remove(atOffsets: offsets)
-        initializeGrid(&grid)
+        var copy = grid
+        copy.remove(atOffsets: offsets)
+        initializeGrid(&copy)
+        grid = copy
     }
 }
 

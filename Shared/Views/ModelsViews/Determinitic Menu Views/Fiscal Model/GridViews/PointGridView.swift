@@ -9,17 +9,71 @@ import SwiftUI
 import AppFoundation
 import Statistics
 
-typealias PointGrid = [Point]
+extension ArrayOfPoint {
+    /// Garantir que la sommes des probabilités = 1.0
+    /// en ajustant la probabilité du(des) dernièr(s) point(s) de la grille
+    mutating func normalizeY() {
+        var exceeding = self.sum(for: \.y) - 1.0
+        
+        switch exceeding {
+            case 0.0:
+                break
+                
+            case 0.0...:
+                // enlever aux derniers éléments
+                for i in self.indices.reversed() {
+                    let removed = Swift.min(exceeding, self[i].y)
+                    self[self.endIndex - 1].y -= removed
+                    exceeding -= removed
+                    if exceeding <= 0 { break }
+                }
+                
+            default:
+                // ajouter au dernier élément
+                self[self.endIndex - 1].y += -exceeding
+        }
+    }
+    
+    /// Garantir que la sommes des probabilités = 1.0 sans affecter le point
+    /// de la grille qui vient d'être modifié.
+    /// - Parameter idx: index du point de la grille qui vient d'être modifié
+    mutating func normalizeY(idx: Int) {
+        var exceeding = self.sum(for: \.y) - 1.0
+        
+        switch exceeding {
+            case 0.0:
+                break
+                
+            case 0.0...:
+                // enlever aux derniers éléments
+                for i in self.indices.reversed() where i != idx {
+                    let removed = Swift.min(exceeding, self[i].y)
+                    self[self.endIndex - 1].y -= removed
+                    exceeding -= removed
+                    if exceeding <= 0 { break }
+                }
+                
+            default:
+                if idx == self.endIndex - 1 {
+                    // ajouter à l'avant-dernier élément
+                    self[idx-1].y -= exceeding
+                } else {
+                    // ajouter au dernier élément
+                    self[self.endIndex - 1].y -= exceeding
+                }
+        }
+    }
+}
 
-// MARK: - Editeur de Courbe [x, y]
+// MARK: - Editeur de Courbe [x, p]
 
 struct VerifiedPointGridView : View {
     let label: String
-    @Binding var grid: PointGrid
+    @Binding var grid: ArrayOfPoint
     
     var body: some View {
         VStack(alignment: .leading) {
-            if formIsValid() {
+            if formIsValid {
                 Text("La grille est valide car le somme des probabilités = 100 %")
                     .foregroundColor(.green)
                     .padding(.horizontal)
@@ -35,13 +89,13 @@ struct VerifiedPointGridView : View {
         }
     }
     
-    var sumOfProbability: Double {
+    private var sumOfProbability: Double {
         grid.sum(for: \.y) * 100.0
     }
     
     /// Vérifie que le formulaire est valide
     /// - Returns: vrai si le formulaire est valide
-    private func formIsValid() -> Bool {
+    private var formIsValid: Bool {
         // vérifier que la somme des probabilité est égale à 1.0
         sumOfProbability == 100.0
     }
@@ -51,18 +105,18 @@ struct VerifiedPointGridView : View {
 typealias PointGridView = GridView<Point, PointView, PointAddView, PointEditView>
 extension PointGridView {
     init(label : String,
-         grid  : Binding<[Point]>) {
+         grid  : Binding<ArrayOfPoint>) {
         self = PointGridView(label          : label,
                              grid           : grid,
                              gridIsValid    : { grid in grid.sum(for: \.y) == 1.0 },
-                             initializeGrid : { _ in  },
+                             initializeGrid : { grid in grid.normalizeY()},
                              displayView    : { point in PointView(point: point) },
                              addView        : { grid in PointAddView(grid: grid) },
                              editView       : { grid, idx in PointEditView(grid: grid, idx: idx) })
     }
 }
 
-// MARK: - Display a Point of a curve [x, y]
+// MARK: - Display a Point of a curve [x, p]
 
 struct PointView: View {
     var point: Point
@@ -71,21 +125,21 @@ struct PointView: View {
         HStack {
             Group { Text("X = ") + Text(point.x as NSObject, formatter: decimalFormatter) }
                 .padding(.trailing)
-            Text("Probabilité(X) = ") + Text(point.y as NSObject, formatter: decimalFormatter)
+            Text("Probabilité(X) = ") + Text((point.y) as NSObject, formatter: percentFormatter)
         }
     }
 }
 
-// MARK: - Edit a Point of a curve [x, y]
+// MARK: - Edit a Point of a curve [x, p]
 
 struct PointEditView: View {
-    @Binding private var grid: PointGrid
+    @Binding private var grid: ArrayOfPoint
     private var idx: Int
     @Environment(\.presentationMode) var presentationMode
     @State private var modifiedSlice : Point
     @State private var alertItem     : AlertItem?
     
-    init(grid : Binding<PointGrid>,
+    init(grid : Binding<ArrayOfPoint>,
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
@@ -121,44 +175,47 @@ struct PointEditView: View {
                     AmountEditView(label    : "X",
                                    amount   : $modifiedSlice.x,
                                    currency : false)
-                    AmountEditView(label    : "Probabilité(X)",
-                                   amount   : $modifiedSlice.y,
-                                   currency : false)
-                    Text("Somme des probabilités = (\(sumOfProbability * 100.0, specifier: "%.2f") %)")
-                        .foregroundColor(formIsValid() ? .green : .red)
-                    if !formIsValid() {
-                        Text("La somme des probabilités doit être égale à 100 %")
-                            .foregroundColor(.red)
-                    }
+                    PercentEditView(label  : "Probabilité(X)",
+                                   percent : $modifiedSlice.y)
                 }
             }
             .textFieldStyle(RoundedBorderTextFieldStyle())
         }
     }
     
-    var sumOfProbability: Double {
-        grid.sum(for: \.y) - grid[idx].y + modifiedSlice.y / 100.0
-    }
-    
-    /// Vérifie que le formulaire est valide
-    /// - Returns: vrai si le formulaire est valide
-    private func formIsValid() -> Bool {
-        // vérifier que la somme des probabilité est égale à 1.0
-        sumOfProbability == 1.0
-    }
-    
     private func updateSlice() {
-        grid[idx] = Point(modifiedSlice.x, modifiedSlice.y / 100.0) // [0, 100%] => [0, 1.0]
-        grid.sort(by: { $0.x < $1.x })
+        // vérifier que le nouveau X n'existe pas déjà dans la grille
+        for i in grid.indices {
+            if i != idx && grid[i].x == modifiedSlice.x {
+                self.alertItem = AlertItem(title         : Text("La valeur de X existe déjà dans la grille"),
+                                           dismissButton : .default(Text("OK")))
+                return
+            }
+        }
+
+        var gridCopy = grid
+        gridCopy[idx] = Point(modifiedSlice.x, modifiedSlice.y / 100.0) // [0, 100%] => [0, 1.0]
+        // garantir que la sommes des probabilités = 1.0
+        gridCopy.normalizeY(idx: idx)
+        gridCopy.sort(by: { $0.x < $1.x })
         
+        // vérifier qu'il n'y a pas de probabilité négative
+        guard gridCopy.allSatisfy({ $0.y >= 0.0 }) else {
+            self.alertItem = AlertItem(title         : Text("Une probabilité est négative"),
+                                       dismissButton : .default(Text("OK")))
+            return
+        }
+
+        grid = gridCopy
+
         self.presentationMode.wrappedValue.dismiss()
     }
 }
 
-// MARK: - Add a Point of a curve [x, y]
+// MARK: - Add a Point of a curve [x, p]
 
 struct PointAddView: View {
-    @Binding var grid: PointGrid
+    @Binding var grid: ArrayOfPoint
     @Environment(\.presentationMode) var presentationMode
     @State private var newSlice = Point(0, 0)
     @State private var alertItem : AlertItem?
@@ -174,7 +231,6 @@ struct PointAddView: View {
             Button(action: addSlice,
                    label: { Text("OK") })
                 .capsuleButtonStyle()
-                .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
         }
         .padding(.horizontal)
@@ -197,17 +253,6 @@ struct PointAddView: View {
         }
     }
     
-    var sumOfProbability: Double {
-        grid.sum(for: \.y) + newSlice.y / 100.0
-    }
-    
-    /// Vérifie que le formulaire est valide
-    /// - Returns: vrai si le formulaire est valide
-    private func formIsValid() -> Bool {
-        // vérifier que la somme des probabilité est égale à 1.0
-        sumOfProbability == 1.0
-    }
-    
     private func addSlice() {
         // vérifier que le nouveau X n'existe pas déjà dans la grille
         guard grid.allSatisfy({ $0.x != newSlice.x }) else {
@@ -215,10 +260,12 @@ struct PointAddView: View {
                                        dismissButton : .default(Text("OK")))
             return
         }
-        
         newSlice.y /= 100.0 // [0, 100%] => [0, 1.0]
-        grid.append(newSlice)
-        grid.sort(by: { $0.x < $1.x })
+        var gridCopy = grid
+        gridCopy.append(newSlice)
+        gridCopy.sort(by: { $0.x < $1.x })
+
+        grid = gridCopy
         
         self.presentationMode.wrappedValue.dismiss()
     }
@@ -234,7 +281,7 @@ struct PointView_Previews: PreviewProvider {
 }
 
 struct PointGridView_Previews: PreviewProvider {
-    static func grid() -> PointGrid {
+    static func grid() -> ArrayOfPoint {
         [ Point(1, 0.1),
           Point(2, 0.7),
           Point(3, 0.2)]
@@ -257,7 +304,7 @@ struct PointGridView_Previews: PreviewProvider {
 }
 
 struct VerifiedPointGridView_Previews: PreviewProvider {
-    static func grid() -> PointGrid {
+    static func grid() -> ArrayOfPoint {
         [ Point(1, 0.1),
           Point(2, 0.7),
           Point(3, 0.2)]

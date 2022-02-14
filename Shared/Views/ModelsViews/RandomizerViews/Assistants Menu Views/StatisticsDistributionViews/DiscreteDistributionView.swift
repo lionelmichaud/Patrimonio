@@ -12,8 +12,8 @@ import Charts // https://github.com/danielgindi/Charts.git
 // MARK: - Loie Discrete
 
 struct DiscreteDistributionView: View {
-    @State private var minX  : Double = 0.0
-    @State private var maxX  : Double = 10.0
+    @State private var minX : Double = 0.0
+    @State private var maxX : Double = 10.0
     let minmin =  0.0
     let maxmax = 10.0
     let delta  =  0.1

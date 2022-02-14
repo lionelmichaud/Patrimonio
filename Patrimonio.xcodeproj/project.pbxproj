@@ -981,8 +981,8 @@
 			children = (
 				795049FD26679347000AAEF0 /* StatisticSidebarSectionView.swift */,
 				79BE4A732651CE7800BBF46C /* ModelHumanView.swift */,
-				79BE4A772651CE7800BBF46C /* ModelSociologyView.swift */,
 				79BE4A782651CE7800BBF46C /* ModelEconomyView.swift */,
+				79BE4A772651CE7800BBF46C /* ModelSociologyView.swift */,
 			);
 			path = "Statistic Menu Views";
 			sourceTree = "<group>";
@@ -1739,25 +1739,25 @@
 			isa = PBXGroup;
 			children = (
 				79C8382F2641DCD3008B29BF /* Charts+Extensions */,
-				7971B9C52638CAF3009CF0F7 /* NSUIViewRepresentable.swift */,
-				79B272802634D77D00298E5D /* LabelValueHelperViews.swift */,
-				799C2F2827ADA0A500D410F7 /* AmountViews.swift */,
-				791B228627ADA35A004C526C /* IntegerViews.swift */,
-				791B229127ADA44D004C526C /* PercentViews.swift */,
-				791B229C27ADAC2C004C526C /* DateRangeEditView.swift */,
-				791B22A327ADADCD004C526C /* LabeledTextViews.swift */,
-				791ED0F4263A1C5E00701202 /* ButtonStyles.swift */,
-				797901292640B49E00104C1A /* TableView.swift */,
 				798DE8BF2635CD3C00C0C3B5 /* AlertView.swift */,
-				79FC725126331E0A004F3BD2 /* PickerHelperViews.swift */,
-				798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */,
-				79C838362641E092008B29BF /* CheckBoxStyles.swift */,
-				799025C32642007300ED53D4 /* ProgressViews.swift */,
-				79C838302641E02B008B29BF /* MenuCollapsable.swift */,
-				79C838332641E04C008B29BF /* PopOverContentView.swift */,
+				799C2F2827ADA0A500D410F7 /* AmountViews.swift */,
 				79F4D12226B03D62009D91B9 /* Buttons.swift */,
-				79AFC4352794924000812E5D /* RatingView.swift */,
+				791ED0F4263A1C5E00701202 /* ButtonStyles.swift */,
+				79C838362641E092008B29BF /* CheckBoxStyles.swift */,
+				791B229C27ADAC2C004C526C /* DateRangeEditView.swift */,
 				797E9A4F27A5F08E00758D97 /* GridView.swift */,
+				791B228627ADA35A004C526C /* IntegerViews.swift */,
+				791B22A327ADADCD004C526C /* LabeledTextViews.swift */,
+				79B272802634D77D00298E5D /* LabelValueHelperViews.swift */,
+				79C838302641E02B008B29BF /* MenuCollapsable.swift */,
+				7971B9C52638CAF3009CF0F7 /* NSUIViewRepresentable.swift */,
+				791B229127ADA44D004C526C /* PercentViews.swift */,
+				79FC725126331E0A004F3BD2 /* PickerHelperViews.swift */,
+				79C838332641E04C008B29BF /* PopOverContentView.swift */,
+				799025C32642007300ED53D4 /* ProgressViews.swift */,
+				79AFC4352794924000812E5D /* RatingView.swift */,
+				798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */,
+				797901292640B49E00104C1A /* TableView.swift */,
 				7994B90227A8A01E00F59FE8 /* VersionEditableViewInForm.swift */,
 			);
 			path = HelpersViews;

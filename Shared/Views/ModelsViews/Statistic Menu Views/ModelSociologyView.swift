@@ -8,12 +8,18 @@
 
 import SwiftUI
 import SocioEconomyModel
+import FamilyModel
 import ModelEnvironment
 import Persistence
 
+/// Affiche un graphique des fonctions de distribution des modèles statistiques
 struct ModelSociologyView: View {
-    @EnvironmentObject private var model : Model
-    @State private var modelChoice       : SocioEconomy.RandomVariable = .pensionDevaluationRate
+    @EnvironmentObject private var dataStore  : Store
+    @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var simulation : Simulation
+    @State private var alertItem   : AlertItem?
+    @State private var modelChoice : SocioEconomy.RandomVariable = .pensionDevaluationRate
     
     var body: some View {
         VStack {
@@ -22,37 +28,68 @@ struct ModelSociologyView: View {
                 .padding(.horizontal)
                 .pickerStyle(SegmentedPickerStyle())
             
+            // éditeur + graphique
             switch modelChoice {
                 case .pensionDevaluationRate:
                     BetaRandomizerEditView(betaRandomizer: $model.socioEconomyModel.pensionDevaluationRate) //{ viewModel in
-//                        viewModel.update(&model.socioEconomyModel.pensionDevaluationRate)
-//                        model.socioEconomy.persistenceSM.process(event: .onModify)
-//                    }
-//                    applyChangesToModelClone: { viewModel, clone in
-//                        viewModel.update(&clone.socioEconomyModel.pensionDevaluationRate)
-//                    }
-                    
+                        .onChange(of: model.socioEconomyModel.pensionDevaluationRate) { _ in
+                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                            model.manageInternalDependencies()
+                        }
+
                 case .nbTrimTauxPlein:
-                    EmptyView()
-                    DiscreteRandomizerView(randomizer: model.socioEconomyModel.nbTrimTauxPlein)
-                    
+                    DiscreteRandomizerEditView(discreteRandomizer: $model.socioEconomyModel.nbTrimTauxPlein)
+                        .onChange(of: model.socioEconomyModel.nbTrimTauxPlein) { _ in
+                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                            model.manageInternalDependencies()
+                        }
+
                 case .expensesUnderEvaluationRate:
                     BetaRandomizerEditView(betaRandomizer: $model.socioEconomyModel.expensesUnderEvaluationRate) //{ viewModel in
-//                        viewModel.update(&model.socioEconomyModel.expensesUnderEvaluationRate)
-//                        model.socioEconomy.persistenceSM.process(event: .onModify)
-//                    }
-//                    applyChangesToModelClone: { viewModel, clone in
-//                        viewModel.update(&clone.socioEconomyModel.expensesUnderEvaluationRate)
-//                    }
+                        .onChange(of: model.socioEconomyModel.expensesUnderEvaluationRate) { _ in
+                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+                            model.manageInternalDependencies()
+                        }
             }
         }
         .navigationTitle("Modèle Sociologique")
         .navigationBarTitleDisplayMode(.inline)
+        .alert(item: $alertItem, content: newAlert)
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(
+            applyChangesToTemplate: {
+                alertItem = applyChangesToTemplateAlert(
+                    model     : model,
+                    notifyTemplatFolderMissing: {
+                        alertItem =
+                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
+                                  dismissButton : .default(Text("OK")))
+                    },
+                    notifyFailure: {
+                        alertItem =
+                        AlertItem(title         : Text("Echec de l'enregistrement"),
+                                  dismissButton : .default(Text("OK")))
+                    })
+            },
+            cancelChanges: {
+                alertItem = cancelChanges(
+                    to         : model,
+                    family     : family,
+                    simulation : simulation,
+                    dataStore  : dataStore)
+            },
+            isModified: model.isModified)
     }
 }
 
 struct ModelSociologyView_Previews: PreviewProvider {
     static var previews: some View {
-        ModelSociologyView()
+        loadTestFilesFromBundle()
+        return ModelSociologyView()
+            .environmentObject(dataStoreTest)
+            .environmentObject(modelTest)
+            .environmentObject(familyTest)
+            .environmentObject(simulationTest)
+            .preferredColorScheme(.dark)
     }
 }

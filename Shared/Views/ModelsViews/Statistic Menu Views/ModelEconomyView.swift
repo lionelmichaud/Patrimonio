@@ -19,8 +19,8 @@ struct ModelEconomyView: View {
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
-    @State private var alertItem         : AlertItem?
-    @State private var modelChoice       : Economy.RandomVariable = .inflation
+    @State private var alertItem   : AlertItem?
+    @State private var modelChoice : Economy.RandomVariable = .inflation
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -32,7 +32,6 @@ struct ModelEconomyView: View {
             // éditeur + graphique
             switch modelChoice {
                 case .inflation:
-                    //VersionEditableView(version: $model.economyModel.randomizers.inflation.version)
                     BetaRandomizerEditView(betaRandomizer: $model.economyModel.randomizers.inflation) //{ viewModel in
                         .onChange(of: model.economyModel.randomizers.inflation) { _ in
                             DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
