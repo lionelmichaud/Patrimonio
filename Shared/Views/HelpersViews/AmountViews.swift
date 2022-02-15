@@ -35,7 +35,7 @@ struct AmountEditView: View {
             if comment != nil { Text(comment!).foregroundColor(.secondary) }
             TextField("montant",
                       text: textValueBinding)
-                .frame(maxWidth: 88)
+                .frame(maxWidth: 100)
                 .numbersAndPunctuationKeyboardType()
                 .multilineTextAlignment(.trailing)
                 .onChange(of: text) { newText in

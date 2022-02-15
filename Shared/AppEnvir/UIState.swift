@@ -103,9 +103,13 @@ final class UIState: ObservableObject {
     @Published var cfChartState        = CashFlowChartState()
     @Published var fiscalChartState    = FiscalChartState()
 
+    // MARK: - Initializers
+    
     init() {
         expenseViewState.colapseCategories = Array(repeating: true, count: LifeExpenseCategory.allCases.count)
     }
+    
+    // MARK: - Subscripts
     
     subscript(category: LifeExpenseCategory) -> Bool {
         get {
@@ -116,6 +120,8 @@ final class UIState: ObservableObject {
         }
     }
 
+    // MARK: - methods
+    
     func resetSimulationView() {
         simulationViewState.selectedItem = .computationView
     }

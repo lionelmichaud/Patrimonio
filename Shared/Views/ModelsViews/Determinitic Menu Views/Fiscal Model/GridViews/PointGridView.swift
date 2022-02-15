@@ -48,7 +48,7 @@ extension ArrayOfPoint {
                 // enlever aux derniers éléments
                 for i in self.indices.reversed() where i != idx {
                     let removed = Swift.min(exceeding, self[i].y)
-                    self[self.endIndex - 1].y -= removed
+                    self[i].y -= removed
                     exceeding -= removed
                     if exceeding <= 0 { break }
                 }
