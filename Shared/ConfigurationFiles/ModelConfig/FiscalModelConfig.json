@@ -18,18 +18,15 @@
             [
                 {
                     "floor"        : 5,
-                    "discountRate" : 6.0,
-                    "prevDiscount" : 0.0
+                    "discountRate" : 6.0
                 },
                 {
                     "floor"        : 21,
-                    "discountRate" : 4.0,
-                    "prevDiscount" : 96.0
+                    "discountRate" : 4.0
                 },
                 {
                     "floor"        : 22,
-                    "discountRate" : 0.0,
-                    "prevDiscount" : 100.0
+                    "discountRate" : 0.0
                 }
             ]
         }
@@ -54,23 +51,19 @@
             [
                 {
                     "floor"        : 5,
-                    "discountRate" : 1.65,
-                    "prevDiscount" : 0.0
+                    "discountRate" : 1.65
                 },
                 {
                     "floor"        : 21,
-                    "discountRate" : 1.6,
-                    "prevDiscount" : 26.4
+                    "discountRate" : 1.6
                 },
                 {
                     "floor"        : 22,
-                    "discountRate" : 9.0,
-                    "prevDiscount" : 28.0
+                    "discountRate" : 9.0
                 },
                 {
                     "floor"        : 30,
-                    "discountRate" : 0.0,
-                    "prevDiscount" : 100.0
+                    "discountRate" : 0.0
                 }
             ]
         }

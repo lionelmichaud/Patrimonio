@@ -20,7 +20,7 @@ extension RealEstateExonerationGridView {
          grid  : Binding<[ExonerationSlice]>) {
         self = RealEstateExonerationGridView(label          : label,
                                              grid           : grid,
-                                             initializeGrid : { _ in },
+                                             initializeGrid : { grid in grid.initialize()},
                                              displayView    : { slice in RealEstateExonerationSliceView(slice: slice) },
                                              addView        : { grid in RealEstateExonerationSliceAddView(grid: grid) },
                                              editView       : { grid, idx in RealEstateExonerationSliceEditView(grid: grid, idx: idx) })
@@ -95,12 +95,8 @@ struct RealEstateExonerationSliceEditView: View {
                     IntegerEditView(label   : "A partir de",
                                     comment : "ans",
                                     integer : $modifiedSlice.floor)
-                    //Spacer(minLength: 50)
                     PercentEditView(label   : "Décote",
                                     percent : $modifiedSlice.discountRate)
-                    //Spacer(minLength: 50)
-                    PercentEditView(label   : "Décote cumulée",
-                                    percent : $modifiedSlice.prevDiscount)
                 }
             }
             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -161,8 +157,6 @@ struct RealEstateExonerationSliceAddView: View {
                                     integer : $newSlice.floor)
                     PercentEditView(label   : "Décote",
                                     percent : $newSlice.discountRate)
-                    PercentEditView(label   : "Décote cumulée",
-                                    percent : $newSlice.prevDiscount)
                 }
             }
             .textFieldStyle(RoundedBorderTextFieldStyle())

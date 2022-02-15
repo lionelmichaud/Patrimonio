@@ -101,7 +101,7 @@ struct RateSliceEditView: View {
         modifiedSlice.rate /= 100.0 // [0, 100%] => [0, 1.0]
         grid[idx] = modifiedSlice
         grid.sort(by: { $0.floor < $1.floor })
-        try! grid.initialize()
+        //try! grid.initialize()
         
         self.presentationMode.wrappedValue.dismiss()
     }
@@ -167,7 +167,7 @@ struct RateSliceAddView: View {
         newSlice.rate /= 100.0 // [0, 100%] => [0, 1.0]
         grid.append(newSlice)
         grid.sort(by: { $0.floor < $1.floor })
-        try! grid.initialize()
+        //try! grid.initialize()
         
         self.presentationMode.wrappedValue.dismiss()
     }

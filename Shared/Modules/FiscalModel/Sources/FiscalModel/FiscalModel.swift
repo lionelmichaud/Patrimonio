@@ -47,6 +47,8 @@ public struct Fiscal: PersistableModelP {
         /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
         public func initialized() -> Model {
             var model = self
+            model.estateCapitalGainIrpp.initialize()
+            model.estateCapitalGainTaxes.initialize()
             do {
                 try model.incomeTaxes.initialize()
             } catch {

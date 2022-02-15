@@ -26,6 +26,10 @@ public struct RealEstateCapitalGainTaxesModel: Codable {
         var total: Double {
             CRDS + CSG + prelevSocial // %
         }
+
+        mutating func initialize() {
+            exoGrid.initialize()
+        }
     }
     
     // MARK: - Properties
@@ -33,6 +37,11 @@ public struct RealEstateCapitalGainTaxesModel: Codable {
     public var model: Model
     
     // MARK: - Methods
+    
+    /// Initializer les paramètres calculés pour les tranches d'exonérations
+    public mutating func initialize() {
+        model.initialize()
+    }
     
     /**
      Charges sociales dûes sur la plus-value immobilièrae

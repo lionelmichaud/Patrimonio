@@ -75,6 +75,7 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
                 }
                 .onDelete(perform: deleteSlices)
                 .onChange(of: grid) { _ in
+                    initializeGrid(&grid)
                     DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                     model.manageInternalDependencies()
                 }

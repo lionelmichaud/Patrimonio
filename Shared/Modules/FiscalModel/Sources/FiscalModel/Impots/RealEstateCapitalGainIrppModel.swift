@@ -12,9 +12,12 @@ import AppFoundation
 // MARK: - tranche de barême de décote
 
 public struct ExonerationSlice: Codable, Hashable {
+    private enum CodingKeys : CodingKey {
+        case floor, discountRate
+    }
     public var floor        : Int // year
     public var discountRate : Double // [0, 100%] // % par année de détention au-delà de floor
-    public var prevDiscount : Double // [0, 100%] // % cumul des tranches précédentes
+    public var prevDiscount : Double = 0.0 // [0, 100%] // % cumul des tranches précédentes
 
     public init(floor: Int, discountRate: Double, prevDiscount: Double) {
         self.floor = floor
@@ -24,6 +27,25 @@ public struct ExonerationSlice: Codable, Hashable {
 }
 
 public typealias ExonerationGrid = [ExonerationSlice]
+public extension ExonerationGrid {
+    mutating func initialize() {
+        switch self.count {
+            case 0:
+                return
+                
+            case 1:
+                self[self.startIndex].prevDiscount = 100.0
+                
+            default:
+                self[self.startIndex].prevDiscount = 0.0
+                var cumul = 0.0
+                for idx in self.startIndex+1 ... self.endIndex-1 {
+                    cumul += (self[idx].floor - self[idx-1].floor).double() * self[idx-1].discountRate
+                    self[idx].prevDiscount = cumul
+                }
+        }
+    }
+}
 
 // MARK: - Impôts sur plus-values immobilières
 /// impôts sur plus-values immobilières
@@ -38,6 +60,10 @@ public struct RealEstateCapitalGainIrppModel: Codable {
         public var irpp            : Double // 19.0 // %
         public var discountTravaux : Double // 15.0 // %
         public var discountAfter   : Int // 5 // ans
+
+        mutating func initialize() {
+            exoGrid.initialize()
+        }
     }
     
     // MARK: - Properties
@@ -46,6 +72,11 @@ public struct RealEstateCapitalGainIrppModel: Codable {
     public var model: Model
     
     // MARK: - Methods
+    
+    /// Initializer les paramètres calculés pour les tranches d'exonérations
+    public mutating func initialize() {
+        model.initialize()
+    }
     
     /**
      Impôt sur le revenu dû sur la plus-value immobilière.
