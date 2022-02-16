@@ -28,7 +28,8 @@ struct ModelsSidebarView: View {
              statHumanModel,
              statEconomyModel,
              statSociologyModel,
-             statisticsAssistant
+             statisticsAssistant,
+             modelManager
     }
     
     var body: some View {
@@ -42,11 +43,9 @@ struct ModelsSidebarView: View {
                     // Modèle Statistique
                     StatisticSidebarSectionView()
                     
-                    // Assistant modèle statistique
-                    RandomizerAssistantSidebarSectionView()
-                } else {
-                    Text("Modèles")
                 }
+                // Assistant modèle statistique
+                ModelAssistantSidebarSectionView()
             }
             //.defaultSideBarListStyle()
             .listStyle(SidebarListStyle())

@@ -16,7 +16,7 @@ struct DiskButton: View {
             action : action,
             label  : {
                 HStack {
-                    Image(systemName: "externaldrive.fill")
+                    Image(systemName: "square.stack.3d.up.fill")
                         .imageScale(.large)
                     Text(butonText)
                 }

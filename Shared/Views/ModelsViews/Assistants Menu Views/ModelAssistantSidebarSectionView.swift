@@ -10,7 +10,7 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 
-struct RandomizerAssistantSidebarSectionView: View {
+struct ModelAssistantSidebarSectionView: View {
     @EnvironmentObject private var uiState: UIState
     
     var body: some View {
@@ -20,8 +20,14 @@ struct RandomizerAssistantSidebarSectionView: View {
                            tag         : .statisticsAssistant,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Assistant Distributions")
-            }
-            .isDetailLink(true)
+            }.isDetailLink(true)
+
+            // Vue gestion des modèles
+            NavigationLink(destination : ModelManagerView(),
+                           tag         : .modelManager,
+                           selection   : $uiState.modelsViewState.selectedItem) {
+                Text("Gestion des Modèles")
+            }.isDetailLink(true)
         }
     }
 }
@@ -33,7 +39,7 @@ struct RandomizerAssistantSectionView_Previews: PreviewProvider {
     static var simulation = Simulation()
     
     static var previews: some View {
-        RandomizerAssistantSidebarSectionView()
+        ModelAssistantSidebarSectionView()
             .environmentObject(dataStore)
             .environmentObject(family)
             .environmentObject(patrimoine)
