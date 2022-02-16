@@ -347,7 +347,7 @@ public struct PersistenceManager {
     }
     
     /// Dupliquer certains fichiers du Bundle Application vers la destination `toFolder`
-    /// Dupliquer le fichier "AppVersion.json" du Bundle Appli vers `toFolder`
+    /// Dupliquer le fichier "AppVersion.json" du Bundle Appli vers la destination `toFolder`
     /// - Parameters:
     ///   - toFolder: répertoire de destination
     ///   - duplicateFiles: closure de duplication des fichiers souhaités de `Bundle Application` vers `toFolder`
