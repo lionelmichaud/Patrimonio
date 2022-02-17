@@ -67,7 +67,7 @@ struct ComputationView: View {
     /// Exporter les résultats de la simulation
     ///
     /// Enregistrer les fichier CSV en tâche de fond dans le dossier `Document` de l'application
-    /// Partager les fichiers CSV et Image existants dans le dossier `Document` de l'application
+    /// Partager les fichiers CSV et Images existantes
     ///
     private func exportSimulationResults(geometry: GeometryProxy) {
         busySaveWheelAnimate.toggle()
@@ -78,7 +78,7 @@ struct ComputationView: View {
         // Enregistrer les fichier CSV en tâche de fond dans le dossier `Document` de l'application
         saveSimulationToDocumentsDirectory(dicoOfCSV: dicoOfCsv)
         
-        // Partager les fichiers CSV et Image existants dans le dossier `Document` de l'application
+        // Partager les fichiers CSV et Images existantes
         if shareCsvFiles || shareImageFiles {
             shareSimulationResults(geometry: geometry)
         }
@@ -95,6 +95,7 @@ struct ComputationView: View {
                                        dismissButton : .default(Text("OK")))
             return
         }
+        
         do {
             for (name, csv) in dicoOfCSV {
                 try PersistenceManager.saveToCsvPath(to              : folder,
@@ -102,16 +103,15 @@ struct ComputationView: View {
                                                      simulationTitle : simulation.title,
                                                      csvString       : csv)
             }
-            // mettre à jour les variables d'état dans le thread principal
             self.simulation.process(event: .onSaveSuccessfulCompletion)
+            
         } catch {
-            // mettre à jour les variables d'état dans le thread principal
             self.alertItem = AlertItem(title         : Text("La sauvegarde locale a échouée"),
                                        dismissButton : .default(Text("OK")))
         }
     }
 
-    /// Partager les fichiers CSV et Image existants  dans le dossier `Document` de l'application
+    /// Partager les fichiers CSV et Images existantes
     private func shareSimulationResults(geometry: GeometryProxy) {
         guard let folder = dataStore.activeDossier?.folder else {
             self.alertItem = AlertItem(title         : Text("Le partage a échoué"),
@@ -119,7 +119,7 @@ struct ComputationView: View {
             return
         }
 
-        // partage des fichiers CSV
+        // collecte des URL des fichiers CSV
         var urls = [URL]()
         if shareCsvFiles {
             do {
@@ -134,7 +134,7 @@ struct ComputationView: View {
             }
         }
         
-        // partage des fichiers PNG
+        // collecte des URL des fichiers PNG
         if shareImageFiles {
             let imageFolder = try? PersistenceManager.imageFolder(in                 : folder,
                                                                   forSimulationTitle : simulation.title)
@@ -143,6 +143,7 @@ struct ComputationView: View {
             }
         }
         
+        // partage des fichiers collectés
         let sideBarWidth = 230.0
         Patrimonio.share(items: urls, fromX: Double(geometry.size.width) + sideBarWidth, fromY: 32.0)
     }

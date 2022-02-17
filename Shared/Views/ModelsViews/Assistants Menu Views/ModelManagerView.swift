@@ -6,108 +6,132 @@
 //
 
 import SwiftUI
+import Files
 import Persistence
 import ModelEnvironment
 
 struct ModelManagerView: View {
     @EnvironmentObject private var dataStore : Store
     @State private var alertItem: AlertItem?
-
+    
     var body: some View {
-        VStack {
-            if dataStore.activeDossier != nil {
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(Color(UIColor.systemGray3))
-                    .overlay(Label("iCloud", systemImage: "icloud.fill")
-                                .font(.largeTitle))
-            }
-
-            HStack {
+        GeometryReader { geometry in
+            VStack {
+                Text("Vous pouvez transférer les modèles d'un endroit vers un autre en utilisant les flèches")
                 if dataStore.activeDossier != nil {
-                    HStack {
-                        VStack {
-                            Button(action: copyFromOpenDossierToCloud,
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .fill(Color(UIColor.systemGray3))
+                        .overlay(Label("iCloud", systemImage: "icloud.fill")
+                                    .font(.largeTitle))
+                }
+                
+                HStack {
+                    if dataStore.activeDossier != nil {
+                        HStack {
+                            VStack {
+                                Button(action: { shareFromOpenDossier(geometry: geometry) },
+                                       label: {
+                                        Image(systemName: "arrow.up")
+                                            .font(Font.title.weight(.bold))
+                                       })
+                                    .padding()
+                                    .foregroundColor(Color.white)
+                                    .background(Color.blue)
+                                    .cornerRadius(.infinity)
+                                
+                                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                    .fill(Color(UIColor.systemGray2))
+                                    .overlay(Label("Dossier ouvert", systemImage: "folder.fill")
+                                                .font(.largeTitle))
+                                HStack {
+                                    Button(action: copyFromTemplateToOpenDossier,
+                                           label: {Image(systemName: "arrow.up")
+                                            .font(Font.title.weight(.bold))
+                                           })
+                                        .padding()
+                                        .foregroundColor(Color.white)
+                                        .background(Color.blue)
+                                        .cornerRadius(.infinity)
+                                    Button(action: copyFromOpenDossierToTemplate,
+                                           label: {Image(systemName: "arrow.down")
+                                            .font(Font.title.weight(.bold))
+                                           })
+                                        .padding()
+                                        .foregroundColor(Color.white)
+                                        .background(Color.blue)
+                                        .cornerRadius(.infinity)
+                                }
+                            }
+                            
+                            Button(action: copyFromOpenDossierToOtherDossiers,
                                    label: {
-                                    Image(systemName: "arrow.up")
+                                    Image(systemName: "arrow.right")
                                         .font(Font.title.weight(.bold))
                                    })
                                 .padding()
                                 .foregroundColor(Color.white)
                                 .background(Color.blue)
                                 .cornerRadius(.infinity)
-                            
-                            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                .fill(Color(UIColor.systemGray2))
-                                .overlay(Label("Dossier ouvert", systemImage: "folder.fill")
-                                            .font(.largeTitle))
-                            HStack {
-                                Button(action: copyFromTemplateToOpenDossier,
-                                       label: {Image(systemName: "arrow.up")
-                                        .font(Font.title.weight(.bold))
-                                       })
-                                    .padding()
-                                    .foregroundColor(Color.white)
-                                    .background(Color.blue)
-                                    .cornerRadius(.infinity)
-                                Button(action: copyFromOpenDossierToTemplate,
-                                       label: {Image(systemName: "arrow.down")
-                                        .font(Font.title.weight(.bold))
-                                       })
-                                    .padding()
-                                    .foregroundColor(Color.white)
-                                    .background(Color.blue)
-                                    .cornerRadius(.infinity)
-                            }
                         }
-
-                        Button(action: copyFromOpenDossierToOtherDossiers,
+                    }
+                    
+                    VStack {
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .fill(Color(UIColor.systemGray2))
+                            .padding(.top)
+                            .overlay(Label(dataStore.activeDossier == nil ? "Dossiers" : "Autres dossiers",
+                                           systemImage: "folder.fill")
+                                        .font(.largeTitle))
+                        
+                        Button(action: copyFromTemplateToOtherDossiers,
                                label: {
-                            Image(systemName: "arrow.right")
-                                .font(Font.title.weight(.bold))
-                        })
+                                Image(systemName: "arrow.up")
+                                    .font(Font.title.weight(.bold))
+                               })
                             .padding()
                             .foregroundColor(Color.white)
                             .background(Color.blue)
                             .cornerRadius(.infinity)
                     }
                 }
-
-                VStack {
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .fill(Color(UIColor.systemGray2))
-                        .padding(.top)
-                        .overlay(Label(dataStore.activeDossier == nil ? "Dossiers" : "Autres dossiers",
-                                       systemImage: "folder.fill")
-                                    .font(.largeTitle))
-
-                    Button(action: copyFromTemplateToOtherDossiers,
-                           label: {
-                        Image(systemName: "arrow.up")
-                            .font(Font.title.weight(.bold))
-                    })
-                        .padding()
-                        .foregroundColor(Color.white)
-                        .background(Color.blue)
-                        .cornerRadius(.infinity)
+                
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(Color(UIColor.systemGray))
+                    .overlay(Label("Patron", systemImage: "square.stack.3d.up.fill")
+                                .font(.largeTitle))
+            }
+            .alert(item: $alertItem, content: newAlert)
+            .padding()
+            .navigationTitle("Transférer les Modèles")
+            //.navigationBarTitleDisplayMode(.inline)
+        }
+    }
+    
+    private func shareFromOpenDossier(geometry: GeometryProxy) {
+        // collecte des URL des fichiers modèle JSON
+        var urls = [URL]()
+        do {
+            guard let activeFolder = dataStore.activeDossier?.folder else {
+                throw DossierError.failedToFindFolder
+            }
+            activeFolder.files.forEach { file in
+                if let ext = file.extension, ext == "json" {
+                    if file.name.contains("ModelConfig") {
+                        urls.append(file.url)
+                    }
                 }
             }
-
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color(UIColor.systemGray))
-                .overlay(Label("Patron", systemImage: "square.stack.3d.up.fill")
-                            .font(.largeTitle))
+            
+        } catch {
+            self.alertItem = AlertItem(title         : Text("Le partage a échoué"),
+                                       dismissButton : .default(Text("OK")))
         }
-        .alert(item: $alertItem, content: newAlert)
-        .padding()
-        .navigationTitle("Gestion des Modèles")
-        //.navigationBarTitleDisplayMode(.inline)
+        
+        // partage des fichiers collectés
+        let sideBarWidth = 230.0
+        Patrimonio.share(items: urls, fromX: Double(geometry.size.width) + sideBarWidth, fromY: 32.0)
     }
-
-    private func copyFromOpenDossierToCloud() {
-        self.alertItem = AlertItem(title         : Text("Non implémenté"),
-                                   dismissButton : .default(Text("OK")))
-    }
-
+    
     private func copyFromTemplateToOpenDossier() {
         do {
             guard let templateFolder = PersistenceManager.templateFolder() else {
@@ -120,8 +144,8 @@ struct ModelManagerView: View {
             let model = Model()
             try model.loadFromJSON(fromFolder: templateFolder)
             try model.saveAsJSON(toFolder: activeFolder)
-                self.alertItem = AlertItem(title         : Text("Copie réussie"),
-                                           dismissButton : .default(Text("OK")))
+            self.alertItem = AlertItem(title         : Text("Copie réussie"),
+                                       dismissButton : .default(Text("OK")))
         } catch {
             self.alertItem = AlertItem(title         : Text("Echec de la copie"),
                                        dismissButton : .default(Text("OK")))
@@ -171,13 +195,13 @@ struct ModelManagerView: View {
                                        dismissButton : .default(Text("OK")))
         }
     }
-
+    
     private func copyFromOpenDossierToOtherDossiers() {
         do {
             guard let activeFolder = dataStore.activeDossier?.folder else {
                 throw DossierError.failedToFindFolder
             }
-
+            
             let model = Model()
             try model.loadFromJSON(fromFolder: activeFolder)
             
