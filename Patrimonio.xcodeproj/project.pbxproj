@@ -125,6 +125,8 @@
 		793FACA126EBE94E0033626E /* BetaRandomizerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FAC9F26EBE94E0033626E /* BetaRandomizerEditView.swift */; };
 		794570D026E38E3700EE9C61 /* SimulationSateMachines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794570CF26E38E3700EE9C61 /* SimulationSateMachines.swift */; };
 		794570D126E38E3700EE9C61 /* SimulationSateMachines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794570CF26E38E3700EE9C61 /* SimulationSateMachines.swift */; };
+		7946B3BE27BC5AF300D49FB4 /* ModelManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7946B3BD27BC5AF300D49FB4 /* ModelManagerView.swift */; };
+		7946B3BF27BC5AF300D49FB4 /* ModelManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7946B3BD27BC5AF300D49FB4 /* ModelManagerView.swift */; };
 		7948F8EE27650C8A00DF756F /* ComputationSidebarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7948F8ED27650C8A00DF756F /* ComputationSidebarSectionView.swift */; };
 		7948F8EF27650C8A00DF756F /* ComputationSidebarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7948F8ED27650C8A00DF756F /* ComputationSidebarSectionView.swift */; };
 		794B016126B9C12400882684 /* AssetsModel in Frameworks */ = {isa = PBXBuildFile; productRef = 794B016026B9C12400882684 /* AssetsModel */; };
@@ -133,8 +135,8 @@
 		795049F4266792C2000AAEF0 /* DeterministicSidebarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795049F2266792C2000AAEF0 /* DeterministicSidebarSectionView.swift */; };
 		795049FE26679347000AAEF0 /* StatisticSidebarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795049FD26679347000AAEF0 /* StatisticSidebarSectionView.swift */; };
 		795049FF26679347000AAEF0 /* StatisticSidebarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795049FD26679347000AAEF0 /* StatisticSidebarSectionView.swift */; };
-		79504A05266793C1000AAEF0 /* RandomizerAssistantSidebarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79504A04266793C1000AAEF0 /* RandomizerAssistantSidebarSectionView.swift */; };
-		79504A06266793C1000AAEF0 /* RandomizerAssistantSidebarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79504A04266793C1000AAEF0 /* RandomizerAssistantSidebarSectionView.swift */; };
+		79504A05266793C1000AAEF0 /* ModelAssistantSidebarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79504A04266793C1000AAEF0 /* ModelAssistantSidebarSectionView.swift */; };
+		79504A06266793C1000AAEF0 /* ModelAssistantSidebarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79504A04266793C1000AAEF0 /* ModelAssistantSidebarSectionView.swift */; };
 		79522AD8275C17FD00926726 /* CashFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 79522AD7275C17FD00926726 /* CashFlow */; };
 		79522ADA275C180800926726 /* CashFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 79522AD9275C180800926726 /* CashFlow */; };
 		7956995C262F90250015AF34 /* NamedValue in Frameworks */ = {isa = PBXBuildFile; productRef = 7956995B262F90250015AF34 /* NamedValue */; };
@@ -657,10 +659,11 @@
 		793D17A12761307800CB0F69 /* UpdateSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSettingsView.swift; sourceTree = "<group>"; };
 		793FAC9F26EBE94E0033626E /* BetaRandomizerEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetaRandomizerEditView.swift; sourceTree = "<group>"; };
 		794570CF26E38E3700EE9C61 /* SimulationSateMachines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationSateMachines.swift; sourceTree = "<group>"; };
+		7946B3BD27BC5AF300D49FB4 /* ModelManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManagerView.swift; sourceTree = "<group>"; };
 		7948F8ED27650C8A00DF756F /* ComputationSidebarSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputationSidebarSectionView.swift; sourceTree = "<group>"; };
 		795049F2266792C2000AAEF0 /* DeterministicSidebarSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeterministicSidebarSectionView.swift; sourceTree = "<group>"; };
 		795049FD26679347000AAEF0 /* StatisticSidebarSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticSidebarSectionView.swift; sourceTree = "<group>"; };
-		79504A04266793C1000AAEF0 /* RandomizerAssistantSidebarSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomizerAssistantSidebarSectionView.swift; sourceTree = "<group>"; };
+		79504A04266793C1000AAEF0 /* ModelAssistantSidebarSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelAssistantSidebarSectionView.swift; sourceTree = "<group>"; };
 		796503CE265596E50093F10E /* DossierDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierDetailView.swift; sourceTree = "<group>"; };
 		796506C1264085830036E466 /* LiabilityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiabilityView.swift; sourceTree = "<group>"; };
 		796506C52640866F0036E466 /* PeriodicInvestDetailedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodicInvestDetailedView.swift; sourceTree = "<group>"; };
@@ -983,6 +986,7 @@
 				79BE4A732651CE7800BBF46C /* ModelHumanView.swift */,
 				79BE4A782651CE7800BBF46C /* ModelEconomyView.swift */,
 				79BE4A772651CE7800BBF46C /* ModelSociologyView.swift */,
+				79BE4A742651CE7800BBF46C /* Randomizers Views */,
 			);
 			path = "Statistic Menu Views";
 			sourceTree = "<group>";
@@ -990,8 +994,10 @@
 		7901CF7B26527B99007DF85B /* Assistants Menu Views */ = {
 			isa = PBXGroup;
 			children = (
+				79504A04266793C1000AAEF0 /* ModelAssistantSidebarSectionView.swift */,
 				799025982641F60300ED53D4 /* StatisticsChartView.swift */,
 				79A9BE952651858800170A01 /* StatisticsDistributionViews */,
+				7946B3BD27BC5AF300D49FB4 /* ModelManagerView.swift */,
 			);
 			path = "Assistants Menu Views";
 			sourceTree = "<group>";
@@ -1427,7 +1433,7 @@
 				79B164822651DD7200D0603C /* ModelsSidebarView.swift */,
 				7901CF7926527AF5007DF85B /* Determinitic Menu Views */,
 				7901CF7A26527B0D007DF85B /* Statistic Menu Views */,
-				79BE4A742651CE7800BBF46C /* RandomizerViews */,
+				7901CF7B26527B99007DF85B /* Assistants Menu Views */,
 			);
 			path = ModelsViews;
 			sourceTree = "<group>";
@@ -1593,17 +1599,15 @@
 			path = "Chart Visitors";
 			sourceTree = "<group>";
 		};
-		79BE4A742651CE7800BBF46C /* RandomizerViews */ = {
+		79BE4A742651CE7800BBF46C /* Randomizers Views */ = {
 			isa = PBXGroup;
 			children = (
-				79504A04266793C1000AAEF0 /* RandomizerAssistantSidebarSectionView.swift */,
 				79BE4A752651CE7800BBF46C /* DiscreteRandomizerView.swift */,
 				7970271A27A9DB3B00C06BBF /* DiscreteRandomizerEditView.swift */,
 				793FAC9F26EBE94E0033626E /* BetaRandomizerEditView.swift */,
 				79BE4A762651CE7800BBF46C /* BetaRandomizerView.swift */,
-				7901CF7B26527B99007DF85B /* Assistants Menu Views */,
 			);
-			path = RandomizerViews;
+			path = "Randomizers Views";
 			sourceTree = "<group>";
 		};
 		79C8382F2641DCD3008B29BF /* Charts+Extensions */ = {
@@ -2172,6 +2176,7 @@
 				799025A72641F60300ED53D4 /* KpiSidebarSectionView.swift in Sources */,
 				79997189279DFA4800AF473E /* ModelFiscalTurnoverView.swift in Sources */,
 				79BE4A6B2651A2BA00BBF46C /* HistogramVisitable.swift in Sources */,
+				7946B3BE27BC5AF300D49FB4 /* ModelManagerView.swift in Sources */,
 				79794FC7277E32AE005D7CB2 /* PatrimoineSummaryShareChartView.swift in Sources */,
 				793FACA026EBE94E0033626E /* BetaRandomizerEditView.swift in Sources */,
 				799025B32641F60300ED53D4 /* StatisticsChartView.swift in Sources */,
@@ -2239,7 +2244,7 @@
 				79AA5D722650830A00B26D2C /* IrppRateChartCashFlowVisitor.swift in Sources */,
 				791ED107263A271A00701202 /* FamilySummaryView.swift in Sources */,
 				796506C2264085830036E466 /* LiabilityView.swift in Sources */,
-				79504A05266793C1000AAEF0 /* RandomizerAssistantSidebarSectionView.swift in Sources */,
+				79504A05266793C1000AAEF0 /* ModelAssistantSidebarSectionView.swift in Sources */,
 				7921A6402785C68500A2BA93 /* LineChartView+Extension.swift in Sources */,
 				79B31E5B2784B6A70039C250 /* BarChartTemplateView.swift in Sources */,
 				7915A15A277F6B6D0042C429 /* PieChartTemplateView.swift in Sources */,
@@ -2458,7 +2463,7 @@
 				79BE4A6C2651A2BB00BBF46C /* HistogramVisitable.swift in Sources */,
 				79FC725A263320BE004F3BD2 /* AppVersionView.swift in Sources */,
 				79C838322641E02B008B29BF /* MenuCollapsable.swift in Sources */,
-				79504A06266793C1000AAEF0 /* RandomizerAssistantSidebarSectionView.swift in Sources */,
+				79504A06266793C1000AAEF0 /* ModelAssistantSidebarSectionView.swift in Sources */,
 				798DE8B32635CBC300C0C3B5 /* ExpenseSummaryView.swift in Sources */,
 				79BE4A692651A2B400BBF46C /* LineChartHistogramVisitor.swift in Sources */,
 				791ED0DC2639FE2700701202 /* RetirementDetailView.swift in Sources */,
@@ -2495,6 +2500,7 @@
 				7921A6482785C6EA00A2BA93 /* CombinedChartView+Extension.swift in Sources */,
 				79794FC8277E32AE005D7CB2 /* PatrimoineSummaryShareChartView.swift in Sources */,
 				79BE4A7E2651CE7800BBF46C /* ModelHumanView.swift in Sources */,
+				7946B3BF27BC5AF300D49FB4 /* ModelManagerView.swift in Sources */,
 				797E9A5427A5FB3D00758D97 /* RealEstateExonerationGridView.swift in Sources */,
 				79BBE8EA2646FEE70045E524 /* CF Detailed ChartView.swift in Sources */,
 				79CEC51F279D96C000A6F9B5 /* ModelRetirementAgircView.swift in Sources */,
@@ -2715,7 +2721,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.0;
+				MARKETING_VERSION = 4.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.michaud.lionel.Patrimonio;
 				PRODUCT_NAME = Patrimonio;
 				SDKROOT = iphoneos;
@@ -2739,7 +2745,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.0;
+				MARKETING_VERSION = 4.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.michaud.lionel.Patrimonio;
 				PRODUCT_NAME = Patrimonio;
 				SDKROOT = iphoneos;
