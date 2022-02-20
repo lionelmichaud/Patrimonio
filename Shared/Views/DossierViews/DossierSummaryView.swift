@@ -33,7 +33,7 @@ struct DossierSummaryView: View {
             .toolbar {
                 /// Bouton: Sauvegarder
                 ToolbarItem(placement: .automatic) {
-                    DiskButton { save(activeDossier) }
+                    DiskButton(text: nil) { save(activeDossier) }
                         .disabled(!savable)
                 }
             }

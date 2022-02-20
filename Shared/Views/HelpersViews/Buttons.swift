@@ -9,8 +9,34 @@ import SwiftUI
 
 struct DiskButton: View {
     let action    : () -> Void
-    let butonText : String
+    let butonText : String?
+    
+    var body: some View {
+        Button(
+            action : action,
+            label  : {
+                HStack {
+                    Image(systemName: "externaldrive")
+                        .imageScale(.large)
+                    if let theText = butonText {
+                        Text(theText)
+                    }
+                }
+            })
+            .capsuleButtonStyle()
+    }
+    
+    init(text   : String? = "Enregistrer",
+         action : @escaping () -> Void) {
+        self.action    = action
+        self.butonText = text
+    }
+}
 
+struct TemplateButton: View {
+    let action    : () -> Void
+    let butonText : String?
+    
     var body: some View {
         Button(
             action : action,
@@ -18,13 +44,15 @@ struct DiskButton: View {
                 HStack {
                     Image(systemName: "square.stack.3d.up.fill")
                         .imageScale(.large)
-                    Text(butonText)
+                    if let theText = butonText {
+                        Text(theText)
+                    }
                 }
             })
             .capsuleButtonStyle()
     }
     
-    init(text   : String = "Enregistrer",
+    init(text   : String? = "Enregistrer",
          action : @escaping () -> Void) {
         self.action    = action
         self.butonText = text
@@ -65,7 +93,7 @@ struct DuplicateButton: View {
                 HStack {
                     Image(systemName: "doc.on.doc.fill")
                         .imageScale(.medium)
-                    Text("Dupliquer")
+                    //Text("Dupliquer")
                 }
             })
             .capsuleButtonStyle()

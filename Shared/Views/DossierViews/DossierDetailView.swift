@@ -37,7 +37,7 @@ struct DossierDetailView: View {
                             .font(.headline)
                     },
                     icon : {
-                        Image(systemName: "square.and.arrow.down")
+                        Image(systemName: "square.and.arrow.down.on.square")
                             .foregroundColor(.red)
                             .font(.title)
                     })
@@ -49,7 +49,7 @@ struct DossierDetailView: View {
                             .font(.headline)
                     },
                     icon : {
-                        Image(systemName: "square.and.arrow.down")
+                        Image(systemName: "square.and.arrow.down.on.square")
                             .foregroundColor(.green)
                             .font(.title)
                     })
@@ -82,7 +82,7 @@ struct DossierDetailView: View {
                     Button(
                         action : activate,
                         label  : {
-                            Image(systemName: dossier.isActive ? "arrowshape.turn.up.backward" : "square.and.arrow.down")
+                            Image(systemName: dossier.isActive ? "arrowshape.turn.up.backward" : "square.and.arrow.down.on.square")
                                 .imageScale(.large)
                         })
                         .capsuleButtonStyle()
@@ -90,7 +90,7 @@ struct DossierDetailView: View {
                 }
                 /// Bouton: Sauvegarder
                 ToolbarItem(placement: .automatic) {
-                    DiskButton { save(dossier) }
+                    DiskButton(text: nil) { save(dossier) }
                     .disabled(!savable)
                 }
                 /// Bouton: Dupliquer
@@ -116,7 +116,7 @@ struct DossierDetailView: View {
                 ToolbarItem(placement: .automatic) {
                     Button(action: { share(geometry: geometry) },
                            label: {
-                        Image(systemName: "square.and.arrow.up")
+                        Image(systemName: "square.and.arrow.up.on.square")
                             .imageScale(.large)
                     })
                         .capsuleButtonStyle()

@@ -42,7 +42,7 @@ func applyChangesToTemplateAlert(model                      : Model,
                                  notifyTemplatFolderMissing : @escaping () -> Void,
                                  notifyFailure              : @escaping () -> Void) -> AlertItem {
     AlertItem(title         : Text("Modèle"),
-              message       : Text("Voulez-vous appliquer les modifications effectuées au modèle ?"),
+              message       : Text("Voulez-vous appliquer les modifications effectuées au patron ?"),
               primaryButton : .destructive(Text("Appliquer")) {
                 guard let templateFolder = PersistenceManager.templateFolder() else {
                     notifyTemplatFolderMissing()
@@ -68,15 +68,15 @@ extension View {
                              isValid               : Bool = true) -> some View {
         self.toolbar {
             ToolbarItem(placement: .automatic) {
-                DiskButton(text   : "Modifier le Patron",
-                           action : applyChangesToTemplate)
+                TemplateButton(text   : "Modifier",
+                               action : applyChangesToTemplate)
             }
             ToolbarItem(placement: .automatic) {
                 Button(
                     action: cancelChanges,
                     label: {
                         HStack {
-                            Image(systemName: "arrowshape.turn.up.backward")
+                            Image(systemName: "arrow.uturn.left")
                                 .imageScale(.large)
                             Text("Revenir")
                         }

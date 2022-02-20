@@ -15,18 +15,18 @@ struct ModelAssistantSidebarSectionView: View {
     
     var body: some View {
         Section(header: Text("Assistants")) {
-            // Vue assistant statistiques
-            NavigationLink(destination : StatisticsChartsView(),
-                           tag         : .statisticsAssistant,
-                           selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Assistant Distributions")
-            }.isDetailLink(true)
-
             // Vue gestion des modèles
             NavigationLink(destination : ModelManagerView(),
                            tag         : .modelManager,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Text("Gestion des Modèles")
+            }.isDetailLink(true)
+            
+            // Vue assistant statistiques
+            NavigationLink(destination : StatisticsChartsView(),
+                           tag         : .statisticsAssistant,
+                           selection   : $uiState.modelsViewState.selectedItem) {
+                Text("Assistant Distributions")
             }.isDetailLink(true)
         }
     }

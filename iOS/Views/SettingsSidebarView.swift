@@ -31,13 +31,13 @@ struct SettingsSidebarView: View {
                 
                 // Export settings
                 NavigationLink(destination: ExportSettingsView()) {
-                    Label("Partage", systemImage: "square.and.arrow.up")
+                    Label("Partage", systemImage: "square.and.arrow.up.on.square")
                 }
                 .isDetailLink(true)
                 
                 // Mise à jour settings
                 NavigationLink(destination: UpdateSettingsView()) {
-                    Label("Mise à jour", systemImage: "square.and.arrow.down")
+                    Label("Mise à jour", systemImage: "square.and.arrow.down.on.square")
                 }
                 .isDetailLink(true)
                 

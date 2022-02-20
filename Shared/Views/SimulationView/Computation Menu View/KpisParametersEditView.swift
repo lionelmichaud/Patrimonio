@@ -24,9 +24,9 @@ struct KpisParametersEditView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .automatic) {
-                DiskButton(text   : "Modifier le Patron",
-                           action : applyChangesToTemplate)
-                    //.disabled(!simulation.isModified)
+                TemplateButton(text   : "Modifier",
+                               action : applyChangesToTemplate)
+                //.disabled(!simulation.isModified)
             }
         }
     }

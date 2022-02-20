@@ -46,7 +46,7 @@ struct ComputationView: View {
                                         if busySaveWheelAnimate {
                                             ProgressView()
                                         }
-                                        Image(systemName: "square.and.arrow.up")
+                                        Image(systemName: "square.and.arrow.up.on.square")
                                             .imageScale(.large)
                                         //Text("Exporter")
                                     }

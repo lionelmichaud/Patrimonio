@@ -41,7 +41,7 @@ struct ModelManagerView: View {
                                 
                                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                                     .fill(Color(UIColor.systemGray2))
-                                    .overlay(Label("Dossier ouvert", systemImage: "folder.fill")
+                                    .overlay(Label("Dossier Ouvert", systemImage: "folder.fill")
                                                 .font(.largeTitle))
                                 HStack {
                                     Button(action: copyFromTemplateToOpenDossier,
@@ -79,7 +79,7 @@ struct ModelManagerView: View {
                         RoundedRectangle(cornerRadius: 20, style: .continuous)
                             .fill(Color(UIColor.systemGray2))
                             .padding(.top)
-                            .overlay(Label(dataStore.activeDossier == nil ? "Dossiers" : "Autres dossiers",
+                            .overlay(Label(dataStore.activeDossier == nil ? "Tous les Dossiers" : "Autres Dossiers",
                                            systemImage: "folder.fill")
                                         .font(.largeTitle))
                         
@@ -97,7 +97,7 @@ struct ModelManagerView: View {
                 
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .fill(Color(UIColor.systemGray))
-                    .overlay(Label("Patron", systemImage: "square.stack.3d.up.fill")
+                    .overlay(Label("Dossier Patron", systemImage: "square.stack.3d.up.fill")
                                 .font(.largeTitle))
             }
             .alert(item: $alertItem, content: newAlert)

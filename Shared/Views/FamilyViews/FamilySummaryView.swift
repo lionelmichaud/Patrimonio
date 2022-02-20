@@ -59,7 +59,7 @@ struct FamilySummaryView: View {
                     ToolbarItem(placement: .automatic) {
                         Button(action: { share(geometry: geometry) },
                                label: {
-                                Image(systemName: "square.and.arrow.up")
+                                Image(systemName: "square.and.arrow.up.on.square")
                                     .imageScale(.large)
                                })
                             .capsuleButtonStyle()

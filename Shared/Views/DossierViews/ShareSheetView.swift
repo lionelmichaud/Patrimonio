@@ -39,7 +39,7 @@ struct SharePopoverContextMenuModifer: ViewModifier {
                 },
                 label: {
                     Text("Share")
-                    Image(systemName: "square.and.arrow.up")
+                    Image(systemName: "square.and.arrow.up.on.square")
                 })
             }
             .popover(isPresented : $showShareSheet,

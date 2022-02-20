@@ -52,9 +52,9 @@ final class UIState: ObservableObject {
         var selectedCategory  : LifeExpenseCategory = .abonnements
     }
     
-    // MARK: - Etat de la vue Scenario
+    // MARK: - Etat de la vue Modèles
     struct ModelViewState {
-        var selectedItem: ModelsSidebarView.PushedItem? = .deterministicModel
+        var selectedItem: ModelsSidebarView.PushedItem? = .modelManager
     }
     
     // MARK: - Etat de la vue Simulation

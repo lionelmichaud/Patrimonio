@@ -36,6 +36,9 @@ struct ModelsSidebarView: View {
         NavigationView {
             /// Primary view
             List {
+                // Assistant modèle statistique
+                ModelAssistantSidebarSectionView()
+                
                 if dataStore.activeDossier != nil {
                     // Modèle Déterministique
                     DeterministicSidebarSectionView()
@@ -44,8 +47,6 @@ struct ModelsSidebarView: View {
                     StatisticSidebarSectionView()
                     
                 }
-                // Assistant modèle statistique
-                ModelAssistantSidebarSectionView()
             }
             //.defaultSideBarListStyle()
             .listStyle(SidebarListStyle())
