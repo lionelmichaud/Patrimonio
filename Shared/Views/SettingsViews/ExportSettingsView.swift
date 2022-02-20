@@ -11,10 +11,15 @@ import Persistence
 struct ExportSettingsView: View {
     @Preference(\.shareCsvFiles)   var shareCsvFiles
     @Preference(\.shareImageFiles) var shareImageFiles
+    @Preference(\.shareAllDossierFilesWithSimuResults) var shareAllDossierFilesWithSimuResults
+    @Preference(\.shareFamilyFilesWithSimuResults) var shareFamilyFilesWithSimuResults
+    @Preference(\.shareExpensesFilesWithSimuResults) var shareExpensesFilesWithSimuResults
+    @Preference(\.sharePatrimoineFilesWithSimuResults) var sharePatrimoineFilesWithSimuResults
 
     var body: some View {
         Form {
-            Section(footer: Text("Sélectionner les données à partager")) {
+            Section(header: Text("Résulats de Simulation").font(.subheadline),
+                    footer: Text("Sélectionner les résultats de simulation à partager")) {
                 Toggle("Partager les résultas de simulation au format CSV",
                        isOn: $shareCsvFiles)
                     .onChange(of: shareCsvFiles) { newValue in
@@ -26,8 +31,47 @@ struct ExportSettingsView: View {
                         shareImageFiles = newValue
                     }
             }
+            if shareCsvFiles || shareImageFiles {
+                Section(header: Text("Contexte de Simulation").font(.subheadline),
+                        footer: Text("Sélectionner les autres données à partager avec les résultats de simulation")) {
+                    Toggle("Partager tous les fichiers de votre dossier",
+                           isOn: $shareAllDossierFilesWithSimuResults)
+                        .onChange(of: shareAllDossierFilesWithSimuResults) { newValue in
+                            shareAllDossierFilesWithSimuResults = newValue
+                            if newValue {
+                                shareFamilyFilesWithSimuResults     = true
+                                shareExpensesFilesWithSimuResults   = true
+                                sharePatrimoineFilesWithSimuResults = true
+                            }
+                        }
+                    Toggle("Partager les données des membres de la famille",
+                           isOn: $shareFamilyFilesWithSimuResults)
+                        .onChange(of: shareFamilyFilesWithSimuResults) { newValue in
+                            shareFamilyFilesWithSimuResults = newValue
+                            if !newValue {
+                                shareAllDossierFilesWithSimuResults = false
+                            }
+                        }
+                    Toggle("Partager les données des dépenses de la famille",
+                           isOn: $shareExpensesFilesWithSimuResults)
+                        .onChange(of: shareExpensesFilesWithSimuResults) { newValue in
+                            shareExpensesFilesWithSimuResults = newValue
+                            if !newValue {
+                                shareAllDossierFilesWithSimuResults = false
+                            }
+                        }
+                    Toggle("Partager les données patrimoniales de la famille",
+                           isOn: $sharePatrimoineFilesWithSimuResults)
+                        .onChange(of: sharePatrimoineFilesWithSimuResults) { newValue in
+                            sharePatrimoineFilesWithSimuResults = newValue
+                            if !newValue {
+                                shareAllDossierFilesWithSimuResults = false
+                            }
+                        }
+                }
+            }
         }
-        .navigationTitle(Text("Export"))
+        .navigationTitle(Text("Partage des Résultats de Simulation"))
     }
 }
 

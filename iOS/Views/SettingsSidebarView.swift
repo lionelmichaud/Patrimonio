@@ -31,7 +31,7 @@ struct SettingsSidebarView: View {
                 
                 // Export settings
                 NavigationLink(destination: ExportSettingsView()) {
-                    Label("Export", systemImage: "square.and.arrow.up")
+                    Label("Partage", systemImage: "square.and.arrow.up")
                 }
                 .isDetailLink(true)
                 

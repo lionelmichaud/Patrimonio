@@ -106,17 +106,9 @@ func share(items      : [Any],
     }
 }
 
-/// Partager les fichiers contenus dans le dossier actif de `dataStore`
-/// et qui contiennent l'une des Strings de `fileNames`
-/// ou bien tous les fichiers si `fileNames` = `nil`
-/// - Parameters:
-///   - dataStore: dataStore de l'application
-///   - fileNames: permet d'identifier les fichiers à partager
-///   - geometry: gemetry de la View qui appèle la fonction
-func shareFiles(dataStore : Store,
-                fileNames : [String]? = nil,
-                alertItem : inout AlertItem?,
-                geometry  : GeometryProxy) {
+func collectedURLs(dataStore : Store,
+                   fileNames : [String]?  = nil,
+                   alertItem : inout AlertItem?) -> [URL] {
     var urls = [URL]()
     do {
         // vérifier l'existence du Folder associé au Dossier
@@ -140,10 +132,31 @@ func shareFiles(dataStore : Store,
     } catch {
         alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
                               dismissButton : .default(Text("OK")))
+        return [ ]
     }
     
+    return urls
+}
+
+/// Partager les fichiers contenus dans le dossier actif de `dataStore`
+/// et qui contiennent l'une des Strings de `fileNames`
+/// ou bien tous les fichiers si `fileNames` = `nil`
+/// - Parameters:
+///   - dataStore: dataStore de l'application
+///   - fileNames: permet d'identifier les fichiers à partager
+///   - geometry: gemetry de la View qui appèle la fonction
+func shareFiles(dataStore : Store,
+                fileNames : [String]? = nil,
+                alertItem : inout AlertItem?,
+                geometry  : GeometryProxy) {
+    let urls = collectedURLs(dataStore: dataStore,
+                             fileNames: fileNames,
+                             alertItem: &alertItem)
+    
     // partage des fichiers collectés
-    share(items: urls,
-          fromX: Double(geometry.frame(in: .global).maxX-32),
-          fromY: 24.0)
+    if urls.isNotEmpty {
+        share(items: urls,
+              fromX: Double(geometry.frame(in: .global).maxX-32),
+              fromY: 24.0)
+    }
 }

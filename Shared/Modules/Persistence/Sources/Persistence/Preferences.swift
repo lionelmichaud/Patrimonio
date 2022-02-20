@@ -191,6 +191,18 @@ public final class Preferences {
     @UserDefault("share_image_files")
     public var shareImageFiles: Bool = true
 
+    @UserDefault("share_all_dossier_files_with_simulation_results")
+    public var shareAllDossierFilesWithSimuResults: Bool = true
+    
+    @UserDefault("share_family_files_with_simulation_results")
+    public var shareFamilyFilesWithSimuResults: Bool = false
+    
+    @UserDefault("share_expenses_files_with_simulation_results")
+    public var shareExpensesFilesWithSimuResults: Bool = false
+    
+    @UserDefault("share_patrimoine_files_with_simulation_results")
+    public var sharePatrimoineFilesWithSimuResults: Bool = false
+    
     /// Paramètres Graphiques
     // graphique Bilan
     @UserEnumDefault("ownership_graphic_selection")

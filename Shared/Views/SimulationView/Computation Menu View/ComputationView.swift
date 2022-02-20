@@ -26,6 +26,10 @@ struct ComputationView: View {
     @State private var alertItem              : AlertItem?
     @Preference(\.shareCsvFiles)   var shareCsvFiles
     @Preference(\.shareImageFiles) var shareImageFiles
+    @Preference(\.shareAllDossierFilesWithSimuResults) var shareAllDossierFilesWithSimuResults
+    @Preference(\.shareFamilyFilesWithSimuResults) var shareFamilyFilesWithSimuResults
+    @Preference(\.shareExpensesFilesWithSimuResults) var shareExpensesFilesWithSimuResults
+    @Preference(\.sharePatrimoineFilesWithSimuResults) var sharePatrimoineFilesWithSimuResults
 
     var body: some View {
         if dataStore.activeDossier != nil {
@@ -143,10 +147,41 @@ struct ComputationView: View {
             }
         }
         
-        // partage des fichiers collectés
+        // partager les autres fichiers de contexte
+        if shareAllDossierFilesWithSimuResults {
+            urls += collectedURLs(dataStore: dataStore,
+                                  alertItem: &alertItem)
+        } else {
+            if shareFamilyFilesWithSimuResults {
+                let fileNameKeys = ["person"]
+                urls += collectedURLs(dataStore: dataStore,
+                                      fileNames: fileNameKeys,
+                                      alertItem: &alertItem)
+            }
+            if shareExpensesFilesWithSimuResults {
+                let fileNameKeys = ["LifeExpense"]
+                urls += collectedURLs(dataStore: dataStore,
+                                      fileNames: fileNameKeys,
+                                      alertItem: &alertItem)
+            }
+            if sharePatrimoineFilesWithSimuResults {
+                let fileNameKeys = ["FreeInvestement",
+                                    "PeriodicInvestement",
+                                    "RealEstateAsset",
+                                    "SCPI",
+                                    "Debt",
+                                    "Loan"]
+                urls += collectedURLs(dataStore: dataStore,
+                                      fileNames: fileNameKeys,
+                                      alertItem: &alertItem)
+            }
+        }
+
+        // partage des fichiers résultats de simulation collectés
         share(items: urls,
               fromX: Double(geometry.frame(in: .global).maxX-32),
               fromY: 24.0)
+        
     }
 }
     

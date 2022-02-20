@@ -70,7 +70,7 @@ struct PatrimoineSummaryView: View {
         }
     }
 
-    func share(geometry: GeometryProxy) {
+    private func share(geometry: GeometryProxy) {
         // collecte des URL des fichiers contenus dans le dossier
         let fileNameKeys = ["FreeInvestement",
                             "PeriodicInvestement",
