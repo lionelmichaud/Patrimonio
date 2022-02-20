@@ -82,17 +82,8 @@ struct DossierDetailView: View {
                     Button(
                         action : activate,
                         label  : {
-                            HStack {
-                                if dossier.isActive {
-                                    Image(systemName: "arrowshape.turn.up.backward")
-                                        .imageScale(.large)
-
-                                } else {
-                                    Image(systemName: "square.and.arrow.down")
-                                        .imageScale(.large)
-
-                                }
-                            }
+                            Image(systemName: dossier.isActive ? "arrowshape.turn.up.backward" : "square.and.arrow.down")
+                                .imageScale(.large)
                         })
                         .capsuleButtonStyle()
                         .disabled(!activable)
@@ -115,10 +106,8 @@ struct DossierDetailView: View {
                             }
                         },
                         label  : {
-                            HStack {
-                                Image(systemName: "square.and.pencil")
-                                    .imageScale(.large)
-                            }
+                            Image(systemName: "square.and.pencil")
+                                .imageScale(.large)
                         })
                         .capsuleButtonStyle()
                         .disabled(!dossier.isActive)
@@ -336,6 +325,22 @@ struct DossierDetailView: View {
 
     /// Dupliquer le Dossier sélectionné
     private func duplicate() {
+        guard !savable else {
+            self.alertItem = AlertItem(title         : Text("Attention"),
+                                       message       : Text("Toutes les modifications sur le dossier ouvert seront perdues"),
+                                       primaryButton : .default(Text("Continuer"),
+                                                                action: {
+                                                                    do {
+                                                                        try dataStore.duplicate(dossier)
+                                                                    } catch {
+                                                                        self.alertItem = AlertItem(title         : Text("Echec de la duplication du dossier !"),
+                                                                                                   dismissButton : .default(Text("OK")))
+                                                                    }
+                                                                }),
+                                       secondaryButton: .cancel())
+            return
+        }
+        
         do {
             try dataStore.duplicate(dossier)
         } catch {
