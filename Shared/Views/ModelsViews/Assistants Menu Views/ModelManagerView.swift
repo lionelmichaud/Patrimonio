@@ -123,7 +123,7 @@ struct ModelManagerView: View {
             }
             
         } catch {
-            self.alertItem = AlertItem(title         : Text("Le partage a échoué"),
+            self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
                                        dismissButton : .default(Text("OK")))
         }
         

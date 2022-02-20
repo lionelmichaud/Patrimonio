@@ -182,16 +182,16 @@
         {
             "version" :
             {
-                "version" : "0.2",
-                "date"    : "2021-01-12T23:00:00+01:00",
-                "comment" : "Impôt 2021 sur le revenu 2020"
+                "version" : "0.3",
+                "date"    : "2022-02-17T23:00:00+01:00",
+                "comment" : "Impôt 2022 sur le revenu 2021"
             },
-            "turnOverRebate"    : 34.0,
+            "turnOverRebate"    :    34.0,
             "minTurnOverRebate" :   305.0,
-            "salaryRebate"      : 10.0,
-            "minSalaryRebate"   :   442.0,
-            "maxSalaryRebate"   : 12652.0,
-            "childRebate"       :  1570.0,
+            "salaryRebate"      :    10.0,
+            "minSalaryRebate"   :   448.0,
+            "maxSalaryRebate"   : 12829.0,
+            "childRebate"       :  1592.0,
             "grid" : [
                 {
                     "floor" : 0,

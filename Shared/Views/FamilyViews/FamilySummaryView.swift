@@ -22,6 +22,7 @@ struct FamilySummaryView: View {
     @EnvironmentObject private var expenses   : LifeExpensesDic
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var simulation : Simulation
+    @State private var alertItem: AlertItem?
     @State private var cashFlow : CashFlowLine?
     
     fileprivate func computeCurrentYearCashFlow() {
@@ -41,19 +42,58 @@ struct FamilySummaryView: View {
     
     var body: some View {
         if dataStore.activeDossier != nil {
-            Form {
-                FamilySummarySection()
-                RevenuSummarySection(cashFlow: cashFlow)
-                FiscalSummarySection(cashFlow: cashFlow)
-                SciSummarySection(cashFlow: cashFlow)
+            GeometryReader { geometry in
+                Form {
+                    FamilySummarySection()
+                    RevenuSummarySection(cashFlow: cashFlow)
+                    FiscalSummarySection(cashFlow: cashFlow)
+                    SciSummarySection(cashFlow: cashFlow)
+                }
+                .alert(item: $alertItem, content: newAlert)
+                .navigationTitle("Synthèse")
+                .navigationBarTitleDisplayMode(.inline)
+                .onAppear(perform: computeCurrentYearCashFlow)
+                .onDisappear(perform: self.patrimoine.resetInvestementsCurrentValue)
+                .toolbar {
+                    /// bouton Exporter fichiers du dossier actif
+                    ToolbarItem(placement: .automatic) {
+                        Button(action: { shareFamily(geometry: geometry) },
+                               label: {
+                                Image(systemName: "square.and.arrow.up")
+                                    .imageScale(.large)
+                               })
+                            .capsuleButtonStyle()
+                    }
+                }
             }
-            .navigationTitle("Synthèse")
-            .navigationBarTitleDisplayMode(.inline)
-            .onAppear(perform: computeCurrentYearCashFlow)
-            .onDisappear(perform: self.patrimoine.resetInvestementsCurrentValue)
         } else {
             NoLoadedDossierView()
         }
+    }
+    
+    func shareFamily(geometry: GeometryProxy) {
+        var urls = [URL]()
+        do {
+            // vérifier l'existence du Folder associé au Dossier
+            guard let activeFolder = dataStore.activeDossier!.folder else {
+                throw DossierError.failedToFindFolder
+            }
+            
+            // collecte des URL des fichiers contenus dans le dossier
+            activeFolder.files.forEach { file in
+                if file.name.contains("persons") {
+                    urls.append(file.url)
+                }
+            }
+            
+        } catch {
+            self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
+                                       dismissButton : .default(Text("OK")))
+        }
+        
+        // partage des fichiers collectés
+        let sideBarWidth = 230.0
+        Patrimonio.share(items: urls, fromX: Double(geometry.size.width) + sideBarWidth, fromY: 32.0)
     }
 }
 

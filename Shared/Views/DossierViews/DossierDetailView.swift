@@ -58,91 +58,124 @@ struct DossierDetailView: View {
     }
     
     var body: some View {
-        Form {
-            // indicateur de chargement du Dossier
-            if dossier.isActive {
-                activeSection
+        GeometryReader { geometry in
+            Form {
+                // indicateur de chargement du Dossier
+                if dossier.isActive {
+                    activeSection
+                }
+                // affichage du Dossier
+                DossierPropertiesView(dossier: dossier,
+                                      sectionHeader: "Descriptif du Dossier")
             }
-            // affichage du Dossier
-            DossierPropertiesView(dossier: dossier,
-                                  sectionHeader: "Descriptif du Dossier")
-        }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
-        .navigationTitle(Text("Dossier"))
-        .alert(item: $alertItem, content: newAlert)
-        .sheet(isPresented: $showingSheet) {
-            DossierEditView(title        : "Modifier le Dossier",
-                            originalItem : dossier)
-                .environmentObject(self.dataStore)
-        }
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                /// Bouton: Charger
-                Button(
-                    action : activate,
-                    label  : {
-                        HStack {
-                            if dossier.isActive {
-                                Image(systemName: "arrowshape.turn.up.backward")
-                                    .imageScale(.large)
-                                Text("Revenir")
-                                
-                            } else {
-                                Image(systemName: "square.and.arrow.down")
-                                    .imageScale(.large)
-                                Text("Charger")
-                                
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .navigationTitle(Text("Dossier"))
+            .alert(item: $alertItem, content: newAlert)
+            .sheet(isPresented: $showingSheet) {
+                DossierEditView(title        : "Modifier le Dossier",
+                                originalItem : dossier)
+                    .environmentObject(self.dataStore)
+            }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    /// Bouton: Charger
+                    Button(
+                        action : activate,
+                        label  : {
+                            HStack {
+                                if dossier.isActive {
+                                    Image(systemName: "arrowshape.turn.up.backward")
+                                        .imageScale(.large)
+
+                                } else {
+                                    Image(systemName: "square.and.arrow.down")
+                                        .imageScale(.large)
+
+                                }
                             }
-                        }
-                    })
-                    .capsuleButtonStyle()
-                    .disabled(!activable)
-            }
-            /// Bouton: Sauvegarder
-            ToolbarItem(placement: .automatic) {
-                DiskButton { save(dossier) }
+                        })
+                        .capsuleButtonStyle()
+                        .disabled(!activable)
+                }
+                /// Bouton: Sauvegarder
+                ToolbarItem(placement: .automatic) {
+                    DiskButton { save(dossier) }
                     .disabled(!savable)
-            }
-            /// Bouton: Dupliquer
-            ToolbarItem(placement: .automatic) {
-                DuplicateButton { duplicate() }
-            }
-            /// Bouton: Modifier
-            ToolbarItem(placement: .automatic) {
-                Button(
-                    action : {
-                        withAnimation {
-                            self.showingSheet = true
-                        }
-                    },
-                    label  : {
-                        HStack {
-                            Image(systemName: "square.and.pencil")
-                                .imageScale(.large)
-                            Text("Modifier")
-                        }
+                }
+                /// Bouton: Dupliquer
+                ToolbarItem(placement: .automatic) {
+                    DuplicateButton { duplicate() }
+                }
+                /// Bouton: Modifier
+                ToolbarItem(placement: .automatic) {
+                    Button(
+                        action : {
+                            withAnimation {
+                                self.showingSheet = true
+                            }
+                        },
+                        label  : {
+                            HStack {
+                                Image(systemName: "square.and.pencil")
+                                    .imageScale(.large)
+                            }
+                        })
+                        .capsuleButtonStyle()
+                        .disabled(!dossier.isActive)
+                }
+                /// Bouton: Exporter fichiers du dossier actif
+                ToolbarItem(placement: .automatic) {
+                    Button(action: { share(geometry: geometry) },
+                           label: {
+                        Image(systemName: "square.and.arrow.up")
+                            .imageScale(.large)
                     })
-                    .capsuleButtonStyle()
-                    .disabled(!dossier.isActive)
+                        .capsuleButtonStyle()
+                        .disabled(!dossier.isActive)
+                }
             }
         }
     }
-    
+
+    /// Exporter tous les fichiers contenus dans le dossier actif
+    private func share(geometry: GeometryProxy) {
+        var urls = [URL]()
+        do {
+            // vérifier l'existence du Folder associé au Dossier
+            guard let activeFolder = dossier.folder else {
+                throw DossierError.failedToFindFolder
+            }
+
+            // collecte des URL des fichiers contenus dans le dossier
+            activeFolder.files.forEach { file in
+                urls.append(file.url)
+            }
+
+        } catch {
+            self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
+                                       dismissButton : .default(Text("OK")))
+        }
+
+        // partage des fichiers collectés
+        let sideBarWidth = 230.0
+        Patrimonio.share(items: urls, fromX: Double(geometry.size.width) + sideBarWidth, fromY: 32.0)
+    }
+
     /// True si le dossier est inactif ou s'il est actif et à été modifié
     private var activable: Bool {
         !dossier.isActive || savable
     }
-    
+
     /// True si le dossier est actif et a été modifié
     private var savable: Bool {
         dossier.isActive &&
-            (family.isModified ||
-                expenses.isModified ||
-                patrimoine.isModified ||
-                model.isModified ||
-                simulation.isModified)
+        (family.isModified ||
+         expenses.isModified ||
+         patrimoine.isModified ||
+         model.isModified ||
+         simulation.isModified)
     }
-    
+
     /// si le dossier est déjà actif et a été modifié alors prévenir que les modif vont être écrasées
     private func activate() {
         if savable {
@@ -155,8 +188,8 @@ struct DossierDetailView: View {
         } else if let activeDossier = dataStore.activeDossier,
                   activeDossier != dossier,
                   (family.isModified || expenses.isModified ||
-                    patrimoine.isModified || model.isModified ||
-                    simulation.isModified) {
+                   patrimoine.isModified || model.isModified ||
+                   simulation.isModified) {
             // le dossier sélectionné n'est pas encore chargé
             // et il y a déjà un autre dossier chargé avec des modifications non sauvegardées
             self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
@@ -168,9 +201,9 @@ struct DossierDetailView: View {
             load()
         }
     }
-    
+
     // MARK: - Methods
-    
+
     /// Enregistrer les données utilisateur dans le Dossier sélectionné actif
     private func save(_ dossier: Dossier) {
         do {
@@ -189,7 +222,7 @@ struct DossierDetailView: View {
                                        dismissButton : .default(Text("OK")))
         }
     }
-    
+
     /// Rendre le Dossier sélectionné actif et charger ses données dans le modèle
     private func load() {
 
@@ -198,7 +231,7 @@ struct DossierDetailView: View {
                                        dismissButton : .default(Text("OK")))
             return
         }
-        
+
         /// charger les fichiers JSON
         do {
             try load(dossier, withIndex: dossierIndex)
@@ -210,16 +243,16 @@ struct DossierDetailView: View {
             return
         }
     }
-    
+
     private func load(_ dossier              : Dossier,
                       withIndex dossierIndex : Int) throws {
         var compatibility = false
-        
+
         try dossier.loadDossierContentAsJSON { folder in
             // Vérifier la compatibilité entre la version de l'app et la version du répertoire `Library/template`.
             do {
                 compatibility = try PersistenceManager.checkCompatibilityWithAppVersion(of: folder)
-                
+
             } catch {
                 // la vérification de compatibilité de version s'est mal passée
                 let error = DossierError.failedToCheckCompatibility
@@ -227,7 +260,7 @@ struct DossierDetailView: View {
                                            dismissButton : .default(Text("OK")))
                 throw error
             }
-            
+
             if compatibility {
                 // injection de family dans la propriété statique de DateBoundary pour lier les évenements à des personnes
                 DateBoundary.setPersonEventYearProvider(family)
@@ -237,7 +270,7 @@ struct DossierDetailView: View {
                 Adult.setAdultRelativesProvider(family)
                 // injection de family dans la propriété statique de Patrimoin
                 Patrimoin.familyProvider = family
-                
+
                 do {
                     try model.loadFromJSON(fromFolder: folder)
                     try patrimoine.loadFromJSON(fromFolder: folder)
@@ -245,13 +278,13 @@ struct DossierDetailView: View {
                     try family.loadFromJSON(fromFolder: folder,
                                             using     : model)
                     try simulation.loadFromJSON(fromFolder: folder)
-                    
+
                     /// gérer les dépendances entre le Modèle et les objets applicatifs
                     DependencyInjector.manageDependencies(to: model)
-                    
+
                     /// rendre le Dossier actif seulement si tout c'est bien passé
                     dataStore.activate(dossierAtIndex: dossierIndex)
-                    
+
                     /// remettre à zéro la simulation et sa vue
                     simulation.notifyComputationInputsModification()
                     uiState.resetSimulationView()
@@ -260,52 +293,52 @@ struct DossierDetailView: View {
                                                dismissButton : .default(Text("OK")))
                     throw error
                 }
-                
+
             } else {
                 // version de dossier incompatible avec version d'Application
                 // tenter de rétablir la compatibilité en important seulement les fichier Models de l'Application
                 self.alertItem =
-                    AlertItem(title         : Text("Attention").foregroundColor(.red),
-                              message       : Text("Le contenu de ce dossier est incompatible de cette version de l'application. Voulez-vous le mettre à jour. Si vous le mettez à jour, vous perdrai les éventuelles modifications qu'il contient."),
-                              primaryButton : .destructive(Text("Mettre à jour"),
-                                                           action: {
-                                                            importModelFilesFromApp(toFolder: folder)
-                                                            // injection de family dans la propriété statique de DateBoundary pour lier les évenements à des personnes
-                                                            DateBoundary.setPersonEventYearProvider(family)
-                                                            // injection de family dans la propriété statique de Expense
-                                                            LifeExpense.setMembersCountProvider(family)
-                                                            // injection de family dans la propriété statique de Adult
-                                                            Adult.setAdultRelativesProvider(family)
-                                                            // injection de family dans la propriété statique de Patrimoin
-                                                            Patrimoin.familyProvider = family
-                                                            
-                                                            do {
-                                                                try model.loadFromJSON(fromFolder: folder)
-                                                                try patrimoine.loadFromJSON(fromFolder: folder)
-                                                                try expenses.loadFromJSON(fromFolder: folder)
-                                                                try family.loadFromJSON(fromFolder: folder,
-                                                                                        using     : model)
-                                                                try simulation.loadFromJSON(fromFolder: folder)
-                                                                
-                                                                /// gérer les dépendances entre le Modèle et les objets applicatifs
-                                                                DependencyInjector.manageDependencies(to: model)
-                                                                
-                                                                /// rendre le Dossier actif seulement si tout c'est bien passé
-                                                                dataStore.activate(dossierAtIndex: dossierIndex)
-                                                                
-                                                                /// remettre à zéro la simulation et sa vue
-                                                                simulation.notifyComputationInputsModification()
-                                                                uiState.resetSimulationView()
-                                                            } catch {
-                                                                self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
-                                                                                           dismissButton : .default(Text("OK")))
-                                                            }
-                                                           }),
-                              secondaryButton: .cancel())
+                AlertItem(title         : Text("Attention").foregroundColor(.red),
+                          message       : Text("Le contenu de ce dossier est incompatible de cette version de l'application. Voulez-vous le mettre à jour. Si vous le mettez à jour, vous perdrai les éventuelles modifications qu'il contient."),
+                          primaryButton : .destructive(Text("Mettre à jour"),
+                                                       action: {
+                    importModelFilesFromApp(toFolder: folder)
+                    // injection de family dans la propriété statique de DateBoundary pour lier les évenements à des personnes
+                    DateBoundary.setPersonEventYearProvider(family)
+                    // injection de family dans la propriété statique de Expense
+                    LifeExpense.setMembersCountProvider(family)
+                    // injection de family dans la propriété statique de Adult
+                    Adult.setAdultRelativesProvider(family)
+                    // injection de family dans la propriété statique de Patrimoin
+                    Patrimoin.familyProvider = family
+
+                    do {
+                        try model.loadFromJSON(fromFolder: folder)
+                        try patrimoine.loadFromJSON(fromFolder: folder)
+                        try expenses.loadFromJSON(fromFolder: folder)
+                        try family.loadFromJSON(fromFolder: folder,
+                                                using     : model)
+                        try simulation.loadFromJSON(fromFolder: folder)
+
+                        /// gérer les dépendances entre le Modèle et les objets applicatifs
+                        DependencyInjector.manageDependencies(to: model)
+
+                        /// rendre le Dossier actif seulement si tout c'est bien passé
+                        dataStore.activate(dossierAtIndex: dossierIndex)
+
+                        /// remettre à zéro la simulation et sa vue
+                        simulation.notifyComputationInputsModification()
+                        uiState.resetSimulationView()
+                    } catch {
+                        self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
+                                                   dismissButton : .default(Text("OK")))
+                    }
+                }),
+                          secondaryButton: .cancel())
             }
         }
     }
-    
+
     private func importModelFilesFromApp(toFolder: Folder) {
         do {
             try PersistenceManager.duplicateFilesFromApp(toFolder: toFolder) { fromFolder, toFolder in
@@ -317,7 +350,7 @@ struct DossierDetailView: View {
                                        dismissButton : .default(Text("OK")))
         }
     }
-    
+
     /// Dupliquer le Dossier sélectionné
     private func duplicate() {
         do {

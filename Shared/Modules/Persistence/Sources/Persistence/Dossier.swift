@@ -264,7 +264,7 @@ public struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
             throw DossierError.failedToFindFolder
         }
 
-        // enregistrer le desscripteur du Dossier
+        // enregistrer le descripteur du Dossier
         do {
             try self.saveAsJSON()
         } catch {
