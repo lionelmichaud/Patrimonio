@@ -7,6 +7,11 @@
     
     "revisionHistory" : [
         {
+            "version" : "4.4.0",
+            "date"    : "2022-02-20T23:00:00+01:00",
+            "comment" : "Ajout de fonctions de partage des fichiers Dossier, Famille, Dépenses, Patrimoine"
+        },
+        {
             "version" : "4.3.0",
             "date"    : "2022-02-17T23:00:00+01:00",
             "comment" : "Ajout d'un gestionnaire de modèle pour transférer les modèles d'un endroit à un autre"
