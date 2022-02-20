@@ -144,8 +144,9 @@ struct ComputationView: View {
         }
         
         // partage des fichiers collectés
-        let sideBarWidth = 230.0
-        Patrimonio.share(items: urls, fromX: Double(geometry.size.width) + sideBarWidth, fromY: 32.0)
+        share(items: urls,
+              fromX: Double(geometry.frame(in: .global).maxX-32),
+              fromY: 24.0)
     }
 }
     

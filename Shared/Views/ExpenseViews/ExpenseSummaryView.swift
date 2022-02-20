@@ -101,28 +101,12 @@ struct ExpenseSummaryView: View {
     }
 
     func share(geometry: GeometryProxy) {
-        var urls = [URL]()
-        do {
-            // vérifier l'existence du Folder associé au Dossier
-            guard let activeFolder = dataStore.activeDossier!.folder else {
-                throw DossierError.failedToFindFolder
-            }
-
-            // collecte des URL des fichiers contenus dans le dossier
-            activeFolder.files.forEach { file in
-                if file.name.contains("LifeExpense") {
-                    urls.append(file.url)
-                }
-            }
-
-        } catch {
-            self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
-                                       dismissButton : .default(Text("OK")))
-        }
-
-        // partage des fichiers collectés
-        let sideBarWidth = 230.0
-        Patrimonio.share(items: urls, fromX: Double(geometry.size.width) + sideBarWidth, fromY: 32.0)
+        // collecte des URL des fichiers contenus dans le dossier
+        let fileNameKeys = ["LifeExpense"]
+        shareFiles(dataStore: dataStore,
+                   fileNames: fileNameKeys,
+                   alertItem: &alertItem,
+                   geometry: geometry)
     }
 }
 

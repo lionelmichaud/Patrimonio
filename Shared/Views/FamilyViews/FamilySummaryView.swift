@@ -57,7 +57,7 @@ struct FamilySummaryView: View {
                 .toolbar {
                     /// bouton Exporter fichiers du dossier actif
                     ToolbarItem(placement: .automatic) {
-                        Button(action: { shareFamily(geometry: geometry) },
+                        Button(action: { share(geometry: geometry) },
                                label: {
                                 Image(systemName: "square.and.arrow.up")
                                     .imageScale(.large)
@@ -71,29 +71,13 @@ struct FamilySummaryView: View {
         }
     }
     
-    func shareFamily(geometry: GeometryProxy) {
-        var urls = [URL]()
-        do {
-            // vérifier l'existence du Folder associé au Dossier
-            guard let activeFolder = dataStore.activeDossier!.folder else {
-                throw DossierError.failedToFindFolder
-            }
-            
-            // collecte des URL des fichiers contenus dans le dossier
-            activeFolder.files.forEach { file in
-                if file.name.contains("persons") {
-                    urls.append(file.url)
-                }
-            }
-            
-        } catch {
-            self.alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
-                                       dismissButton : .default(Text("OK")))
-        }
-        
-        // partage des fichiers collectés
-        let sideBarWidth = 230.0
-        Patrimonio.share(items: urls, fromX: Double(geometry.size.width) + sideBarWidth, fromY: 32.0)
+    func share(geometry: GeometryProxy) {
+        // collecte des URL des fichiers contenus dans le dossier
+        let fileNameKeys = ["person"]
+        shareFiles(dataStore: dataStore,
+                   fileNames: fileNameKeys,
+                   alertItem: &alertItem,
+                   geometry: geometry)
     }
 }
 

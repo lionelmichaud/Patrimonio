@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Persistence
 
 struct ActivityViewController: UIViewControllerRepresentable {
     @Binding var activityItems: [Any]
@@ -103,4 +104,46 @@ func share(items      : [Any],
             width: 32,
             height: 32)
     }
+}
+
+/// Partager les fichiers contenus dans le dossier actif de `dataStore`
+/// et qui contiennent l'une des Strings de `fileNames`
+/// ou bien tous les fichiers si `fileNames` = `nil`
+/// - Parameters:
+///   - dataStore: dataStore de l'application
+///   - fileNames: permet d'identifier les fichiers à partager
+///   - geometry: gemetry de la View qui appèle la fonction
+func shareFiles(dataStore : Store,
+                fileNames : [String]? = nil,
+                alertItem : inout AlertItem?,
+                geometry  : GeometryProxy) {
+    var urls = [URL]()
+    do {
+        // vérifier l'existence du Folder associé au Dossier
+        guard let activeFolder = dataStore.activeDossier!.folder else {
+            throw DossierError.failedToFindFolder
+        }
+        
+        // collecte des URL des fichiers contenus dans le dossier
+        activeFolder.files.forEach { file in
+            if let fileNames = fileNames {
+                fileNames.forEach { fileName in
+                    if file.name.contains(fileName) {
+                        urls.append(file.url)
+                    }
+                }
+            } else {
+                urls.append(file.url)
+            }
+        }
+        
+    } catch {
+        alertItem = AlertItem(title         : Text((error as! DossierError).rawValue),
+                              dismissButton : .default(Text("OK")))
+    }
+    
+    // partage des fichiers collectés
+    share(items: urls,
+          fromX: Double(geometry.frame(in: .global).maxX-32),
+          fromY: 24.0)
 }

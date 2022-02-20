@@ -26,11 +26,13 @@ public struct AppSettings: Decodable {
     // MARK: - Static Methods
     
     func csvPath(_ simulationTitle: String) -> String {
-        simulationTitle + "/" + AppSettings.shared.tableDir + "/"
+        let dirName = simulationTitle.replacingOccurrences(of: "/", with: "-")
+        return dirName + "/" + AppSettings.shared.tableDir + "/"
     }
     
     func imagePath(_ simulationTitle: String) -> String {
-        simulationTitle + "/" + AppSettings.shared.imageDir + "/"
+        let dirName = simulationTitle.replacingOccurrences(of: "/", with: "-")
+        return dirName + "/" + AppSettings.shared.imageDir + "/"
     }
 
     func templatePath() -> String {

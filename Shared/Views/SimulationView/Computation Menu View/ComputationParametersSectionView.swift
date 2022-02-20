@@ -19,7 +19,6 @@ struct ComputationParametersSectionView : View {
     
     var body: some View {
         GroupBox(label: Text("Paramètres de Simulation").font(.headline)) {
-            //Section(header: Text("Paramètres de Simulation").font(.headline)) {
             // choix du Titre et Note
             VStack {
                 HStack {
