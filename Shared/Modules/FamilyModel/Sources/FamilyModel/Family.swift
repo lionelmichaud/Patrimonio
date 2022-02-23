@@ -12,6 +12,17 @@ import PatrimoineModel
 // MARK: - Class Family: la Famille, ses membres, leurs actifs et leurs revenus
 
 /// la Famille, ses membres, leurs actifs et leurs revenus
+///
+/// Usage:
+///
+///     let family = Family()
+///     try family.loadFromJSON(fromFolder: folder, using: model)
+///     try family.saveAsJSON(toFolder: folder)
+///
+///     // alernative
+///     try family = Family(fromFolder: folder, using: model)
+///     try family.saveAsJSON(toFolder: folder)
+///
 public final class Family: ObservableObject {
     
     // MARK: - Properties

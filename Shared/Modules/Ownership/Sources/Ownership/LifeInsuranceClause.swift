@@ -8,13 +8,11 @@
 
 import Foundation
 
-// MARK: - Clause bénéficiaire d'assurance vie
-
-// MARK: - La répartition des droits de propriété d'un bien entre personnes
-
 public enum ClauseError: String, Error {
     case invalidClause = "La clause de l'assurance vie n'est pas valide"
 }
+
+// MARK: - Clause bénéficiaire d'assurance vie
 
 /// Clause bénéficiaire d'assurance vie
 /// - Warning:
@@ -26,13 +24,13 @@ public struct LifeInsuranceClause: Codable, Hashable {
 
     public var isOptional   : Bool = false
     public var isDismembered: Bool = false
-    // bénéficiaire en PP
+    /// Bénéficiaires en PP
     public var fullRecipients: Owners = [] // PP si la clause n'est pas démembrée
-    // bénéficiaire en UF
+    /// Bénéficiaire en UF
     public var usufructRecipient: String = "" // UF si la clause est démembrée
-    // bénéficiaire en NP
     // TODO: - traiter le cas des parts non égales chez les NP désignés dans la clause bénéficiaire
     //   => public var bareRecipients: Owners = [] // NP si la clause est démembrée
+    /// Bénéficiaires en NP
     public var bareRecipients: [String] = [] // NP si la clause est démembrée
     
     public var isValid: Bool {
@@ -40,7 +38,11 @@ public struct LifeInsuranceClause: Codable, Hashable {
             case (true, true):
                 // une clause à option ne doit pas être démembrée
                 return false
-                
+
+            case (true, false):
+                // un seul donataire désigné en PP dans une clause à option (celui qui exerce l'option)
+                return fullRecipients.count == 1 && fullRecipients.isvalid
+
             case (false, true):
                 // il doit y avoir au moins 1 usufruitier et 1 nu-propriétaire
                 return usufructRecipient.isNotEmpty && bareRecipients.isNotEmpty
@@ -48,10 +50,6 @@ public struct LifeInsuranceClause: Codable, Hashable {
             case (false, false):
                 // Note: il peut ne pas y avoir de donataire
                 return fullRecipients.isvalid
-
-            case (true, false):
-                // un seul donataire désigné en PP dans une clause à option (celui qui exerce l'option)
-                return fullRecipients.count == 1 && fullRecipients.isvalid
         }
     }
     
@@ -63,7 +61,16 @@ public struct LifeInsuranceClause: Codable, Hashable {
             case (true, true):
                 // une clause à option ne doit pas être démembrée
                 return "Une clause à option ne doit pas être démembrée"
-                
+
+            case (true, false):
+                // un seul donataire désigné en PP dans une clause à option (celui qui exerce l'option)
+                if !fullRecipients.isvalid {
+                    return "La liste des donataires de la clause à option n'est pas valide"
+                }
+                if fullRecipients.count != 1 {
+                    return "La liste des donataires de la clause à option inclue plusieurs donataires"
+                }
+
             case (false, true):
                 if usufructRecipient.isEmpty {
                     return "La clause est démembrée en n'a pas de donataire en UF"
@@ -77,15 +84,6 @@ public struct LifeInsuranceClause: Codable, Hashable {
                 if !fullRecipients.isvalid {
                     return "La liste des donataires de la clause n'est pas valide"
                 }
-                
-            case (true, false):
-                // un seul donataire désigné en PP dans une clause à option (celui qui exerce l'option)
-                if !fullRecipients.isvalid {
-                    return "La liste des donataires de la clause à option n'est pas valide"
-                }
-                if fullRecipients.count != 1 {
-                    return "La liste des donataires de la clause à option inclue plusieurs donataires"
-                }
         }
         return nil
     }
@@ -93,9 +91,6 @@ public struct LifeInsuranceClause: Codable, Hashable {
     // MARK: - Initializers
     
     public init() { }
-    
-    // MARK: - Methods
-    
 }
 
 extension LifeInsuranceClause: CustomStringConvertible {

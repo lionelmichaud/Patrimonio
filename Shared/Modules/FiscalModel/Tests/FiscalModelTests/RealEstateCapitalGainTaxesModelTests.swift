@@ -17,9 +17,10 @@ class RealEstateCapitalGainTaxesModelTests: XCTestCase {
     
     override class func setUp() { 
         super.setUp()
-        let model = RealEstateCapitalGainTaxesModel.Model(
+        var model = RealEstateCapitalGainTaxesModel.Model(
             fromFile   : RealEstateCapitalGainTaxesModel.Model.defaultFileName,
             fromBundle : Bundle.module)
+        model.initialize()
         RealEstateCapitalGainTaxesModelTests.estateCapitalGainTaxes = RealEstateCapitalGainTaxesModel(model: model)
     }
     

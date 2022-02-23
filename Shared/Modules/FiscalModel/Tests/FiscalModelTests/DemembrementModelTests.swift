@@ -33,11 +33,11 @@ class DemembrementModelTests: XCTestCase {
     func test_demembrement() throws {
         var demembrement = try DemembrementModelTests.demembrement.demembrement(of: 100.0, usufructuaryAge: 20)
         XCTAssertEqual(90.0, demembrement.usufructValue)
-        XCTAssertEqual(10.0, demembrement.bareValue)
+        XCTAssertEqual(10.0, demembrement.bareValue, accuracy: 0.000000001)
 
         demembrement = try DemembrementModelTests.demembrement.demembrement(of: 100.0, usufructuaryAge: 30)
         XCTAssertEqual(80.0, demembrement.usufructValue)
-        XCTAssertEqual(20.0, demembrement.bareValue)
+        XCTAssertEqual(20.0, demembrement.bareValue, accuracy: 0.000000001)
 
         demembrement = try DemembrementModelTests.demembrement.demembrement(of: 100.0, usufructuaryAge: 50)
         XCTAssertEqual(60.0, demembrement.usufructValue)

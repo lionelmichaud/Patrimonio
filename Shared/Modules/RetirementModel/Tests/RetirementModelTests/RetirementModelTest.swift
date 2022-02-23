@@ -32,50 +32,11 @@ class RetirementModelTest: XCTestCase {
         XCTAssertNoThrow(RetirementModelTest.retirement.saveAsJSON(toBundle: Bundle.module))
     }
 
-    func test_ageMinimumLegal() {
-        XCTAssertEqual(RetirementModelTest.retirement.ageMinimumLegal, 62)
-
-        var retirement = Retirement(fromBundle : Bundle.module)
-        retirement.ageMinimumLegal = 60
-        XCTAssertEqual(retirement.ageMinimumLegal, 60)
-        XCTAssertEqual(retirement.persistenceSM.currentState , .modified)
-    }
-
-    func test_ageMinimumAGIRC() {
-        XCTAssertEqual(RetirementModelTest.retirement.ageMinimumAGIRC, 57)
-
-        var retirement = Retirement(fromBundle : Bundle.module)
-        retirement.ageMinimumAGIRC = 50
-        XCTAssertEqual(retirement.ageMinimumAGIRC, 50)
-        XCTAssertEqual(retirement.persistenceSM.currentState , .modified)
-    }
-
-    func test_valeurDuPointAGIRC() {
-        XCTAssertEqual(RetirementModelTest.retirement.valeurDuPointAGIRC, 1.2714)
-
-        var retirement = Retirement(fromBundle : Bundle.module)
-        retirement.valeurDuPointAGIRC = 2.54
-        XCTAssertEqual(retirement.valeurDuPointAGIRC, 2.54)
-        XCTAssertEqual(retirement.persistenceSM.currentState , .modified)
-    }
-
     func test_state_machine() {
-        var retirement = Retirement(fromBundle : Bundle.module)
+        let retirement = Retirement(fromBundle : Bundle.module)
         
         XCTAssertFalse(retirement.isModified)
         
-        retirement.ageMinimumLegal = 2
-        XCTAssertTrue(retirement.isModified)
-        retirement.saveAsJSON(toBundle: Bundle.module)
-        XCTAssertFalse(retirement.isModified)
-        
-        retirement.valeurDuPointAGIRC = 2
-        XCTAssertTrue(retirement.isModified)
-        retirement.saveAsJSON(toBundle: Bundle.module)
-        XCTAssertFalse(retirement.isModified)
-        
-        retirement.ageMinimumAGIRC = 2
-        XCTAssertTrue(retirement.isModified)
         retirement.saveAsJSON(toBundle: Bundle.module)
         XCTAssertFalse(retirement.isModified)
     }

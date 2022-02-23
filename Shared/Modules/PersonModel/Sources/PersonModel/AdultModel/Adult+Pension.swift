@@ -15,29 +15,29 @@ import ModelEnvironment
 
 public extension Adult {
     // MARK: - Computed Properties
-    
+
+    /// RETRAITE: date de demande de liquidation de pension régime général
     var dateOfPensionLiquid              : Date { // computed
         Date.calendar.date(from: dateOfPensionLiquidComp)!
     } // computed
+    /// RETRAITE: date de demande de liquidation de pension régime général
     var dateOfPensionLiquidComp          : DateComponents { // computed
         let liquidDate = Date.calendar.date(byAdding: ageOfPensionLiquidComp, to: birthDate)
         return Date.calendar.dateComponents([.year, .month, .day], from: liquidDate!)
     } // computed
-    var displayDateOfPensionLiquid       : String { // computed
-        mediumDateFormatter.string(from: dateOfPensionLiquid)
-    } // computed
     
     // MARK: - Methods
     
-    /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime général
+    /// True si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime général
     /// - Parameter year: première année incluant des revenus
     func isPensioned(during year: Int) -> Bool {
         isAlive(atEndOf: year) && (dateOfPensionLiquid.year <= year)
     }
+
+    /// Pension du régime général durant l'année `year`
+    /// - Parameter year: année de calul de la pension
     func pensionRegimeGeneral(during year: Int, using model: Model)
     -> (brut: Double, net: Double) {
-        // pension du régime général
-        // TODO: - Nombre d'enfants codé en dur pour prendre en compte le décès d'Isaline
         if let (brut, net) =
             model.retirementModel.regimeGeneral.pension(
                 birthDate                : birthDate,
@@ -52,9 +52,9 @@ public extension Adult {
             return (0, 0)
         }
     }
+
+    /// Pension du régime général durant l'année de liquidation de la pension
     func pensionRegimeGeneral(using model: Model) -> (brut: Double, net: Double) {
-        // pension du régime général
-        // TODO: - Nombre d'enfants codé en dur pour prendre en compte le décès d'Isaline
         if let (brut, net) =
             model.retirementModel.regimeGeneral.pension(
                 birthDate                : birthDate,
@@ -75,24 +75,25 @@ public extension Adult {
 public extension Adult {
     // MARK: - Computed Properties
     
-    var dateOfAgircPensionLiquid              : Date { // computed
+    /// RETRAITE: date de demande de liquidation de pension régime complémentaire
+    var dateOfAgircPensionLiquid     : Date { // computed
         Date.calendar.date(from: dateOfAgircPensionLiquidComp)!
     } // computed
-    var dateOfAgircPensionLiquidComp          : DateComponents { // computed
+    var dateOfAgircPensionLiquidComp : DateComponents { // computed
         let liquidDate = Date.calendar.date(byAdding: ageOfAgircPensionLiquidComp, to: birthDate)
         return Date.calendar.dateComponents([.year, .month, .day], from: liquidDate!)
     } // computed
-    var displayDateOfAgircPensionLiquid       : String { // computed
-        mediumDateFormatter.string(from: dateOfAgircPensionLiquid)
-    } // computed
-    
+
     // MARK: - Methods
     
-    /// true si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime complémentaire
+    /// True si est vivant à la fin de l'année et année égale ou postérieur à l'année de liquidation de la pension du régime complémentaire
     /// - Parameter year: première année incluant des revenus
     final func isAgircPensioned(during year: Int) -> Bool {
         isAlive(atEndOf: year) && (dateOfAgircPensionLiquid.year <= year)
     }
+
+    /// Pension du régime complémentaire durant l'année `year`
+    /// - Parameter year: année de calul de la pension
     final func pensionRegimeAgirc(during year : Int,
                                   using model : Model)
     -> (brut: Double, net: Double) {
@@ -113,6 +114,8 @@ public extension Adult {
             return (0, 0)
         }
     }
+
+    /// Pension du régime complémentaire durant l'année de liquidation de la pension
     final func pensionRegimeAgirc(using model: Model) -> (brut: Double, net: Double) {
         if let pensionAgirc =
             model.retirementModel.regimeAgirc.pension(

@@ -64,10 +64,26 @@ struct OwnershipView: View {
                 /// pleine propriété
                 NavigationLink(destination: OwnersListView(title  : proprietaireStr,
                                                            owners : $ownership.fullOwners).environmentObject(family)) {
-                    Text(proprietaireStr+"s")
-                        .foregroundColor(ownership.isValid ? .blue : .red)
+                    HStack {
+                        Text(proprietaireStr+"s")
+                            .foregroundColor(ownership.isValid ? .blue : .red)
+                        Spacer()
+                        Text(ownersSummary(owners: ownership.fullOwners)).foregroundColor(.secondary)
+                    }
                 }.padding(.leading)
             }
+        }
+    }
+
+    // MARK: - Methods
+
+    private func ownersSummary(owners: Owners) -> String {
+        if owners.isEmpty {
+            return ""
+        } else if owners.count == 1 {
+            return owners.first!.name
+        } else {
+            return "\(owners.count) personnes"
         }
     }
 }

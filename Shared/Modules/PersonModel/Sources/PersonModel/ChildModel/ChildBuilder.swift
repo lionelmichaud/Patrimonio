@@ -9,13 +9,35 @@ import Foundation
 import AppFoundation
 
 /// Builder pour la Class Child
+///
+/// Usage:
+///
+///     // créer un nouvel objet
+///     let child = ChildBuilder()
+///                    .withSex(personViewModel.sexe)
+///                    .named(givenName : givenName,
+///                           familyName : familyName)
+///                    .wasBorn(on: birthDate)
+///                    .willDyeAtAgeOf(deathAge)
+///                    .entersUniversityAtAgeOf(ageUniversity)
+///                    .willBeIndependantAtAgeOf(ageIndependance)
+///                    .build()
+///
+///     // modifier un objet existant
+///     ChildBuilder(for: child)
+///         .entersUniversityAtAgeOf(ageUniversity)
+///
 public class ChildBuilder {
     private var child: Child = Child()
     
     // MARK: - Initializers
     
     public init() { }
-    
+
+    public init(for child: Child) {
+        self.child = child
+    }
+
     // MARK: - Person properties
     
     public func withSex(_ sex: Sexe) -> ChildBuilder {

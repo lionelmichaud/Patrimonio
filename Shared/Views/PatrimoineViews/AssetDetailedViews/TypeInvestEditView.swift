@@ -71,23 +71,33 @@ struct TypeInvestEditView : View {
                     // nue-propriétaires
                     NavigationLink(destination: RecipientsListView(title      : nuPropStr,
                                                                    recipients : $clause.bareRecipients).environmentObject(family)) {
-                        Text(nuPropStr)
-                            .foregroundColor(clause.bareRecipients.isNotEmpty ? .blue : .red)
-                            .padding(.leading)
+                        HStack {
+                            Text(nuPropStr)
+                                .foregroundColor(clause.bareRecipients.isNotEmpty ? .blue : .red)
+                                .padding(.leading)
+                            Spacer()
+                            Text(bareRecipientsSummary(clause: clause)).foregroundColor(.secondary)
+                        }
                     }
                 } else {
                     // bénéficiaires
                     NavigationLink(destination: OwnersListView(title  : beneficiaireStr,
                                                                owners : $clause.fullRecipients).environmentObject(family)) {
-                        Text(beneficiaireStr)
-                            .foregroundColor(clause.fullRecipients.isNotEmpty ? .blue : .red)
-                            .padding(.leading)
+                        HStack {
+                            Text(beneficiaireStr)
+                                .foregroundColor(clause.fullRecipients.isNotEmpty ? .blue : .red)
+                                .padding(.leading)
+                            Spacer()
+                            Text(fullRecipientsSummary(clause: clause)).foregroundColor(.secondary)
+                        }
                     }
                 }
             }
         }
     }
-    
+
+    // MARK: - Initializer
+
     init(investType: Binding<InvestementKind>) {
         self._investType = investType
         self._typeIndex  = State(initialValue: investType.wrappedValue.id)
@@ -99,6 +109,28 @@ struct TypeInvestEditView : View {
             default:
                 self._isPeriodic = State(initialValue: false)
                 self._clause     = State(initialValue: LifeInsuranceClause())
+        }
+    }
+
+    // MARK: - Methods
+
+    private func bareRecipientsSummary(clause: LifeInsuranceClause) -> String {
+        if clause.bareRecipients.isEmpty {
+            return ""
+        } else if clause.bareRecipients.count == 1 {
+            return clause.bareRecipients.first!
+        } else {
+            return "\(clause.bareRecipients.count) personnes"
+        }
+    }
+
+    private func fullRecipientsSummary(clause: LifeInsuranceClause) -> String {
+        if clause.fullRecipients.isEmpty {
+            return ""
+        } else if clause.fullRecipients.count == 1 {
+            return clause.fullRecipients.first!.name
+        } else {
+            return "\(clause.fullRecipients.count) personnes"
         }
     }
 }

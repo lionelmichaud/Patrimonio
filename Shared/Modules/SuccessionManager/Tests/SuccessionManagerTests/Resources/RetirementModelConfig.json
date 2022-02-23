@@ -15,6 +15,7 @@
             "decoteParTrimestre"   : 0.625,
             "surcoteParTrimestre"  : 1.25,
             "maxNbTrimestreDecote" : 20,
+            "majorationTauxEnfant" : 10.0,
             "nbTrimNonIndemniseGrid" : [
                 {
                     "nbTrimestreAcquis"  : 0,

@@ -57,53 +57,11 @@ class SocioEconomyModelTest: XCTestCase {
         XCTAssertEqual(dico, currentRandomizersValues)
     }
 
-    func test_pensionDevaluationRate() {
-        XCTAssertEqual(SocioEconomyModelTest.socioEconomy.pensionDevaluationRateDeterministic,
-                       1.0)
-
-        var socioEconomy = SocioEconomy(fromBundle : Bundle.module)
-        socioEconomy.pensionDevaluationRateDeterministic = 60
-        XCTAssertEqual(socioEconomy.pensionDevaluationRateDeterministic, 60)
-        XCTAssertEqual(socioEconomy.persistenceSM.currentState , .modified)
-    }
-
-    func test_nbTrimTauxPlein() {
-        XCTAssertEqual(SocioEconomyModelTest.socioEconomy.nbTrimTauxPleinDeterministic,
-                       0)
-
-        var socioEconomy = SocioEconomy(fromBundle : Bundle.module)
-        socioEconomy.nbTrimTauxPleinDeterministic = 50
-        XCTAssertEqual(socioEconomy.nbTrimTauxPleinDeterministic, 50)
-        XCTAssertEqual(socioEconomy.persistenceSM.currentState , .modified)
-    }
-
-    func test_expensesUnderEvaluationRate() {
-        XCTAssertEqual(SocioEconomyModelTest.socioEconomy.expensesUnderEvaluationRateDeterministic,
-                       5)
-
-        var socioEconomy = SocioEconomy(fromBundle : Bundle.module)
-        socioEconomy.expensesUnderEvaluationRateDeterministic = 40
-        XCTAssertEqual(socioEconomy.expensesUnderEvaluationRateDeterministic, 40)
-        XCTAssertEqual(socioEconomy.persistenceSM.currentState , .modified)
-    }
-
     func test_state_machine() {
-        var socioEconomy = SocioEconomy(fromBundle : Bundle.module)
+        let socioEconomy = SocioEconomy(fromBundle : Bundle.module)
         
         XCTAssertFalse(socioEconomy.isModified)
         
-        socioEconomy.pensionDevaluationRateDeterministic = 2
-        XCTAssertTrue(socioEconomy.isModified)
-        socioEconomy.saveAsJSON(toBundle: Bundle.module)
-        XCTAssertFalse(socioEconomy.isModified)
-        
-        socioEconomy.nbTrimTauxPleinDeterministic = 2
-        XCTAssertTrue(socioEconomy.isModified)
-        socioEconomy.saveAsJSON(toBundle: Bundle.module)
-        XCTAssertFalse(socioEconomy.isModified)
-        
-        socioEconomy.expensesUnderEvaluationRateDeterministic = 2
-        XCTAssertTrue(socioEconomy.isModified)
         socioEconomy.saveAsJSON(toBundle: Bundle.module)
         XCTAssertFalse(socioEconomy.isModified)
     }

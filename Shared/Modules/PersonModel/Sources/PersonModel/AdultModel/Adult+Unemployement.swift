@@ -14,7 +14,8 @@ import ModelEnvironment
 // MARK: - EXTENSION: Chômage
 public extension Adult {
     // MARK: - Computed Properties
-    
+
+    /// CHOMAGE: salaire journalier de référence
     var SJR: Double { // computed
         guard let workIncome = workIncome else {
             return 0.0
@@ -27,6 +28,7 @@ public extension Adult {
                 return 0.0
         }
     }
+    /// CHOMAGE: true si la personne peut prétendre à des allocations recherche d'emploi
     var hasUnemployementAllocationPeriod      : Bool { // computed
         guard let workIncome = workIncome else {
             return false

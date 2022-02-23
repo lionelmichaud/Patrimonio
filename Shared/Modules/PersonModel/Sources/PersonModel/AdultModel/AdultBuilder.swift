@@ -11,7 +11,23 @@ import FiscalModel
 import UnemployementModel
 import RetirementModel
 
-/// Builder pour la Class Person
+/// Builder pour la Class Adult
+///
+/// Usage:
+///
+///     // créer un nouvel objet
+///     let adult = AdultBuilder()
+///                    .withSex(personViewModel.sexe)
+///                    .named(givenName : givenName,
+///                           familyName : familyName)
+///                    .wasBorn(on: birthDate)
+///                    .willDyeAtAgeOf(deathAge)
+///                    .build()
+///
+///     // modifier un objet existant
+///     AdultBuilder(for: adult)
+///        .withSex(personViewModel.sexe)
+///
 public class AdultBuilder {
     private var adult: Adult
     

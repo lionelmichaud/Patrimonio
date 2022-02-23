@@ -17,6 +17,16 @@ import Persistence
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio",
                                category: "Model.PersonModel")
 
+/// Tableau de Person
+///
+/// Usage:
+///
+///     members  = try PersistableArrayOfPerson(fromFolder: folder,
+///                                                using     : model)
+///
+///     // mettre à jour les membres de la famille existants avec un nouveau model
+///     members.initialize(using: model)
+///
 public typealias PersistableArrayOfPerson = PersistableArray<Person>
 public extension PersistableArrayOfPerson {
     /// Initialiser à partir d'un fichier JSON portant le nom `FileNameCst.kFamilyMembersFileName`

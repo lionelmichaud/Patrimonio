@@ -14,6 +14,7 @@ import UnemployementModel
 import ModelEnvironment
 import DateBoundary
 
+/// Revenu Brut, Net et Taxable
 public struct BrutNetTaxable {
     public var brut    : Double
     public var net     : Double
@@ -26,6 +27,20 @@ public struct BrutNetTaxable {
     }
 }
 
+/// Modèle d'un adulte
+///
+/// Usage:
+///
+///     let adult = Adult(from: decoder)
+///     adult.initialize(using: model)
+///
+///     print(String(describing: adult)
+///
+///     adult.nextRandomProperties(using: model)
+///     adult.nextRandomProperties(using: model)
+///
+///     adult.setRandomPropertiesDeterministicaly(using: model)
+///
 public final class Adult: Person {
     
     // MARK: - nested types
@@ -55,15 +70,16 @@ public final class Adult: Person {
     
     // MARK: - Properties
     
-    // nombre d'enfants
+    /// Nombre d'enfants nés
     @Published public var nbOfChildBirth: Int = 0
     
     /// SUCCESSION: option fiscale
     @Published public var fiscalOption : InheritanceFiscalOption = .fullUsufruct
     
-    /// ACTIVITE: revenus du travail
+    /// ACTIVITE: nature de revenu du travail
     @Published public var workIncome : WorkIncomeType?
-    public var workBrutIncome    : Double { // avant charges sociales, dépenses de mutuelle ou d'assurance perte d'emploi
+    /// ACTIVITE: revenu du travail avant charges sociales, dépenses de mutuelle ou d'assurance perte d'emploi
+    public var workBrutIncome    : Double {
         switch workIncome {
             case .salary(let brutSalary, _, _, _, _):
                 return brutSalary
@@ -73,36 +89,38 @@ public final class Adult: Person {
                 return 0
         }
     }
-    
-    /// ACTIVITE: date et cause de cessation d'activité
+    /// ACTIVITE: cause de cessation d'activité
     @Published public var causeOfRetirement: Unemployment.Cause = .demission
+    /// ACTIVITE: date de cessation d'activité
     @Published public var dateOfRetirement : Date = Date.distantFuture
     public var dateOfRetirementComp        : DateComponents { // computed
         Date.calendar.dateComponents([.year, .month, .day], from: dateOfRetirement)
     } // computed
+      /// ACTIVITE: âge de cessation d'activité
     public var ageOfRetirementComp         : DateComponents { // computed
         Date.calendar.dateComponents([.year, .month, .day], from: birthDateComponents, to: dateOfRetirementComp)
     } // computed
-    public var displayDateOfRetirement     : String { // computed
-        mediumDateFormatter.string(from: dateOfRetirement)
-    } // computed
-    
+
     /// CHOMAGE
     @Published public var layoffCompensationBonified : Double? // indemnité accordée par l'entreprise > légal (supra-légale)
     
     /// RETRAITE: date de demande de liquidation de pension régime général
     @Published public var ageOfPensionLiquidComp: DateComponents = DateComponents(calendar: Date.calendar, year: 62, month: 0, day: 1)
+    /// RETRAITE: dernière situation connue au régime général
     @Published public var lastKnownPensionSituation = RegimeGeneralSituation()
     
     /// RETRAITE: date de demande de liquidation de pension complémentaire
     @Published public var ageOfAgircPensionLiquidComp: DateComponents = DateComponents(calendar: Date.calendar, year: 62, month: 0, day: 1)
+    /// RETRAITE: dernière situation connue au régime complémentaire
     @Published public var lastKnownAgircPensionSituation = RegimeAgircSituation()
     
-    /// DEPENDANCE
+    /// DEPENDANCE: nombre d'années de dépendance
     @Published public var nbOfYearOfDependency : Int = 0
+    /// DEPENDANCE: âge à l'entrée en dépendance
     public var ageOfDependency                 : Int {
         return ageOfDeath - nbOfYearOfDependency
     } // computed
+    /// DEPENDANCE: année à l'entrée en dépendance
     public var yearOfDependency                : Int {
         return yearOfDeath - nbOfYearOfDependency
     } // computed
@@ -111,7 +129,7 @@ public final class Adult: Person {
             """
         - Nombre d'années de dépendance: \(nbOfYearOfDependency)
         - Cessation d'activité - age :  \(ageOfRetirementComp)
-        - Cessation d'activité - date: \(displayDateOfRetirement)
+        - Cessation d'activité - date: \(mediumDateFormatter.string(from: dateOfRetirement))
         - AGIRC pension liquidation - age :  \(ageOfAgircPensionLiquidComp)
         - AGIRC pension liquidation - date: \(dateOfAgircPensionLiquid.stringMediumDate)
         - Pension liquidation - age :  \(ageOfPensionLiquidComp)
@@ -124,7 +142,7 @@ public final class Adult: Person {
     
     // MARK: - initialization
     
-    // reads from JSON
+    /// Initialiser à partir d'un fichier JSON
     required init(from decoder: Decoder) throws {
         // Get our container for this subclass' coding keys
         let container =
@@ -226,8 +244,9 @@ public final class Adult: Person {
             // TODO: ajouter la fin des indemnités chomage
         }
     }
-    
-    public final func workNetIncome(using model: Model) -> Double { // net de feuille de paye, net de charges sociales et mutuelle obligatore
+
+    /// Revenu net de feuille de paye, net de charges sociales et mutuelle obligatore
+    public final func workNetIncome(using model: Model) -> Double {
         switch workIncome {
             case .salary(_, _, let netSalary, _, _):
                 return netSalary
@@ -237,7 +256,9 @@ public final class Adult: Person {
                 return 0
         }
     }
-    public final func workLivingIncome(using model: Model) -> Double { // net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
+
+    /// Revenu net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
+    public final func workLivingIncome(using model: Model) -> Double {
         switch workIncome {
             case .salary(_, _, let netSalary, _, let charge):
                 return netSalary - charge
@@ -247,7 +268,9 @@ public final class Adult: Person {
                 return 0
         }
     }
-    public final func workTaxableIncome(using model: Model) -> Double { // taxable à l'IRPP
+
+    /// Revenu taxable à l'IRPP
+    public final func workTaxableIncome(using model: Model) -> Double {
         switch workIncome {
             case .none:
                 return 0
@@ -255,25 +278,29 @@ public final class Adult: Person {
                 return model.fiscalModel.incomeTaxes.taxableIncome(from: workIncome!)
         }
     }
+
+    /// Définir le nombre d'enfants nés
     public final func gaveBirthTo(children : Int) {
         nbOfChildBirth = children
     }
-    public final func addChild() {
-        nbOfChildBirth += 1
-    }
-    public final func removeChild() {
-        nbOfChildBirth -= 1
-    }
+
+    /// Nombre d'enfants fiscalement à charge
     public final func nbOfFiscalChildren(during year: Int) -> Int {
         Adult.adultRelativesProvider.nbOfFiscalChildren(during: year)
     }
+
+    /// Nombre d'enfants nés
     public final func nbOfBornChildren() -> Int {
-        // TODO: - àremplacer par un accès directe à self.nbOfChildBirth
+        // TODO: - à remplacer par un accès directe à self.nbOfChildBirth
         Adult.adultRelativesProvider.nbOfBornChildren
     }
+
+    /// Définir l'âge de liquidation de la pension de retraite du régime général
     public final func setAgeOfPensionLiquidComp(year: Int, month: Int = 0, day: Int = 0) {
         ageOfPensionLiquidComp = DateComponents(calendar: Date.calendar, year: year, month: month, day: day)
     }
+
+    /// Définir l'âge de liquidation de la pension de retraite du régime complémentaire
     public final func setAgeOfAgircPensionLiquidComp(year: Int, month: Int = 0, day: Int = 0) {
         ageOfAgircPensionLiquidComp = DateComponents(calendar: Date.calendar, year: year, month: month, day: day)
     }

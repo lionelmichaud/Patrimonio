@@ -31,50 +31,11 @@ class HumanLifeTests: XCTestCase {
         XCTAssertNoThrow(HumanLifeTests.humanLife.saveAsJSON(toBundle: Bundle.module))
     }
 
-    func test_get_set_menLifeExpectationDeterministic() {
-        XCTAssertEqual(HumanLifeTests.humanLife.menLifeExpectationDeterministic, 82)
-
-        var humanLife = HumanLife(fromBundle : Bundle.module)
-        humanLife.menLifeExpectationDeterministic = 60
-        XCTAssertEqual(humanLife.menLifeExpectationDeterministic, 60)
-        XCTAssertEqual(humanLife.persistenceSM.currentState , .modified)
-    }
-
-    func test_get_set_womenLifeExpectationDeterministic() {
-        XCTAssertEqual(HumanLifeTests.humanLife.womenLifeExpectationDeterministic, 89)
-
-        var humanLife = HumanLife(fromBundle : Bundle.module)
-        humanLife.womenLifeExpectationDeterministic = 50
-        XCTAssertEqual(humanLife.womenLifeExpectationDeterministic, 50)
-        XCTAssertEqual(humanLife.persistenceSM.currentState , .modified)
-    }
-
-    func test_get_set_nbOfYearsOfdependencyDeterministic() {
-        XCTAssertEqual(HumanLifeTests.humanLife.nbOfYearsOfdependencyDeterministic, 6)
-
-        var humanLife = HumanLife(fromBundle : Bundle.module)
-        humanLife.nbOfYearsOfdependencyDeterministic = 4
-        XCTAssertEqual(humanLife.nbOfYearsOfdependencyDeterministic, 4)
-        XCTAssertEqual(humanLife.persistenceSM.currentState , .modified)
-    }
-
     func test_state_machine() {
-        var humanLife = HumanLife(fromBundle : Bundle.module)
+        let humanLife = HumanLife(fromBundle : Bundle.module)
         
         XCTAssertFalse(humanLife.isModified)
         
-        humanLife.menLifeExpectationDeterministic = 2
-        XCTAssertTrue(humanLife.isModified)
-        humanLife.saveAsJSON(toBundle: Bundle.module)
-        XCTAssertFalse(humanLife.isModified)
-        
-        humanLife.womenLifeExpectationDeterministic = 2
-        XCTAssertTrue(humanLife.isModified)
-        humanLife.saveAsJSON(toBundle: Bundle.module)
-        XCTAssertFalse(humanLife.isModified)
-        
-        humanLife.nbOfYearsOfdependencyDeterministic = 2
-        XCTAssertTrue(humanLife.isModified)
         humanLife.saveAsJSON(toBundle: Bundle.module)
         XCTAssertFalse(humanLife.isModified)
     }

@@ -11,7 +11,20 @@ import AppFoundation
 import ModelEnvironment
 import DateBoundary
 
-// MARK: -
+/// Un enfant
+///
+/// Usage:
+///
+///     let child = Child(from: decoder)
+///     child.initialize(using: model)
+///
+///     print(String(describing: child)
+///
+///     child.nextRandomProperties(using: model)
+///     child.nextRandomProperties(using: model)
+///
+///     child.setRandomPropertiesDeterministicaly(using: model)
+///
 public final class Child: Person {
     
     // MARK: - nested types

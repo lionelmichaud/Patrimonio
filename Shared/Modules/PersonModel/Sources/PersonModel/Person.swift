@@ -14,11 +14,25 @@ import TypePreservingCodingAdapter // https://github.com/IgorMuzyka/Type-Preserv
 import ModelEnvironment
 import DateBoundary
 
-// MARK: - Tableau de Person
-
+/// Tableau de personnes: adulte ou enfant
 public typealias PersonArray = [Person]
 
-// MARK: - Person
+// MARK: -
+
+/// Le modèle d'une personne: adulte ou enfant
+///
+/// Usage:
+///
+///     let person = Person(from: decoder)
+///     person.initialize(using: model)
+///
+///     print(String(describing: person)
+///
+///     person.nextRandomProperties(using: model)
+///     person.nextRandomProperties(using: model)
+///
+///     person.setRandomPropertiesDeterministicaly(using: model)
+///
 public class Person : ObservableObject, Identifiable, Codable, CustomStringConvertible {
     
     // MARK: - Nested types
@@ -41,7 +55,7 @@ public class Person : ObservableObject, Identifiable, Codable, CustomStringConve
         }
     }
     @Published public var displayName : String = ""
-    public var birthDate              : Date = Date() {
+    public var birthDate : Date = Date() {
         didSet {
             displayBirthDate = mediumDateFormatter.string(from: birthDate)
             birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate)
@@ -196,7 +210,6 @@ public class Person : ObservableObject, Identifiable, Codable, CustomStringConve
 extension Person: Comparable {
     public static func == (lhs: Person, rhs: Person) -> Bool {
         lhs.birthDate == rhs.birthDate
-        
     }
     
     public static func < (lhs: Person, rhs: Person) -> Bool {

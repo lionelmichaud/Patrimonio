@@ -17,8 +17,9 @@ class RealEstateCapitalGainIrppModelTests: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        let model = RealEstateCapitalGainIrppModel.Model(fromFile   : RealEstateCapitalGainIrppModel.Model.defaultFileName,
+        var model = RealEstateCapitalGainIrppModel.Model(fromFile   : RealEstateCapitalGainIrppModel.Model.defaultFileName,
                                                          fromBundle : Bundle.module)
+        model.initialize()
         RealEstateCapitalGainIrppModelTests.estateCapitalGainIrpp = RealEstateCapitalGainIrppModel(model: model)
     }
     
@@ -65,7 +66,7 @@ class RealEstateCapitalGainIrppModelTests: XCTestCase {
         detention = 21 // ans
         // when
         irpp = RealEstateCapitalGainIrppModelTests.estateCapitalGainIrpp.irpp(capitalGain: pluValue,
-                                                                                  detentionDuration: detention)
+                                                                              detentionDuration: detention)
         // then
         theory = 19.0 / 100.0 * (1.0 - 15.0/100.0)
         theory *= (1.0 - (Double(detention) - 5.0) * 6.0 / 100.0) * pluValue
@@ -87,7 +88,7 @@ class RealEstateCapitalGainIrppModelTests: XCTestCase {
         detention = 35 // ans
         // when
         irpp = RealEstateCapitalGainIrppModelTests.estateCapitalGainIrpp.irpp(capitalGain: pluValue,
-                                                                                  detentionDuration: detention)
+                                                                              detentionDuration: detention)
         // then
         XCTAssertEqual(0.0, irpp)
     }
