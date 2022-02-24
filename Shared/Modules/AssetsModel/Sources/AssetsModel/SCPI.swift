@@ -26,6 +26,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     enum CodingKeys: CodingKey {
         case name
         case note
+        case website
         case ownership
         case buyingDate
         case buyingPrice
@@ -68,9 +69,10 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     
     // MARK: - Properties
     
-    public var id           = UUID()
-    public var name         : String
-    public var note         : String = ""
+    public var id = UUID()
+    public var name    : String
+    public var note    : String = ""
+    public var website : URL?
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
     /// Droits de propriété sur le bien

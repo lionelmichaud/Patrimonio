@@ -123,6 +123,8 @@
 		793D17A32761307800CB0F69 /* UpdateSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793D17A12761307800CB0F69 /* UpdateSettingsView.swift */; };
 		793FACA026EBE94E0033626E /* BetaRandomizerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FAC9F26EBE94E0033626E /* BetaRandomizerEditView.swift */; };
 		793FACA126EBE94E0033626E /* BetaRandomizerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FAC9F26EBE94E0033626E /* BetaRandomizerEditView.swift */; };
+		7940521327C70CBA00E018CF /* WebsiteEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7940521227C70CBA00E018CF /* WebsiteEditView.swift */; };
+		7940521427C70CBA00E018CF /* WebsiteEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7940521227C70CBA00E018CF /* WebsiteEditView.swift */; };
 		794570D026E38E3700EE9C61 /* SimulationSateMachines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794570CF26E38E3700EE9C61 /* SimulationSateMachines.swift */; };
 		794570D126E38E3700EE9C61 /* SimulationSateMachines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794570CF26E38E3700EE9C61 /* SimulationSateMachines.swift */; };
 		7946B3BE27BC5AF300D49FB4 /* ModelManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7946B3BD27BC5AF300D49FB4 /* ModelManagerView.swift */; };
@@ -658,6 +660,7 @@
 		7935FFDA265420FF00AC1715 /* DossierBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierBrowserView.swift; sourceTree = "<group>"; };
 		793D17A12761307800CB0F69 /* UpdateSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSettingsView.swift; sourceTree = "<group>"; };
 		793FAC9F26EBE94E0033626E /* BetaRandomizerEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetaRandomizerEditView.swift; sourceTree = "<group>"; };
+		7940521227C70CBA00E018CF /* WebsiteEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteEditView.swift; sourceTree = "<group>"; };
 		794570CF26E38E3700EE9C61 /* SimulationSateMachines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationSateMachines.swift; sourceTree = "<group>"; };
 		7946B3BD27BC5AF300D49FB4 /* ModelManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManagerView.swift; sourceTree = "<group>"; };
 		7948F8ED27650C8A00DF756F /* ComputationSidebarSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputationSidebarSectionView.swift; sourceTree = "<group>"; };
@@ -1763,6 +1766,7 @@
 				798DE8A326357CF500C0C3B5 /* SwiftUIconditional.swift */,
 				797901292640B49E00104C1A /* TableView.swift */,
 				7994B90227A8A01E00F59FE8 /* VersionEditableViewInForm.swift */,
+				7940521227C70CBA00E018CF /* WebsiteEditView.swift */,
 			);
 			path = HelpersViews;
 			sourceTree = "<group>";
@@ -2257,6 +2261,7 @@
 				79FC726026333350004F3BD2 /* SettingsSidebarView.swift in Sources */,
 				79FC728C26333A27004F3BD2 /* MainScene.swift in Sources */,
 				79FC7259263320BE004F3BD2 /* AppVersionView.swift in Sources */,
+				7940521327C70CBA00E018CF /* WebsiteEditView.swift in Sources */,
 				791ED0FB263A1EB700701202 /* PersonDetailView.swift in Sources */,
 				7935FFD92654204200AC1715 /* DossierSummaryView.swift in Sources */,
 				79CB2C89264D731900B3E493 /* MonteCarloCsvVisitor.swift in Sources */,
@@ -2483,6 +2488,7 @@
 				799C2F2A27ADA0A500D410F7 /* AmountViews.swift in Sources */,
 				7990D8D2264EA36700078CB6 /* LineChartBalanceSheetVisitor.swift in Sources */,
 				79FC726B263336C3004F3BD2 /* UIState.swift in Sources */,
+				7940521427C70CBA00E018CF /* WebsiteEditView.swift in Sources */,
 				796506CE2640866F0036E466 /* TypeInvestEditView.swift in Sources */,
 				79B31E5C2784B6A70039C250 /* BarChartTemplateView.swift in Sources */,
 				79EC5EA026406F5200FF8263 /* OwnersListView.swift in Sources */,

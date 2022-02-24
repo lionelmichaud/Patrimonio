@@ -43,6 +43,7 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
     public var id                   = UUID()
     public var name                 : String
     public var note                 : String = ""
+    public var website              : URL?
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
     /// Droits de propriété sur le bien
@@ -125,26 +126,28 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
                 willBeRented            : Bool         = false,
                 rentalFrom              : DateBoundary = DateBoundary.empty,
                 rentalTo                : DateBoundary = DateBoundary.empty,
-                monthlyRentAfterCharges : Double       = 0.0) {
-        self.id = id
-        self.name = name
-        self.note = note
-        self.ownership = ownership
-        self.buyingYear = buyingYear
-        self.buyingPrice = buyingPrice
-        self.yearlyTaxeHabitation = yearlyTaxeHabitation
-        self.yearlyTaxeFonciere = yearlyTaxeFonciere
-        self.estimatedValue = estimatedValue
-        self.willBeSold = willBeSold
-        self.sellingYear = sellingYear
-        self.sellingNetPrice = sellingNetPrice
-        self.willBeInhabited = willBeInhabited
-        self.inhabitedFrom = inhabitedFrom
-        self.inhabitedTo = inhabitedTo
-        self.willBeRented = willBeRented
-        self.rentalFrom = rentalFrom
-        self.rentalTo = rentalTo
+                monthlyRentAfterCharges : Double       = 0.0,
+                website                 : URL?         = nil) {
+        self.id                      = id
+        self.name                    = name
+        self.note                    = note
+        self.ownership               = ownership
+        self.buyingYear              = buyingYear
+        self.buyingPrice             = buyingPrice
+        self.yearlyTaxeHabitation    = yearlyTaxeHabitation
+        self.yearlyTaxeFonciere      = yearlyTaxeFonciere
+        self.estimatedValue          = estimatedValue
+        self.willBeSold              = willBeSold
+        self.sellingYear             = sellingYear
+        self.sellingNetPrice         = sellingNetPrice
+        self.willBeInhabited         = willBeInhabited
+        self.inhabitedFrom           = inhabitedFrom
+        self.inhabitedTo             = inhabitedTo
+        self.willBeRented            = willBeRented
+        self.rentalFrom              = rentalFrom
+        self.rentalTo                = rentalTo
         self.monthlyRentAfterCharges = monthlyRentAfterCharges
+        self.website                 = website
     }
     
     // MARK: - Methods

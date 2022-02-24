@@ -44,6 +44,7 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     enum CodingKeys: CodingKey {
         case name
         case note
+        case website
         case ownership
         case type
         case interestRateType
@@ -101,9 +102,10 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     
     // MARK: - Properties
     
-    public var id   = UUID()
-    public var name : String
-    public var note : String = ""
+    public var id = UUID()
+    public var name    : String
+    public var note    : String = ""
+    public var website : URL?
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
     /// Droits de propriété sur le bien
@@ -203,7 +205,8 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
                 initialValue     : Double = 0.0,
                 initialInterest  : Double = 0.0,
                 yearlyPayement   : Double = 0.0,
-                yearlyCost       : Double = 0.0) {
+                yearlyCost       : Double = 0.0,
+                website          : URL?   = nil) {
         self.name             = name
         self.note             = note
         self.type             = type
@@ -217,6 +220,7 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
         self.refState         = State(firstYear         : firstYear,
                                       initialInterest   : initialInterest,
                                       initialInvestment : initialValue - initialInterest)
+        self.website         = website
     }
     
     // MARK: - Methods

@@ -68,10 +68,10 @@ struct RealEstateDetailedView: View {
     @EnvironmentObject var uiState    : UIState
 
     // commun
-    private var originalItem          : RealEstateAsset?
-    @State private var localItem      : RealEstateAsset
-    @State private var alertItem      : AlertItem?
-    @State private var index          : Int?
+    private var originalItem     : RealEstateAsset?
+    @State private var localItem : RealEstateAsset
+    @State private var alertItem : AlertItem?
+    @State private var index     : Int?
     // à adapter
     @StateObject private var assetVM : RealEstateViewModel
 
@@ -79,7 +79,8 @@ struct RealEstateDetailedView: View {
         Form {
             LabeledTextField(label: "Nom", defaultText: "obligatoire", text: $localItem.name)
             LabeledTextEditor(label: "Note", text: $localItem.note)
-            
+            WebsiteEditView(website: $localItem.website)
+
             /// acquisition
             Section(header: Text("ACQUISITION")) {
                 Group {
@@ -203,7 +204,7 @@ struct RealEstateDetailedView: View {
             index      = nil
         }
     }
-    
+
     private func resetSimulation() {
         // remettre à zéro la simulation et sa vue
         simulation.notifyComputationInputsModification()

@@ -34,7 +34,8 @@ struct ScpiDetailedView: View {
         Form {
             LabeledTextField(label: "Nom", defaultText: "obligatoire", text: $localItem.name)
             LabeledTextEditor(label: "Note", text: $localItem.note)
-            
+            WebsiteEditView(website: $localItem.website)
+
             /// acquisition
             Section(header: Text("ACQUISITION")) {
                 DatePicker(selection: $localItem.buyingDate,
