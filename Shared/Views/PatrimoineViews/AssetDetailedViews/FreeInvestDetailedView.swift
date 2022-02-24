@@ -30,7 +30,8 @@ struct FreeInvestDetailedView: View {
         Form {
             LabeledTextField(label: "Nom", defaultText: "obligatoire", text: $localItem.name)
             LabeledTextEditor(label: "Note", text: $localItem.note)
-            
+            WebsiteEditView(website: $localItem.website)
+
             /// propriété
             OwnershipView(ownership  : $localItem.ownership,
                           totalValue : localItem.value(atEndOf  : CalendarCst.thisYear))
