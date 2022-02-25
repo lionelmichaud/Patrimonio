@@ -34,6 +34,11 @@ struct LabeledTextEditor : View {
 
 // MARK: - Saisie d'un text "TextField"
 
+/// Affiche un `label` au gauche et un `text` éditable à droite
+///   - label: texte à gauche
+///   - labelWidth: largeur du label (70 par défaut)
+///   - defaultText: texte par défaut si le `text`initial est vide
+///   - text: texte éditable à droite
 struct LabeledTextField : View {
     let label         : String
     let labelWidth    : Int
@@ -48,9 +53,15 @@ struct LabeledTextField : View {
         }
     }
     
+    /// Affiche un `label` au gauche et un `text` à droite
+    /// - Parameters:
+    ///   - label: texte à gauche
+    ///   - labelWidth: largeur du label (70 par défaut)
+    ///   - defaultText: texte par défaut si le `text`initial est vide
+    ///   - text: texte éditable à droite
     init(label       : String,
          labelWidth  : Int = 70,
-         defaultText : String?  = nil,
+         defaultText : String? = nil,
          text        : Binding<String>) {
         self.label       = label
         self.labelWidth  = labelWidth > 0 ? labelWidth : 70

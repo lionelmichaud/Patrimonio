@@ -24,19 +24,25 @@ struct DossierPropertiesView: View {
 
     var body: some View {
         Section(header: Text(sectionHeader)) {
-            Text(dossier.name).font(.headline)
+            LabeledText(label: "Nom du dossier",
+                        text : dossier.name)
             if dossier.isActive {
                 LabeledText(label: "Etat",
-                            text : savable() ? "Modifié" : "Synchronisé")
+                            text : savable() ? "Modifié et non sauvegardé" : "Sauvegardé")
             }
             if dossier.note.isNotEmpty {
-                Text(dossier.note).multilineTextAlignment(.leading)
+                HStack {
+                    Text("Note de dossier")
+                        .padding(.trailing)
+                    Spacer()
+                    Text(dossier.note).multilineTextAlignment(.leading)
+                }
             }
             LabeledText(label: "Date de céation",
                         text : dossier.dateCreationStr)
             LabeledText(label: "Date de dernière modification",
                         text : "\(dossier.dateModificationStr) à \(dossier.hourModificationStr)")
-            LabeledText(label: "Nom du directory associé",
+            LabeledText(label: "Nom du répertoire associé",
                         text : dossier.folderName)
         }
     }
