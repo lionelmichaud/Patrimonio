@@ -29,7 +29,7 @@ public struct Donation: Codable, Hashable {
 
     // MARK: - Initializers
 
-    init() {
+    public init() {
         clause = LifeInsuranceClause()
         // une donation ne peut pas être optionnelle
         clause.isOptional = false
