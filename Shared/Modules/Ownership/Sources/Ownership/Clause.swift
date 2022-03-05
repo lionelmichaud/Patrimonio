@@ -9,19 +9,19 @@
 import Foundation
 
 public enum ClauseError: String, Error {
-    case invalidClause = "La clause de l'assurance vie n'est pas valide"
+    case invalidClause = "La clause n'est pas valide"
 }
 
-// MARK: - Clause bénéficiaire d'assurance vie
+// MARK: - Clause bénéficiaire d'assurance vie ou de donation
 
-/// Clause bénéficiaire d'assurance vie
+/// Clause bénéficiaire d'assurance vie ou de donation
 /// - Warning:
 ///   - le cas de plusieurs usufruitiers bénéficiaires n'est pas traité
 ///   - le cas de parts non égales entre nue-propriétaires bénéficiaires n'est pas traité
-public struct LifeInsuranceClause: Codable, Hashable {
-
+public struct Clause: Codable, Hashable {
+    
     // MARK: - Properties
-
+    
     public var isOptional   : Bool = false
     public var isDismembered: Bool = false
     /// Bénéficiaires en PP
@@ -38,11 +38,11 @@ public struct LifeInsuranceClause: Codable, Hashable {
             case (true, true):
                 // une clause à option ne doit pas être démembrée
                 return false
-
+                
             case (true, false):
                 // un seul donataire désigné en PP dans une clause à option (celui qui exerce l'option)
                 return fullRecipients.count == 1 && fullRecipients.isvalid
-
+                
             case (false, true):
                 // il doit y avoir au moins 1 usufruitier et 1 nu-propriétaire
                 return usufructRecipient.isNotEmpty && bareRecipients.isNotEmpty
@@ -61,7 +61,7 @@ public struct LifeInsuranceClause: Codable, Hashable {
             case (true, true):
                 // une clause à option ne doit pas être démembrée
                 return "Une clause à option ne doit pas être démembrée"
-
+                
             case (true, false):
                 // un seul donataire désigné en PP dans une clause à option (celui qui exerce l'option)
                 if !fullRecipients.isvalid {
@@ -70,7 +70,7 @@ public struct LifeInsuranceClause: Codable, Hashable {
                 if fullRecipients.count != 1 {
                     return "La liste des donataires de la clause à option inclue plusieurs donataires"
                 }
-
+                
             case (false, true):
                 if usufructRecipient.isEmpty {
                     return "La clause est démembrée en n'a pas de donataire en UF"
@@ -93,10 +93,10 @@ public struct LifeInsuranceClause: Codable, Hashable {
     public init() { }
 }
 
-extension LifeInsuranceClause: CustomStringConvertible {
+extension Clause: CustomStringConvertible {
     public var description: String {
         let header = """
-        - Valide: \(isValid.frenchString)
+        - Valide: \(isValid.frenchString) \(isValid ? "" : " cause: ") \(invalidityCause ?? "")
         - Clause à option : \(isOptional.frenchString)
         - Clause démembrée: \(isDismembered.frenchString)
 

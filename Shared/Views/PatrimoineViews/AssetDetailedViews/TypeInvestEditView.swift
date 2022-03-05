@@ -19,7 +19,7 @@ struct TypeInvestEditView : View {
     @Binding var investType       : InvestementKind
     @State private var typeIndex  : Int
     @State private var isPeriodic : Bool
-    @State private var clause     : LifeInsuranceClause
+    @State private var clause     : Clause
 
     var body: some View {
         Group {
@@ -73,41 +73,35 @@ struct TypeInvestEditView : View {
                 
             default:
                 self._isPeriodic = State(initialValue: false)
-                self._clause     = State(initialValue: LifeInsuranceClause())
-        }
-    }
-
-    // MARK: - Methods
-
-    private func bareRecipientsSummary(clause: LifeInsuranceClause) -> String {
-        if clause.bareRecipients.isEmpty {
-            return ""
-        } else if clause.bareRecipients.count == 1 {
-            return clause.bareRecipients.first!
-        } else {
-            return "\(clause.bareRecipients.count) personnes"
-        }
-    }
-
-    private func fullRecipientsSummary(clause: LifeInsuranceClause) -> String {
-        if clause.fullRecipients.isEmpty {
-            return ""
-        } else if clause.fullRecipients.count == 1 {
-            return clause.fullRecipients.first!.name
-        } else {
-            return "\(clause.fullRecipients.count) personnes"
+                self._clause     = State(initialValue: Clause())
         }
     }
 }
 
 struct TypeInvestEditView_Previews: PreviewProvider {
-    static var family     = Family()
-
+    static func clause() -> Clause {
+        var theClause = Clause()
+        theClause.isOptional        = false
+        theClause.isDismembered     = true
+        theClause.usufructRecipient = "M. Lionel MICHAUD"
+        theClause.bareRecipients    = ["Enfant 1", "Enfant 2"]
+        return theClause
+    }
+    static func investementKind() -> InvestementKind {
+        InvestementKind.lifeInsurance(periodicSocialTaxes: true, clause: clause())
+    }
+    
     static var previews: some View {
-        Form {
-            TypeInvestEditView(investType: .constant(InvestementKind.lifeInsurance()))
-                .environmentObject(family)
-        }
-        .previewDisplayName("TypeInvestEditView")
+        loadTestFilesFromBundle()
+        return
+            NavigationView {
+                EmptyView()
+                Form {
+                    TypeInvestEditView(investType: .constant(investementKind()))
+                        .environmentObject(familyTest)
+                }
+            }
+            .preferredColorScheme(.dark)
+            .previewDisplayName("TypeInvestEditView")
     }
 }

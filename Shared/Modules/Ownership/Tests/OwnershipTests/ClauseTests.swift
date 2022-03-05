@@ -1,5 +1,5 @@
 //
-//  LifeInsuranceClauseTests.swift
+//  ClauseTests.swift
 //  PatrimoineTests
 //
 //  Created by Lionel MICHAUD on 06/02/2021.
@@ -9,11 +9,11 @@
 import XCTest
 @testable import Ownership
 
-class LifeInsuranceClauseTests: XCTestCase {
+class ClauseTests: XCTestCase {
 
     func test_description() {
-        print("Test de LifeInsuranceClause.description")
-        var clause = LifeInsuranceClause()
+        print("Test de Clause.description")
+        var clause = Clause()
         // clause sans option
         print("Clause sans option")
         clause.isOptional        = false
@@ -36,7 +36,7 @@ class LifeInsuranceClauseTests: XCTestCase {
     }
     
     func test_clause_sans_option_non_valide() {
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         
         clause.isOptional    = false
         clause.isDismembered = true
@@ -58,7 +58,7 @@ class LifeInsuranceClauseTests: XCTestCase {
     }
     
     func test_clause_avec_option_non_valide() {
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
 
         clause.isOptional    = true
         clause.isDismembered = true
@@ -74,7 +74,7 @@ class LifeInsuranceClauseTests: XCTestCase {
     }
         
     func test_clause_sans_option_valide() {
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         
         clause.isOptional    = false
         clause.isDismembered = false
@@ -94,7 +94,7 @@ class LifeInsuranceClauseTests: XCTestCase {
     }
 
     func test_clause_avec_option_valide() {
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         
         clause.isOptional    = true
         clause.isDismembered = false

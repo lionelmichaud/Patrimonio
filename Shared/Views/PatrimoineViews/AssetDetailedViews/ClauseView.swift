@@ -11,7 +11,7 @@ import FamilyModel
 
 struct ClauseView: View {
     @EnvironmentObject var family : Family
-    @Binding var clause: LifeInsuranceClause
+    @Binding var clause: Clause
     let beneficiaireStr = "Bénéficiaire"
     let usufruitierStr  = "Bénéficiaire de l'Usufruitier"
     let nuPropStr       = "Bénéficiaires de la Nue-Propriété"
@@ -54,7 +54,7 @@ struct ClauseView: View {
 
     // MARK: - Methods
     
-    private func bareRecipientsSummary(clause: LifeInsuranceClause) -> String {
+    private func bareRecipientsSummary(clause: Clause) -> String {
         if clause.bareRecipients.isEmpty {
             return ""
         } else if clause.bareRecipients.count == 1 {
@@ -64,7 +64,7 @@ struct ClauseView: View {
         }
     }
     
-    private func fullRecipientsSummary(clause: LifeInsuranceClause) -> String {
+    private func fullRecipientsSummary(clause: Clause) -> String {
         if clause.fullRecipients.isEmpty {
             return ""
         } else if clause.fullRecipients.count == 1 {
@@ -76,20 +76,26 @@ struct ClauseView: View {
 }
 
 struct ClauseView_Previews: PreviewProvider {
-    static func clause() -> LifeInsuranceClause {
-        var theClause = LifeInsuranceClause()
+    static func clause() -> Clause {
+        var theClause = Clause()
         theClause.isOptional        = false
         theClause.isDismembered     = true
-        theClause.usufructRecipient = "Conjoint"
-        theClause.bareRecipients    = ["Enfant1"]
+        theClause.usufructRecipient = "M. Lionel MICHAUD"
+        theClause.bareRecipients    = ["Enfant 1", "Enfant 2"]
         return theClause
     }
     
     static var previews: some View {
         loadTestFilesFromBundle()
-        return Form {
-            ClauseView(clause: .constant(clause()))
-        }
-        .environmentObject(familyTest)
+        return
+            NavigationView {
+                EmptyView()
+                Form {
+                    ClauseView(clause: .constant(clause()))
+                }
+            }
+            .environmentObject(familyTest)
+            .preferredColorScheme(.dark)
+            .previewDisplayName("ClauseView")
     }
 }

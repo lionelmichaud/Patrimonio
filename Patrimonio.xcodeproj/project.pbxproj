@@ -211,6 +211,8 @@
 		79735EED263242FA00CD952F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79735EE9263242FA00CD952F /* ContentView.swift */; };
 		797390772782202B00543B74 /* PatrimoineSummaryRiskChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797390762782202B00543B74 /* PatrimoineSummaryRiskChartView.swift */; };
 		797390782782202B00543B74 /* PatrimoineSummaryRiskChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797390762782202B00543B74 /* PatrimoineSummaryRiskChartView.swift */; };
+		7973A66A27D3EE6600C2572F /* Donation in Frameworks */ = {isa = PBXBuildFile; productRef = 7973A66927D3EE6600C2572F /* Donation */; };
+		7973A66C27D3EE7000C2572F /* Donation in Frameworks */ = {isa = PBXBuildFile; productRef = 7973A66B27D3EE7000C2572F /* Donation */; };
 		7974156226AB51E300683A3A /* Persistable in Frameworks */ = {isa = PBXBuildFile; productRef = 7974156126AB51E300683A3A /* Persistable */; };
 		7974156426AB51FA00683A3A /* Persistable in Frameworks */ = {isa = PBXBuildFile; productRef = 7974156326AB51FA00683A3A /* Persistable */; };
 		797574AE26C13C8C00842572 /* LifeExpense in Frameworks */ = {isa = PBXBuildFile; productRef = 797574AD26C13C8C00842572 /* LifeExpense */; };
@@ -918,6 +920,7 @@
 				79FC3D3B262C760A00A6184B /* Statistics in Frameworks */,
 				79E713EE262C9891000FD625 /* EconomyModel in Frameworks */,
 				792874F426E130A20011913B /* FamilyModel in Frameworks */,
+				7973A66A27D3EE6600C2572F /* Donation in Frameworks */,
 				794B016126B9C12400882684 /* AssetsModel in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -940,6 +943,7 @@
 				799074262660524C00F224F7 /* FileAndFolder in Frameworks */,
 				7988A96526E1790800E00861 /* SimulationLogger in Frameworks */,
 				796A707926E6A11D00769D1E /* Kpi in Frameworks */,
+				7973A66C27D3EE7000C2572F /* Donation in Frameworks */,
 				79155AF726E115E400757981 /* PatrimoineModel in Frameworks */,
 				794B016326B9C12C00882684 /* AssetsModel in Frameworks */,
 				797574AE26C13C8C00842572 /* LifeExpense in Frameworks */,
@@ -1843,6 +1847,7 @@
 				796A707626E6A0F500769D1E /* Kpi */,
 				79522AD7275C17FD00926726 /* CashFlow */,
 				797BD5F52767F70A00A9355B /* AppFoundation */,
+				7973A66927D3EE6600C2572F /* Donation */,
 			);
 			productName = "Patrimonio (iOS)";
 			productReference = 7920DC51262C700500536B03 /* Patrimonio.app */;
@@ -1892,6 +1897,7 @@
 				7988A96426E1790800E00861 /* SimulationLogger */,
 				796A707826E6A11D00769D1E /* Kpi */,
 				79522AD9275C180800926726 /* CashFlow */,
+				7973A66B27D3EE7000C2572F /* Donation */,
 			);
 			productName = "Patrimonio (macOS)";
 			productReference = 7920DC59262C700500536B03 /* Patrimonio.app */;
@@ -3116,6 +3122,14 @@
 		79706280262C7B82009A18F0 /* UnemployementModel */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = UnemployementModel;
+		};
+		7973A66927D3EE6600C2572F /* Donation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Donation;
+		};
+		7973A66B27D3EE7000C2572F /* Donation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Donation;
 		};
 		7974156126AB51E300683A3A /* Persistable */ = {
 			isa = XCSwiftPackageProductDependency;

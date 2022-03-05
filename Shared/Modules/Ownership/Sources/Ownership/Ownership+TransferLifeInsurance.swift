@@ -46,7 +46,7 @@ extension Ownership {
     public mutating func transferLifeInsurance(of decedentName    : String,
                                                spouseName         : String?,
                                                childrenName       : [String]?,
-                                               accordingTo clause : inout LifeInsuranceClause,
+                                               accordingTo clause : inout Clause,
                                                verbose            : Bool = false) throws {
         guard isValid else {
             let invalid = self
@@ -200,7 +200,7 @@ extension Ownership {
     (of decedentName    : String,
      spouseName         : String?,
      childrenName       : [String]?,
-     accordingTo clause : inout LifeInsuranceClause,
+     accordingTo clause : inout Clause,
      verbose            : Bool = false) throws {
         // (B) le capital de l'assurance vie n'est pas démembré
         // le défunt est-il un des PP propriétaires du capital de l'assurance vie ?

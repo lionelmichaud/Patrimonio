@@ -21,12 +21,12 @@ struct DonationView: View {
 
 struct DonationView_Previews: PreviewProvider {
     static func donation() -> Donation {
-        var theClause = LifeInsuranceClause()
+        var theClause = Clause()
         theClause.isOptional        = false
         theClause.isDismembered     = true
-        theClause.usufructRecipient = "Conjoint"
-        theClause.bareRecipients    = ["Enfant1"]
-        
+        theClause.usufructRecipient = "M. Lionel MICHAUD"
+        theClause.bareRecipients    = ["Enfant 1", "Enfant 2"]
+
         var donation = Donation()
         donation.clause = theClause
         
@@ -35,9 +35,15 @@ struct DonationView_Previews: PreviewProvider {
     
     static var previews: some View {
         loadTestFilesFromBundle()
-        return Form {
-            DonationView(donation: .constant(donation()))
-        }
-        .environmentObject(familyTest)
+        return
+            NavigationView {
+                EmptyView()
+                Form {
+                    DonationView(donation: .constant(donation()))
+                }
+            }
+            .environmentObject(familyTest)
+            .preferredColorScheme(.dark)
+            .previewDisplayName("DonationView")
     }
 }

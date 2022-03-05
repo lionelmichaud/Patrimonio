@@ -326,7 +326,7 @@ extension OwnershipManager {
     ///   - clause: la clause à modifier
     ///   - childrenName: nom des enfants du défunt
     func manageRecipientDeath(decedentName      : String,
-                              withClause clause : inout LifeInsuranceClause,
+                              withClause clause : inout Clause,
                               childrenName      : [String]?) {
         if clause.isDismembered {
             // (A) la clause est est démembrée

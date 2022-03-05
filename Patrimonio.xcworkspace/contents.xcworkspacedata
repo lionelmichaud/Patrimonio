@@ -47,6 +47,9 @@
       location = "group:Shared/Modules/Ownership">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/Donation">
+   </FileRef>
+   <FileRef
       location = "group:Shared/Modules/Persistence">
    </FileRef>
    <FileRef

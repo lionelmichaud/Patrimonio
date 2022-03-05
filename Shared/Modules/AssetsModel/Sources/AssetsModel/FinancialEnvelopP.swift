@@ -14,7 +14,7 @@ import Ownership
 public protocol FinancialEnvelopP: OwnableP {
     var type            : InvestementKind { get set }
     var isLifeInsurance : Bool { get }
-    var clause          : LifeInsuranceClause? { get }
+    var clause          : Clause? { get }
     
     func isOpen(in year: Int) -> Bool
 }
@@ -28,7 +28,7 @@ public extension FinancialEnvelopP {
                 return false
         }
     }
-    var clause: LifeInsuranceClause? {
+    var clause: Clause? {
         switch type {
             case .lifeInsurance(_, let clause):
                 return clause

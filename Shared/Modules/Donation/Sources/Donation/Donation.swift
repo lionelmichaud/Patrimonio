@@ -7,13 +7,14 @@
 
 import Foundation
 import AppFoundation
+import Ownership
 
 /// Donation d'un bien par une personne
 public struct Donation: Codable, Hashable {
     /// Année à la fin de laqelle la donation est effectuée
     public var atEndOfYear : Int = CalendarCst.thisYear
     /// Désigne les donataires
-    public var clause      : LifeInsuranceClause
+    public var clause      : Clause
 
     public var isValid: Bool {
         clause.isValid && clause.isOptional == false
@@ -30,7 +31,7 @@ public struct Donation: Codable, Hashable {
     // MARK: - Initializers
 
     public init() {
-        clause = LifeInsuranceClause()
+        clause = Clause()
         // une donation ne peut pas être optionnelle
         clause.isOptional = false
     }
@@ -38,6 +39,17 @@ public struct Donation: Codable, Hashable {
 
 extension Donation: CustomStringConvertible {
     public var description: String {
-        clause.description
+        let header = """
+        - Valide: \(isValid.frenchString) \(isValid ? "" : " cause: ") \(invalidityCause ?? "")
+        - Clause démembrée: \(clause.isDismembered.frenchString)
+
+        """
+        let fr =
+            !clause.isDismembered ? "   - Bénéficiaire en PP:\n      \(clause.fullRecipients)" : ""
+        let ur =
+            clause.isDismembered ? "   - Bénéficiaire en UF:\n      \(clause.usufructRecipient) \n" : ""
+        let br =
+            clause.isDismembered ? "   - Bénéficiaire en NP:\n      \(clause.bareRecipients)" : ""
+        return header + fr + ur + br
     }
 }

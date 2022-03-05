@@ -14,7 +14,7 @@ import Ownership
 
 public enum InvestementKind {
     case lifeInsurance (periodicSocialTaxes: Bool = true,
-                        clause: LifeInsuranceClause = LifeInsuranceClause())
+                        clause: Clause = Clause())
     case pea
     case other
     
@@ -88,7 +88,7 @@ extension InvestementKind: Codable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         // decode .lifeInsurance
         if let valueTaxes = try? values.decode(Bool.self, forKey: .lifeInsurance_taxes) {
-            if let valueClause = try? values.decode(LifeInsuranceClause.self, forKey: .lifeInsurance_clause) {
+            if let valueClause = try? values.decode(Clause.self, forKey: .lifeInsurance_clause) {
                 self = .lifeInsurance(periodicSocialTaxes: valueTaxes, clause: valueClause)
                 return
             }

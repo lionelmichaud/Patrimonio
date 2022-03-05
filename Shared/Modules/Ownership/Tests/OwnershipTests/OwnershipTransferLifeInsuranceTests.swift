@@ -57,7 +57,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase { // swiftlint:disable:thi
     
     func test_transfer_Life_Insurance_non_demembrée () {
         var ownership = Ownership(ageOf: Tests.ageOf)
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         
         // (B) le capital de l'assurance vie n'est pas démembré
         // (a) le défunt est un des PP propriétaires du capital de l'assurance vie
@@ -216,7 +216,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase { // swiftlint:disable:thi
 
     func test_transfer_Life_Insurance_demembrée () {
         var ownership = Ownership(ageOf: OwnershipTransferLifeInsuranceTests.ageOf)
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         
         // (A) le capital de l'assurane vie est démembré
         // (1) le défunt est usufruitier
@@ -272,7 +272,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase { // swiftlint:disable:thi
     
     func test_transferDismemberedLifeInsurance_do_nothing() {
         var ownership = Ownership(ageOf: OwnershipTransferLifeInsuranceTests.ageOf)
-        let clause = LifeInsuranceClause()
+        let clause = Clause()
         
         // (A) le capital de l'assurane vie est démembré
         // (3) le défunt n'est ni usufruitier ni nue-propriétaire => on ne fait rien
@@ -297,7 +297,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase { // swiftlint:disable:thi
 
     func test_transferDismemberedLifeInsurance_fail_many_fullOwners() {
         var ownership = Ownership(ageOf: OwnershipTransferLifeInsuranceTests.ageOf)
-        let clause = LifeInsuranceClause()
+        let clause = Clause()
         
         // (A) le capital de l'assurane vie est démembré
         // (1) le défunt est usufruitier
@@ -321,7 +321,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase { // swiftlint:disable:thi
     
     func test_transferDismemberedLifeInsurance_fail_no_bareOwner() {
         var ownership = Ownership(ageOf: OwnershipTransferLifeInsuranceTests.ageOf)
-        let clause = LifeInsuranceClause()
+        let clause = Clause()
         
         // (A) le capital de l'assurane vie est démembré
         // (1) le défunt est usufruitier
@@ -342,7 +342,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase { // swiftlint:disable:thi
     
     func test_transferDismemberedLifeInsurance_fail_decedent_is_bareOwner() {
         var ownership = Ownership(ageOf: OwnershipTransferLifeInsuranceTests.ageOf)
-        let clause = LifeInsuranceClause()
+        let clause = Clause()
         
         // (A) le capital de l'assurane vie est démembré
         // (1) le défunt est usufruitier
@@ -365,7 +365,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase { // swiftlint:disable:thi
     
     func test_transferDismemberedLifeInsurance_do_transfer() {
         var ownership = Ownership(ageOf: OwnershipTransferLifeInsuranceTests.ageOf)
-        let clause = LifeInsuranceClause()
+        let clause = Clause()
         
         // (A) le capital de l'assurane vie est démembré
         // (1) le défunt est usufruitier
@@ -397,7 +397,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase { // swiftlint:disable:thi
 
     func test_transferUndismemberedLifeInsurance() {
         var ownership = Ownership(ageOf: Tests.ageOf)
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         
         // (B) le capital de l'assurance vie n'est pas démembré
         // (a) le défunt est un des PP propriétaires du capital de l'assurance vie
@@ -428,7 +428,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase { // swiftlint:disable:thi
     
     func test_transferUndismemberedLifeInsToUsufructAndBareOwners() {
         var ownership = Ownership(ageOf: OwnershipTransferLifeInsuranceTests.ageOf)
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         
         // (B) le capital de l'assurance vie n'est pas démembré
         // (a) le défunt est un des PP propriétaires du capital de l'assurance vie
@@ -464,7 +464,7 @@ class OwnershipTransferLifeInsuranceTests: XCTestCase { // swiftlint:disable:thi
 
     func test_transferUndismemberedLifeInsFullOwnership() {
         var ownership = Ownership(ageOf: OwnershipTransferLifeInsuranceTests.ageOf)
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         
         // (B) le capital de l'assurance vie n'est pas démembré
         // (a) le défunt est un des PP propriétaires du capital de l'assurance vie
