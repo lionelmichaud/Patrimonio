@@ -282,7 +282,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         return (deltaInvestment, deltaInterest)
     }
     
-    /// somme des versements + somme des intérêts
+    /// Retourne la valeur estimée en fin d'année `year` = somme des versements + somme des intérêts
     public func value(atEndOf year: Int) -> Double {
         if year == self.currentState.year {
             // valeur de la dernière année simulée
@@ -299,7 +299,10 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
                                    initialValue : lastKnownState.value)
         }
     }
-    
+
+    /// True si le bien est déjà ouvert en fin d'année `year`.
+    /// Cad si `lastKnownState.year` <= `year`
+    /// - Parameter year: Année
     public func isOpen(in year: Int) -> Bool {
         (lastKnownState.year...).contains(year) && isOpen
     }
@@ -364,13 +367,14 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         return value
     }
     
-    /// Réaliser un versement
-    /// - Parameter amount: montant du versement
+    /// Réaliser un dépôt
+    /// - Parameter amount: Montant du dépôt
+    /// - Note: Les intérêts sur le dépôt seront comptabilisés dès que `capitalize()` sera appelée.
     public mutating func deposit(_ amount: Double) {
         currentState.investment += amount
     }
     
-    /// Capitaliser les intérêts d'une année: à faire une fois par an et apparaissent dans l'année courante
+    /// Capitaliser les intérêts de l'année `year`: à faire une fois par an et apparaissent dans l'année `year`.
     /// - Note: Si la volatilité est prise en compte dans le modèle économique alors le taux change chaque année
     public mutating func capitalize(atEndOf year: Int) throws {
         guard (currentState.year ... (currentState.year + 1)).contains(year) else {

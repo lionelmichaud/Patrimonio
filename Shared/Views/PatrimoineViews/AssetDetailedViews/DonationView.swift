@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Ownership
+import Donation
 
 struct DonationView: View {
     @Binding var donation: Donation

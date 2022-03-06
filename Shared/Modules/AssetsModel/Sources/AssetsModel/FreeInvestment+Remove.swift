@@ -92,22 +92,24 @@ extension FreeInvestement {
     }
     
     /// Effectuer un retrait de `netAmount` NET de charges sociales pour le compte d'un débiteur nommé `name`.
-    /// - Note:
-    ///     Si `name` = "" : on retire le montant indépendament de tout droit de propriété
     ///
-    ///     Si `name` != "" : on tient compte des droit de propriété de `name` sur le bien:
-    ///     - Le retrait n'est alors autorisé que si `name` possède une part de la PP du bien.
-    ///     - Autorise le retrait dans la limite de la part de propriété de `name`.
-    ///     - Met à jour la part de propriété de `name` en conséquence.
-    /// - Returns:
-    ///     - revenue: retrait net de charges sociales réellement obtenu (= netAmount si le capital est suffisant, moins sinon)
-    ///     - interests: intérêts bruts avant charges sociales
-    ///     - netInterests: intérêts nets de charges sociales
-    ///     - taxableInterests: part des netInterests imposable à l'IRPP
-    ///     - socialTaxes: charges sociales sur les intérêts
     /// - Parameters:
-    ///   - netAmount: retrait net de charges sociales souhaité
-    ///   - name: nom du débiteur ou nil
+    ///   - netAmount: Retrait net de charges sociales souhaité
+    ///   - name: Nom du débiteur ou nil
+    ///
+    /// - Returns:
+    ///   revenue: retrait net de charges sociales réellement obtenu (= netAmount si le capital est suffisant, moins sinon)
+    ///   interests: intérêts bruts avant charges sociales
+    ///   netInterests: intérêts nets de charges sociales
+    ///   taxableInterests: part des netInterests imposable à l'IRPP
+    ///   socialTaxes: charges sociales sur les intérêts
+    ///
+    /// - Note: Si `name` = "" : on retire le montant indépendament de tout droit de propriété
+    /// - Note: Si `name` != "" : on tient compte des droit de propriété de `name` sur le bien:
+    ///       Le retrait n'est alors autorisé que si `name` possède une part de la PP du bien.
+    ///       Autorise le retrait dans la limite de la part de propriété de `name`.
+    ///       Met à jour la part de propriété de `name` en conséquence.
+    ///
     public mutating func withdrawal(netAmount : Double, // swiftlint:disable:this cyclomatic_complexity
                                     for name  : String = "",
                                     verbose   : Bool = false)
@@ -241,10 +243,10 @@ extension FreeInvestement {
 
     /// Retirer les capitaux décès de `decedentName` de l'assurance vie
     /// si l'AV n'est pas démembrée et si `decedentName` est un des PP
-    /// - Warning: les droits de propriété ne sont PAS mis à jour en conséquence
+    /// - Warning: Les droits de propriété ne sont PAS mis à jour en conséquence
     /// - Parameters:
-    ///   - decedentName: nom du défunt
-    ///   - year: année du décès
+    ///   - decedentName: Nom du défunt
+    ///   - year: Année du décès
     public mutating func withdrawLifeInsuranceCapitalDeces(of decedentName : String) {
         guard isLifeInsurance else {
             return
