@@ -153,10 +153,10 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     /// - Parameters:
     ///   - year: fin de l'année
     /// - Returns:
-    ///   - revenue: revenus inscrit en compte courant avant prélèvements sociaux et IRPP (ou IS) mais net d'inflation
+    ///   - revenue: revenus inscrit en compte courant avant prélèvements sociaux et IRPP mais net d'inflation
     ///   - taxableIrpp: part des revenus inscrit en compte courant imposable à l'IRPP (après charges sociales)
-    ///   - socialTaxes: charges sociales (si imposable à l'IRPP)
-    public func yearlyRevenue(during year: Int)
+    ///   - socialTaxes: charges sociales
+    public func yearlyRevenueIRPP(during year: Int)
     -> (revenue    : Double,
         taxableIrpp: Double,
         socialTaxes: Double) {
@@ -167,6 +167,21 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
         return (revenue    : revenue,
                 taxableIrpp: taxableIrpp,
                 socialTaxes: revenue - taxableIrpp)
+    }
+    
+    /// Revenus annuels net d'inflation (cas taxable à l'IS)
+    ///
+    /// On retire l'inflation du taux de rendement annuel car côté dépenses, celles-ci ne sont pas augmentée de l'inflation chaque année.
+    ///
+    /// Le revenu est calculé comme suit: (rendement - inflation) x valeur d'acquisition
+    ///
+    /// - Parameters:
+    ///   - year: fin de l'année
+    /// - Returns: revenus inscrit en compte courant avant IS mais net d'inflation
+    public func yearlyRevenueIS(during year: Int) -> Double {
+        isOwned(during: year) ?
+                            buyingPrice * (interestRate - SCPI.inflation) / 100.0 :
+                            0.0
     }
     
     /// True si l'année est postérieure à l'année de vente

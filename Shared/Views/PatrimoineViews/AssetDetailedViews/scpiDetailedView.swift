@@ -54,16 +54,16 @@ struct ScpiDetailedView: View {
                 PercentEditView(label: "Taux de rendement annuel brut",
                                 percent: $localItem.interestRate)
                 AmountView(label: "Revenu annuel brut déflaté (avant prélèvements sociaux et IRPP)",
-                           amount: localItem.yearlyRevenue(during: CalendarCst.thisYear).revenue)
+                           amount: localItem.yearlyRevenueIRPP(during: CalendarCst.thisYear).revenue)
                     .foregroundColor(.secondary)
                 AmountView(label: "Charges sociales (si imposable à l'IRPP)",
-                           amount: localItem.yearlyRevenue(during: CalendarCst.thisYear).socialTaxes)
+                           amount: localItem.yearlyRevenueIRPP(during: CalendarCst.thisYear).socialTaxes)
                     .foregroundColor(.secondary)
                 AmountView(label: "Revenu annuel déflaté net de charges sociales (imposable à l'IRPP)",
-                           amount: localItem.yearlyRevenue(during: CalendarCst.thisYear).taxableIrpp)
+                           amount: localItem.yearlyRevenueIRPP(during: CalendarCst.thisYear).taxableIrpp)
                     .foregroundColor(.secondary)
                 AmountView(label: "Revenu annuel déflaté net d'IS (si imposable à l'IS)",
-                           amount: model.fiscalModel.companyProfitTaxes.net(localItem.yearlyRevenue(during: CalendarCst.thisYear).revenue))
+                           amount: model.fiscalModel.companyProfitTaxes.net(localItem.yearlyRevenueIRPP(during: CalendarCst.thisYear).revenue))
                     .foregroundColor(.secondary)
                 PercentEditView(label: "Taux de réévaluation annuel",
                                 percent: $localItem.revaluatRate)

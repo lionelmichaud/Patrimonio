@@ -125,18 +125,19 @@ public struct SciCashFlowLine {
             // FIXME: Ca ne marche pas comme ca. C'est toute la SCI dont il faut géréer les droit de propriété. Pas chaque SCPI individuellement.
             
             /// Revenus
-            var adultRevenue : Double = 0
+            var adultDividendsRevenue : Double = 0
             if scpi.providesRevenue(to: adultsName) {
-                let yearlyRevenue = scpi.yearlyRevenue(during: year)
+                let yearlyRevenue = scpi.yearlyRevenueIS(during: year)
                 let adultFraction = scpi.ownership.ownedRevenueFraction(by: adultsName)
                 // revenus inscrit en compte courant avant IS
                 // dans le cas d'une SCI, le revenu remboursable aux actionnaires c'est le net d'IS
-                // FIXME: Les revenus devraient être affectés en fonction des droits de propriété de chacun
-                adultRevenue = adultFraction / 100.0 * yearlyRevenue.revenue
+                // FIXME: Les revenus devraient être affectés en fonction des droits de propriété de chacun, y.c. aux enfants
+                adultDividendsRevenue = adultFraction / 100.0 * yearlyRevenue
             }
+            // FIXME: Les revenus devraient être affectés en fonction des droits de propriété de chacun, y.c. aux enfants
             revenues.scpiDividends.namedValues
                 .append(NamedValue(name : scpiName,
-                                   value: adultRevenue.rounded()))
+                                   value: adultDividendsRevenue.rounded()))
             
             /// Ventes
             // le produit de la vente se répartit entre UF et NP si démembrement
@@ -144,28 +145,33 @@ public struct SciCashFlowLine {
             // FIXME: Ca ne marche pas comme ca. C'est toute la SCI dont il faut géréer les droit de propriété. Pas chaque SCPI individuellement.
             // populate SCPI sale revenue: produit net d'impôt (IS) sur la plus-value
             // le crédit se fait au début de l'année qui suit la vente
-            var netRevenue: Double = 0
+            var adultSaleNetRevenue: Double = 0
             if scpi.isPartOfPatrimoine(of: adultsName) {
                 let liquidatedValue = scpi.liquidatedValueIS(year - 1)
                 if liquidatedValue.revenue > 0 {
-                    netRevenue = liquidatedValue.netRevenue
+                    let saleNetRevenue = liquidatedValue.netRevenue
                     // créditer le produit de la vente sur les comptes des personnes
                     // en fonction de leur part de propriété respective
-                    let ownedSaleValues = scpi.ownedValues(ofValue           : liquidatedValue.netRevenue,
+                    let ownedSaleValues = scpi.ownedValues(ofValue           : saleNetRevenue,
                                                            atEndOf           : year,
                                                            evaluationContext : .patrimoine)
                     let netCashFlowManager = NetCashFlowManager()
                     netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
                                                      in            : patrimoine,
                                                      atEndOf       : year)
+                    // FIXME: Les revenus devraient être affectés en fonction des droits de propriété de chacun, y.c. aux enfants
+                    let adultFraction = scpi.ownership.ownedRevenueFraction(by: adultsName)
+                    adultSaleNetRevenue = adultFraction / 100.0 * saleNetRevenue
                 }
             }
+            // FIXME: Les revenus devraient être affectés en fonction des droits de propriété de chacun, y.c. aux enfants
             revenues.scpiSale.namedValues
                 .append(NamedValue(name : scpiName,
-                                   value: netRevenue.rounded()))
+                                   value: adultSaleNetRevenue.rounded()))
         }
         
-        /// calcul de l'IS de la SCI dû sur les dividendes (sur les ventes: déduit au moment de la vente)
+        /// calcul de l'IS de la SCI dû sur le total des dividendes (sur les ventes: déduit au moment de la vente)
+        // dans le cas d'une SCI, le revenu remboursable aux actionnaires c'est le net d'IS
         IS = model.fiscalModel.companyProfitTaxes.IS(revenues.scpiDividends.total)
     }
     
