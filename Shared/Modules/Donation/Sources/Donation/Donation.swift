@@ -9,15 +9,15 @@ import Foundation
 import AppFoundation
 import Ownership
 
-/// Donation d'un bien par une personne
+/// Donation d'un bien par une personne donateur à des personnes donataires
 public struct Donation: Codable, Hashable {
-    /// Année à la fin de laqelle la donation est effectuée
+    /// Année à la fin de laquelle la donation est effectuée
     public var atEndOfYear : Int = CalendarCst.thisYear
     /// Désigne les donataires
     public var clause      : Clause
 
     public var isValid: Bool {
-        clause.isValid && clause.isOptional == false
+        clause.isValid && !clause.isOptional
     }
 
     public var invalidityCause: String? {
