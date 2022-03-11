@@ -144,7 +144,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
         }
     }
     
-    /// Revenus annuels net d'inflation
+    /// Revenus annuels net d'inflation (cas taxable à l'IRPP)
     ///
     /// On retire l'inflation du taux de rendement annuel car côté dépenses, celles-ci ne sont pas augmentée de l'inflation chaque année.
     ///

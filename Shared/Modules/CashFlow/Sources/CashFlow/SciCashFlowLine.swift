@@ -125,24 +125,24 @@ public struct SciCashFlowLine {
             // FIXME: Ca ne marche pas comme ca. C'est toute la SCI dont il faut géréer les droit de propriété. Pas chaque SCPI individuellement.
             
             /// Revenus
-            var revenue : Double = 0
+            var adultRevenue : Double = 0
             if scpi.providesRevenue(to: adultsName) {
                 let yearlyRevenue = scpi.yearlyRevenue(during: year)
-                let fraction      = scpi.ownership.ownedRevenueFraction(by: adultsName)
+                let adultFraction = scpi.ownership.ownedRevenueFraction(by: adultsName)
                 // revenus inscrit en compte courant avant IS
                 // dans le cas d'une SCI, le revenu remboursable aux actionnaires c'est le net d'IS
                 // FIXME: Les revenus devraient être affectés en fonction des droits de propriété de chacun
-                revenue = fraction / 100.0 * yearlyRevenue.revenue
+                adultRevenue = adultFraction / 100.0 * yearlyRevenue.revenue
             }
             revenues.scpiDividends.namedValues
                 .append(NamedValue(name : scpiName,
-                                   value: revenue.rounded()))
+                                   value: adultRevenue.rounded()))
             
             /// Ventes
             // le produit de la vente se répartit entre UF et NP si démembrement
             // les produits de la vente ne reviennent qu'aux PP ou NP
             // FIXME: Ca ne marche pas comme ca. C'est toute la SCI dont il faut géréer les droit de propriété. Pas chaque SCPI individuellement.
-            // populate SCPI sale revenue: produit net de charges sociales et d'impôt sur la plus-value
+            // populate SCPI sale revenue: produit net d'impôt (IS) sur la plus-value
             // le crédit se fait au début de l'année qui suit la vente
             var netRevenue: Double = 0
             if scpi.isPartOfPatrimoine(of: adultsName) {
