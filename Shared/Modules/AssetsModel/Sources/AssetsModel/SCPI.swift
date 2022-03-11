@@ -72,6 +72,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     public var id = UUID()
     public var name    : String
     public var note    : String = ""
+    /// Site web de l'établissement qui détient le bien
     public var website : URL?
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
@@ -85,11 +86,11 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     public var liquidityLevel : LiquidityLevel? {
         .medium
     }
-    /// Type de l'investissement
-    // achat
+    /// Date d'achat du bien
     public var buyingDate   : Date
+    /// Prix d'achat du bien
     public var buyingPrice  : Double = 0.0
-    // rendement
+    /// Rendement annuel servi
     public var interestRate : Double = 0.0 // %
     public var revaluatRate : Double = 0.0 // %
     // vente

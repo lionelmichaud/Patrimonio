@@ -9,6 +9,8 @@ import SwiftUI
 import Ownership
 import Donation
 
+/// Edition d'une Donation
+/// - Warning: Doit être intégrée dans une Form()
 struct DonationView: View {
     @Binding var donation: Donation
     

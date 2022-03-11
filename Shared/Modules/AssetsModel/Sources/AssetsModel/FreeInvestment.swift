@@ -101,6 +101,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     public var id = UUID()
     public var name    : String
     public var note    : String
+    /// Site web de l'établissement qui détient le bien
     public var website : URL?
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
