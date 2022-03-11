@@ -147,23 +147,25 @@ public struct SciCashFlowLine {
             var netRevenue: Double = 0
             if scpi.isPartOfPatrimoine(of: adultsName) {
                 let liquidatedValue = scpi.liquidatedValueIS(year - 1)
-                netRevenue = liquidatedValue.netRevenue
-                // créditer le produit de la vente sur les comptes des personnes
-                // en fonction de leur part de propriété respective
-                let ownedSaleValues = scpi.ownedValues(ofValue           : liquidatedValue.netRevenue,
-                                                       atEndOf           : year,
-                                                       evaluationContext : .patrimoine)
-                let netCashFlowManager = NetCashFlowManager()
-                netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
-                                                 in            : patrimoine,
-                                                 atEndOf       : year)
+                if liquidatedValue.revenue > 0 {
+                    netRevenue = liquidatedValue.netRevenue
+                    // créditer le produit de la vente sur les comptes des personnes
+                    // en fonction de leur part de propriété respective
+                    let ownedSaleValues = scpi.ownedValues(ofValue           : liquidatedValue.netRevenue,
+                                                           atEndOf           : year,
+                                                           evaluationContext : .patrimoine)
+                    let netCashFlowManager = NetCashFlowManager()
+                    netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
+                                                     in            : patrimoine,
+                                                     atEndOf       : year)
+                }
             }
             revenues.scpiSale.namedValues
                 .append(NamedValue(name : scpiName,
                                    value: netRevenue.rounded()))
         }
         
-        /// calcul de l'IS de la SCI dû sur les dividendes (sur les ventes: déduis au moment de la vente)
+        /// calcul de l'IS de la SCI dû sur les dividendes (sur les ventes: déduit au moment de la vente)
         IS = model.fiscalModel.companyProfitTaxes.IS(revenues.scpiDividends.total)
     }
     
