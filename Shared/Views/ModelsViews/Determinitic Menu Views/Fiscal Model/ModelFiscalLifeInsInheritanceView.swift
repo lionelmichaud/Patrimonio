@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import HelpersView
 
 struct ModelFiscalLifeInsInheritanceView: View {
     @EnvironmentObject private var dataStore  : Store

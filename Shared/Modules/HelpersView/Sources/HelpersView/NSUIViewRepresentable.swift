@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 #if os(iOS) || os(tvOS)
-typealias NSUIViewRepresentable = UIViewRepresentable
+public typealias NSUIViewRepresentable = UIViewRepresentable
 #else
-typealias NSUIViewRepresentable = NSViewRepresentable
+public typealias NSUIViewRepresentable = NSViewRepresentable
 #endif

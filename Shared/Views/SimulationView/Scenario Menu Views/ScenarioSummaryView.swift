@@ -15,6 +15,7 @@ import Persistence
 import AssetsModel
 import PersonModel
 import FamilyModel
+import HelpersView
 
 /// Affiche des valeures des modèles utilisées pour le dernier Run de simulation
 struct ScenarioSummaryView: View {
@@ -47,29 +48,29 @@ struct ScenarioSummaryView: View {
                 // Modèle Economique
                 Section(header: Text("Modèle Economique")) {
                     PercentView(label   : "Inflation",
-                                percent : model.economyModel.randomizers.inflation.value(withMode: simulationMode)/100.0)
+                                percent : model.economyModel.randomizers.inflation.value(withMode: simulationMode))
                     PercentView(label   : "Rendement annuel moyen des Obligations sans risque",
-                                percent : model.economyModel.randomizers.securedRate.value(withMode: simulationMode)/100.0)
+                                percent : model.economyModel.randomizers.securedRate.value(withMode: simulationMode))
                     if simulateVolatility {
                         PercentView(label   : "Volatilité des Obligations sans risque",
-                                    percent : model.economyModel.randomizers.securedVolatility/100.0)
+                                    percent : model.economyModel.randomizers.securedVolatility)
                     }
                     PercentView(label   : "Rendement annuel moyen des Actions",
-                                percent : model.economyModel.randomizers.stockRate.value(withMode: simulationMode)/100.0)
+                                percent : model.economyModel.randomizers.stockRate.value(withMode: simulationMode))
                     if simulateVolatility {
                         PercentView(label   : "Volatilité des Actions",
-                                    percent : model.economyModel.randomizers.stockVolatility/100.0)
+                                    percent : model.economyModel.randomizers.stockVolatility)
                     }
                 }
 
                 // Modèle Sociologique
                 Section(header: Text("Modèle Sociologique")) {
                     PercentView(label   : "Dévaluation anuelle des pensions par rapport à l'inflation",
-                                percent : -model.socioEconomyModel.pensionDevaluationRate.value(withMode: simulationMode)/100.0)
+                                percent : -model.socioEconomyModel.pensionDevaluationRate.value(withMode: simulationMode))
                     IntegerView(label   : "Nombre de trimestres additionels pour obtenir le taux plein",
                                 integer : Int(model.socioEconomyModel.nbTrimTauxPlein.value(withMode: simulationMode)))
                     PercentView(label   : "Pénalisation des dépenses",
-                                percent : model.socioEconomyModel.expensesUnderEvaluationRate.value(withMode: simulationMode)/100.0)
+                                percent : model.socioEconomyModel.expensesUnderEvaluationRate.value(withMode: simulationMode))
                 }
             }
             .navigationTitle("Résumé")

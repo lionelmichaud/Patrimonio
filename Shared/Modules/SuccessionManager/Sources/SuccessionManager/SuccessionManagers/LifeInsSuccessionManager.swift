@@ -212,7 +212,7 @@ struct LifeInsuranceSuccessionManager {
             print(
                 """
                 TOTAL
-                   Part      = \(inheritances.sum(for: \.percentFiscal).percentString(digit: 1))
+                   Part      = \(inheritances.sum(for: \.percentFiscal).percentNormString(digit: 1))
                    Brut      = \(inheritances.sum(for: \.brutFiscal).rounded()))
                    Taxe      = \(inheritances.sum(for: \.tax).rounded()))
                    Net       = \(inheritances.sum(for: \.netFiscal).rounded()))

@@ -10,13 +10,15 @@ import SwiftUI
 import AppFoundation
 
 // MARK: - Saisie d'une Année
-struct YearPicker: View {
-    let title              : String
-    let inRange            : ClosedRange<Int>
-    @Binding var selection : Int
-    @State var rows = [Int]()
+public struct YearPicker: View {
+    private let title     : String
+    private let inRange   : ClosedRange<Int>
+    @Binding
+    private var selection : Int
+    @State
+    private var rows = [Int]()
     
-    var body: some View {
+    public var body: some View {
         Picker(title, selection: $selection) {
             ForEach(rows, id: \.self) { year in
                 Text(String(year))
@@ -24,33 +26,55 @@ struct YearPicker: View {
         }
         .onAppear( perform: { self.inRange.forEach {self.rows.append($0)}})
     }
+
+    public init(title     : String,
+                inRange   : ClosedRange<Int>,
+                selection : Binding<Int>) {
+        self.title      = title
+        self.inRange    = inRange
+        self._selection = selection
+    }
 }
 
 // MARK: - Saisie d'un Enum
-struct CasePicker<T: PickableEnumP>: View where T.AllCases: RandomAccessCollection {
-    @Binding var pickedCase: T
-    let label: String
+public struct CasePicker<T: PickableEnumP>: View where T.AllCases: RandomAccessCollection {
+    @Binding
+    private var pickedCase: T
+    private let label: String
     
-    var body: some View {
+    public var body: some View {
         Picker(selection: $pickedCase, label: Text(label)) {
             ForEach(T.allCases, id: \.self) { enu in
                 Text(enu.pickerString)
             }
         }
     }
+
+    public init(pickedCase : Binding<T>,
+                label      : String) {
+        self.label      = label
+        self._pickedCase = pickedCase
+    }
 }
 
 // MARK: - Saisie d'un Enum avec Valeurs associées
-struct CaseWithAssociatedValuePicker<T: PickableIdentifiableEnumP>: View where T.AllCases: RandomAccessCollection {
-    @Binding var caseIndex: Int
-    let label: String
+public struct CaseWithAssociatedValuePicker<T: PickableIdentifiableEnumP>: View where T.AllCases: RandomAccessCollection {
+    @Binding
+    public var caseIndex: Int
+    public let label: String
     
-    var body: some View {
+    public var body: some View {
         Picker(selection: $caseIndex, label: Text(label)) {
             ForEach(T.allCases) { enu in
                 Text(enu.pickerString).tag(enu.id)
             }
         }
+    }
+
+    public init(caseIndex : Binding<Int>,
+                label     : String) {
+        self.label      = label
+        self._caseIndex = caseIndex
     }
 }
 
@@ -74,12 +98,13 @@ struct PickerHelperViews_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             YearPicker(title: "Année", inRange: 2010...2025, selection: .constant(2020))
+                .preferredColorScheme(.dark)
                 .previewLayout(PreviewLayout.sizeThatFits)
-                .padding([.bottom, .top])
+                .padding(.all)
                 .previewDisplayName("YearPicker")
             CasePicker<TestEnum>(pickedCase: .constant(TestEnum.deux), label: "Enum")
                 .previewLayout(PreviewLayout.sizeThatFits)
-                .padding([.bottom, .top])
+                .padding(.all)
                 .previewDisplayName("CasePicker<TestEnum>")
         }
     }

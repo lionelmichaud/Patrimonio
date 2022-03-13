@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import HelpersView
 
 struct ModelFiscalPensionView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -32,7 +33,8 @@ struct ModelFiscalPensionView: View {
                     HStack {
                         Text("Abattement")
                         Spacer()
-                        Text("\(model.fiscalModel.pensionTaxes.model.rebate.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.pensionTaxes.model.rebate.percentString(digit: 0))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.pensionTaxes.model.rebate) { _ in
@@ -62,7 +64,8 @@ struct ModelFiscalPensionView: View {
                     HStack {
                         Text("CSG déductible")
                         Spacer()
-                        Text("\(model.fiscalModel.pensionTaxes.model.CSGdeductible.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.pensionTaxes.model.CSGdeductible.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.pensionTaxes.model.CSGdeductible) { _ in
@@ -76,7 +79,8 @@ struct ModelFiscalPensionView: View {
                     HStack {
                         Text("CRDS")
                         Spacer()
-                        Text("\(model.fiscalModel.pensionTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.pensionTaxes.model.CRDS.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.pensionTaxes.model.CRDS) { _ in
@@ -90,7 +94,8 @@ struct ModelFiscalPensionView: View {
                     HStack {
                         Text("CSG")
                         Spacer()
-                        Text("\(model.fiscalModel.pensionTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.pensionTaxes.model.CSG.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.pensionTaxes.model.CSG) { _ in
@@ -104,7 +109,8 @@ struct ModelFiscalPensionView: View {
                     HStack {
                         Text("Contribution additionnelle")
                         Spacer()
-                        Text("\(model.fiscalModel.pensionTaxes.model.additionalContrib.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.pensionTaxes.model.additionalContrib.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.pensionTaxes.model.additionalContrib) { _ in
@@ -118,7 +124,8 @@ struct ModelFiscalPensionView: View {
                     HStack {
                         Text("Cotisation Assurance Santé")
                         Spacer()
-                        Text("\(model.fiscalModel.pensionTaxes.model.healthInsurance.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.pensionTaxes.model.healthInsurance.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.pensionTaxes.model.healthInsurance) { _ in

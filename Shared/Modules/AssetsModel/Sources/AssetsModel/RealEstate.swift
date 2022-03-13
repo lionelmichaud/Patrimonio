@@ -416,7 +416,7 @@ extension RealEstateAsset: CustomStringConvertible {
                   - Loyer mensuel:        \(monthlyRentAfterCharges.€String)
                   - Loyer annuel:         \(yearlyRentAfterCharges.€String)
                   - Loyer annuel taxable: \(yearlyRentTaxableIrpp.€String)
-                  - Profitabilité:        \((profitability*100.0).percentString(digit: 1)) % \n
+                  - Profitabilité:        \(profitability.percentNormString(digit: 1)) \n
                 """
         }
         

@@ -11,6 +11,7 @@ import LifeExpense
 import PatrimoineModel
 import Persistence
 import FamilyModel
+import HelpersView
 
 struct DossierPropertiesView: View {
     @EnvironmentObject private var dataStore  : Store

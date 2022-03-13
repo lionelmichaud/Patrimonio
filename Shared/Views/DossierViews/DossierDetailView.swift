@@ -14,6 +14,7 @@ import DateBoundary
 import Persistence
 import PatrimoineModel
 import FamilyModel
+import HelpersView
 
 struct DossierDetailView: View {
     @EnvironmentObject private var dataStore  : Store

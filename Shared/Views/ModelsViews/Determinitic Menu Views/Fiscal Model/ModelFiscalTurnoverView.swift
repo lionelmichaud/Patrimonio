@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import HelpersView
 
 struct ModelFiscalTurnoverView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -31,7 +32,8 @@ struct ModelFiscalTurnoverView: View {
                 HStack {
                     Text("URSAAF")
                     Spacer()
-                    Text("\(model.fiscalModel.turnoverTaxes.model.URSSAF.percentString(digit: 0)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.turnoverTaxes.model.URSSAF.percentString(digit: 0))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.fiscalModel.turnoverTaxes.model.URSSAF) { _ in

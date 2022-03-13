@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FamilyModel
+import HelpersView
 
 struct RecipientsListView : View {
     @EnvironmentObject var family: Family

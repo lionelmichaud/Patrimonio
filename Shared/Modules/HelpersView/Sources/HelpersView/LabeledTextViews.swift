@@ -9,12 +9,18 @@ import SwiftUI
 
 // MARK: - Saisie d'un text "TextEditor"
 
-struct LabeledTextEditor : View {
-    let label         : String
-    let labelWidth    : Int
-    @Binding var text : String
-    
-    var body: some View {
+/// Editer un texte d'une ligne
+/// - Parameters:
+///   - label: texte à gauche
+///   - labelWidth: largeur du label (70 par défaut)
+///   - text: texte éditable à droite
+public struct LabeledTextEditor : View {
+    private let label      : String
+    private let labelWidth : Int
+    @Binding
+    private var text       : String
+
+    public var body: some View {
         HStack {
             Text(label)
                 .frame(width: CGFloat(labelWidth), alignment: .leading)
@@ -23,9 +29,14 @@ struct LabeledTextEditor : View {
         }
     }
     
-    init(label       : String,
-         labelWidth  : Int = 70,
-         text        : Binding<String>) {
+    /// Editer un texte d'une ligne
+    /// - Parameters:
+    ///   - label: texte à gauche
+    ///   - labelWidth: largeur du label (70 par défaut)
+    ///   - text: texte éditable à droite
+    public init(label       : String,
+                labelWidth  : Int = 70,
+                text        : Binding<String>) {
         self.label       = label
         self.labelWidth  = labelWidth > 0 ? labelWidth : 70
         self._text       = text
@@ -34,18 +45,20 @@ struct LabeledTextEditor : View {
 
 // MARK: - Saisie d'un text "TextField"
 
-/// Affiche un `label` au gauche et un `text` éditable à droite
+/// Editer un texte de plusieurs lignes
+/// - Parameters:
 ///   - label: texte à gauche
 ///   - labelWidth: largeur du label (70 par défaut)
 ///   - defaultText: texte par défaut si le `text`initial est vide
 ///   - text: texte éditable à droite
-struct LabeledTextField : View {
-    let label         : String
-    let labelWidth    : Int
-    let defaultText   : String?
-    @Binding var text : String
-    
-    var body: some View {
+public struct LabeledTextField : View {
+    private let label       : String
+    private let labelWidth  : Int
+    private let defaultText : String?
+    @Binding
+    private var text        : String
+
+    public var body: some View {
         HStack {
             Text(label)
                 .frame(width: CGFloat(labelWidth), alignment: .leading)
@@ -53,16 +66,16 @@ struct LabeledTextField : View {
         }
     }
     
-    /// Affiche un `label` au gauche et un `text` à droite
+    /// Editer un texte de plusieurs lignes
     /// - Parameters:
     ///   - label: texte à gauche
     ///   - labelWidth: largeur du label (70 par défaut)
     ///   - defaultText: texte par défaut si le `text`initial est vide
     ///   - text: texte éditable à droite
-    init(label       : String,
-         labelWidth  : Int = 70,
-         defaultText : String? = nil,
-         text        : Binding<String>) {
+    public init(label       : String,
+                labelWidth  : Int = 70,
+                defaultText : String? = nil,
+                text        : Binding<String>) {
         self.label       = label
         self.labelWidth  = labelWidth > 0 ? labelWidth : 70
         self.defaultText = defaultText
@@ -73,11 +86,12 @@ struct LabeledTextField : View {
 
 // MARK: - Affichage d'un text "text"
 
-struct LabeledText: View {
-    let label : String
-    let text  : String
+/// Affiche un `label` au gauche et un `text` droite
+public struct LabeledText: View {
+    private let label : String
+    private let text  : String
     
-    var body: some View {
+    public var body: some View {
         HStack {
             Text(label)
             Spacer()
@@ -85,7 +99,10 @@ struct LabeledText: View {
         }
     }
     
-    init(label: String, text : String, comment: String? = nil) {
+    /// Affiche un `label` au gauche et un `text` droite
+    public init(label   : String,
+                text    : String,
+                comment : String?  = nil) {
         self.label   = label
         self.text    = text
     }
@@ -93,16 +110,19 @@ struct LabeledText: View {
 
 // MARK: - PreViews
 
-struct LabeledTextViews_Previews: View { // swiftlint:disable:this type_name
-    var body: some View {
+struct LabeledTextViews_Previews: PreviewProvider { 
+    static var previews: some View {
         Group {
-            LabeledText(label: "Label", text: "Text", comment: "Comment")
+            LabeledText(label: "Label", text: "Text à afficher", comment: "Comment")
+                .padding()
                 .previewLayout(PreviewLayout.sizeThatFits)
                 .previewDisplayName("LabeledText")
-            LabeledTextField(label: "Label", labelWidth: 70, defaultText: "Obligatoire", text: .constant("text"))
+            LabeledTextField(label: "Label", labelWidth: 70, defaultText: "Obligatoire", text: .constant("Text à éditer"))
+                .padding()
                 .previewLayout(PreviewLayout.sizeThatFits)
                 .previewDisplayName("LabeledTextField")
-            LabeledTextEditor(label: "Label", labelWidth: 70, text: .constant("text"))
+            LabeledTextEditor(label: "Label", labelWidth: 70, text: .constant("Text à éditer"))
+                .padding()
                 .previewLayout(PreviewLayout.sizeThatFits)
                 .previewDisplayName("LabeledTextEditor")
         }

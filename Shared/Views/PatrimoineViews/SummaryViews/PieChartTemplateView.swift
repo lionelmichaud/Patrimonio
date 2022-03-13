@@ -8,6 +8,7 @@
 import SwiftUI
 import AppFoundation
 import Charts
+import HelpersView
 
 /// Wrapper de LineChartView
 struct PieChartTemplateView: NSUIViewRepresentable {

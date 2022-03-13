@@ -62,8 +62,10 @@ struct RatingView_Previews: PreviewProvider {
                    onColor   : [Color.accentColor],
                    offImage  : Image(systemName : "star"),
                    onImage   : Image(systemName : "star.fill"))
+            .padding()
             .preferredColorScheme(.dark)
             .previewLayout(.sizeThatFits)
+
         RatingView(rating    : 0,
                    minRating : 0,
                    maxRating : 4,
@@ -72,18 +74,23 @@ struct RatingView_Previews: PreviewProvider {
                    onColor   : ChartThemes.riskColorsTable.map { Color($0) },
                    offImage  : Image(systemName : "square"),
                    onImage   : Image(systemName : "square.fill"))
+            .padding()
             .preferredColorScheme(.dark)
             .previewLayout(.sizeThatFits)
+
         RatingView(rating    : 1,
                    maxRating : 4,
                    font      : .body,
                    onColor   : ChartThemes.riskColorsTable.map { Color($0) })
+            .padding()
             .preferredColorScheme(.dark)
             .previewLayout(.sizeThatFits)
+
         RatingView(rating    : 2,
                    maxRating : 4,
                    font      : .body,
                    onColor   : ChartThemes.riskColorsTable.map { Color($0) })
+            .padding()
             .preferredColorScheme(.dark)
             .previewLayout(.sizeThatFits)
     }

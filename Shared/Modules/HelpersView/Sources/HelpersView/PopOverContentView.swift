@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-struct PopOverContentView: View {
+public struct PopOverContentView: View {
     var title       : String?
     var description : String
     
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 10) {
             if let title = title {
                 Text(title)
@@ -23,10 +23,18 @@ struct PopOverContentView: View {
         }
         .padding()
     }
+
+    public init(title       : String?  = nil,
+                description : String) {
+        self.title = title
+        self.description = description
+    }
 }
 
 struct PopOverContentView_Previews: PreviewProvider {
     static var previews: some View {
-        PopOverContentView(title: "Titre", description: "contenu du popvoer")
+        PopOverContentView(title: "Titre",
+                           description: "contenu du popvoer")
+            .previewLayout(.sizeThatFits)
     }
 }

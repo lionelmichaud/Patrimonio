@@ -9,6 +9,7 @@ import SwiftUI
 import Ownership
 import PersonModel
 import FamilyModel
+import HelpersView
 
 struct OwnersListView: View {
     let title                    : String
@@ -29,7 +30,8 @@ struct OwnersListView: View {
                 }
                 .onDelete(perform: deleteOwner)
                 .onMove(perform: moveOwners)
-                PercentView(label: "Total " + title + "s (doit être de 100%)", percent: owners.sumOfOwnedFractions / 100.0)
+                PercentView(label   : "Total " + title + "s (doit être de 100%)",
+                            percent : owners.sumOfOwnedFractions)
                     .foregroundColor(owners.isvalid ? .blue : .red)
             }
         }

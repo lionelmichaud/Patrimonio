@@ -72,7 +72,7 @@ final class OwnershipManagerTests: XCTestCase {
         let decedentName = "M. Lionel MICHAUD"
         let spouseName   = "Mme. Vanessa MICHAUD"
         let childrenName = ["M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         clause.isDismembered = false
         
         // (B) la clause n'est pas démembrée
@@ -85,7 +85,7 @@ final class OwnershipManagerTests: XCTestCase {
                                            withClause   : &clause,
                                            childrenName : nil)
         
-        var expectedClause = LifeInsuranceClause()
+        var expectedClause = Clause()
         expectedClause.isDismembered = false
         expectedClause.fullRecipients = [Owner(name: spouseName, fraction: 100)]
         
@@ -102,7 +102,7 @@ final class OwnershipManagerTests: XCTestCase {
                                            withClause   : &clause,
                                            childrenName : childrenName)
         
-        expectedClause = LifeInsuranceClause()
+        expectedClause = Clause()
         expectedClause.isDismembered = false
         expectedClause.fullRecipients = [Owner(name: childrenName[0], fraction: 50),
                                          Owner(name: childrenName[1], fraction: 50)]
@@ -114,7 +114,7 @@ final class OwnershipManagerTests: XCTestCase {
         let decedentName = "M. Lionel MICHAUD"
         let spouseName   = "Mme. Vanessa MICHAUD"
         let childrenName = ["M. Arthur MICHAUD", "Mme. Lou-Ann MICHAUD"]
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         clause.isDismembered = true
 
         // (A) la clause est est démembrée
@@ -126,7 +126,7 @@ final class OwnershipManagerTests: XCTestCase {
                                            withClause   : &clause,
                                            childrenName : nil)
         
-        var expectedClause = LifeInsuranceClause()
+        var expectedClause = Clause()
         expectedClause.isDismembered = false
         expectedClause.fullRecipients = [Owner(name: childrenName[0], fraction: 50),
                                          Owner(name: childrenName[1], fraction: 50)]
@@ -145,7 +145,7 @@ final class OwnershipManagerTests: XCTestCase {
                                            withClause   : &clause,
                                            childrenName : nil)
         
-        expectedClause = LifeInsuranceClause()
+        expectedClause = Clause()
         expectedClause.isDismembered     = true
         expectedClause.usufructRecipient = spouseName
         expectedClause.bareRecipients    = childrenName
@@ -164,7 +164,7 @@ final class OwnershipManagerTests: XCTestCase {
                                            withClause   : &clause,
                                            childrenName : nil)
         
-        expectedClause = LifeInsuranceClause()
+        expectedClause = Clause()
         expectedClause.isDismembered     = false
         expectedClause.fullRecipients    = [Owner(name: spouseName, fraction: 100)]
         expectedClause.usufructRecipient = ""
@@ -186,7 +186,7 @@ final class OwnershipManagerTests: XCTestCase {
             $0.name == "AV Lionel Bourso"
         }
         
-        var expectedClause = LifeInsuranceClause()
+        var expectedClause = Clause()
         expectedClause.isDismembered = false
         expectedClause.fullRecipients = [Owner(name: childrenName[0], fraction: 50),
                                          Owner(name: childrenName[1], fraction: 50)]
@@ -197,7 +197,7 @@ final class OwnershipManagerTests: XCTestCase {
             $0.name == "AV Lionel AFER"
         }
         
-        expectedClause = LifeInsuranceClause()
+        expectedClause = Clause()
         expectedClause.isDismembered = false
         expectedClause.fullRecipients = [Owner(name: childrenName[0], fraction: 50),
                                          Owner(name: childrenName[1], fraction: 50)]
@@ -305,7 +305,7 @@ final class OwnershipManagerTests: XCTestCase {
                             conjointName : spouseName,
                             verbose: Tests.verbose))
         
-        var expectedClause = LifeInsuranceClause()
+        var expectedClause = Clause()
         expectedClause.isDismembered = false
         expectedClause.fullRecipients = [Owner(name: childrenName[0], fraction: 50),
                                          Owner(name: childrenName[1], fraction: 50)]
@@ -336,7 +336,7 @@ final class OwnershipManagerTests: XCTestCase {
         
         let expectedChildShare = 10_000.0 / (104_594.0 + 2_621.0) * 100.0
         let expectedSpouseShare = 100.0 - 2.0 * expectedChildShare
-        var expectedClause = LifeInsuranceClause()
+        var expectedClause = Clause()
         expectedClause.isDismembered = false
         expectedClause.fullRecipients = [Owner(name: spouseName,      fraction: expectedSpouseShare),
                                          Owner(name: childrenName[0], fraction: expectedChildShare),
@@ -347,7 +347,7 @@ final class OwnershipManagerTests: XCTestCase {
         XCTAssertEqual(missingCapital["Mme. Lou-Ann MICHAUD"]!, 0.0)
     }
     
-    func test_modifyLifeInsuranceClauseIfNecessaryAndPossible() {
+    func test_modifyClauseIfNecessaryAndPossible() {
         let decedentName = "M. Lionel MICHAUD"
         let spouseName   = "Mme. Vanessa MICHAUD"
         
@@ -387,13 +387,12 @@ final class OwnershipManagerTests: XCTestCase {
         let taxes = ["M. Arthur MICHAUD"    : taxeEnfant,
                      "Mme. Lou-Ann MICHAUD" : taxeEnfant]
         
-        XCTAssertNoThrow(try Tests.manager
-            .modifyLifeInsuranceClauseIfNecessaryAndPossible(decedentName          : decedentName,
-                                                             conjointName          : spouseName,
-                                                             withAssets            : &Tests.patrimoin.assets,
-                                                             withLiabilities       : Tests.patrimoin.liabilities,
-                                                             toPayFor              : taxes,
-                                                             capitauxDecesRecusNet : capitauxDeces,
-                                                             verbose               : Tests.verbose))
+        XCTAssertNoThrow(try Tests.manager.modifyLifeInsuranceClauseIfNecessaryAndPossible(decedentName          : decedentName,
+                                                                conjointName          : spouseName,
+                                                                withAssets            : &Tests.patrimoin.assets,
+                                                                withLiabilities       : Tests.patrimoin.liabilities,
+                                                                toPayFor              : taxes,
+                                                                capitauxDecesRecusNet : capitauxDeces,
+                                                                verbose               : Tests.verbose))
     }
 }

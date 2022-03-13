@@ -10,6 +10,7 @@ import SwiftUI
 import AppFoundation
 import Ownership
 import FamilyModel
+import HelpersView
 
 struct OwnershipView: View {
     @EnvironmentObject var family : Family
@@ -32,7 +33,7 @@ struct OwnershipView: View {
                         if ownership.isValid {
                             AmountView(label   : usufruitierStr+"s",
                                        amount  : (try! ownership.demembrementPercentage(atEndOf : CalendarCst.thisYear).usufructPercent / 100.0) * totalValue,
-                                       comment : try! ownership.demembrementPercentage(atEndOf : CalendarCst.thisYear).usufructPercent.percentString(digit : 2)+"%")
+                                       comment : try! ownership.demembrementPercentage(atEndOf : CalendarCst.thisYear).usufructPercent.percentString(digit : 2))
                                 .foregroundColor(.blue)
                         } else {
                             if !ownership.usufructOwners.isEmpty && ownership.usufructOwners.isvalid {
@@ -48,7 +49,7 @@ struct OwnershipView: View {
                         if ownership.isValid {
                             AmountView(label   : nuPropStr+"s",
                                        amount  : (try! ownership.demembrementPercentage(atEndOf : CalendarCst.thisYear).bareValuePercent / 100.0) * totalValue,
-                                       comment : try! ownership.demembrementPercentage(atEndOf : CalendarCst.thisYear).bareValuePercent.percentString(digit : 2)+"%")
+                                       comment : try! ownership.demembrementPercentage(atEndOf : CalendarCst.thisYear).bareValuePercent.percentString(digit : 2))
                                 .foregroundColor(.blue)
                         } else {
                             if !ownership.bareOwners.isEmpty && ownership.bareOwners.isvalid {

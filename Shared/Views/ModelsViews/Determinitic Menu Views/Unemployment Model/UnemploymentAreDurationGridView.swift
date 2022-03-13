@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UnemployementModel
+import HelpersView
 
 typealias DurationSlice = UnemploymentCompensation.DurationSlice
 typealias DurationGrid = [DurationSlice]
@@ -45,7 +46,7 @@ struct DurationSliceView: View {
             IntegerView(label   : "Nombre de mois d'indemnisation avant dégressivité",
                         integer : slice.reductionAfter)
             PercentView(label   : "Dégressivité après ce délai",
-                        percent : slice.reduction / 100.0)
+                        percent : slice.reduction)
         }
     }
 }

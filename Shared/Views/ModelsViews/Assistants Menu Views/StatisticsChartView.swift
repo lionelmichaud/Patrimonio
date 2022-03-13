@@ -9,6 +9,7 @@
 import SwiftUI
 import Statistics
 import Charts // https://github.com/danielgindi/Charts.git
+import HelpersView
 
 struct StatisticsChartsView: View {
     @State private var rgType: RandomGeneratorEnum = .uniform

@@ -77,24 +77,24 @@ class SCPItests: XCTestCase {
     func test_revenue() {
         // deterministic
         SCPI.setSimulationMode(to: .deterministic)
-        var revenue = SCPItests.scpi.yearlyRevenue(during: 2020)
+        var revenue = SCPItests.scpi.yearlyRevenueIRPP(during: 2020)
         XCTAssertEqual(1000.0 * (3.56 - 2.5) / 100.0, revenue.revenue)
 
-        revenue = SCPItests.scpi.yearlyRevenue(during: 2022)
+        revenue = SCPItests.scpi.yearlyRevenueIRPP(during: 2022)
         XCTAssertEqual(1000.0 * (3.56 - 2.5) / 100.0, revenue.revenue)
 
-        revenue = SCPItests.scpi.yearlyRevenue(during: 2023)
+        revenue = SCPItests.scpi.yearlyRevenueIRPP(during: 2023)
         XCTAssertEqual(0.0, revenue.revenue)
         
         // random
         SCPI.setSimulationMode(to: .random)
-        revenue = SCPItests.scpi.yearlyRevenue(during: 2020)
+        revenue = SCPItests.scpi.yearlyRevenueIRPP(during: 2020)
         XCTAssertEqual(1000.0 * (3.56 - 5.0) / 100.0, revenue.revenue)
 
-        revenue = SCPItests.scpi.yearlyRevenue(during: 2022)
+        revenue = SCPItests.scpi.yearlyRevenueIRPP(during: 2022)
         XCTAssertEqual(1000.0 * (3.56 - 5.0) / 100.0, revenue.revenue)
 
-        revenue = SCPItests.scpi.yearlyRevenue(during: 2023)
+        revenue = SCPItests.scpi.yearlyRevenueIRPP(during: 2023)
         XCTAssertEqual(0.0, revenue.revenue)
     }
 

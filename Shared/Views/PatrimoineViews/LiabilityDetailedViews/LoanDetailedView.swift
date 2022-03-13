@@ -11,6 +11,7 @@ import AppFoundation
 import Liabilities
 import PatrimoineModel
 import FamilyModel
+import HelpersView
 
 struct LoanDetailedView: View {
     @EnvironmentObject var family     : Family

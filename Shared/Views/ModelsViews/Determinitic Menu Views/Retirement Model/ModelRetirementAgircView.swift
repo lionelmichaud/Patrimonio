@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import HelpersView
 
 // MARK: - Deterministic Retirement Régime Complémentaire View
 
@@ -69,7 +70,8 @@ struct ModelRetirementAgircView: View {
                     HStack {
                         Text("Surcote pour enfants nés")
                         Spacer()
-                        Text("\(model.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes.percentString(digit: 0))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes) { _ in
@@ -83,7 +85,8 @@ struct ModelRetirementAgircView: View {
                     HStack {
                         Text("Nombre d'enfants nés pour obtenir la majoration")
                         Spacer()
-                        Text("\(model.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin) enfants").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin) enfants")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin) { _ in
@@ -105,7 +108,8 @@ struct ModelRetirementAgircView: View {
                     HStack {
                         Text("Surcote pour enfants à charge")
                         Spacer()
-                        Text("\(model.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge.percentString(digit: 0))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge) { _ in

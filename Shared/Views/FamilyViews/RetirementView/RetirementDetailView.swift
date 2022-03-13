@@ -12,6 +12,7 @@ import RetirementModel
 import ModelEnvironment
 import PersonModel
 import FamilyModel
+import HelpersView
 
 // MARK: - Retirement View Model
 
@@ -263,10 +264,10 @@ struct RetirementGeneralSectionView: View {
                 AgeDateView(label: "Date du taux plein")
                 IntegerView(label: viewModel.general.nbTrimestreDecote >= 0 ? "Nombre de trimestres de surcote" : "Nombre de trimestres de décote",
                             integer: viewModel.general.nbTrimestreDecote)
-                PercentView(label: "Taux de réversion",
-                            percent: viewModel.general.tauxDePension, comment: "Trev")
-                PercentView(label: "Majoration pour enfants nés (\(viewModel.general.nbEnfantNe))",
-                            percent: viewModel.general.majorationEnfant, comment: "Menf")
+                PercentNormView(label: "Taux de réversion",
+                                percent: viewModel.general.tauxDePension, comment: "Trev")
+                PercentNormView(label: "Majoration pour enfants nés (\(viewModel.general.nbEnfantNe))",
+                                percent: viewModel.general.majorationEnfant, comment: "Menf")
                 IntegerView(label: "Durée d'assurance (trimestres)",
                             integer: viewModel.general.dureeAssurance, comment: "Da")
                 IntegerView(label: "Durée de référence (trimestres)",
@@ -365,18 +366,24 @@ struct RetirementAgircSectionView: View {
                     Spacer()
                     Text("\(viewModel.agirc.dateLiquidation.stringShortDate) à \(viewModel.agirc.ageLiquidation)")
                 }
-                IntegerView(label: "Nombre de points",
-                            integer: viewModel.agirc.projectedNbOfPoints, comment: "Npt")
-                AmountView(label: "Valeur du point",
-                           amount: viewModel.agirc.valeurDuPoint, digit: 3, comment: "Vpt")
-                PercentView(label: "Coeficient de minoration (en \(viewModel.agirc.dateLiquidation?.year ?? 0))",
-                            percent: viewModel.agirc.coefMinoration, comment: "Cmin")
-                PercentView(label: "Majoration pour enfants nés (\(viewModel.agirc.nbEnfantNe)) / à charge (\(viewModel.agirc.nbEnfantACharge) en \(viewModel.agirc.dateLiquidation?.year ?? 0))",
-                            percent: (viewModel.agirc.majorationEnfant/(viewModel.agirc.pensionBrute-viewModel.agirc.majorationEnfant)), comment: "Menf")
-                AmountView(label: "Pension annuelle brute (non dévaluée)",
-                           amount: viewModel.agirc.pensionBrute, comment: "Brut = Npt x Vpt x Cmin x (1 + Menf)")
-                AmountView(label: "Pension annuelle nette (non dévaluée)",
-                           amount: viewModel.agirc.pensionNette, weight: .bold, comment: "Net = Brut - Prélev sociaux")
+                IntegerView(label   : "Nombre de points",
+                            integer : viewModel.agirc.projectedNbOfPoints,
+                            comment : "Npt")
+                AmountView(label   : "Valeur du point",
+                           amount  : viewModel.agirc.valeurDuPoint, digit  : 3,
+                           comment : "Vpt")
+                PercentNormView(label   : "Coeficient de minoration (en \(viewModel.agirc.dateLiquidation?.year ?? 0))",
+                                percent : viewModel.agirc.coefMinoration,
+                                comment : "Cmin")
+                PercentNormView(label   : "Majoration pour enfants nés (\(viewModel.agirc.nbEnfantNe)) / à charge (\(viewModel.agirc.nbEnfantACharge) en \(viewModel.agirc.dateLiquidation?.year ?? 0))",
+                                percent : (viewModel.agirc.majorationEnfant/(viewModel.agirc.pensionBrute-viewModel.agirc.majorationEnfant)),
+                                comment : "Menf")
+                AmountView(label   : "Pension annuelle brute (non dévaluée)",
+                           amount  : viewModel.agirc.pensionBrute,
+                           comment : "Brut = Npt x Vpt x Cmin x (1 + Menf)")
+                AmountView(label   : "Pension annuelle nette (non dévaluée)",
+                           amount  : viewModel.agirc.pensionNette, weight  : .bold,
+                           comment : "Net = Brut - Prélev sociaux")
             },
             label: { HeaderView }
         )

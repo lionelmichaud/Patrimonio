@@ -7,11 +7,13 @@
 
 import SwiftUI
 
-struct WebsiteEditView: View {
-    @Binding var website: URL?
-    @State private var url: String
+public struct WebsiteEditView: View {
+    @Binding
+    private var website: URL?
+    @State
+    private var url: String
 
-    var body: some View {
+    public var body: some View {
         HStack {
             if let website = website {
                 Link(destination: website) {
@@ -31,7 +33,7 @@ struct WebsiteEditView: View {
         }
     }
 
-    init(website: Binding<URL?>) {
+    public init(website: Binding<URL?>) {
         _url = State(initialValue: website.wrappedValue?.absoluteString ?? "")
         _website = website
     }

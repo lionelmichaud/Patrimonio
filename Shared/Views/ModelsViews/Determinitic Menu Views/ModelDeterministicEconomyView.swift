@@ -9,6 +9,7 @@ import SwiftUI
 import Persistence
 import ModelEnvironment
 import FamilyModel
+import HelpersView
 
 // MARK: - Deterministic Economy View
 
@@ -34,7 +35,8 @@ struct ModelDeterministicEconomyView: View {
                     HStack {
                         Text("Inflation")
                         Spacer()
-                        Text("\(model.economyModel.randomizers.inflation.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.economyModel.randomizers.inflation.defaultValue.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.economyModel.randomizers.inflation.defaultValue) { _ in
@@ -56,7 +58,8 @@ struct ModelDeterministicEconomyView: View {
                     HStack {
                         Text("Rendement")
                         Spacer()
-                        Text("\(model.economyModel.randomizers.securedRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.economyModel.randomizers.securedRate.defaultValue.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.economyModel.randomizers.securedRate.defaultValue) { _ in
@@ -70,7 +73,8 @@ struct ModelDeterministicEconomyView: View {
                     HStack {
                         Text("Volatilité")
                         Spacer()
-                        Text("\(model.economyModel.randomizers.securedVolatility.percentString(digit: 2)) %").foregroundColor(.secondary)
+                        Text("\(model.economyModel.randomizers.securedVolatility.percentString(digit: 2))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.economyModel.randomizers.securedVolatility) { _ in
@@ -92,7 +96,8 @@ struct ModelDeterministicEconomyView: View {
                     HStack {
                         Text("Rendement")
                         Spacer()
-                        Text("\(model.economyModel.randomizers.stockRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.economyModel.randomizers.stockRate.defaultValue.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.economyModel.randomizers.stockRate.defaultValue) { _ in
@@ -106,7 +111,8 @@ struct ModelDeterministicEconomyView: View {
                     HStack {
                         Text("Volatilité")
                         Spacer()
-                        Text("\(model.economyModel.randomizers.stockVolatility.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.economyModel.randomizers.stockVolatility.percentString(digit: 0))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.economyModel.randomizers.stockVolatility) { _ in

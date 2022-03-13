@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import HelpersView
 
 // MARK: - Deterministic Retirement Pension de Réversion View
 
@@ -47,7 +48,8 @@ struct ModelRetirementReversionView : View {
                     HStack {
                         Text("Taux de réversion")
                         Spacer()
-                        Text("\(model.retirementModel.reversion.newTauxReversion.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.reversion.newTauxReversion.percentString(digit: 0))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.retirementModel.reversion.newTauxReversion) { _ in
@@ -71,7 +73,8 @@ struct ModelRetirementReversionView : View {
                         HStack {
                             Text("Majoration pour 3 enfants nés")
                             Spacer()
-                            Text("\(model.retirementModel.reversion.oldModel.general.majoration3enfants.percentString(digit: 0)) %").foregroundColor(.secondary)
+                            Text("\(model.retirementModel.reversion.oldModel.general.majoration3enfants.percentString(digit: 0))")
+                                .foregroundColor(.secondary)
                         }
                     }
                     .onChange(of: model.retirementModel.reversion.oldModel.general.majoration3enfants) { _ in
@@ -87,7 +90,8 @@ struct ModelRetirementReversionView : View {
                         HStack {
                             Text("Age minimum pour perçevoir la pension de réversion")
                             Spacer()
-                            Text("\(model.retirementModel.reversion.oldModel.agircArcco.ageMinimum) ans").foregroundColor(.secondary)
+                            Text("\(model.retirementModel.reversion.oldModel.agircArcco.ageMinimum) ans")
+                                .foregroundColor(.secondary)
                         }
                     }
                     .onChange(of: model.retirementModel.reversion.oldModel.agircArcco.ageMinimum) { _ in
@@ -101,7 +105,8 @@ struct ModelRetirementReversionView : View {
                         HStack {
                             Text("Fraction des points du conjoint décédé")
                             Spacer()
-                            Text("\(model.retirementModel.reversion.oldModel.agircArcco.fractionConjoint.percentString(digit: 0)) %").foregroundColor(.secondary)
+                            Text("\(model.retirementModel.reversion.oldModel.agircArcco.fractionConjoint.percentString(digit: 0))")
+                                .foregroundColor(.secondary)
                         }
                     }
                     .onChange(of: model.retirementModel.reversion.oldModel.agircArcco.fractionConjoint) { _ in

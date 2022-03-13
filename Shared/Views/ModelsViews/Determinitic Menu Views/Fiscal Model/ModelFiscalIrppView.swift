@@ -9,6 +9,7 @@ import SwiftUI
 import Persistence
 import ModelEnvironment
 import FamilyModel
+import HelpersView
 
 struct ModelFiscalIrppView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -39,7 +40,8 @@ struct ModelFiscalIrppView: View {
                     HStack {
                         Text("Abattement")
                         Spacer()
-                        Text("\(model.fiscalModel.incomeTaxes.model.salaryRebate.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.incomeTaxes.model.salaryRebate.percentString(digit: 0))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.incomeTaxes.model.salaryRebate) { _ in
@@ -75,7 +77,8 @@ struct ModelFiscalIrppView: View {
                     HStack {
                         Text("Abattement")
                         Spacer()
-                        Text("\(model.fiscalModel.incomeTaxes.model.turnOverRebate.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.incomeTaxes.model.turnOverRebate.percentString(digit: 0))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.incomeTaxes.model.turnOverRebate) { _ in

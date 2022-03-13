@@ -9,6 +9,7 @@ import SwiftUI
 import Persistence
 import ModelEnvironment
 import FamilyModel
+import HelpersView
 
 struct ModelDeterministicUnemploymentView: View {
     @EnvironmentObject private var dataStore  : Store

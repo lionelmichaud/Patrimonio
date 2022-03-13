@@ -9,12 +9,13 @@ import SwiftUI
 
 // MARK: - Saisie d'un Integer
 
-struct IntegerEditView: View {
-    let label            : String
-    let comment          : String?
-    @Binding var integer : Int
+public struct IntegerEditView: View {
+    private let label   : String
+    private let comment : String?
+    @Binding
+    private var integer : Int
     
-    var body: some View {
+    public var body: some View {
         let numberFormatter = NumberFormatter()
         let textValueBinding = Binding<String>(
             get: {
@@ -40,9 +41,9 @@ struct IntegerEditView: View {
         .textFieldStyle(RoundedBorderTextFieldStyle())
     }
     
-    init(label   : String,
-         comment : String? = nil,
-         integer : Binding<Int>) {
+    public init(label   : String,
+                comment : String? = nil,
+                integer : Binding<Int>) {
         self.label   = label
         self.comment = comment
         _integer     = integer
@@ -51,13 +52,13 @@ struct IntegerEditView: View {
 
 // MARK: - Affichage d'un Integer
 
-struct IntegerView: View {
-    let label   : String
-    let integer : Int
-    let weight  : Font.Weight
-    let comment : String?
+public struct IntegerView: View {
+    private let label   : String
+    private let integer : Int
+    private let weight  : Font.Weight
+    private let comment : String?
     
-    var body: some View {
+    public var body: some View {
         HStack {
             Text(label)
                 .fontWeight(weight)
@@ -69,7 +70,10 @@ struct IntegerView: View {
         }
     }
     
-    init(label: String, integer: Int, weight: Font.Weight = .regular, comment: String? = nil) {
+    public init(label   : String,
+                integer : Int,
+                weight  : Font.Weight = .regular,
+                comment : String?     = nil) {
         self.label   = label
         self.integer = integer
         self.weight  = weight
@@ -83,10 +87,12 @@ struct IntegerViews_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             IntegerView(label: "Label", integer: 4)
+                .padding()
                 .previewLayout(PreviewLayout.sizeThatFits)
                 .padding([.bottom, .top])
                 .previewDisplayName("IntegerView")
             IntegerEditView(label: "Label", integer: .constant(4))
+                .padding()
                 .previewLayout(PreviewLayout.sizeThatFits)
                 .padding([.bottom, .top])
                 .previewDisplayName("IntegerEditView")

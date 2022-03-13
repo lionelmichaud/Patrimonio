@@ -10,14 +10,16 @@ import AppFoundation
 
 // MARK: - Saisie d'un intervalle de Dates
 
-struct DateRangeEditView: View {
-    let fromLabel         : String
-    @Binding var fromDate : Date
-    let toLabel           : String
-    @Binding var toDate   : Date
-    let `in`              : ClosedRange<Date>?
+public struct DateRangeEditView: View {
+    public let fromLabel         : String
+    @Binding
+    public var fromDate : Date
+    public let toLabel           : String
+    @Binding
+    public var toDate   : Date
+    public let `in`              : ClosedRange<Date>?
     
-    var body: some View {
+    public var body: some View {
         VStack {
             if `in` != nil {
                 // contraintes sur la plage de dates

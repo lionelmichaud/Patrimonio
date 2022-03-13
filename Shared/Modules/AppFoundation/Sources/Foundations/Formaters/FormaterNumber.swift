@@ -116,13 +116,16 @@ public extension Double {
     }
 
     func €String(digit: Int = 0) -> String {
+        guard digit >= 0 else {
+            return "??"
+        }
         let numFormatter = NumberFormatter()
         numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
         numFormatter.isLenient             = true
+        numFormatter.numberStyle           = .currency
         numFormatter.minimumIntegerDigits  = 1
         numFormatter.minimumFractionDigits = 0
         numFormatter.maximumFractionDigits = digit
-        numFormatter.numberStyle           = .currency
         return numFormatter.string(from: self as NSNumber) ?? ""
     }
 
@@ -133,19 +136,23 @@ public extension Double {
     var percentStringRounded: String {
         percentIntegerFormatter.string(from: self as NSNumber) ?? ""
     }
-    
-    func percentString(digit: Int = 0) -> String {
+
+    func percentNormString(digit: Int = 0) -> String {
         guard digit >= 0 else {
             return "??"
         }
         let numFormatter = NumberFormatter()
         numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
         numFormatter.isLenient             = true
-        numFormatter.numberStyle           = .decimal
+        numFormatter.numberStyle           = .percent
         numFormatter.minimumIntegerDigits  = 1
         numFormatter.maximumIntegerDigits  = 3
         numFormatter.minimumFractionDigits = 0
         numFormatter.maximumFractionDigits = digit
         return numFormatter.string(from: self as NSNumber) ?? ""
+    }
+
+    func percentString(digit: Int = 0) -> String {
+        (self/100.0).percentNormString(digit: digit)
     }
 }

@@ -8,6 +8,7 @@
 
 import SwiftUI
 import AssetsModel
+import HelpersView
 
 struct InterestRateTypeEditView : View {
     @Binding var rateType         : InterestRateKind

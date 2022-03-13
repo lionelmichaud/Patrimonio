@@ -8,6 +8,7 @@
 import SwiftUI
 import Persistence
 import ModelEnvironment
+import HelpersView
 
 struct UpdateSettingsView: View {
     @State private var alertItem: AlertItem?

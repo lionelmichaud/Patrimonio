@@ -9,6 +9,7 @@ import SwiftUI
 import Persistence
 import ModelEnvironment
 import FamilyModel
+import HelpersView
 
 // MARK: - Deterministic Retirement Régime General View
 
@@ -60,7 +61,8 @@ struct ModelRetirementGeneralView: View {
                 HStack {
                     Text("Taux maximum")
                     Spacer()
-                    Text("\(model.retirementModel.regimeGeneral.maxReversionRate.percentString(digit: 0)) %").foregroundColor(.secondary)
+                    Text("\(model.retirementModel.regimeGeneral.maxReversionRate.percentString(digit: 0))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.retirementModel.regimeGeneral.maxReversionRate) { _ in
@@ -75,7 +77,8 @@ struct ModelRetirementGeneralView: View {
                     HStack {
                         Text("Décote par trimestre manquant")
                         Spacer()
-                        Text("\(model.retirementModel.regimeGeneral.decoteParTrimestre.percentString(digit: 3)) %").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeGeneral.decoteParTrimestre.percentString(digit: 3))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.retirementModel.regimeGeneral.decoteParTrimestre) { _ in
@@ -89,7 +92,8 @@ struct ModelRetirementGeneralView: View {
                     HStack {
                         Text("Surcote par trimestre supplémentaire")
                         Spacer()
-                        Text("\(model.retirementModel.regimeGeneral.surcoteParTrimestre.percentString(digit: 2)) %").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeGeneral.surcoteParTrimestre.percentString(digit: 2))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.retirementModel.regimeGeneral.surcoteParTrimestre) { _ in
@@ -103,7 +107,8 @@ struct ModelRetirementGeneralView: View {
                     HStack {
                         Text("Nombre de trimestres maximum de décote")
                         Spacer()
-                        Text("\(model.retirementModel.regimeGeneral.maxNbTrimestreDecote) trimestres").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeGeneral.maxNbTrimestreDecote) trimestres")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.retirementModel.regimeGeneral.maxNbTrimestreDecote) { _ in
@@ -117,7 +122,8 @@ struct ModelRetirementGeneralView: View {
                     HStack {
                         Text("Surcote pour trois enfants nés")
                         Spacer()
-                        Text("\(model.retirementModel.regimeGeneral.majorationTauxEnfant.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.retirementModel.regimeGeneral.majorationTauxEnfant.percentString(digit: 0))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.retirementModel.regimeGeneral.majorationTauxEnfant) { _ in

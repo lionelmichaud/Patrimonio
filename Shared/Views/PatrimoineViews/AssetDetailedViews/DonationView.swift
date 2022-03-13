@@ -8,6 +8,7 @@
 import SwiftUI
 import Ownership
 import Donation
+import HelpersView
 
 /// Edition d'une Donation
 /// - Warning: Doit être intégrée dans une Form()

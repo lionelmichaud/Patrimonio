@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import HelpersView
 
 struct ModelFiscalFinancialView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -32,7 +33,8 @@ struct ModelFiscalFinancialView: View {
                     HStack {
                         Text("CRDS")
                         Spacer()
-                        Text("\(model.fiscalModel.financialRevenuTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.financialRevenuTaxes.model.CRDS.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.financialRevenuTaxes.model.CRDS) { _ in
@@ -46,7 +48,8 @@ struct ModelFiscalFinancialView: View {
                     HStack {
                         Text("CSG")
                         Spacer()
-                        Text("\(model.fiscalModel.financialRevenuTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.financialRevenuTaxes.model.CSG.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.financialRevenuTaxes.model.CSG) { _ in
@@ -60,7 +63,8 @@ struct ModelFiscalFinancialView: View {
                     HStack {
                         Text("Prélèvement Sociaux")
                         Spacer()
-                        Text("\(model.fiscalModel.financialRevenuTaxes.model.prelevSocial.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.financialRevenuTaxes.model.prelevSocial.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.financialRevenuTaxes.model.prelevSocial) { _ in

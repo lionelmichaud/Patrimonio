@@ -9,6 +9,7 @@
 import SwiftUI
 import AppFoundation
 import DateBoundary
+import HelpersView
 
 // MARK: - View Model for LifeExpenseTimeSpan
 

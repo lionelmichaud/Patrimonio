@@ -11,6 +11,7 @@ import Ownership
 import FamilyModel
 import PatrimoineModel
 import Charts
+import HelpersView
 
 struct PatrimoineSummaryShareChartView: View {
     static let tous     = "Tous"

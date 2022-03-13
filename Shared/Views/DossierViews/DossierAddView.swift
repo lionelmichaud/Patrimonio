@@ -8,6 +8,7 @@
 import SwiftUI
 import AppFoundation
 import Persistence
+import HelpersView
 
 // MARK: - Création du nouveau DOSSIER
 

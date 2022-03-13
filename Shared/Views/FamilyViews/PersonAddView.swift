@@ -12,6 +12,7 @@ import ModelEnvironment
 import PersonModel
 import PatrimoineModel
 import FamilyModel
+import HelpersView
 
 // MARK: - Saisie du nouveau membre de la famille
 

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Persistence
+import HelpersView
 
 struct ActivityViewController: UIViewControllerRepresentable {
     @Binding var activityItems: [Any]

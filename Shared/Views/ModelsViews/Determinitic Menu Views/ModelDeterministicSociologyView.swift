@@ -9,6 +9,7 @@ import SwiftUI
 import Persistence
 import ModelEnvironment
 import FamilyModel
+import HelpersView
 
 // MARK: - Deterministic SocioEconomy View
 
@@ -34,7 +35,8 @@ struct ModelDeterministicSociologyView: View {
                     HStack {
                         Text("Évolution anuelle des pensions de retraite")
                         Spacer()
-                        Text("\(model.socioEconomyModel.pensionDevaluationRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.socioEconomyModel.pensionDevaluationRate.defaultValue.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.socioEconomyModel.pensionDevaluationRate.defaultValue) { _ in
@@ -55,7 +57,8 @@ struct ModelDeterministicSociologyView: View {
                     HStack {
                         Text("Nombre de trimestres additionels pour obtenir le taux plein")
                         Spacer()
-                        Text("\(Int(model.socioEconomyModel.nbTrimTauxPlein.defaultValue)) ans").foregroundColor(.secondary)
+                        Text("\(Int(model.socioEconomyModel.nbTrimTauxPlein.defaultValue)) ans")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.socioEconomyModel.nbTrimTauxPlein.defaultValue) { _ in
@@ -77,7 +80,8 @@ struct ModelDeterministicSociologyView: View {
                     HStack {
                         Text("Pénalisation des dépenses")
                         Spacer()
-                        Text("\(model.socioEconomyModel.expensesUnderEvaluationRate.defaultValue.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.socioEconomyModel.expensesUnderEvaluationRate.defaultValue.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.socioEconomyModel.expensesUnderEvaluationRate.defaultValue) { _ in

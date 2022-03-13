@@ -15,6 +15,7 @@ import LifeExpense
 import PatrimoineModel
 import FamilyModel
 import Kpi
+import HelpersView
 
 struct KpiListSummaryView: View {
     @EnvironmentObject var simulation : Simulation
@@ -89,9 +90,9 @@ struct KpiSummaryView: View {
                     .padding(EdgeInsets(top: withPadding ? 3 : 0, leading: 0, bottom: withPadding ? 3 : 0, trailing: 0))
                 if simulationMode == .random {
                     HStack {
-                        PercentView(label   : "Critère satisfait",
-                                    percent : kpi.probability(for: kpi.objective) ?? Double.nan,
-                                    comment : "avec une probabilité de")
+                        PercentNormView(label : "Critère satisfait",
+                                    percent   : kpi.probability(for  : kpi.objective) ?? Double.nan,
+                                    comment   : "avec une probabilité de")
                         Image(systemName: kpi.objectiveIsReached(withMode: simulationMode)! ? "checkmark.circle.fill" : "multiply.circle.fill")
                             .imageScale(.large)
                     }

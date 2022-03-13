@@ -9,6 +9,7 @@ import SwiftUI
 import Persistence
 import ModelEnvironment
 import FamilyModel
+import HelpersView
 
 struct ModelUnemploymentDiffereView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -25,7 +26,8 @@ struct ModelUnemploymentDiffereView: View {
                     HStack {
                         Text("Délai d'attente avant inscription")
                         Spacer()
-                        Text("\(model.unemploymentModel.allocationChomage.model.delayModel.delaiAttente) jours").foregroundColor(.secondary)
+                        Text("\(model.unemploymentModel.allocationChomage.model.delayModel.delaiAttente) jours")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.unemploymentModel.allocationChomage.model.delayModel.delaiAttente) { _ in
@@ -41,7 +43,8 @@ struct ModelUnemploymentDiffereView: View {
                     HStack {
                         Text("Nombre de jours de différé obtenu en x le montant de l'indemnité par ce coefficient")
                         Spacer()
-                        Text("\(model.unemploymentModel.allocationChomage.model.delayModel.ratioDiffereSpecifique.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.unemploymentModel.allocationChomage.model.delayModel.ratioDiffereSpecifique.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.unemploymentModel.allocationChomage.model.delayModel.ratioDiffereSpecifique) { _ in
@@ -54,7 +57,8 @@ struct ModelUnemploymentDiffereView: View {
                     HStack {
                         Text("Durée maximale du différé spécifique")
                         Spacer()
-                        Text("\(model.unemploymentModel.allocationChomage.model.delayModel.maxDiffereSpecifique) jours").foregroundColor(.secondary)
+                        Text("\(model.unemploymentModel.allocationChomage.model.delayModel.maxDiffereSpecifique) jours")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.unemploymentModel.allocationChomage.model.delayModel.maxDiffereSpecifique) { _ in
@@ -67,7 +71,8 @@ struct ModelUnemploymentDiffereView: View {
                     HStack {
                         Text("Sauf dans le cas d'un licenciement économique")
                         Spacer()
-                        Text("\(model.unemploymentModel.allocationChomage.model.delayModel.maxDiffereSpecifiqueLicenciementEco) jours").foregroundColor(.secondary)
+                        Text("\(model.unemploymentModel.allocationChomage.model.delayModel.maxDiffereSpecifiqueLicenciementEco) jours")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.unemploymentModel.allocationChomage.model.delayModel.maxDiffereSpecifiqueLicenciementEco) { _ in

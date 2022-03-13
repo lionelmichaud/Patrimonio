@@ -14,6 +14,7 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 import Kpi
+import HelpersView
 
 struct KpiListView : View {
     @EnvironmentObject var simulation : Simulation

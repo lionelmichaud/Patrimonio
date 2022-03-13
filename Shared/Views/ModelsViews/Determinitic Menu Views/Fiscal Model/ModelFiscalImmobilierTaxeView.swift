@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import HelpersView
 
 struct ModelFiscalImmobilierTaxeView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -39,7 +40,8 @@ struct ModelFiscalImmobilierTaxeView: View {
                 HStack {
                     Text("CRDS")
                     Spacer()
-                    Text("\(model.fiscalModel.estateCapitalGainTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.estateCapitalGainTaxes.model.CRDS.percentString(digit: 1))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.fiscalModel.estateCapitalGainTaxes.model.CRDS) { _ in
@@ -53,7 +55,8 @@ struct ModelFiscalImmobilierTaxeView: View {
                 HStack {
                     Text("CSG")
                     Spacer()
-                    Text("\(model.fiscalModel.estateCapitalGainTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.estateCapitalGainTaxes.model.CSG.percentString(digit: 1))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.fiscalModel.estateCapitalGainTaxes.model.CSG) { _ in
@@ -67,7 +70,8 @@ struct ModelFiscalImmobilierTaxeView: View {
                 HStack {
                     Text("Prélèvements Sociaux")
                     Spacer()
-                    Text("\(model.fiscalModel.estateCapitalGainTaxes.model.prelevSocial.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.estateCapitalGainTaxes.model.prelevSocial.percentString(digit: 1))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.fiscalModel.estateCapitalGainTaxes.model.prelevSocial) { _ in
@@ -81,7 +85,8 @@ struct ModelFiscalImmobilierTaxeView: View {
                 HStack {
                     Text("Abattement forfaitaire pour travaux")
                     Spacer()
-                    Text("\(model.fiscalModel.estateCapitalGainTaxes.model.discountTravaux.percentString(digit: 0)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.estateCapitalGainTaxes.model.discountTravaux.percentString(digit: 0))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.fiscalModel.estateCapitalGainTaxes.model.discountTravaux) { _ in

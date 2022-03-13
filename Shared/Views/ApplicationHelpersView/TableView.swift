@@ -17,12 +17,12 @@ struct ListTableRowView<RatingView1: View, RatingView2: View>: View {
     private var rating1     : RatingView1
     private var rating2     : RatingView2
 
-    internal init(label                : String,
-                  value                : Double,
-                  indentLevel          : Int,
-                  header               : Bool,
-                  @ViewBuilder rating1 : () -> RatingView1,
-                  @ViewBuilder rating2 : () -> RatingView2) {
+    public init(label                : String,
+                value                : Double,
+                indentLevel          : Int,
+                header               : Bool,
+                @ViewBuilder rating1 : () -> RatingView1,
+                @ViewBuilder rating2 : () -> RatingView2) {
         self.label       = label
         self.value       = value
         self.indentLevel = indentLevel

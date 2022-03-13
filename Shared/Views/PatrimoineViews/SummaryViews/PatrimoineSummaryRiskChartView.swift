@@ -12,6 +12,7 @@ import Ownership
 import AssetsModel
 import FamilyModel
 import Charts
+import HelpersView
 
 let riskPopOverMessage =
     """

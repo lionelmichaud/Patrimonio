@@ -9,6 +9,7 @@ import SwiftUI
 import Persistence
 import ModelEnvironment
 import FamilyModel
+import HelpersView
 
 struct ModelUnemploymentAmountView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -26,7 +27,8 @@ struct ModelUnemploymentAmountView: View {
                     HStack {
                         Text("Cas 1: % du salaire journalier de référence")
                         Spacer()
-                        Text("\(model.unemploymentModel.allocationChomage.model.amountModel.case1Rate.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.unemploymentModel.allocationChomage.model.amountModel.case1Rate.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.unemploymentModel.allocationChomage.model.amountModel.case1Rate) { _ in
@@ -50,7 +52,8 @@ struct ModelUnemploymentAmountView: View {
                     HStack {
                         Text("Cas 2: % du salaire journalier de référence")
                         Spacer()
-                        Text("\(model.unemploymentModel.allocationChomage.model.amountModel.case2Rate.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.unemploymentModel.allocationChomage.model.amountModel.case2Rate.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.unemploymentModel.allocationChomage.model.amountModel.case2Rate) { _ in
@@ -80,7 +83,8 @@ struct ModelUnemploymentAmountView: View {
                     HStack {
                         Text("Allocation maximale en % du salaire journalier de référence")
                         Spacer()
-                        Text("\(model.unemploymentModel.allocationChomage.model.amountModel.maxAllocationPcent.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(model.unemploymentModel.allocationChomage.model.amountModel.maxAllocationPcent.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.unemploymentModel.allocationChomage.model.amountModel.maxAllocationPcent) { _ in

@@ -13,6 +13,7 @@ import AssetsModel
 import ModelEnvironment
 import PatrimoineModel
 import FamilyModel
+import HelpersView
 
 struct ScpiDetailedView: View {
     @EnvironmentObject var model      : Model

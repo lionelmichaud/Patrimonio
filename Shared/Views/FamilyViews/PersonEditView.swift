@@ -15,6 +15,7 @@ import ModelEnvironment
 import PersonModel
 import PatrimoineModel
 import FamilyModel
+import HelpersView
 
 struct PersonEditView: View {
     @EnvironmentObject var family     : Family

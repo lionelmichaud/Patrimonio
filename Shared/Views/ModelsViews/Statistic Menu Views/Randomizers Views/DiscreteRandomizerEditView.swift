@@ -8,6 +8,7 @@
 import SwiftUI
 import ModelEnvironment
 import Statistics
+import HelpersView
 
 struct DiscreteRandomizerEditView: View {
     @EnvironmentObject private var model : Model

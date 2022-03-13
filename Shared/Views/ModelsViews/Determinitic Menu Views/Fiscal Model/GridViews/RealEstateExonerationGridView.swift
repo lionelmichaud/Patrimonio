@@ -8,6 +8,7 @@
 import SwiftUI
 import AppFoundation
 import FiscalModel
+import HelpersView
 
 // MARK: - Editeur de ExonerationSlice [année, discount %, sum %]
 
@@ -39,10 +40,10 @@ struct RealEstateExonerationSliceView: View {
                         weight  : .bold,
                         comment : "ans")
             PercentView(label   : "Décote",
-                        percent : slice.discountRate / 100.0,
+                        percent : slice.discountRate,
                         comment : "par année de détention au-delà")
             PercentView(label   : "Décote cumulée",
-                        percent : slice.prevDiscount / 100.0,
+                        percent : slice.prevDiscount,
                         comment : "cumul des tranches précédentes")
         }
     }

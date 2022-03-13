@@ -9,16 +9,16 @@
 import SwiftUI
 
 // MARK: - Check Box - Syle de Toggle customisé
-struct CheckboxToggleStyle: ToggleStyle {
-    enum Size {
+public struct CheckboxToggleStyle: ToggleStyle {
+    public enum Size {
         case small
         case medium
         case large
     }
     
-    let size: Size
+    public let size: Size
     
-    func makeBody(configuration: Configuration) -> some View {
+    public func makeBody(configuration: Configuration) -> some View {
         return HStack {
             configuration.label
             Spacer()
@@ -47,7 +47,7 @@ struct CheckboxToggleStyle: ToggleStyle {
 // swiftlint:disable type_name
 struct ToggleModifiers_Library: LibraryContentProvider {
     @LibraryContentBuilder
-    func modifiers(base: Toggle<ContentView>) -> [LibraryItem] {
+    func modifiers(base: Toggle<EmptyView>) -> [LibraryItem] {
         LibraryItem(base.toggleStyle(CheckboxToggleStyle(size :.large)),
                     title                                     : "Toggle Check Box",
                     category                                  : .control,

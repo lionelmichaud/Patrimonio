@@ -7,6 +7,7 @@
 
 import SwiftUI
 import RetirementModel
+import HelpersView
 
 typealias SliceRegimeLegal = RegimeGeneral.SliceRegimeLegal
 typealias GridRegimeLegal = [SliceRegimeLegal]

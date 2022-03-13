@@ -10,16 +10,17 @@ import SwiftUI
 
 // MARK: - Selection Menus View
 
-struct MenuContentView: View {
-    @Binding var itemSelection  : [(label  : String, selected  : Bool)]
+public struct MenuContentView: View {
+    @Binding
+    private var itemSelection: [(label: String, selected: Bool)]
     
-    func setAll(selected: Bool) {
+    private func setAll(selected: Bool) {
         for idx in 0 ..< itemSelection.count {
             itemSelection[idx].selected = selected
         }
     }
     
-    var body: some View {
+    public var body: some View {
         // filtre des séries à (dé)sélectionner
         VStack {
             // Barre de titre
@@ -60,6 +61,10 @@ struct MenuContentView: View {
             .listStyle(GroupedListStyle())
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    public init(itemSelection: Binding<[(label: String, selected: Bool)]>) {
+        self._itemSelection = itemSelection
     }
 }
 

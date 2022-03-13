@@ -137,7 +137,7 @@ final class LifeInsSuccessionManagerTests: XCTestCase { // swiftlint:disable:thi
         ownership.isDismembered = false
         ownership.fullOwners = [Owner(name: defunt, fraction: 100.0)]
         
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         clause.isOptional     = false
         clause.isDismembered  = false
         clause.fullRecipients = [Owner(name: enfant1, fraction: 40.0),
@@ -270,7 +270,7 @@ final class LifeInsSuccessionManagerTests: XCTestCase { // swiftlint:disable:thi
         ownership.bareOwners = [Owner(name: enfant1, fraction: 40.0),
                                 Owner(name: enfant2, fraction: 60.0)]
         
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         clause.isOptional     = false
         clause.isDismembered  = false
         clause.fullRecipients = [Owner(name: enfant1, fraction: 40.0),

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import RetirementModel
+import HelpersView
 
 typealias SliceNbTrimUnemployement = RegimeGeneral.SliceUnemployement
 typealias GridNbTrimUnemployement = [SliceNbTrimUnemployement]

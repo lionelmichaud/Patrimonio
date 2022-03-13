@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import Combine
 import AppFoundation
 
 struct LabeledValueRowView: View {
@@ -25,7 +24,7 @@ struct LabeledValueRowView: View {
                     self.colapse.toggle()
                 },
                 label: {
-                    Image(systemName: "chevron.right.2")
+                    Image(systemName: "chevron.right")
                         .foregroundColor(.accentColor)
                         //.imageScale(.large)
                         .rotationEffect(.degrees(colapse ? 0 : 90))

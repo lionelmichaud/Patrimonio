@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import HelpersView
 
 struct ModelFiscalIsfView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -64,7 +65,8 @@ struct ModelFiscalIsfView: View {
                     HStack {
                         Text("Abattement")
                         Spacer()
-                        Text("\(model.fiscalModel.isf.model.decoteCoef.percentString(digit: 2)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.isf.model.decoteCoef.percentString(digit: 2))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.isf.model.decoteCoef) { _ in
@@ -80,7 +82,8 @@ struct ModelFiscalIsfView: View {
                     HStack {
                         Text("Décote sur la valeur de la résidence principale")
                         Spacer()
-                        Text("\(model.fiscalModel.isf.model.decoteResidence.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.isf.model.decoteResidence.percentString(digit: 0))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.isf.model.decoteResidence) { _ in
@@ -94,7 +97,8 @@ struct ModelFiscalIsfView: View {
                     HStack {
                         Text("Décote sur la valeur d'un bien immobilier en location")
                         Spacer()
-                        Text("\(model.fiscalModel.isf.model.decoteLocation.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.isf.model.decoteLocation.percentString(digit: 0))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.isf.model.decoteLocation) { _ in
@@ -108,7 +112,8 @@ struct ModelFiscalIsfView: View {
                     HStack {
                         Text("Décote sur la valeur d'un bien immobilier en indivision")
                         Spacer()
-                        Text("\(model.fiscalModel.isf.model.decoteIndivision.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.isf.model.decoteIndivision.percentString(digit: 0))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.isf.model.decoteIndivision) { _ in

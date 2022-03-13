@@ -17,6 +17,7 @@ import LifeExpense
 import PatrimoineModel
 import FamilyModel
 import CashFlow
+import HelpersView
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.CashFlowDetailedChartView")
 

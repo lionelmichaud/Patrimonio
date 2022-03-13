@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppFoundation
+import HelpersView
 
 // MARK: - Editeur de Barême [seuil €, taux %]
 
@@ -33,8 +34,8 @@ struct RateSliceView: View {
             AmountView(label   : "Seuil",
                        amount  : slice.floor)
             Spacer(minLength: 50)
-            PercentView(label   : "Taux",
-                        percent : slice.rate)
+            PercentNormView(label   : "Taux",
+                            percent : slice.rate)
         }
     }
 }

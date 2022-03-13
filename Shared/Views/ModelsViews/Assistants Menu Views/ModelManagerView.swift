@@ -9,6 +9,7 @@ import SwiftUI
 import Files
 import Persistence
 import ModelEnvironment
+import HelpersView
 
 struct ModelManagerView: View {
     @EnvironmentObject private var dataStore : Store

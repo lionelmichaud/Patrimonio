@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import HelpersView
 
 struct ModelFiscalImmobilierImpotView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -39,7 +40,8 @@ struct ModelFiscalImmobilierImpotView: View {
                 HStack {
                     Text("Taux d'impôt sur les plus-values")
                     Spacer()
-                    Text("\(model.fiscalModel.estateCapitalGainIrpp.model.irpp.percentString(digit: 0)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.estateCapitalGainIrpp.model.irpp.percentString(digit: 0))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.fiscalModel.estateCapitalGainIrpp.model.irpp) { _ in
@@ -54,7 +56,8 @@ struct ModelFiscalImmobilierImpotView: View {
                     HStack {
                         Text("Abattement forfaitaire pour travaux")
                         Spacer()
-                        Text("\(model.fiscalModel.estateCapitalGainIrpp.model.discountTravaux.percentString(digit: 0)) %").foregroundColor(.secondary)
+                        Text("\(model.fiscalModel.estateCapitalGainIrpp.model.discountTravaux.percentString(digit: 0))")
+                            .foregroundColor(.secondary)
                     }
                 }
                 .onChange(of: model.fiscalModel.estateCapitalGainIrpp.model.discountTravaux) { _ in

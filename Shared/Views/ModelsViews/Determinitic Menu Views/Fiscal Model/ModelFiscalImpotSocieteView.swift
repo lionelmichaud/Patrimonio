@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import HelpersView
 
 struct ModelFiscalImpotSocieteView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -31,7 +32,8 @@ struct ModelFiscalImpotSocieteView: View {
                 HStack {
                     Text("Taux d'impôt sur les bénéfices")
                     Spacer()
-                    Text("\(model.fiscalModel.companyProfitTaxes.model.rate.percentString(digit: 0)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.companyProfitTaxes.model.rate.percentString(digit: 0))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.fiscalModel.companyProfitTaxes.model.rate) { _ in

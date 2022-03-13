@@ -10,9 +10,19 @@ import AppFoundation
 import Persistence
 import ModelEnvironment
 import FamilyModel
+import HelpersView
 
 // MARK: - Editeur de Grille Générique
 
+/// Editeur de Grille Générique
+/// - Parameters:
+///   - label: Nom de la grille
+///   - grid: Grille à éditer
+///   - gridIsValid: closure qui doit retourner Vrai si la grille est valide
+///   - initializeGrid: closure qui initialize la grille (si nécessaire) à chaque foi qu'elle change
+///   - displayView: View présentant une ligne de la grille
+///   - addView: View permettant d'ajouter une ligne de la grille
+///   - editView: View permettant de modifier une ligne de la grille
 struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> : View {
     let label: String
     @Binding var grid: [S]
@@ -30,7 +40,16 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
     private var displayView    : (S) -> DisplayView
     private var addView        : (Binding<[S]>) -> AddView
     private var editView       : (Binding<[S]>, Int) -> EditView
-
+    
+    /// Création
+    /// - Parameters:
+    ///   - label: Nom de la grille
+    ///   - grid: Grille à éditer
+    ///   - gridIsValid: closure qui doit retourner Vrai si la grille est valide
+    ///   - initializeGrid: closure qui initialize la grille (si nécessaire) à chaque foi qu'elle change
+    ///   - displayView: View présentant une ligne de la grille
+    ///   - addView: View permettant d'ajouter une ligne de la grille
+    ///   - editView: View permettant de modifier une ligne de la grille
     init(label                    : String,
          grid                     : Binding<[S]>,
          gridIsValid              : @escaping ([S]) -> Bool = { _ in true },
@@ -57,7 +76,11 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
                 .sheet(isPresented: $showingAddSheet) {
                     addView($grid)
                 }
-                .padding([.horizontal,.top])
+                .padding()
+
+            Text("Double cliquer sur une ligne pour la modifier.")
+                .foregroundColor(.secondary)
+                .padding(.horizontal)
 
             /// Liste
             List(selection: $selection) {
@@ -80,6 +103,7 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
                     model.manageInternalDependencies()
                 }
             }
+            Spacer()
         }
         .alert(item: $alertItem, content: newAlert)
         .navigationTitle(label)
@@ -89,14 +113,18 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
                 alertItem = applyChangesToTemplateAlert(
                     model : model,
                     notifyTemplatFolderMissing: {
-                        alertItem =
-                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                      dismissButton : .default(Text("OK")))
+                        DispatchQueue.main.async {
+                            alertItem =
+                                AlertItem(title         : Text("Répertoire 'Patron' absent"),
+                                          dismissButton : .default(Text("OK")))
+                        }
                     },
                     notifyFailure: {
-                        alertItem =
-                            AlertItem(title         : Text("Echec de l'enregistrement"),
-                                      dismissButton : .default(Text("OK")))
+                        DispatchQueue.main.async {
+                            alertItem =
+                                AlertItem(title         : Text("Echec de l'enregistrement"),
+                                          dismissButton : .default(Text("OK")))
+                        }
                     })
             },
             cancelChanges: {
@@ -129,19 +157,20 @@ struct GridView_Previews: PreviewProvider {
         loadTestFilesFromBundle()
         return
             NavigationView {
-                NavigationLink("Test", destination: GridView(label          : "Nom",
-                                                             grid           : .constant(grid()),
-                                                             gridIsValid    : { _ in true },
-                                                             initializeGrid : { grid in try! grid.initialize() },
-                                                             displayView    : { slice in RateSliceView(slice: slice) },
-                                                             addView        : { grid in RateSliceAddView(grid: grid) },
-                                                             editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) })
-                                .preferredColorScheme(.dark)
-                                .environmentObject(dataStoreTest)
-                                .environmentObject(modelTest)
-                                .environmentObject(familyTest)
-                                .environmentObject(simulationTest))
-
+                EmptyView()
+                GridView(label          : "label",
+                         grid           : .constant(grid()),
+                         gridIsValid    : { _ in true },
+                         initializeGrid : { grid in try! grid.initialize() },
+                         displayView    : { slice in RateSliceView(slice: slice) },
+                         addView        : { grid in RateSliceAddView(grid: grid) },
+                         editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) })
+                    .preferredColorScheme(.dark)
+                    .environmentObject(dataStoreTest)
+                    .environmentObject(modelTest)
+                    .environmentObject(familyTest)
+                    .environmentObject(simulationTest)
+                
             }
             .preferredColorScheme(.dark)
             .previewLayout(.fixed(width: 700.0, height: 400.0))

@@ -14,6 +14,7 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 import CashFlow
+import HelpersView
 
 struct FamilySummaryView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -154,8 +155,8 @@ struct FiscalSummarySection: View {
                             integer : Int(cashFlow!.adultTaxes.irpp.familyQuotient))
                     .foregroundColor(.secondary)
                     .padding(.leading)
-                PercentView(label   : "Taux moyen d'imposition",
-                            percent : cashFlow!.adultTaxes.irpp.averageRate)
+                PercentNormView(label   : "Taux moyen d'imposition",
+                                percent : cashFlow!.adultTaxes.irpp.averageRate)
                     .foregroundColor(.secondary)
                     .padding(.leading)
                 AmountView(label : "Montant de l'ISF",
@@ -164,8 +165,8 @@ struct FiscalSummarySection: View {
                            amount : cashFlow!.adultTaxes.isf.taxable)
                     .foregroundColor(.secondary)
                     .padding(.leading)
-                PercentView(label   : "Taux ISF",
-                            percent : cashFlow!.adultTaxes.isf.marginalRate)
+                PercentNormView(label   : "Taux ISF",
+                                percent : cashFlow!.adultTaxes.isf.marginalRate)
                     .foregroundColor(.secondary)
                     .padding(.leading)
                 AmountView(label : "Taxes locales",

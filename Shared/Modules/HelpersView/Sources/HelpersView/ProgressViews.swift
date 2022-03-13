@@ -11,7 +11,7 @@ import AppFoundation
 //import ActivityIndicatorView // https://github.com/exyte/ActivityIndicatorView.git
 
 // MARK: - Progress bar
-struct ProgressBar: View {
+public struct ProgressBar: View {
     private let value             : Double
     private let minValue          : Double
     private let maxValue          : Double
@@ -24,17 +24,17 @@ struct ProgressBar: View {
     private let maxValuePercent   : Bool
     private let formater          : NumberFormatter?
     
-    init(value             : Double,
-         minValue          : Double = 0.0,
-         maxValue          : Double,
-         backgroundEnabled : Bool  = true,
-         externalLabels    : Bool  = false,
-         internalLabels    : Bool  = false,
-         backgroundColor   : Color = .secondary,
-         foregroundColor   : Color = .blue,
-         valuePercent      : Bool  = false,
-         maxValuePercent   : Bool  = false,
-         formater          : NumberFormatter? = nil) {
+    public init(value             : Double,
+                minValue          : Double = 0.0,
+                maxValue          : Double,
+                backgroundEnabled : Bool  = true,
+                externalLabels    : Bool  = false,
+                internalLabels    : Bool  = false,
+                backgroundColor   : Color = .secondary,
+                foregroundColor   : Color = .blue,
+                valuePercent      : Bool  = false,
+                maxValuePercent   : Bool  = false,
+                formater          : NumberFormatter? = nil) {
         self.value             = value.clamp(low: minValue, high: maxValue)
         self.minValue          = minValue
         self.maxValue          = max(minValue+0.01, maxValue)
@@ -48,7 +48,7 @@ struct ProgressBar: View {
         self.formater          = formater
     }
 
-    var body: some View {
+    public var body: some View {
         if minValue == maxValue {
             EmptyView()
         } else {
@@ -130,9 +130,11 @@ struct ProgressBar: View {
         let percentage = (value - minValue) / (maxValue - minValue)
         return width *  CGFloat(percentage)
     }
+    
     private func percentageValue(value: Double) -> Int {
         Int(100 * (value - minValue) / (maxValue - minValue))
     }
+    
     private func percentageMaxValue(value: Double) -> Int? {
         guard (value - minValue) != 0 else {
             return nil
@@ -142,8 +144,8 @@ struct ProgressBar: View {
 }
 
 // MARK: - Progress circle
-struct ProgressCircle: View {
-    enum Stroke {
+public struct ProgressCircle: View {
+    public enum Stroke {
         case line
         case dotted
         
@@ -170,15 +172,15 @@ struct ProgressCircle: View {
     private let foregroundColor   : Color
     private let lineWidth         : CGFloat
     
-    init(value             : Double,
-         minValue          : Double,
-         maxValue          : Double,
-         style             : Stroke  = .line,
-         backgroundEnabled : Bool    = true,
-         labelsEnabled     : Bool    = true,
-         backgroundColor   : Color   = .secondary,
-         foregroundColor   : Color   = .blue,
-         lineWidth         : CGFloat = 10) {
+    public init(value             : Double,
+                minValue          : Double,
+                maxValue          : Double,
+                style             : Stroke  = .line,
+                backgroundEnabled : Bool    = true,
+                labelsEnabled     : Bool    = true,
+                backgroundColor   : Color   = .secondary,
+                foregroundColor   : Color   = .blue,
+                lineWidth         : CGFloat = 10) {
         self.value             = value.clamp(low: minValue, high: maxValue)
         self.minValue          = minValue
         self.maxValue          = max(minValue+0.01, maxValue)
@@ -190,7 +192,7 @@ struct ProgressCircle: View {
         self.lineWidth         = lineWidth
     }
     
-    var body: some View {
+    public var body: some View {
         ZStack {
             if backgroundEnabled {
                 Circle()
@@ -216,20 +218,24 @@ struct ProgressCircle: View {
 }
 
 // MARK: - Activity Indicator
-struct ActivityIndicator: UIViewRepresentable {
+public struct ActivityIndicator: UIViewRepresentable {
     @Binding var shouldAnimate: Bool
     
-    func makeUIView(context: Context) -> UIActivityIndicatorView {
+    public func makeUIView(context: Context) -> UIActivityIndicatorView {
         return UIActivityIndicatorView()
     }
     
-    func updateUIView(_ uiView: UIActivityIndicatorView,
-                      context: Context) {
+    public func updateUIView(_ uiView : UIActivityIndicatorView,
+                             context  : Context) {
         if self.shouldAnimate {
             uiView.startAnimating()
         } else {
             uiView.stopAnimating()
         }
+    }
+    
+    public init(shouldAnimate: Binding<Bool>) {
+        _shouldAnimate = shouldAnimate
     }
 }
 

@@ -8,6 +8,7 @@
 import SwiftUI
 import AppFoundation
 import FiscalModel
+import HelpersView
 
 // MARK: - Editeur de Demembrement [age, usuFruit %, nueProp %]
 
@@ -39,12 +40,12 @@ struct DemembrementSliceView: View {
                         comment : "ans")
             Divider()
             Spacer(minLength: 125)
-            PercentView(label   : "Usufruit",
-                        percent : slice.usuFruit)
+            PercentNormView(label   : "Usufruit",
+                            percent : slice.usuFruit)
             Divider()
             Spacer(minLength: 125)
-            PercentView(label   : "Nue propriété",
-                        percent : slice.nueProp)
+            PercentNormView(label   : "Nue propriété",
+                            percent : slice.nueProp)
         }
     }
 }

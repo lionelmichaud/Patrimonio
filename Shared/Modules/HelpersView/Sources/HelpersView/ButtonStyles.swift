@@ -9,11 +9,11 @@
 import SwiftUI
 
 // MARK: - Syle de bouton Rectangle à coins arrondis
-struct RoundedRectButtonStyle: ButtonStyle {
-    var color     : Color     = .accentColor
-    var width     : CGFloat?
-    var height    : CGFloat?
-    var alignment : Alignment = .center
+public struct RoundedRectButtonStyle: ButtonStyle {
+    public var color     : Color     = .accentColor
+    public var width     : CGFloat?
+    public var height    : CGFloat?
+    public var alignment : Alignment = .center
     
     public func makeBody(configuration: RoundedRectButtonStyle.Configuration) -> some View {
         MyButton(configuration : configuration,
@@ -44,7 +44,7 @@ struct RoundedRectButtonStyle: ButtonStyle {
     }
 }
 
-extension Button {
+public extension Button {
     func roundedRectButtonStyle(color     : Color     = .accentColor,
                                 width     : CGFloat?,
                                 height    : CGFloat?  = nil,
@@ -54,12 +54,12 @@ extension Button {
 }
 
 // MARK: - Syle de bouton Capsule - façon iOS 14
-struct CapsuleButtonStyle: ButtonStyle {
-    var color     : Color     = Color("buttonBackgroundColor")
-    var width     : CGFloat?
-    var height    : CGFloat?
-    var alignment : Alignment = .center
-    var withShadow: Bool      = false
+public struct CapsuleButtonStyle: ButtonStyle {
+    public var color     : Color     = Color("buttonBackgroundColor")
+    public var width     : CGFloat?
+    public var height    : CGFloat?
+    public var alignment : Alignment = .center
+    public var withShadow: Bool      = false
     
     public func makeBody(configuration: CapsuleButtonStyle.Configuration) -> some View {
         MyButton(configuration : configuration,
@@ -92,7 +92,7 @@ struct CapsuleButtonStyle: ButtonStyle {
     }
 }
 
-extension Button {
+public extension Button {
     func capsuleButtonStyle(color     : Color     = Color("buttonBackgroundColor"),
                             width     : CGFloat?  = nil,
                             height    : CGFloat?  = nil,
@@ -102,7 +102,7 @@ extension Button {
 }
 
 // Button(iconName: "play.fill") {
-extension Button where Label == Image {
+public extension Button where Label == Image {
     init(iconName: String, action: @escaping () -> Void) {
         self.init(action: action) {
             Image(systemName: iconName)
@@ -163,7 +163,7 @@ struct ButtonsViews_Previews: PreviewProvider {
 // swiftlint:disable type_name
 struct ButtonModifiers_Library: LibraryContentProvider {
     @LibraryContentBuilder
-    func modifiers(base: Button<ContentView>) -> [LibraryItem] {
+    func modifiers(base: Button<EmptyView>) -> [LibraryItem] {
         LibraryItem(base.roundedRectButtonStyle(color : .blue, width : 200),
                     title                             : "Rounded Rect Button",
                     category                          : .control,

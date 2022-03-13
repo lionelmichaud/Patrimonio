@@ -10,6 +10,7 @@ import FamilyModel
 import ModelEnvironment
 import LifeExpense
 import PatrimoineModel
+import HelpersView
 
 struct ComputationForm: View {
     @EnvironmentObject private var model      : Model

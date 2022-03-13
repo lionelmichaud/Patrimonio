@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import HelpersView
 
 struct ModelFiscalChomageChargeView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -33,7 +34,8 @@ struct ModelFiscalChomageChargeView: View {
                 HStack {
                     Text("Assiette")
                     Spacer()
-                    Text("\(model.fiscalModel.allocationChomageTaxes.model.assiette.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.allocationChomageTaxes.model.assiette.percentString(digit: 1))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.fiscalModel.allocationChomageTaxes.model.assiette) { _ in
@@ -55,7 +57,8 @@ struct ModelFiscalChomageChargeView: View {
                 HStack {
                     Text("CRDS")
                     Spacer()
-                    Text("\(model.fiscalModel.allocationChomageTaxes.model.CRDS.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.allocationChomageTaxes.model.CRDS.percentString(digit: 1))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.fiscalModel.allocationChomageTaxes.model.CRDS) { _ in
@@ -69,7 +72,8 @@ struct ModelFiscalChomageChargeView: View {
                 HStack {
                     Text("CSG")
                     Spacer()
-                    Text("\(model.fiscalModel.allocationChomageTaxes.model.CSG.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.allocationChomageTaxes.model.CSG.percentString(digit: 1))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.fiscalModel.allocationChomageTaxes.model.CSG) { _ in
@@ -83,7 +87,8 @@ struct ModelFiscalChomageChargeView: View {
                 HStack {
                     Text("Cotisation de Retraite Complémentaire")
                     Spacer()
-                    Text("\(model.fiscalModel.allocationChomageTaxes.model.retraiteCompl.percentString(digit: 1)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.allocationChomageTaxes.model.retraiteCompl.percentString(digit: 1))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.fiscalModel.allocationChomageTaxes.model.retraiteCompl) { _ in

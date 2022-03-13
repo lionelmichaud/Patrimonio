@@ -11,6 +11,7 @@ import Ownership
 import AssetsModel
 import PersonModel
 import FamilyModel
+import HelpersView
 
 // MARK: - Saisie du type d'investissement
 

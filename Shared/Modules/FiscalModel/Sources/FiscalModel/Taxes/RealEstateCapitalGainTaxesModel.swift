@@ -58,11 +58,9 @@ public struct RealEstateCapitalGainTaxesModel: Codable {
      rechercher si les dépenses de travaux ont déjà été prises en compte pour l'assiette de l'impôt sur le revenu. Le forfait de 15 % est une simple faculté pour les
      contribuables propriétaires de leur bien depuis plus de cinq ans. Il ne se cumule pas avec les frais réellement supportés par le propriétaire.
      - Parameter detentionDuration: durée de la détention du bien
-     
      - Returns: Charges sociales dûes sur la plus-value immobilièrae
-     - Note:
-     - [notaires](https://www.notaires.fr/fr/immobilier-fiscalité/fiscalité-et-gestion-du-patrimoine/les-plus-values-immobilières)
-     - [impots gouv](https://www.service-public.fr/particuliers/vosdroits/F10864)
+     - Note: [notaires](https://www.notaires.fr/fr/immobilier-fiscalité/fiscalité-et-gestion-du-patrimoine/les-plus-values-immobilières)
+     - Note: [impots gouv](https://www.service-public.fr/particuliers/vosdroits/F10864)
      **/
     public func socialTaxes (capitalGain       : Double,
                              detentionDuration : Int) -> Double {

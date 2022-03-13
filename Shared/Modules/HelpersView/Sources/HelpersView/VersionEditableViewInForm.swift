@@ -7,10 +7,8 @@
 
 import SwiftUI
 import AppFoundation
-import ModelEnvironment
-import FamilyModel
 
-@ViewBuilder func headerWithVersion(label: String, version: Version) -> some View {
+@ViewBuilder public func headerWithVersion(label: String, version: Version) -> some View {
     HStack {
         Text(label)
         Spacer()
@@ -23,11 +21,13 @@ import FamilyModel
 
 // MARK: - Display & Edit the Version from inside a Form
 
-struct VersionEditableViewInForm: View {
-    @Binding var version: Version
-    @State private var showingEditSheet = false
+public struct VersionEditableViewInForm: View {
+    @Binding
+    private var version: Version
+    @State
+    private var showingEditSheet = false
 
-    var body: some View {
+    public var body: some View {
         VersionVStackView(version: version, withDetails: true)
             .foregroundColor(.blue)
             .onTapGesture(count   : 1,
@@ -36,15 +36,19 @@ struct VersionEditableViewInForm: View {
                 VersionEditSheet(version: $version)
             }
     }
+    
+    public init(version: Binding<Version>) {
+        self._version = version
+    }
 }
 
 // MARK: - Display the Version as a VStack
 
-struct VersionVStackView : View {
-    var version: Version
-    var withDetails: Bool
+public struct VersionVStackView : View {
+    private var version     : Version
+    private var withDetails : Bool
     
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text("Version: ").bold() + Text("v\(version.version ?? "") du \(version.date.stringShortDate)")
@@ -62,14 +66,20 @@ struct VersionVStackView : View {
             }
         }
     }
+    
+    public init(version     : Version,
+                withDetails : Bool) {
+        self.version = version
+        self.withDetails = withDetails
+    }
 }
 
 // MARK: - Display the Version as a Section
 
-struct VersionSectionView: View {
-    var version: Version
+public struct VersionSectionView: View {
+    private var version: Version
 
-    var body: some View {
+    public var body: some View {
         Section(header: Text("Version").font(.headline)) {
             if let name = version.name {
                 Text(name)
@@ -85,15 +95,21 @@ struct VersionSectionView: View {
             }
         }
     }
+    
+    public init(version: Version) {
+        self.version = version
+    }
 }
 
 // MARK: - Display & Edit the Version from inside another View (not a Form/List)
 
-struct VersionEditableView: View {
-    @Binding var version: Version
-    @State private var showingEditSheet = false
+public struct VersionEditableView: View {
+    @Binding
+    private var version : Version
+    @State
+    private var showingEditSheet = false
     
-    var body: some View {
+    public var body: some View {
         VersionListView(version: version, withDetails: true)
             .frame(maxHeight: version.comment == nil ? 60 : 120)
             .foregroundColor(.blue)
@@ -103,15 +119,19 @@ struct VersionEditableView: View {
                 VersionEditSheet(version: $version)
             }
     }
+    
+    public init(version: Binding<Version>) {
+        self._version = version
+    }
 }
 
 // MARK: - Display the Version as a List
 
-struct VersionListView : View {
-    var version: Version
-    var withDetails: Bool
+public struct VersionListView : View {
+    private var version     : Version
+    private var withDetails : Bool
     
-    var body: some View {
+    public var body: some View {
         List {
             HStack {
                 Text("Version: ").bold() + Text("v\(version.version ?? "") du \(version.date.stringShortDate)")
@@ -129,11 +149,17 @@ struct VersionListView : View {
             }
         }
     }
+    
+    public init(version     : Version,
+                withDetails : Bool) {
+        self.version = version
+        self.withDetails = withDetails
+    }
 }
 
 // MARK: - Sheet to Edit the Version
 
-struct VersionEditSheet : View {
+public struct VersionEditSheet : View {
     @Binding private var version: Version
     @Environment(\.presentationMode) var presentationMode
     @State private var name    : String
@@ -142,7 +168,7 @@ struct VersionEditSheet : View {
     @State private var minor   : Int
     @State private var patch   : Int
 
-    init(version: Binding<Version>) {
+    public init(version: Binding<Version>) {
         _version = version
         _name    = State(initialValue : version.wrappedValue.name ?? "")
         _major   = State(initialValue : version.wrappedValue.major ?? 0)
@@ -168,7 +194,7 @@ struct VersionEditSheet : View {
         .padding(.top)
     }
 
-    var body: some View {
+    public var body: some View {
         VStack {
             /// Barre de titre et boutons
             toolBar

@@ -332,7 +332,7 @@ extension KPI: CustomStringConvertible {
           nom:  \(name)
           note: \(note)
           valeur objectif: \(objective.rounded())
-          probabilité minimum d'atteindre l'objectif: \((probaObjective * 100.0).percentString(digit: 2)) %
+          probabilité minimum d'atteindre l'objectif: \(probaObjective.percentString(digit: 2))
           comparateur avec l'objectif: \(comparator)
 
         """

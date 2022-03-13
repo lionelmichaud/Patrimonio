@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import HelpersView
 
 struct ModelFiscalInheritanceDonationView: View {
     @EnvironmentObject private var dataStore  : Store
@@ -68,7 +69,8 @@ struct ModelFiscalInheritanceDonationView: View {
                 HStack {
                     Text("Décote sur la Résidence Principale")
                     Spacer()
-                    Text("\(model.fiscalModel.inheritanceDonation.model.decoteResidence.percentString(digit: 0)) %").foregroundColor(.secondary)
+                    Text("\(model.fiscalModel.inheritanceDonation.model.decoteResidence.percentString(digit: 0))")
+                        .foregroundColor(.secondary)
                 }
             }
             .onChange(of: model.fiscalModel.inheritanceDonation.model.decoteResidence) { _ in

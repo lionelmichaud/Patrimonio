@@ -7,15 +7,23 @@
 
 import SwiftUI
 
-// MARK: - Saisie d'un montant en €
+// MARK: - Edition d'un montant en €
 
-struct AmountEditView: View {
-    let label            : String
-    let comment          : String?
-    let currency         : Bool
-    @Binding var amount  : Double
-    @State var text      : String
-    var textValueBinding : Binding<String> {
+/// Saisie d'un montant en €
+/// - Parameters:
+///   - label: libellé
+///   - comment: Commentaire à afficher en grisé à gauche de la valeur
+///   - amount: valeur
+///   - currency: affiche le symbole € après la valeur si Vrai
+public struct AmountEditView: View {
+    private let label    : String
+    private let comment  : String?
+    private let currency : Bool
+    @Binding
+    private var amount   : Double
+    @State
+    private var text     : String
+    private var textValueBinding : Binding<String> {
         Binding(
             get: {
                 self.text
@@ -28,8 +36,8 @@ struct AmountEditView: View {
         )
     }
     
-    var body: some View {
-        HStack {
+    public var body: some View {
+        return HStack {
             Text(label)
             Spacer()
             if comment != nil { Text(comment!).foregroundColor(.secondary) }
@@ -62,10 +70,16 @@ struct AmountEditView: View {
         .textFieldStyle(RoundedBorderTextFieldStyle())
     }
     
-    init(label    : String,
-         comment  : String?  = nil,
-         amount   : Binding<Double>,
-         currency : Bool = true) {
+    /// Création
+    /// - Parameters:
+    ///   - label: libellé
+    ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
+    ///   - amount: valeur
+    ///   - currency: affiche le symbole € après la valeur si Vrai
+    public init(label    : String,
+                comment  : String?  = nil,
+                amount   : Binding<Double>,
+                currency : Bool = true) {
         self.label    = label
         self.comment  = comment
         self.currency = currency
@@ -77,22 +91,23 @@ struct AmountEditView: View {
 
 // MARK: - Affichage d'un montant en €
 
-/// Affichage d'une valeur numérique Double
-/// - Parameter:
+/// Affichage d'un montant en €
+/// - Parameters:
 ///   - label: Libellé à gauche
 ///   - amount: valeure numérique à afficher à droite
-///   - digit: Nombre de digit à afficher
+///   - digit: Nombre de chifrre après la virgule à afficher
 ///   - weight: Taille de la police utilisée pour `label` et `amount`
 ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
-struct AmountView: View {
-    let label   : String
-    let amount  : Double
-    let digit   : Int
-    let kEuro   : Bool
-    let weight  : Font.Weight
-    let comment : String?
+///   - kEuro: si Vrai alors affiche la valeur en k€ au lieu de €
+public struct AmountView: View {
+    private let label   : String
+    private let amount  : Double
+    private let digit   : Int
+    private let kEuro   : Bool
+    private let weight  : Font.Weight
+    private let comment : String?
     
-    var body: some View {
+    public var body: some View {
         HStack {
             Text(label)
                 .fontWeight(weight)
@@ -110,19 +125,20 @@ struct AmountView: View {
         }
     }
     
-    /// Création de la View
+    /// Création
     /// - Parameters:
     ///   - label: Libellé à gauche
     ///   - amount: valeure numérique à afficher à droite
-    ///   - digit: Nombre de digit à afficher
+    ///   - digit: Nombre de chifrre après la virgule à afficher
     ///   - weight: Taille de la police utilisée pour `label` et `amount`
     ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
-    init(label   : String,
-         amount  : Double,
-         kEuro   : Bool        = false,
-         digit   : Int         = 0,
-         weight  : Font.Weight = .regular,
-         comment : String?     = nil) {
+    ///   - kEuro: si Vrai alors affiche la valeur en k€ au lieu de €
+    public init(label   : String,
+                amount  : Double,
+                kEuro   : Bool        = false,
+                digit   : Int         = 0,
+                weight  : Font.Weight = .regular,
+                comment : String?     = nil) {
         self.label   = label
         self.amount  = amount
         self.kEuro   = kEuro
@@ -137,15 +153,21 @@ struct AmountView: View {
 struct AmountViews_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            AmountView(label: "Label", amount: 1234.3)
+            AmountView(label   : "Label",
+                       amount  : 1234.345,
+                       digit   : 2,
+                       weight  : .bold,
+                       comment : "Comment")
                 .preferredColorScheme(.dark)
+                .padding(.all)
                 .previewLayout(PreviewLayout.sizeThatFits)
-                .padding([.bottom, .top])
                 .previewDisplayName("AmountView")
-            AmountEditView(label: "Label", amount: .constant(1234.3))
+            AmountEditView(label: "Label",
+                           comment: "Comment",
+                           amount: .constant(1234.345))
                 .preferredColorScheme(.dark)
+                .padding(.all)
                 .previewLayout(PreviewLayout.sizeThatFits)
-                .padding([.bottom, .top])
                 .previewDisplayName("AmountEditView")
         }
     }
@@ -153,12 +175,11 @@ struct AmountViews_Previews: PreviewProvider {
 
 struct AmountEditView_Previews: PreviewProvider {
     static var previews: some View {
-        AmountEditView(label: "Label", amount: .constant(1234.3))
+        AmountEditView(label: "Label", amount: .constant(1234.345))
             .preferredColorScheme(.dark)
+            .padding(.all)
             .previewLayout(PreviewLayout.sizeThatFits)
-            .padding([.bottom, .top])
             .previewDisplayName("AmountEditView")
-            .previewDevice("iPhone 12")
     }
 }
 

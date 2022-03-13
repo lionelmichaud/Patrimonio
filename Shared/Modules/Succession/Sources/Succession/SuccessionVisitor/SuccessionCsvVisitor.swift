@@ -85,7 +85,7 @@ public class SuccessionsCsvVisitor: SuccessionCsvVisitorP {
         }
         // construire table
         table.append(element.successorName + separator)
-        table.append(String((element.percentFiscal * 100).percentString()) + separator)
+        table.append(element.percentFiscal.percentNormString(digit: 1) + separator)
         table.append(String(Int(element.brutFiscal/1000)) + separator)
         table.append(String(Int(-element.tax/1000)) + separator)
         table.append(String(Int(element.netFiscal/1000)) + separator)

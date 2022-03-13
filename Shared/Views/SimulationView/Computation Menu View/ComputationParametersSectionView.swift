@@ -11,6 +11,7 @@ import Persistence
 import RetirementModel
 import LifeExpense
 import PatrimoineModel
+import HelpersView
 
 struct ComputationParametersSectionView : View {
     @EnvironmentObject private var dataStore  : Store

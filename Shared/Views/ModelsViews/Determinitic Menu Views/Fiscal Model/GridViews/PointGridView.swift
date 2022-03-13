@@ -8,6 +8,7 @@
 import SwiftUI
 import AppFoundation
 import Statistics
+import HelpersView
 
 extension ArrayOfPoint {
     /// Garantir que la sommes des probabilités = 1.0

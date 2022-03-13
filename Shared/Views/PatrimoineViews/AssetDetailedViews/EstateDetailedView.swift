@@ -11,6 +11,7 @@ import AppFoundation
 import AssetsModel
 import PatrimoineModel
 import FamilyModel
+import HelpersView
 
 // MARK: - View Model for RealEstateAsset
 
@@ -139,8 +140,8 @@ struct RealEstateDetailedView: View {
                             .foregroundColor(.secondary)
                         AmountView(label : "Loyer annuel net de charges sociales",
                                    amount: localItem.yearlyRentAfterCharges)
-                        PercentView(label  : "Rendement locatif net de charges sociales",
-                                    percent: localItem.profitability)
+                        PercentNormView(label : "Rendement locatif net de charges sociales",
+                                    percent   : localItem.profitability)
                             .foregroundColor(.secondary)
                     }.padding(.leading)
                 }

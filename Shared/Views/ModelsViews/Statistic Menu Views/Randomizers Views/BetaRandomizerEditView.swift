@@ -10,6 +10,7 @@ import AppFoundation
 import ModelEnvironment
 import Statistics
 import Persistence
+import HelpersView
 
 struct BetaRandomizerEditView : View {
     @Binding var betaRandomizer: ModelRandomizer<BetaRandomGenerator>
@@ -31,7 +32,8 @@ struct BetaRandomizerEditView : View {
                     HStack {
                         Text("Minimum")
                         Spacer()
-                        Text("\(minX.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(minX.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }.padding(.trailing)
                 .onChange(of: minX) { value in
@@ -45,7 +47,8 @@ struct BetaRandomizerEditView : View {
                     HStack {
                         Text("Maximum")
                         Spacer()
-                        Text("\(maxX.percentString(digit: 1)) %").foregroundColor(.secondary)
+                        Text("\(maxX.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
                     }
                 }.padding(.trailing)
                 .onChange(of: maxX) { value in

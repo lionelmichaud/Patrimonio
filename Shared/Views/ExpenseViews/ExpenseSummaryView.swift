@@ -12,6 +12,7 @@ import Persistence
 import LifeExpense
 import FamilyModel
 import Charts // https://github.com/danielgindi/Charts.git
+import HelpersView
 
 struct ExpenseSummaryView: View {
     @EnvironmentObject private var dataStore  : Store

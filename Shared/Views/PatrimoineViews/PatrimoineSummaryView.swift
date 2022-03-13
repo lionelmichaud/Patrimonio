@@ -8,6 +8,7 @@
 import SwiftUI
 import AppFoundation
 import Persistence
+import HelpersView
 
 struct PatrimoineSummaryView: View {
     @EnvironmentObject private var dataStore : Store

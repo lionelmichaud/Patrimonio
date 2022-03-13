@@ -97,11 +97,11 @@ class FreeInvestementTests: XCTestCase {
     
     func test_averageInterestRateNet() {
         Tests.fi.type = .lifeInsurance(periodicSocialTaxes : true,
-                                 clause              : LifeInsuranceClause())
+                                 clause              : Clause())
         XCTAssertGreaterThan(Tests.averageRateTheory, Tests.fi.averageInterestRateNetOfTaxesAndInflation)
         
         Tests.fi.type = .lifeInsurance(periodicSocialTaxes : false,
-                                 clause              : LifeInsuranceClause())
+                                 clause              : Clause())
 //        XCTAssertEqual(Tests.fi.averageInterestRateNetOfInflation, Tests.fi.averageInterestRateNet)
         
         Tests.fi.type = .pea

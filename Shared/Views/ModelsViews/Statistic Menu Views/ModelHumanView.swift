@@ -11,6 +11,7 @@ import HumanLifeModel
 import ModelEnvironment
 import FamilyModel
 import Persistence
+import HelpersView
 
 struct ModelHumanView: View {
     @EnvironmentObject private var dataStore  : Store

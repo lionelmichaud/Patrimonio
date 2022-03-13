@@ -11,6 +11,7 @@ import Ownership
 import Persistence
 import PatrimoineModel
 import FamilyModel
+import HelpersView
 
 struct GraphicUserSettingsView: View {
     @EnvironmentObject var patrimoine : Patrimoin

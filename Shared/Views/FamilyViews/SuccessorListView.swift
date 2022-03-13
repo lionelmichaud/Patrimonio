@@ -10,6 +10,7 @@ import Succession
 import PersonModel
 import FamilyModel
 import ModelEnvironment
+import HelpersView
 
 struct SuccessorsListView: View {
     var successionKind : SuccessionKindEnum

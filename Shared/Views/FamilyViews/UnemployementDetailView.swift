@@ -10,6 +10,7 @@ import SwiftUI
 import ModelEnvironment
 import PersonModel
 import FamilyModel
+import HelpersView
 
 struct UnemployementDetailView: View {
 
@@ -101,7 +102,7 @@ struct UnemployementDetailView: View {
                         IntegerView(label: "Réduction de l'allocation après", integer: afterMonth)
                         Text("mois")
                     }
-                    PercentView(label: "Coefficient de réduction", percent: viewModel.percentReduc / 100)
+                    PercentView(label: "Coefficient de réduction", percent: viewModel.percentReduc)
                     AmountView(label: "Montant annuel réduit brut", amount: viewModel.allocationReducedBrut)
                     AmountView(label: "Montant annuel réduit net", amount: viewModel.allocationReducedNet, weight: .bold)
                 }

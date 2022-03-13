@@ -109,6 +109,8 @@ struct Buttons_Previews: PreviewProvider {
         Group {
             DiskButton(action: { print("saved") })
                 .previewLayout(.fixed(width: 200, height: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/))
+            TemplateButton(action: { print("modified") })
+                .previewLayout(.fixed(width: 200, height: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/))
             FolderButton(action: { print("modified") })
                 .previewLayout(.fixed(width: 200, height: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/))
             DuplicateButton(action: { print("duplicated") })

@@ -11,6 +11,7 @@ import AppFoundation
 import Persistence
 import PatrimoineModel
 import FamilyModel
+import HelpersView
 
 struct PatrimoineSidebarView: View {
     @EnvironmentObject private var uiState    : UIState

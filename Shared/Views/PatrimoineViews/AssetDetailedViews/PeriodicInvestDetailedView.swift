@@ -11,6 +11,7 @@ import AppFoundation
 import AssetsModel
 import PatrimoineModel
 import FamilyModel
+import HelpersView
 
 struct PeriodicInvestDetailedView: View {
     @EnvironmentObject var family     : Family
@@ -56,8 +57,8 @@ struct PeriodicInvestDetailedView: View {
             
             Section(header: Text("RENTABILITE")) {
                 InterestRateTypeEditView(rateType: $localItem.interestRateType)
-                PercentView(label: "Rendement moyen net d'inflation",
-                            percent: localItem.averageInterestRateNetOfTaxesAndInflation/100.0)
+                PercentView(label   : "Rendement moyen net d'inflation",
+                            percent : localItem.averageInterestRateNetOfTaxesAndInflation)
                     .foregroundColor(.secondary)
             }
             

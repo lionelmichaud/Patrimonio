@@ -174,7 +174,7 @@ extension Inheritance: CustomStringConvertible {
     public var description: String {
         """
         Héritier:        \(successorName)
-        Pourcentage:     \((percentFiscal * 100).percentString(digit: 1)) % de la masse successorale
+        Pourcentage:     \(percentFiscal.percentNormString(digit: 1)) de la masse successorale
         Héritage Brut:   \(brutFiscal.k€String) (valeur fiscale)
         Abattement %:    \((abatFrac * 100.0).rounded()) % de l'abattement fiscal maximum
         Héritage Net:    \(netFiscal.k€String) (valeur fiscale)

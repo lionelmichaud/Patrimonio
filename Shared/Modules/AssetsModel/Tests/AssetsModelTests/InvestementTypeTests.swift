@@ -27,7 +27,7 @@ class InvestementTypeTests: XCTestCase {
             .withPrefixedSplittedLines("  ")
         print(str)
 
-        var clause = LifeInsuranceClause()
+        var clause = Clause()
         clause.isDismembered     = true
         clause.usufructRecipient = "Conjoint"
         clause.bareRecipients    = ["Enfant1"]

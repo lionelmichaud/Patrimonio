@@ -16,6 +16,7 @@ import LifeExpense
 import PatrimoineModel
 import FamilyModel
 import Kpi
+import HelpersView
 
 struct GridsView: View {
     @EnvironmentObject var uiState    : UIState
@@ -287,7 +288,7 @@ struct ShortGridLineView : View {
                 }
                 /// valeurs aléatoires de conditions économiques
                 ForEach(Economy.RandomVariable.allCases, id: \.self) { variableEnum in
-                    Text((line.dicoOfEconomyRandomVariables[variableEnum]?.percentString(digit: 1) ?? "NaN") + "%")
+                    Text((line.dicoOfEconomyRandomVariables[variableEnum]?.percentString(digit: 1) ?? "NaN"))
                         .frame(width: 40)
                     Divider()
                 }
@@ -299,7 +300,7 @@ struct ShortGridLineView : View {
                                 .frame(width: 40)
                             
                         default:
-                            Text((line.dicoOfSocioEconomyRandomVariables[variableEnum]?.percentString(digit: 1) ?? "NaN") + "%")
+                            Text((line.dicoOfSocioEconomyRandomVariables[variableEnum]?.percentString(digit: 1) ?? "NaN"))
                                 .frame(width: 40)
                     }
                     Divider()

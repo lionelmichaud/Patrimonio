@@ -7,6 +7,7 @@
 
 import SwiftUI
 import RetirementModel
+import HelpersView
 
 typealias SliceAgircApresAgeLegal = RegimeAgirc.SliceApresAgeLegal
 typealias GridAgircApresAgeLegal = [SliceAgircApresAgeLegal]
@@ -39,8 +40,8 @@ struct AgircApresAgeLegalSliceView: View {
                         weight  : .bold)
             IntegerView(label   : "Nombre de trimestres audelà de l'âge légal de départ à la retraite",
                         integer : slice.ndTrimPostAgeLegal)
-            PercentView(label   : "Coefficient de réduction",
-                        percent : slice.coef)
+            PercentNormView(label   : "Coefficient de réduction",
+                            percent : slice.coef)
         }
     }
 }

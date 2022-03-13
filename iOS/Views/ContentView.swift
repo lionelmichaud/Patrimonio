@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Persistence
+import HelpersView
 
 struct ContentView: View {
     
