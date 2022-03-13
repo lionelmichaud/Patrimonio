@@ -246,8 +246,6 @@
 		798F90D027DD731100DB0459 /* LabelValueHelperViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798F90CE27DD731100DB0459 /* LabelValueHelperViews.swift */; };
 		798F90D227DD736A00DB0459 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798F90D127DD736A00DB0459 /* TableView.swift */; };
 		798F90D327DD736A00DB0459 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798F90D127DD736A00DB0459 /* TableView.swift */; };
-		798F90D527DD741600DB0459 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798F90D427DD741600DB0459 /* RatingView.swift */; };
-		798F90D627DD741600DB0459 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798F90D427DD741600DB0459 /* RatingView.swift */; };
 		798FBA00265D622200A34892 /* DossierPropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798FB9FF265D622200A34892 /* DossierPropertiesView.swift */; };
 		798FBA01265D622200A34892 /* DossierPropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798FB9FF265D622200A34892 /* DossierPropertiesView.swift */; };
 		799025A12641F60300ED53D4 /* GridsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990258D2641F60300ED53D4 /* GridsView.swift */; };
@@ -699,7 +697,6 @@
 		798E783A264209AD0094534F /* ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ding.wav; sourceTree = "<group>"; };
 		798F90CE27DD731100DB0459 /* LabelValueHelperViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelValueHelperViews.swift; sourceTree = "<group>"; };
 		798F90D127DD736A00DB0459 /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
-		798F90D427DD741600DB0459 /* RatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		798FB9FF265D622200A34892 /* DossierPropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierPropertiesView.swift; sourceTree = "<group>"; };
 		7990258D2641F60300ED53D4 /* GridsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridsView.swift; sourceTree = "<group>"; };
 		7990258E2641F60300ED53D4 /* HistogramView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistogramView.swift; sourceTree = "<group>"; };
@@ -1498,7 +1495,6 @@
 		79ABF96027DD05CC00505135 /* ApplicationHelpersView */ = {
 			isa = PBXGroup;
 			children = (
-				798F90D427DD741600DB0459 /* RatingView.swift */,
 				798F90D127DD736A00DB0459 /* TableView.swift */,
 				798F90CE27DD731100DB0459 /* LabelValueHelperViews.swift */,
 				79F4D12226B03D62009D91B9 /* Buttons.swift */,
@@ -1711,7 +1707,6 @@
 				79FC724F26331DE9004F3BD2 /* SettingsViews */,
 				79C8382F2641DCD3008B29BF /* Charts+Extensions */,
 				79ABF96027DD05CC00505135 /* ApplicationHelpersView */,
-				79FC725026331DF4004F3BD2 /* HelpersViews */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1726,13 +1721,6 @@
 				793D17A12761307800CB0F69 /* UpdateSettingsView.swift */,
 			);
 			path = SettingsViews;
-			sourceTree = "<group>";
-		};
-		79FC725026331DF4004F3BD2 /* HelpersViews */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = HelpersViews;
 			sourceTree = "<group>";
 		};
 		79FC7270263337CA004F3BD2 /* Simulation */ = {
@@ -2146,7 +2134,6 @@
 				799025A72641F60300ED53D4 /* KpiSidebarSectionView.swift in Sources */,
 				79997189279DFA4800AF473E /* ModelFiscalTurnoverView.swift in Sources */,
 				79BE4A6B2651A2BA00BBF46C /* HistogramVisitable.swift in Sources */,
-				798F90D527DD741600DB0459 /* RatingView.swift in Sources */,
 				7946B3BE27BC5AF300D49FB4 /* ModelManagerView.swift in Sources */,
 				79E4014D27C956D800734A24 /* DonationView.swift in Sources */,
 				79794FC7277E32AE005D7CB2 /* PatrimoineSummaryShareChartView.swift in Sources */,
@@ -2409,7 +2396,6 @@
 				792AAE5F27AB323000D3D4DF /* ModelUnemploymentAmountView.swift in Sources */,
 				791ED0DE2639FE2700701202 /* RetirementEditView.swift in Sources */,
 				791ED102263A1EF800701202 /* ChildDetailView.swift in Sources */,
-				798F90D627DD741600DB0459 /* RatingView.swift in Sources */,
 				79EC5E9226406AAD00FF8263 /* LoanDetailedView.swift in Sources */,
 				79BE4A6C2651A2BB00BBF46C /* HistogramVisitable.swift in Sources */,
 				79E4013C27C94DC100734A24 /* RecipientsListView.swift in Sources */,

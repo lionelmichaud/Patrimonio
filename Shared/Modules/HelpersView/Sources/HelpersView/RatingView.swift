@@ -7,20 +7,20 @@
 
 import SwiftUI
 
-struct RatingView: View {
-    let rating    : Int
-    var minRating : Int = 0
-    let maxRating : Int
-    var label     : String?
-    var font      : Font = .body
+public struct RatingView: View {
+    private let rating    : Int
+    private var minRating : Int = 0
+    private let maxRating : Int
+    private var label     : String?
+    private var font      : Font = .body
     /// The color of the star that will be displayed when not selected, defaults to gray
-    var offColor = Color.gray
+    private var offColor = Color.gray
     /// The color of the star when selected, defaults to accentColor
-    var onColor  : [Color] = [Color.accentColor]
-    var offImage = Image(systemName: "square")
-    var onImage  = Image(systemName: "square.fill")
+    private var onColor  : [Color] = [Color.accentColor]
+    private var offImage = Image(systemName: "square")
+    private var onImage  = Image(systemName: "square.fill")
 
-    var body: some View {
+    public var body: some View {
         HStack (spacing: 0) {
             if let label = self.label {
                 Text(label)
@@ -43,7 +43,28 @@ struct RatingView: View {
         }
     }
     
-    func image(for number: Int) -> Image {
+    public init(rating    : Int,
+                minRating : Int      = 0,
+                maxRating : Int,
+                label     : String?  = nil,
+                font      : Font     = .body,
+                offColor  : Color    = Color.gray,
+                onColor   : [Color]  = [Color.accentColor],
+                offImage  : Image    = Image(systemName : "star"),
+                onImage   : Image    = Image(systemName : "star.fill"))
+    {
+        self.rating    = rating
+        self.minRating = minRating
+        self.maxRating = maxRating
+        self.label     = label
+        self.font      = font
+        self.offColor  = offColor
+        self.onColor   = onColor
+        self.offImage  = offImage
+        self.onImage   = onImage
+    }
+    
+    private func image(for number: Int) -> Image {
         if number > rating {
             return offImage
         } else {
@@ -71,9 +92,9 @@ struct RatingView_Previews: PreviewProvider {
                    maxRating : 4,
                    font      : .body,
                    offColor  : Color.gray,
-                   onColor   : ChartThemes.riskColorsTable.map { Color($0) },
-                   offImage  : Image(systemName : "square"),
-                   onImage   : Image(systemName : "square.fill"))
+                   onColor   : [Color.blue],
+                   offImage  : Image(systemName : "circle"),
+                   onImage   : Image(systemName : "circle.fill"))
             .padding()
             .preferredColorScheme(.dark)
             .previewLayout(.sizeThatFits)
@@ -81,7 +102,7 @@ struct RatingView_Previews: PreviewProvider {
         RatingView(rating    : 1,
                    maxRating : 4,
                    font      : .body,
-                   onColor   : ChartThemes.riskColorsTable.map { Color($0) })
+                   onColor   : [Color.green])
             .padding()
             .preferredColorScheme(.dark)
             .previewLayout(.sizeThatFits)
@@ -89,7 +110,7 @@ struct RatingView_Previews: PreviewProvider {
         RatingView(rating    : 2,
                    maxRating : 4,
                    font      : .body,
-                   onColor   : ChartThemes.riskColorsTable.map { Color($0) })
+                   onColor   : [Color.pink])
             .padding()
             .preferredColorScheme(.dark)
             .previewLayout(.sizeThatFits)
