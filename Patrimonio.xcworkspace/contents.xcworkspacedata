@@ -95,13 +95,13 @@
       location = "group:Shared/Modules/SimulationLogger">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/SimulationAndVisitors">
+   </FileRef>
+   <FileRef
       location = "group:Shared/Modules/ChartsExtensions">
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/HelpersView">
-   </FileRef>
-   <FileRef
-      location = "group:Shared/Modules/SimulationAndVisitors">
    </FileRef>
    <FileRef
       location = "container:Patrimonio.xcodeproj">

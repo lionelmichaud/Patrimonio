@@ -965,9 +965,9 @@
 		7935BBD527DF660F0079F39C /* ModelsViews */ = {
 			isa = PBXGroup;
 			children = (
+				7935BC0727DF660F0079F39C /* ModelsSidebarView.swift */,
 				7935BBD627DF660F0079F39C /* Determinitic Menu Views */,
 				7935BBFF27DF660F0079F39C /* Assistants Menu Views */,
-				7935BC0727DF660F0079F39C /* ModelsSidebarView.swift */,
 				7935BC0827DF660F0079F39C /* Statistic Menu Views */,
 			);
 			path = ModelsViews;

@@ -162,6 +162,7 @@ extension Simulation {
         kpis.reset(withMode: mode)
     }
 
+    /// Récupérer les propriétés aléatoires courantes en mode Déterministe
     private func getCurrentRandomProperties(using model: Model,
                                             _ family                            : Family,
                                             _ dicoOfAdultsRandomProperties      : inout DictionaryOfAdultRandomProperties,
@@ -172,6 +173,7 @@ extension Simulation {
         dicoOfSocioEconomyRandomVariables = model.socioEconomyModel.currentRandomizersValues(withMode: mode)
     }
     
+    /// Re-générer les propriétés aléatoires à chaque run si on est en mode Aléatoire
     private func getNextRandomProperties(using model                         : Model,
                                          _ family                            : Family,
                                          _ dicoOfAdultsRandomProperties      : inout DictionaryOfAdultRandomProperties,
@@ -187,5 +189,4 @@ extension Simulation {
         // re-générer les propriétés aléatoires du modèle socio économique
         dicoOfSocioEconomyRandomVariables = model.socioEconomyModel.nextRun()
     }
-    
 }
