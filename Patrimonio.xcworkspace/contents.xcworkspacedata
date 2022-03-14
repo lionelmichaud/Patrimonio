@@ -86,10 +86,16 @@
       location = "group:Shared/Modules/CashFlow">
    </FileRef>
    <FileRef
+      location = "group:Shared/Modules/SocialAccounts">
+   </FileRef>
+   <FileRef
       location = "group:Shared/Modules/Kpi">
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/SimulationLogger">
+   </FileRef>
+   <FileRef
+      location = "group:Shared/Modules/Simulation">
    </FileRef>
    <FileRef
       location = "group:Shared/Modules/ChartsExtensions">

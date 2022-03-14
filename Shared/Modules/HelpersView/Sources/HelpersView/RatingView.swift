@@ -51,8 +51,7 @@ public struct RatingView: View {
                 offColor  : Color    = Color.gray,
                 onColor   : [Color]  = [Color.accentColor],
                 offImage  : Image    = Image(systemName : "star"),
-                onImage   : Image    = Image(systemName : "star.fill"))
-    {
+                onImage   : Image    = Image(systemName : "star.fill")) {
         self.rating    = rating
         self.minRating = minRating
         self.maxRating = maxRating

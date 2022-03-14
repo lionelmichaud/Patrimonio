@@ -17,6 +17,7 @@ import Persistence
 import LifeExpense
 import PatrimoineModel
 import FamilyModel
+import SocialAccounts
 import HelpersView
 import ChartsExtensions
 

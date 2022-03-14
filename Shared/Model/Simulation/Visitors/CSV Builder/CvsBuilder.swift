@@ -12,6 +12,7 @@ import Succession
 import Persistence
 import BalanceSheet
 import CashFlow
+import SocialAccounts
 
 // MARK: - Constructeur de fichier d'export CSV
 

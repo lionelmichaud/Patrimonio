@@ -22,6 +22,7 @@ import LifeExpense
 import PersonModel
 import PatrimoineModel
 import FamilyModel
+import SocialAccounts
 import SimulationLogger
 import OrderedCollections
 import Kpi
@@ -35,7 +36,7 @@ protocol CanResetSimulationP {
 final class Simulation: ObservableObject, CanResetSimulationP, PersistableP {
    
     //#if DEBUG
-    /// URL du fichier de stockage du résultat de calcul au format CSV
+    // URL du fichier de stockage du résultat de calcul au format CSV
     //    static let monteCarloFileUrl = Bundle.main.url(forResource: "Monté-Carlo Kpi.csv", withExtension: nil)
     //#endif
 

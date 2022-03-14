@@ -18,28 +18,32 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 // MARK: - Comptes sociaux
 
 /// Comptes sociaux: Table de Compte de résultat annuels + Bilans annuels
-struct SocialAccounts {
+public struct SocialAccounts {
+    public init() {
+    }
     
     // MARK: - Properties
     
-    var cashFlowArray = CashFlowArray()
-    var balanceArray  = BalanceSheetArray()
+    /// Comptes de résultats annuels
+    public var cashFlowArray = CashFlowArray()
+    /// Bilans annuels
+    public var balanceArray  = BalanceSheetArray()
+    /// Première année de calcul des comptes sociaux
     var firstYear     = CalendarCst.thisYear
+    /// Dernière année de calcul des comptes sociaux
     var lastYear      = CalendarCst.thisYear
-    // les successions légales survenues depuis le début du run
-    var legalSuccessions   : [Succession] = []
-    // les transmissions d'assurances vie survenues depuis le début du run
-    var lifeInsSuccessions : [Succession] = []
-    // soldes nets de l'héritage reçu par les enfants à chaque décès depuis le début du run
+    /// les successions légales survenues depuis le début du run
+    public var legalSuccessions   : [Succession] = []
+    /// les transmissions d'assurances vie survenues depuis le début du run
+    public var lifeInsSuccessions : [Succession] = []
+    /// soldes nets de l'héritage reçu par les enfants à chaque décès depuis le début du run
     var netChildrenInheritances: [Double] = []
 
     // MARK: - Computed Properties
     
     // MARK: - Methods
     
-    // MARK: - Construction de la table des comptes sociaux = Bilan + CashFlow
-    
-    /// Construire la table de comptes sociaux au fil des années
+    /// Construire la table de comptes sociaux au fil des années: comptes sociaux = Bilan + CashFlow
     /// - Parameters:
     ///   - run: numéro du run en cours de calcul
     ///   - nbOfYears: nombre d'années à construire
@@ -50,14 +54,14 @@ struct SocialAccounts {
     ///   - simulationMode: mode de simluation en cours
     ///   - model: modèle à utiliser
     /// - Returns: Résultats obtenus pour les KPI
-    mutating func build(run                       : Int, // swiftlint:disable:this function_parameter_count
-                        nbOfYears                 : Int,
-                        withFamily family         : Family,
-                        withExpenses expenses     : LifeExpensesDic,
-                        withPatrimoine patrimoine : Patrimoin,
-                        withKPIs kpis             : inout KpiDictionary,
-                        withMode simulationMode   : SimulationModeEnum,
-                        using model               : Model) -> KpiResultsDictionary {
+    public mutating func build(run                       : Int, // swiftlint:disable:this function_parameter_count
+                               nbOfYears                 : Int,
+                               withFamily family         : Family,
+                               withExpenses expenses     : LifeExpensesDic,
+                               withPatrimoine patrimoine : Patrimoin,
+                               withKPIs kpis             : inout KpiDictionary,
+                               withMode simulationMode   : SimulationModeEnum,
+                               using model               : Model) -> KpiResultsDictionary {
         // création du calculateur de KPIs
         var kpiComputer = KpiComputer(simulationMode : simulationMode,
                                       model          : model,
