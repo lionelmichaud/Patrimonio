@@ -149,14 +149,14 @@ struct SuccessorsDisclosureGroup: View {
 
 struct SuccessionsView_Previews: PreviewProvider {
     static func initializedSimulation() -> Simulation {
-        loadTestFilesFromBundle()
-        simulationTest.compute(using          : modelTest,
+        TestEnvir.loadTestFilesFromBundle()
+        TestEnvir.simulation.compute(using          : TestEnvir.model,
                                nbOfYears      : 55,
                                nbOfRuns       : 1,
-                               withFamily     : familyTest,
-                               withExpenses   : expensesTest,
-                               withPatrimoine : patrimoineTest)
-        return simulationTest
+                               withFamily     : TestEnvir.family,
+                               withExpenses   : TestEnvir.expenses,
+                               withPatrimoine : TestEnvir.patrimoine)
+        return TestEnvir.simulation
     }
     
     static var previews: some View {
@@ -165,9 +165,9 @@ struct SuccessionsView_Previews: PreviewProvider {
         return SuccessionsView(title       : "Successions Légales",
                                successions : simulation.occuredLegalSuccessions)
             .preferredColorScheme(.dark)
-            .environmentObject(uiStateTest)
-            .environmentObject(familyTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(simulationTest)
+            .environmentObject(TestEnvir.uiState)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.patrimoine)
+            .environmentObject(TestEnvir.simulation)
     }
 }

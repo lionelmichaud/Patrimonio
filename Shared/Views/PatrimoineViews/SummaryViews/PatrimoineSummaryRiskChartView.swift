@@ -12,6 +12,7 @@ import Ownership
 import AssetsModel
 import FamilyModel
 import Charts
+import ChartsExtensions
 import HelpersView
 
 let riskPopOverMessage =
@@ -298,11 +299,11 @@ struct PatrimoineBubbleChartView: View {
 
 struct PatrimoineSummaryRiskChartView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return PatrimoineSummaryRiskChartView()
             .preferredColorScheme(.dark)
-            .environmentObject(familyTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(uiStateTest)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.patrimoine)
+            .environmentObject(TestEnvir.uiState)
     }
 }

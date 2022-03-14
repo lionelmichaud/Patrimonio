@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum LengendPosition {
+public enum LengendPosition {
     case bottom
     case left
 }

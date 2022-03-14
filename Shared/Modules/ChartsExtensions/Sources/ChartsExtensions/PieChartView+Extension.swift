@@ -13,7 +13,7 @@ import Charts // https://github.com/danielgindi/Charts.git
 
 // MARK: - Extension de PieChartView pour customizer la configuration des Graph de l'appli
 
-extension PieChartView {
+public extension PieChartView {
     
     /// Création d'un LineChartView avec une présentation customisée
     /// - Parameter title: Titre du graphique

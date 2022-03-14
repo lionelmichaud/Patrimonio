@@ -154,7 +154,7 @@ struct GridView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return
             NavigationView {
                 EmptyView()
@@ -166,10 +166,10 @@ struct GridView_Previews: PreviewProvider {
                          addView        : { grid in RateSliceAddView(grid: grid) },
                          editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) })
                     .preferredColorScheme(.dark)
-                    .environmentObject(dataStoreTest)
-                    .environmentObject(modelTest)
-                    .environmentObject(familyTest)
-                    .environmentObject(simulationTest)
+                    .environmentObject(TestEnvir.dataStore)
+                    .environmentObject(TestEnvir.model)
+                    .environmentObject(TestEnvir.family)
+                    .environmentObject(TestEnvir.simulation)
                 
             }
             .preferredColorScheme(.dark)

@@ -68,14 +68,14 @@ struct FamilyHeaderView: View {
 
 struct FamilyView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return FamilySidebarView()
-            .environmentObject(dataStoreTest)
-            .environmentObject(modelTest)
-            .environmentObject(familyTest)
-            .environmentObject(simulationTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(uiStateTest)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.model)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.simulation)
+            .environmentObject(TestEnvir.patrimoine)
+            .environmentObject(TestEnvir.uiState)
             .colorScheme(.dark)
         //.previewLayout(.fixed(width: 1024, height: 768))
         //.previewLayout(.fixed(width: 896, height: 414))

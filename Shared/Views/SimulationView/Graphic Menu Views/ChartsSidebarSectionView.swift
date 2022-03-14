@@ -104,20 +104,20 @@ struct ChartsSidebarSectionView: View {
 
 struct ChartsSidebarView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
-        simulationTest.compute(using          : modelTest,
+        TestEnvir.loadTestFilesFromBundle()
+        TestEnvir.simulation.compute(using          : TestEnvir.model,
                                nbOfYears      : 5,
                                nbOfRuns       : 1,
-                               withFamily     : familyTest,
-                               withExpenses   : expensesTest,
-                               withPatrimoine : patrimoineTest)
+                               withFamily     : TestEnvir.family,
+                               withExpenses   : TestEnvir.expenses,
+                               withPatrimoine : TestEnvir.patrimoine)
         return NavigationView {
             List {
                 ChartsSidebarSectionView()
-                    .environmentObject(uiStateTest)
-                    .environmentObject(familyTest)
-                    .environmentObject(patrimoineTest)
-                    .environmentObject(simulationTest)
+                    .environmentObject(TestEnvir.uiState)
+                    .environmentObject(TestEnvir.family)
+                    .environmentObject(TestEnvir.patrimoine)
+                    .environmentObject(TestEnvir.simulation)
             }
         }
     }

@@ -63,12 +63,12 @@ struct ModelFiscalLifeInsInheritanceView: View {
 
 struct ModelFiscalLifeInsInheritanceView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return ModelFiscalLifeInsInheritanceView()
             .preferredColorScheme(.dark)
-            .environmentObject(dataStoreTest)
-            .environmentObject(modelTest)
-            .environmentObject(familyTest)
-            .environmentObject(simulationTest)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.model)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.simulation)
     }
 }

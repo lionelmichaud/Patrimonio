@@ -13,7 +13,7 @@ import Charts // https://github.com/danielgindi/Charts.git
 
 // MARK: - Extension de LineChartDataSet pour customizer la configuration du tracé de courbe
 
-extension LineChartDataSet {
+public extension LineChartDataSet {
     convenience init (entries   : [ChartDataEntry]?,
                       label     : String,
                       color     : NSUIColor,

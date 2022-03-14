@@ -15,7 +15,7 @@ import HelpersView
 
 // MARK: - View Model for RealEstateAsset
 
-class RealEstateViewModel: ObservableObject {
+final class RealEstateViewModel: ObservableObject {
     
     // MARK: - Properties
     

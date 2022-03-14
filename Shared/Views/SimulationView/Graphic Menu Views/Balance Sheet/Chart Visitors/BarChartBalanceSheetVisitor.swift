@@ -10,6 +10,7 @@ import AppFoundation
 import NamedValue
 import BalanceSheet
 import Charts // https://github.com/danielgindi/Charts.git
+import ChartsExtensions
 
 // MARK: - Génération de graphiques - Détail d'une seule catégorie - CASH FLOW
 

@@ -312,32 +312,32 @@ struct ChildEditView : View {
 
 struct PersonEditView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
-        let anAdult = familyTest.members[0]
-        let aChild  = familyTest.members[2]
+        TestEnvir.loadTestFilesFromBundle()
+        let anAdult = TestEnvir.family.members[0]
+        let aChild  = TestEnvir.family.members[2]
 
         return Group {
             // adult
             PersonEditView(withInitialValueFrom : anAdult,
-                           using                : modelTest)
-                .environmentObject(dataStoreTest)
-                .environmentObject(modelTest)
-                .environmentObject(uiStateTest)
-                .environmentObject(familyTest)
-                .environmentObject(expensesTest)
-                .environmentObject(patrimoineTest)
-                .environmentObject(simulationTest)
+                           using                : TestEnvir.model)
+                .environmentObject(TestEnvir.dataStore)
+                .environmentObject(TestEnvir.model)
+                .environmentObject(TestEnvir.uiState)
+                .environmentObject(TestEnvir.family)
+                .environmentObject(TestEnvir.expenses)
+                .environmentObject(TestEnvir.patrimoine)
+                .environmentObject(TestEnvir.simulation)
                 .environmentObject(anAdult)
             // child
             PersonEditView(withInitialValueFrom : aChild,
-                           using                : modelTest)
-                .environmentObject(dataStoreTest)
-                .environmentObject(modelTest)
-                .environmentObject(uiStateTest)
-                .environmentObject(familyTest)
-                .environmentObject(expensesTest)
-                .environmentObject(patrimoineTest)
-                .environmentObject(simulationTest)
+                           using                : TestEnvir.model)
+                .environmentObject(TestEnvir.dataStore)
+                .environmentObject(TestEnvir.model)
+                .environmentObject(TestEnvir.uiState)
+                .environmentObject(TestEnvir.family)
+                .environmentObject(TestEnvir.expenses)
+                .environmentObject(TestEnvir.patrimoine)
+                .environmentObject(TestEnvir.simulation)
                 .environmentObject(aChild)
         }
     }
@@ -345,18 +345,18 @@ struct PersonEditView_Previews: PreviewProvider {
 
 struct AdultEditView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return Form {
             AdultEditView(authorizeDeathAgeModification : true,
                           personViewModel               : PersonViewModel(),
                           adultViewModel                : AdultViewModel())
-                .environmentObject(dataStoreTest)
-                .environmentObject(modelTest)
-                .environmentObject(uiStateTest)
-                .environmentObject(familyTest)
-                .environmentObject(expensesTest)
-                .environmentObject(patrimoineTest)
-                .environmentObject(simulationTest)
+                .environmentObject(TestEnvir.dataStore)
+                .environmentObject(TestEnvir.model)
+                .environmentObject(TestEnvir.uiState)
+                .environmentObject(TestEnvir.family)
+                .environmentObject(TestEnvir.expenses)
+                .environmentObject(TestEnvir.patrimoine)
+                .environmentObject(TestEnvir.simulation)
         }
     }
 }

@@ -152,12 +152,12 @@ struct ModelDeterministicEconomyView: View {
 
 struct ModelDeterministicEconomyView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return ModelDeterministicEconomyView()
-            .environmentObject(dataStoreTest)
-            .environmentObject(modelTest)
-            .environmentObject(familyTest)
-            .environmentObject(simulationTest)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.model)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.simulation)
             .preferredColorScheme(.dark)
     }
 }

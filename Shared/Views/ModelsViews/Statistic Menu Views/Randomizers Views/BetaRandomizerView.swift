@@ -10,6 +10,7 @@ import SwiftUI
 import Statistics
 import EconomyModel
 import Charts // https://github.com/danielgindi/Charts.git
+import ChartsExtensions
 import ModelEnvironment
 
 struct BetaRandomizerView: UIViewRepresentable {

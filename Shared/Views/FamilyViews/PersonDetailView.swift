@@ -72,18 +72,18 @@ struct PersonDetailView: View {
 
 struct PersonDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
-        let member = familyTest.members[0]
+        TestEnvir.loadTestFilesFromBundle()
+        let member = TestEnvir.family.members[0]
         return Group {
             // adult
             PersonDetailView()
-                .environmentObject(dataStoreTest)
-                .environmentObject(modelTest)
-                .environmentObject(uiStateTest)
-                .environmentObject(familyTest)
-                .environmentObject(expensesTest)
-                .environmentObject(patrimoineTest)
-                .environmentObject(simulationTest)
+                .environmentObject(TestEnvir.dataStore)
+                .environmentObject(TestEnvir.model)
+                .environmentObject(TestEnvir.uiState)
+                .environmentObject(TestEnvir.family)
+                .environmentObject(TestEnvir.expenses)
+                .environmentObject(TestEnvir.patrimoine)
+                .environmentObject(TestEnvir.simulation)
                 .environmentObject(member)
         }
     }

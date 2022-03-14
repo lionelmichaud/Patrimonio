@@ -44,12 +44,12 @@ struct StatisticSidebarSectionView: View {
 
 struct StatisticSectionView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return StatisticSidebarSectionView()
-            .environmentObject(dataStoreTest)
-            .environmentObject(modelTest)
-            .environmentObject(familyTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(simulationTest)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.model)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.patrimoine)
+            .environmentObject(TestEnvir.simulation)
     }
 }

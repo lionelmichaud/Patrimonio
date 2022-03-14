@@ -85,12 +85,12 @@ struct ModelHumanView_Previews: PreviewProvider {
     static var model = Model(fromBundle: Bundle.main)
     
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return ModelHumanView()
-            .environmentObject(dataStoreTest)
-            .environmentObject(modelTest)
-            .environmentObject(familyTest)
-            .environmentObject(simulationTest)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.model)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.simulation)
             .preferredColorScheme(.dark)
     }
 }

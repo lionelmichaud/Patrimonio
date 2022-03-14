@@ -10,6 +10,7 @@ import os
 import SwiftUI
 import AppFoundation
 import Charts // https://github.com/danielgindi/Charts.git
+import ChartsExtensions
 import Files
 import ModelEnvironment
 import Persistence
@@ -195,22 +196,22 @@ struct IsfLineChartView: UIViewRepresentable {
 
 struct IsfView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
-        simulationTest.compute(using          : modelTest,
+        TestEnvir.loadTestFilesFromBundle()
+        TestEnvir.simulation.compute(using          : TestEnvir.model,
                                nbOfYears      : 40,
                                nbOfRuns       : 1,
-                               withFamily     : familyTest,
-                               withExpenses   : expensesTest,
-                               withPatrimoine : patrimoineTest)
+                               withFamily     : TestEnvir.family,
+                               withExpenses   : TestEnvir.expenses,
+                               withPatrimoine : TestEnvir.patrimoine)
         return NavigationView {
             List {
                 // calcul de simulation
                 NavigationLink(destination : IsfEvolutionChartView()
-                                .environmentObject(uiStateTest)
-                                .environmentObject(dataStoreTest)
-                                .environmentObject(familyTest)
-                                .environmentObject(patrimoineTest)
-                                .environmentObject(simulationTest)
+                                .environmentObject(TestEnvir.uiState)
+                                .environmentObject(TestEnvir.dataStore)
+                                .environmentObject(TestEnvir.family)
+                                .environmentObject(TestEnvir.patrimoine)
+                                .environmentObject(TestEnvir.simulation)
                 ) {
                     Text("ISF")
                 }

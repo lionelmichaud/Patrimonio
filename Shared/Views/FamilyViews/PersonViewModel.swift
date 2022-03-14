@@ -10,7 +10,7 @@ import PersonModel
 
 // MARK: - Person View Model
 
-class PersonViewModel: ObservableObject {
+final class PersonViewModel: ObservableObject {
     @Published var familyName   = ""
     @Published var givenName    = ""
     @Published var sexe         = Sexe.male

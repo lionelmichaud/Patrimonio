@@ -16,7 +16,7 @@ import HelpersView
 
 // MARK: - Retirement View Model
 
-class RetirementViewModel: ObservableObject {
+final class RetirementViewModel: ObservableObject {
     
     struct General {
         var dateLiquidation  : Date?

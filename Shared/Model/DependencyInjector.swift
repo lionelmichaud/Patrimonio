@@ -16,7 +16,7 @@ import LifeExpense
 /// Injecte les dépendance dans les différents objets du modèle utilisateur qui en ont besoin
 struct DependencyInjector {
     /// gérer les dépendances entre le Modèle et les objets applicatifs
-    static func manageDependencies(to model: Model) {
+    static func updateDependencies(to model: Model) {
         // Injection de Fiscal
         RealEstateAsset.setFiscalModelProvider(model.fiscalModel)
         SCPI.setFiscalModelProvider(model.fiscalModel)
@@ -39,7 +39,7 @@ struct DependencyInjector {
                                           family     : Family,
                                           simulation : Simulation) {
         /// gérer les dépendances entre le Modèle et les objets applicatifs
-        DependencyInjector.manageDependencies(to: model)
+        updateDependencies(to: model)
         /// mettre à jour les membres de la famille existants avec les nouvelles valeurs
         family.members.initialize(using: model)
         family.members.persistenceSM.process(event: .onModify)

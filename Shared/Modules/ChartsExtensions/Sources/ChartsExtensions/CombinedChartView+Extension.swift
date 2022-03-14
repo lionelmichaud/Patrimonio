@@ -1,5 +1,5 @@
 //
-//  LineChartView+Extension.swift
+//  CombinedChartView+Extension.swift
 //  Patrimonio
 //
 //  Created by Lionel MICHAUD on 05/01/2022.
@@ -11,15 +11,16 @@ import UIKit
 #endif
 import Charts // https://github.com/danielgindi/Charts.git
 
-// MARK: - Extension de LineChartView pour customizer la configuration des Graph de l'appli
+// MARK: - Extension de CombinedChartView pour customizer la configuration des Graph de l'appli
 
-extension LineChartView {
+public extension CombinedChartView {
     
     /// Création d'un LineChartView avec une présentation customisée
     /// - Parameter title: Titre du graphique
-    convenience init(title               : String,
-                     smallLegend         : Bool = true,
-                     axisFormatterChoice : AxisFormatterChoice) {
+    convenience init(title                    : String,
+                     smallLegend              : Bool = true,
+                     leftAxisFormatterChoice  : AxisFormatterChoice = .none,
+                     rightAxisFormatterChoice : AxisFormatterChoice = .none) {
         self.init()
         
         //: ### General
@@ -56,7 +57,7 @@ extension LineChartView {
         leftAxis.enabled               = true
         leftAxis.labelFont             = ChartThemes.ChartDefaults.smallLabelFont
         leftAxis.labelTextColor        = ChartThemes.DarkChartColors.labelTextColor
-        leftAxis.valueFormatter        = axisFormatterChoice.IaxisFormatter()
+        leftAxis.valueFormatter        = leftAxisFormatterChoice.IaxisFormatter()
         //        leftAxis.axisMaximum = 200.0
         //        leftAxis.axisMinimum = 0.0
         leftAxis.drawGridLinesEnabled  = true
@@ -64,12 +65,11 @@ extension LineChartView {
         
         //: ### RightAxis
         let rightAxis = self.rightAxis
-        rightAxis.enabled              = false
+        rightAxis.enabled              = true
         rightAxis.labelFont            = ChartThemes.ChartDefaults.smallLabelFont
-        rightAxis.labelTextColor       = #colorLiteral(red     : 1, green     : 0.1474981606, blue     : 0, alpha     : 1)
-        leftAxis.valueFormatter        = axisFormatterChoice.IaxisFormatter()
-        //        rightAxis.axisMaximum          = 900.0
-        //        rightAxis.axisMinimum          = -200.0
+        rightAxis.labelTextColor       = #colorLiteral(red: 0.7254902124, green: 0.4784313738, blue: 0.09803921729, alpha: 1)
+        rightAxis.valueFormatter       = rightAxisFormatterChoice.IaxisFormatter()
+        rightAxis.axisMinimum          = 0.0
         rightAxis.drawGridLinesEnabled = false
         rightAxis.granularityEnabled   = false
         
@@ -97,6 +97,6 @@ extension LineChartView {
         //: ### Description
         self.chartDescription?.text    = title
         self.chartDescription?.enabled = true
-        self.chartDescription?.font    = ChartThemes.ChartDefaults.largeLegendFont
+        self.chartDescription?.font    = .systemFont(ofSize : 13)
     }
 }

@@ -10,6 +10,7 @@ import os
 import SwiftUI
 import AppFoundation
 import Charts // https://github.com/danielgindi/Charts.git
+import ChartsExtensions
 import Files
 import ModelEnvironment
 import LifeExpense

@@ -37,7 +37,7 @@ struct DiscreteRandomizerEditView: View {
 
 struct DiscreteRandomizerEditView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
-        return DiscreteRandomizerEditView(discreteRandomizer: .constant(modelTest.socioEconomyModel.nbTrimTauxPlein))
+        TestEnvir.loadTestFilesFromBundle()
+        return DiscreteRandomizerEditView(discreteRandomizer: .constant(TestEnvir.model.socioEconomyModel.nbTrimTauxPlein))
     }
 }

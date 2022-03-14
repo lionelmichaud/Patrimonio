@@ -13,7 +13,7 @@ import UIKit
 
 // MARK: - Extension de BarChartView pour customizer la configuration des Graph de l'appli
 
-extension BarChartView {
+public extension BarChartView {
     
     /// Création d'un BarChartView avec une présentation customisée
     /// - Parameter title: Titre du graphique

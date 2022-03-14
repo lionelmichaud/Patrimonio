@@ -188,18 +188,18 @@ struct ComputationView: View {
     
 struct ComputationView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return NavigationView {
             List {
                 // calcul de simulation
                 NavigationLink(destination : ComputationView()
-                                .environmentObject(modelTest)
-                                .environmentObject(uiStateTest)
-                                .environmentObject(dataStoreTest)
-                                .environmentObject(familyTest)
-                                .environmentObject(expensesTest)
-                                .environmentObject(patrimoineTest)
-                                .environmentObject(simulationTest)
+                                .environmentObject(TestEnvir.model)
+                                .environmentObject(TestEnvir.uiState)
+                                .environmentObject(TestEnvir.dataStore)
+                                .environmentObject(TestEnvir.family)
+                                .environmentObject(TestEnvir.expenses)
+                                .environmentObject(TestEnvir.patrimoine)
+                                .environmentObject(TestEnvir.simulation)
                 ) {
                     Text("Calculs")
                 }

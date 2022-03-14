@@ -57,18 +57,18 @@ struct DossierPropertiesView: View {
 
 struct DossierPropertiesView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
-        let dossier = dataStoreTest.dossiers[0]
+        TestEnvir.loadTestFilesFromBundle()
+        let dossier = TestEnvir.dataStore.dossiers[0]
         return Form {
             DossierPropertiesView(dossier       : dossier,
                                   sectionHeader : "Header")
-                .environmentObject(dataStoreTest)
-                .environmentObject(modelTest)
-                .environmentObject(uiStateTest)
-                .environmentObject(familyTest)
-                .environmentObject(expensesTest)
-                .environmentObject(patrimoineTest)
-                .environmentObject(simulationTest)
+                .environmentObject(TestEnvir.dataStore)
+                .environmentObject(TestEnvir.model)
+                .environmentObject(TestEnvir.uiState)
+                .environmentObject(TestEnvir.family)
+                .environmentObject(TestEnvir.expenses)
+                .environmentObject(TestEnvir.patrimoine)
+                .environmentObject(TestEnvir.simulation)
         }
     }
 }

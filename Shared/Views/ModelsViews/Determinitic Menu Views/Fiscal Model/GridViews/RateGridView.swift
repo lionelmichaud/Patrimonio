@@ -193,15 +193,15 @@ struct RateGridView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return
             NavigationView {
                 NavigationLink("Test", destination: RateGridView(label: "Nom",
                                                                  grid: .constant(grid()))
-                                .environmentObject(dataStoreTest)
-                                .environmentObject(modelTest)
-                                .environmentObject(familyTest)
-                                .environmentObject(simulationTest))
+                                .environmentObject(TestEnvir.dataStore)
+                                .environmentObject(TestEnvir.model)
+                                .environmentObject(TestEnvir.family)
+                                .environmentObject(TestEnvir.simulation))
             }
             .preferredColorScheme(.dark)
             .previewLayout(.fixed(width: 700.0, height: 400.0))

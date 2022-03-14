@@ -101,16 +101,16 @@ struct PatrimoineHeaderView: View {
 
 struct PatrimoineSidebarView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return TabView {
             PatrimoineSidebarView()
                 .tabItem { Label("Patrimoine", systemImage: "dollarsign.circle.fill") }
                 .tag(UIState.Tab.asset)
-                .environmentObject(dataStoreTest)
-                .environmentObject(familyTest)
-                .environmentObject(expensesTest)
-                .environmentObject(patrimoineTest)
-                .environmentObject(uiStateTest)
+                .environmentObject(TestEnvir.dataStore)
+                .environmentObject(TestEnvir.family)
+                .environmentObject(TestEnvir.expenses)
+                .environmentObject(TestEnvir.patrimoine)
+                .environmentObject(TestEnvir.uiState)
         }
     }
 }

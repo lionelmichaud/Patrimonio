@@ -10,7 +10,7 @@ import Charts // https://github.com/danielgindi/Charts.git
 
 // MARK: - Extension de ChartLimitLine pour customizer la configuration de la ligne limite
 
-extension ChartLimitLine {
+public extension ChartLimitLine {
     convenience init(limit        : Double,
                      label        : String,
                      labelPosition: LabelPosition,

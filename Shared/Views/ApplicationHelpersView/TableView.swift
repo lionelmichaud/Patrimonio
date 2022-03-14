@@ -8,6 +8,8 @@
 
 import SwiftUI
 import AppFoundation
+import HelpersView
+import ChartsExtensions
 
 struct ListTableRowView<RatingView1: View, RatingView2: View>: View {
     private let label       : String

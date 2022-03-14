@@ -253,7 +253,7 @@ struct DossierDetailView: View {
                     try simulation.loadFromJSON(fromFolder: folder)
 
                     /// gérer les dépendances entre le Modèle et les objets applicatifs
-                    DependencyInjector.manageDependencies(to: model)
+                    DependencyInjector.updateDependencies(to: model)
 
                     /// rendre le Dossier actif seulement si tout c'est bien passé
                     dataStore.activate(dossierAtIndex: dossierIndex)
@@ -294,7 +294,7 @@ struct DossierDetailView: View {
                         try simulation.loadFromJSON(fromFolder: folder)
 
                         /// gérer les dépendances entre le Modèle et les objets applicatifs
-                        DependencyInjector.manageDependencies(to: model)
+                        DependencyInjector.updateDependencies(to: model)
 
                         /// rendre le Dossier actif seulement si tout c'est bien passé
                         dataStore.activate(dossierAtIndex: dossierIndex)
@@ -353,18 +353,18 @@ struct DossierDetailView: View {
 
 struct DossierDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
-        let dossier = dataStoreTest.dossiers[0]
+        TestEnvir.loadTestFilesFromBundle()
+        let dossier = TestEnvir.dataStore.dossiers[0]
         return NavigationView {
             List {
                 NavigationLink(destination : DossierDetailView(dossier: dossier)
-                                .environmentObject(dataStoreTest)
-                                .environmentObject(modelTest)
-                                .environmentObject(uiStateTest)
-                                .environmentObject(familyTest)
-                                .environmentObject(expensesTest)
-                                .environmentObject(patrimoineTest)
-                                .environmentObject(simulationTest)
+                                .environmentObject(TestEnvir.dataStore)
+                                .environmentObject(TestEnvir.model)
+                                .environmentObject(TestEnvir.uiState)
+                                .environmentObject(TestEnvir.family)
+                                .environmentObject(TestEnvir.expenses)
+                                .environmentObject(TestEnvir.patrimoine)
+                                .environmentObject(TestEnvir.simulation)
                 ) {
                     Text("DossierDetailView")
                 }

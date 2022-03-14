@@ -8,6 +8,7 @@
 import SwiftUI
 import AppFoundation
 import Charts
+import ChartsExtensions
 import HelpersView
 
 /// Wrapper de LineChartView

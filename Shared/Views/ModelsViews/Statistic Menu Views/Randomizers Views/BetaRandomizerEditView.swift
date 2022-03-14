@@ -97,7 +97,7 @@ struct BetaRandomizerEditView : View {
 
 struct BetaRandomizerEditView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
-        return BetaRandomizerEditView(betaRandomizer: .constant(modelTest.economyModel.randomizers.inflation))
+        TestEnvir.loadTestFilesFromBundle()
+        return BetaRandomizerEditView(betaRandomizer: .constant(TestEnvir.model.economyModel.randomizers.inflation))
     }
 }

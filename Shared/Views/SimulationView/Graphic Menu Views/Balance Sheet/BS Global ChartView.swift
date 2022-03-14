@@ -11,6 +11,7 @@ import SwiftUI
 import AppFoundation
 import NamedValue
 import Charts // https://github.com/danielgindi/Charts.git
+import ChartsExtensions
 import Files
 import ModelEnvironment
 import Persistence
@@ -218,22 +219,22 @@ struct BalanceSheetLineChartView: NSUIViewRepresentable {
 
 struct BalanceSheetGlobalChartView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         // calcul de simulation
-        simulationTest.compute(using          : modelTest,
+        TestEnvir.simulation.compute(using          : TestEnvir.model,
                                nbOfYears      : 40,
                                nbOfRuns       : 1,
-                               withFamily     : familyTest,
-                               withExpenses   : expensesTest,
-                               withPatrimoine : patrimoineTest)
+                               withFamily     : TestEnvir.family,
+                               withExpenses   : TestEnvir.expenses,
+                               withPatrimoine : TestEnvir.patrimoine)
         return NavigationView {
             List {
                 NavigationLink(destination : BalanceSheetGlobalChartView()
-                                .environmentObject(uiStateTest)
-                                .environmentObject(dataStoreTest)
-                                .environmentObject(familyTest)
-                                .environmentObject(patrimoineTest)
-                                .environmentObject(simulationTest)
+                                .environmentObject(TestEnvir.uiState)
+                                .environmentObject(TestEnvir.dataStore)
+                                .environmentObject(TestEnvir.family)
+                                .environmentObject(TestEnvir.patrimoine)
+                                .environmentObject(TestEnvir.simulation)
                 ) {
                     Text("Bilan Global")
                 }

@@ -9,6 +9,7 @@
 import SwiftUI
 import Statistics
 import Charts // https://github.com/danielgindi/Charts.git
+import ChartsExtensions
 
 /// Présentation graphique d'un Historgramme
 ///

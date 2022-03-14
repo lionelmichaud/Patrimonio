@@ -64,18 +64,18 @@ struct DossierHeaderView: View {
 
 struct DossiersView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromTemplate()
+        TestEnvir.loadTestFilesFromTemplate()
         return TabView {
             DossiersSidebarView()
                 .tabItem { Label("Dossiers", systemImage: "folder.fill.badge.person.crop") }
                 .tag(UIState.Tab.expense)
-            .environmentObject(dataStoreTest)
-            .environmentObject(modelTest)
-            .environmentObject(uiStateTest)
-            .environmentObject(familyTest)
-            .environmentObject(expensesTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(simulationTest)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.model)
+            .environmentObject(TestEnvir.uiState)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.expenses)
+            .environmentObject(TestEnvir.patrimoine)
+            .environmentObject(TestEnvir.simulation)
         }
     }
 }

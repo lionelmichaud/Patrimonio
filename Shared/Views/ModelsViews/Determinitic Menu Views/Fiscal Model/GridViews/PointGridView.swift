@@ -289,15 +289,15 @@ struct PointGridView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return
             NavigationView {
                 NavigationLink("Test", destination: PointGridView(label: "Nom",
                                                                   grid: .constant(grid()))
-                                .environmentObject(dataStoreTest)
-                                .environmentObject(modelTest)
-                                .environmentObject(familyTest)
-                                .environmentObject(simulationTest))
+                                .environmentObject(TestEnvir.dataStore)
+                                .environmentObject(TestEnvir.model)
+                                .environmentObject(TestEnvir.family)
+                                .environmentObject(TestEnvir.simulation))
             }
             .preferredColorScheme(.dark)
             .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/500.0/*@END_MENU_TOKEN@*/, height: 300.0))
@@ -312,15 +312,15 @@ struct VerifiedPointGridView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return
             NavigationView {
                 NavigationLink("Test", destination: VerifiedPointGridView(label: "Courbe",
                                                                           grid: .constant(grid()))
-                                .environmentObject(dataStoreTest)
-                                .environmentObject(modelTest)
-                                .environmentObject(familyTest)
-                                .environmentObject(simulationTest))
+                                .environmentObject(TestEnvir.dataStore)
+                                .environmentObject(TestEnvir.model)
+                                .environmentObject(TestEnvir.family)
+                                .environmentObject(TestEnvir.simulation))
             }
         .preferredColorScheme(.dark)
         .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/500.0/*@END_MENU_TOKEN@*/, height: 300.0))

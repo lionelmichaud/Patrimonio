@@ -9,30 +9,8 @@ import Foundation
 import AppFoundation
 import ModelEnvironment
 import Charts
+import ChartsExtensions
 import CashFlow
-
-// MARK: - Génération de graphiques - Synthèse - FISCALITE IRPP
-
-enum IrppEnum: Int, PickableEnumP {
-    case bareme
-    case withChildren
-    case withoutChildren
-
-    var id: Int {
-        return self.rawValue
-    }
-
-    var pickerString: String {
-        switch self {
-            case .bareme:
-                return "Barême"
-            case .withChildren:
-                return "Quotient Familial \n avec Enfants"
-            case .withoutChildren:
-                return "Quotient Familial \n sans Enfant"
-        }
-    }
-}
 
 /// Dessiner un graphe à lignes : revenu imposable + irpp
 /// - Returns: tableau de LineChartDataSet

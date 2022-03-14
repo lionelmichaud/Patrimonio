@@ -11,6 +11,7 @@ import Persistence
 import NamedValue
 import CashFlow
 import Charts // https://github.com/danielgindi/Charts.git
+import ChartsExtensions
 
 // MARK: - Génération de graphiques - Détail par catégories - CASH FLOW
 

@@ -339,22 +339,22 @@ struct ShortGridLineView : View {
 
 struct ShortGridView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
-        simulationTest.compute(using          : modelTest,
+        TestEnvir.loadTestFilesFromBundle()
+        TestEnvir.simulation.compute(using          : TestEnvir.model,
                                nbOfYears      : 25,
                                nbOfRuns       : 10,
-                               withFamily     : familyTest,
-                               withExpenses   : expensesTest,
-                               withPatrimoine : patrimoineTest)
+                               withFamily     : TestEnvir.family,
+                               withExpenses   : TestEnvir.expenses,
+                               withPatrimoine : TestEnvir.patrimoine)
         return
             NavigationView {
                 NavigationLink(destination: ShortGridView()
-                                .environmentObject(uiStateTest)
-                                .environmentObject(dataStoreTest)
-                                .environmentObject(modelTest)
-                                .environmentObject(familyTest)
-                                .environmentObject(patrimoineTest)
-                                .environmentObject(simulationTest)
+                                .environmentObject(TestEnvir.uiState)
+                                .environmentObject(TestEnvir.dataStore)
+                                .environmentObject(TestEnvir.model)
+                                .environmentObject(TestEnvir.family)
+                                .environmentObject(TestEnvir.patrimoine)
+                                .environmentObject(TestEnvir.simulation)
                 ) {
                     Text("Synthèse")
                 }

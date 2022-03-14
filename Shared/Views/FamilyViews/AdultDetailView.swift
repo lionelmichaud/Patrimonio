@@ -297,61 +297,61 @@ private struct InheritanceSectionView: View {
 
 struct LifeScenarioSectionView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
-        let member = familyTest.members[0]
+        TestEnvir.loadTestFilesFromBundle()
+        let member = TestEnvir.family.members[0]
         // child
         return Form {
             LifeScenarioSectionView(member: member)
-                .environmentObject(modelTest)
+                .environmentObject(TestEnvir.model)
         }
     }
 }
 
 struct RevenuSectionView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
-        let member = familyTest.members[0]
+        TestEnvir.loadTestFilesFromBundle()
+        let member = TestEnvir.family.members[0]
         // child
         return Form {
             RevenuSectionView(member: member)
-                .environmentObject(modelTest)
-                .environmentObject(patrimoineTest)
+                .environmentObject(TestEnvir.model)
+                .environmentObject(TestEnvir.patrimoine)
         }
     }
 }
 
 //struct InheritanceSectionView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        loadTestFilesFromBundle()
-//        let member = familyTest.members[0]
+//        TestEnvir.loadTestFilesFromBundle()
+//        let member = TestEnvir.familyTest.members[0]
 //        // child
 //        return Form {
 //            InheritanceSectionView(member: member)
-//                .environmentObject(dataStoreTest)
-//                .environmentObject(modelTest)
-//                .environmentObject(uiStateTest)
-//                .environmentObject(familyTest)
-//                .environmentObject(expensesTest)
-//                .environmentObject(patrimoineTest)
-//                .environmentObject(simulationTest)
+//                .environmentObject(TestEnvir.dataStoreTest)
+//                .environmentObject(TestEnvir.modelTest)
+//                .environmentObject(TestEnvir.uiStateTest)
+//                .environmentObject(TestEnvir.familyTest)
+//                .environmentObject(TestEnvir.expensesTest)
+//                .environmentObject(TestEnvir.patrimoineTest)
+//                .environmentObject(TestEnvir.simulationTest)
 //        }
 //    }
 //}
 
 //struct AdultDetailView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        loadTestFilesFromBundle()
-//        let member = familyTest.members[0]
+//        TestEnvir.loadTestFilesFromBundle()
+//        let member = TestEnvir.familyTest.members[0]
 //        // child
 //        return Form {
 //            AdultDetailView()
-//                .environmentObject(dataStoreTest)
-//                .environmentObject(modelTest)
-//                .environmentObject(uiStateTest)
-//                .environmentObject(familyTest)
-//                .environmentObject(expensesTest)
-//                .environmentObject(patrimoineTest)
-//                .environmentObject(simulationTest)
+//                .environmentObject(TestEnvir.dataStoreTest)
+//                .environmentObject(TestEnvir.modelTest)
+//                .environmentObject(TestEnvir.uiStateTest)
+//                .environmentObject(TestEnvir.familyTest)
+//                .environmentObject(TestEnvir.expensesTest)
+//                .environmentObject(TestEnvir.patrimoineTest)
+//                .environmentObject(TestEnvir.simulationTest)
 //                .environmentObject(member)
 //        }
 //    }

@@ -38,7 +38,7 @@ struct DonationView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return
             NavigationView {
                 EmptyView()
@@ -46,7 +46,7 @@ struct DonationView_Previews: PreviewProvider {
                     DonationView(donation: .constant(donation()))
                 }
             }
-            .environmentObject(familyTest)
+            .environmentObject(TestEnvir.family)
             .preferredColorScheme(.dark)
             .previewDisplayName("DonationView")
     }

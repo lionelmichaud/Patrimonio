@@ -13,7 +13,7 @@ import HelpersView
 
 // MARK: - View Model for LifeExpense
 
-class LifeExpenseViewModel: ObservableObject {
+final class LifeExpenseViewModel: ObservableObject {
     
     // MARK: - Properties
     

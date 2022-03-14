@@ -8,6 +8,7 @@
 import SwiftUI
 import AppFoundation
 import Charts
+import ChartsExtensions
 import HelpersView
 
 struct BubbleChartTemplateView: NSUIViewRepresentable {
@@ -165,7 +166,7 @@ struct BubbleChartTemplateView: NSUIViewRepresentable {
 
 struct BubbleChartTemplateView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return BubbleChartTemplateView(title                   : nil,
                                        titleEnabled            : true,
                                        legendEnabled           : true,
@@ -178,7 +179,7 @@ struct BubbleChartTemplateView_Previews: PreviewProvider {
                                        data                    : [(x: 0.0, y: 1.0, size: 15000.0),
                                                                   (x: 1.0, y: 0.0, size: 10000.0)])
             .preferredColorScheme(.dark)
-            .environmentObject(patrimoineTest)
-            .environmentObject(uiStateTest)
+            .environmentObject(TestEnvir.patrimoine)
+            .environmentObject(TestEnvir.uiState)
     }
 }

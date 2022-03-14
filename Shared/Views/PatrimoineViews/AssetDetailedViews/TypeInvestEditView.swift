@@ -93,13 +93,13 @@ struct TypeInvestEditView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return
             NavigationView {
                 EmptyView()
                 Form {
                     TypeInvestEditView(investType: .constant(investementKind()))
-                        .environmentObject(familyTest)
+                        .environmentObject(TestEnvir.family)
                 }
             }
             .preferredColorScheme(.dark)

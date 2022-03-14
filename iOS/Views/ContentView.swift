@@ -83,13 +83,13 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return ContentView()
-            .environmentObject(modelTest)
-            .environmentObject(uiStateTest)
-            .environmentObject(dataStoreTest)
-            .environmentObject(familyTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(simulationTest)
+            .environmentObject(TestEnvir.model)
+            .environmentObject(TestEnvir.uiState)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.patrimoine)
+            .environmentObject(TestEnvir.simulation)
     }
 }

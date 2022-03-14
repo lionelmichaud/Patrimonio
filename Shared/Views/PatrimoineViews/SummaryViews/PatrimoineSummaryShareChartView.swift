@@ -438,12 +438,12 @@ struct PatrimoineSingleCategoryView : View {
 
 struct PatrimoineSummaryChartView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return PatrimoineSummaryShareChartView()
             .preferredColorScheme(.dark)
-            .environmentObject(dataStoreTest)
-            .environmentObject(familyTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(uiStateTest)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.patrimoine)
+            .environmentObject(TestEnvir.uiState)
     }
 }

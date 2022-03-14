@@ -72,14 +72,14 @@ struct DossierSummaryView: View {
 
 struct DossierSummaryView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return DossierSummaryView()
-            .environmentObject(dataStoreTest)
-            .environmentObject(modelTest)
-            .environmentObject(uiStateTest)
-            .environmentObject(familyTest)
-            .environmentObject(expensesTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(simulationTest)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.model)
+            .environmentObject(TestEnvir.uiState)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.expenses)
+            .environmentObject(TestEnvir.patrimoine)
+            .environmentObject(TestEnvir.simulation)
     }
 }

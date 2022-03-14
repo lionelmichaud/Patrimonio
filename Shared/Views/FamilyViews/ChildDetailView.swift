@@ -44,12 +44,12 @@ struct ChildDetailView: View {
 
 struct ChildDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
-        let member = familyTest.members[2]
+        TestEnvir.loadTestFilesFromBundle()
+        let member = TestEnvir.family.members[2]
         return Form {
             ChildDetailView()
                 .environmentObject(member)
-                .environmentObject(modelTest)
+                .environmentObject(TestEnvir.model)
         }
     }
 }

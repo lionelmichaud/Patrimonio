@@ -12,6 +12,7 @@ import Persistence
 import LifeExpense
 import FamilyModel
 import Charts // https://github.com/danielgindi/Charts.git
+import ChartsExtensions
 import HelpersView
 
 struct ExpenseSummaryView: View {
@@ -248,12 +249,12 @@ struct ExpenseSummaryChartView: NSUIViewRepresentable {
 
 struct ExpenseSummaryView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return ExpenseSummaryView()
-            .environmentObject(dataStoreTest)
-            .environmentObject(familyTest)
-            .environmentObject(expensesTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(uiStateTest)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.expenses)
+            .environmentObject(TestEnvir.patrimoine)
+            .environmentObject(TestEnvir.uiState)
     }
 }

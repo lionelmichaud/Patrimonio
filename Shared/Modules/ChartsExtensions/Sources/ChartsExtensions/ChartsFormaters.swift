@@ -7,15 +7,15 @@
 //
 
 import Foundation
-import Charts // https://github.com/danielgindi/Charts.git
 import AppFoundation
+import Charts // https://github.com/danielgindi/Charts.git
 
 // swiftlint:disable type_name
-class Kilo€Formatter: NSObject, IAxisValueFormatter, IValueFormatter {
+public class Kilo€Formatter: NSObject, IAxisValueFormatter, IValueFormatter {
     let numFormatter: NumberFormatter
     // swiftlint:enable type_name
 
-    override init() {
+    public override init() {
 //        numFormatter = NumberFormatter()
 //
 //        // if number is less than 1 add 0 before decimal
@@ -57,10 +57,10 @@ class Kilo€Formatter: NSObject, IAxisValueFormatter, IValueFormatter {
     }
 }
 
-class PercentFormatter: NSObject, IAxisValueFormatter, IValueFormatter {
+public class PercentFormatter: NSObject, IAxisValueFormatter, IValueFormatter {
     let numFormatter: NumberFormatter
     
-    override init() {
+    public override init() {
         numFormatter = NumberFormatter()
         
         // if number is less than 1 add 0 before decimal
@@ -102,7 +102,7 @@ class PercentFormatter: NSObject, IAxisValueFormatter, IValueFormatter {
 public class DateValueFormatter: NSObject, IAxisValueFormatter {
     private let dateFormatter = DateFormatter()
     
-    override init() {
+    public override init() {
         super.init()
         dateFormatter.dateFormat = "dd MMM HH:mm"
     }
@@ -119,7 +119,7 @@ public class DayAxisValueFormatter: NSObject, IAxisValueFormatter {
                   "Jul", "Aug", "Sep",
                   "Oct", "Nov", "Dec"]
     
-    init(chart: BarLineChartViewBase) {
+    public init(chart: BarLineChartViewBase) {
         self.chart = chart
     }
     
@@ -294,14 +294,14 @@ public class LargeValueFormatter: NSObject, IValueFormatter, IAxisValueFormatter
 public class NamedValueFormatter: NSObject, IAxisValueFormatter, IValueFormatter {
 
     // libélés de l'axe X
-    var names = [String]()
+    public var names = [String]()
 
-    init(names: [String]) {
+    public init(names: [String]) {
         self.names = names
         super.init()
     }
 
-    override init() {
+    public override init() {
         super.init()
     }
 
@@ -322,6 +322,29 @@ public class NamedValueFormatter: NSObject, IAxisValueFormatter, IValueFormatter
                                dataSetIndex    : Int,
                                viewPortHandler : ViewPortHandler?) -> String {
         return names[Int(value)]
+    }
+}
+
+// MARK: - Génération de graphiques - Synthèse - FISCALITE IRPP
+
+public enum IrppEnum: Int, PickableEnumP {
+    case bareme
+    case withChildren
+    case withoutChildren
+
+    public var id: Int {
+        return self.rawValue
+    }
+
+    public var pickerString: String {
+        switch self {
+            case .bareme:
+                return "Barême"
+            case .withChildren:
+                return "Quotient Familial \n avec Enfants"
+            case .withoutChildren:
+                return "Quotient Familial \n sans Enfant"
+        }
     }
 }
 

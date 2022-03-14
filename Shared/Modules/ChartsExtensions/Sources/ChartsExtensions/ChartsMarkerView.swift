@@ -15,7 +15,7 @@ import UIKit
 // MARK: - Etiquette pour diagramme en radar
 
 /// Etiquette pour diagramme  en radar
-class RadarMarkerView: MarkerView {
+public class RadarMarkerView: MarkerView {
     @IBOutlet var label: UILabel!
     
     public override func awakeFromNib() {
@@ -32,7 +32,7 @@ class RadarMarkerView: MarkerView {
 // MARK: - Bulle d'info pour diagramme (générique)
 
 /// Bulle d'info pour diagramme (générique)
-open class BalloonMarker: MarkerImage {
+public class BalloonMarker: MarkerImage {
     open var color: NSUIColor
     open var arrowSize = CGSize(width: 15, height: 11)
     open var font: NSUIFont
@@ -56,7 +56,7 @@ open class BalloonMarker: MarkerImage {
         super.init()
     }
     
-    open override func offsetForDrawing(atPoint point: CGPoint) -> CGPoint {
+    public override func offsetForDrawing(atPoint point: CGPoint) -> CGPoint {
         var offset = self.offset
         var size = self.size
         
@@ -92,7 +92,7 @@ open class BalloonMarker: MarkerImage {
         return offset
     }
     
-    open override func draw(context: CGContext, point: CGPoint) {
+    public override func draw(context: CGContext, point: CGPoint) {
         guard let label = label else { return }
         
         let offset = self.offsetForDrawing(atPoint: point)
@@ -185,11 +185,11 @@ open class BalloonMarker: MarkerImage {
         context.restoreGState()
     }
     
-    open override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {
+    public override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {
         setLabel(String(entry.y))
     }
     
-    open func setLabel(_ newLabel: String) {
+    public func setLabel(_ newLabel: String) {
         label = newLabel
         
         _drawAttributes.removeAll()
@@ -211,7 +211,7 @@ open class BalloonMarker: MarkerImage {
 // MARK: - Bulle d'info pour diagramme en camembert
 
 /// Etiquette pour diagramme  en camembert
-class PieMarkerView: BalloonMarker {
+public class PieMarkerView: BalloonMarker {
     public override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {
         guard let e = entry as? PieChartDataEntry, let label = e.label else {
             setLabel("?")
@@ -225,8 +225,8 @@ class PieMarkerView: BalloonMarker {
 // MARK: - Bulle d'info pour diagramme en Bubble
 
 /// Bulle d'info pour diagramme en en Bubble
-class StringMarker: BalloonMarker {
-    var markers: [[String]]?
+public class StringMarker: BalloonMarker {
+    public var markers: [[String]]?
     
     public init(color     : NSUIColor,
                 font      : NSUIFont,
@@ -250,7 +250,7 @@ class StringMarker: BalloonMarker {
 // MARK: - Bulle d'info pour diagramme en X-Y
 
 /// Bulle d'info pour diagramme en en X-Y
-class XYMarkerViewSpecial: BalloonMarker {
+public class XYMarkerViewSpecial: BalloonMarker {
     public var xAxisValueFormatter: IAxisValueFormatter
     fileprivate var yFormatter = NumberFormatter()
     
@@ -275,7 +275,7 @@ class XYMarkerViewSpecial: BalloonMarker {
 }
 
 /// Bulle d'info pour diagramme en en X-Y
-class XYMarkerView: BalloonMarker {
+public class XYMarkerView: BalloonMarker {
     public var xAxisValueFormatter: IAxisValueFormatter
     public var yAxisValueFormatter: IAxisValueFormatter
     
@@ -302,7 +302,7 @@ class XYMarkerView: BalloonMarker {
 // MARK: - Bulle d'info pour diagramme en barre: Date + Valeur en Y
 
 /// Bulle d'info: Date + Valeur en Y
-class DateValueMarkerView: BalloonMarker {
+public class DateValueMarkerView: BalloonMarker {
     public var xAxisValueFormatter: IAxisValueFormatter
     public var yAxisValueFormatter: IAxisValueFormatter
     
@@ -347,12 +347,12 @@ class DateValueMarkerView: BalloonMarker {
 // MARK: - Bulle d'info pour diagramme en barre: Date + Valeur en Y
 
 /// Bulle d'info pour une dépense
-class ExpenseMarkerView: BalloonMarker {
-    var xAxisValueFormatter: IAxisValueFormatter
-    var yAxisValueFormatter: IAxisValueFormatter
-    var amounts           = [Double]()
-    var prop              = [Bool]()
-    var firstYearDuration = [[Int]]()
+public class ExpenseMarkerView: BalloonMarker {
+    public var xAxisValueFormatter: IAxisValueFormatter
+    public var yAxisValueFormatter: IAxisValueFormatter
+    public var amounts           = [Double]()
+    public var prop              = [Bool]()
+    public var firstYearDuration = [[Int]]()
     
     public init(color               : NSUIColor,
                 font                : NSUIFont,

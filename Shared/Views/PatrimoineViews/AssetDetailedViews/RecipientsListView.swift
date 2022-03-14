@@ -109,10 +109,10 @@ struct RecipientsListView_Previews: PreviewProvider {
     static var recipients = ["Nom 1", "Nom 2"]
     
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return Form {
             RecipientsListView(title: "Usufruitiers", recipients: .constant(recipients))
-                .environmentObject(familyTest)
+                .environmentObject(TestEnvir.family)
         }
         .previewLayout(.sizeThatFits)
         .previewDisplayName("RecipientsListView")

@@ -15,7 +15,7 @@ import PersonModel
 
 // MARK: - Adult View Model
 
-class AdultViewModel: ObservableObject {
+final class AdultViewModel: ObservableObject {
     @Published var fiscalOption              = InheritanceFiscalOption.fullUsufruct
     @Published var dateRetirement            = Date()
     @Published var causeOfRetirement         = Unemployment.Cause.demission

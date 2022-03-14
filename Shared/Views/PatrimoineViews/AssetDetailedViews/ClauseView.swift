@@ -86,7 +86,7 @@ struct ClauseView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return
             NavigationView {
                 EmptyView()
@@ -94,7 +94,7 @@ struct ClauseView_Previews: PreviewProvider {
                     ClauseView(clause: .constant(clause()))
                 }
             }
-            .environmentObject(familyTest)
+            .environmentObject(TestEnvir.family)
             .preferredColorScheme(.dark)
             .previewDisplayName("ClauseView")
     }

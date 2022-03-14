@@ -8,6 +8,8 @@
 import SwiftUI
 import AssetsModel
 import PatrimoineModel
+import HelpersView
+import ChartsExtensions
 
 struct PatrimoineSummaryTableView: View {
     static let riskColors      = ChartThemes.riskColorsTable.map { Color($0) }
@@ -306,12 +308,12 @@ struct PatrimoineSummaryTableView: View {
 
 struct PatrimoineSummaryTableView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return PatrimoineSummaryTableView()
             .preferredColorScheme(.dark)
-            .environmentObject(dataStoreTest)
-            .environmentObject(familyTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(uiStateTest)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.patrimoine)
+            .environmentObject(TestEnvir.uiState)
     }
 }

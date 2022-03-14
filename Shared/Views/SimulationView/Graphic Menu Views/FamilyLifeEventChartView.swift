@@ -9,6 +9,7 @@
 import SwiftUI
 import AppFoundation
 import Charts // https://github.com/danielgindi/Charts.git
+import ChartsExtensions
 import DateBoundary
 import FamilyModel
 
@@ -113,10 +114,10 @@ struct FamilyLifeEventChartView: UIViewRepresentable {
 
 struct FamilyLifeEventChartView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return FamilyLifeEventChartView(endDate: 2054)
             .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealWidth: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealHeight: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxHeight: 500, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-            .environmentObject(familyTest)
-            .environmentObject(uiStateTest)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.uiState)
     }
 }

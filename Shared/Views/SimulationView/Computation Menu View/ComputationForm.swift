@@ -182,15 +182,15 @@ struct EditKpisButtonView: View {
 
 struct ComputationForm_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return ComputationForm()
             .preferredColorScheme(.dark)
-            .environmentObject(dataStoreTest)
-            .environmentObject(modelTest)
-            .environmentObject(familyTest)
-            .environmentObject(expensesTest)
-            .environmentObject(patrimoineTest)
-            .environmentObject(simulationTest)
-            .environmentObject(uiStateTest)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.model)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.expenses)
+            .environmentObject(TestEnvir.patrimoine)
+            .environmentObject(TestEnvir.simulation)
+            .environmentObject(TestEnvir.uiState)
     }
 }

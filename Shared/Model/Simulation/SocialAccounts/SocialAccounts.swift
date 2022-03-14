@@ -112,7 +112,7 @@ struct SocialAccounts {
                                                            withBalanceSheetLine : balanceArray.last)
                 SimulationLogger.shared.log(run      : run,
                                             logTopic : LogTopic.simulationEvent,
-                                            message  : "Fin du run: à cours de cash en \(year)")
+                                            message  : "Fin du run: 🔴 à cours de cash en \(year)")
                 return kpiComputer.currentRunKpiResults // arrêter la construction de la table
             }
             

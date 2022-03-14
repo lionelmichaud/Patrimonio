@@ -13,6 +13,7 @@ import Persistence
 import LifeExpense
 import CashFlow
 import Charts // https://github.com/danielgindi/Charts.git
+import ChartsExtensions
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CategoryBarChartCashFlowVisitor")
 

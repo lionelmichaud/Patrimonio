@@ -161,16 +161,16 @@ struct ExpenseView_Previews: PreviewProvider {
     }
     static var simulationReseter = FakeSimulationReseter()
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return TabView {
             ExpenseSidebarView(simulationReseter: simulationReseter)
                 .tabItem { Label("Dépenses", systemImage: "cart.fill") }
                 .tag(UIState.Tab.expense)
-                .environmentObject(dataStoreTest)
-                .environmentObject(familyTest)
-                .environmentObject(expensesTest)
-                .environmentObject(patrimoineTest)
-                .environmentObject(uiStateTest)
+                .environmentObject(TestEnvir.dataStore)
+                .environmentObject(TestEnvir.family)
+                .environmentObject(TestEnvir.expenses)
+                .environmentObject(TestEnvir.patrimoine)
+                .environmentObject(TestEnvir.uiState)
         }
     }
 }

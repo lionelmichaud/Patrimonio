@@ -14,7 +14,7 @@ import FamilyModel
 
 struct PersonLifeLineView: View {
    
-    class ViewModel: ObservableObject {
+    final class ViewModel: ObservableObject {
         @Published var personName : String = ""
         @Published var steps      : [AnyView]                        = []
         @Published var indicators : [StepperIndicationType<AnyView>] = []

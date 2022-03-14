@@ -65,12 +65,12 @@ struct ModelFiscalLifeInsuranceView: View {
 
 struct ModelFiscalLifeInsuranceView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return ModelFiscalLifeInsuranceView()
             .preferredColorScheme(.dark)
-            .environmentObject(dataStoreTest)
-            .environmentObject(modelTest)
-            .environmentObject(familyTest)
-            .environmentObject(simulationTest)
+            .environmentObject(TestEnvir.dataStore)
+            .environmentObject(TestEnvir.model)
+            .environmentObject(TestEnvir.family)
+            .environmentObject(TestEnvir.simulation)
     }
 }

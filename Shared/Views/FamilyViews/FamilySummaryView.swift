@@ -196,10 +196,10 @@ struct SciSummarySection: View {
 
 struct FamilySummarySectionView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         return Form {
             FamilySummarySection()
-                .environmentObject(familyTest)
+                .environmentObject(TestEnvir.family)
         }
         
     }
@@ -207,31 +207,31 @@ struct FamilySummarySectionView_Previews: PreviewProvider {
 
 struct RevenuSummarySectionView_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         let cashFlowLine = CashFlowLine()
         return Form {
             RevenuSummarySection(cashFlow: cashFlowLine)
-                .environmentObject(familyTest)
-                .environmentObject(modelTest)
+                .environmentObject(TestEnvir.family)
+                .environmentObject(TestEnvir.model)
         }
     }
 }
 
 struct FiscalSummarySection_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         let cashFlowLine = CashFlowLine()
         return Form {
             FiscalSummarySection(cashFlow: cashFlowLine)
-                .environmentObject(familyTest)
-                .environmentObject(modelTest)
+                .environmentObject(TestEnvir.family)
+                .environmentObject(TestEnvir.model)
         }
     }
 }
 
 struct SciSummarySection_Previews: PreviewProvider {
     static var previews: some View {
-        loadTestFilesFromBundle()
+        TestEnvir.loadTestFilesFromBundle()
         let cashFlowLine = CashFlowLine()
         return Form {
             SciSummarySection(cashFlow: cashFlowLine)
@@ -241,13 +241,13 @@ struct SciSummarySection_Previews: PreviewProvider {
 
 //struct FamilySummaryView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        loadTestFilesFromBundle()
+//        TestEnvir.loadTestFilesFromBundle()
 //        return FamilySummaryView()
-//            .environmentObject(dataStoreTest)
-//            .environmentObject(modelTest)
-//            .environmentObject(familyTest)
-//            .environmentObject(expensesTest)
-//            .environmentObject(patrimoineTest)
-//            .environmentObject(simulationTest)
+//            .environmentObject(TestEnvir.dataStoreTest)
+//            .environmentObject(TestEnvir.modelTest)
+//            .environmentObject(TestEnvir.familyTest)
+//            .environmentObject(TestEnvir.expensesTest)
+//            .environmentObject(TestEnvir.patrimoineTest)
+//            .environmentObject(TestEnvir.simulationTest)
 //    }
 //}

@@ -13,7 +13,7 @@ import Charts // https://github.com/danielgindi/Charts.git
 
 // MARK: - Extension de BubbleChartView pour customizer la configuration des Graph de l'appli
 
-extension BubbleChartView {
+public extension BubbleChartView {
     /// Création d'un BubbleChartView avec une présentation customisée
     /// - Parameter title: Titre du graphique
     convenience init(title                   : String,

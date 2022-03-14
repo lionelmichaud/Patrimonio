@@ -12,7 +12,7 @@ import Files
 
 // MARK: - Dictionnaire de [Category : Table d'Item Valuable and Namable]
 
-public class DictionaryOfNameableValuableArray <ItemCategory, ArrayOfItems>: ObservableObject
+public final class DictionaryOfNameableValuableArray <ItemCategory, ArrayOfItems>: ObservableObject
 where ItemCategory: PickableEnumP,
       ItemCategory: Codable,
       ArrayOfItems: NameableValuableArrayP,
