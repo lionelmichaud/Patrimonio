@@ -19,6 +19,7 @@ import Persistence
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.Simulation")
 
 extension Simulation {
+    
     /// Rejouer un run
     ///
     /// [- Sauvegarder l'état du patrimoine avant de lancer les calculs (et donc de modifier l'état du patrimoine] Pourquoi pas fait ?

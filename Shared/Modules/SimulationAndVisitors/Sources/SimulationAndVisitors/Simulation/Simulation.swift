@@ -58,7 +58,7 @@ public final class Simulation: ObservableObject, CanResetSimulationP, Persistabl
     @Published public var lastYear       : Int?
     
     // vecteur d'état de la simulation
-    @Published public var currentRunNb   : Int = 0
+    @Published public var currentRunNb : Int = 0
     private var computationSM        = SimulationComputationStateMachine()
     private var resultsPersistenceSM = SimulationPersistenceStateMachine()
     public  var persistenceSM        = PersistenceStateMachine()
@@ -66,7 +66,7 @@ public final class Simulation: ObservableObject, CanResetSimulationP, Persistabl
     @Published public var socialAccounts        = SocialAccounts()
     @Published public var kpis                  = KpiDictionary()
     @Published public var monteCarloResultTable = SimulationResultTable()
-    @Published var currentRunResults    = SimulationResultLine()
+    @Published var currentRunResults            = SimulationResultLine()
     
     // MARK: - Computed Properties
     
@@ -78,25 +78,32 @@ public final class Simulation: ObservableObject, CanResetSimulationP, Persistabl
         resultsPersistenceSM.currentState
     }
     
+    /// Vrai si le calcul est terminé
     public var isComputed      : Bool {
         computationState == .completed
     }
     
+    /// Vrai si les résultats de la dernière simulation sont valides car aucune donnée d'entrée n'a changée
     public var resultIsValid   : Bool {
-        !(persistenceState == .invalid)
+        persistenceState != .invalid
     }
     
+    /// Vrai si les résultats de la dernière simulation sont valides mais pas sauvegardés
     public var resultIsSavable : Bool {
         persistenceState == .savable
     }
     
+    /// Vrai si les résultats de la dernière simulation sont valides et sauvegardés
     public var resultIsSaved   : Bool {
         persistenceState == .saved
     }
     
+    /// Successions légales survenues pendant le run de simulation
     public var occuredLegalSuccessions   : [Succession] {
         socialAccounts.legalSuccessions
     }
+    
+    /// Transmissions d'Assurances Vies survenues pendant le run de simulation
     public var occuredLifeInsSuccessions : [Succession] {
         socialAccounts.lifeInsSuccessions
     }
@@ -163,7 +170,7 @@ public final class Simulation: ObservableObject, CanResetSimulationP, Persistabl
         persistenceSM.process(event: .onSave)
     }
     
-    /// Traiter un événement
+    /// Traiter un événement de Calcul de la Simulation
     /// - Parameter event: événement à traiter
     public func process(event: SimulationEvent) {
         computationSM.process(event: event)
@@ -190,6 +197,7 @@ public final class Simulation: ObservableObject, CanResetSimulationP, Persistabl
                        value : KPI) {
         kpis[key] = value
         notifyComputationInputsModification()
+        // le dossier reste modifié tant qu'on ne l'a pas enregistré dans son propre répertoire
         persistenceSM.process(event: .onModify)
     }
 }

@@ -86,9 +86,11 @@ struct KpiGroupBox : View {
                     AmountEditView(label  : "Valeur" + compareStr,
                                    amount : $kpi.objective)
                         .onChange(of: kpi.objective) { value in
-                            simulation.kpis[KpiEnum(rawValue: kpi.name)!]?.objective = value
+                            simulation.setKpi(key   : KpiEnum(rawValue: kpi.name)!,
+                                              value : kpi)
+                            //simulation.kpis[KpiEnum(rawValue: kpi.name)!]?.objective = value
                             // le dossier reste modifié tant qu'on ne l'a pas enregistré dans son propre répertoire
-                            simulation.persistenceSM.process(event: .onModify)
+                            //simulation.persistenceSM.process(event: .onModify)
                         }
                     Spacer()
                 }
@@ -101,7 +103,7 @@ struct KpiGroupBox : View {
                             simulation.setKpi(key   : KpiEnum(rawValue: kpi.name)!,
                                               value : kpiCopy)
                             // le dossier reste modifié tant qu'on ne l'a pas enregistré dans son propre répertoire
-                            simulation.persistenceSM.process(event: .onModify)
+                            //simulation.persistenceSM.process(event: .onModify)
                         }
                     Spacer()
                 }
@@ -116,7 +118,7 @@ struct KpiGroupBox : View {
         self._kpi  = State(initialValue : kpiModified)
     }
     
-    func kpiNoteSubstituted(_ note: String) -> String {
+    private func kpiNoteSubstituted(_ note: String) -> String {
         var substituted: String = note
         substituted = substituted.replacingOccurrences(of    : "<<OwnershipNature>>",
                                                        with  : ownershipGraphicSelection.rawValue,

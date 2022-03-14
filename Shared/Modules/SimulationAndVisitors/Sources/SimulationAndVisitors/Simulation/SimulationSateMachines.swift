@@ -11,19 +11,20 @@ import Stateful
 // MARK: - State Machine de l'état du Calcul de la Simulation
 
 public enum SimulationEvent {
-    // l'utilisateur vient de lancer une simulation
+    /// L'utilisateur vient de lancer une simulation
     case onComputationTrigger
-    // non utilisé, pour un usage futur
+    /// Non utilisé, pour un usage futur
     case onComputationPause
-    // les clauls de simulation viennent de se terminer
+    /// Les calculs de simulation viennent de se terminer
     case onComputationCompletion
-    // l'utilisateur vient de mofifier un paramètre de simulation
+    /// L'utilisateur vient de mofifier un paramètre de simulation
     case onComputationInputsModification
-    // les résultats de simulation on été sauvegarder dans le répertoire local Document avec succès
+    /// Les résultats de simulation on été sauvegarder dans le répertoire local Document avec succès
     case onSaveSuccessfulCompletion
 }
 
 public enum SimulationComputationState: String {
+    /// Quand les résultats de la dernière simulation ne sont plus valides car une donnée d'entrée a changée
     case invalid   = "Invalide"
     case computing = "Calcul en cours"
     case completed = "Terminée"
@@ -71,8 +72,11 @@ extension SimulationComputationStateMachine {
 // MARK: - State Machine de l'état de Sauvegarde de la Simulation
 
 public enum SimulationPersistenceState: String {
+    /// Quand les résultats de la dernière simulation ne sont plus valides car une donnée d'entrée a changée
     case invalid = "Invalide"
+    /// Quand les résultats de la dernière simulation sont valides mais pas sauvegardés
     case savable = "Valide & Non sauvegardée"
+    /// Quand les résultats de la dernière simulation sont valides et sauvegardés
     case saved   = "Sauvegardée"
 }
 
