@@ -16,7 +16,7 @@ import FamilyModel
 import Kpi
 
 extension KpiResultsDictionary {
-    func runResult() -> RunResult {
+    public func runResult() -> RunResult {
         for kpi in KpiEnum.allCases {
             if let objectiveIsReached = self[kpi]?.objectiveIsReached {
                 if !objectiveIsReached {
@@ -35,13 +35,13 @@ extension KpiResultsDictionary {
 
 // MARK: - Runs results
 
-enum RunResult: String, Codable {
+public enum RunResult: String, Codable {
     case allObjectivesReached
     case someObjectiveMissed
     case someObjectiveUndefined
 }
 
-enum RunFilterEnum: String, Codable {
+public enum RunFilterEnum: String, Codable {
     case all
     case someBad
     case somUnknown
@@ -50,38 +50,38 @@ enum RunFilterEnum: String, Codable {
 // MARK: - VISITOR de Propriétés aléatoires d'un Adult
 
 extension DictionaryOfAdultRandomProperties: MonteCarloVisitableP {
-    func accept(_ visitor: MonteCarloVisitorP) {
+    public func accept(_ visitor: MonteCarloVisitorP) {
         visitor.visit(element: self)
     }
 }
 
 // MARK: - Synthèse d'un Run de Simulation
 
-struct SimulationResultLine: Hashable {
-    var runNumber                         : Int = 1
-    var dicoOfAdultsRandomProperties      = DictionaryOfAdultRandomProperties()
-    var dicoOfEconomyRandomVariables      = Economy.DictionaryOfRandomVariable()
-    var dicoOfSocioEconomyRandomVariables = SocioEconomy.DictionaryOfRandomVariable()
-    var dicoOfKpiResults                  = KpiResultsDictionary()
+public struct SimulationResultLine: Hashable {
+    public var runNumber                         : Int = 1
+    public var dicoOfAdultsRandomProperties      = DictionaryOfAdultRandomProperties()
+    public var dicoOfEconomyRandomVariables      = Economy.DictionaryOfRandomVariable()
+    public var dicoOfSocioEconomyRandomVariables = SocioEconomy.DictionaryOfRandomVariable()
+    public var dicoOfKpiResults                  = KpiResultsDictionary()
 }
 extension SimulationResultLine: MonteCarloVisitableP {
-    func accept(_ visitor: MonteCarloVisitorP) {
+    public func accept(_ visitor: MonteCarloVisitorP) {
         visitor.visit(element: self)
     }
 }
 
 // MARK: - Tableau de Synthèse d'un Run de Simulation
 
-enum KpiSortCriteriaEnum: String, Codable {
+public enum KpiSortCriteriaEnum: String, Codable {
     case byRunNumber
     case byKpi1
     case byKpi2
     case byKpi3
 }
 
-typealias SimulationResultTable = [SimulationResultLine]
+public typealias SimulationResultTable = [SimulationResultLine]
 
-extension SimulationResultTable {
+public extension SimulationResultTable {
     func filtered(with filter: RunFilterEnum = .all) -> SimulationResultTable {
         switch filter {
             case .all:
@@ -153,7 +153,7 @@ extension SimulationResultTable {
 // MARK: - VISITOR de Tableau de Synthèse d'un Run de Simulation
 
 extension SimulationResultTable: MonteCarloVisitableP {
-    func accept(_ visitor: MonteCarloVisitorP) {
+    public func accept(_ visitor: MonteCarloVisitorP) {
         visitor.visit(element: self)
     }
 }

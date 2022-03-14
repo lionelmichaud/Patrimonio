@@ -15,6 +15,7 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 import HelpersView
+import SimulationAndVisitors
 
 struct DossierDetailView: View {
     @EnvironmentObject private var dataStore  : Store

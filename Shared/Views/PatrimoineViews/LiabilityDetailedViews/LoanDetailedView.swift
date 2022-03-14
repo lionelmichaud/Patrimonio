@@ -11,6 +11,7 @@ import AppFoundation
 import Liabilities
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 import HelpersView
 
 struct LoanDetailedView: View {

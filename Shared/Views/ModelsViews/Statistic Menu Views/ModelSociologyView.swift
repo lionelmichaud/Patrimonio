@@ -11,6 +11,7 @@ import SocioEconomyModel
 import FamilyModel
 import ModelEnvironment
 import Persistence
+import SimulationAndVisitors
 import HelpersView
 
 /// Affiche un graphique des fonctions de distribution des modèles statistiques

@@ -12,6 +12,7 @@ import ModelEnvironment
 import FamilyModel
 import Persistence
 import Statistics
+import SimulationAndVisitors
 import HelpersView
 
 /// Affiche un graphique des fonctions de distribution des modèles statistiques

@@ -19,7 +19,7 @@ import SocialAccounts
 /// The client code can run visitor operations over any set of elements without
 /// figuring out their concrete classes. The accept operation directs a call to
 /// the appropriate operation in the visitor object.
-struct CsvBuilder {
+public struct CsvBuilder {
     
     // MARK: - Constructeur de fichier d'export CSV pour une SIMULATION
     
@@ -34,8 +34,8 @@ struct CsvBuilder {
     ///   - simulation: la simulation à convertir
     ///   - model: modèle à utiliser
     /// - Returns: dictionnaire [Nom de fichier : CSV string]
-    static func simulationResultsCSV(from simulation : Simulation,
-                                     using model     : Model) -> [String:String] {
+    public static func simulationResultsCSV(from simulation : Simulation,
+                                            using model     : Model) -> [String:String] {
         /// - un fichier pour le Cash Flow
         /// - un fichier pour le Bilan
         /// - un fichier pour les Successions

@@ -10,6 +10,7 @@ import SwiftUI
 import AppFoundation
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 
 struct AssetView: View {
     @EnvironmentObject var patrimoine : Patrimoin

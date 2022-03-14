@@ -11,6 +11,7 @@ import Persistence
 import ModelEnvironment
 import FamilyModel
 import HelpersView
+import SimulationAndVisitors
 
 // MARK: - Editeur de Grille Générique
 

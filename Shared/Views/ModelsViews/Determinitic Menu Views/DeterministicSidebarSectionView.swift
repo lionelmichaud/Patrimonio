@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import PatrimoineModel
+import SimulationAndVisitors
 import FamilyModel
 
 struct DeterministicSidebarSectionView: View {

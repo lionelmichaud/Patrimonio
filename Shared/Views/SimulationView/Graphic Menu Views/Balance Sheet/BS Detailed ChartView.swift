@@ -18,6 +18,7 @@ import PatrimoineModel
 import FamilyModel
 import BalanceSheet
 import SocialAccounts
+import SimulationAndVisitors
 import HelpersView
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.BalanceSheetDetailedChartView")

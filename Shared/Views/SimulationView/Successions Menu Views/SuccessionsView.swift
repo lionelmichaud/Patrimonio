@@ -14,6 +14,7 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 import HelpersView
+import SimulationAndVisitors
 
 struct SuccessionsView: View {
     @EnvironmentObject var simulation : Simulation

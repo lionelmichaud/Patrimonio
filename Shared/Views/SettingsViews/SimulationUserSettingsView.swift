@@ -10,6 +10,7 @@ import Ownership
 import Persistence
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 
 struct SimulationUserSettingsView: View {
     @EnvironmentObject var simulation : Simulation

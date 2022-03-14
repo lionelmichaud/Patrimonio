@@ -11,6 +11,7 @@ import ModelEnvironment
 import LifeExpense
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 
 struct KpiSidebarSectionView: View {
     @EnvironmentObject var simulation : Simulation

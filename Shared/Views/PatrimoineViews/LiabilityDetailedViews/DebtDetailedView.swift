@@ -12,6 +12,7 @@ import Liabilities
 import PatrimoineModel
 import FamilyModel
 import HelpersView
+import SimulationAndVisitors
 
 struct DebtDetailedView: View {
     @EnvironmentObject var family     : Family

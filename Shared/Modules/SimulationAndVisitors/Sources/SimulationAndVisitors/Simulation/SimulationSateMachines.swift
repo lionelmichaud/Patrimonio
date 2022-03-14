@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import Stateful
 
 // MARK: - State Machine de l'état du Calcul de la Simulation

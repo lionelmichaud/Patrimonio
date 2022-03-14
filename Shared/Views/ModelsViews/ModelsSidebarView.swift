@@ -11,6 +11,7 @@ import ModelEnvironment
 import Persistence
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 
 struct ModelsSidebarView: View {
     @EnvironmentObject private var dataStore : Store

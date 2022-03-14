@@ -11,6 +11,7 @@ import HumanLifeModel
 import ModelEnvironment
 import FamilyModel
 import Persistence
+import SimulationAndVisitors
 import HelpersView
 
 struct ModelHumanView: View {

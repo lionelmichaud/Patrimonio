@@ -8,6 +8,7 @@
 import SwiftUI
 import Persistence
 import Kpi
+import SimulationAndVisitors
 import HelpersView
 
 struct KpisParametersEditView: View {

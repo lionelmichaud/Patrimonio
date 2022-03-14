@@ -9,6 +9,7 @@ import SwiftUI
 import Persistence
 import ModelEnvironment
 import FamilyModel
+import SimulationAndVisitors
 import HelpersView
 
 struct ModelUnemploymentDiffereView: View {

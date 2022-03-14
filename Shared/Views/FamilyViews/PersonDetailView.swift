@@ -11,6 +11,7 @@ import ModelEnvironment
 import PersonModel
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 
 // MARK: - Afficher les détails d'un membre de la famille
 

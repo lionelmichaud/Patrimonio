@@ -10,6 +10,7 @@ import SwiftUI
 import ModelEnvironment
 import LifeExpense
 import PatrimoineModel
+import SimulationAndVisitors
 import FamilyModel
 
 struct ChartsSidebarSectionView: View {

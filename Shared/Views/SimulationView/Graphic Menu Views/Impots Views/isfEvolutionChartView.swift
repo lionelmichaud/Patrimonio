@@ -18,6 +18,7 @@ import LifeExpense
 import PatrimoineModel
 import FamilyModel
 import SocialAccounts
+import SimulationAndVisitors
 import HelpersView
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.IsfEvolutionChartView")

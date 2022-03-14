@@ -12,6 +12,7 @@ import LifeExpense
 import PatrimoineModel
 import FamilyModel
 import HelpersView
+import SimulationAndVisitors
 
 struct DossierBrowserView: View {
     @EnvironmentObject private var dataStore  : Store

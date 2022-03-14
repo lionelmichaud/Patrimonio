@@ -13,6 +13,7 @@ import Persistence
 import LifeExpense
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 import HelpersView
 
 struct ComputationView: View {

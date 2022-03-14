@@ -18,6 +18,7 @@ import LifeExpense
 import PatrimoineModel
 import FamilyModel
 import SocialAccounts
+import SimulationAndVisitors
 import HelpersView
 import ChartsExtensions
 

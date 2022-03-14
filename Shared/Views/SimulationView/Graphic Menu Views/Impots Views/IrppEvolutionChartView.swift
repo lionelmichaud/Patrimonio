@@ -19,6 +19,7 @@ import PatrimoineModel
 import FamilyModel
 import SocialAccounts
 import HelpersView
+import SimulationAndVisitors
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", category: "UI.IrppEvolutionChartView")
 

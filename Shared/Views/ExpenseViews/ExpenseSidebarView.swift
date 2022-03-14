@@ -12,6 +12,7 @@ import Persistence
 import LifeExpense
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 
 struct ExpenseSidebarView: View {
     @EnvironmentObject private var dataStore : Store

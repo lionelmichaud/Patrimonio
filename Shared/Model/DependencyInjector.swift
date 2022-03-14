@@ -12,6 +12,7 @@ import Ownership
 import AssetsModel
 import FamilyModel
 import LifeExpense
+import SimulationAndVisitors
 
 /// Injecte les dépendance dans les différents objets du modèle utilisateur qui en ont besoin
 struct DependencyInjector {

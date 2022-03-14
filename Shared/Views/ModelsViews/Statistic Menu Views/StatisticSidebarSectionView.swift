@@ -10,6 +10,7 @@ import Persistence
 import ModelEnvironment
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 
 struct StatisticSidebarSectionView: View {
     @EnvironmentObject private var model      : Model

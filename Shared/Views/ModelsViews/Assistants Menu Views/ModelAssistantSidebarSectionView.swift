@@ -8,6 +8,7 @@
 import SwiftUI
 import Persistence
 import PatrimoineModel
+import SimulationAndVisitors
 import FamilyModel
 
 struct ModelAssistantSidebarSectionView: View {

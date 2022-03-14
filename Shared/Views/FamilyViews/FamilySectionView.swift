@@ -10,6 +10,7 @@ import SwiftUI
 import PersonModel
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 
 struct FamilySectionView : View {
     @EnvironmentObject var family     : Family

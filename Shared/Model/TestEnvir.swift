@@ -13,6 +13,7 @@ import PatrimoineModel
 import LifeExpense
 import Persistence
 import DateBoundary
+import SimulationAndVisitors
 
 struct TestEnvir {
     static var dataStore  : Store!

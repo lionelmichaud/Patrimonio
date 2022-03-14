@@ -15,6 +15,7 @@ import LifeExpense
 import PatrimoineModel
 import FamilyModel
 import Kpi
+import SimulationAndVisitors
 import HelpersView
 
 struct KpiListSummaryView: View {

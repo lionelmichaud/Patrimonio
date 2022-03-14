@@ -11,6 +11,7 @@ import Persistence
 import LifeExpense
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 
 @main
 struct AppMain: App {

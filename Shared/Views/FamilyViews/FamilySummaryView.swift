@@ -15,6 +15,7 @@ import PatrimoineModel
 import FamilyModel
 import CashFlow
 import HelpersView
+import SimulationAndVisitors
 
 struct FamilySummaryView: View {
     @EnvironmentObject private var dataStore  : Store

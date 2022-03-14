@@ -14,6 +14,7 @@ import ModelEnvironment
 import PatrimoineModel
 import FamilyModel
 import HelpersView
+import SimulationAndVisitors
 
 struct ScpiDetailedView: View {
     @EnvironmentObject var model      : Model

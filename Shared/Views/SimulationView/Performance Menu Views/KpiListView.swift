@@ -15,6 +15,7 @@ import PatrimoineModel
 import FamilyModel
 import Kpi
 import HelpersView
+import SimulationAndVisitors
 
 struct KpiListView : View {
     @EnvironmentObject var simulation : Simulation

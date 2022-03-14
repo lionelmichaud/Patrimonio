@@ -11,6 +11,7 @@ import AppFoundation
 import AssetsModel
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 import HelpersView
 
 struct PeriodicInvestDetailedView: View {

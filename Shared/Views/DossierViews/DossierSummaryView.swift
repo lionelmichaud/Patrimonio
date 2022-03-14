@@ -12,6 +12,7 @@ import LifeExpense
 import Persistence
 import PatrimoineModel
 import FamilyModel
+import SimulationAndVisitors
 import HelpersView
 
 struct DossierSummaryView: View {

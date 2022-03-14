@@ -9,6 +9,7 @@ import SwiftUI
 import ModelEnvironment
 import Persistence
 import FamilyModel
+import SimulationAndVisitors
 import HelpersView
 
 struct ModelFiscalImpotSocieteView: View {
