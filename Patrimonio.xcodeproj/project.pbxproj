@@ -950,14 +950,14 @@
 		7935BBD427DF660F0079F39C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				7935BBD527DF660F0079F39C /* ModelsViews */,
-				7935BC1227DF660F0079F39C /* SettingsViews */,
-				7935BC1827DF660F0079F39C /* PatrimoineViews */,
-				7935BC3427DF660F0079F39C /* ApplicationHelpersView */,
-				7935BC3927DF660F0079F39C /* FamilyViews */,
 				7935BC4B27DF660F0079F39C /* DossierViews */,
+				7935BC3927DF660F0079F39C /* FamilyViews */,
 				7935BC5627DF660F0079F39C /* ExpenseViews */,
+				7935BC1827DF660F0079F39C /* PatrimoineViews */,
+				7935BBD527DF660F0079F39C /* ModelsViews */,
 				7935BC5D27DF660F0079F39C /* SimulationView */,
+				7935BC1227DF660F0079F39C /* SettingsViews */,
+				7935BC3427DF660F0079F39C /* ApplicationHelpersView */,
 			);
 			path = Views;
 			sourceTree = "<group>";
