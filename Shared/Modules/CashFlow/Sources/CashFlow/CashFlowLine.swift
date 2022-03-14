@@ -168,7 +168,8 @@ public struct CashFlowLine {
                 using model                           : Model) throws {
         //        print(previousSuccession?.description)
         self.year = year
-        let adultsNames = family.adultsAliveName(atEndOf: year) ?? []
+        let adultsNames   = family.adultsAliveName(atEndOf: year) ?? []
+        let childrenNames = family.childrenAliveName(atEndOf: year) ?? []
         adultsRevenues
             .taxableIrppRevenueDelayedFromLastYear
             .setValue(to: taxableIrppRevenueDelayedFromLastyear)
@@ -191,10 +192,13 @@ public struct CashFlowLine {
             populateIncomes(of: family, using: model)
             
             /// REAL ESTATE: populate produit de vente, loyers, taxes sociales et taxes locales des bien immobiliers
-            manageRealEstateRevenues(of: patrimoine, for: adultsNames)
+            manageRealEstateRevenues(of  : patrimoine,
+                                     for : adultsNames)
             
             /// SCPI: populate produit de vente, dividendes, taxes sociales des SCPI
-            manageScpiRevenues(of: patrimoine, for: adultsNames)
+            manageScpiRevenues(of          : patrimoine,
+                               forAdults   : adultsNames,
+                               forChildren : childrenNames)
             
             /// PERIODIC INVEST: populate revenue, des investissements financiers périodiques
             managePeriodicInvestmentRevenues(of                  : patrimoine,

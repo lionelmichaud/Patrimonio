@@ -92,9 +92,11 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     public var buyingPrice  : Double = 0.0
     /// Rendement annuel servi
     public var interestRate : Double = 0.0 // %
+    /// Agmentation annuelle de la valeur du bien
     public var revaluatRate : Double = 0.0 // %
-    // vente
+    /// Le bien sera vendu
     public var willBeSold   : Bool = false
+    /// Année de vente du bien (cédé en fin d'année)
     public var sellingDate  : Date = 100.years.fromNow!
     
     // MARK: - Initializer
@@ -123,7 +125,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     
     // MARK: - Methods
     
-    /// Valeur du bien à la date spécifiée.
+    /// Valeur du bien à la fin de l'année `year`.
     ///
     /// Le bien est revalorisé annuellement de `revaluatRate` % depuis sa date d'acquisition mais il n'est pas déflaté en valeur.
     ///
@@ -151,7 +153,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     /// Le revenu est calculé comme suit: (rendement - inflation) x valeur d'acquisition
     ///
     /// - Parameters:
-    ///   - year: fin de l'année
+    ///   - year: durant l'année
     /// - Returns:
     ///   - revenue: revenus inscrit en compte courant avant prélèvements sociaux et IRPP mais net d'inflation
     ///   - taxableIrpp: part des revenus inscrit en compte courant imposable à l'IRPP (après charges sociales)
@@ -176,7 +178,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     /// Le revenu est calculé comme suit: (rendement - inflation) x valeur d'acquisition
     ///
     /// - Parameters:
-    ///   - year: fin de l'année
+    ///   - year: durant l'année
     /// - Returns: revenus inscrit en compte courant avant IS mais net d'inflation
     public func yearlyRevenueIS(during year: Int) -> Double {
         isOwned(during: year) ?
