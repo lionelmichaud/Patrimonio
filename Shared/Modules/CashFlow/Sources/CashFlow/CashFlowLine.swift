@@ -43,7 +43,8 @@ public struct CashFlowLine {
     public let sciCashFlowLine : SciCashFlowLine
     
     // Les comptes annuels
-    
+
+    // MARK: -
     // Revenus
     
     /// Profits des Parents en report d'imposition d'une année sur l'autre
@@ -62,7 +63,7 @@ public struct CashFlowLine {
     ///  - inclus revenus de la SCI
     ///  - EXCLUS les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
     ///
-    /// Note: Utilisé pour calculer le Net Cash-Flow de fin d'année (à réinvestir en fin d'année)
+    /// - Note: Utilisé pour calculer le Net Cash-Flow de fin d'année (à réinvestir en fin d'année)
     var sumOfAdultsRevenuesSalesExcluded: Double {
         adultsRevenues.totalRevenueSalesExcluded +
             sciCashFlowLine.netRevenuesSalesExcluded
@@ -80,6 +81,7 @@ public struct CashFlowLine {
         childrenRevenues.totalRevenue
     }
 
+    // MARK: -
     // Dépenses
     
     /// Agrégat des Taxes annuelles payées par les Parents
@@ -109,6 +111,7 @@ public struct CashFlowLine {
         childrenTaxes.total
     }
 
+    // MARK: -
     // Soldes nets annuels (Revenus - Dépenses) des Parents
     
     /// Solde net des revenus - dépenses courants des Parents - dépenses communes (hors ventes de bien en séparation de bien)
@@ -129,6 +132,7 @@ public struct CashFlowLine {
         sumOfChildrenRevenues - sumOfChildrenExpenses
     }
 
+    // MARK: -
     // Successions survenus dans l'année
     
     /// Les successions légales survenues dans l'année
@@ -192,8 +196,9 @@ public struct CashFlowLine {
             populateIncomes(of: family, using: model)
             
             /// REAL ESTATE: populate produit de vente, loyers, taxes sociales et taxes locales des bien immobiliers
-            manageRealEstateRevenues(of  : patrimoine,
-                                     for : adultsNames)
+            manageRealEstateRevenues(of          : patrimoine,
+                                     forAdults   : adultsNames,
+                                     forChildren : childrenNames)
             
             /// SCPI: populate produit de vente, dividendes, taxes sociales des SCPI
             manageScpiRevenues(of          : patrimoine,
@@ -202,7 +207,8 @@ public struct CashFlowLine {
             
             /// PERIODIC INVEST: populate revenue, des investissements financiers périodiques
             managePeriodicInvestmentRevenues(of                  : patrimoine,
-                                             for                 : adultsNames,
+                                             forAdults           : adultsNames,
+                                             forChildren         : childrenNames,
                                              lifeInsuranceRebate : &lifeInsuranceRebate)
             
             // Note: les intérêts des investissements financiers libres sont capitalisés

@@ -21,17 +21,20 @@ public extension CashFlowLine {
     ///   - patrimoine: patrimoine
     ///   - adultsName: des adultes
     ///   - lifeInsuranceRebate: franchise d'imposition sur les plus values
-    mutating func managePeriodicInvestmentRevenues(of patrimoine       : Patrimoin,
-                                                   for adultsName      : [String],
-                                                   lifeInsuranceRebate : inout Double) {
+    mutating func managePeriodicInvestmentRevenues(of patrimoine            : Patrimoin,
+                                                   forAdults adultsName     : [String],
+                                                   forChildren childrenName : [String],
+                                                   lifeInsuranceRebate      : inout Double) {
         // pour chaque investissement financier periodique
         for periodicInvestement in patrimoine.assets.periodicInvests.items.sorted(by:<) {
             let name = periodicInvestement.name
-            var revenue        : Double = 0
-            var taxablesIrpp   : Double = 0
-            var socialTaxes    : Double = 0
-            var yearlyPayement : Double = 0
-            
+            var adultsSaleValue   : Double = 0
+            var childrenSaleValue : Double = 0
+            var taxablesIrpp      : Double = 0
+            var socialTaxes       : Double = 0
+            var yearlyPayement    : Double = 0
+            var adultFraction     : Double = 1.0
+
             if periodicInvestement.isPartOfPatrimoine(of: adultsName) {
                 /// Ventes de l'année
                 // le crédit se fait au début de l'année qui suit la vente
@@ -39,7 +42,6 @@ public extension CashFlowLine {
                 
                 if liquidatedValue.revenue > 0 {
                     // produit de la liquidation inscrit en compte courant avant prélèvements sociaux et IRPP
-                    revenue = liquidatedValue.revenue
                     // créditer le produit de la vente sur les comptes des personnes
                     // en fonction de leur part de propriété respective
                     let ownedSaleValues = periodicInvestement.ownedValues(ofValue           : liquidatedValue.revenue,
@@ -49,7 +51,16 @@ public extension CashFlowLine {
                     netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
                                                      in            : patrimoine,
                                                      atEndOf       : year)
-                    
+                    // produit net de la vente revenant aux adults
+                    adultsSaleValue = ownedSaleValues.map { key, value in
+                        adultsName.contains(key) ? value : 0.0
+                    }.sum()
+                    adultFraction = adultsSaleValue / liquidatedValue.revenue
+                    // produit net de la vente revenant aux enfants
+                    childrenSaleValue = ownedSaleValues.map { key, value in
+                        childrenName.contains(key) ? value : 0.0
+                    }.sum()
+
                     // populate plus values taxables à l'IRPP
                     switch periodicInvestement.type {
                         case .lifeInsurance:
@@ -76,28 +87,46 @@ public extension CashFlowLine {
                     yearlyPayement = periodicInvestement.yearlyTotalPayement(atEndOf: year)
                 }
             }
-            
+            // Adultes
             adultsRevenues
                 .perCategory[.financials]?
                 .credits
                 .namedValues
                 .append(NamedValue(name: name,
-                                   value: revenue.rounded()))
+                                   value: adultsSaleValue.rounded()))
             adultsRevenues
                 .perCategory[.financials]?
                 .taxablesIrpp
                 .namedValues
                 .append(NamedValue(name: name,
-                         value: taxablesIrpp.rounded()))
+                         value: adultFraction * taxablesIrpp.rounded()))
             adultTaxes
                 .perCategory[.socialTaxes]?
                 .namedValues
                 .append(NamedValue(name: name,
-                         value: socialTaxes.rounded()))
+                         value: adultFraction * socialTaxes.rounded()))
             investPayements
                 .namedValues
                 .append(NamedValue(name : name,
                          value: yearlyPayement.rounded()))
+            // Enfants
+            childrenRevenues
+                .perCategory[.financials]?
+                .credits
+                .namedValues
+                .append(NamedValue(name: name,
+                                   value: childrenSaleValue.rounded()))
+            childrenRevenues
+                .perCategory[.financials]?
+                .taxablesIrpp
+                .namedValues
+                .append(NamedValue(name: name,
+                                   value: (1.0 - adultFraction) * taxablesIrpp.rounded()))
+            childrenTaxes
+                .perCategory[.socialTaxes]?
+                .namedValues
+                .append(NamedValue(name: name,
+                                   value: (1.0 - adultFraction) * socialTaxes.rounded()))
         }
     }
 }

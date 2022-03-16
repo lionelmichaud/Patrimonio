@@ -19,67 +19,112 @@ public extension CashFlowLine {
     /// - Parameters:
     ///   - patrimoine: patrimoine
     ///   - adultsName: des adultes
-    mutating func manageRealEstateRevenues(of patrimoine  : Patrimoin,
-                                           for adultsName : [String]) {
+    mutating func manageRealEstateRevenues(of patrimoine            : Patrimoin,
+                                           forAdults adultsName     : [String],
+                                           forChildren childrenName : [String]) {
         for realEstate in patrimoine.assets.realEstates.items.sorted(by:<) {
             let name = realEstate.name
             
             /// Revenus
-            var revenue          : Double = 0
-            var taxableIrpp      : Double = 0
-            var socialTaxes      : Double = 0
-            var yearlyLocaltaxes : Double = 0
+            var yearlyAdultsRevenue = (revenue          : 0.0,
+                                       taxableIrpp      : 0.0,
+                                       socialTaxes      : 0.0,
+                                       yearlyLocaltaxes : 0.0)
+            var yearlyChildrenRevenue = (revenue          : 0.0,
+                                         taxableIrpp      : 0.0,
+                                         socialTaxes      : 0.0,
+                                         yearlyLocaltaxes : 0.0)
             // les revenus ne reviennent qu'aux UF ou PP, idem pour les impôts locaux
             if realEstate.providesRevenue(to: adultsName) {
                 // populate real estate rent revenues and social taxes
-                let yearlyRent = realEstate.yearlyRent(during: year)
-                let fraction   = realEstate.ownership.ownedRevenueFraction(by: adultsName)
+                let yearlyRent     = realEstate.yearlyRent(during: year)
+                let adultsFraction = realEstate.ownership.ownedRevenueFraction(by: adultsName)
                 // loyers inscrit en compte courant avant prélèvements sociaux et IRPP
-                revenue          = fraction / 100.0 * yearlyRent.revenue
                 // part des loyers inscrit en compte courant imposable à l'IRPP - idem ci-dessus car même base
-                taxableIrpp      = fraction / 100.0 * yearlyRent.taxableIrpp
                 // prélèvements sociaux payés sur le loyer
-                socialTaxes      = fraction / 100.0 * yearlyRent.socialTaxes
                 // impôts locaux
-                yearlyLocaltaxes = fraction / 100.0 * realEstate.yearlyLocalTaxes(during: year)
+                yearlyAdultsRevenue = (revenue          : adultsFraction / 100.0 * yearlyRent.revenue,
+                                       taxableIrpp      : adultsFraction / 100.0 * yearlyRent.taxableIrpp,
+                                       socialTaxes      : adultsFraction / 100.0 * yearlyRent.socialTaxes,
+                                       yearlyLocaltaxes : adultsFraction / 100.0 * realEstate.yearlyLocalTaxes(during: year))
             }
+            if realEstate.providesRevenue(to: childrenName) {
+                // populate real estate rent revenues and social taxes
+                let yearlyRent     = realEstate.yearlyRent(during: year)
+                let childrenFraction = realEstate.ownership.ownedRevenueFraction(by: childrenName)
+                // loyers inscrit en compte courant avant prélèvements sociaux et IRPP
+                // part des loyers inscrit en compte courant imposable à l'IRPP - idem ci-dessus car même base
+                // prélèvements sociaux payés sur le loyer
+                // impôts locaux
+                yearlyChildrenRevenue = (revenue          : childrenFraction / 100.0 * yearlyRent.revenue,
+                                         taxableIrpp      : childrenFraction / 100.0 * yearlyRent.taxableIrpp,
+                                         socialTaxes      : childrenFraction / 100.0 * yearlyRent.socialTaxes,
+                                         yearlyLocaltaxes : childrenFraction / 100.0 * realEstate.yearlyLocalTaxes(during: year))
+            }
+            // Adultes
             adultsRevenues
                 .perCategory[.realEstateRents]?
                 .credits
                 .namedValues
                 .append(NamedValue(name: name,
-                                   value: revenue.rounded()))
-            // part des loyers inscrit en compte courant imposable à l'IRPP - idem ci-dessus car même base
+                                   value: yearlyAdultsRevenue.revenue.rounded()))
+            //   part des loyers inscrit en compte courant imposable à l'IRPP - idem ci-dessus car même base
             adultsRevenues
                 .perCategory[.realEstateRents]?
                 .taxablesIrpp
                 .namedValues
                 .append(NamedValue(name: name,
-                                   value: taxableIrpp.rounded()))
-            // prélèvements sociaux payés sur le loyer
+                                   value: yearlyAdultsRevenue.taxableIrpp.rounded()))
+            //   prélèvements sociaux payés sur le loyer
             adultTaxes
                 .perCategory[.socialTaxes]?
                 .namedValues
                 .append(NamedValue(name : name,
-                                   value: socialTaxes.rounded()))
-            // impôts locaux
+                                   value: yearlyAdultsRevenue.socialTaxes.rounded()))
+            //   impôts locaux
             adultTaxes
                 .perCategory[.localTaxes]?
                 .namedValues
                 .append(NamedValue(name: name,
-                                   value: yearlyLocaltaxes.rounded()))
-            
+                                   value: yearlyAdultsRevenue.yearlyLocaltaxes.rounded()))
+            // Enfants
+            childrenRevenues
+                .perCategory[.realEstateRents]?
+                .credits
+                .namedValues
+                .append(NamedValue(name: name,
+                                   value: yearlyChildrenRevenue.revenue.rounded()))
+            //   part des loyers inscrit en compte courant imposable à l'IRPP - idem ci-dessus car même base
+            childrenRevenues
+                .perCategory[.realEstateRents]?
+                .taxablesIrpp
+                .namedValues
+                .append(NamedValue(name: name,
+                                   value: yearlyChildrenRevenue.taxableIrpp.rounded()))
+            //   prélèvements sociaux payés sur le loyer
+            childrenTaxes
+                .perCategory[.socialTaxes]?
+                .namedValues
+                .append(NamedValue(name : name,
+                                   value: yearlyChildrenRevenue.socialTaxes.rounded()))
+            //   impôts locaux
+            childrenTaxes
+                .perCategory[.localTaxes]?
+                .namedValues
+                .append(NamedValue(name: name,
+                                   value: yearlyChildrenRevenue.yearlyLocaltaxes.rounded()))
+
             /// Vente
             // le produit de la vente se répartit entre UF et NP si démembrement
-            var netRevenue: Double = 0
-            if realEstate.isPartOfPatrimoine(of: adultsName) {
+            var adultsSaleValue   : Double = 0
+            var childrenSaleValue : Double = 0
+            if realEstate.isPartOfPatrimoine(of: adultsName) || realEstate.isPartOfPatrimoine(of: childrenName) {
                 // produit de la vente inscrit en compte courant:
                 //    produit net de charges sociales et d'impôt sur la plus-value
                 // le crédit se fait au début de l'année qui suit la vente
                 let liquidatedValue = realEstate.liquidatedValue(year - 1)
                 
                 if liquidatedValue.revenue > 0 {
-                    netRevenue = liquidatedValue.netRevenue
                     // créditer le produit de la vente sur les comptes des personnes
                     // en fonction de leur part de propriété respective
                     let ownedSaleValues = realEstate.ownedValues(ofValue           : liquidatedValue.netRevenue,
@@ -89,14 +134,30 @@ public extension CashFlowLine {
                     netCashFlowManager.investCapital(ownedCapitals : ownedSaleValues,
                                                      in            : patrimoine,
                                                      atEndOf       : year)
+                    // produit net de la vente revenant aux adults
+                    adultsSaleValue = ownedSaleValues.map { key, value in
+                        adultsName.contains(key) ? value : 0.0
+                    }.sum()
+                    // produit net de la vente revenant aux enfants
+                    childrenSaleValue = ownedSaleValues.map { key, value in
+                        childrenName.contains(key) ? value : 0.0
+                    }.sum()
                 }
             }
+            // Adultes
             adultsRevenues
                 .perCategory[.realEstateSale]?
                 .credits
                 .namedValues
                 .append(NamedValue(name: name,
-                                   value: netRevenue.rounded()))
+                                   value: adultsSaleValue.rounded()))
+            // Enfants
+            childrenRevenues
+                .perCategory[.scpiSale]?
+                .credits
+                .namedValues
+                .append(NamedValue(name: name,
+                                   value: childrenSaleValue.rounded()))
         }
     }
 }
