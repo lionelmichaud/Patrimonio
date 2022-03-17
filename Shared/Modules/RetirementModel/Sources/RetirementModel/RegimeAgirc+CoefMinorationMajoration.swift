@@ -38,7 +38,7 @@ extension RegimeAgirc {
     ///       La solution la plus favorable pour vous sera choisie.
     ///  - [www.agirc-arrco.fr](https://www.agirc-arrco.fr/particuliers/demander-retraite/conditions-pour-la-retraite/)
     ///  - [www.retraite.com](https://www.retraite.com/calcul-retraite/calcul-retraite-complementaire.html)
-    func coefMinorationMajoration(birthDate                : Date, // swiftlint:disable:this function_parameter_count cyclomatic_complexity
+    func coefMinorationMajoration(birthDate                : Date, 
                                   lastKnownSituation       : RegimeGeneralSituation,
                                   dateOfRetirement         : Date,
                                   dateOfEndOfUnemployAlloc : Date?,

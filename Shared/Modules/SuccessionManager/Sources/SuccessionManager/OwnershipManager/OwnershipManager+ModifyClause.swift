@@ -23,7 +23,7 @@ extension OwnershipManager {
     ///   - liabilities: Passifs de la famille
     ///   - capitauxDecesRecusNet: capitaux décès nets de taxes de transmssion reçus par les héritiers
     ///   - taxes: les droits de succession à payer par chaque enfant
-    func modifyLifeInsuranceClauseIfNecessaryAndPossible // swiftlint:disable:this function_parameter_count
+    func modifyLifeInsuranceClauseIfNecessaryAndPossible /// swiftlint:disable:this function_parameter_count
     (decedentName                : String,
      conjointName                : String,
      withAssets assets           : inout Assets,

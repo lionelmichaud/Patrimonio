@@ -186,7 +186,6 @@ struct NetCashFlowManager {
         }
     }
     
-    // swiftlint:disable function_parameter_count
     /// Retirer `amount` du capital des personnes dans la liste `adultsName` seulement.
     ///
     /// L'ordre de retrait est le suivant:
@@ -274,9 +273,7 @@ struct NetCashFlowManager {
             }
         }
     }
-    // swiftlint:enable function_parameter_count
     
-    // swiftlint:disable function_parameter_count
     /// Retirer `amount` du capital des personnes dans la liste `adultsName` seulement.
     ///
     /// Ordre:
@@ -358,6 +355,5 @@ struct NetCashFlowManager {
         
         return totalTaxableInterests
     }
-    // swiftlint:enable function_parameter_count
 
 }

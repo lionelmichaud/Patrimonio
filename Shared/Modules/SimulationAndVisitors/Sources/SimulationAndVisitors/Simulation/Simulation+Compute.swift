@@ -22,7 +22,6 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 
 extension Simulation {
 
-    // swiftlint:disable function_parameter_count
     /// Exécuter une simulation Déterministe ou Aléatoire
     ///
     /// - Sauvegarder l'état du patrimoine avant de lancer les claucls (et donc de modifier l'état du patrimoine
@@ -146,7 +145,6 @@ extension Simulation {
         
         process(event: .onComputationCompletion)
     }
-    // swiftlint:enable function_parameter_count
     
     /// Remettre à zéro les historiques des tirages aléatoires avant le lancement d'un MontéCarlo
     private func resetAllRandomHistories(using model: Model) {
