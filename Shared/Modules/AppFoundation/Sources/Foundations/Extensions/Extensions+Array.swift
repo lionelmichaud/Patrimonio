@@ -75,6 +75,7 @@ public extension Array {
     /// Retrourne true si les éléments du tableau sont ordonnés selon la relation d'ordre `isOrderedBefore`
     /// - Parameter isOrderedBefore: relation d'ordre entre éléments du tableau à utiliser
     /// - Returns: true si les éléments du tableau sont ordonnés selon la relation d'ordre `isOrderedBefore`
+    /// - Precondition: Le tableau doit contenir au moins deux éléments
     func isSorted(_ isOrderedBefore: (Element, Element) -> Bool) -> Bool {
         for i in 1..<self.count {
             if !isOrderedBefore(self[i-1], self[i]) {

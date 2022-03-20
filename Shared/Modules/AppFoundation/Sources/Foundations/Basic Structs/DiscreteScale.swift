@@ -10,11 +10,18 @@ import Foundation
 public struct DiscreteScale {
     
     // MARK: - Properties
-    
+
+    /// Valeurs de seuil de l'échelle
     private let scale        : [Double] // [-inifinity, +inifinity]
+    /// Ordre des valeurs de seuils: croissant ou décroissant
     private let scaleOrder   : SortingOrder
+    /// Rating le plus faible (pour les valeurs dans [scale[0], scale[1]]
     private let firstRating  : Int
+    /// True si l'échelle est valide (au moins une valeur; rangées dans le bon ordre)
     private var isValid      : Bool {
+        guard scale.count >= 1 else {
+            return false
+        }
         switch scaleOrder {
             case .ascending:
                 return scale.isSorted {
@@ -47,9 +54,9 @@ public struct DiscreteScale {
     
     // MARK: - Methods
     
-    /// Retourne la rating entier d'une valeur continue
-    /// - Parameter value: valeur >= à la plus petite valeur de l'échelle
-    /// - Returns: rating
+    /// Retourne la rating (entier) d'une valeur (réelle) selon l'échelle `scale`
+    /// - Parameter value: valeur >= à la plus petite valeur de l'échelle ( scale[0] ) dans le cas d'une échelle ascendante
+    /// - Returns: le rating entier ou `nil` si value < scale[0] dans le cas d'une échelle ascendante
     public func rating(_ value: Double) -> Int? {
         switch scaleOrder {
             case .ascending:
@@ -60,9 +67,9 @@ public struct DiscreteScale {
         }
     }
     
-    /// Retourne la rating énuméré d'une valeur continue
-    /// - Parameter value: valeur >= à la plus petite valeur de l'échelle
-    /// - Returns: rating
+    /// Retourne la rating (énuméré) d'une valeur (réelle) selon l'échelle `scale`
+    /// - Parameter value: valeur >= à la plus petite valeur de l'échelle ( scale[0] ) dans le cas d'une échelle ascendante
+    /// - Returns: rating énuméré ou `nil` si value < scale[0] dans le cas d'une échelle ascendante
     public func rating<T: RawRepresentable>(_ value: Double) -> T? where T.RawValue == Int {
         switch scaleOrder {
             case .ascending:

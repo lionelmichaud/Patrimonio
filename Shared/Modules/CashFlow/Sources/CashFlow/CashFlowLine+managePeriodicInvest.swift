@@ -64,9 +64,9 @@ public extension CashFlowLine {
                     // populate plus values taxables à l'IRPP
                     switch periodicInvestement.type {
                         case .lifeInsurance:
-                            var taxableInterests: Double
+                            @ZeroOrPositive var taxableInterests: Double
                             // apply rebate if some is remaining
-                            taxableInterests = zeroOrPositive(liquidatedValue.taxableIrppInterests - lifeInsuranceRebate)
+                            taxableInterests = liquidatedValue.taxableIrppInterests - lifeInsuranceRebate
                             lifeInsuranceRebate -= (liquidatedValue.taxableIrppInterests - taxableInterests)
                             // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
                             taxablesIrpp = taxableInterests
