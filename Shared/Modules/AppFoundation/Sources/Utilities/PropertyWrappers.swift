@@ -9,8 +9,8 @@
 import Foundation
 
 /// Usage:
-///     @NonNegative var score = 0
-@propertyWrapper public struct NonNegative<T: Numeric & Comparable> {
+///     @ZeroOrPositive var score = 0
+@propertyWrapper public struct ZeroOrPositive<T: Numeric & Comparable> {
     var value: T
     
     public var wrappedValue: T {
@@ -27,6 +27,32 @@ import Foundation
     
     public init(wrappedValue: T) {
         if wrappedValue < 0 {
+            self.value = 0
+        } else {
+            self.value = wrappedValue
+        }
+    }
+}
+
+/// Usage:
+///     @ZeroOrNegative var score = 0
+@propertyWrapper public struct ZeroOrNegative<T: Numeric & Comparable> {
+    var value: T
+
+    public var wrappedValue: T {
+        get { value }
+
+        set {
+            if newValue > 0 {
+                value = 0
+            } else {
+                value = newValue
+            }
+        }
+    }
+
+    public init(wrappedValue: T) {
+        if wrappedValue > 0 {
             self.value = 0
         } else {
             self.value = wrappedValue
