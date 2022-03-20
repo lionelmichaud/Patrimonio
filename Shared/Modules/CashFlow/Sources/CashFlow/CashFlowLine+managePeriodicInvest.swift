@@ -88,6 +88,7 @@ public extension CashFlowLine {
                 }
             }
             // Adultes
+        adultsRevenues: do {
             adultsRevenues
                 .perCategory[.financials]?
                 .credits
@@ -99,16 +100,18 @@ public extension CashFlowLine {
                 .taxablesIrpp
                 .namedValues
                 .append(NamedValue(name: name,
-                         value: adultFraction * taxablesIrpp.rounded()))
+                                   value: adultFraction * taxablesIrpp.rounded()))
             adultTaxes
                 .perCategory[.socialTaxes]?
                 .namedValues
                 .append(NamedValue(name: name,
-                         value: adultFraction * socialTaxes.rounded()))
+                                   value: adultFraction * socialTaxes.rounded()))
             investPayements
                 .namedValues
                 .append(NamedValue(name : name,
-                         value: yearlyPayement.rounded()))
+                                   value: yearlyPayement.rounded()))
+        }
+        childrenRevenues: do {
             // Enfants
             childrenRevenues
                 .perCategory[.financials]?
@@ -127,6 +130,7 @@ public extension CashFlowLine {
                 .namedValues
                 .append(NamedValue(name: name,
                                    value: (1.0 - adultFraction) * socialTaxes.rounded()))
+        }
         }
     }
 }

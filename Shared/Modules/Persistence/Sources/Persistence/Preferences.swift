@@ -16,7 +16,7 @@ public struct UserDefault<Value> {
     
     public var wrappedValue: Value {
         get { fatalError("Wrapped value should not be used.") }
-        set { fatalError("Wrapped value should not be used.") }
+        set { fatalError("Wrapped value should not be used.") } // swiftlint:disable:this unused_setter_value
     }
     
     init(wrappedValue: Value, _ key: String) {
@@ -51,7 +51,7 @@ public struct UserEnumDefault<Value: RawRepresentable> {
     
     public var wrappedValue: Value {
         get { fatalError("Wrapped value should not be used.") }
-        set { fatalError("Wrapped value should not be used.") }
+        set { fatalError("Wrapped value should not be used.") } // swiftlint:disable:this unused_setter_value
     }
     
     init(wrappedValue: Value, _ key: String) {

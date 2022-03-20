@@ -62,6 +62,7 @@ public extension CashFlowLine {
                                          yearlyLocaltaxes : childrenFraction / 100.0 * realEstate.yearlyLocalTaxes(during: year))
             }
             // Adultes
+        adultsRevenues: do {
             adultsRevenues
                 .perCategory[.realEstateRents]?
                 .credits
@@ -87,6 +88,8 @@ public extension CashFlowLine {
                 .namedValues
                 .append(NamedValue(name: name,
                                    value: yearlyAdultsRevenue.yearlyLocaltaxes.rounded()))
+        }
+        childrenRevenues: do {
             // Enfants
             childrenRevenues
                 .perCategory[.realEstateRents]?
@@ -113,7 +116,7 @@ public extension CashFlowLine {
                 .namedValues
                 .append(NamedValue(name: name,
                                    value: yearlyChildrenRevenue.yearlyLocaltaxes.rounded()))
-
+        }
             /// Vente
             // le produit de la vente se répartit entre UF et NP si démembrement
             var adultsSaleValue   : Double = 0
@@ -153,7 +156,7 @@ public extension CashFlowLine {
                                    value: adultsSaleValue.rounded()))
             // Enfants
             childrenRevenues
-                .perCategory[.scpiSale]?
+                .perCategory[.realEstateSale]?
                 .credits
                 .namedValues
                 .append(NamedValue(name: name,

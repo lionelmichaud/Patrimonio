@@ -10,7 +10,7 @@ import XCTest
 
 final class RandomGeneratorPTests: XCTestCase {
     struct RNG: RandomGeneratorP {
-        typealias Number = Double
+        typealias Number = Double // swiftlint:disable:this nesting
         
         mutating func next() -> Double {
             1.0

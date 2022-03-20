@@ -56,6 +56,7 @@ public extension CashFlowLine {
                                          socialTaxes: childrenFraction / 100.0 * yearlyRevenue.socialTaxes)
             }
             // Adultes
+        adultsRevenues: do {
             adultsRevenues
                 .perCategory[.scpis]?
                 .credits
@@ -73,6 +74,8 @@ public extension CashFlowLine {
                 .namedValues
                 .append(NamedValue(name: scpiName,
                                    value: yearlyAdultsRevenue.socialTaxes.rounded()))
+        }
+        childrenRevenues: do {
             // Enfants
             childrenRevenues
                 .perCategory[.scpis]?
@@ -91,7 +94,7 @@ public extension CashFlowLine {
                 .namedValues
                 .append(NamedValue(name: scpiName,
                                    value: yearlyChildrenRevenue.socialTaxes.rounded()))
-
+        }
             /// Vente
             // le produit de la vente se répartit entre UF et NP si démembrement
             // populate SCPI sale revenue: produit de vente net de charges sociales et d'impôt sur la plus-value

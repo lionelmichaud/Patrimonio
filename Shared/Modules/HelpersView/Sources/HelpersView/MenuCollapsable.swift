@@ -48,7 +48,7 @@ public struct MenuContentView: View {
                     }).capsuleButtonStyle()
             }.padding(.horizontal)
             // menu
-            List(0 ..< itemSelection.count) {idx in
+            List(itemSelection.startIndex ..< itemSelection.endIndex) {idx in
                 HStack {
                     Text(self.itemSelection[idx].label).font(.caption)
                     Spacer()
