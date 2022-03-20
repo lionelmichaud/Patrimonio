@@ -205,7 +205,7 @@ struct ShortGridView: View {
 
 struct GridHeaderView : View {
     let line: SimulationResultLine
-    let viewHeight = CGFloat(100)
+    let viewHeight = 100.0
     
     var body: some View {
         HStack(alignment: .center) {

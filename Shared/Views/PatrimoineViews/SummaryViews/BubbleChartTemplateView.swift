@@ -75,7 +75,7 @@ struct BubbleChartTemplateView: NSUIViewRepresentable {
         var dataSets = [BubbleChartDataSet]()
         
         let dataEntries: [BubbleChartDataEntry] = data.map { entry in
-            BubbleChartDataEntry(x: entry.x, y: entry.y, size: CGFloat(entry.size))
+            BubbleChartDataEntry(x: entry.x, y: entry.y, size: entry.size)
         }
         let dataSet = BubbleChartDataSet(entries : dataEntries,
                                          label   : "Label")

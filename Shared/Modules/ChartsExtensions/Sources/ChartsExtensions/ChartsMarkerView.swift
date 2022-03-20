@@ -69,7 +69,7 @@ public class BalloonMarker: MarkerImage {
         
         let width = size.width
         let height = size.height
-        let padding: CGFloat = 8.0
+        let padding = 8.0
         
         var origin = point
         origin.x -= width / 2

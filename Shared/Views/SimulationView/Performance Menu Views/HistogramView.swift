@@ -61,7 +61,7 @@ struct HistogramView : UIViewRepresentable {
         xAxis.granularityEnabled              = true
         xAxis.valueFormatter                  = xAxisFormatterChoice.IaxisFormatter()
         xAxis.labelRotationAngle              = 45
-        xAxis.labelFont                       = NSUIFont(name : "HelveticaNeue-Light", size : CGFloat(13.0))!
+        xAxis.labelFont                       = NSUIFont(name : "HelveticaNeue-Light", size : 13.0)!
         xAxis.drawLimitLinesBehindDataEnabled = false
         xAxis.removeAllLimitLines()
 
@@ -112,7 +112,7 @@ struct HistogramView : UIViewRepresentable {
         // ajouter les DataSet au Chartdata
         let data = LineChartData(dataSets: dataSets)
         data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
+        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: 12.0)!)
 
         // ajouter le Chartdata au ChartView
         chartView.data = data

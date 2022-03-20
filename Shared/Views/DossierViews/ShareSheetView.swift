@@ -100,8 +100,8 @@ func share(items      : [Any],
     if UIDevice.current.userInterfaceIdiom == .pad {
         activityView.popoverPresentationController?.sourceView = UIApplication.shared.windows.first
         activityView.popoverPresentationController?.sourceRect = CGRect(
-            x: (fromX == nil) ? UIScreen.main.bounds.width / 2.1 : CGFloat(fromX!),
-            y: (fromY == nil) ? UIScreen.main.bounds.height / 2.3 : CGFloat(fromY!),
+            x: (fromX == nil) ? UIScreen.main.bounds.width / 2.1 : fromX!,
+            y: (fromY == nil) ? UIScreen.main.bounds.height / 2.3 : fromY!,
             width: 32,
             height: 32)
     }

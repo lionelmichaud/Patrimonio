@@ -23,7 +23,7 @@ public struct LabeledTextEditor : View {
     public var body: some View {
         HStack {
             Text(label)
-                .frame(width: CGFloat(labelWidth), alignment: .leading)
+                .frame(width: Double(labelWidth), alignment: .leading)
             TextEditor(text: $text)
                 .border(Color("borderTextColor"), width: 1)
         }
@@ -61,7 +61,7 @@ public struct LabeledTextField : View {
     public var body: some View {
         HStack {
             Text(label)
-                .frame(width: CGFloat(labelWidth), alignment: .leading)
+                .frame(width: Double(labelWidth), alignment: .leading)
             TextField(defaultText ?? "", text: $text)
         }
     }

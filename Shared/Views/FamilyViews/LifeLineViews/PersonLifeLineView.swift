@@ -19,9 +19,9 @@ struct PersonLifeLineView: View {
         @Published var steps      : [AnyView]                        = []
         @Published var indicators : [StepperIndicationType<AnyView>] = []
         @Published var pitStops   : [PitStopStep]                    = []
-        let spacing  : CGFloat = 40
-        let radius   : CGFloat = 45
-        let fontSize : CGFloat = 14
+        let spacing  = 40.0
+        let radius   = 45.0
+        let fontSize = 14.0
 
         init(from member: Person, using model: Model) {
             personName = member.displayName

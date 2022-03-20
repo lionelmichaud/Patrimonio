@@ -26,9 +26,9 @@ extension Color: Codable {
 
     /// A new random color.
     public static var random: Color {
-        let red   = Double.random(in   : 0...1)
+        let red   = Double.random(in : 0...1)
         let green = Double.random(in : 0...1)
-        let blue  = Double.random(in  : 0...1)
+        let blue  = Double.random(in : 0...1)
         return Color(.sRGB, red: red, green: green, blue: blue, opacity: 1)
     }
     
@@ -51,9 +51,9 @@ extension Color: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy        : CodingKeys.self)
-        let red       = try container.decode(Double.self, forKey   : .red)
+        let red       = try container.decode(Double.self, forKey : .red)
         let green     = try container.decode(Double.self, forKey : .green)
-        let blue      = try container.decode(Double.self, forKey  : .blue)
+        let blue      = try container.decode(Double.self, forKey : .blue)
         let alpha     = try container.decode(Double.self, forKey : .alpha)
         self.init(Components(red: red, green: green, blue: blue, alpha: alpha))
     }
@@ -65,9 +65,9 @@ extension Color: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         let components = self.components
-        try container.encode(components.red, forKey: .red)
+        try container.encode(components.red,   forKey: .red)
         try container.encode(components.green, forKey: .green)
-        try container.encode(components.blue, forKey: .blue)
+        try container.encode(components.blue,  forKey: .blue)
         try container.encode(components.alpha, forKey: .alpha)
     }
 

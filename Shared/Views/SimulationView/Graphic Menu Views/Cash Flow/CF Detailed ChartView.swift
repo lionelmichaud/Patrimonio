@@ -36,7 +36,7 @@ struct CashFlowDetailedChartView: View {
     @State private var lifeEventChatIsPresented = false
     var lastYear: Int? { simulation.socialAccounts.cashFlowArray.last?.year }
     @State private var menuIsPresented = false
-    let menuWidth: CGFloat = 200
+    let menuWidth = 200.0
     @State private var showInfoPopover = false
     let popOverTitle   = "Contenu du graphique:"
     let popOverMessage =
@@ -251,7 +251,7 @@ struct CashFlowStackedBarChartView: UIViewRepresentable {
         // ajouter les data au graphique
         let data = BarChartData(dataSet: ((aDataSet == nil ? BarChartDataSet() : aDataSet)!))
         data.setValueTextColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
+        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: 12.0)!)
         data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
 
         // ajouter le dataset au graphique

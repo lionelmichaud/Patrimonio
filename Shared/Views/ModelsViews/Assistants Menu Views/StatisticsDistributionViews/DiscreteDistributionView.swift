@@ -107,7 +107,7 @@ struct DiscreteChartView : UIViewRepresentable {
         // ajouter les DataSet au Chartdata
         let data = LineChartData(dataSets: dataSets)
         data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
+        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: 12.0)!)
 
         // ajouter le Chartdata au ChartView
         uiView.data = data
