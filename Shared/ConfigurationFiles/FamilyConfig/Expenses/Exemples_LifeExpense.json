@@ -7,13 +7,15 @@
             "name" : "Depuis",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "starting_from" :
-                {
-                    "fixedYear": 2028,
-                    "event"    : "Fin d'activité professionnelle",
-                    "group"    : null,
-                    "order"    : null,
-                    "name"     : "M. Lionel MICHAUD"
+                "starting" : {
+                    "from":
+                    {
+                        "fixedYear": 2028,
+                        "event"    : "Fin d'activité professionnelle",
+                        "group"    : null,
+                        "order"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    }
                 }
             }
         },
@@ -24,12 +26,14 @@
             "name" : "Jusqu'à",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 2022,
-                    "event"    : "Décès",
-                    "group"    : null,
-                    "name"     : "Mme. Vanessa MICHAUD"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 2022,
+                        "event"    : "Décès",
+                        "group"    : null,
+                        "name"     : "Mme. Vanessa MICHAUD"
+                    }
                 }
             }
         },
@@ -40,19 +44,21 @@
             "name" : "De...à...",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "spanning_from" :
-                {
-                    "fixedYear": 2024,
-                    "event"    : "Liquidation de pension",
-                    "group"    : null,
-                    "name"     : "M. Lionel MICHAUD"
-                },
-                "spanning_to" :
-                {
-                    "fixedYear": 2025,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "M. Lionel MICHAUD"
+                "spanning": {
+                    "from" :
+                    {
+                        "fixedYear": 2024,
+                        "event"    : "Liquidation de pension",
+                        "group"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    },
+                    "to" :
+                    {
+                        "fixedYear": 2025,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    }
                 }
             }
         },
@@ -63,7 +69,7 @@
             "name" : "Exceptionnelle",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "exceptional_in" : 2026
+                "exceptional": { "inYear" : 2026 }
             }
         },
         {
@@ -73,20 +79,22 @@
             "name" : "Périodique",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "periodic_period" : 7,
-                "periodic_from" :
-                {
-                    "fixedYear": 2020,
-                    "event"    : null,
-                    "group"    : null,
-                    "name"     : ""
-                },
-                "periodic_to" :
-                {
-                    "fixedYear": 2022,
-                    "event"    : null,
-                    "group"    : null,
-                    "name"     : ""
+                "periodic": {
+                    "period" : 7,
+                    "from" :
+                    {
+                        "fixedYear": 2020,
+                        "event"    : null,
+                        "group"    : null,
+                        "name"     : ""
+                    },
+                    "to" :
+                    {
+                        "fixedYear": 2022,
+                        "event"    : null,
+                        "group"    : null,
+                        "name"     : ""
+                    }
                 }
             }
         },
@@ -97,7 +105,7 @@
             "name" : "Adultes",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "permanent" : true
+                "permanent" : {}
             }
         }
     ]

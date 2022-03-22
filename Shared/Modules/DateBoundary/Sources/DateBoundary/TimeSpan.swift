@@ -14,7 +14,7 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", catego
 
 // MARK: - Elongation temporelle du poste de dépense
  
-public enum TimeSpan: Hashable {
+public enum TimeSpan: Hashable, Codable {
     case permanent
     // l'année de début est inclue mais la date de fin n'est pas inclue
     case periodic (from: DateBoundary, period: Int, to: DateBoundary)
@@ -199,97 +199,6 @@ extension TimeSpan: PickableIdentifiableEnumP {
                 return "De...à..."
             case .exceptional:
                 return "Ponctuelle"
-        }
-    }
-}
-
-extension TimeSpan: Codable {
-    // coding keys
-    private enum CodingKeys: String, CodingKey {
-        case permanent, periodic_from, periodic_to, periodic_period, spanning_from, spanning_to
-        case starting_from, ending_to, exceptional_in
-    }
-    // error type
-    enum TimeSpanError: Error {
-        case decoding(String)
-    }
-    
-    // MARK: - Decoding
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        // decode .permanent
-        if (try? container.decode(Bool.self, forKey: .permanent)) != nil {
-            self = .permanent
-            return
-        }
-        
-        // decode .periodic
-        if let from = try? container.decode(DateBoundary.self, forKey: .periodic_from) {
-            if let to = try? container.decode(DateBoundary.self, forKey: .periodic_to) {
-                if let period = try? container.decode(Int.self, forKey: .periodic_period) {
-                    self = .periodic(from: from, period: period, to: to)
-                    return
-                }
-            }
-        }
-        
-        // decode .spanning
-        if let from = try? container.decode(DateBoundary.self, forKey: .spanning_from) {
-            if let to = try? container.decode(DateBoundary.self, forKey: .spanning_to) {
-                self = .spanning(from: from, to: to)
-                return
-            }
-        }
-        
-        // decode .starting
-        if let from = try? container.decode(DateBoundary.self, forKey: .starting_from) {
-            self = .starting (from: from)
-            return
-        }
-        
-        // decode .ending
-        if let to = try? container.decode(DateBoundary.self, forKey: .ending_to) {
-            self = .ending (to: to)
-            return
-        }
-        
-        // decode .exceptional
-        if let inYear = try? container.decode(Int.self, forKey: .exceptional_in) {
-            self = .exceptional (inYear: inYear)
-            return
-        }
-        
-        throw TimeSpanError.decoding("Error decoding 'LifeExpenseTimeSpan' ! \(dump(container))")
-    }
-
-    // MARK: - Coding
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        switch self {
-            case .permanent:
-                try container.encode(true, forKey: .permanent)
-            
-            case .starting (let from):
-                try container.encode(from, forKey: .starting_from)
-            
-            case .ending (let to):
-                try container.encode(to, forKey: .ending_to)
-
-            case .exceptional (let inYear):
-                try container.encode(inYear, forKey: .exceptional_in)
-            
-            case .spanning (let from, let to):
-                try container.encode(from, forKey: .spanning_from)
-                try container.encode(to, forKey: .spanning_to)
-            
-            case .periodic (let from, let period, let to):
-                try container.encode(from, forKey: .periodic_from)
-                try container.encode(to, forKey: .periodic_to)
-                try container.encode(period, forKey: .periodic_period)
         }
     }
 }

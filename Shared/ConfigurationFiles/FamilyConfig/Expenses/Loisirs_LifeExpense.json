@@ -7,11 +7,13 @@
             "name" : "Divertissement - culture",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard",
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard",
+                    }
                 }
             }
         },
@@ -22,11 +24,13 @@
             "name" : "Club / association (sport, hobby, art...)",
             "note" : "Actualisé le 16/02/2021\nTennis, Piscine, Pelote, Surf, Yoga...",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard",
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard",
+                    }
                 }
             }
         },
@@ -37,11 +41,13 @@
             "name" : "Restaurants, bars...",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard",
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard",
+                    }
                 }
             }
         },
@@ -52,11 +58,13 @@
             "name" : "Loisirs - Autres",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard",
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard",
+                    }
                 }
             }
         }
