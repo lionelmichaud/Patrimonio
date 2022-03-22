@@ -1,6 +1,7 @@
 import Foundation
 
 /// Usage:
+///
 ///   ```
 ///   // protocol de l'objet à injecter
 ///   protocol NetworkProviding {
@@ -22,7 +23,6 @@ public protocol InjectionKeyP {
 }
 
 /// Provides access to injected dependencies.
-///
 ///
 /// Usage:
 ///   ```
@@ -55,6 +55,7 @@ struct InjectedValues {
 /// Property Wrapper
 ///
 /// Usage:
+///
 ///   ```
 ///   // protocol de l'objet à injecter
 ///   protocol NetworkProviding {

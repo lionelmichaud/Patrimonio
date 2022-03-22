@@ -8,9 +8,14 @@
 
 import Foundation
 
+/// Retourne max(value, 0.0)
+///
 /// Usage:
+///
 ///     @ZeroOrPositive var score = 0
-@propertyWrapper public struct ZeroOrPositive<T: Numeric & Comparable> {
+///
+@propertyWrapper
+public struct ZeroOrPositive<T: Numeric & Comparable> {
     var value: T
     
     public var wrappedValue: T {
@@ -34,9 +39,14 @@ import Foundation
     }
 }
 
+/// Retourne min(value, 0.0)
+///
 /// Usage:
+///
 ///     @ZeroOrNegative var score = 0
-@propertyWrapper public struct ZeroOrNegative<T: Numeric & Comparable> {
+///
+@propertyWrapper
+public struct ZeroOrNegative<T: Numeric & Comparable> {
     var value: T
 
     public var wrappedValue: T {
@@ -57,5 +67,24 @@ import Foundation
         } else {
             self.value = wrappedValue
         }
+    }
+}
+
+/// Clamps a value in a range.
+///
+/// Usage:
+///    ```
+///    @Clamped(range: 0.0...100.0) var value: Double
+///
+///    func setScore2(@Clamped(range: 0...100) to score: Int) {
+///        print("Setting score to \(score)")
+///    }
+///    ```
+@propertyWrapper
+public struct Clamped<T: Comparable> {
+    public let wrappedValue: T
+
+    init(wrappedValue: T, range: ClosedRange<T>) {
+        self.wrappedValue = min(max(wrappedValue, range.lowerBound), range.upperBound)
     }
 }
