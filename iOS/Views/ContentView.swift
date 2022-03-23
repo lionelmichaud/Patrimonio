@@ -65,19 +65,22 @@ struct ContentView: View {
     
     func checkCompatibility() {
         if !PersistenceManager.templateDirIsCompatibleWithAppVersion {
-            self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
-                                       message       : Text("Votre dossier Modèle n'est pas compatible de cette version de l'application. Voulez-vous le mettre à jour. Si vous le mettez à jour, vous perdrai les éventuelles modifications qu'il contient."),
-                                       primaryButton : .destructive(Text("Mettre à jour"),
-                                                                    action: {
-                                                                        /// insert alert 1 action here
-                                                                        do {
-                                                                            try PersistenceManager.forcedImportAllTemplateFilesFromApp()
-                                                                        } catch {
-                                                                            self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
-                                                                                                       dismissButton : .default(Text("OK")))
-                                                                        }
-                                                                    }),
-                                       secondaryButton: .cancel())
+            self.alertItem =
+            AlertItem(title         : Text("Attention").foregroundColor(.red),
+                      message       : Text("Votre dossier Modèle n'est pas compatible de cette version de l'application. Voulez-vous le mettre à jour. Si vous le mettez à jour, vous perdrai les éventuelles modifications qu'il contient."),
+                      primaryButton : .destructive(Text("Mettre à jour"),
+                                                   action: {
+                /// insert alert 1 action here
+                do {
+                    try PersistenceManager.forcedImportAllTemplateFilesFromApp()
+                } catch {
+                    DispatchQueue.main.async {
+                        self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
+                                                   dismissButton : .default(Text("OK")))
+                    }
+                }
+            }),
+                      secondaryButton: .cancel())
         }
     }
 }

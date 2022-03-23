@@ -57,19 +57,22 @@ struct DossierBrowserView: View {
     }
     
     func deleteDossier(at offsets: IndexSet) {
-        self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
-                                   message       : Text("La destruction du dossier est irréversible"),
-                                   primaryButton : .destructive(Text("Supprimer"),
-                                                            action: {
-                                                                /// insert alert 1 action here
-                                                                do {
-                                                                    try dataStore.deleteDossier(atOffsets: offsets)
-                                                                } catch {
-                                                                    self.alertItem = AlertItem(title         : Text("Echec de la suppression du dossier"),
-                                                                                                dismissButton : .default(Text("OK")))
-                                                                }
-                                                            }),
-                                   secondaryButton: .cancel())
+        alertItem =
+        AlertItem(title         : Text("Attention").foregroundColor(.red),
+                  message       : Text("La destruction du dossier est irréversible"),
+                  primaryButton : .destructive(Text("Supprimer"),
+                                               action: {
+            /// insert alert 1 action here
+            do {
+                try dataStore.deleteDossier(atOffsets: offsets)
+            } catch {
+                DispatchQueue.main.async {
+                    alertItem = AlertItem(title         : Text("Echec de la suppression du dossier"),
+                                          dismissButton : .default(Text("OK")))
+                }
+            }
+        }),
+                  secondaryButton: .cancel())
     }
     
     func moveDossier(from indexes: IndexSet, to destination: Int) {

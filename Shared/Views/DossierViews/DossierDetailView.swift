@@ -304,8 +304,10 @@ struct DossierDetailView: View {
                         simulation.notifyComputationInputsModification()
                         uiState.resetSimulationView()
                     } catch {
-                        self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
-                                                   dismissButton : .default(Text("OK")))
+                        DispatchQueue.main.async {
+                            self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
+                                                       dismissButton : .default(Text("OK")))
+                        }
                     }
                 }),
                           secondaryButton: .cancel())
@@ -335,8 +337,10 @@ struct DossierDetailView: View {
                                                                     do {
                                                                         try dataStore.duplicate(dossier)
                                                                     } catch {
-                                                                        self.alertItem = AlertItem(title         : Text("Echec de la duplication du dossier !"),
-                                                                                                   dismissButton : .default(Text("OK")))
+                                                                        DispatchQueue.main.async {
+                                                                            self.alertItem = AlertItem(title         : Text("Echec de la duplication du dossier !"),
+                                                                                                       dismissButton : .default(Text("OK")))
+                                                                        }
                                                                     }
                                                                 }),
                                        secondaryButton: .cancel())

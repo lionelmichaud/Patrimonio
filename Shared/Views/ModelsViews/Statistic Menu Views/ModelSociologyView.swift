@@ -63,14 +63,18 @@ struct ModelSociologyView: View {
                 alertItem = applyChangesToTemplateAlert(
                     model     : model,
                     notifyTemplatFolderMissing: {
-                        alertItem =
-                        AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                  dismissButton : .default(Text("OK")))
+                        DispatchQueue.main.async {
+                            alertItem =
+                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
+                                      dismissButton : .default(Text("OK")))
+                        }
                     },
                     notifyFailure: {
-                        alertItem =
-                        AlertItem(title         : Text("Echec de l'enregistrement"),
-                                  dismissButton : .default(Text("OK")))
+                        DispatchQueue.main.async {
+                            alertItem =
+                            AlertItem(title         : Text("Echec de l'enregistrement"),
+                                      dismissButton : .default(Text("OK")))
+                        }
                     })
             },
             cancelChanges: {
