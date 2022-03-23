@@ -26,19 +26,20 @@ struct DossiersSidebarView: View {
                 DossierBrowserView(showingSheet: $showingSheet)
             }
             //.defaultSideBarListStyle()
-            .listStyle(SidebarListStyle())
+            .listStyle(.sidebar)
             .environment(\.horizontalSizeClass, .regular)
             .navigationTitle("Dossiers")
-            .toolbar {
+            .toolbar { // de la sidebar
                 EditButton()
             }
             /// vue par défaut
             NoLoadedDossierView()
         }
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
-        // Vue modale de saisie d'un nouveau membre de la famille
+        .navigationViewStyle(.columns)
+        // alerte si on a pas pu trouver le répertoire des dossiers
         .onAppear(perform: onAppear)
         .alert(item: $alertItem, content: newAlert)
+        // Vue modale de saisie d'un nouveau membre de la famille
         .sheet(isPresented: $showingSheet) {
             DossierEditView(title: "Créer un nouveau dossier")
                 .environmentObject(self.dataStore)

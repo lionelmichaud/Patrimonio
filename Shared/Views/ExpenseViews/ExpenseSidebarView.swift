@@ -56,7 +56,7 @@ struct ExpenseSidebarView: View {
             /// vue par défaut
             ExpenseSummaryView()
         }
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .navigationViewStyle(.columns)
     }
 }
 

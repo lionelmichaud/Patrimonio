@@ -52,7 +52,6 @@ struct DossierBrowserView: View {
             }
             .onDelete(perform: deleteDossier)
             .onMove(perform: moveDossier)
-            .listStyle(SidebarListStyle())
         }
         .alert(item: $alertItem, content: newAlert)
     }

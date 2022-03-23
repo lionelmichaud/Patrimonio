@@ -23,7 +23,7 @@ struct ContentView: View {
     // MARK: - Properties
 
     var body: some View {
-        TabView(selection: $uiState.selectedTab) {
+        TabView(selection: $selection) {
             /// gestion des dossiers
             DossiersSidebarView()
                 .tabItem { Label("Dossiers", systemImage: "folder.fill.badge.person.crop") }

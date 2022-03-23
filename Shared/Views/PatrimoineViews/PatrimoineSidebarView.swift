@@ -52,7 +52,7 @@ struct PatrimoineSidebarView: View {
             /// vue par défaut
             PatrimoineSummaryView()
         }
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .navigationViewStyle(.columns)
     }
     
     private func reinitialize() {

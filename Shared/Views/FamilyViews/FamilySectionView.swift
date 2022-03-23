@@ -44,7 +44,7 @@ struct FamilySectionView : View {
             }
             .onDelete(perform: deleteMembers)
             .onMove(perform: family.moveMembers)
-            .listStyle(SidebarListStyle())
+            .listStyle(.sidebar)
         }
     }
     

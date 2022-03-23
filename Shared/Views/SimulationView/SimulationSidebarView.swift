@@ -50,14 +50,14 @@ struct SimulationSidebarView: View {
                 }
             }
             //.defaultSideBarListStyle()
-            .listStyle(SidebarListStyle())
+            .listStyle(.sidebar)
             .environment(\.horizontalSizeClass, .regular)
             .navigationTitle("Simulation")
             
             /// vue par défaut
             ComputationView()
         }
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .navigationViewStyle(.columns)
     }
 }
 

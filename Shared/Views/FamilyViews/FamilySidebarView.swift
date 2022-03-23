@@ -35,7 +35,7 @@ struct FamilySidebarView: View {
                 }
             }
             //.defaultSideBarListStyle()
-            .listStyle(SidebarListStyle())
+            .listStyle(.sidebar)
             .environment(\.horizontalSizeClass, .regular)
             .navigationTitle("Famille")
             .toolbar {
@@ -45,7 +45,7 @@ struct FamilySidebarView: View {
             /// vue par défaut
             FamilySummaryView()
         }
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .navigationViewStyle(.columns)
         // Vue modale de saisie d'un nouveau membre de la famille
         .sheet(isPresented: $showingSheet) {
             PersonAddView(using: model)
