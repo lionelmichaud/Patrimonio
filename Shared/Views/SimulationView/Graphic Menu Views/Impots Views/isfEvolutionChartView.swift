@@ -47,13 +47,12 @@ struct IsfEvolutionChartView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // sauvergarder l'image dans l'album photo
-                ToolbarItem(placement: .automatic) {
+                ToolbarItemGroup(placement: .automatic) {
                     Button(action: { IsfLineChartView.saveImage(to: dataStore.activeDossier!.folder!) },
                            label : { Image(systemName: "camera.circle") })
                         .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
-                }
-                // afficher info-bulle
-                ToolbarItem(placement: .automatic) {
+
+                    // afficher info-bulle
                     Button(action: { self.showInfoPopover = true },
                            label : {
                             Image(systemName: "info.circle")

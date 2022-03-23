@@ -25,7 +25,7 @@ struct DossierBrowserView: View {
     @State private var alertItem : AlertItem?
 
     var body: some View {
-        // bouton "ajouter"
+        /// bouton "ajouter"
         Button(
             action: {
                 withAnimation {
@@ -38,8 +38,8 @@ struct DossierBrowserView: View {
                     .foregroundColor(.accentColor)
             })
 
+        /// liste des dossiers
         Section(header: Text("Dossiers existants")) {
-            // liste des dossiers
             ForEach(dataStore.dossiers) { dossier in
                 NavigationLink(destination: DossierDetailView(dossier: dossier)) {
                     Label(title: { DossierRowView(dossier: dossier) },

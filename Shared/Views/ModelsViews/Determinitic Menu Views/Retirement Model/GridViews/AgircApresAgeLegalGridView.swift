@@ -97,7 +97,7 @@ struct AgircApresAgeLegalSliceEditView: View {
                                     percent : $modifiedSlice.coef)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 
@@ -159,7 +159,7 @@ struct AgircApresAgeLegalSliceAddView: View {
                                     percent : $newSlice.coef)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 

@@ -34,7 +34,7 @@ struct DossierDetailView: View {
             if savable {
                 Label(
                     title: {
-                        Text("Dossier en cours d'utilisation - Modifications non sauvegardées")
+                        Text("Ce dossier est en cours d'utilisation - Modifications non sauvegardées")
                             .foregroundColor(.red)
                             .font(.headline)
                     },
@@ -46,7 +46,7 @@ struct DossierDetailView: View {
             } else {
                 Label(
                     title: {
-                        Text("Dossier en cours d'utilisation")
+                        Text("Ce dossier est en cours d'utilisation")
                             .foregroundColor(.green)
                             .font(.headline)
                     },
@@ -62,24 +62,26 @@ struct DossierDetailView: View {
     var body: some View {
         GeometryReader { geometry in
             Form {
-                // indicateur de chargement du Dossier
+                /// Section: indicateur de chargement du Dossier
                 if dossier.isActive {
                     activeSection
                 }
-                // affichage du Dossier
+                /// Section: affichage des informations sur le Dossier
                 DossierPropertiesView(dossier: dossier,
                                       sectionHeader: "Descriptif du Dossier")
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
             .navigationTitle(Text("Dossier"))
             .alert(item: $alertItem, content: newAlert)
+            /// Vue modale de modification du dossier
             .sheet(isPresented: $showingSheet) {
                 DossierEditView(title        : "Modifier le Dossier",
                                 originalItem : dossier)
                     .environmentObject(self.dataStore)
             }
+            /// Barre d'outils
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
+                ToolbarItemGroup(placement: .automatic) {
                     /// Bouton: Charger
                     Button(
                         action : activate,
@@ -87,20 +89,17 @@ struct DossierDetailView: View {
                             Image(systemName: dossier.isActive ? "arrowshape.turn.up.backward" : "square.and.arrow.down.on.square")
                                 .imageScale(.large)
                         })
-                        .capsuleButtonStyle()
-                        .disabled(!activable)
-                }
-                /// Bouton: Sauvegarder
-                ToolbarItem(placement: .automatic) {
+                    .capsuleButtonStyle()
+                    .disabled(!activable)
+
+                    /// Bouton: Sauvegarder
                     DiskButton(text: nil) { save(dossier) }
-                    .disabled(!savable)
-                }
-                /// Bouton: Dupliquer
-                ToolbarItem(placement: .automatic) {
+                        .disabled(!savable)
+
+                    /// Bouton: Dupliquer
                     DuplicateButton { duplicate() }
-                }
-                /// Bouton: Modifier
-                ToolbarItem(placement: .automatic) {
+
+                    /// Bouton: Modifier
                     Button(
                         action : {
                             withAnimation {
@@ -111,18 +110,17 @@ struct DossierDetailView: View {
                             Image(systemName: "square.and.pencil")
                                 .imageScale(.large)
                         })
-                        .capsuleButtonStyle()
-                        .disabled(!dossier.isActive)
-                }
-                /// Bouton: Exporter fichiers du dossier actif
-                ToolbarItem(placement: .automatic) {
+                    .capsuleButtonStyle()
+                    .disabled(!dossier.isActive)
+                    
+                    /// Bouton: Exporter fichiers du dossier actif
                     Button(action: { share(geometry: geometry) },
                            label: {
                         Image(systemName: "square.and.arrow.up.on.square")
                             .imageScale(.large)
                     })
-                        .capsuleButtonStyle()
-                        .disabled(!dossier.isActive)
+                    .capsuleButtonStyle()
+                    .disabled(!dossier.isActive)
                 }
             }
         }

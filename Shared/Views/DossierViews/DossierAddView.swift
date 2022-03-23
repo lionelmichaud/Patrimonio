@@ -58,7 +58,7 @@ struct DossierAddView: View {
                 }
             }
             .font(.body)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
             .alert(item: $alertItem, content: newAlert)
         }
     }

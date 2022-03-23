@@ -67,7 +67,7 @@ public struct AmountEditView: View {
                 Text("€")
             }
         }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .textFieldStyle(.roundedBorder)
     }
     
     /// Création

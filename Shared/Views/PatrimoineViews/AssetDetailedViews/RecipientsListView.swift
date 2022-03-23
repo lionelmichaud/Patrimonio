@@ -33,10 +33,8 @@ struct RecipientsListView : View {
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .automatic) {
+            ToolbarItemGroup(placement: .automatic) {
                 EditButton()
-            }
-            ToolbarItem(placement: .automatic) {
                 Menu(content: menuAdd, label: menuAddLabel)
             }
         }

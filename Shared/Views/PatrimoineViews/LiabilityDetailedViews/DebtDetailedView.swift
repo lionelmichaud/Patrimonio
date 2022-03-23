@@ -42,14 +42,12 @@ struct DebtDetailedView: View {
                                amount : $localItem.value)
             }
         }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .textFieldStyle(.roundedBorder)
         .navigationTitle("Dette")
         .toolbar {
-            ToolbarItem(placement: .automatic) {
+            ToolbarItemGroup(placement: .automatic) {
                 DuplicateButton { duplicate() }
                     .disabled((index == nil) || changeOccured)
-            }
-            ToolbarItem(placement: .automatic) {
                 FolderButton(action : applyChanges)
                     .disabled(!changeOccured)
             }

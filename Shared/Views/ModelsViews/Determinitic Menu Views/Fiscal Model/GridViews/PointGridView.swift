@@ -180,7 +180,7 @@ struct PointEditView: View {
                                    percent : $modifiedSlice.y)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
     
@@ -250,7 +250,7 @@ struct PointAddView: View {
                                    currency : false)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
     

@@ -87,14 +87,12 @@ struct PeriodicInvestDetailedView: View {
                     .foregroundColor(.secondary)
             }
         }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .textFieldStyle(.roundedBorder)
         .navigationTitle("Invest. Périodique")
         .toolbar {
-            ToolbarItem(placement: .automatic) {
+            ToolbarItemGroup(placement: .automatic) {
                 DuplicateButton { duplicate() }
                     .disabled((index == nil) || changeOccured)
-            }
-            ToolbarItem(placement: .automatic) {
                 FolderButton(action : applyChanges)
                     .disabled(!changeOccured)
             }

@@ -75,24 +75,23 @@ struct ExpenseSummaryView: View {
                     .navigationBarTitleDisplayModeInline()
                     .toolbar {
                         // afficher info-bulle
-                        ToolbarItem(placement: .automatic) {
+                        ToolbarItemGroup(placement: .automatic) {
                             Button(action: { self.showInfoPopover = true },
                                    label : {
                                 Image(systemName: "info.circle")
                             })
-                                .popover(isPresented: $showInfoPopover) {
-                                    PopOverContentView(title       : popOverTitle,
-                                                       description : popOverMessage)
-                                }
-                        }
-                        /// bouton Exporter fichiers du dossier actif
-                        ToolbarItem(placement: .automatic) {
+                            .popover(isPresented: $showInfoPopover) {
+                                PopOverContentView(title       : popOverTitle,
+                                                   description : popOverMessage)
+                            }
+                            
+                            /// bouton Exporter fichiers du dossier actif
                             Button(action: { share(geometry: geometry) },
                                    label: {
                                 Image(systemName: "square.and.arrow.up.on.square")
                                     .imageScale(.large)
                             })
-                                .capsuleButtonStyle()
+                            .capsuleButtonStyle()
                         }
                     }
                 }

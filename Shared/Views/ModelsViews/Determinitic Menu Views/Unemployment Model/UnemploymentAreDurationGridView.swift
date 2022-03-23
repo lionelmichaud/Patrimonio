@@ -109,7 +109,7 @@ struct DurationSliceEditView: View {
                                     percent : $modifiedSlice.reduction)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 
@@ -177,7 +177,7 @@ struct DurationSliceAddView: View {
                                     percent : $newSlice.reduction)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 

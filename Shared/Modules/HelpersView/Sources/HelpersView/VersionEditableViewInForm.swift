@@ -228,7 +228,7 @@ public struct VersionEditSheet : View {
                     TextField("commentaire", text: $comment)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 

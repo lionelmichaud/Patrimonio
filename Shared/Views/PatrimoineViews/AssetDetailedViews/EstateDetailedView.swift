@@ -170,15 +170,13 @@ struct RealEstateDetailedView: View {
                 }
             }
         }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .textFieldStyle(.roundedBorder)
         .navigationTitle("Immeuble")
         //.navigationBarTitleDisplayModeInline()
         .toolbar {
-            ToolbarItem(placement: .automatic) {
+            ToolbarItemGroup(placement: .automatic) {
                 DuplicateButton { duplicate() }
                     .disabled((index == nil) || changeOccured)
-            }
-            ToolbarItem(placement: .automatic) {
                 FolderButton(action : applyChanges)
                     .disabled(!changeOccured)
             }

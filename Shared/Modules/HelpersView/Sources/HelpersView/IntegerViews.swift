@@ -33,12 +33,12 @@ public struct IntegerEditView: View {
             if comment != nil { Text(comment!).foregroundColor(.secondary) }
             TextField("entier",
                       text: textValueBinding)
-                //.textFieldStyle(RoundedBorderTextFieldStyle())
+                //.textFieldStyle(.roundedBorder)
                 .frame(maxWidth: 88)
                 .numbersAndPunctuationKeyboardType()
                 .multilineTextAlignment(.trailing)
         }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .textFieldStyle(.roundedBorder)
     }
     
     public init(label   : String,

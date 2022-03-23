@@ -125,18 +125,16 @@ struct CashFlowDetailedChartView: View {
                    })//.capsuleButtonStyle()
         }
         // afficher/masquer le grpahique des événemnts de vie
-        ToolbarItem(placement: .automatic) {
+        ToolbarItemGroup(placement: .automatic) {
             Button(action: { withAnimation { lifeEventChatIsPresented.toggle() } },
                    label : { Image(systemName: lifeEventChatIsPresented ? "rectangle" : "rectangle.split.1x2") })
-        }
-        // sauvergarder l'image dans l'album photo
-        ToolbarItem(placement: .automatic) {
+
+            // sauvergarder l'image dans l'album photo
             Button(action: { CashFlowStackedBarChartView.saveImage(to: dataStore.activeDossier!.folder!) },
                    label : { Image(systemName: "camera.circle") })
                 .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
-        }
-        // afficher info-bulle
-        ToolbarItem(placement: .automatic) {
+
+            // afficher info-bulle
             Button(action: { self.showInfoPopover = true },
                    label : {
                     Image(systemName: "info.circle")//.font(.largeTitle)

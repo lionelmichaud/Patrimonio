@@ -101,7 +101,7 @@ struct DemembrementSliceEditView: View {
                                     percent : $modifiedSlice.usuFruit)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 
@@ -161,7 +161,7 @@ struct DemembrementSliceAddView: View {
                                     percent : $newSlice.usuFruit)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 
