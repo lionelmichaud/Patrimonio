@@ -20,6 +20,8 @@ final class PersonViewModel: ObservableObject {
 
     // MARK: - Initializers of ViewModel from Model
 
+    init() {}
+
     init(from member: Person) {
         deathAge = member.ageOfDeath
     }
@@ -29,6 +31,4 @@ final class PersonViewModel: ObservableObject {
     func update(member: Person) {
         member.ageOfDeath = deathAge
     }
-
-    init() {    }
 }

@@ -15,3 +15,31 @@ public extension Binding {
                        set: { lhs.wrappedValue = $0 })
     }
 }
+
+public extension Binding {
+    /// Observer
+    ///
+    /// Usage:
+    ///
+    ///     struct ContentView: View {
+    ///         @State private var name = ""
+    ///
+    ///         var body: some View {
+    ///             TextField("Enter your name:", text: $name.onChange(nameChanged))
+    ///                 .textFieldStyle(.roundedBorder)
+    ///         }
+    ///
+    ///         func nameChanged(to value: String) {
+    ///             print("Name changed to \(name)!")
+    ///         }
+    ///     }
+    func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
+        Binding(
+            get: { self.wrappedValue },
+            set: { newValue in
+                self.wrappedValue = newValue
+                handler(newValue)
+            }
+        )
+    }
+}

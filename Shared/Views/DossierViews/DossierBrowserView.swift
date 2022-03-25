@@ -35,7 +35,7 @@ struct DossierBrowserView: View {
             label: {
                 Label(title: { Text("Créer un nouveau dosssier") },
                       icon : { Image(systemName: "folder.fill.badge.plus") })
-                    .foregroundColor(.accentColor)
+                .foregroundColor(.accentColor)
             })
 
         /// liste des dossiers
@@ -45,7 +45,9 @@ struct DossierBrowserView: View {
                     Label(title: { DossierRowView(dossier: dossier) },
                           icon : {
                             Image(systemName: "folder.fill.badge.person.crop")
-                                .if(dossier.isActive) { $0.accentColor(savable(dossier) ? .red : .green) }
+                                .if(dossier.isActive) {
+                                    $0.foregroundColor(savable(dossier) ? .red : .green)
+                                }
                     })
                 }
                 .isDetailLink(true)

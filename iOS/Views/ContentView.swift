@@ -26,36 +26,36 @@ struct ContentView: View {
         TabView(selection: $selection) {
             /// gestion des dossiers
             DossiersSidebarView()
-                .tabItem { Label("Dossiers", systemImage: "folder.fill.badge.person.crop") }
+                .tabItem { Label("Dossiers", systemImage: "folder.badge.person.crop").symbolVariant(.none) }
                 .tag(UIState.Tab.dossier)
 
             /// composition de la famille
             FamilySidebarView()
-                .tabItem { Label("Famille", systemImage: "person.2.fill") }
+                .tabItem { Label("Famille", systemImage: "person.2").symbolVariant(.none) }
                 .tag(UIState.Tab.family)
             
             /// dépenses de la famille
             ExpenseSidebarView(simulationReseter: simulation)
-                .tabItem { Label("Dépenses", systemImage: "cart.fill") }
+                .tabItem { Label("Dépenses", systemImage: "cart").symbolVariant(.none) }
                 .tag(UIState.Tab.expense)
 
             /// actifs & passifs du patrimoine de la famille
             PatrimoineSidebarView()
-                .tabItem { Label("Patrimoine", systemImage: "dollarsign.circle.fill") }
+                .tabItem { Label("Patrimoine", systemImage: "eurosign.circle").symbolVariant(.none) }
                 .tag(UIState.Tab.asset)
 
             /// scenario paramètrique de simulation
             ModelsSidebarView()
-                .tabItem { Label("Modèles", systemImage: "slider.horizontal.3") }
+                .tabItem { Label("Modèles", systemImage: "slider.horizontal.3").symbolVariant(.none) }
                 .tag(UIState.Tab.scenario)
 
             /// calcul et présentation des résultats de simulation
             SimulationSidebarView()
-                .tabItem { Label("Simulation", systemImage: "function") }
+                .tabItem { Label("Simulation", systemImage: "function").symbolVariant(.none) }
                 .tag(UIState.Tab.simulation)
             /// préférences
             SettingsSidebarView()
-                .tabItem { Label("Préférences", systemImage: "gear") }
+                .tabItem { Label("Préférences", systemImage: "gear").symbolVariant(.none) }
                 .tag(UIState.Tab.userSettings)
             
         }

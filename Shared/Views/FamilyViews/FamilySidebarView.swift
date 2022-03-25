@@ -61,7 +61,9 @@ struct FamilySidebarView: View {
 struct FamilyHeaderView: View {
     var body: some View {
         NavigationLink(destination: FamilySummaryView()) {
-            Text("Synthèse").fontWeight(.bold)
+            Label(title: { Text("Synthèse") },
+                  icon : { Image(systemName: "person.3.sequence.fill") })
+            //Text("Synthèse").fontWeight(.bold)
         }
         .isDetailLink(true)
     }

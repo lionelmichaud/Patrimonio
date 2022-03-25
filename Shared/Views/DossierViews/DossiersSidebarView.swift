@@ -57,7 +57,8 @@ struct DossiersSidebarView: View {
 struct DossierHeaderView: View {
     var body: some View {
         NavigationLink(destination: DossierSummaryView()) {
-            Text("Dossier en cours d'utilisation")
+            Label(title: { Text("Dossier en cours d'utilisation") },
+                  icon : { Image(systemName: "folder.fill.badge.questionmark") })
         }
         .isDetailLink(true)
     }

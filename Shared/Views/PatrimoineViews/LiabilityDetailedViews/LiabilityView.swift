@@ -83,7 +83,8 @@ struct LoanView: View {
                                             label       : item.name,
                                             value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
-                                            header      : false)
+                                            header      : false,
+                                            icon        : Image(systemName: "eurosign.circle.fill"))
                     }
                     .isDetailLink(true)
                 }
@@ -144,7 +145,8 @@ struct DebtView: View {
                                             label       : item.name,
                                             value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
-                                            header      : false)
+                                            header      : false,
+                                            icon        : Image(systemName: "eurosign.circle.fill"))
                     }
                     .isDetailLink(true)
                 }
