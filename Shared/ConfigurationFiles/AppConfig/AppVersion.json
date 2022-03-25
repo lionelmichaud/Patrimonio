@@ -7,6 +7,11 @@
     
     "revisionHistory" : [
         {
+            "version" : "4.6.0",
+            "date"    : "2022-03-23T23:00:00+01:00",
+            "comment" : "Modification du format de fichier JSON pour le enum avec valeurs associées"
+        },
+        {
             "version" : "4.5.0",
             "date"    : "2022-02-24T23:00:00+01:00",
             "comment" : "Ajout d'un lien internet optionel pour chaque actif"

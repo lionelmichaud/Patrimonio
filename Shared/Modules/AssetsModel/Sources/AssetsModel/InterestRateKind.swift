@@ -11,7 +11,7 @@ import AppFoundation
 
 // MARK: - Type d'investissement
 
-public enum InterestRateKind {
+public enum InterestRateKind: Codable {
     case contractualRate (fixedRate: Double)
     case marketRate (stockRatio: Double)
     
@@ -57,45 +57,6 @@ extension InterestRateKind: CustomStringConvertible {
                 
             case .marketRate(let stockRatio):
                 return "Taux de Marché avec \(stockRatio) % d'actions et \(100 - stockRatio) % d'obligations"
-        }
-    }
-}
-
-extension InterestRateKind: Codable {
-    // coding keys
-    private enum CodingKeys: String, CodingKey {
-        case contractualRate_fixedRate, marketRate_stockRatio
-    }
-    // error type
-    enum InterestRateTypeCodingError: Error {
-        case decoding(String)
-    }
-    // decode
-    public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        // decode .contractualRate
-        if let value = try? values.decode(Double.self, forKey: .contractualRate_fixedRate) {
-            self = .contractualRate(fixedRate: value)
-            return
-        }
-        
-        // decode .marketRate
-        if let value = try? values.decode(Double.self, forKey: .marketRate_stockRatio) {
-            self = .marketRate(stockRatio: value)
-            return
-        }
-        
-        throw InterestRateTypeCodingError.decoding("Error decoding 'InterestRateType' ! \(dump(values))")
-    }
-    // encode
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        switch self {
-            case .contractualRate(let fixedRate):
-                try container.encode(fixedRate, forKey: .contractualRate_fixedRate)
-            case .marketRate(let stockRatio):
-                try container.encode(stockRatio, forKey: .marketRate_stockRatio)
         }
     }
 }

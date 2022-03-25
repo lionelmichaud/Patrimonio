@@ -23,39 +23,39 @@ struct ContentView: View {
     // MARK: - Properties
 
     var body: some View {
-        TabView(selection: $uiState.selectedTab) {
+        TabView(selection: $selection) {
             /// gestion des dossiers
             DossiersSidebarView()
-                .tabItem { Label("Dossiers", systemImage: "folder.fill.badge.person.crop") }
+                .tabItem { Label("Dossiers", systemImage: "folder.badge.person.crop").symbolVariant(.none) }
                 .tag(UIState.Tab.dossier)
 
             /// composition de la famille
             FamilySidebarView()
-                .tabItem { Label("Famille", systemImage: "person.2.fill") }
+                .tabItem { Label("Famille", systemImage: "person.2").symbolVariant(.none) }
                 .tag(UIState.Tab.family)
             
             /// dépenses de la famille
             ExpenseSidebarView(simulationReseter: simulation)
-                .tabItem { Label("Dépenses", systemImage: "cart.fill") }
+                .tabItem { Label("Dépenses", systemImage: "cart").symbolVariant(.none) }
                 .tag(UIState.Tab.expense)
 
             /// actifs & passifs du patrimoine de la famille
             PatrimoineSidebarView()
-                .tabItem { Label("Patrimoine", systemImage: "dollarsign.circle.fill") }
+                .tabItem { Label("Patrimoine", systemImage: "eurosign.circle").symbolVariant(.none) }
                 .tag(UIState.Tab.asset)
 
             /// scenario paramètrique de simulation
             ModelsSidebarView()
-                .tabItem { Label("Modèles", systemImage: "slider.horizontal.3") }
+                .tabItem { Label("Modèles", systemImage: "slider.horizontal.3").symbolVariant(.none) }
                 .tag(UIState.Tab.scenario)
 
             /// calcul et présentation des résultats de simulation
             SimulationSidebarView()
-                .tabItem { Label("Simulation", systemImage: "function") }
+                .tabItem { Label("Simulation", systemImage: "function").symbolVariant(.none) }
                 .tag(UIState.Tab.simulation)
             /// préférences
             SettingsSidebarView()
-                .tabItem { Label("Préférences", systemImage: "gear") }
+                .tabItem { Label("Préférences", systemImage: "gear").symbolVariant(.none) }
                 .tag(UIState.Tab.userSettings)
             
         }
@@ -65,19 +65,22 @@ struct ContentView: View {
     
     func checkCompatibility() {
         if !PersistenceManager.templateDirIsCompatibleWithAppVersion {
-            self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
-                                       message       : Text("Votre dossier Modèle n'est pas compatible de cette version de l'application. Voulez-vous le mettre à jour. Si vous le mettez à jour, vous perdrai les éventuelles modifications qu'il contient."),
-                                       primaryButton : .destructive(Text("Mettre à jour"),
-                                                                    action: {
-                                                                        /// insert alert 1 action here
-                                                                        do {
-                                                                            try PersistenceManager.forcedImportAllTemplateFilesFromApp()
-                                                                        } catch {
-                                                                            self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
-                                                                                                       dismissButton : .default(Text("OK")))
-                                                                        }
-                                                                    }),
-                                       secondaryButton: .cancel())
+            self.alertItem =
+            AlertItem(title         : Text("Attention").foregroundColor(.red),
+                      message       : Text("Votre dossier Modèle n'est pas compatible de cette version de l'application. Voulez-vous le mettre à jour. Si vous le mettez à jour, vous perdrai les éventuelles modifications qu'il contient."),
+                      primaryButton : .destructive(Text("Mettre à jour"),
+                                                   action: {
+                /// insert alert 1 action here
+                do {
+                    try PersistenceManager.forcedImportAllTemplateFilesFromApp()
+                } catch {
+                    DispatchQueue.main.async {
+                        self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
+                                                   dismissButton : .default(Text("OK")))
+                    }
+                }
+            }),
+                      secondaryButton: .cancel())
         }
     }
 }

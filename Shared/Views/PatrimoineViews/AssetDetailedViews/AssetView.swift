@@ -111,7 +111,8 @@ struct RealEstateView: View {
                                             label       : item.name,
                                             value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
-                                            header      : false)
+                                            header      : false,
+                                            icon        : Image(systemName: "building.2.crop.circle"))
                     }
                     .isDetailLink(true)
                 }
@@ -183,7 +184,8 @@ struct ScpiView: View {
                                             label       : item.name,
                                             value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
-                                            header      : false)
+                                            header      : false,
+                                            icon        : Image(systemName: "building.2.crop.circle"))
                     }
                     .isDetailLink(true)
                 }
@@ -243,7 +245,8 @@ struct PeriodicInvestView: View {
                                             label       : item.name,
                                             value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
-                                            header      : false)
+                                            header      : false,
+                                            icon        : Image(systemName: "eurosign.circle.fill"))
                     }
                     .isDetailLink(true)
                 }
@@ -304,7 +307,8 @@ struct FreeInvestView: View {
                                             label       : item.name,
                                             value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
-                                            header      : false)
+                                            header      : false,
+                                            icon        : Image(systemName: "eurosign.circle.fill"))
                     }
                     .isDetailLink(true)
                 }
@@ -376,7 +380,8 @@ struct SciScpiView: View {
                                             label       : item.name,
                                             value       : item.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
-                                            header      : false)
+                                            header      : false,
+                                            icon        : Image(systemName: "building.2.crop.circle"))
                     }
                     .isDetailLink(true)
                 }

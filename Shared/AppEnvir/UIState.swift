@@ -92,8 +92,8 @@ final class UIState: ObservableObject {
         var evalDate: Double = CalendarCst.thisYear.double()
     }
 
-    @Published var selectedTab         : Tab  = Tab.dossier
-    @Published var selectedSideBarItem : Tab? = Tab.family
+//    @Published var selectedTab         : Tab  = Tab.dossier
+//    @Published var selectedSideBarItem : Tab? = Tab.family
     @Published var patrimoineViewState = PatrimoineViewState()
     @Published var modelsViewState     = ModelViewState()
     @Published var simulationViewState = SimulationViewState()

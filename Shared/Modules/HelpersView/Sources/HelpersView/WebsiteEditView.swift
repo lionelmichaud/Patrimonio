@@ -17,10 +17,13 @@ public struct WebsiteEditView: View {
         HStack {
             if let website = website {
                 Link(destination: website) {
-                    Image(systemName: "safari")
+                    Image(systemName: "link.circle.fill")
+                        .font(.title)
                 }
             } else {
-                Image(systemName: "safari").foregroundColor(.secondary)
+                Image(systemName: "link.circle.fill")
+                    .font(.title)
+                    .foregroundColor(.secondary)
             }
             TextField("url", text: $url)
                 .onChange(of: url) { newUrl in

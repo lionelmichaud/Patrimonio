@@ -92,7 +92,7 @@ struct NbTrimUnemployementSliceEditView: View {
                     //Spacer(minLength: 50)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 
@@ -150,7 +150,7 @@ struct NbTrimUnemployementSliceAddView: View {
                                     integer : $newSlice.nbTrimNonIndemnise)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 

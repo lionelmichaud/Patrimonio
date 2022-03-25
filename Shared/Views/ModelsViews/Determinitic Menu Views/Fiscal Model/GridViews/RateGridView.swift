@@ -88,7 +88,7 @@ struct RateSliceEditView: View {
                                     percent : $modifiedSlice.rate)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
     
@@ -147,7 +147,7 @@ struct RateSliceAddView: View {
                                     percent : $newSlice.rate)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
     

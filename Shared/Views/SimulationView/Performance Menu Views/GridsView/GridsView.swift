@@ -101,7 +101,7 @@ struct ShortGridView: View {
     @ToolbarContentBuilder
     func myToolBarContent() -> some ToolbarContent {
         // menu de filtrage
-        ToolbarItem(placement: .navigationBarLeading) {
+        ToolbarItemGroup(placement: .navigationBarLeading) {
             Menu {
                 Picker(selection: $filter, label: Text("Filtering options")) {
                     Label("Tous les résultats", systemImage: "checkmark.circle.fill").tag(RunFilterEnum.all)
@@ -114,9 +114,8 @@ struct ShortGridView: View {
                     .imageScale(.large)
                     .padding(.leading)
             }
-        }
-        // menu de choix de critère de tri
-        ToolbarItem(placement: .navigationBarLeading) {
+
+            // menu de choix de critère de tri
             Menu {
                 Picker(selection: $sortCriteria, label: Text("Sorting options")) {
                     Text("Numéro de Run").tag(KpiSortCriteriaEnum.byRunNumber)
@@ -132,14 +131,13 @@ struct ShortGridView: View {
             }
         }
         // menu de choix de l'ordre de tri
-        ToolbarItem(placement: .navigationBarLeading) {
+        ToolbarItemGroup(placement: .navigationBarLeading) {
             Button(action: { sortOrder.toggle() }) { // swiftlint:disable:this multiple_closures_with_trailing_closure
                 Image(systemName: sortOrder.imageSystemName)
                     .imageScale(.large)
             }
-        }
-        // sauvegarde du tableau
-        ToolbarItem(placement: .navigationBarTrailing) {
+
+            // sauvegarde du tableau
             Button(action: saveGrid ) {
                 HStack(alignment: .center) {
                     if busySaveWheelAnimate {
@@ -150,9 +148,7 @@ struct ShortGridView: View {
             }
             .disabled(dataStore.activeDossier == nil)
             
-        }
-        // afficher info-bulle
-        ToolbarItem(placement: .navigationBarTrailing) {
+            // afficher info-bulle
             Button(action: { self.showInfoPopover = true },
                    label : {
                     Image(systemName: "info.circle")
@@ -205,7 +201,7 @@ struct ShortGridView: View {
 
 struct GridHeaderView : View {
     let line: SimulationResultLine
-    let viewHeight = CGFloat(100)
+    let viewHeight = 100.0
     
     var body: some View {
         HStack(alignment: .center) {

@@ -35,7 +35,7 @@ struct FamilySidebarView: View {
                 }
             }
             //.defaultSideBarListStyle()
-            .listStyle(SidebarListStyle())
+            .listStyle(.sidebar)
             .environment(\.horizontalSizeClass, .regular)
             .navigationTitle("Famille")
             .toolbar {
@@ -45,7 +45,7 @@ struct FamilySidebarView: View {
             /// vue par défaut
             FamilySummaryView()
         }
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .navigationViewStyle(.columns)
         // Vue modale de saisie d'un nouveau membre de la famille
         .sheet(isPresented: $showingSheet) {
             PersonAddView(using: model)
@@ -61,7 +61,9 @@ struct FamilySidebarView: View {
 struct FamilyHeaderView: View {
     var body: some View {
         NavigationLink(destination: FamilySummaryView()) {
-            Text("Synthèse").fontWeight(.bold)
+            Label(title: { Text("Synthèse") },
+                  icon : { Image(systemName: "person.3.sequence.fill") })
+            //Text("Synthèse").fontWeight(.bold)
         }
         .isDetailLink(true)
     }

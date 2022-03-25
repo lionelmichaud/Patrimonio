@@ -10,9 +10,9 @@ import SwiftUI
 
 struct ListTheme {
     struct ListRowTheme {
-        let indent          : CGFloat
-        let labelFontSize   : CGFloat
-        let valueFontSize   : CGFloat
+        let indent          : Double
+        let labelFontSize   : Double
+        let valueFontSize   : Double
         let opacity         : Double
     }
     

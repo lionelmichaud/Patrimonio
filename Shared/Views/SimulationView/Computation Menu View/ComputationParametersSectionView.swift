@@ -27,7 +27,7 @@ struct ComputationParametersSectionView : View {
                     Text("Titre")
                         .frame(width: 70, alignment: .leading)
                     TextField("", text: $simulation.title)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .textFieldStyle(.roundedBorder)
                     Button(action: { simulation.title += " \(dataStore.activeDossier!.name)" },
                            label: { Image(systemName: "folder.fill.badge.person.crop") })
                     Button(action: { simulation.title += " le \(CalendarCst.now.stringShortDate)" },

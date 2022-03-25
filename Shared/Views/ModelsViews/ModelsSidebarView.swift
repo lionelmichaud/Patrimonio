@@ -50,7 +50,7 @@ struct ModelsSidebarView: View {
                 }
             }
             //.defaultSideBarListStyle()
-            .listStyle(SidebarListStyle())
+            .listStyle(.sidebar)
             .environment(\.horizontalSizeClass, .regular)
             .navigationTitle("Modèles")
             
@@ -61,7 +61,7 @@ struct ModelsSidebarView: View {
                 NoLoadedDossierView()
             }
         }
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .navigationViewStyle(.columns)
     }
 }
 

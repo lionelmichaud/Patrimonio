@@ -83,18 +83,16 @@ struct BalanceSheetGlobalChartView: View {
         .navigationBarTitleDisplayModeInline()
         .toolbar {
             // afficher/masquer le grpahique des événemnts de vie
-            ToolbarItem(placement: .automatic) {
+            ToolbarItemGroup(placement: .automatic) {
                 Button(action: { withAnimation { lifeEventChatIsPresented.toggle() } },
                        label : { Image(systemName: lifeEventChatIsPresented ? "rectangle" : "rectangle.split.1x2") })
-            }
-            // sauvergarder l'image dans l'album photo
-            ToolbarItem(placement: .automatic) {
+
+                // sauvergarder l'image dans l'album photo
                 Button(action: { BalanceSheetLineChartView.saveImage(to: dataStore.activeDossier!.folder!) },
                        label : { Image(systemName: "camera.circle") })
                     .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
-            }
-            // afficher info-bulle
-            ToolbarItem(placement: .automatic) {
+
+                // afficher info-bulle
                 Button(action: { self.showInfoPopover = true },
                        label : {
                         Image(systemName: "info.circle")
@@ -181,7 +179,7 @@ struct BalanceSheetLineChartView: NSUIViewRepresentable {
         // ajouter les DataSet au Chartdata
         let data = LineChartData(dataSets: dataSets)
         data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
+        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: 12.0)!)
         data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
 
         // ajouter le Chartdata au ChartView

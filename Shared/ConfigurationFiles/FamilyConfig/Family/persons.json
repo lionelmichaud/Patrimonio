@@ -9,16 +9,18 @@
         },
         "sexe"          : 0,
         "birth_Date"    : "1964-09-22T23:00:00+01:00",
-        "fiscal_option" : "100% Usufruit",
-        "work_Income"   : {
-            "salary_brutSalary"      : 98400,
-            "salary_taxableSalary"   : 80712,
-            "salary_netSalary"       : 77000,
-            "salary_fromDate"        : "2001-11-19T23:00:00+01:00",
-            "salary_healthInsurance" : 700
+        "fiscalOption" : "100% Usufruit",
+        "workIncome"   : {
+            "salary": {
+                "brutSalary"      : 98400,
+                "taxableSalary"   : 80712,
+                "netSalary"       : 77000,
+                "fromDate"        : "2001-11-19T23:00:00+01:00",
+                "healthInsurance" : 700
+            }
         },
-        "nb_Of_Child_Birth" : 3,
-        "age_Of_Pension_Liquid" : {
+        "nbOfChildBirth" : 3,
+        "ageOfPensionLiquidComp" : {
             "year" : 62,
             "month": 0,
             "day"  : 1,
@@ -34,12 +36,12 @@
                 "firstWeekday" : 2
             },
         },
-        "regime_General_Situation" : {
+        "lastKnownPensionSituation" : {
             "atEndOf"           : 2020,
             "nbTrimestreAcquis" : 139,
             "sam"               : 37054
         },
-        "age_Of_Agirc_Pension_Liquid" : {
+        "ageOfAgircPensionLiquidComp" : {
             "year" : 62,
             "month": 0,
             "day"  : 1,
@@ -55,14 +57,14 @@
                 "firstWeekday" : 2
             },
         },
-        "regime_Agirc_Situation" : {
+        "lastKnownAgircPensionSituation" : {
             "atEndOf"     : 2020,
             "nbPoints"    : 19484,
             "pointsParAn" : 789
         },
-        "date_Of_Retirement"           : "2021-12-31T23:00:00+01:00",
-        "cause_Retirement"             : "PSE",
-        "layoff_Compensation_Bonified" : null
+        "dateOfRetirement"           : "2021-12-31T23:00:00+01:00",
+        "causeOfRetirement"             : "PSE",
+        "layoffCompensationBonified" : null
     },
     
     {
@@ -75,13 +77,15 @@
         },
         "sexe"                 : 1,
         "birth_Date"    : "1968-12-17T23:00:00+01:00",
-        "fiscal_option" : "100% Usufruit",
-        "work_Income"   : {
-            "turnOver_BNC" : 48000,
-            "turnOver_incomeLossInsurance" : 4046
+        "fiscalOption" : "100% Usufruit",
+        "workIncome"   : {
+            "turnOver" : {
+                "BNC" : 48000,
+                "incomeLossInsurance" : 4046
+            }
         },
-        "nb_Of_Child_Birth" : 3,
-        "age_Of_Pension_Liquid" : {
+        "nbOfChildBirth" : 3,
+        "ageOfPensionLiquidComp" : {
             "year" : 62,
             "month": 0,
             "day"  : 1,
@@ -97,12 +101,12 @@
                 "firstWeekday" : 2
             }
         },
-        "regime_General_Situation" : {
+        "lastKnownPensionSituation" : {
             "atEndOf"           : 2020,
             "nbTrimestreAcquis" : 145,
             "sam"               : 31857
         },
-        "age_Of_Agirc_Pension_Liquid" : {
+        "ageOfAgircPensionLiquidComp" : {
             "year" : 62,
             "month": 0,
             "day"  : 1,
@@ -118,14 +122,14 @@
                 "firstWeekday" : 2
             }
         },
-        "regime_Agirc_Situation" : {
+        "lastKnownAgircPensionSituation" : {
             "atEndOf"     : 2013,
             "nbPoints"    : 4429,
             "pointsParAn" : 0
         },
-        "date_Of_Retirement"           : "2031-01-01T22:00:00Z",
-        "cause_Retirement"             : "Démission",
-        "layoff_Compensation_Bonified" : null
+        "dateOfRetirement"           : "2031-01-01T22:00:00Z",
+        "causeOfRetirement"             : "Démission",
+        "layoffCompensationBonified" : null
     },
     
     {

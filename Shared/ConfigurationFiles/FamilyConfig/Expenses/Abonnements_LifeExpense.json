@@ -7,7 +7,7 @@
             "name" : "Abonnement téléphone",
             "note" : "Actualisé le 16/02/2021\n4 x 13€/mois",
             "timeSpan" : {
-                "permanent" : true
+                "permanent" : {}
             }
         },
         {
@@ -17,11 +17,13 @@
             "name" : "Abonnement internet",
             "note" : "Actualisé le 16/02/2021\n32€/mois",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard",
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard",
+                    }
                 }
             }
         },
@@ -32,12 +34,14 @@
             "name" : "Abonnement Netflix",
             "note" : "Actualisé le 16/02/2021\n12€/mois",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : null,
-                    "order"     : null,
-                    "name"      : "M. Lionel MICHAUD"
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : null,
+                        "order"     : null,
+                        "name"      : "M. Lionel MICHAUD"
+                    }
                 }
             }
         },
@@ -48,11 +52,13 @@
             "name" : "Abonnement Apple",
             "note" : "Actualisé le 16/02/2021\n(Musique 15€ + iCloud 3€)/mois + iTunesMatch 25€/an",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard",
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard",
+                    }
                 }
             }
         },
@@ -63,12 +69,14 @@
             "name" : "Abonnement - Autres",
             "note" : "Actualisé le 16/02/2021\nInfuse 10€/an + SoloLearn 50€/an + Medium 5,5€/mois + OVH 110€/an",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : null,
-                    "order"     : null,
-                    "name"      : "M. Lionel MICHAUD"
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : null,
+                        "order"     : null,
+                        "name"      : "M. Lionel MICHAUD"
+                    }
                 }
             }
         }

@@ -30,32 +30,34 @@
             "yearlyPayement"          : 4800,
             "yearlyCost"              : 480,
             "interestRateType" : {
-                "contractualRate_fixedRate" : 4.0
+                "contractualRate": { "fixedRate" : 4.0 }
             },
             "type" : {
-                "lifeInsurance_taxes" : false,
-                "lifeInsurance_clause" : {
-                    "isOptional"        : false,
-                    "isDismembered"     : false,
-                    "fullRecipients"    :
-                    [
-                        {
-                            "name"     : "Mme. Lou-Ann MICHAUD",
-                            "fraction" : 50
-                        },
-                        {
-                            "name"     : "M. Arthur MICHAUD",
-                            "fraction" : 50
-                        }
-                    ],
-                    "usufructRecipient" : "",
-                    "bareRecipients"    : [ ]
+                "lifeInsurance": {
+                    "periodicSocialTaxes" : false,
+                    "clause" : {
+                        "isOptional"        : false,
+                        "isDismembered"     : false,
+                        "fullRecipients"    :
+                        [
+                            {
+                                "name"     : "Mme. Lou-Ann MICHAUD",
+                                "fraction" : 50
+                            },
+                            {
+                                "name"     : "M. Arthur MICHAUD",
+                                "fraction" : 50
+                            }
+                        ],
+                        "usufructRecipient" : "",
+                        "bareRecipients"    : [ ]
+                    }
                 }
             },
-            "lastYear"                : 2032
+            "lastYear": 2032
         },
         
-       {
+        {
            "id"           : "4A6940AE-3D5B-4F3E-BB23-CF076F9CB5B7",
            "name"         : "Tontine Lionel 1",
            "note"         : "Ouvert le 01/04/2010\nActualisé le 18/09/2020",
@@ -78,31 +80,33 @@
            "initialInterest"         : 0,
            "initialValue"            : 150000,
            "interestRateType" : {
-               "contractualRate_fixedRate" : 4.0
+               "contractualRate": { "fixedRate" : 4.0 }
            },
            "yearlyPayement"          : 0,
            "yearlyCost"              : 0,
            "type" : {
-               "lifeInsurance_taxes" : false,
-               "lifeInsurance_clause" : {
-                   "isOptional"        : false,
-                   "isDismembered"     : false,
-                   "fullRecipients"    :
-                   [
-                       {
-                           "name"     : "Mme. Lou-Ann MICHAUD",
-                           "fraction" : 50
-                       },
-                       {
-                           "name"     : "M. Arthur MICHAUD",
-                           "fraction" : 50
-                       }
-                   ],
-                   "usufructRecipient" : "",
-                   "bareRecipients"    : [ ]
+               "lifeInsurance": {
+                   "periodicSocialTaxes" : false,
+                   "clause" : {
+                       "isOptional"        : false,
+                       "isDismembered"     : false,
+                       "fullRecipients"    :
+                       [
+                           {
+                               "name"     : "Mme. Lou-Ann MICHAUD",
+                               "fraction" : 50
+                           },
+                           {
+                               "name"     : "M. Arthur MICHAUD",
+                               "fraction" : 50
+                           }
+                       ],
+                       "usufructRecipient" : "",
+                       "bareRecipients"    : [ ]
+                   }
                }
-            },
-            "lastYear"                : 2022
+           },
+           "lastYear": 2022
         }
     ]
 }

@@ -14,25 +14,16 @@ public struct RoundedRectButtonStyle: ButtonStyle {
     public var width     : CGFloat?
     public var height    : CGFloat?
     public var alignment : Alignment = .center
-    
-    public func makeBody(configuration: RoundedRectButtonStyle.Configuration) -> some View {
-        MyButton(configuration : configuration,
-                 color         : color,
-                 width         : width,
-                 height        : height,
-                 alignment     : alignment)
-    }
-    
+
     struct MyButton: View {
         let configuration : RoundedRectButtonStyle.Configuration
         var color         : Color     = .accentColor
         var width         : CGFloat?
         var height        : CGFloat?
         var alignment     : Alignment = .center
-        
+
         var body: some View {
-            
-            return configuration.label
+            configuration.label
                 .frame(width: width, height: height, alignment: alignment)
                 .foregroundColor(.white)
                 .padding(15)
@@ -42,6 +33,14 @@ public struct RoundedRectButtonStyle: ButtonStyle {
                 .opacity(configuration.isPressed ? 0.5 : 1.0)
         }
     }
+
+    public func makeBody(configuration: RoundedRectButtonStyle.Configuration) -> some View {
+        MyButton(configuration : configuration,
+                 color         : color,
+                 width         : width,
+                 height        : height,
+                 alignment     : alignment)
+    }
 }
 
 public extension Button {
@@ -49,7 +48,10 @@ public extension Button {
                                 width     : CGFloat?,
                                 height    : CGFloat?  = nil,
                                 alignment : Alignment = .center) -> some View {
-        self.buttonStyle(RoundedRectButtonStyle(color: color, width: width, height: height, alignment: alignment))
+        self.buttonStyle(RoundedRectButtonStyle(color     : color,
+                                                width     : width,
+                                                height    : height,
+                                                alignment : alignment))
     }
 }
 
@@ -61,6 +63,27 @@ public struct CapsuleButtonStyle: ButtonStyle {
     public var alignment : Alignment = .center
     public var withShadow: Bool      = false
     
+    struct MyButton: View {
+        let configuration : CapsuleButtonStyle.Configuration
+        var color         : Color     = Color("buttonBackgroundColor")
+        var width         : CGFloat?
+        var height        : CGFloat?
+        var alignment     : Alignment = .center
+        var withShadow    : Bool      = false
+
+        var body: some View {
+            configuration.label
+                .frame(width: width, height: height, alignment: alignment)
+                .foregroundColor(.accentColor)
+                .padding(.vertical, 5.0)
+                .padding(.horizontal, 10.0)
+                .background(Capsule(style: .continuous).fill(color))
+            //.compositingGroup()
+            //.shadow(color: .black, radius: 3)
+                .opacity(configuration.isPressed ? 0.4 : 1.0)
+        }
+    }
+
     public func makeBody(configuration: CapsuleButtonStyle.Configuration) -> some View {
         MyButton(configuration : configuration,
                  color         : color,
@@ -69,27 +92,6 @@ public struct CapsuleButtonStyle: ButtonStyle {
                  alignment     : alignment)
     }
     
-    struct MyButton: View {
-        let configuration : CapsuleButtonStyle.Configuration
-        var color         : Color     = Color("buttonBackgroundColor")
-        var width         : CGFloat?
-        var height        : CGFloat?
-        var alignment     : Alignment = .center
-        var withShadow    : Bool      = false
-        
-        var body: some View {
-            
-            return configuration.label
-                .frame(width: width, height: height, alignment: alignment)
-                .foregroundColor(.accentColor)
-                .padding(.vertical, 5.0)
-                .padding(.horizontal, 10.0)
-                .background(Capsule(style: .continuous).fill(color))
-                //.compositingGroup()
-                //.shadow(color: .black, radius: 3)
-                .opacity(configuration.isPressed ? 0.4 : 1.0)
-        }
-    }
 }
 
 public extension Button {
@@ -97,7 +99,10 @@ public extension Button {
                             width     : CGFloat?  = nil,
                             height    : CGFloat?  = nil,
                             alignment : Alignment = .center) -> some View {
-        self.buttonStyle(CapsuleButtonStyle(color: color, width: width, height: height, alignment: alignment))
+        self.buttonStyle(CapsuleButtonStyle(color: color,
+                                            width: width,
+                                            height: height,
+                                            alignment: alignment))
     }
 }
 

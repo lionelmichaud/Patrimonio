@@ -33,7 +33,7 @@ struct BalanceSheetDetailedChartView: View {
     @EnvironmentObject var uiState    : UIState
     @State private var lifeEventChatIsPresented = false
     @State private var menuIsPresented = false
-    let menuWidth: CGFloat = 200
+    let menuWidth = 200.0
     var lastYear: Int? { simulation.socialAccounts.balanceArray.last?.year }
     @State private var showInfoPopover = false
     let popOverTitle   = "Contenu du graphique:"
@@ -124,18 +124,16 @@ struct BalanceSheetDetailedChartView: View {
                    })//.capsuleButtonStyle()
         }
         // afficher/masquer le grpahique des événemnts de vie
-        ToolbarItem(placement: .automatic) {
+        ToolbarItemGroup(placement: .automatic) {
             Button(action: { withAnimation { lifeEventChatIsPresented.toggle() } },
                    label : { Image(systemName: lifeEventChatIsPresented ? "rectangle" : "rectangle.split.1x2") })
-        }
-        // sauvergarder l'image dans l'album photo
-        ToolbarItem(placement: .automatic) {
+
+            // sauvergarder l'image dans l'album photo
             Button(action: { BalanceSheetStackedBarChartView.saveImage(to: dataStore.activeDossier!.folder!) },
                    label : { Image(systemName: "camera.circle") })
                 .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
-        }
-        // afficher info-bulle
-        ToolbarItem(placement: .automatic) {
+
+            // afficher info-bulle
             Button(action: { self.showInfoPopover = true },
                    label : {
                     Image(systemName: "info.circle")//.font(.largeTitle)
@@ -245,7 +243,7 @@ struct BalanceSheetStackedBarChartView: UIViewRepresentable {
         // ajouter les data au graphique
         let data = BarChartData(dataSet: ((aDataSet == nil ? BarChartDataSet() : aDataSet)!))
         data.setValueTextColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
+        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: 12.0)!)
         data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
 
         // ajouter le dataset au graphique

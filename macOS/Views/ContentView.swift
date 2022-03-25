@@ -72,7 +72,7 @@ struct ContentView: View {
             }
         }
         .frame(minWidth: 150)
-        .listStyle(SidebarListStyle())
+        .listStyle(.sidebar)
     }
 }
 

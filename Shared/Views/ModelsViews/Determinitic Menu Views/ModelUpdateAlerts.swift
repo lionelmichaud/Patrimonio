@@ -69,11 +69,9 @@ extension View {
                              isModified            : Bool,
                              isValid               : Bool = true) -> some View {
         self.toolbar {
-            ToolbarItem(placement: .automatic) {
+            ToolbarItemGroup(placement: .automatic) {
                 TemplateButton(text   : "Modifier",
                                action : applyChangesToTemplate)
-            }
-            ToolbarItem(placement: .automatic) {
                 Button(
                     action: cancelChanges,
                     label: {

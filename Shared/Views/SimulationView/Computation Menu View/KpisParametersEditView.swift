@@ -40,17 +40,21 @@ struct KpisParametersEditView: View {
                       message       : Text("Voulez-vous appliquer les modifications effectuées au modèle ?"),
                       primaryButton : .default(Text("Appliquer")) {
                         guard let templateFolder = PersistenceManager.templateFolder() else {
-                            alertItem =
+                            DispatchQueue.main.async {
+                                alertItem =
                                 AlertItem(title         : Text("Répertoire 'Patron' absent"),
                                           dismissButton : .default(Text("OK")))
+                            }
                             return
                         }
                         do {
                             try simulation.saveAsJSON(toFolder: templateFolder)
                         } catch {
-                            alertItem =
+                            DispatchQueue.main.async {
+                                alertItem =
                                 AlertItem(title         : Text("Echec de l'enregistrement"),
                                           dismissButton : .default(Text("OK")))
+                            }
                         }
                       },
                       secondaryButton: .cancel())

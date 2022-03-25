@@ -7,20 +7,22 @@
             "name" : "Petit voyage d'été",
             "note" : "Actualisé le 16/12/2021",
             "timeSpan" : {
-                "periodic_period" : 2,
-                "periodic_from" :
-                {
-                    "fixedYear": 2022,
-                    "event"    : null,
-                    "group"    : null,
-                    "name"     : ""
-                },
-                "periodic_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "periodic": {
+                    "period" : 2,
+                    "from" :
+                    {
+                        "fixedYear": 2022,
+                        "event"    : null,
+                        "group"    : null,
+                        "name"     : ""
+                    },
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -32,20 +34,22 @@
             "name" : "Grand voyage d'été",
             "note" : "Actualisé le 16/12/2021",
             "timeSpan" : {
-                "periodic_period" : 2,
-                "periodic_from" :
-                {
-                    "fixedYear": 2021,
-                    "event"    : null,
-                    "group"    : null,
-                    "name"     : ""
-                },
-                "periodic_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "periodic": {
+                    "period" : 2,
+                    "from" :
+                    {
+                        "fixedYear": 2021,
+                        "event"    : null,
+                        "group"    : null,
+                        "name"     : ""
+                    },
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -57,11 +61,13 @@
             "name" : "Vacances ski",
             "note" : "Actualisé le 16/12/2021",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -73,11 +79,13 @@
             "name" : "Week Ends",
             "note" : "Actualisé le 16/12/2021",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -89,11 +97,13 @@
             "name" : "Location de véhicule",
             "note" : "Actualisé le 16/12/2021",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -105,11 +115,13 @@
             "name" : "Transport longue distance (avion, train)",
             "note" : "Actualisé le 16/12/2021",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -121,11 +133,13 @@
             "name" : "Transport quotidien (métro, bus, taxi)",
             "note" : "Actualisé le 16/12/2021",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear": 0,
-                    "event"    : "Indépendance financière",
-                    "group"    : "Tous les Enfants",
-                    "order"    : "Date au plus tard"
+                "ending" : {
+                    "to" : {
+                        "fixedYear": 0,
+                        "event"    : "Indépendance financière",
+                        "group"    : "Tous les Enfants",
+                        "order"    : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -137,11 +151,13 @@
             "name" : "Parking, péages",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -153,11 +169,13 @@
             "name" : "Voyage Autres",
             "note" : "Actualisé le 16/12/2021",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         }

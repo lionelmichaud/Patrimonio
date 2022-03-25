@@ -22,7 +22,7 @@ public extension LineChartDataSet {
         self.axisDependency        = .left
         self.colors                = [color]
         self.circleColors          = [color]
-        self.lineWidth             = CGFloat(lineWidth)
+        self.lineWidth             = lineWidth
         self.circleRadius          = 3.0
         self.fillAlpha             = 65 / 255.0
         self.fillColor             = color

@@ -15,22 +15,22 @@ struct LabeledValueRowView: View {
     let value           : Double
     let indentLevel     : Int
     let header          : Bool
+    let icon            : Image
     
     var body: some View {
         HStack {
             if header {
                 // bouton pour déplier / replier la liste
                 Button(action: {
-                    self.colapse.toggle()
+                    withAnimation(.easeInOut) {
+                        self.colapse.toggle()
+                    }
                 },
                 label: {
                     Image(systemName: "chevron.right")
                         .foregroundColor(.accentColor)
-                        //.imageScale(.large)
                         .rotationEffect(.degrees(colapse ? 0 : 90))
                         //.scaleEffect(colapse ? 1 : 1.5)
-                        //.padding()
-                        .animation(.easeInOut)
                 })
                 Text(label)
                     .font(Font.system(size: ListTheme[indentLevel].labelFontSize,
@@ -40,8 +40,7 @@ struct LabeledValueRowView: View {
             } else {
                 HStack {
                     // symbol document en tête de ligne
-                    Image(systemName: "doc")
-                        .imageScale(.large)
+                    icon.imageScale(.large)
                     //.font(Font.title.weight(.semibold))
                     Text(label)
                         .font(Font.system(size: ListTheme[indentLevel].labelFontSize,
@@ -53,11 +52,25 @@ struct LabeledValueRowView: View {
                 .font(Font.system(size: ListTheme[indentLevel].valueFontSize,
                                   design: Font.Design.default))
         }
-        .padding(EdgeInsets(top: 0,
-                            leading: ListTheme[indentLevel].indent,
-                            bottom: 0,
-                            trailing: 0))
+        .padding(EdgeInsets(top      : 0,
+                            leading  : ListTheme[indentLevel].indent,
+                            bottom   : 0,
+                            trailing : 0))
         .listRowBackground(ListTheme.rowsBaseColor.opacity(header ? ListTheme[indentLevel].opacity:0.0))
+    }
+
+    init(colapse     : Binding<Bool>,
+         label       : String,
+         value       : Double,
+         indentLevel : Int,
+         header      : Bool,
+         icon        : Image = Image(systemName: "doc")) {
+        self._colapse    = colapse
+        self.label       = label
+        self.value       = value
+        self.indentLevel = indentLevel
+        self.header      = header
+        self.icon        = icon
     }
 }
 

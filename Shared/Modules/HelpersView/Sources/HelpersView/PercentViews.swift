@@ -40,7 +40,7 @@ public struct PercentEditView: View {
             if comment != nil { Text(comment!).foregroundColor(.secondary) }
             TextField("montant",
                       text: textValueBinding)
-                //.textFieldStyle(RoundedBorderTextFieldStyle())
+                //.textFieldStyle(.roundedBorder)
                 .frame(maxWidth: 88)
                 .decimalPadKeyboardType()
                 .multilineTextAlignment(.trailing)
@@ -59,7 +59,7 @@ public struct PercentEditView: View {
                 }
             Text("%")
         }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .textFieldStyle(.roundedBorder)
     }
     
     /// Création

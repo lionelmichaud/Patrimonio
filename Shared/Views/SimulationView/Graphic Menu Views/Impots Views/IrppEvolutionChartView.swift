@@ -50,13 +50,12 @@ struct IrppEvolutionChartView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             // sauvergarder l'image dans l'album photo
-            ToolbarItem(placement: .automatic) {
+            ToolbarItemGroup(placement: .automatic) {
                 Button(action: { saveImages(to: dataStore.activeDossier!.folder!) },
                        label : { Image(systemName: "camera.circle") })
                     .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
-            }
-            // afficher info-bulle
-            ToolbarItem(placement: .automatic) {
+
+                // afficher info-bulle
                 Button(action: { self.showInfoPopover = true },
                        label : {
                         Image(systemName: "info.circle")
@@ -139,7 +138,7 @@ struct IrppEvolutionLineChartView: UIViewRepresentable {
         // ajouter les DataSet au ChartData
         let lineChartData = LineChartData(dataSets: lineDataSets)
         lineChartData.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        lineChartData.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
+        lineChartData.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: 12.0)!)
         lineChartData.setValueFormatter(DefaultValueFormatter(formatter: decimalX100IntegerFormatter))
 
         // BARRES
@@ -148,7 +147,7 @@ struct IrppEvolutionLineChartView: UIViewRepresentable {
         // ajouter les DataSet au ChartData
         let barChartData = BarChartData(dataSets: barDataSets)
         barChartData.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        barChartData.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
+        barChartData.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: 12.0)!)
         barChartData.setValueFormatter(DefaultValueFormatter(formatter: decimalFormatter))
 
         // combiner les ChartData
@@ -258,7 +257,7 @@ struct IrppTranchesLineChartView: UIViewRepresentable {
         // ajouter les DataSet au Chartdata
         let data = LineChartData(dataSets: dataSets)
         data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
+        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: 12.0)!)
         data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
 
         // ajouter le Chartdata au ChartView

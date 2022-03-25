@@ -90,7 +90,7 @@ public extension BubbleChartView {
                 legend.verticalAlignment   = .bottom
         }
         legend.horizontalAlignment = .left
-        legend.formSize = CGFloat(12.0)
+        legend.formSize = 12.0
         
         //: ### Description
         self.chartDescription?.text    = title

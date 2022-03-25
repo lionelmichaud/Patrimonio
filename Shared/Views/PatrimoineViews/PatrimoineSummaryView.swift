@@ -46,16 +46,15 @@ struct PatrimoineSummaryView: View {
                 .navigationTitle("Synthèse")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    ToolbarItem(placement: .automatic) {
+                    ToolbarItemGroup(placement: .automatic) {
                         Picker("Présentation", selection: $presentation) {
                             Image(systemName: "tablecells").tag("Table")
                             Image(systemName: "chart.pie").tag("ShareChart")
                             Image(systemName: "exclamationmark.triangle").tag("RiskChart")
                         }
                         .pickerStyle(SegmentedPickerStyle())
-                    }
-                    /// bouton Exporter fichiers du dossier actif
-                    ToolbarItem(placement: .automatic) {
+
+                        /// bouton Exporter fichiers du dossier actif
                         Button(action: { share(geometry: geometry) },
                                label: {
                             Image(systemName: "square.and.arrow.up.on.square")

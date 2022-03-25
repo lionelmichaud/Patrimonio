@@ -126,9 +126,9 @@ public struct ProgressBar: View {
     }
     
     private func progress(value: Double,
-                          width: CGFloat) -> CGFloat {
+                          width: Double) -> Double {
         let percentage = (value - minValue) / (maxValue - minValue)
-        return width *  CGFloat(percentage)
+        return width *  percentage
     }
     
     private func percentageValue(value: Double) -> Int {
@@ -149,7 +149,7 @@ public struct ProgressCircle: View {
         case line
         case dotted
         
-        func strokeStyle(lineWidth: CGFloat) -> StrokeStyle {
+        func strokeStyle(lineWidth: Double) -> StrokeStyle {
             switch self {
                 case .line:
                     return StrokeStyle(lineWidth: lineWidth,
@@ -170,7 +170,7 @@ public struct ProgressCircle: View {
     private let labelsEnabled     : Bool
     private let backgroundColor   : Color
     private let foregroundColor   : Color
-    private let lineWidth         : CGFloat
+    private let lineWidth         : Double
     
     public init(value             : Double,
                 minValue          : Double,
@@ -180,7 +180,7 @@ public struct ProgressCircle: View {
                 labelsEnabled     : Bool    = true,
                 backgroundColor   : Color   = .secondary,
                 foregroundColor   : Color   = .blue,
-                lineWidth         : CGFloat = 10) {
+                lineWidth         : Double = 10.0) {
         self.value             = value.clamp(low: minValue, high: maxValue)
         self.minValue          = minValue
         self.maxValue          = max(minValue+0.01, maxValue)
@@ -201,7 +201,7 @@ public struct ProgressCircle: View {
             }
             
             Circle()
-                .trim(from: 0, to: CGFloat((value - minValue) / (maxValue - minValue)))
+                .trim(from: 0, to: (value - minValue) / (maxValue - minValue))
                 .stroke(style: style.strokeStyle(lineWidth: lineWidth))
                 .foregroundColor(foregroundColor)
                 .rotationEffect(Angle(degrees: -90))

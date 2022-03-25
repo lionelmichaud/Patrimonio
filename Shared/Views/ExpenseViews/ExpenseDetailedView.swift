@@ -99,14 +99,12 @@ struct ExpenseDetailedView: View {
             /// plage de temps
             TimeSpanEditView(timeSpanVM: $expenseVM.timeSpanVM)
         }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .textFieldStyle(.roundedBorder)
         .navigationTitle(Text("Poste: " + category.displayString))
         .toolbar {
-            ToolbarItem(placement: .automatic) {
+            ToolbarItemGroup(placement: .automatic) {
                 DuplicateButton { duplicate() }
                     .disabled((index == nil) || changeOccured)
-            }
-            ToolbarItem(placement: .automatic) {
                 FolderButton(action : applyChanges)
                     .disabled(!changeOccured)
             }

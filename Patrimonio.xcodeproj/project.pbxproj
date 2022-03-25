@@ -1113,14 +1113,14 @@
 		7935BC1827DF660F0079F39C /* PatrimoineViews */ = {
 			isa = PBXGroup;
 			children = (
-				7935BC1927DF660F0079F39C /* SummaryViews */,
-				7935BC2027DF660F0079F39C /* OwnershipView.swift */,
-				7935BC2127DF660F0079F39C /* AssetDetailedViews */,
-				7935BC2C27DF660F0079F39C /* OwnerGroupBox.swift */,
-				7935BC2D27DF660F0079F39C /* PatrimoineSummaryView.swift */,
 				7935BC2E27DF660F0079F39C /* PatrimoineSidebarView.swift */,
+				7935BC2D27DF660F0079F39C /* PatrimoineSummaryView.swift */,
+				7935BC1927DF660F0079F39C /* SummaryViews */,
+				7935BC2127DF660F0079F39C /* AssetDetailedViews */,
 				7935BC2F27DF660F0079F39C /* LiabilityDetailedViews */,
 				7935BC3327DF660F0079F39C /* OwnersListView.swift */,
+				7935BC2C27DF660F0079F39C /* OwnerGroupBox.swift */,
+				7935BC2027DF660F0079F39C /* OwnershipView.swift */,
 			);
 			path = PatrimoineViews;
 			sourceTree = "<group>";
@@ -1179,19 +1179,19 @@
 		7935BC3927DF660F0079F39C /* FamilyViews */ = {
 			isa = PBXGroup;
 			children = (
-				7935BC3A27DF660F0079F39C /* AdultViewModel.swift */,
 				7935BC3B27DF660F0079F39C /* RetirementView */,
 				7935BC3E27DF660F0079F39C /* LifeLineViews */,
-				7935BC4027DF660F0079F39C /* PersonAddView.swift */,
-				7935BC4127DF660F0079F39C /* SuccessorListView.swift */,
-				7935BC4227DF660F0079F39C /* PersonViewModel.swift */,
-				7935BC4327DF660F0079F39C /* AdultDetailView.swift */,
 				7935BC4427DF660F0079F39C /* FamilySidebarView.swift */,
-				7935BC4527DF660F0079F39C /* PersonDetailView.swift */,
-				7935BC4627DF660F0079F39C /* UnemployementDetailView.swift */,
 				7935BC4727DF660F0079F39C /* FamilySummaryView.swift */,
-				7935BC4827DF660F0079F39C /* ChildDetailView.swift */,
 				7935BC4927DF660F0079F39C /* FamilySectionView.swift */,
+				7935BC4527DF660F0079F39C /* PersonDetailView.swift */,
+				7935BC4227DF660F0079F39C /* PersonViewModel.swift */,
+				7935BC3A27DF660F0079F39C /* AdultViewModel.swift */,
+				7935BC4127DF660F0079F39C /* SuccessorListView.swift */,
+				7935BC4327DF660F0079F39C /* AdultDetailView.swift */,
+				7935BC4027DF660F0079F39C /* PersonAddView.swift */,
+				7935BC4627DF660F0079F39C /* UnemployementDetailView.swift */,
+				7935BC4827DF660F0079F39C /* ChildDetailView.swift */,
 				7935BC4A27DF660F0079F39C /* PersonEditView.swift */,
 			);
 			path = FamilyViews;
@@ -2450,12 +2450,12 @@
 				DEVELOPMENT_TEAM = 8N9S268396;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.0;
+				MARKETING_VERSION = 4.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.michaud.lionel.Patrimonio;
 				PRODUCT_NAME = Patrimonio;
 				SDKROOT = iphoneos;
@@ -2474,12 +2474,12 @@
 				DEVELOPMENT_TEAM = 8N9S268396;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.0;
+				MARKETING_VERSION = 4.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.michaud.lionel.Patrimonio;
 				PRODUCT_NAME = Patrimonio;
 				SDKROOT = iphoneos;

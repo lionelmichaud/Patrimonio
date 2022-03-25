@@ -42,14 +42,14 @@ struct SettingsSidebarView: View {
                 .isDetailLink(true)
                 
             }
-            .listStyle(SidebarListStyle())
+            .listStyle(.sidebar)
             .navigationTitle("Préférences")
             
             // default View
             AppVersionView()
                 .padding()
         }
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .navigationViewStyle(.columns)
     }
 }
 

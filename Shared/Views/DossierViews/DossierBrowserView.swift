@@ -25,7 +25,7 @@ struct DossierBrowserView: View {
     @State private var alertItem : AlertItem?
 
     var body: some View {
-        // bouton "ajouter"
+        /// bouton "ajouter"
         Button(
             action: {
                 withAnimation {
@@ -35,42 +35,46 @@ struct DossierBrowserView: View {
             label: {
                 Label(title: { Text("Créer un nouveau dosssier") },
                       icon : { Image(systemName: "folder.fill.badge.plus") })
-                    .foregroundColor(.accentColor)
+                .foregroundColor(.accentColor)
             })
 
+        /// liste des dossiers
         Section(header: Text("Dossiers existants")) {
-            // liste des dossiers
             ForEach(dataStore.dossiers) { dossier in
                 NavigationLink(destination: DossierDetailView(dossier: dossier)) {
                     Label(title: { DossierRowView(dossier: dossier) },
                           icon : {
                             Image(systemName: "folder.fill.badge.person.crop")
-                                .if(dossier.isActive) { $0.accentColor(savable(dossier) ? .red : .green) }
+                                .if(dossier.isActive) {
+                                    $0.foregroundColor(savable(dossier) ? .red : .green)
+                                }
                     })
                 }
                 .isDetailLink(true)
             }
             .onDelete(perform: deleteDossier)
             .onMove(perform: moveDossier)
-            .listStyle(SidebarListStyle())
         }
         .alert(item: $alertItem, content: newAlert)
     }
     
     func deleteDossier(at offsets: IndexSet) {
-        self.alertItem = AlertItem(title         : Text("Attention").foregroundColor(.red),
-                                   message       : Text("La destruction du dossier est irréversible"),
-                                   primaryButton : .destructive(Text("Supprimer"),
-                                                            action: {
-                                                                /// insert alert 1 action here
-                                                                do {
-                                                                    try dataStore.deleteDossier(atOffsets: offsets)
-                                                                } catch {
-                                                                    self.alertItem = AlertItem(title         : Text("Echec de la suppression du dossier"),
-                                                                                                dismissButton : .default(Text("OK")))
-                                                                }
-                                                            }),
-                                   secondaryButton: .cancel())
+        alertItem =
+        AlertItem(title         : Text("Attention").foregroundColor(.red),
+                  message       : Text("La destruction du dossier est irréversible"),
+                  primaryButton : .destructive(Text("Supprimer"),
+                                               action: {
+            /// insert alert 1 action here
+            do {
+                try dataStore.deleteDossier(atOffsets: offsets)
+            } catch {
+                DispatchQueue.main.async {
+                    alertItem = AlertItem(title         : Text("Echec de la suppression du dossier"),
+                                          dismissButton : .default(Text("OK")))
+                }
+            }
+        }),
+                  secondaryButton: .cancel())
     }
     
     func moveDossier(from indexes: IndexSet, to destination: Int) {

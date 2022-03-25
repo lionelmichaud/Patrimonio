@@ -29,26 +29,28 @@
             "yearlyPayement"          : 4800,
             "yearlyCost"              : 480,
             "interestRateType" : {
-                "contractualRate_fixedRate" : 4.0
+                "contractualRate": { "fixedRate" : 4.0 }
             },
             "type" : {
-                "lifeInsurance_taxes" : false,
-                "lifeInsurance_clause" : {
-                    "isOptional"        : false,
-                    "isDismembered"     : false,
-                    "fullRecipients"    :
-                    [
-                        {
-                            "name"     : "Mme. Lou-Ann MICHAUD",
-                            "fraction" : 50
-                        },
-                        {
-                            "name"     : "M. Arthur MICHAUD",
-                            "fraction" : 50
-                        }
-                    ],
-                    "usufructRecipient" : "",
-                    "bareRecipients"    : [ ]
+                "lifeInsurance": {
+                    "periodicSocialTaxes" : false,
+                    "clause" : {
+                        "isOptional"        : false,
+                        "isDismembered"     : false,
+                        "fullRecipients"    :
+                        [
+                            {
+                                "name"     : "Mme. Lou-Ann MICHAUD",
+                                "fraction" : 50
+                            },
+                            {
+                                "name"     : "M. Arthur MICHAUD",
+                                "fraction" : 50
+                            }
+                        ],
+                        "usufructRecipient" : "",
+                        "bareRecipients"    : [ ]
+                    }
                 }
             },
             "lastYear"                : 2032
@@ -78,26 +80,28 @@
             "yearlyPayement"          : 0,
             "yearlyCost"              : 0,
             "interestRateType" : {
-                "contractualRate_fixedRate" : 4.0
+                "contractualRate": { "fixedRate" : 4.0 }
             },
             "type" : {
-                "lifeInsurance_taxes" : false,
-                "lifeInsurance_clause" : {
-                    "isOptional"        : false,
-                    "isDismembered"     : false,
-                    "fullRecipients"    :
-                    [
-                        {
-                            "name"     : "Mme. Lou-Ann MICHAUD",
-                            "fraction" : 50
-                        },
-                        {
-                            "name"     : "M. Arthur MICHAUD",
-                            "fraction" : 50
-                        }
-                    ],
-                    "usufructRecipient" : "",
-                    "bareRecipients"    : [ ]
+                "lifeInsurance": {
+                    "periodicSocialTaxes" : false,
+                    "clause" : {
+                        "isOptional"        : false,
+                        "isDismembered"     : false,
+                        "fullRecipients"    :
+                        [
+                            {
+                                "name"     : "Mme. Lou-Ann MICHAUD",
+                                "fraction" : 50
+                            },
+                            {
+                                "name"     : "M. Arthur MICHAUD",
+                                "fraction" : 50
+                            }
+                        ],
+                        "usufructRecipient" : "",
+                        "bareRecipients"    : [ ]
+                    }
                 }
             },
             "lastYear"                : 2024
@@ -127,26 +131,28 @@
             "yearlyPayement"          : 0,
             "yearlyCost"              : 0,
             "interestRateType" : {
-                "contractualRate_fixedRate" : 4.0
+                "contractualRate": { "fixedRate" : 4.0 }
             },
             "type" : {
-                "lifeInsurance_taxes" : false,
-                "lifeInsurance_clause" : {
-                    "isOptional"        : false,
-                    "isDismembered"     : false,
-                    "fullRecipients"    :
-                    [
-                        {
-                            "name"     : "Mme. Lou-Ann MICHAUD",
-                            "fraction" : 50
-                        },
-                        {
-                            "name"     : "M. Arthur MICHAUD",
-                            "fraction" : 50
-                        }
-                    ],
-                    "usufructRecipient" : "",
-                    "bareRecipients"    : [ ]
+                "lifeInsurance": {
+                    "periodicSocialTaxes" : false,
+                    "clause" : {
+                        "isOptional"        : false,
+                        "isDismembered"     : false,
+                        "fullRecipients"    :
+                        [
+                            {
+                                "name"     : "Mme. Lou-Ann MICHAUD",
+                                "fraction" : 50
+                            },
+                            {
+                                "name"     : "M. Arthur MICHAUD",
+                                "fraction" : 50
+                            }
+                        ],
+                        "usufructRecipient" : "",
+                        "bareRecipients"    : [ ]
+                    }
                 }
             },
             "lastYear"                : 2025
@@ -174,31 +180,33 @@
            "initialInterest"         : 0,
            "initialValue"            : 27321,
            "interestRateType" : {
-               "contractualRate_fixedRate" : 4.0
+               "contractualRate": { "fixedRate" : 4.0 }
            },
            "yearlyPayement"          : 0,
            "yearlyCost"              : 0,
            "type" : {
-               "lifeInsurance_taxes" : false,
-               "lifeInsurance_clause" : {
-                   "isOptional"        : false,
-                   "isDismembered"     : false,
-                   "fullRecipients"    :
-                   [
-                       {
-                           "name"     : "Mme. Lou-Ann MICHAUD",
-                           "fraction" : 50
-                       },
-                       {
-                           "name"     : "M. Arthur MICHAUD",
-                           "fraction" : 50
-                       }
-                   ],
-                   "usufructRecipient" : "",
-                   "bareRecipients"    : [ ]
+               "lifeInsurance": {
+                   "periodicSocialTaxes" : false,
+                   "clause" : {
+                       "isOptional"        : false,
+                       "isDismembered"     : false,
+                       "fullRecipients"    :
+                       [
+                           {
+                               "name"     : "Mme. Lou-Ann MICHAUD",
+                               "fraction" : 50
+                           },
+                           {
+                               "name"     : "M. Arthur MICHAUD",
+                               "fraction" : 50
+                           }
+                       ],
+                       "usufructRecipient" : "",
+                       "bareRecipients"    : [ ]
+                   }
                }
-            },
-            "lastYear"                : 2022
+           },
+           "lastYear"                : 2022
         },
        
         {
@@ -223,28 +231,30 @@
             "initialInterest"         : 0,
             "initialValue"            : 27636,
             "interestRateType" : {
-                "contractualRate_fixedRate" : 4.0
+                "contractualRate": { "fixedRate" : 4.0 }
             },
             "yearlyPayement"          : 0,
             "yearlyCost"              : 0,
             "type" : {
-                "lifeInsurance_taxes" : false,
-                "lifeInsurance_clause" : {
-                    "isOptional"        : false,
-                    "isDismembered"     : false,
-                    "fullRecipients"    :
-                    [
-                        {
-                            "name"     : "Mme. Lou-Ann MICHAUD",
-                            "fraction" : 50
-                        },
-                        {
-                            "name"     : "M. Arthur MICHAUD",
-                            "fraction" : 50
-                        }
-                    ],
-                    "usufructRecipient" : "",
-                    "bareRecipients"    : [ ]
+                "lifeInsurance": {
+                    "periodicSocialTaxes" : false,
+                    "clause" : {
+                        "isOptional"        : false,
+                        "isDismembered"     : false,
+                        "fullRecipients"    :
+                        [
+                            {
+                                "name"     : "Mme. Lou-Ann MICHAUD",
+                                "fraction" : 50
+                            },
+                            {
+                                "name"     : "M. Arthur MICHAUD",
+                                "fraction" : 50
+                            }
+                        ],
+                        "usufructRecipient" : "",
+                        "bareRecipients"    : [ ]
+                    }
                 }
             },
             "lastYear"                : 2023
@@ -272,28 +282,30 @@
             "initialInterest"         : 0,
             "initialValue"            : 27924,
             "interestRateType" : {
-                "contractualRate_fixedRate" : 4.0
+                "contractualRate": { "fixedRate" : 4.0 }
             },
             "yearlyPayement"          : 0,
             "yearlyCost"              : 0,
             "type" : {
-                "lifeInsurance_taxes" : false,
-                "lifeInsurance_clause" : {
-                    "isOptional"        : false,
-                    "isDismembered"     : false,
-                    "fullRecipients"    :
-                    [
-                        {
-                            "name"     : "Mme. Lou-Ann MICHAUD",
-                            "fraction" : 50
-                        },
-                        {
-                            "name"     : "M. Arthur MICHAUD",
-                            "fraction" : 50
-                        }
-                    ],
-                    "usufructRecipient" : "",
-                    "bareRecipients"    : [ ]
+                "lifeInsurance": {
+                    "periodicSocialTaxes" : false,
+                    "clause" : {
+                        "isOptional"        : false,
+                        "isDismembered"     : false,
+                        "fullRecipients"    :
+                        [
+                            {
+                                "name"     : "Mme. Lou-Ann MICHAUD",
+                                "fraction" : 50
+                            },
+                            {
+                                "name"     : "M. Arthur MICHAUD",
+                                "fraction" : 50
+                            }
+                        ],
+                        "usufructRecipient" : "",
+                        "bareRecipients"    : [ ]
+                    }
                 }
             },
             "lastYear"                : 2024
@@ -321,28 +333,30 @@
             "initialInterest"         : 0,
             "initialValue"            : 8848,
             "interestRateType" : {
-                "contractualRate_fixedRate" : 4.0
+                "contractualRate": { "fixedRate" : 4.0 }
             },
             "yearlyPayement"          : 0,
             "yearlyCost"              : 0,
             "type" : {
-                "lifeInsurance_taxes" : false,
-                "lifeInsurance_clause" : {
-                    "isOptional"        : false,
-                    "isDismembered"     : false,
-                    "fullRecipients"    :
-                    [
-                        {
-                            "name"     : "Mme. Lou-Ann MICHAUD",
-                            "fraction" : 50
-                        },
-                        {
-                            "name"     : "M. Arthur MICHAUD",
-                            "fraction" : 50
-                        }
-                    ],
-                    "usufructRecipient" : "",
-                    "bareRecipients"    : [ ]
+                "lifeInsurance": {
+                    "periodicSocialTaxes" : false,
+                    "clause" : {
+                        "isOptional"        : false,
+                        "isDismembered"     : false,
+                        "fullRecipients"    :
+                        [
+                            {
+                                "name"     : "Mme. Lou-Ann MICHAUD",
+                                "fraction" : 50
+                            },
+                            {
+                                "name"     : "M. Arthur MICHAUD",
+                                "fraction" : 50
+                            }
+                        ],
+                        "usufructRecipient" : "",
+                        "bareRecipients"    : [ ]
+                    }
                 }
             },
             "lastYear"                : 2027
@@ -370,28 +384,30 @@
             "initialInterest"         : 0,
             "initialValue"            : 8699,
             "interestRateType" : {
-                "contractualRate_fixedRate" : 4.0
+                "contractualRate": { "fixedRate" : 4.0 }
             },
             "yearlyPayement"          : 0,
             "yearlyCost"              : 0,
             "type" : {
-                "lifeInsurance_taxes" : false,
-                "lifeInsurance_clause" : {
-                    "isOptional"        : false,
-                    "isDismembered"     : false,
-                    "fullRecipients"    :
-                    [
-                        {
-                            "name"     : "Mme. Lou-Ann MICHAUD",
-                            "fraction" : 50
-                        },
-                        {
-                            "name"     : "M. Arthur MICHAUD",
-                            "fraction" : 50
-                        }
-                    ],
-                    "usufructRecipient" : "",
-                    "bareRecipients"    : [ ]
+                "lifeInsurance": {
+                    "periodicSocialTaxes" : false,
+                    "clause" : {
+                        "isOptional"        : false,
+                        "isDismembered"     : false,
+                        "fullRecipients"    :
+                        [
+                            {
+                                "name"     : "Mme. Lou-Ann MICHAUD",
+                                "fraction" : 50
+                            },
+                            {
+                                "name"     : "M. Arthur MICHAUD",
+                                "fraction" : 50
+                            }
+                        ],
+                        "usufructRecipient" : "",
+                        "bareRecipients"    : [ ]
+                    }
                 }
             },
             "lastYear"                : 2028
@@ -419,28 +435,30 @@
             "initialInterest"         : 0,
             "initialValue"            : 8536,
             "interestRateType" : {
-                "contractualRate_fixedRate" : 4.0
+                "contractualRate": { "fixedRate" : 4.0 }
             },
             "yearlyPayement"          : 0,
             "yearlyCost"              : 0,
             "type" : {
-                "lifeInsurance_taxes" : false,
-                "lifeInsurance_clause" : {
-                    "isOptional"        : false,
-                    "isDismembered"     : false,
-                    "fullRecipients"    :
-                    [
-                        {
-                            "name"     : "Mme. Lou-Ann MICHAUD",
-                            "fraction" : 50
-                        },
-                        {
-                            "name"     : "M. Arthur MICHAUD",
-                            "fraction" : 50
-                        }
-                    ],
-                    "usufructRecipient" : "",
-                    "bareRecipients"    : [ ]
+                "lifeInsurance": {
+                    "periodicSocialTaxes" : false,
+                    "clause" : {
+                        "isOptional"        : false,
+                        "isDismembered"     : false,
+                        "fullRecipients"    :
+                        [
+                            {
+                                "name"     : "Mme. Lou-Ann MICHAUD",
+                                "fraction" : 50
+                            },
+                            {
+                                "name"     : "M. Arthur MICHAUD",
+                                "fraction" : 50
+                            }
+                        ],
+                        "usufructRecipient" : "",
+                        "bareRecipients"    : [ ]
+                    }
                 }
             },
             "lastYear"                : 2029

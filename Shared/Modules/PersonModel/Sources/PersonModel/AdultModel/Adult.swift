@@ -46,16 +46,16 @@ public final class Adult: Person {
     // MARK: - nested types
     
     private enum CodingKeys : String, CodingKey {
-        case nb_Of_Child_Birth,
-             fiscal_option,
-             date_Of_Retirement,
-             cause_Retirement,
-             layoff_Compensation_Bonified,
-             age_Of_Pension_Liquid,
-             regime_General_Situation,
-             age_Of_Agirc_Pension_Liquid,
-             regime_Agirc_Situation,
-             work_Income
+        case nbOfChildBirth,
+             fiscalOption,
+             dateOfRetirement,
+             causeOfRetirement,
+             layoffCompensationBonified,
+             ageOfPensionLiquidComp,
+             lastKnownPensionSituation,
+             ageOfAgircPensionLiquidComp,
+             lastKnownAgircPensionSituation,
+             workIncome
     }
     
     // MARK: - Static Properties
@@ -149,34 +149,34 @@ public final class Adult: Person {
             try decoder.container(keyedBy: CodingKeys.self)
         nbOfChildBirth =
             try container.decode(Int.self,
-                                 forKey : .nb_Of_Child_Birth)
+                                 forKey : .nbOfChildBirth)
         fiscalOption =
             try container.decode(InheritanceFiscalOption.self,
-                                 forKey : .fiscal_option)
+                                 forKey : .fiscalOption)
         dateOfRetirement =
             try container.decode(Date.self,
-                                 forKey: .date_Of_Retirement)
+                                 forKey: .dateOfRetirement)
         causeOfRetirement =
             try container.decode(Unemployment.Cause.self,
-                                 forKey: .cause_Retirement)
+                                 forKey: .causeOfRetirement)
         layoffCompensationBonified =
             try container.decode(Double?.self,
-                                 forKey: .layoff_Compensation_Bonified)
+                                 forKey: .layoffCompensationBonified)
         ageOfPensionLiquidComp =
             try container.decode(DateComponents.self,
-                                 forKey: .age_Of_Pension_Liquid)
+                                 forKey: .ageOfPensionLiquidComp)
         lastKnownPensionSituation =
             try container.decode(RegimeGeneralSituation.self,
-                                 forKey: .regime_General_Situation)
+                                 forKey: .lastKnownPensionSituation)
         ageOfAgircPensionLiquidComp =
-            try container.decode(DateComponents.self, forKey: .age_Of_Agirc_Pension_Liquid)
+            try container.decode(DateComponents.self, forKey: .ageOfAgircPensionLiquidComp)
         lastKnownAgircPensionSituation =
             try container.decode(RegimeAgircSituation.self,
-                                 forKey: .regime_Agirc_Situation)
+                                 forKey: .lastKnownAgircPensionSituation)
         // initialiser avec la valeur moyenne déterministe
         workIncome =
             try container.decode(WorkIncomeType.self,
-                                 forKey: .work_Income)
+                                 forKey: .workIncome)
         
         try super.init(from: decoder)
         
@@ -194,17 +194,17 @@ public final class Adult: Person {
         try super.encode(to: encoder)
         
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(nbOfChildBirth, forKey: .nb_Of_Child_Birth)
-        try container.encode(fiscalOption, forKey: .fiscal_option)
-        try container.encode(dateOfRetirement, forKey: .date_Of_Retirement)
-        try container.encode(causeOfRetirement, forKey: .cause_Retirement)
-        try container.encode(layoffCompensationBonified, forKey: .layoff_Compensation_Bonified)
-        try container.encode(ageOfPensionLiquidComp, forKey: .age_Of_Pension_Liquid)
-        try container.encode(lastKnownPensionSituation, forKey: .regime_General_Situation)
-        try container.encode(ageOfAgircPensionLiquidComp, forKey: .age_Of_Agirc_Pension_Liquid)
-        try container.encode(lastKnownAgircPensionSituation, forKey: .regime_Agirc_Situation)
+        try container.encode(nbOfChildBirth, forKey: .nbOfChildBirth)
+        try container.encode(fiscalOption, forKey: .fiscalOption)
+        try container.encode(dateOfRetirement, forKey: .dateOfRetirement)
+        try container.encode(causeOfRetirement, forKey: .causeOfRetirement)
+        try container.encode(layoffCompensationBonified, forKey: .layoffCompensationBonified)
+        try container.encode(ageOfPensionLiquidComp, forKey: .ageOfPensionLiquidComp)
+        try container.encode(lastKnownPensionSituation, forKey: .lastKnownPensionSituation)
+        try container.encode(ageOfAgircPensionLiquidComp, forKey: .ageOfAgircPensionLiquidComp)
+        try container.encode(lastKnownAgircPensionSituation, forKey: .lastKnownAgircPensionSituation)
         //        try container.encode(nbOfYearOfDependency, forKey: .nb_Of_Year_Of_Dependency)
-        try container.encode(workIncome, forKey: .work_Income)
+        try container.encode(workIncome, forKey: .workIncome)
     }
     
     /// Initialise les propriétés qui ne peuvent pas l'être à la création

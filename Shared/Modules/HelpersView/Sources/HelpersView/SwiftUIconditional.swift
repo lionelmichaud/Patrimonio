@@ -22,15 +22,19 @@ public extension NavigationLink {
 
 public extension View {
     /// Sets the style for lists within this view.
+    @ViewBuilder
     func defaultSideBarListStyle() -> some View {
         #if os(iOS) || os(tvOS)
         if #available(iOS 14.0, *) {
-            return AnyView(self.listStyle(InsetGroupedListStyle()))
+            self
+                .listStyle(.insetGrouped)
         } else {
-            return AnyView(self.listStyle(GroupedListStyle()))
+            self
+                .listStyle(.grouped)
         }
         #else
-        return AnyView(self.listStyle(SidebarListStyle()))
+        self
+            .listStyle(.sidebar)
         #endif
     }
     
@@ -49,38 +53,42 @@ public extension View {
         #if os(iOS) || os(tvOS)
         if #available(iOS 14.0, *) {
             self
-                .listStyle(InsetGroupedListStyle())
+                .listStyle(.insetGrouped)
         } else {
             self
-                .listStyle(GroupedListStyle())
+                .listStyle(.grouped)
                 .environment(\.horizontalSizeClass, .regular)
         }
+        #else
+        self
+            .listStyle(.automatic)
+        #endif
+    }
+    
+    @ViewBuilder
+    func numbersAndPunctuationKeyboardType() -> some View {
+        #if os(iOS) || os(tvOS)
+        self.keyboardType(.numbersAndPunctuation)
+        #else
+        return self
+        #endif
+    }
+    
+    @ViewBuilder
+    func decimalPadKeyboardType() -> some View {
+        #if os(iOS) || os(tvOS)
+        self.keyboardType(.decimalPad)
         #else
         self
         #endif
     }
     
-    func numbersAndPunctuationKeyboardType() -> some View {
-        #if os(iOS) || os(tvOS)
-        return AnyView(self.keyboardType(.numbersAndPunctuation))
-        #else
-        return self
-        #endif
-    }
-    
-    func decimalPadKeyboardType() -> some View {
-        #if os(iOS) || os(tvOS)
-        return AnyView(self.keyboardType(.decimalPad))
-        #else
-        return self
-        #endif
-    }
-    
+    @ViewBuilder
     func navigationBarTitleDisplayModeInline() -> some View {
         #if os(iOS) || os(tvOS)
-        return AnyView(self.navigationBarTitleDisplayMode(.inline))
+        self.navigationBarTitleDisplayMode(.inline)
         #else
-        return self
+        self
         #endif
     }
     

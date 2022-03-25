@@ -38,10 +38,8 @@ struct OwnersListView: View {
         .navigationTitle(title+"s")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .automatic) {
+            ToolbarItemGroup(placement: .automatic) {
                 EditButton()
-            }
-            ToolbarItem(placement: .automatic) {
                 Menu(content: menuAdd, label: menuAddLabel)
             }
         }

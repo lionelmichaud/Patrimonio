@@ -99,7 +99,7 @@ struct PersonEditView: View {
                                   ageIndependance               : $ageIndependance)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
     

@@ -7,12 +7,14 @@
             "name" : "Alimentation",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"     : "Décès",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"     : "Décès",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -24,12 +26,14 @@
             "name" : "Animaux domestiques",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -41,12 +45,14 @@
             "name" : "Bien-être & soins (coiffeur, parfum...)",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -58,12 +64,14 @@
             "name" : "Bricolage & Jardinage",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "M. Lionel MICHAUD"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    }
                 }
             }
         },
@@ -75,12 +83,14 @@
             "name" : "Electronique & informatique",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -92,12 +102,14 @@
             "name" : "Equipements sportifs",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -109,12 +121,14 @@
             "name" : "Pressing, repassage",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -126,12 +140,14 @@
             "name" : "Livres, musique, jouets, bijous",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -143,12 +159,14 @@
             "name" : "Mobiliers, électroménager, décoration",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -160,12 +178,14 @@
             "name" : "Tabac",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "M. Lionel MICHAUD"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    }
                 }
             }
         },
@@ -177,12 +197,14 @@
             "name" : "Vêtements & accessoires",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -194,12 +216,14 @@
             "name" : "Vie - Autres",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Décès",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Décès",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         }

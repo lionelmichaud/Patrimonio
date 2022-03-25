@@ -56,7 +56,7 @@ struct ExpenseSidebarView: View {
             /// vue par défaut
             ExpenseSummaryView()
         }
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .navigationViewStyle(.columns)
     }
 }
 
@@ -86,7 +86,10 @@ struct ExpenseHeaderView: View {
     var body: some View {
         Section {
             NavigationLink(destination: ExpenseSummaryView()) {
-                Text("Synthèse").fontWeight(.bold)
+                Label(title: { Text("Synthèse") },
+                      icon : { Image(systemName: "cart.fill").imageScale(.large) })
+                .font(.title3)
+                //Text("Synthèse").fontWeight(.bold)
             }
             .isiOSDetailLink(true)
         }
@@ -130,7 +133,8 @@ struct ExpenseListInCategory: View {
                                             label       : expense.name,
                                             value       : expense.value(atEndOf: CalendarCst.thisYear),
                                             indentLevel : 3,
-                                            header      : false)
+                                            header      : false,
+                                            icon        : Image(systemName: "cart.fill"))
                     }
                     .isiOSDetailLink(true)
                 }

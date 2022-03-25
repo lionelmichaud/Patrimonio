@@ -100,7 +100,7 @@ struct RealEstateExonerationSliceEditView: View {
                                     percent : $modifiedSlice.discountRate)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 
@@ -160,7 +160,7 @@ struct RealEstateExonerationSliceAddView: View {
                                     percent : $newSlice.discountRate)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 

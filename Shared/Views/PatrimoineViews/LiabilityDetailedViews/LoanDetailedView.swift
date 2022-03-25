@@ -73,15 +73,13 @@ struct LoanDetailedView: View {
                     .foregroundColor(.secondary)
             }
         }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .textFieldStyle(.roundedBorder)
         //.onAppear(perform: onAppear)
         .navigationTitle("Emprunt")
         .toolbar {
-            ToolbarItem(placement: .automatic) {
+            ToolbarItemGroup(placement: .automatic) {
                 DuplicateButton { duplicate() }
                     .disabled((index == nil) || changeOccured)
-            }
-            ToolbarItem(placement: .automatic) {
                 FolderButton(action : applyChanges)
                     .disabled(!changeOccured)
             }

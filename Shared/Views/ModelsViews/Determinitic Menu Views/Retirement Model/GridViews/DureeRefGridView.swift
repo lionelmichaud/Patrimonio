@@ -99,7 +99,7 @@ struct DureeRefSliceEditView: View {
                                     integer : $modifiedSlice.ageTauxPlein)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 
@@ -162,7 +162,7 @@ struct DureeRefSliceAddView: View {
                                     integer : $newSlice.ageTauxPlein)
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 

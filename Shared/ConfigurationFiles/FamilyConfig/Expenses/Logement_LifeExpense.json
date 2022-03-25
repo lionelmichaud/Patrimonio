@@ -7,12 +7,14 @@
             "name" : "Nettoyage et services à domicile (avt dép)",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -23,19 +25,21 @@
             "name" : "Nettoyage et services à domicile (apr dép)",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "spanning_from" :
-                {
-                    "fixedYear": 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
-                },
-                "spanning_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Décès",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "spanning": {
+                    "from" :
+                    {
+                        "fixedYear": 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    },
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Décès",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -47,12 +51,14 @@
             "name" : "Assurances habitation (maison)",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -63,19 +69,21 @@
             "name" : "Assurances habitation (appart)",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "spanning_from" :
-                {
-                    "fixedYear": 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
-                },
-                "spanning_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Décès",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "spanning": {
+                    "from" :
+                    {
+                        "fixedYear": 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    },
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Décès",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -87,12 +95,14 @@
             "name" : "Eau",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Décès",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Décès",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -103,12 +113,14 @@
             "name" : "Energies",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Décès",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Décès",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -119,12 +131,14 @@
             "name" : "Travaux, réparation, entretien, aménagement...",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    }
                 }
             }
         },
@@ -135,12 +149,14 @@
             "name" : "Logement - Autres",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "M. Lionel MICHAUD"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    }
                 }
             }
         }

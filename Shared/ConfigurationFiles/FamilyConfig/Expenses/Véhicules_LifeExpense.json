@@ -7,20 +7,22 @@
             "name" : "Achat Berline",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "periodic_period" : 10,
-                "periodic_from" :
-                {
-                    "fixedYear": 2024,
-                    "event"    : null,
-                    "group"    : null,
-                    "name"     : ""
-                },
-                "periodic_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "M. Lionel MICHAUD"
+                "periodic": {
+                    "from" :
+                    {
+                        "fixedYear": 2024,
+                        "event"    : null,
+                        "group"    : null,
+                        "name"     : ""
+                    },
+                    "period" : 10,
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    }
                 }
             }
         },
@@ -32,20 +34,22 @@
             "name" : "Achat Moto",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "periodic_period" : 10,
-                "periodic_from" :
-                {
-                    "fixedYear": 2025,
-                    "event"    : null,
-                    "group"    : null,
-                    "name"     : ""
-                },
-                "periodic_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "M. Lionel MICHAUD"
+                "periodic": {
+                    "from" :
+                    {
+                        "fixedYear": 2025,
+                        "event"    : null,
+                        "group"    : null,
+                        "name"     : ""
+                    },
+                    "period" : 10,
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    }
                 }
             }
         },
@@ -57,20 +61,22 @@
             "name" : "Achat Citadine",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "periodic_period" : 10,
-                "periodic_from" :
-                {
-                    "fixedYear": 2027,
-                    "event"    : null,
-                    "group"    : null,
-                    "name"     : ""
-                },
-                "periodic_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "Mme. Vanessa MICHAUD"
+                "periodic": {
+                    "from" :
+                    {
+                        "fixedYear": 2027,
+                        "event"    : null,
+                        "group"    : null,
+                        "name"     : ""
+                    },
+                    "period" : 10,
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "Mme. Vanessa MICHAUD"
+                    }
                 }
             }
         },
@@ -82,7 +88,7 @@
             "name" : "Achat véh Lou-Ann",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "exceptional_in" : 2023
+                "exceptional": { "inYear" : 2023 }
             }
         },
         
@@ -93,7 +99,7 @@
             "name" : "Achat véh Arthur",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "exceptional_in" : 2024
+                "exceptional": { "inYear" : 2024 }
             }
         },
         
@@ -104,12 +110,14 @@
             "name" : "Assurances véh Lionel",
             "note" : "Actualisé le 16/02/2021\nBMW 370€, Moto 534€",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "M. Lionel MICHAUD"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    }
                 }
             }
         },
@@ -121,12 +129,14 @@
             "name" : "Assurances véh Vanessa",
             "note" : "Actualisé le 16/02/2021\nVW 573€, Mutuelle 24€",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "Mme. Vanessa MICHAUD"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "Mme. Vanessa MICHAUD"
+                    }
                 }
             }
         },
@@ -138,19 +148,21 @@
             "name" : "Assurances véh Enfants",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "spanning_from" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Début des études supérieurs",
-                    "group"    : "Tous les Enfants",
-                    "order"    : "Date au plus tard"
-                },
-                "spanning_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Indépendance financière",
-                    "group"    : "Tous les Enfants",
-                    "order"    : "Date au plus tard"
+                "spanning": {
+                    "from" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Début des études supérieurs",
+                        "group"    : "Tous les Enfants",
+                        "order"    : "Date au plus tard"
+                    },
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Indépendance financière",
+                        "group"    : "Tous les Enfants",
+                        "order"    : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -162,12 +174,14 @@
             "name" : "Carburants",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "Mme. Vanessa MICHAUD"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "Mme. Vanessa MICHAUD"
+                    }
                 }
             }
         },
@@ -179,12 +193,14 @@
             "name" : "Entretien, réparation",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "Mme. Vanessa MICHAUD"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "Mme. Vanessa MICHAUD"
+                    }
                 }
             }
         },
@@ -196,12 +212,14 @@
             "name" : "Véhicule Autres",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "Mme. Vanessa MICHAUD"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "Mme. Vanessa MICHAUD"
+                    }
                 }
             }
         }

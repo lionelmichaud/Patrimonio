@@ -89,7 +89,7 @@ struct PersonAddView: View {
                     }
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
         }
     }
 

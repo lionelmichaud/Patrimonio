@@ -7,12 +7,14 @@
             "name" : "Cadeaux - Dons",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "Mme. Vanessa MICHAUD"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "Mme. Vanessa MICHAUD"
+                    }
                 }
             }
         }

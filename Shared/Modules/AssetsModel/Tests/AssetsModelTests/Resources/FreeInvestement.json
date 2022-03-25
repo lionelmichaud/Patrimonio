@@ -21,21 +21,23 @@
         "investment" : 90
     },
     "type" : {
-        "lifeInsurance_taxes"  : false,
-        "lifeInsurance_clause" : {
-            "isOptional"        : false,
-            "isDismembered"     : true,
-            "fullRecipients"    : [ ],
-            "usufructRecipient" : "Mme. Vanessa MICHAUD",
-            "bareRecipients"    :
-            [
-                "Mme Lou-Ann MICHAUD",
-                "M. Arthur MICHAUD"
-            ]
+        "lifeInsurance": {
+            "periodicSocialTaxes" : false,
+            "clause" : {
+                "isOptional"        : false,
+                "isDismembered"     : true,
+                "fullRecipients"    : [ ],
+                "usufructRecipient" : "Mme. Vanessa MICHAUD",
+                "bareRecipients"    :
+                [
+                    "Mme Lou-Ann MICHAUD",
+                    "M. Arthur MICHAUD"
+                ]
+            }
         }
     },
     "interestRateType" : {
-        "marketRate_stockRatio" : 75.0
+        "marketRate": { "stockRatio" : 75.0 }
     },
     "currentState" : {
         "year"       : 0,

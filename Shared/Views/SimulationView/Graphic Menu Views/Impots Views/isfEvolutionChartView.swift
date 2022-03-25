@@ -47,13 +47,12 @@ struct IsfEvolutionChartView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // sauvergarder l'image dans l'album photo
-                ToolbarItem(placement: .automatic) {
+                ToolbarItemGroup(placement: .automatic) {
                     Button(action: { IsfLineChartView.saveImage(to: dataStore.activeDossier!.folder!) },
                            label : { Image(systemName: "camera.circle") })
                         .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
-                }
-                // afficher info-bulle
-                ToolbarItem(placement: .automatic) {
+
+                    // afficher info-bulle
                     Button(action: { self.showInfoPopover = true },
                            label : {
                             Image(systemName: "info.circle")
@@ -146,7 +145,7 @@ struct IsfLineChartView: UIViewRepresentable {
         // ajouter les DataSet au Chartdata
         let data = LineChartData(dataSets: dataSets)
         data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: CGFloat(12.0))!)
+        data.setValueFont(NSUIFont(name: "HelveticaNeue-Light", size: 12.0)!)
         data.setValueFormatter(DefaultValueFormatter(formatter: valueKiloFormatter))
 
         // seuil d'imposition à l'ISF

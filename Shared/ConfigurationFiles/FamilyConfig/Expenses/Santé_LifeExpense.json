@@ -7,12 +7,14 @@
             "name" : "Complémentaires santé - Salarié",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Fin d'activité professionnelle",
-                    "group"    : null,
-                    "name"     : "M. Lionel MICHAUD"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Fin d'activité professionnelle",
+                        "group"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    }
                 }
             }
         },
@@ -24,19 +26,21 @@
             "name" : "Complémentaires santé - TNS",
             "note" : "Actualisé le 16/03/2021",
             "timeSpan" : {
-                "spanning_from" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Fin d'activité professionnelle",
-                    "group"    : null,
-                    "name"     : "M. Lionel MICHAUD"
-                },
-                "spanning_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Liquidation de pension",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "spanning": {
+                    "from" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Fin d'activité professionnelle",
+                        "group"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    },
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Liquidation de pension",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -48,19 +52,21 @@
             "name" : "Complémentaires santé - Retraités",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "spanning_from" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Liquidation de pension",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
-                },
-                "spanning_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Décès",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "spanning": {
+                    "from" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Liquidation de pension",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    },
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Décès",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -72,12 +78,14 @@
             "name" : "Médecins, Pharmacie, Labo, Optique, audition...",
             "note" : "Actualisé le 16/02/2021\nNet de remboursement mutuelle Airbus",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Décès",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Décès",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -89,19 +97,21 @@
             "name" : "EHPAD Lionel",
             "note" : "Actualisé le 16/12/2021",
             "timeSpan" : {
-                "spanning_from" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "M. Lionel MICHAUD"
-                },
-                "spanning_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Décès",
-                    "group"    : null,
-                    "name"     : "M. Lionel MICHAUD"
+                "spanning": {
+                    "from" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    },
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Décès",
+                        "group"    : null,
+                        "name"     : "M. Lionel MICHAUD"
+                    }
                 }
             }
         },
@@ -113,19 +123,21 @@
             "name" : "EHPAD Vanessa",
             "note" : "Actualisé le 16/12/2021",
             "timeSpan" : {
-                "spanning_from" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Dépendance",
-                    "group"    : null,
-                    "name"     : "Mme. Vanessa MICHAUD"
-                },
-                "spanning_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Décès",
-                    "group"    : null,
-                    "name"     : "Mme. Vanessa MICHAUD"
+                "spanning": {
+                    "from" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Dépendance",
+                        "group"    : null,
+                        "name"     : "Mme. Vanessa MICHAUD"
+                    },
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Décès",
+                        "group"    : null,
+                        "name"     : "Mme. Vanessa MICHAUD"
+                    }
                 }
             }
         },
@@ -137,12 +149,14 @@
             "name" : "Santé - Autres",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"     : "Décès",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"     : "Décès",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         }

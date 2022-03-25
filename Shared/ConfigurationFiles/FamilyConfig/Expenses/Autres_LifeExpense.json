@@ -7,11 +7,13 @@
             "name" : "Depuis",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "starting_from" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Fin d'activité professionnelle",
-                    "name"     : "M. Lionel MICHAUD"
+                "starting" : {
+                    "from":
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Fin d'activité professionnelle",
+                        "name"     : "M. Lionel MICHAUD"
+                    }
                 }
             }
         },
@@ -23,11 +25,13 @@
             "name" : "Jusqu'à",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "ending_to" :
-                {
-                    "fixedYear": 0,
-                    "event"    : "Fin d'activité professionnelle",
-                    "name"     : "Mme. Vanessa MICHAUD"
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Fin d'activité professionnelle",
+                        "name"     : "Mme. Vanessa MICHAUD"
+                    }
                 }
             }
         },
@@ -39,18 +43,20 @@
             "name" : "De...à...",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "spanning_from" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Fin d'activité professionnelle",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tôt",
-                },
-                "spanning_to" :
-                {
-                    "fixedYear" : 0,
-                    "event"     : "Décès",
-                    "name"      : "M. Lionel MICHAUD"
+                "spanning": {
+                    "from" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Fin d'activité professionnelle",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    },
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Décès",
+                        "name"      : "M. Lionel MICHAUD"
+                    }
                 }
             }
         },
@@ -62,7 +68,7 @@
             "name" : "Exceptionnelle",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "exceptional_in" : 2026
+                "exceptional": { "inYear" : 2026 }
             }
         },
         
@@ -73,14 +79,16 @@
             "name" : "Périodique",
             "note" : "Actualisé le ",
             "timeSpan" : {
-                "periodic_period" : 7,
-                "periodic_from" :
-                {
-                    "fixedYear": 2020,
-                },
-                "periodic_to" :
-                {
-                    "fixedYear": 2022,
+                "periodic": {
+                    "from" :
+                    {
+                        "fixedYear" : 2020
+                    },
+                    "period" : 7,
+                    "to" :
+                    {
+                        "fixedYear" : 2022
+                    }
                 }
             }
         },
@@ -92,11 +100,13 @@
             "name" : "Retrait cash CB",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard",
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         },
@@ -108,11 +118,13 @@
             "name" : "Non catégorisé",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
-                "ending_to" : {
-                    "fixedYear" : 0,
-                    "event"     : "Dépendance",
-                    "group"     : "Tous les Adultes",
-                    "order"     : "Date au plus tard",
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
                 }
             }
         }

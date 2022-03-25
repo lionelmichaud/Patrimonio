@@ -52,7 +52,7 @@ struct PatrimoineSidebarView: View {
             /// vue par défaut
             PatrimoineSummaryView()
         }
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .navigationViewStyle(.columns)
     }
     
     private func reinitialize() {
@@ -93,7 +93,9 @@ struct PatrimoineHeaderView: View {
     var body: some View {
         Section {
             NavigationLink(destination: PatrimoineSummaryView()) {
-                Text("Synthèse").fontWeight(.bold)
+                Label(title: { Text("Synthèse") },
+                      icon : { Image(systemName: "eurosign.circle.fill").imageScale(.large) })
+                .font(.title3)
             }.isDetailLink(true)
         }
     }
