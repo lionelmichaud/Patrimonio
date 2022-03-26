@@ -31,10 +31,6 @@ struct ModelUnemploymentDiffereView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.unemploymentModel.allocationChomage.model.delayModel.delaiAttente) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
 
             Section(header: Text("Différé Spécifique").font(.headline)) {
@@ -48,10 +44,6 @@ struct ModelUnemploymentDiffereView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.unemploymentModel.allocationChomage.model.delayModel.ratioDiffereSpecifique) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
                 Stepper(value : $model.unemploymentModel.allocationChomage.model.delayModel.maxDiffereSpecifique,
                         in    : 0 ... 300) {
@@ -61,10 +53,6 @@ struct ModelUnemploymentDiffereView: View {
                         Text("\(model.unemploymentModel.allocationChomage.model.delayModel.maxDiffereSpecifique) jours")
                             .foregroundColor(.secondary)
                     }
-                }
-                .onChange(of: model.unemploymentModel.allocationChomage.model.delayModel.maxDiffereSpecifique) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
                 }
 
                 Stepper(value : $model.unemploymentModel.allocationChomage.model.delayModel.maxDiffereSpecifiqueLicenciementEco,
@@ -76,11 +64,11 @@ struct ModelUnemploymentDiffereView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.unemploymentModel.allocationChomage.model.delayModel.maxDiffereSpecifiqueLicenciementEco) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
+        }
+        .onChange(of: model.unemploymentModel.allocationChomage.model.delayModel) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Calcul du Différé d'indemnisation")
         .alert(item: $alertItem, content: newAlert)

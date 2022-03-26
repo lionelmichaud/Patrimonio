@@ -25,10 +25,6 @@ struct ModelRetirementGeneralView: View {
         Form {
             Section {
                 VersionEditableViewInForm(version: $model.retirementModel.regimeGeneral.model.version)
-                    .onChange(of: model.retirementModel.regimeGeneral.model.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
             
             Stepper(value : $model.retirementModel.regimeGeneral.ageMinimumLegal,
@@ -38,10 +34,6 @@ struct ModelRetirementGeneralView: View {
                     Spacer()
                     Text("\(model.retirementModel.regimeGeneral.ageMinimumLegal) ans").foregroundColor(.secondary)
                 }
-            }
-            .onChange(of: model.retirementModel.regimeGeneral.ageMinimumLegal) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
             }
 
             NavigationLink(destination: DureeRefGridView(label: "Durée de référence",
@@ -66,10 +58,6 @@ struct ModelRetirementGeneralView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .onChange(of: model.retirementModel.regimeGeneral.maxReversionRate) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
-            }
 
             Section(header: Text("Décote / Surcote").font(.headline)) {
                 Stepper(value : $model.retirementModel.regimeGeneral.decoteParTrimestre,
@@ -82,10 +70,6 @@ struct ModelRetirementGeneralView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.retirementModel.regimeGeneral.decoteParTrimestre) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
                 Stepper(value : $model.retirementModel.regimeGeneral.surcoteParTrimestre,
                         in    : 0 ... 2.5,
@@ -96,10 +80,6 @@ struct ModelRetirementGeneralView: View {
                         Text("\(model.retirementModel.regimeGeneral.surcoteParTrimestre.percentString(digit: 2))")
                             .foregroundColor(.secondary)
                     }
-                }
-                .onChange(of: model.retirementModel.regimeGeneral.surcoteParTrimestre) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
                 }
 
                 Stepper(value : $model.retirementModel.regimeGeneral.maxNbTrimestreDecote,
@@ -112,10 +92,6 @@ struct ModelRetirementGeneralView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.retirementModel.regimeGeneral.maxNbTrimestreDecote) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
                 Stepper(value : $model.retirementModel.regimeGeneral.majorationTauxEnfant,
                         in    : 0 ... 20.0,
@@ -127,11 +103,11 @@ struct ModelRetirementGeneralView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.retirementModel.regimeGeneral.majorationTauxEnfant) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
+        }
+        .onChange(of: model.retirementModel.regimeGeneral.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Régime Général")
         .alert(item: $alertItem, content: newAlert)

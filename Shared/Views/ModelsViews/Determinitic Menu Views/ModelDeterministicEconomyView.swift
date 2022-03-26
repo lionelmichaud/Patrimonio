@@ -25,11 +25,7 @@ struct ModelDeterministicEconomyView: View {
         Form {
             Section(header: Text("Inflation").font(.headline)) {
                 VersionEditableViewInForm(version: $model.economyModel.randomizers.inflation.version)
-                    .onChange(of: model.economyModel.randomizers.inflation.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
-                
+
                 Stepper(value : $model.economyModel.randomizers.inflation.defaultValue,
                         in    : 0 ... 10,
                         step  : 0.1) {
@@ -40,19 +36,11 @@ struct ModelDeterministicEconomyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.economyModel.randomizers.inflation.defaultValue) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
             
             Section(header: Text("Placements sans Risque").font(.headline)) {
                 VersionEditableViewInForm(version: $model.economyModel.randomizers.securedRate.version)
-                    .onChange(of: model.economyModel.randomizers.securedRate.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
-                
+
                 Stepper(value : $model.economyModel.randomizers.securedRate.defaultValue,
                         in    : 0 ... 10,
                         step  : 0.1) {
@@ -63,11 +51,7 @@ struct ModelDeterministicEconomyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.economyModel.randomizers.securedRate.defaultValue) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
-                
+
                 Stepper(value : $model.economyModel.randomizers.securedVolatility,
                         in    : 0 ... 5,
                         step  : 0.1) {
@@ -78,22 +62,14 @@ struct ModelDeterministicEconomyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.economyModel.randomizers.securedVolatility) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
             
             Section(header: Text("Placements Actions").font(.headline)) {
                 VersionEditableViewInForm(version: $model.economyModel.randomizers.stockRate.version)
-                    .onChange(of: model.economyModel.randomizers.stockRate.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
-                
+
                 Stepper(value : $model.economyModel.randomizers.stockRate.defaultValue,
                         in    : 0 ... 10,
-                        step  : 0.1) {
+                        step  : 0.05) {
                     HStack {
                         Text("Rendement")
                         Spacer()
@@ -101,11 +77,7 @@ struct ModelDeterministicEconomyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.economyModel.randomizers.stockRate.defaultValue) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
-                
+
                 Stepper(value : $model.economyModel.randomizers.stockVolatility,
                         in    : 0 ... 20,
                         step  : 1.0) {
@@ -116,11 +88,11 @@ struct ModelDeterministicEconomyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.economyModel.randomizers.stockVolatility) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
+        }
+        .onChange(of: model.economyModel.randomizers) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Modèle Economique")
         .alert(item: $alertItem, content: newAlert)

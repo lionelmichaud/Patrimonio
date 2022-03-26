@@ -65,14 +65,14 @@ public final class RegimeAgirc: Codable {
         }
     }
     
-    public struct MajorationPourEnfant: Codable {
+    public struct MajorationPourEnfant: Codable, Equatable {
         public var majorPourEnfantsNes   : Double // % [0, 100]
         public var nbEnafntNesMin        : Int
         public var majorParEnfantACharge : Double // % [0, 100]
         public var plafondMajoEnfantNe   : Double // €
     }
     
-    public struct Model: JsonCodableToBundleP, VersionableP {
+    public struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
             case version, gridAvantAgeLegal, gridApresAgelegal, valeurDuPoint, ageMinimum, majorationPourEnfant
         }
@@ -87,6 +87,15 @@ public final class RegimeAgirc: Codable {
         var regimeGeneral                  : RegimeGeneral!
         var netRegimeAgircProviderP        : NetRegimeAgircProviderP!
         var pensionDevaluationRateProvider : PensionDevaluationRateProviderP!
+
+        public static func == (lhs: RegimeAgirc.Model, rhs: RegimeAgirc.Model) -> Bool {
+            return lhs.version == rhs.version &&
+            lhs.gridAvantAgeLegal == rhs.gridAvantAgeLegal &&
+            lhs.gridApresAgelegal == rhs.gridApresAgelegal &&
+            lhs.valeurDuPoint == rhs.valeurDuPoint &&
+            lhs.ageMinimum == rhs.ageMinimum &&
+            lhs.majorationPourEnfant == rhs.majorationPourEnfant
+        }
     }
     
     // MARK: - Static Properties

@@ -10,11 +10,12 @@ import Foundation
 import AppFoundation
 
 // MARK: - Impôt sur les plus-values d'assurance vie-Assurance vies
+/// Ne contient aucune Class
 public struct LifeInsuranceTaxes: Codable {
     
     // MARK: Nested types
     
-    public struct Model: JsonCodableToBundleP, VersionableP {
+    public struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         public static var defaultFileName : String = "LifeInsuranceTaxesModel.json"
         
         public var version        : Version

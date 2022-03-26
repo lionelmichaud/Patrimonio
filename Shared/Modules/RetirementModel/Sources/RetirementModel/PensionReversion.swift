@@ -13,23 +13,23 @@ public struct PensionReversion: Codable {
     
     // MARK: - Nested types
     
-    public struct OldRegimeGeneral: Codable {
+    public struct OldRegimeGeneral: Codable, Equatable {
         public var minimum: Double // minimum absolu
         public var majoration3enfants: Double // [0, 100] 10%
     }
     
-    public struct OldAgircArcco: Codable {
+    public struct OldAgircArcco: Codable, Equatable {
         public var fractionConjoint: Double // [0, 100] 60% des points du conjoint décédé
         public var ageMinimum      : Int // 55 ans
     }
     
-    public struct Old: Codable {
+    public struct Old: Codable, Equatable {
         public var general    : OldRegimeGeneral
         public var agircArcco : OldAgircArcco
     }
     
     // https://www.retraite.com/dossier-retraite/pension-de-reversion/evolution-de-la-pension-de-reversion-dans-la-reforme-des-retraites.html
-    public struct Model: JsonCodableToBundleP, VersionableP {
+    public struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         public var version: Version
         var newModelSelected : Bool
         var tauxReversion    : Double // [0, 100] // 70% de la somme des deux pensions

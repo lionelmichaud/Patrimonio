@@ -23,10 +23,6 @@ struct ModelFiscalImmobilierImpotView: View {
         Form {
             Section {
                 VersionEditableViewInForm(version: $model.fiscalModel.estateCapitalGainIrpp.model.version)
-                    .onChange(of: model.fiscalModel.estateCapitalGainIrpp.model.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
             
             NavigationLink(destination: RealEstateExonerationGridView(label: "Barême de l'Impôts sur Plus-Values Immobilières",
@@ -45,11 +41,7 @@ struct ModelFiscalImmobilierImpotView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .onChange(of: model.fiscalModel.estateCapitalGainIrpp.model.irpp) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
-            }
-            
+
             Section(header: Text("Abattement").font(.headline)) {
                 Stepper(value : $model.fiscalModel.estateCapitalGainIrpp.model.discountTravaux,
                         in    : 0 ... 100.0,
@@ -61,19 +53,15 @@ struct ModelFiscalImmobilierImpotView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.fiscalModel.estateCapitalGainIrpp.model.discountTravaux) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
-                
+
                 IntegerEditView(label   : "Abattement possible après",
                                 comment : "ans",
                                 integer : $model.fiscalModel.estateCapitalGainIrpp.model.discountAfter)
-                    .onChange(of: model.fiscalModel.estateCapitalGainIrpp.model.discountAfter) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
+        }
+        .onChange(of: model.fiscalModel.estateCapitalGainIrpp.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Plus-Value Immobilière")
         .alert(item: $alertItem, content: newAlert)

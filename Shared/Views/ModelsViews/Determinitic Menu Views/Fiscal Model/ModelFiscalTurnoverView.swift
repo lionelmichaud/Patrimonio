@@ -22,10 +22,6 @@ struct ModelFiscalTurnoverView: View {
     var body: some View {
         Form {
             VersionEditableViewInForm(version: $model.fiscalModel.turnoverTaxes.model.version)
-                .onChange(of: model.fiscalModel.turnoverTaxes.model.version) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
             Stepper(value : $model.fiscalModel.turnoverTaxes.model.URSSAF,
                     in    : 0 ... 100.0,
@@ -37,10 +33,10 @@ struct ModelFiscalTurnoverView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .onChange(of: model.fiscalModel.turnoverTaxes.model.URSSAF) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
-            }
+        }
+        .onChange(of: model.fiscalModel.turnoverTaxes.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Bénéfices Non Commerciaux (BNC)")
         .alert(item: $alertItem, content: newAlert)

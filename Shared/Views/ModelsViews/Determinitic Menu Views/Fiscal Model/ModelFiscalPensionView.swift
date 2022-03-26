@@ -22,10 +22,6 @@ struct ModelFiscalPensionView: View {
     var body: some View {
         Form {
             VersionEditableViewInForm(version: $model.fiscalModel.pensionTaxes.model.version)
-                .onChange(of: model.fiscalModel.pensionTaxes.model.version) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
             Section(header: Text("Abattement").font(.headline)) {
                 Stepper(value : $model.fiscalModel.pensionTaxes.model.rebate,
@@ -38,24 +34,12 @@ struct ModelFiscalPensionView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.fiscalModel.pensionTaxes.model.rebate) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
                 AmountEditView(label  : "Abattement minimum",
                                amount : $model.fiscalModel.pensionTaxes.model.minRebate)
-                    .onChange(of: model.fiscalModel.pensionTaxes.model.minRebate) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
 
                 AmountEditView(label  : "Abattement maximum",
                                amount : $model.fiscalModel.pensionTaxes.model.maxRebate)
-                    .onChange(of: model.fiscalModel.pensionTaxes.model.maxRebate) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
             
             Section(header: Text("Taux de Cotisation").font(.headline)) {
@@ -69,10 +53,6 @@ struct ModelFiscalPensionView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.fiscalModel.pensionTaxes.model.CSGdeductible) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
                 Stepper(value : $model.fiscalModel.pensionTaxes.model.CRDS,
                         in    : 0 ... 100.0,
@@ -83,10 +63,6 @@ struct ModelFiscalPensionView: View {
                         Text("\(model.fiscalModel.pensionTaxes.model.CRDS.percentString(digit: 1))")
                             .foregroundColor(.secondary)
                     }
-                }
-                .onChange(of: model.fiscalModel.pensionTaxes.model.CRDS) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
                 }
 
                 Stepper(value : $model.fiscalModel.pensionTaxes.model.CSG,
@@ -99,10 +75,6 @@ struct ModelFiscalPensionView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.fiscalModel.pensionTaxes.model.CSG) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
                 Stepper(value : $model.fiscalModel.pensionTaxes.model.additionalContrib,
                         in    : 0 ... 100.0,
@@ -113,10 +85,6 @@ struct ModelFiscalPensionView: View {
                         Text("\(model.fiscalModel.pensionTaxes.model.additionalContrib.percentString(digit: 1))")
                             .foregroundColor(.secondary)
                     }
-                }
-                .onChange(of: model.fiscalModel.pensionTaxes.model.additionalContrib) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
                 }
 
                 Stepper(value : $model.fiscalModel.pensionTaxes.model.healthInsurance,
@@ -129,12 +97,13 @@ struct ModelFiscalPensionView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.fiscalModel.pensionTaxes.model.healthInsurance) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
         }
+        .onChange(of: model.fiscalModel.pensionTaxes.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
+        }
+        .navigationTitle("Plus-Value Immobilière")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(

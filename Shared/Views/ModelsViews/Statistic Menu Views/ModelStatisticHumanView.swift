@@ -14,7 +14,7 @@ import Persistence
 import SimulationAndVisitors
 import HelpersView
 
-struct ModelHumanView: View {
+struct ModelStatisticHumanView: View {
     @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
@@ -32,25 +32,17 @@ struct ModelHumanView: View {
             switch modelChoice {
                 case .menLifeExpectation:
                     DiscreteRandomizerEditView(discreteRandomizer: $model.humanLifeModel.menLifeExpectation)
-                        .onChange(of: model.humanLifeModel.menLifeExpectation) { _ in
-                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                            model.manageInternalDependencies()
-                        }
 
                 case .womenLifeExpectation:
                     DiscreteRandomizerEditView(discreteRandomizer: $model.humanLifeModel.womenLifeExpectation)
-                        .onChange(of: model.humanLifeModel.womenLifeExpectation) { _ in
-                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                            model.manageInternalDependencies()
-                        }
 
                 case .nbOfYearsOfdependency:
                     DiscreteRandomizerEditView(discreteRandomizer: $model.humanLifeModel.nbOfYearsOfdependency)
-                        .onChange(of: model.humanLifeModel.nbOfYearsOfdependency) { _ in
-                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                            model.manageInternalDependencies()
-                        }
             }
+        }
+        .onChange(of: model.humanLifeModel) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Modèle Humain")
         .navigationBarTitleDisplayMode(.inline)
@@ -91,7 +83,7 @@ struct ModelHumanView_Previews: PreviewProvider {
     
     static var previews: some View {
         TestEnvir.loadTestFilesFromBundle()
-        return ModelHumanView()
+        return ModelStatisticHumanView()
             .environmentObject(TestEnvir.dataStore)
             .environmentObject(TestEnvir.model)
             .environmentObject(TestEnvir.family)

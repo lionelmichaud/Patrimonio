@@ -30,7 +30,8 @@ public struct Unemployment: PersistableModelP {
             return self.rawValue
         }
     }
-    
+
+    /// Contient des Class
     public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP {
         public var indemniteLicenciement : LayoffCompensation
         public var allocationChomage     : UnemploymentCompensation

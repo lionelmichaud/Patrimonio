@@ -39,6 +39,7 @@ public struct LayOffTaxes: Codable, LayOffTaxesProviderP {
             rateDeductible + rateNonDeductible
         }
     }
+    /// Ne contient aucune Class
     struct Model: JsonCodableToBundleP, VersionableP {
         static var defaultFileName : String = "LayOffTaxesModel.json"
         

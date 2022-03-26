@@ -58,7 +58,7 @@ public struct Economy: PersistableModelP {
     public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
     // MARK: - Modèles statistiques de générateurs aléatoires
-    public struct RandomizersModel: Codable {
+    public struct RandomizersModel: Codable, Equatable {
         
         // MARK: - Properties
         

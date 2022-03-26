@@ -27,8 +27,9 @@ public struct HumanLife: PersistableModelP {
             return self.rawValue
         }
     }
-    
-    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP {
+
+    /// Ne contient aucune Class, uniquement des Struct
+    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP, Equatable {
         public var menLifeExpectation    : ModelRandomizer<DiscreteRandomGenerator>
         public var womenLifeExpectation  : ModelRandomizer<DiscreteRandomGenerator>
         public var nbOfYearsOfdependency : ModelRandomizer<DiscreteRandomGenerator>

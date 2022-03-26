@@ -23,10 +23,6 @@ struct ModelFiscalChomageChargeView: View {
         Form {
             Section {
                 VersionEditableViewInForm(version: $model.fiscalModel.allocationChomageTaxes.model.version)
-                    .onChange(of: model.fiscalModel.allocationChomageTaxes.model.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
             
             Stepper(value : $model.fiscalModel.allocationChomageTaxes.model.assiette,
@@ -39,18 +35,10 @@ struct ModelFiscalChomageChargeView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .onChange(of: model.fiscalModel.allocationChomageTaxes.model.assiette) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
-            }
 
             AmountEditView(label  : "Seuil de Taxation CSG/CRDS",
                            comment: "journalier",
                            amount : $model.fiscalModel.allocationChomageTaxes.model.seuilCsgCrds)
-                .onChange(of: model.fiscalModel.allocationChomageTaxes.model.seuilCsgCrds) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
             Stepper(value : $model.fiscalModel.allocationChomageTaxes.model.CRDS,
                     in    : 0 ... 100.0,
@@ -61,10 +49,6 @@ struct ModelFiscalChomageChargeView: View {
                     Text("\(model.fiscalModel.allocationChomageTaxes.model.CRDS.percentString(digit: 1))")
                         .foregroundColor(.secondary)
                 }
-            }
-            .onChange(of: model.fiscalModel.allocationChomageTaxes.model.CRDS) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
             }
 
             Stepper(value : $model.fiscalModel.allocationChomageTaxes.model.CSG,
@@ -77,10 +61,6 @@ struct ModelFiscalChomageChargeView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .onChange(of: model.fiscalModel.allocationChomageTaxes.model.CSG) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
-            }
 
             Stepper(value : $model.fiscalModel.allocationChomageTaxes.model.retraiteCompl,
                     in    : 0 ... 100.0,
@@ -92,18 +72,14 @@ struct ModelFiscalChomageChargeView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .onChange(of: model.fiscalModel.allocationChomageTaxes.model.retraiteCompl) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
-            }
 
             AmountEditView(label  : "Seuil de Taxation Retraite Complémentaire",
                            comment: "journalier",
                            amount : $model.fiscalModel.allocationChomageTaxes.model.seuilRetCompl)
-                .onChange(of: model.fiscalModel.allocationChomageTaxes.model.seuilRetCompl) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
+        }
+        .onChange(of: model.fiscalModel.allocationChomageTaxes.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Allocation Chômage")
         .alert(item: $alertItem, content: newAlert)

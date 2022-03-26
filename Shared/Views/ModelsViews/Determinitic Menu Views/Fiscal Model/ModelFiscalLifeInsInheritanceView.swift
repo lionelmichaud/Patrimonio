@@ -22,16 +22,16 @@ struct ModelFiscalLifeInsInheritanceView: View {
     var body: some View {
         Form {
             VersionEditableViewInForm(version: $model.fiscalModel.lifeInsuranceInheritance.model.version)
-                .onChange(of: model.fiscalModel.lifeInsuranceInheritance.model.version) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
             NavigationLink(destination: RateGridView(label: "Barême Transmssion Assurance Vie",
                                                      grid: $model.fiscalModel.lifeInsuranceInheritance.model.grid)
                             .environmentObject(model)) {
                 Text("Barême Fiscal des Transmssions d'Assurance Vie")
             }.isDetailLink(true)
+        }
+        .onChange(of: model.fiscalModel.lifeInsuranceInheritance.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Transmission des Assurances Vie")
         .alert(item: $alertItem, content: newAlert)

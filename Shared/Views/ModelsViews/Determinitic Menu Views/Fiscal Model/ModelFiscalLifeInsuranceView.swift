@@ -22,18 +22,14 @@ struct ModelFiscalLifeInsuranceView: View {
     var body: some View {
         Form {
             VersionEditableViewInForm(version: $model.fiscalModel.lifeInsuranceTaxes.model.version)
-                .onChange(of: model.fiscalModel.lifeInsuranceTaxes.model.version) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
             AmountEditView(label   : "Abattement par personne",
                            comment : "annuel",
                            amount  : $model.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson)
-                .onChange(of: model.fiscalModel.lifeInsuranceTaxes.model.rebatePerPerson) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
+        }
+        .onChange(of: model.fiscalModel.lifeInsuranceTaxes.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Revenus d'Assurance Vie")
         .alert(item: $alertItem, content: newAlert)

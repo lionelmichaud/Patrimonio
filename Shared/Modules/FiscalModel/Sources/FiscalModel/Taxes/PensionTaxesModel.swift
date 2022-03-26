@@ -31,7 +31,8 @@ public struct PensionTaxesModel: Codable, NetPensionProviderP {
         case outOfBounds
     }
     
-    public struct Model: JsonCodableToBundleP, VersionableP {
+    /// Ne contient aucune Class
+    public struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         public static var defaultFileName : String = "PensionTaxesModel.json"
         public var version           : Version
         public var rebate            : Double // 10.0 // %

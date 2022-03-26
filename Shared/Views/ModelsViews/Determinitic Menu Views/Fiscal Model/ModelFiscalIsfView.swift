@@ -28,10 +28,6 @@ struct ModelFiscalIsfView: View {
         Form {
             Section {
                 VersionEditableViewInForm(version: $model.fiscalModel.isf.model.version)
-                    .onChange(of: model.fiscalModel.isf.model.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
             
             NavigationLink(destination: RateGridView(label: "Barême ISF/IFI",
@@ -44,22 +40,13 @@ struct ModelFiscalIsfView: View {
                     footer: Text(footnote)) {
                 AmountEditView(label  : "Seuil d'imposition",
                                amount : $model.fiscalModel.isf.model.seuil)
-                    .onChange(of: model.fiscalModel.isf.model.seuil) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
+
                 AmountEditView(label  : "Limite supérieure de la tranche de transition",
                                amount : $model.fiscalModel.isf.model.seuil2)
-                    .onChange(of: model.fiscalModel.isf.model.seuil2) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
+
                 AmountEditView(label  : "Décote maximale",
                                amount : $model.fiscalModel.isf.model.decote€)
-                    .onChange(of: model.fiscalModel.isf.model.decote€) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
+
                 Stepper(value : $model.fiscalModel.isf.model.decoteCoef,
                         in    : 0 ... 100.0,
                         step  : 0.25) {
@@ -69,10 +56,6 @@ struct ModelFiscalIsfView: View {
                         Text("\(model.fiscalModel.isf.model.decoteCoef.percentString(digit: 2))")
                             .foregroundColor(.secondary)
                     }
-                }
-                .onChange(of: model.fiscalModel.isf.model.decoteCoef) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
                 }
             }
             
@@ -87,11 +70,7 @@ struct ModelFiscalIsfView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.fiscalModel.isf.model.decoteResidence) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
-                
+
                 Stepper(value : $model.fiscalModel.isf.model.decoteLocation,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
@@ -102,11 +81,7 @@ struct ModelFiscalIsfView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.fiscalModel.isf.model.decoteLocation) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
-                
+
                 Stepper(value : $model.fiscalModel.isf.model.decoteIndivision,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
@@ -117,11 +92,11 @@ struct ModelFiscalIsfView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.fiscalModel.isf.model.decoteIndivision) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
+        }
+        .onChange(of: model.fiscalModel.isf.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Imposition sur le Capital")
         .alert(item: $alertItem, content: newAlert)

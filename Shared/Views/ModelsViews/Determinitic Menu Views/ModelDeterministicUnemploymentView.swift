@@ -22,10 +22,6 @@ struct ModelDeterministicUnemploymentView: View {
     var body: some View {
         Form {
             VersionEditableViewInForm(version: $model.unemploymentModel.allocationChomage.model.version)
-                .onChange(of: model.unemploymentModel.allocationChomage.model.version) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
             NavigationLink(destination:
                             UnemploymentAreDurationGridView(label: "Barême de durée d'indemnisation",
@@ -34,15 +30,17 @@ struct ModelDeterministicUnemploymentView: View {
                 Text("Durée d'indemnisation")
             }.isDetailLink(true)
 
-            NavigationLink(destination: ModelUnemploymentAmountView()
-                            .environmentObject(model)) {
+            NavigationLink(destination: ModelUnemploymentDiffereView().environmentObject(model)) {
                 Text("Différés d'indemnisation")
             }
 
-            NavigationLink(destination: ModelUnemploymentDiffereView()
-                            .environmentObject(model)) {
+            NavigationLink(destination: ModelUnemploymentAmountView().environmentObject(model)) {
                 Text("Allocation de Recherche d'Emploi (ARE)")
             }
+        }
+        .onChange(of: model.unemploymentModel.allocationChomage.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Modèle Chômage")
         .alert(item: $alertItem, content: newAlert)

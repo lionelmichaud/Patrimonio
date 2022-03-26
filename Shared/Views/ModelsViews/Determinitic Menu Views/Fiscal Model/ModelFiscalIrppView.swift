@@ -23,10 +23,6 @@ struct ModelFiscalIrppView: View {
     var body: some View {
         Form {
             VersionEditableViewInForm(version: $model.fiscalModel.incomeTaxes.model.version)
-                .onChange(of: model.fiscalModel.incomeTaxes.model.version) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
             Section(header: Text("Salaire").font(.headline)) {
                 NavigationLink(destination: RateGridView(label: "Barême IRPP",
@@ -45,31 +41,15 @@ struct ModelFiscalIrppView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.fiscalModel.incomeTaxes.model.salaryRebate) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
                 AmountEditView(label  : "Abattement minimum",
                                amount : $model.fiscalModel.incomeTaxes.model.minSalaryRebate)
-                    .onChange(of: model.fiscalModel.incomeTaxes.model.minSalaryRebate) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
 
                 AmountEditView(label  : "Abattement maximum",
                                amount : $model.fiscalModel.incomeTaxes.model.maxSalaryRebate)
-                    .onChange(of: model.fiscalModel.incomeTaxes.model.maxSalaryRebate) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
 
                 AmountEditView(label  : "Plafond de Réduction d'Impôt par Enfant",
                                amount : $model.fiscalModel.incomeTaxes.model.childRebate)
-                    .onChange(of: model.fiscalModel.incomeTaxes.model.childRebate) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
             
             Section(header: Text("BNC").font(.headline)) {
@@ -82,18 +62,14 @@ struct ModelFiscalIrppView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.fiscalModel.incomeTaxes.model.turnOverRebate) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
                 AmountEditView(label  : "Abattement minimum",
                                amount : $model.fiscalModel.incomeTaxes.model.minTurnOverRebate)
-                    .onChange(of: model.fiscalModel.incomeTaxes.model.minTurnOverRebate) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
+        }
+        .onChange(of: model.fiscalModel.incomeTaxes.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Revenus du Travail")
         .alert(item: $alertItem, content: newAlert)

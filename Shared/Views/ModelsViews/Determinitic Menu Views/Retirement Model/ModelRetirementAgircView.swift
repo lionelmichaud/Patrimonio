@@ -26,10 +26,6 @@ struct ModelRetirementAgircView: View {
         Form {
             Section {
                 VersionEditableViewInForm(version: $model.retirementModel.regimeAgirc.model.version)
-                    .onChange(of: model.retirementModel.regimeAgirc.model.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
             
             Stepper(value : $model.retirementModel.regimeAgirc.ageMinimum,
@@ -40,17 +36,9 @@ struct ModelRetirementAgircView: View {
                     Text("\(model.retirementModel.regimeAgirc.ageMinimum) ans").foregroundColor(.secondary)
                 }
             }
-            .onChange(of: model.retirementModel.regimeAgirc.ageMinimum) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
-            }
 
             AmountEditView(label  : "Valeur du point",
                            amount : $model.retirementModel.regimeAgirc.valeurDuPoint)
-                .onChange(of: model.retirementModel.regimeAgirc.valeurDuPoint) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
             NavigationLink(destination: AgircAvantAgeLegalGridView(label: "Réduction pour trimestres manquant avant l'âge légale",
                                                                    grid: $model.retirementModel.regimeAgirc.gridAvantAgeLegal)
@@ -75,10 +63,6 @@ struct ModelRetirementAgircView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.retirementModel.regimeAgirc.majorationPourEnfant.majorPourEnfantsNes) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
                 Stepper(value : $model.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin,
                         in    : 1 ... 4,
@@ -90,18 +74,10 @@ struct ModelRetirementAgircView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.retirementModel.regimeAgirc.majorationPourEnfant.nbEnafntNesMin) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
                 AmountEditView(label   : "Plafond pour enfants nés",
                                comment : "annuel",
                                amount  : $model.retirementModel.regimeAgirc.majorationPourEnfant.plafondMajoEnfantNe)
-                    .onChange(of: model.retirementModel.regimeAgirc.majorationPourEnfant.plafondMajoEnfantNe) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
 
                 Stepper(value : $model.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge,
                         in    : 0 ... 20.0,
@@ -113,11 +89,11 @@ struct ModelRetirementAgircView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.retirementModel.regimeAgirc.majorationPourEnfant.majorParEnfantACharge) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
+        }
+        .onChange(of: model.retirementModel.regimeAgirc.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Régime Général")
         .alert(item: $alertItem, content: newAlert)

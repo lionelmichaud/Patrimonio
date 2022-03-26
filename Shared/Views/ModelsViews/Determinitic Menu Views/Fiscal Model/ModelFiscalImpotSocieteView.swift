@@ -22,10 +22,6 @@ struct ModelFiscalImpotSocieteView: View {
     var body: some View {
         Form {
             VersionEditableViewInForm(version: $model.fiscalModel.companyProfitTaxes.model.version)
-                .onChange(of: model.fiscalModel.companyProfitTaxes.model.version) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
             Stepper(value : $model.fiscalModel.companyProfitTaxes.model.rate,
                     in    : 0 ... 100.0,
@@ -37,10 +33,10 @@ struct ModelFiscalImpotSocieteView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .onChange(of: model.fiscalModel.companyProfitTaxes.model.rate) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
-            }
+        }
+        .onChange(of: model.fiscalModel.companyProfitTaxes.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Bénéfice des Sociétés (IS)")
         .alert(item: $alertItem, content: newAlert)

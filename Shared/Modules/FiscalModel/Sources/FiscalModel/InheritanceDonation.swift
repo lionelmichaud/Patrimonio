@@ -95,7 +95,8 @@ public struct InheritanceDonation: Codable {
         case donationToSpouseSlicesIssue
     }
     
-    public struct Model: JsonCodableToBundleP, VersionableP {
+    /// Ne contient aucune Class
+    public struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         public static var defaultFileName: String = "InheritanceDonationModel.json"
         
         public var version              : Version
@@ -176,7 +177,8 @@ public struct LifeInsuranceInheritance: Codable {
         case heritageOfChildSlicesIssue
     }
     
-    public struct Model: JsonCodableToBundleP, VersionableP, RateGridableP {
+    /// Ne contient aucune Class
+    public struct Model: JsonCodableToBundleP, VersionableP, RateGridableP, Equatable {
         static var defaultFileName: String = "LifeInsuranceInheritanceModel.json"
         
         public var version : Version

@@ -49,34 +49,6 @@ struct ModelDeterministicRetirementView: View {
         }
         .navigationTitle("Modèle Retraite")
         .alert(item: $alertItem, content: newAlert)
-        /// barre d'outils de la NavigationView
-        .modelChangesToolbar(
-            applyChangesToTemplate: {
-                alertItem = applyChangesToTemplateAlert(
-                    model     : model,
-                    notifyTemplatFolderMissing: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    },
-                    notifyFailure: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Echec de l'enregistrement"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    })
-            },
-            cancelChanges: {
-                alertItem = cancelChanges(
-                    to         : model,
-                    family     : family,
-                    simulation : simulation,
-                    dataStore  : dataStore)
-            },
-            isModified: model.isModified)
     }
 }
 

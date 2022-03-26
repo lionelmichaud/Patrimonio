@@ -14,7 +14,8 @@ public struct TurnoverTaxesModel: Codable {
     
     // MARK: Nested types
     
-    public struct Model: JsonCodableToBundleP, VersionableP {
+    /// Ne contient aucune Class
+    public struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         public static var defaultFileName : String = "TurnoverTaxesModel.json"
         public var version: Version
         public var URSSAF : Double // 24 // %

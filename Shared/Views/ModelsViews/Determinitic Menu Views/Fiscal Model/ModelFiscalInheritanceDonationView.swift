@@ -22,10 +22,6 @@ struct ModelFiscalInheritanceDonationView: View {
     var body: some View {
         Form {
             VersionEditableViewInForm(version: $model.fiscalModel.inheritanceDonation.model.version)
-                .onChange(of: model.fiscalModel.inheritanceDonation.model.version) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
             Section(header: Text("Entre Conjoint").font(.headline)) {
                 NavigationLink(destination: RateGridView(label: "Barême Donation Conjoint",
@@ -36,10 +32,6 @@ struct ModelFiscalInheritanceDonationView: View {
                 
                 AmountEditView(label  : "Abattement sur Donation au Conjoint",
                                amount : $model.fiscalModel.inheritanceDonation.model.abatConjoint)
-                    .onChange(of: model.fiscalModel.inheritanceDonation.model.abatConjoint) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
             
             Section(header: Text("En Ligne Directe").font(.headline)) {
@@ -51,19 +43,11 @@ struct ModelFiscalInheritanceDonationView: View {
                 
                 AmountEditView(label  : "Abattement sur Donation/Succession en ligne directe",
                                amount : $model.fiscalModel.inheritanceDonation.model.abatLigneDirecte)
-                    .onChange(of: model.fiscalModel.inheritanceDonation.model.abatLigneDirecte) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
             
             AmountEditView(label  : "Abattement sur Succession pour frais Funéraires",
                            amount : $model.fiscalModel.inheritanceDonation.model.fraisFunéraires)
-                .onChange(of: model.fiscalModel.inheritanceDonation.model.fraisFunéraires) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
-            
+
             Stepper(value : $model.fiscalModel.inheritanceDonation.model.decoteResidence,
                     in    : 0 ... 100.0,
                     step  : 1.0) {
@@ -74,10 +58,10 @@ struct ModelFiscalInheritanceDonationView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .onChange(of: model.fiscalModel.inheritanceDonation.model.decoteResidence) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
-            }
+        }
+        .onChange(of: model.fiscalModel.inheritanceDonation.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Succession et Donation")
         .alert(item: $alertItem, content: newAlert)

@@ -53,10 +53,11 @@ public struct RealEstateCapitalGainIrppModel: Codable {
     
     // MARK: - Nested types
 
-    public struct Model: JsonCodableToBundleP, VersionableP {
+    /// Ne contient aucune Class
+    public struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         static var defaultFileName : String = "RealEstateCapitalGainIrppModel.json"
         public var version         : Version
-        public var exoGrid         : [ExonerationSlice]
+        public var exoGrid         : ExonerationGrid
         public var irpp            : Double // 19.0 // %
         public var discountTravaux : Double // 15.0 // %
         public var discountAfter   : Int // 5 // ans

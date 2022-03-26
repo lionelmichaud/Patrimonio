@@ -1,5 +1,5 @@
 //
-//  ModelSociologyView.swift
+//  ModelEconomyView.swift
 //  Patrimoine
 //
 //  Created by Lionel MICHAUD on 16/10/2020.
@@ -7,54 +7,47 @@
 //
 
 import SwiftUI
-import SocioEconomyModel
-import FamilyModel
+import EconomyModel
 import ModelEnvironment
+import FamilyModel
 import Persistence
+import Statistics
 import SimulationAndVisitors
 import HelpersView
 
 /// Affiche un graphique des fonctions de distribution des modèles statistiques
-struct ModelSociologyView: View {
+struct ModelStatisticEconomyView: View {
     @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
     @State private var alertItem   : AlertItem?
-    @State private var modelChoice : SocioEconomy.RandomVariable = .pensionDevaluationRate
-    
+    @State private var modelChoice : Economy.RandomVariable = .inflation
+
     var body: some View {
-        VStack {
-            // sélecteur: Actif / Passif / Tout
+        VStack(alignment: .leading) {
+            // sélecteur: inflation / securedRate / stockRate
             CasePicker(pickedCase: $modelChoice, label: "")
                 .padding(.horizontal)
                 .pickerStyle(SegmentedPickerStyle())
-            
+
             // éditeur + graphique
             switch modelChoice {
-                case .pensionDevaluationRate:
-                    BetaRandomizerEditView(betaRandomizer: $model.socioEconomyModel.pensionDevaluationRate) //{ viewModel in
-                        .onChange(of: model.socioEconomyModel.pensionDevaluationRate) { _ in
-                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                            model.manageInternalDependencies()
-                        }
+                case .inflation:
+                    BetaRandomizerEditView(betaRandomizer: $model.economyModel.randomizers.inflation) //{ viewModel in
 
-                case .nbTrimTauxPlein:
-                    DiscreteRandomizerEditView(discreteRandomizer: $model.socioEconomyModel.nbTrimTauxPlein)
-                        .onChange(of: model.socioEconomyModel.nbTrimTauxPlein) { _ in
-                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                            model.manageInternalDependencies()
-                        }
+                case .securedRate:
+                    BetaRandomizerEditView(betaRandomizer: $model.economyModel.randomizers.securedRate) //{ viewModel in
 
-                case .expensesUnderEvaluationRate:
-                    BetaRandomizerEditView(betaRandomizer: $model.socioEconomyModel.expensesUnderEvaluationRate) //{ viewModel in
-                        .onChange(of: model.socioEconomyModel.expensesUnderEvaluationRate) { _ in
-                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                            model.manageInternalDependencies()
-                        }
+                case .stockRate:
+                    BetaRandomizerEditView(betaRandomizer: $model.economyModel.randomizers.stockRate) //{ viewModel in
             }
         }
-        .navigationTitle("Modèle Sociologique")
+        .onChange(of: model.economyModel.randomizers) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
+        }
+        .navigationTitle("Modèle Economique")
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
@@ -88,10 +81,10 @@ struct ModelSociologyView: View {
     }
 }
 
-struct ModelSociologyView_Previews: PreviewProvider {
+struct ModelEconomyView_Previews: PreviewProvider {
     static var previews: some View {
         TestEnvir.loadTestFilesFromBundle()
-        return ModelSociologyView()
+        return ModelStatisticEconomyView()
             .environmentObject(TestEnvir.dataStore)
             .environmentObject(TestEnvir.model)
             .environmentObject(TestEnvir.family)

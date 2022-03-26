@@ -45,6 +45,7 @@ public struct DemembrementModel: Codable, DemembrementProviderP {
         }
     }
     
+    /// Ne contient aucune Class
     public struct Model: JsonCodableToBundleP, VersionableP {
         public static var defaultFileName : String = "DemembrementModel.json"
         public var version : Version

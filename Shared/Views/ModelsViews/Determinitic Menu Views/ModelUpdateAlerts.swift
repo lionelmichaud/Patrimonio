@@ -14,11 +14,8 @@ import HelpersView
 
 // MARK: - Global Methods
 
-/// Appliquer la modification au projet ouvert (en mémoire seulement)
-///
-/// - Warning:
-///     Ne suvegarde PAS la modification sur disque
-///
+/// Recharger le modèle complet à partir du fichier JSON
+/// et mettre à jour toutes les dépendances internes au modèle et externes vis-à-vis du modèle
 func cancelChanges(to model   : Model,
                    family     : Family,
                    simulation : Simulation,
@@ -35,7 +32,7 @@ func cancelChanges(to model   : Model,
               secondaryButton: .cancel())
 }
 
-/// Enregistrer la modification dans le répertoire Template (sur disque)
+/// Sauvegarder le modèle dans le dossier template
 ///
 /// - Warning:
 ///     N'applique PAS la modification au projet ouvert (en mémoire)

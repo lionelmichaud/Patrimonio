@@ -19,24 +19,24 @@ struct StatisticSidebarSectionView: View {
     
     var body: some View {
         Section(header: Text("Modèles Statistiques")) {
-            NavigationLink(destination: ModelHumanView(),
+            NavigationLink(destination: ModelStatisticHumanView(),
                            tag         : .statHumanModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Modèle Humain")
+                Label("Modèle Humain", systemImage: "slider.horizontal.3")
             }
             .isDetailLink(true)
             
-            NavigationLink(destination: ModelEconomyView(),
+            NavigationLink(destination: ModelStatisticEconomyView(),
                            tag         : .statEconomyModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Modèle Economique")
+                Label("Modèle Economique", systemImage: "slider.horizontal.3")
             }
             .isDetailLink(true)
             
-            NavigationLink(destination: ModelSociologyView(),
+            NavigationLink(destination: ModelStatisticSociologyView(),
                            tag         : .statSociologyModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Modèle Sociologique")
+                Label("Modèle Sociologique", systemImage: "slider.horizontal.3")
             }
             .isDetailLink(true)
         }

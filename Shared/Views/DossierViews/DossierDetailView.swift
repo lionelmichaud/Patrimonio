@@ -252,7 +252,7 @@ struct DossierDetailView: View {
                     try simulation.loadFromJSON(fromFolder: folder)
 
                     /// gérer les dépendances entre le Modèle et les objets applicatifs
-                    DependencyInjector.updateDependencies(to: model)
+                    DependencyInjector.updateStaticDependencies(to: model)
 
                     /// rendre le Dossier actif seulement si tout c'est bien passé
                     dataStore.activate(dossierAtIndex: dossierIndex)
@@ -293,7 +293,7 @@ struct DossierDetailView: View {
                         try simulation.loadFromJSON(fromFolder: folder)
 
                         /// gérer les dépendances entre le Modèle et les objets applicatifs
-                        DependencyInjector.updateDependencies(to: model)
+                        DependencyInjector.updateStaticDependencies(to: model)
 
                         /// rendre le Dossier actif seulement si tout c'est bien passé
                         dataStore.activate(dossierAtIndex: dossierIndex)

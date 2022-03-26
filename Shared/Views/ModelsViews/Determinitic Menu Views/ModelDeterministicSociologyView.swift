@@ -25,11 +25,7 @@ struct ModelDeterministicSociologyView: View {
         Form {
             Section(header: Text("Dévaluation des pensions").font(.headline)) {
                 VersionEditableViewInForm(version: $model.socioEconomyModel.pensionDevaluationRate.version)
-                    .onChange(of: model.socioEconomyModel.pensionDevaluationRate.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
-                
+
                 Stepper(value : $model.socioEconomyModel.pensionDevaluationRate.defaultValue,
                         in    : 0 ... 10,
                         step  : 0.1) {
@@ -40,7 +36,7 @@ struct ModelDeterministicSociologyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.socioEconomyModel.pensionDevaluationRate.defaultValue) { _ in
+                .onChange(of: model.socioEconomyModel.pensionDevaluationRate) { _ in
                     DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                     model.manageInternalDependencies()
                 }
@@ -48,11 +44,7 @@ struct ModelDeterministicSociologyView: View {
             
             Section(header: Text("Évolution du nombre de trimestres requis").font(.headline)) {
                 VersionEditableViewInForm(version: $model.socioEconomyModel.nbTrimTauxPlein.version)
-                    .onChange(of: model.socioEconomyModel.nbTrimTauxPlein.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
-                
+
                 Stepper(value : $model.socioEconomyModel.nbTrimTauxPlein.defaultValue,
                         in    : 0 ... 12) {
                     HStack {
@@ -62,7 +54,7 @@ struct ModelDeterministicSociologyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.socioEconomyModel.nbTrimTauxPlein.defaultValue) { _ in
+                .onChange(of: model.socioEconomyModel.nbTrimTauxPlein) { _ in
                     DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                     model.manageInternalDependencies()
                 }
@@ -70,10 +62,6 @@ struct ModelDeterministicSociologyView: View {
             
             Section(header: Text("Sous-estimation du niveau des dépenses").font(.headline)) {
                 VersionEditableViewInForm(version: $model.socioEconomyModel.expensesUnderEvaluationRate.version)
-                    .onChange(of: model.socioEconomyModel.expensesUnderEvaluationRate.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
                 
                 Stepper(value : $model.socioEconomyModel.expensesUnderEvaluationRate.defaultValue,
                         in    : 0 ... 10,
@@ -85,7 +73,7 @@ struct ModelDeterministicSociologyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.socioEconomyModel.expensesUnderEvaluationRate.defaultValue) { _ in
+                .onChange(of: model.socioEconomyModel.expensesUnderEvaluationRate) { _ in
                     DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
                     model.manageInternalDependencies()
                 }

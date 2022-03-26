@@ -14,12 +14,13 @@ public struct RealEstateCapitalGainTaxesModel: Codable {
     
     // MARK: - Nested types
     
-    public struct Model: JsonCodableToBundleP, VersionableP {
+    /// Ne contient aucune Class
+    public struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         static var defaultFileName : String = "RealEstateCapitalGainTaxesModel.json"
         public var version         : Version
         public var discountTravaux : Double // 15 // %
         public var discountAfter   : Int // 5 // ans
-        public var exoGrid         : [ExonerationSlice]
+        public var exoGrid         : ExonerationGrid
         public var CRDS            : Double // 0.5 // %
         public var CSG             : Double // 9.2 // %
         public var prelevSocial    : Double // 7.5 // %

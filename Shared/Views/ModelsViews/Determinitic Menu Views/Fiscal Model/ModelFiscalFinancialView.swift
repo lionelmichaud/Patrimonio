@@ -22,10 +22,6 @@ struct ModelFiscalFinancialView: View {
     var body: some View {
         Form {
             VersionEditableViewInForm(version: $model.fiscalModel.financialRevenuTaxes.model.version)
-                .onChange(of: model.fiscalModel.financialRevenuTaxes.model.version) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
             Section(footer: Text("Appliquable à tous les revenus financiers")) {
                 Stepper(value : $model.fiscalModel.financialRevenuTaxes.model.CRDS,
@@ -38,10 +34,6 @@ struct ModelFiscalFinancialView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.fiscalModel.financialRevenuTaxes.model.CRDS) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
                 Stepper(value : $model.fiscalModel.financialRevenuTaxes.model.CSG,
                         in    : 0 ... 100.0,
@@ -52,10 +44,6 @@ struct ModelFiscalFinancialView: View {
                         Text("\(model.fiscalModel.financialRevenuTaxes.model.CSG.percentString(digit: 1))")
                             .foregroundColor(.secondary)
                     }
-                }
-                .onChange(of: model.fiscalModel.financialRevenuTaxes.model.CSG) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
                 }
 
                 Stepper(value : $model.fiscalModel.financialRevenuTaxes.model.prelevSocial,
@@ -68,11 +56,11 @@ struct ModelFiscalFinancialView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.fiscalModel.financialRevenuTaxes.model.prelevSocial) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
+        }
+        .onChange(of: model.fiscalModel.financialRevenuTaxes.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Revenus Financiers")
         .alert(item: $alertItem, content: newAlert)

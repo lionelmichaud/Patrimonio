@@ -20,14 +20,14 @@ struct ModelAssistantSidebarSectionView: View {
             NavigationLink(destination : ModelManagerView(),
                            tag         : .modelManager,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Gestion des Modèles")
+                Label("Gestion des Modèles", systemImage: "slider.horizontal.3")
             }.isDetailLink(true)
             
             // Vue assistant statistiques
             NavigationLink(destination : StatisticsChartsView(),
                            tag         : .statisticsAssistant,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Assistant Distributions")
+                Label("Assistant Distributions", systemImage: "chart.xyaxis.line")
             }.isDetailLink(true)
         }
     }

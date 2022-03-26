@@ -123,12 +123,12 @@
 		7935BCEC27DF66100079F39C /* DiscreteRandomizerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC0D27DF660F0079F39C /* DiscreteRandomizerEditView.swift */; };
 		7935BCED27DF66100079F39C /* StatisticSidebarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC0E27DF660F0079F39C /* StatisticSidebarSectionView.swift */; };
 		7935BCEE27DF66100079F39C /* StatisticSidebarSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC0E27DF660F0079F39C /* StatisticSidebarSectionView.swift */; };
-		7935BCEF27DF66100079F39C /* ModelHumanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC0F27DF660F0079F39C /* ModelHumanView.swift */; };
-		7935BCF027DF66100079F39C /* ModelHumanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC0F27DF660F0079F39C /* ModelHumanView.swift */; };
-		7935BCF127DF66100079F39C /* ModelSociologyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC1027DF660F0079F39C /* ModelSociologyView.swift */; };
-		7935BCF227DF66100079F39C /* ModelSociologyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC1027DF660F0079F39C /* ModelSociologyView.swift */; };
-		7935BCF327DF66100079F39C /* ModelEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC1127DF660F0079F39C /* ModelEconomyView.swift */; };
-		7935BCF427DF66100079F39C /* ModelEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC1127DF660F0079F39C /* ModelEconomyView.swift */; };
+		7935BCEF27DF66100079F39C /* ModelStatisticHumanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC0F27DF660F0079F39C /* ModelStatisticHumanView.swift */; };
+		7935BCF027DF66100079F39C /* ModelStatisticHumanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC0F27DF660F0079F39C /* ModelStatisticHumanView.swift */; };
+		7935BCF127DF66100079F39C /* ModelStatisticSociologyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC1027DF660F0079F39C /* ModelStatisticSociologyView.swift */; };
+		7935BCF227DF66100079F39C /* ModelStatisticSociologyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC1027DF660F0079F39C /* ModelStatisticSociologyView.swift */; };
+		7935BCF327DF66100079F39C /* ModelStatisticEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC1127DF660F0079F39C /* ModelStatisticEconomyView.swift */; };
+		7935BCF427DF66100079F39C /* ModelStatisticEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC1127DF660F0079F39C /* ModelStatisticEconomyView.swift */; };
 		7935BCF527DF66100079F39C /* AppVersionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC1327DF660F0079F39C /* AppVersionView.swift */; };
 		7935BCF627DF66100079F39C /* AppVersionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC1327DF660F0079F39C /* AppVersionView.swift */; };
 		7935BCF727DF66100079F39C /* ExportSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BC1427DF660F0079F39C /* ExportSettingsView.swift */; };
@@ -583,9 +583,9 @@
 		7935BC0C27DF660F0079F39C /* BetaRandomizerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BetaRandomizerView.swift; sourceTree = "<group>"; };
 		7935BC0D27DF660F0079F39C /* DiscreteRandomizerEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscreteRandomizerEditView.swift; sourceTree = "<group>"; };
 		7935BC0E27DF660F0079F39C /* StatisticSidebarSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticSidebarSectionView.swift; sourceTree = "<group>"; };
-		7935BC0F27DF660F0079F39C /* ModelHumanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelHumanView.swift; sourceTree = "<group>"; };
-		7935BC1027DF660F0079F39C /* ModelSociologyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelSociologyView.swift; sourceTree = "<group>"; };
-		7935BC1127DF660F0079F39C /* ModelEconomyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelEconomyView.swift; sourceTree = "<group>"; };
+		7935BC0F27DF660F0079F39C /* ModelStatisticHumanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelStatisticHumanView.swift; sourceTree = "<group>"; };
+		7935BC1027DF660F0079F39C /* ModelStatisticSociologyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelStatisticSociologyView.swift; sourceTree = "<group>"; };
+		7935BC1127DF660F0079F39C /* ModelStatisticEconomyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelStatisticEconomyView.swift; sourceTree = "<group>"; };
 		7935BC1327DF660F0079F39C /* AppVersionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppVersionView.swift; sourceTree = "<group>"; };
 		7935BC1427DF660F0079F39C /* ExportSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportSettingsView.swift; sourceTree = "<group>"; };
 		7935BC1527DF660F0079F39C /* GraphicUserSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicUserSettingsView.swift; sourceTree = "<group>"; };
@@ -1080,9 +1080,9 @@
 			children = (
 				7935BC0927DF660F0079F39C /* Randomizers Views */,
 				7935BC0E27DF660F0079F39C /* StatisticSidebarSectionView.swift */,
-				7935BC0F27DF660F0079F39C /* ModelHumanView.swift */,
-				7935BC1027DF660F0079F39C /* ModelSociologyView.swift */,
-				7935BC1127DF660F0079F39C /* ModelEconomyView.swift */,
+				7935BC0F27DF660F0079F39C /* ModelStatisticHumanView.swift */,
+				7935BC1027DF660F0079F39C /* ModelStatisticSociologyView.swift */,
+				7935BC1127DF660F0079F39C /* ModelStatisticEconomyView.swift */,
 			);
 			path = "Statistic Menu Views";
 			sourceTree = "<group>";
@@ -2090,7 +2090,7 @@
 				7935BCC127DF66100079F39C /* ModelRetirementAgircView.swift in Sources */,
 				7935BCCF27DF66100079F39C /* ModelUnemploymentDiffereView.swift in Sources */,
 				7935BCF727DF66100079F39C /* ExportSettingsView.swift in Sources */,
-				7935BCEF27DF66100079F39C /* ModelHumanView.swift in Sources */,
+				7935BCEF27DF66100079F39C /* ModelStatisticHumanView.swift in Sources */,
 				7935BCDB27DF66100079F39C /* DiscreteDistributionView.swift in Sources */,
 				7935BCED27DF66100079F39C /* StatisticSidebarSectionView.swift in Sources */,
 				7935BD7127DF66100079F39C /* PersonPickerView.swift in Sources */,
@@ -2098,7 +2098,7 @@
 				7935BD5327DF66100079F39C /* PersonEditView.swift in Sources */,
 				7935BD9527DF66100079F39C /* CategoryBarChartCashFlowVisitor.swift in Sources */,
 				7935BD3327DF66100079F39C /* GridView.swift in Sources */,
-				7935BCF327DF66100079F39C /* ModelEconomyView.swift in Sources */,
+				7935BCF327DF66100079F39C /* ModelStatisticEconomyView.swift in Sources */,
 				7935BDB727DF66100079F39C /* ComputationSidebarSectionView.swift in Sources */,
 				7935BCDD27DF66100079F39C /* UniformDistributionView.swift in Sources */,
 				7935BD0F27DF66100079F39C /* AssetView.swift in Sources */,
@@ -2118,7 +2118,7 @@
 				7935BD1527DF66100079F39C /* FreeInvestDetailedView.swift in Sources */,
 				7935BD1B27DF66100079F39C /* ClauseView.swift in Sources */,
 				7935BD7527DF66100079F39C /* KpiSidebarSectionView.swift in Sources */,
-				7935BCF127DF66100079F39C /* ModelSociologyView.swift in Sources */,
+				7935BCF127DF66100079F39C /* ModelStatisticSociologyView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2184,7 +2184,7 @@
 				7935BD1E27DF66100079F39C /* RecipientsListView.swift in Sources */,
 				7935BD6427DF66100079F39C /* NoLoadedDossierView.swift in Sources */,
 				7935BCDA27DF66100079F39C /* BetaDistributionView.swift in Sources */,
-				7935BCF427DF66100079F39C /* ModelEconomyView.swift in Sources */,
+				7935BCF427DF66100079F39C /* ModelStatisticEconomyView.swift in Sources */,
 				7935BCE627DF66100079F39C /* BetaRandomizerEditView.swift in Sources */,
 				7935BD4427DF66100079F39C /* PersonViewModel.swift in Sources */,
 				7935BD7E27DF66100079F39C /* HistogramVisitor.swift in Sources */,
@@ -2192,7 +2192,7 @@
 				7935BCB827DF66100079F39C /* ModelDeterministicHumanView.swift in Sources */,
 				7935BCC627DF66100079F39C /* AgircApresAgeLegalGridView.swift in Sources */,
 				7935BD0E27DF66100079F39C /* PeriodicInvestDetailedView.swift in Sources */,
-				7935BCF027DF66100079F39C /* ModelHumanView.swift in Sources */,
+				7935BCF027DF66100079F39C /* ModelStatisticHumanView.swift in Sources */,
 				7935BCBE27DF66100079F39C /* ModelDeterministicEconomyView.swift in Sources */,
 				7935BD1427DF66100079F39C /* DonationView.swift in Sources */,
 				7935BD0827DF66100079F39C /* PatrimoineSummaryRiskChartView.swift in Sources */,
@@ -2255,7 +2255,7 @@
 				7935BDA227DF66100079F39C /* CF Detailed ChartView.swift in Sources */,
 				7935BCD027DF66100079F39C /* ModelUnemploymentDiffereView.swift in Sources */,
 				7935BD3A27DF66100079F39C /* RetirementDetailView.swift in Sources */,
-				7935BCF227DF66100079F39C /* ModelSociologyView.swift in Sources */,
+				7935BCF227DF66100079F39C /* ModelStatisticSociologyView.swift in Sources */,
 				79FC726B263336C3004F3BD2 /* UIState.swift in Sources */,
 				7935BD2E27DF66100079F39C /* OwnersListView.swift in Sources */,
 				7935BD0A27DF66100079F39C /* BubbleChartTemplateView.swift in Sources */,

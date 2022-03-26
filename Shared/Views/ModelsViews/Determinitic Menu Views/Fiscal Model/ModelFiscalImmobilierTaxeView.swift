@@ -23,10 +23,6 @@ struct ModelFiscalImmobilierTaxeView: View {
         Form {
             Section {
                 VersionEditableViewInForm(version: $model.fiscalModel.estateCapitalGainTaxes.model.version)
-                    .onChange(of: model.fiscalModel.estateCapitalGainTaxes.model.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
             
             NavigationLink(destination: RealEstateExonerationGridView(label: "Barême des taxes sur Plus-Values Immobilières",
@@ -45,10 +41,6 @@ struct ModelFiscalImmobilierTaxeView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .onChange(of: model.fiscalModel.estateCapitalGainTaxes.model.CRDS) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
-            }
 
             Stepper(value : $model.fiscalModel.estateCapitalGainTaxes.model.CSG,
                     in    : 0 ... 100.0,
@@ -59,10 +51,6 @@ struct ModelFiscalImmobilierTaxeView: View {
                     Text("\(model.fiscalModel.estateCapitalGainTaxes.model.CSG.percentString(digit: 1))")
                         .foregroundColor(.secondary)
                 }
-            }
-            .onChange(of: model.fiscalModel.estateCapitalGainTaxes.model.CSG) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
             }
 
             Stepper(value : $model.fiscalModel.estateCapitalGainTaxes.model.prelevSocial,
@@ -75,10 +63,6 @@ struct ModelFiscalImmobilierTaxeView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .onChange(of: model.fiscalModel.estateCapitalGainTaxes.model.prelevSocial) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
-            }
 
             Stepper(value : $model.fiscalModel.estateCapitalGainTaxes.model.discountTravaux,
                     in    : 0 ... 100.0,
@@ -90,18 +74,14 @@ struct ModelFiscalImmobilierTaxeView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .onChange(of: model.fiscalModel.estateCapitalGainTaxes.model.discountTravaux) { _ in
-                DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                model.manageInternalDependencies()
-            }
 
             IntegerEditView(label   : "Abattement possible après",
                             comment : "ans",
                             integer : $model.fiscalModel.estateCapitalGainTaxes.model.discountAfter)
-                .onChange(of: model.fiscalModel.estateCapitalGainTaxes.model.discountAfter) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
+        }
+        .onChange(of: model.fiscalModel.estateCapitalGainTaxes.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Plus-Value Immobilière")
         .alert(item: $alertItem, content: newAlert)

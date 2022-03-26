@@ -78,7 +78,7 @@ public final class RegimeGeneral: Codable {
         }
     }
     
-    public struct Model: JsonCodableToBundleP, VersionableP {
+    public struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
             case version, dureeDeReferenceGrid, nbTrimNonIndemniseGrid, ageMinimumLegal,
             nbOfYearForSAM, maxReversionRate, decoteParTrimestre, surcoteParTrimestre, maxNbTrimestreDecote,
@@ -97,6 +97,19 @@ public final class RegimeGeneral: Codable {
         var majorationTauxEnfant     : Double // 10.0 // % [0, 100]
         var netRegimeGeneralProvider : NetRegimeGeneralProviderP!
         var socioEconomy             : SocioEconomyModelProviderP!
+
+        public static func == (lhs: RegimeGeneral.Model, rhs: RegimeGeneral.Model) -> Bool {
+            return lhs.version == rhs.version &&
+            lhs.dureeDeReferenceGrid == rhs.dureeDeReferenceGrid &&
+            lhs.nbTrimNonIndemniseGrid == rhs.nbTrimNonIndemniseGrid &&
+            lhs.ageMinimumLegal == rhs.ageMinimumLegal &&
+            lhs.nbOfYearForSAM == rhs.nbOfYearForSAM &&
+            lhs.maxReversionRate == rhs.maxReversionRate &&
+            lhs.decoteParTrimestre == rhs.decoteParTrimestre &&
+            lhs.surcoteParTrimestre == rhs.surcoteParTrimestre &&
+            lhs.maxNbTrimestreDecote == rhs.maxNbTrimestreDecote &&
+            lhs.majorationTauxEnfant == rhs.majorationTauxEnfant
+        }
     }
     
     // MARK: - Static Properties

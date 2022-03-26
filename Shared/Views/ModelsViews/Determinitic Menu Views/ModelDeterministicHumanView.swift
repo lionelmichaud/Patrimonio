@@ -25,11 +25,7 @@ struct ModelDeterministicHumanView: View {
         Form {
             Section(header: Text("Homme").font(.headline)) {
                 VersionEditableViewInForm(version: $model.humanLifeModel.menLifeExpectation.version)
-                    .onChange(of: model.humanLifeModel.menLifeExpectation.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
-                
+
                 Stepper(value : $model.humanLifeModel.menLifeExpectation.defaultValue,
                         in    : 50 ... 100) {
                     HStack {
@@ -37,10 +33,6 @@ struct ModelDeterministicHumanView: View {
                         Spacer()
                         Text("\(Int(model.humanLifeModel.menLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
                     }
-                }
-                .onChange(of: model.humanLifeModel.menLifeExpectation.defaultValue) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
                 }
             }
 
@@ -55,10 +47,6 @@ struct ModelDeterministicHumanView: View {
                         Text("\(Int(model.humanLifeModel.womenLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.humanLifeModel.womenLifeExpectation.defaultValue) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
 
             Section(header: Text("Dépendance").font(.headline)) {
@@ -72,11 +60,11 @@ struct ModelDeterministicHumanView: View {
                         Text("\(Int(model.humanLifeModel.nbOfYearsOfdependency.defaultValue)) ans").foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.humanLifeModel.nbOfYearsOfdependency.defaultValue) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
+        }
+        .onChange(of: model.humanLifeModel) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Modèle Humain")
         .alert(item: $alertItem, content: newAlert)

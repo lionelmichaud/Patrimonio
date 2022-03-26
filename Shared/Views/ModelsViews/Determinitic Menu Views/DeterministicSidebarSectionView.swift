@@ -23,7 +23,7 @@ struct DeterministicSidebarSectionView: View {
             NavigationLink(destination: ModelDeterministicHumanView(),
                            tag         : .detHumanModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Modèle Humain")
+                Label("Modèle Humain", systemImage: "slider.horizontal.3")
             }
             .isDetailLink(true)
             
@@ -31,7 +31,7 @@ struct DeterministicSidebarSectionView: View {
             NavigationLink(destination: ModelDeterministicEconomyView(),
                            tag         : .detEconomyModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Modèle Economique")
+                Label("Modèle Economique", systemImage: "slider.horizontal.3")
             }
             .isDetailLink(true)
             
@@ -39,7 +39,7 @@ struct DeterministicSidebarSectionView: View {
             NavigationLink(destination: ModelDeterministicSociologyView(),
                            tag         : .detSociologyModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Modèle Sociologique")
+                Label("Modèle Sociologique", systemImage: "slider.horizontal.3")
             }
             .isDetailLink(true)
             
@@ -47,7 +47,7 @@ struct DeterministicSidebarSectionView: View {
             NavigationLink(destination: ModelDeterministicRetirementView(),
                            tag         : .detRetirementModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Modèle Retraite")
+                Label("Modèle Retraite", systemImage: "slider.horizontal.3")
             }
             .isDetailLink(true)
             
@@ -55,7 +55,7 @@ struct DeterministicSidebarSectionView: View {
             NavigationLink(destination: ModelDeterministicFiscalView(),
                            tag         : .detFiscalModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Modèle Fiscal")
+                Label("Modèle Fiscal", systemImage: "slider.horizontal.3")
             }
             .isDetailLink(true)
             
@@ -63,7 +63,7 @@ struct DeterministicSidebarSectionView: View {
             NavigationLink(destination: ModelDeterministicUnemploymentView(),
                            tag         : .detUnemploymentModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Text("Modèle Chômage")
+                Label("Modèle Chômage", systemImage: "slider.horizontal.3")
             }
             .isDetailLink(true)
 

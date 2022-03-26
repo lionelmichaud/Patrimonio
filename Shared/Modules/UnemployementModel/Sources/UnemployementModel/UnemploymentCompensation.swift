@@ -26,7 +26,7 @@ public final class UnemploymentCompensation: Codable {
     
     // MARK: - Nested types
 
-    public struct DurationSlice: Codable, Hashable {
+    public struct DurationSlice: Codable, Hashable, Equatable {
         public var fromAge             : Int
         public var maxDuration         : Int // nb de mois d'indemnisation
         public var reduction           : Double // % de dégressivité après le délai de reductionAfter
@@ -46,14 +46,14 @@ public final class UnemploymentCompensation: Codable {
         }
     }
     
-    public struct DelayModel: Codable {
+    public struct DelayModel: Codable, Equatable {
         public var delaiAttente                        : Int // 7 // L'ARE ne peut pas être versée avant la fin d'un délai d'attente, fixé à 7 jours
         public var ratioDiffereSpecifique              : Double // 94,4 // nombre de jours obtenu en divisant le montant de l'indemnité prise en compte par 94,4
         public var maxDiffereSpecifique                : Int // 150 // le différé ne doit pas dépasser 150 jours calendaires (5 mois)
         public var maxDiffereSpecifiqueLicenciementEco : Int // 75 // ou, en cas de licenciement pour motif économique, 75 jours calendaires.
     }
     
-    public struct AmountModel: Codable {
+    public struct AmountModel: Codable, Equatable {
         public var case1Rate          : Double // 40.4 // % du salaire journalier de référence
         public var case1Fix           : Double // 12.0 // € par jour
         public var case2Rate          : Double // 57.0 // % du salaire journalier de référence
@@ -62,7 +62,7 @@ public final class UnemploymentCompensation: Codable {
         public var maxAllocationEuro  : Double // 253.14 // en €
     }
     
-    public struct Model: JsonCodableToBundleP, VersionableP {
+    public struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
             case version, durationGrid, delayModel, amountModel
         }
@@ -74,6 +74,13 @@ public final class UnemploymentCompensation: Codable {
         public var amountModel  : AmountModel
         // dependencies to other Models
         var allocationChomageTaxesProvider : AllocationChomageTaxesProviderP!
+
+        public static func == (lhs: UnemploymentCompensation.Model, rhs: UnemploymentCompensation.Model) -> Bool {
+            return lhs.version == rhs.version &&
+            lhs.durationGrid == rhs.durationGrid &&
+            lhs.delayModel == rhs.delayModel &&
+            lhs.amountModel == rhs.amountModel
+        }
     }
     
     // MARK: - Initializer

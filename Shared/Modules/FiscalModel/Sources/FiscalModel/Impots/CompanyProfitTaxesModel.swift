@@ -14,7 +14,8 @@ public struct CompanyProfitTaxesModel: Codable {
     
     // MARK: Nested types
     
-    public struct Model: JsonCodableToBundleP, VersionableP {
+    /// Ne contient aucune Class
+    public struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         static var defaultFileName : String = "CompanyProfitTaxesModel.json"
         public var version : Version
         public var rate    : Double // 15.0 // %

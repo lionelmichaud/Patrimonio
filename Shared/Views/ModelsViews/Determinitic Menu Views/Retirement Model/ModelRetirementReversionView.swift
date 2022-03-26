@@ -29,18 +29,10 @@ struct ModelRetirementReversionView : View {
         Form {
             Section {
                 VersionEditableViewInForm(version: $model.retirementModel.reversion.model.version)
-                    .onChange(of: model.retirementModel.reversion.model.version) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
             
             Toggle("Utiliser la réforme des retraites",
                    isOn: $model.retirementModel.reversion.newModelSelected)
-                .onChange(of: model.retirementModel.reversion.newModelSelected) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
 
             Section(header: Text("Système Réformé Futur").font(.headline)) {
                 Stepper(value : $model.retirementModel.reversion.newTauxReversion,
@@ -53,20 +45,12 @@ struct ModelRetirementReversionView : View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.retirementModel.reversion.newTauxReversion) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
             
             Section(header: Text("Système Actuel").font(.headline)) {
                 DisclosureGroup("Régime Général",
                                 isExpanded: $isExpandedCurrentGeneral) {
                     AmountEditView(label: "Minimum", amount: $model.retirementModel.reversion.oldModel.general.minimum)
-                        .onChange(of: model.retirementModel.reversion.oldModel.general.minimum) { _ in
-                            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                            model.manageInternalDependencies()
-                        }
 
                     Stepper(value : $model.retirementModel.reversion.oldModel.general.majoration3enfants,
                             in    : 0 ... 100.0,
@@ -77,10 +61,6 @@ struct ModelRetirementReversionView : View {
                             Text("\(model.retirementModel.reversion.oldModel.general.majoration3enfants.percentString(digit: 0))")
                                 .foregroundColor(.secondary)
                         }
-                    }
-                    .onChange(of: model.retirementModel.reversion.oldModel.general.majoration3enfants) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
                     }
                 }
                 
@@ -95,10 +75,6 @@ struct ModelRetirementReversionView : View {
                                 .foregroundColor(.secondary)
                         }
                     }
-                    .onChange(of: model.retirementModel.reversion.oldModel.agircArcco.ageMinimum) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
 
                     Stepper(value : $model.retirementModel.reversion.oldModel.agircArcco.fractionConjoint,
                             in    : 0 ... 100.0,
@@ -110,12 +86,13 @@ struct ModelRetirementReversionView : View {
                                 .foregroundColor(.secondary)
                         }
                     }
-                    .onChange(of: model.retirementModel.reversion.oldModel.agircArcco.fractionConjoint) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
+
                 }
             }
+        }
+        .onChange(of: model.retirementModel.reversion.model) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Régime Général")
         .alert(item: $alertItem, content: newAlert)

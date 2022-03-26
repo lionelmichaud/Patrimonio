@@ -32,17 +32,9 @@ struct ModelUnemploymentAmountView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.unemploymentModel.allocationChomage.model.amountModel.case1Rate) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
                 
                 AmountEditView(label  : "Cas 1: Indemnité journalière",
                                amount : $model.unemploymentModel.allocationChomage.model.amountModel.case1Fix)
-                    .onChange(of: model.unemploymentModel.allocationChomage.model.amountModel.case1Fix) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
             }
 
             Section(header: Text("Cas n°2").font(.headline),
@@ -57,26 +49,14 @@ struct ModelUnemploymentAmountView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.unemploymentModel.allocationChomage.model.amountModel.case2Rate) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
 
             Section(header: Text("Limites").font(.headline)) {
                 AmountEditView(label  : "Allocation minimale",
                                amount : $model.unemploymentModel.allocationChomage.model.amountModel.minAllocationEuro)
-                    .onChange(of: model.unemploymentModel.allocationChomage.model.amountModel.minAllocationEuro) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
 
                 AmountEditView(label  : "Allocation maximale",
                                amount : $model.unemploymentModel.allocationChomage.model.amountModel.maxAllocationEuro)
-                    .onChange(of: model.unemploymentModel.allocationChomage.model.amountModel.maxAllocationEuro) { _ in
-                        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                        model.manageInternalDependencies()
-                    }
 
                 Stepper(value : $model.unemploymentModel.allocationChomage.model.amountModel.maxAllocationPcent,
                         in    : 0 ... 100.0,
@@ -88,11 +68,11 @@ struct ModelUnemploymentAmountView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.unemploymentModel.allocationChomage.model.amountModel.maxAllocationPcent) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
             }
+        }
+        .onChange(of: model.unemploymentModel.allocationChomage.model.amountModel) { _ in
+            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+            model.manageInternalDependencies()
         }
         .navigationTitle("Calcul du montant de l'indemnité de recherche d'emploi")
         .alert(item: $alertItem, content: newAlert)
