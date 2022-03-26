@@ -1234,9 +1234,9 @@
 		7935BC5627DF660F0079F39C /* ExpenseViews */ = {
 			isa = PBXGroup;
 			children = (
+				7935BC5927DF660F0079F39C /* ExpenseSidebarView.swift */,
 				7935BC5727DF660F0079F39C /* ExpenseDetailedView.swift */,
 				7935BC5827DF660F0079F39C /* TimeSpanEditView.swift */,
-				7935BC5927DF660F0079F39C /* ExpenseSidebarView.swift */,
 				7935BC5A27DF660F0079F39C /* ExpenseSummaryView.swift */,
 				7935BC5B27DF660F0079F39C /* PersonPickerView.swift */,
 				7935BC5C27DF660F0079F39C /* BoundaryEditView.swift */,
@@ -1247,10 +1247,10 @@
 		7935BC5D27DF660F0079F39C /* SimulationView */ = {
 			isa = PBXGroup;
 			children = (
+				7935BC7027DF660F0079F39C /* SimulationSidebarView.swift */,
 				7935BC5E27DF660F0079F39C /* Performance Menu Views */,
 				7935BC6927DF660F0079F39C /* Scenario Menu Views */,
 				7935BC6C27DF660F0079F39C /* Successions Menu Views */,
-				7935BC7027DF660F0079F39C /* SimulationSidebarView.swift */,
 				7935BC7127DF660F0079F39C /* Graphic Menu Views */,
 				7935BC8A27DF66100079F39C /* Computation Menu View */,
 			);

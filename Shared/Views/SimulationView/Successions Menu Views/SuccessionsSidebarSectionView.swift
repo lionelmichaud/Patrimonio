@@ -24,7 +24,7 @@ struct SuccessionsSidebarSectionView: View {
                                                             successions : simulation.occuredLegalSuccessions),
                                tag         : .successionsLegal,
                                selection   : $uiState.simulationViewState.selectedItem) {
-                    Text("Légales")
+                    Label("Légales", systemImage: "person.fill.xmark")
                 }
                 .isDetailLink(true)
                 
@@ -32,7 +32,7 @@ struct SuccessionsSidebarSectionView: View {
                                                             successions : simulation.occuredLifeInsSuccessions),
                                tag         : .successionsAssVie,
                                selection   : $uiState.simulationViewState.selectedItem) {
-                    Text("Assurance Vie")
+                    Label("Assurance Vie", systemImage: "person.fill.xmark")
                 }
                 .isDetailLink(true)
                 
@@ -40,7 +40,7 @@ struct SuccessionsSidebarSectionView: View {
                                                             successions : simulation.occuredLegalSuccessions + simulation.occuredLifeInsSuccessions),
                                tag         : .successionCumul,
                                selection   : $uiState.simulationViewState.selectedItem) {
-                    Text("Cumul")
+                    Label("Cumul", systemImage: "person.fill.xmark")
                 }
                 .isDetailLink(true)
             }

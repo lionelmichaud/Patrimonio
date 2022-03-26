@@ -41,7 +41,7 @@ struct ChartsSidebarSectionView: View {
                                     .isDetailLink(true)
                                 },
                                 label: {
-                                    Text("Bilan")//.font(.headline)
+                                    Label("Bilan", systemImage: "chart.bar.xaxis")
                                 })
 
                 DisclosureGroup(isExpanded: $isCfExpanded,
@@ -61,7 +61,7 @@ struct ChartsSidebarSectionView: View {
                                     .isDetailLink(true)
                                 },
                                 label: {
-                                    Text("Cash Flow")//.font(.headline)
+                                    Label("Cash Flow", systemImage: "chart.bar.xaxis")
                                 })
 
                 DisclosureGroup(isExpanded: $isIrppExpanded,
@@ -81,7 +81,7 @@ struct ChartsSidebarSectionView: View {
                                     .isDetailLink(true)
                                 },
                                 label: {
-                                    Text("Impôt sur le Revenu")//.font(.headline)
+                                    Label("Impôt sur le Revenu", systemImage: "chart.bar.xaxis")
                                 })
 
                 DisclosureGroup(isExpanded: $isIsfExpanded,
@@ -94,7 +94,7 @@ struct ChartsSidebarSectionView: View {
                                     .isDetailLink(true)
                                 },
                                 label: {
-                                    Text("Impôt sur la Fortune")//.font(.headline)
+                                    Label("Impôt sur la Fortune", systemImage: "chart.bar.xaxis")
                                 })
             }
         } else {

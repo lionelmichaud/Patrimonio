@@ -112,16 +112,18 @@ struct ComputationButonView: View {
     @State private var localAlertItem         : AlertItem?
 
     var body: some View {
-        Button(action: computeSimulation,
-               label: {
+        Button(
+            action: computeSimulation,
+            label: {
                 Label("Calculer", systemImage: "function")
                     .font(.title2)
                     .padding(.vertical, 4.0)
-               })
-            .capsuleButtonStyle(width: 200.0)
-            .alert(item: $localAlertItem, content: newAlert)
+            })
+        .buttonStyle(.borderedProminent)
+        //.capsuleButtonStyle(width: 200.0)
+        .alert(item: $localAlertItem, content: newAlert)
     }
-
+    
     /// Exécuter la simulation
     private func computeSimulation() {
         // busyCompWheelAnimate.toggle()
@@ -167,13 +169,16 @@ struct EditKpisButtonView: View {
 
     var body: some View {
         HStack {
-            Button(action: { showKpiEditView = true },
-                   label : {
+            Button(
+                action: { showKpiEditView = true },
+                label : {
                     Label("Critères de performances", systemImage: "thermometer")
                         .font(.title2)
                         .padding(.vertical, 4.0)
-                   })
-                .capsuleButtonStyle()
+                })
+            .buttonStyle(.borderedProminent)
+
+            //.capsuleButtonStyle()
             NavigationLink(destination: KpisParametersEditView(), isActive: $showKpiEditView) {
                 EmptyView()
             }

@@ -21,7 +21,7 @@ struct ScenarioSidebarSectionView: View {
                 NavigationLink(destination : ScenarioSummaryView(simulationMode: simulationMode),
                                tag         : .lastScenarioUsed,
                                selection   : $uiState.simulationViewState.selectedItem) {
-                    Text("Dernier Scénario Exécuté")
+                    Label("Dernier Scénario Exécuté", systemImage: "film")
                 }
                 .isDetailLink(true)
             }

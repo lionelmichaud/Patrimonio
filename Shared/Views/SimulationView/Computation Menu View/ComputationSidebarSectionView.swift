@@ -20,7 +20,7 @@ struct ComputationSidebarSectionView: View {
             NavigationLink(destination : ComputationView(),
                            tag         : .computationView,
                            selection   : $uiState.simulationViewState.selectedItem) {
-                Text("Calculs")
+                Label("Calculs", systemImage: "function")
             }
             .isDetailLink(true)
     }

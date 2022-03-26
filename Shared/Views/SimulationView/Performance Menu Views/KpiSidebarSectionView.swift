@@ -43,7 +43,7 @@ struct KpiSidebarSectionView: View {
                                     KpiListView()
                                 },
                                 label: {
-                                    Text("Indicateurs")//.font(.headline)
+                                    Label("Indicateurs", systemImage: "thermometer")
                                 })
                 
                 // Résultats tabulés des runs de MontéCarlo

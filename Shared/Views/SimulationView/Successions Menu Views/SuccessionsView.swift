@@ -29,32 +29,36 @@ struct SuccessionsView: View {
         } else {
             List {
                 // Cumul global des successions
-                GroupBox(label: Text("Cumulatif des Successions").font(.headline)) {
-                    Group {
+                GroupBox(
+                    content: {
                         Group {
-                            AmountView(label : "Masse successorale taxable brute (évaluation fiscale)",
-                                       amount: successions.sum(for: \.taxableValue))
-                            AmountView(label : "Droits de succession à payer par les héritiers",
-                                       amount: -successions.sum(for: \.tax),
-                                       comment: (successions.sum(for: \.tax) / successions.sum(for: \.taxableValue)).percentStringRounded)
-                            AmountView(label : "Net (évaluation fiscale)",
-                                       amount: successions.sum(for: \.netFiscal))
+                            Group {
+                                AmountView(label : "Masse successorale taxable brute (évaluation fiscale)",
+                                           amount: successions.sum(for: \.taxableValue))
+                                AmountView(label : "Droits de succession à payer par les héritiers",
+                                           amount: -successions.sum(for: \.tax),
+                                           comment: (successions.sum(for: \.tax) / successions.sum(for: \.taxableValue)).percentStringRounded)
+                                AmountView(label : "Net (évaluation fiscale)",
+                                           amount: successions.sum(for: \.netFiscal))
+                                Divider()
+                                AmountView(label  : "Somme des héritages reçu brut (en cash)",
+                                           amount : successions.sum(for: \.received))
+                                AmountView(label  : "Somme des héritages reçu net (en cash)",
+                                           amount : successions.sum(for: \.receivedNet))
+                                AmountView(label  : "Somme des créance de restitution des héritiers envers le quasi-usufruitier",
+                                           amount : successions.sum(for: \.creanceRestit))
+                            }
+                            .foregroundColor(.secondary)
+                            .padding(.top, 3)
                             Divider()
-                            AmountView(label  : "Somme des héritages reçu brut (en cash)",
-                                       amount : successions.sum(for: \.received))
-                            AmountView(label  : "Somme des héritages reçu net (en cash)",
-                                       amount : successions.sum(for: \.receivedNet))
-                            AmountView(label  : "Somme des créance de restitution des héritiers envers le quasi-usufruitier",
-                                       amount : successions.sum(for: \.creanceRestit))
+                            CumulatedSuccessorsDisclosureGroup(successions: successions)
                         }
-                        .foregroundColor(.secondary)
-                        .padding(.top, 3)
-                        Divider()
-                        CumulatedSuccessorsDisclosureGroup(successions: successions)
-                    }
-                    .padding(.leading)
-                }
-
+                        .padding(.leading)
+                    },
+                    label: {
+                        Label("Cumulatif des Successions", systemImage: "plus").font(.headline)
+                    })
+                
                 // liste des successsions dans le temps
                 ForEach(successions.sorted(by: \.yearOfDeath)) { succession in
                     SuccessionGroupBox(succession: succession)
@@ -65,14 +69,14 @@ struct SuccessionsView: View {
         }
     }
     
-//    init(simulation: Simulation) {
-//        self.successions = simulation.occuredLegalSuccessions
-//    }
+    //    init(simulation: Simulation) {
+    //        self.successions = simulation.occuredLegalSuccessions
+    //    }
 }
 
 struct CumulatedSuccessorsDisclosureGroup: View {
     var successions: [Succession]
-
+    
     var body: some View {
         DisclosureGroup(
             content: {
@@ -80,8 +84,8 @@ struct CumulatedSuccessorsDisclosureGroup: View {
                     GroupBox(label: Text(name).font(.headline)) {
                         AmountView(label  : "Somme des héritages reçu net (en cash)",
                                    amount : successions.successorsReceivedNetValue[name]!)
-                            .foregroundColor(.secondary)
-                            .padding(.top, 3)
+                        .foregroundColor(.secondary)
+                        .padding(.top, 3)
                     }
                 }
             },
@@ -97,36 +101,45 @@ struct SuccessionGroupBox: View {
         succession.kind.rawValue
     }
     @EnvironmentObject private var family: Family
-
+    
     var body: some View {
-        GroupBox(label: Text("Succession \(nature) de \(succession.decedentName) ") +
-                    Text("à l'âge de \(family.ageOf(succession.decedentName, succession.yearOfDeath)) ans ").fontWeight(.regular) +
-                    Text("en \(String(succession.yearOfDeath))").fontWeight(.regular)) {
-            Group {
+        GroupBox(
+            content: {
                 Group {
-                    AmountView(label : "Masse successorale taxable brute (évaluation fiscale)",
-                               amount: succession.taxableValue)
-                    AmountView(label : "Droits de succession à payer par les héritiers",
-                               amount: -succession.tax,
-                               comment: (succession.tax / succession.taxableValue).percentStringRounded)
-                    AmountView(label : "Net (évaluation fiscale)",
-                               amount: succession.netFiscal)
+                    Group {
+                        AmountView(label : "Masse successorale taxable brute (évaluation fiscale)",
+                                   amount: succession.taxableValue)
+                        AmountView(label : "Droits de succession à payer par les héritiers",
+                                   amount: -succession.tax,
+                                   comment: (succession.tax / succession.taxableValue).percentStringRounded)
+                        AmountView(label : "Net (évaluation fiscale)",
+                                   amount: succession.netFiscal)
+                        Divider()
+                        AmountView(label  : "Somme des héritages reçu brut (en cash)",
+                                   amount : succession.received)
+                        AmountView(label  : "Somme des héritages reçu net (en cash)",
+                                   amount : succession.receivedNet)
+                        AmountView(label  : "Somme des créance de restitution des héritiers envers le quasi-usufruitier",
+                                   amount : succession.creanceRestit)
+                    }
+                    .foregroundColor(.secondary)
+                    .padding(.top, 3)
                     Divider()
-                    AmountView(label  : "Somme des héritages reçu brut (en cash)",
-                               amount : succession.received)
-                    AmountView(label  : "Somme des héritages reçu net (en cash)",
-                               amount : succession.receivedNet)
-                    AmountView(label  : "Somme des créance de restitution des héritiers envers le quasi-usufruitier",
-                               amount : succession.creanceRestit)
-               }
-                .foregroundColor(.secondary)
-                .padding(.top, 3)
-                Divider()
-                SuccessorsDisclosureGroup(successionKind : succession.kind,
-                                          inheritances   : succession.inheritances)
-            }
-            .padding(.leading)
-        }
+                    SuccessorsDisclosureGroup(successionKind : succession.kind,
+                                              inheritances   : succession.inheritances)
+                }
+                .padding(.leading)
+            },
+            label: {
+                Label {
+                    Text("Succession \(nature) de ").fontWeight(.regular) +
+                    Text("\(succession.decedentName) ") +
+                    Text("à l'âge de \(family.ageOf(succession.decedentName, succession.yearOfDeath)) ans ").fontWeight(.regular) +
+                    Text("en \(String(succession.yearOfDeath))").fontWeight(.regular)
+                } icon: {
+                    Image(systemName: "person.fill")
+                }
+            })
     }
 }
 
@@ -152,11 +165,11 @@ struct SuccessionsView_Previews: PreviewProvider {
     static func initializedSimulation() -> Simulation {
         TestEnvir.loadTestFilesFromBundle()
         TestEnvir.simulation.compute(using          : TestEnvir.model,
-                               nbOfYears      : 55,
-                               nbOfRuns       : 1,
-                               withFamily     : TestEnvir.family,
-                               withExpenses   : TestEnvir.expenses,
-                               withPatrimoine : TestEnvir.patrimoine)
+                                     nbOfYears      : 55,
+                                     nbOfRuns       : 1,
+                                     withFamily     : TestEnvir.family,
+                                     withExpenses   : TestEnvir.expenses,
+                                     withPatrimoine : TestEnvir.patrimoine)
         return TestEnvir.simulation
     }
     
@@ -165,10 +178,10 @@ struct SuccessionsView_Previews: PreviewProvider {
         
         return SuccessionsView(title       : "Successions Légales",
                                successions : simulation.occuredLegalSuccessions)
-            .preferredColorScheme(.dark)
-            .environmentObject(TestEnvir.uiState)
-            .environmentObject(TestEnvir.family)
-            .environmentObject(TestEnvir.patrimoine)
-            .environmentObject(TestEnvir.simulation)
+        .preferredColorScheme(.dark)
+        .environmentObject(TestEnvir.uiState)
+        .environmentObject(TestEnvir.family)
+        .environmentObject(TestEnvir.patrimoine)
+        .environmentObject(TestEnvir.simulation)
     }
 }

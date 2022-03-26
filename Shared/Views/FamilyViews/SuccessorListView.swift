@@ -53,36 +53,40 @@ struct SuccessorGroupBox : View {
     }
 
     var body: some View {
-        GroupBox(label: groupBoxLabel(personName: inheritence.successorName).font(.headline)) {
-            Group {
-                AmountView(label  : "Base taxable brute (évaluation fiscale)",
-                           amount : inheritence.brutFiscal,
-                           comment: inheritence.percentFiscal.percentStringRounded + " de la masse successorale")
+        GroupBox(
+            content: {
+                Group {
+                    AmountView(label  : "Base taxable brute (évaluation fiscale)",
+                               amount : inheritence.brutFiscal,
+                               comment: inheritence.percentFiscal.percentStringRounded + " de la masse successorale")
                     .padding(.top, 3)
-                AmountView(label  : "Abattement fiscal",
-                           amount : abattement,
-                           comment: abattementFraction.percentStringRounded)
+                    AmountView(label  : "Abattement fiscal",
+                               amount : abattement,
+                               comment: abattementFraction.percentStringRounded)
                     .padding(.top, 3)
-                AmountView(label  : "Droits de succession à payer",
-                           amount : -inheritence.tax,
-                           comment: (inheritence.tax / inheritence.brutFiscal).percentStringRounded)
+                    AmountView(label  : "Droits de succession à payer",
+                               amount : -inheritence.tax,
+                               comment: (inheritence.tax / inheritence.brutFiscal).percentStringRounded)
                     .padding(.top, 3)
-                AmountView(label  : "Net (évaluation fiscale)",
-                           amount : inheritence.netFiscal,
-                           comment: "=")
+                    AmountView(label  : "Net (évaluation fiscale)",
+                               amount : inheritence.netFiscal,
+                               comment: "=")
                     .padding(.top, 3)
-                Divider()
-                AmountView(label  : "Héritage reçu brut (en cash)",
-                           amount : inheritence.received)
-                AmountView(label  : "Héritage reçu net (en cash)",
-                           amount : inheritence.receivedNet)
+                    Divider()
+                    AmountView(label  : "Héritage reçu brut (en cash)",
+                               amount : inheritence.received)
+                    AmountView(label  : "Héritage reçu net (en cash)",
+                               amount : inheritence.receivedNet)
                     .padding(.top, 3)
-                AmountView(label  : "Créance de restitution de l'héritier envers le quasi-usufruitier",
-                           amount : inheritence.creanceRestit)
+                    AmountView(label  : "Créance de restitution de l'héritier envers le quasi-usufruitier",
+                               amount : inheritence.creanceRestit)
                     .padding(.top, 3)
-            }
-            .foregroundColor(.secondary)
-        }
+                }
+                .foregroundColor(.secondary)
+            },
+            label: {
+                groupBoxLabel(personName: inheritence.successorName).font(.headline)
+            })
     }
 
     func groupBoxLabel(personName: String) -> some View {
