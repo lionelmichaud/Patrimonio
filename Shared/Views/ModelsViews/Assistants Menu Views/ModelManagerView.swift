@@ -13,7 +13,9 @@ import HelpersView
 
 struct ModelManagerView: View {
     @EnvironmentObject private var dataStore : Store
+    @EnvironmentObject private var model     : Model
     @State private var alertItem: AlertItem?
+    private let repertoireTemplateNonTrouve = "Répertoire template non trouvé"
     
     var body: some View {
         GeometryReader { geometry in
@@ -107,7 +109,9 @@ struct ModelManagerView: View {
             //.navigationBarTitleDisplayMode(.inline)
         }
     }
-    
+
+    /// La version du Model exportée est celle enregistrée sur disque.
+    /// - Warning: les modifications non suavegardées ne seront pas exportées.
     private func shareFromOpenDossier(geometry: GeometryProxy) {
         // collecte des URL des fichiers modèle JSON
         var urls = [URL]()
@@ -133,6 +137,8 @@ struct ModelManagerView: View {
         Patrimonio.share(items: urls, fromX: Double(geometry.size.width) + sideBarWidth, fromY: 32.0)
     }
     
+    /// Le Model en mémoire est remplacé par celui issu du Template.
+    /// Le Model enregistrée sur disque est remplacé par celui issu du Template
     private func copyFromTemplateToOpenDossier() {
         do {
             guard let templateFolder = PersistenceManager.templateFolder() else {
@@ -141,34 +147,37 @@ struct ModelManagerView: View {
             guard let activeFolder = dataStore.activeDossier?.folder else {
                 throw DossierError.failedToFindFolder
             }
-            
-            let model = Model()
+
             try model.loadFromJSON(fromFolder: templateFolder)
             try model.saveAsJSON(toFolder: activeFolder)
             self.alertItem = AlertItem(title         : Text("Copie réussie"),
                                        dismissButton : .default(Text("OK")))
+        } catch FileError.failedToFindTemplateDirectory {
+            self.alertItem = AlertItem(title         : Text("**Echec de la copie**").foregroundColor(.red) +
+                                       Text("\n\(repertoireTemplateNonTrouve)"),
+                                       dismissButton : .default(Text("OK")))
         } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de la copie"),
+            self.alertItem = AlertItem(title         : Text("**Echec de la copie**").foregroundColor(.red),
                                        dismissButton : .default(Text("OK")))
         }
     }
     
+    /// La version du Model exportée est celle en cours de modification.
     private func copyFromOpenDossierToTemplate() {
         do {
             guard let templateFolder = PersistenceManager.templateFolder() else {
                 throw FileError.failedToFindTemplateDirectory
             }
-            guard let activeFolder = dataStore.activeDossier?.folder else {
-                throw DossierError.failedToFindFolder
-            }
-            
-            let model = Model()
-            try model.loadFromJSON(fromFolder: activeFolder)
+
             try model.saveAsJSON(toFolder: templateFolder)
             self.alertItem = AlertItem(title         : Text("Copie réussie"),
                                        dismissButton : .default(Text("OK")))
+        } catch FileError.failedToFindTemplateDirectory {
+            self.alertItem = AlertItem(title         : Text("**Echec de la copie**").foregroundColor(.red) +
+                                       Text("\n\(repertoireTemplateNonTrouve)"),
+                                       dismissButton : .default(Text("OK")))
         } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de la copie"),
+            self.alertItem = AlertItem(title         : Text("**Echec de la copie**").foregroundColor(.red),
                                        dismissButton : .default(Text("OK")))
         }
     }
@@ -191,21 +200,23 @@ struct ModelManagerView: View {
             
             self.alertItem = AlertItem(title         : Text("Copie réussie"),
                                        dismissButton : .default(Text("OK")))
+        } catch FileError.failedToFindTemplateDirectory {
+            self.alertItem = AlertItem(title         : Text("**Echec de la copie**").foregroundColor(.red) +
+                                       Text("\n\(repertoireTemplateNonTrouve)"),
+                                       dismissButton : .default(Text("OK")))
         } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de la copie"),
+            self.alertItem = AlertItem(title         : Text("**Echec de la copie**").foregroundColor(.red),
                                        dismissButton : .default(Text("OK")))
         }
     }
     
+    /// La version du Model exportée est celle en cours de modification.
     private func copyFromOpenDossierToOtherDossiers() {
         do {
             guard let activeFolder = dataStore.activeDossier?.folder else {
                 throw DossierError.failedToFindFolder
             }
-            
-            let model = Model()
-            try model.loadFromJSON(fromFolder: activeFolder)
-            
+
             try PersistenceManager.forEachUserFolder { userFolder in
                 if userFolder != activeFolder {
                     try model.saveAsJSON(toFolder: userFolder)
@@ -215,7 +226,7 @@ struct ModelManagerView: View {
             self.alertItem = AlertItem(title         : Text("Copie réussie"),
                                        dismissButton : .default(Text("OK")))
         } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de la copie"),
+            self.alertItem = AlertItem(title         : Text("**Echec de la copie**").foregroundColor(.red),
                                        dismissButton : .default(Text("OK")))
         }
     }

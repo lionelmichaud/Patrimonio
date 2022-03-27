@@ -49,7 +49,8 @@ struct TemplateButton: View {
                     }
                 }
             })
-            .capsuleButtonStyle()
+        .buttonStyle(.bordered)
+            //.capsuleButtonStyle()
     }
     
     init(text   : String? = "Enregistrer",

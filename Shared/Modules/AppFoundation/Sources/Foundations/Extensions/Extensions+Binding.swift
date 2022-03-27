@@ -46,7 +46,7 @@ public extension Binding {
 
 @propertyWrapper
 @dynamicMemberLookup
-public struct Transaction<Value>: DynamicProperty {
+public struct Transac<Value>: DynamicProperty {
     @State private var derived: Value
     @Binding private var source: Value
 
@@ -55,12 +55,18 @@ public struct Transaction<Value>: DynamicProperty {
         self._derived = State(wrappedValue: source.wrappedValue)
     }
 
+    public init(source: Value) {
+        var source = source
+        let binding = Binding(get: { source }, set: { source = $0 })
+        self.init(source: binding)
+    }
+
     public var wrappedValue: Value {
         get { derived }
         nonmutating set { derived = newValue }
     }
 
-    public var projectedValue: Transaction<Value> { self }
+    public var projectedValue: Transac<Value> { self }
 
     public subscript<T>(dynamicMember keyPath: WritableKeyPath<Value, T>) -> Binding<T> {
         return $derived[dynamicMember: keyPath]
@@ -76,9 +82,10 @@ public struct Transaction<Value>: DynamicProperty {
     }
 }
 
-extension Transaction where Value: Equatable {
+extension Transac where Value: Equatable {
     public var hasChanges: Bool { return source != derived }
 }
+
 extension Binding {
-    public func transaction() -> Transaction<Value> { .init(source: self) }
+    public func transaction() -> Transac<Value> { .init(source: self) }
 }
