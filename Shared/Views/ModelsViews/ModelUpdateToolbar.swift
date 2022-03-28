@@ -12,8 +12,9 @@ import AppFoundation
 
 extension View {
     func modelChangesToolbar2<Value: Equatable>(
-        subModel: Transac<Value>,
-        updateDependenciesToModel: @escaping () -> Void) -> some View {
+        subModel                  : Transac<Value>,
+        isValid                   : Bool = true,
+        updateDependenciesToModel : @escaping () -> Void) -> some View {
         self.toolbar {
             // revenir à la version du modèle en mémoire avant les modifications faites localement
             Button(
@@ -38,7 +39,7 @@ extension View {
                 }
             )
             .buttonStyle(.bordered)
-            .disabled(!subModel.hasChanges)
+            .disabled(!subModel.hasChanges || !isValid)
         }
     }
 }

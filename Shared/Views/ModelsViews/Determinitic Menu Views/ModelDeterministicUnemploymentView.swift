@@ -26,7 +26,8 @@ struct ModelDeterministicUnemploymentView: View {
 
             NavigationLink(destination:
                             UnemploymentAreDurationGridView(label: "Barême de durée d'indemnisation",
-                                                            grid: $subModel.durationGrid)
+                                                            grid: $subModel.durationGrid.transaction(),
+                                                            updateDependenciesToModel: updateDependenciesToModel)
                             .environmentObject(model)) {
                 Text("Durée d'indemnisation")
             }.isDetailLink(true)
