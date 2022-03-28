@@ -86,17 +86,17 @@ public final class RegimeGeneral: Codable {
         }
         
         public var version           : Version
-        var dureeDeReferenceGrid     : [SliceRegimeLegal]
-        var nbTrimNonIndemniseGrid   : [SliceUnemployement]
-        var ageMinimumLegal          : Int    // 62
-        let nbOfYearForSAM           : Int    // 25 pour le calcul du SAM
-        var maxReversionRate         : Double // 50.0 // % du SAM [0, 100]
-        var decoteParTrimestre       : Double // 0.625 // % par trimestre [0, 100]
-        var surcoteParTrimestre      : Double // 1.25  // % par trimestre [0, 100]
-        var maxNbTrimestreDecote     : Int    // 20 // plafond
-        var majorationTauxEnfant     : Double // 10.0 // % [0, 100]
-        var netRegimeGeneralProvider : NetRegimeGeneralProviderP!
-        var socioEconomy             : SocioEconomyModelProviderP!
+        public var dureeDeReferenceGrid     : [SliceRegimeLegal]
+        public var nbTrimNonIndemniseGrid   : [SliceUnemployement]
+        public var ageMinimumLegal          : Int    // 62
+        public let nbOfYearForSAM           : Int    // 25 pour le calcul du SAM
+        public var maxReversionRate         : Double // 50.0 // % du SAM [0, 100]
+        public var decoteParTrimestre       : Double // 0.625 // % par trimestre [0, 100]
+        public var surcoteParTrimestre      : Double // 1.25  // % par trimestre [0, 100]
+        public var maxNbTrimestreDecote     : Int    // 20 // plafond
+        public var majorationTauxEnfant     : Double // 10.0 // % [0, 100]
+        public var netRegimeGeneralProvider : NetRegimeGeneralProviderP!
+        public var socioEconomy             : SocioEconomyModelProviderP!
 
         public static func == (lhs: RegimeGeneral.Model, rhs: RegimeGeneral.Model) -> Bool {
             return lhs.version == rhs.version &&

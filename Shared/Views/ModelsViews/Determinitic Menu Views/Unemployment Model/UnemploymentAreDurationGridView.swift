@@ -21,11 +21,11 @@ extension UnemploymentAreDurationGridView {
     init(label                     : String,
          grid                      : Transac<[DurationSlice]>,
          updateDependenciesToModel : @escaping ( ) -> Void) {
-        self = UnemploymentAreDurationGridView(label                     : label,
-                                               grid                      : grid,
-                                               displayView               : { slice in DurationSliceView(slice: slice) },
-                                               addView                   : { grid in DurationSliceAddView(grid: grid) },
-                                               editView                  : { grid, idx in DurationSliceEditView(grid: grid, idx: idx) },
+        self = UnemploymentAreDurationGridView(label        : label,
+                                               grid         : grid,
+                                               displayView  : { slice in DurationSliceView(slice: slice) },
+                                               addView      : { grid in DurationSliceAddView(grid: grid) },
+                                               editView     : { grid, idx in DurationSliceEditView(grid: grid, idx: idx) },
                                                updateDependenciesToModel : updateDependenciesToModel)
     }
 }

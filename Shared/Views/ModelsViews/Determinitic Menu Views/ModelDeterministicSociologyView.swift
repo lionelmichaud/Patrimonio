@@ -19,7 +19,8 @@ struct ModelDeterministicSociologyView: View {
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
-    @State private var alertItem              : AlertItem?
+    let updateDependenciesToModel: ( ) -> Void
+    @State private var alertItem : AlertItem?
     
     var body: some View {
         Form {
@@ -37,8 +38,7 @@ struct ModelDeterministicSociologyView: View {
                     }
                 }
                 .onChange(of: model.socioEconomyModel.pensionDevaluationRate) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
+                    updateDependenciesToModel()
                 }
             }
             
@@ -55,8 +55,7 @@ struct ModelDeterministicSociologyView: View {
                     }
                 }
                 .onChange(of: model.socioEconomyModel.nbTrimTauxPlein) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
+                    updateDependenciesToModel()
                 }
             }
             
@@ -74,8 +73,7 @@ struct ModelDeterministicSociologyView: View {
                     }
                 }
                 .onChange(of: model.socioEconomyModel.expensesUnderEvaluationRate) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
+                    updateDependenciesToModel()
                 }
             }
         }
@@ -115,7 +113,7 @@ struct ModelDeterministicSociologyView: View {
 struct ModelDeterministicSociologyView_Previews: PreviewProvider {
     static var previews: some View {
         TestEnvir.loadTestFilesFromBundle()
-        return ModelDeterministicSociologyView()
+        return ModelDeterministicSociologyView(updateDependenciesToModel: { })
             .environmentObject(TestEnvir.dataStore)
             .environmentObject(TestEnvir.model)
             .environmentObject(TestEnvir.family)

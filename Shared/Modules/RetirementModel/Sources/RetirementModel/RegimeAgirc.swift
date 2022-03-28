@@ -78,11 +78,11 @@ public final class RegimeAgirc: Codable {
         }
         
         public var version                 : Version
-        var gridAvantAgeLegal              : [SliceAvantAgeLegal]
-        var gridApresAgelegal              : [SliceApresAgeLegal]
-        var valeurDuPoint                  : Double // 1.2714
-        var ageMinimum                     : Int    // 57
-        var majorationPourEnfant           : MajorationPourEnfant
+        public var gridAvantAgeLegal              : [SliceAvantAgeLegal]
+        public var gridApresAgelegal              : [SliceApresAgeLegal]
+        public var valeurDuPoint                  : Double // 1.2714
+        public var ageMinimum                     : Int    // 57
+        public var majorationPourEnfant           : MajorationPourEnfant
         // dependencies to other Models
         var regimeGeneral                  : RegimeGeneral!
         var netRegimeAgircProviderP        : NetRegimeAgircProviderP!

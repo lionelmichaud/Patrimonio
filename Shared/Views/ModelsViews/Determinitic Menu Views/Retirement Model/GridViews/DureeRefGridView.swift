@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import RetirementModel
 import HelpersView
 
@@ -14,19 +15,20 @@ typealias GridRegimeLegal = [SliceRegimeLegal]
 
 // MARK: - Editeur de GridRegimeLegal [année naissance, nb trimestre, age taux plein]
 
-typealias DureeRefGridView = GridView<SliceRegimeLegal,
+typealias DureeRefGridView = GridView2<SliceRegimeLegal,
                                       DureeRefSliceView,
                                       DureeRefSliceAddView,
                                       DureeRefSliceEditView>
 extension DureeRefGridView {
-    init(label : String,
-         grid  : Binding<[SliceRegimeLegal]>) {
+    init(label                     : String,
+         grid                      : Transac<[SliceRegimeLegal]>,
+         updateDependenciesToModel : @escaping ( ) -> Void) {
         self = DureeRefGridView(label          : label,
                                 grid           : grid,
-                                initializeGrid : { _ in },
                                 displayView    : { slice in DureeRefSliceView(slice: slice) },
                                 addView        : { grid in DureeRefSliceAddView(grid: grid) },
-                                editView       : { grid, idx in DureeRefSliceEditView(grid: grid, idx: idx) })
+                                editView       : { grid, idx in DureeRefSliceEditView(grid: grid, idx: idx) },
+                                updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
@@ -51,13 +53,13 @@ struct DureeRefSliceView: View {
 // MARK: - Edit a SliceRegimeLegal of the Grid [année naissance, nb trimestre, age taux plein]
 
 struct DureeRefSliceEditView: View {
-    @Binding private var grid: GridRegimeLegal
+    @Transac private var grid: GridRegimeLegal
     private var idx: Int
     @Environment(\.presentationMode) var presentationMode
     @State private var modifiedSlice : SliceRegimeLegal
     @State private var alertItem     : AlertItem?
 
-    init(grid : Binding<GridRegimeLegal>,
+    init(grid : Transac<GridRegimeLegal>,
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
@@ -120,7 +122,7 @@ struct DureeRefSliceEditView: View {
 // MARK: - Add a ExonerationSlice to the Grid [année naissance, nb trimestre, age taux plein]
 
 struct DureeRefSliceAddView: View {
-    @Binding var grid: GridRegimeLegal
+    @Transac var grid: GridRegimeLegal
     @Environment(\.presentationMode) var presentationMode
     @State private var newSlice = SliceRegimeLegal(birthYear    : 0,
                                                    ndTrimestre  : 0,
@@ -207,7 +209,8 @@ struct DureeRefGridView_Previews: PreviewProvider {
         return
             NavigationView {
             NavigationLink("Test", destination: DureeRefGridView(label: "Nom",
-                                                                 grid : .constant(grid()))
+                                                                 grid : .init(source: grid()),
+                                                                 updateDependenciesToModel: { })
                             .environmentObject(TestEnvir.dataStore)
                             .environmentObject(TestEnvir.model)
                             .environmentObject(TestEnvir.family)

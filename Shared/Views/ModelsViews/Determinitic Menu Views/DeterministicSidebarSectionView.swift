@@ -39,7 +39,7 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle sociologie
-            NavigationLink(destination: ModelDeterministicSociologyView(),
+            NavigationLink(destination: ModelDeterministicSociologyView(updateDependenciesToModel: updateDependenciesToModel),
                            tag         : .detSociologyModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Label("Modèle Sociologique", systemImage: "slider.horizontal.3")
@@ -47,7 +47,7 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle sociologie
-            NavigationLink(destination: ModelDeterministicRetirementView(),
+            NavigationLink(destination: ModelDeterministicRetirementView(updateDependenciesToModel: updateDependenciesToModel),
                            tag         : .detRetirementModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Label("Modèle Retraite", systemImage: "slider.horizontal.3")

@@ -6,26 +6,27 @@
 //
 
 import SwiftUI
-
+import AppFoundation
 import RetirementModel
 import HelpersView
 
 typealias SliceAgircAvantAgeLegal = RegimeAgirc.SliceAvantAgeLegal
 typealias GridAgircAvantAgeLegal = [SliceAgircAvantAgeLegal]
 
-typealias AgircAvantAgeLegalGridView = GridView<SliceAgircAvantAgeLegal,
+typealias AgircAvantAgeLegalGridView = GridView2<SliceAgircAvantAgeLegal,
                                                 AgircAvantAgeLegalSliceView,
                                                 AgircAvantAgeLegalSliceAddView,
                                                 AgircAvantAgeLegalSliceEditView>
 extension AgircAvantAgeLegalGridView {
     init(label : String,
-         grid  : Binding<[SliceAgircAvantAgeLegal]>) {
+         grid  : Transac<[SliceAgircAvantAgeLegal]>,
+         updateDependenciesToModel : @escaping ( ) -> Void) {
         self = AgircAvantAgeLegalGridView(label          : label,
                                           grid           : grid,
-                                          initializeGrid : { _ in },
                                           displayView    : { slice in AgircAvantAgeLegalSliceView(slice: slice) },
                                           addView        : { grid in AgircAvantAgeLegalSliceAddView(grid: grid) },
-                                          editView       : { grid, idx in AgircAvantAgeLegalSliceEditView(grid: grid, idx: idx) })
+                                          editView       : { grid, idx in AgircAvantAgeLegalSliceEditView(grid: grid, idx: idx) },
+                                          updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
@@ -47,13 +48,13 @@ struct AgircAvantAgeLegalSliceView: View {
 // MARK: - Edit a SliceAgircAvantAgeLegal of the Grid [année naissance, nb trimestre, age taux plein]
 
 struct AgircAvantAgeLegalSliceEditView: View {
-    @Binding private var grid: GridAgircAvantAgeLegal
+    @Transac private var grid: GridAgircAvantAgeLegal
     private var idx: Int
     @Environment(\.presentationMode) var presentationMode
     @State private var modifiedSlice : SliceAgircAvantAgeLegal
     @State private var alertItem     : AlertItem?
 
-    init(grid : Binding<GridAgircAvantAgeLegal>,
+    init(grid : Transac<GridAgircAvantAgeLegal>,
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
@@ -114,7 +115,7 @@ struct AgircAvantAgeLegalSliceEditView: View {
 // MARK: - Add a ExonerationSlice to the Grid [année naissance, nb trimestre, age taux plein]
 
 struct AgircAvantAgeLegalSliceAddView: View {
-    @Binding var grid: GridAgircAvantAgeLegal
+    @Transac var grid: GridAgircAvantAgeLegal
     @Environment(\.presentationMode) var presentationMode
     @State private var newSlice = SliceAgircAvantAgeLegal(ndTrimAvantAgeLegal : 0,
                                                           coef                : 0)
@@ -194,7 +195,8 @@ struct AgircAvantAgeLegalGridView_Previews: PreviewProvider {
         return
             NavigationView {
                 NavigationLink("Test", destination: AgircAvantAgeLegalGridView(label: "Nom",
-                                                                           grid : .constant(grid()))
+                                                                               grid : .init(source: grid()),
+                                                                               updateDependenciesToModel: { })
                                 .environmentObject(TestEnvir.dataStore)
                                 .environmentObject(TestEnvir.model)
                                 .environmentObject(TestEnvir.family)

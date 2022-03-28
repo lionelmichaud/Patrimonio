@@ -15,7 +15,6 @@ import SimulationAndVisitors
 import HelpersView
 
 struct ModelDeterministicUnemploymentView: View {
-    @EnvironmentObject private var model      : Model
     let updateDependenciesToModel: ( ) -> Void
     @Transac var subModel: UnemploymentCompensation.Model
     @State private var alertItem: AlertItem?
@@ -27,8 +26,7 @@ struct ModelDeterministicUnemploymentView: View {
             NavigationLink(destination:
                             UnemploymentAreDurationGridView(label: "Barême de durée d'indemnisation",
                                                             grid: $subModel.durationGrid.transaction(),
-                                                            updateDependenciesToModel: updateDependenciesToModel)
-                            .environmentObject(model)) {
+                                                            updateDependenciesToModel: updateDependenciesToModel)) {
                 Text("Durée d'indemnisation")
             }.isDetailLink(true)
 

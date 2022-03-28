@@ -6,25 +6,27 @@
 //
 
 import SwiftUI
+import AppFoundation
 import RetirementModel
 import HelpersView
 
 typealias SliceNbTrimUnemployement = RegimeGeneral.SliceUnemployement
 typealias GridNbTrimUnemployement = [SliceNbTrimUnemployement]
 
-typealias NbTrimUnemployementGridView = GridView<SliceNbTrimUnemployement,
+typealias NbTrimUnemployementGridView = GridView2<SliceNbTrimUnemployement,
                                                  NbTrimUnemployementSliceView,
                                                  NbTrimUnemployementSliceAddView,
                                                  NbTrimUnemployementSliceEditView>
 extension NbTrimUnemployementGridView {
     init(label : String,
-         grid  : Binding<[SliceNbTrimUnemployement]>) {
-        self = NbTrimUnemployementGridView(label          : label,
-                                           grid           : grid,
-                                           initializeGrid : { _ in },
-                                           displayView    : { slice in NbTrimUnemployementSliceView(slice: slice) },
-                                           addView        : { grid in NbTrimUnemployementSliceAddView(grid: grid) },
-                                           editView       : { grid, idx in NbTrimUnemployementSliceEditView(grid: grid, idx: idx) })
+         grid  : Transac<[SliceNbTrimUnemployement]>,
+         updateDependenciesToModel : @escaping ( ) -> Void) {
+        self = NbTrimUnemployementGridView(label       : label,
+                                           grid        : grid,
+                                           displayView : { slice in NbTrimUnemployementSliceView(slice: slice) },
+                                           addView     : { grid in NbTrimUnemployementSliceAddView(grid: grid) },
+                                           editView    : { grid, idx in NbTrimUnemployementSliceEditView(grid: grid, idx: idx) },
+                                           updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
@@ -46,13 +48,13 @@ struct NbTrimUnemployementSliceView: View {
 // MARK: - Edit a SliceNbTrimUnemployement of the Grid [année naissance, nb trimestre, age taux plein]
 
 struct NbTrimUnemployementSliceEditView: View {
-    @Binding private var grid: GridNbTrimUnemployement
+    @Transac private var grid: GridNbTrimUnemployement
     private var idx: Int
     @Environment(\.presentationMode) var presentationMode
     @State private var modifiedSlice : SliceNbTrimUnemployement
     @State private var alertItem     : AlertItem?
 
-    init(grid : Binding<GridNbTrimUnemployement>,
+    init(grid : Transac<GridNbTrimUnemployement>,
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
@@ -113,7 +115,7 @@ struct NbTrimUnemployementSliceEditView: View {
 // MARK: - Add a ExonerationSlice to the Grid [année naissance, nb trimestre, age taux plein]
 
 struct NbTrimUnemployementSliceAddView: View {
-    @Binding var grid: GridNbTrimUnemployement
+    @Transac var grid: GridNbTrimUnemployement
     @Environment(\.presentationMode) var presentationMode
     @State private var newSlice = SliceNbTrimUnemployement(nbTrimestreAcquis  : 0,
                                                            nbTrimNonIndemnise : 0)
@@ -191,8 +193,9 @@ struct NbTrimUnemployementGridView_Previews: PreviewProvider {
         TestEnvir.loadTestFilesFromBundle()
         return
             NavigationView {
-            NavigationLink("Test", destination: NbTrimUnemployementGridView(label: "Nom",
-                                                                            grid : .constant(grid()))
+                NavigationLink("Test", destination: NbTrimUnemployementGridView(label: "Nom",
+                                                                                grid : .init(source: grid()),
+                                                                                updateDependenciesToModel: { })
                             .environmentObject(TestEnvir.dataStore)
                             .environmentObject(TestEnvir.model)
                             .environmentObject(TestEnvir.family)
