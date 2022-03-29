@@ -27,7 +27,7 @@ class SocioEconomyModelTest: XCTestCase {
     }
     
     func test_next_currentRandomizersValues_setRandomValue() {
-        var dico = SocioEconomyModelTest.socioEconomy.model!.nextRun()
+        var dico = SocioEconomyModelTest.socioEconomy.model!.next()
         
         XCTAssertNotNil(dico[.expensesUnderEvaluationRate])
         XCTAssertNotNil(dico[.nbTrimTauxPlein])
@@ -35,7 +35,7 @@ class SocioEconomyModelTest: XCTestCase {
         
         var currentRandomizersValues =
             SocioEconomyModelTest.socioEconomy.model!
-            .currentRandomizersValues(withMode: .random)
+            .current(withMode: .random)
         XCTAssertNotNil(currentRandomizersValues[.expensesUnderEvaluationRate])
         XCTAssertNotNil(currentRandomizersValues[.nbTrimTauxPlein])
         XCTAssertNotNil(currentRandomizersValues[.pensionDevaluationRate])
@@ -49,7 +49,7 @@ class SocioEconomyModelTest: XCTestCase {
         
         currentRandomizersValues =
             SocioEconomyModelTest.socioEconomy.model!
-            .currentRandomizersValues(withMode: .random)
+            .current(withMode: .random)
         XCTAssertNotNil(currentRandomizersValues[.expensesUnderEvaluationRate])
         XCTAssertNotNil(currentRandomizersValues[.nbTrimTauxPlein])
         XCTAssertNotNil(currentRandomizersValues[.pensionDevaluationRate])

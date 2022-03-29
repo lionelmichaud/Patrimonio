@@ -38,7 +38,8 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle sociologie
-            NavigationLink(destination: ModelDeterministicSociologyView(updateDependenciesToModel: updateDependenciesToModel),
+            NavigationLink(destination: ModelDeterministicSociologyView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                        subModel: $model.socioEconomyModel.randomizers.transaction()),
                            tag         : .detSociologyModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Label("Modèle Sociologique", systemImage: "slider.horizontal.3")

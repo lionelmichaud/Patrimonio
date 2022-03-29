@@ -13,7 +13,7 @@ import HelpersView
 typealias SliceAgircApresAgeLegal = RegimeAgirc.SliceApresAgeLegal
 typealias GridAgircApresAgeLegal = [SliceAgircApresAgeLegal]
 
-typealias AgircApresAgeLegalGridView = GridView2<SliceAgircApresAgeLegal,
+typealias AgircApresAgeLegalGridView = GridView<SliceAgircApresAgeLegal,
                                                 AgircApresAgeLegalSliceView,
                                                 AgircApresAgeLegalSliceAddView,
                                                 AgircApresAgeLegalSliceEditView>

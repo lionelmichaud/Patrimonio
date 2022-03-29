@@ -94,7 +94,7 @@ struct ModelFiscalIsfView: View {
         .navigationTitle("Imposition sur le Capital")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar2(subModel                  : $subModel,
+        .modelChangesToolbar(subModel                  : $subModel,
                               updateDependenciesToModel : updateDependenciesToModel)
     }
 }

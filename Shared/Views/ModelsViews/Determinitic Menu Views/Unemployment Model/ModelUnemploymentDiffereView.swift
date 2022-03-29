@@ -65,7 +65,7 @@ struct ModelUnemploymentDiffereView: View {
         .navigationTitle("Calcul du Différé d'indemnisation")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar2(subModel                  : $subModel,
+        .modelChangesToolbar(subModel                  : $subModel,
                               updateDependenciesToModel : updateDependenciesToModel)
     }
 }

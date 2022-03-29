@@ -11,7 +11,7 @@ import AppFoundation
 // MARK: - View Extensions
 
 extension View {
-    func modelChangesToolbar2<Value: Equatable>(
+    func modelChangesToolbar<Value: Equatable>(
         subModel                  : Transac<Value>,
         isValid                   : Bool = true,
         updateDependenciesToModel : @escaping () -> Void) -> some View {

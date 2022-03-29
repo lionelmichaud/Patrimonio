@@ -71,8 +71,6 @@
 		7935BCB627DF66100079F39C /* ModelFiscalPensionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BBEB27DF660F0079F39C /* ModelFiscalPensionView.swift */; };
 		7935BCB727DF66100079F39C /* ModelDeterministicHumanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BBEC27DF660F0079F39C /* ModelDeterministicHumanView.swift */; };
 		7935BCB827DF66100079F39C /* ModelDeterministicHumanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BBEC27DF660F0079F39C /* ModelDeterministicHumanView.swift */; };
-		7935BCB927DF66100079F39C /* ModelUpdateAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BBED27DF660F0079F39C /* ModelUpdateAlerts.swift */; };
-		7935BCBA27DF66100079F39C /* ModelUpdateAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BBED27DF660F0079F39C /* ModelUpdateAlerts.swift */; };
 		7935BCBD27DF66100079F39C /* ModelDeterministicEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BBEF27DF660F0079F39C /* ModelDeterministicEconomyView.swift */; };
 		7935BCBE27DF66100079F39C /* ModelDeterministicEconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BBEF27DF660F0079F39C /* ModelDeterministicEconomyView.swift */; };
 		7935BCBF27DF66100079F39C /* ModelRetirementGeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935BBF127DF660F0079F39C /* ModelRetirementGeneralView.swift */; };
@@ -559,7 +557,6 @@
 		7935BBEA27DF660F0079F39C /* ModelFiscalChomageChargeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelFiscalChomageChargeView.swift; sourceTree = "<group>"; };
 		7935BBEB27DF660F0079F39C /* ModelFiscalPensionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelFiscalPensionView.swift; sourceTree = "<group>"; };
 		7935BBEC27DF660F0079F39C /* ModelDeterministicHumanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelDeterministicHumanView.swift; sourceTree = "<group>"; };
-		7935BBED27DF660F0079F39C /* ModelUpdateAlerts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelUpdateAlerts.swift; sourceTree = "<group>"; };
 		7935BBEF27DF660F0079F39C /* ModelDeterministicEconomyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelDeterministicEconomyView.swift; sourceTree = "<group>"; };
 		7935BBF127DF660F0079F39C /* ModelRetirementGeneralView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelRetirementGeneralView.swift; sourceTree = "<group>"; };
 		7935BBF227DF660F0079F39C /* ModelRetirementAgircView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelRetirementAgircView.swift; sourceTree = "<group>"; };
@@ -981,11 +978,10 @@
 			isa = PBXGroup;
 			children = (
 				7935BBD727DF660F0079F39C /* DeterministicSidebarSectionView.swift */,
-				7935BBD827DF660F0079F39C /* ModelDeterministicSociologyView.swift */,
 				7935BBEC27DF660F0079F39C /* ModelDeterministicHumanView.swift */,
 				7935BBEF27DF660F0079F39C /* ModelDeterministicEconomyView.swift */,
+				7935BBD827DF660F0079F39C /* ModelDeterministicSociologyView.swift */,
 				7935BBFE27DF660F0079F39C /* ModelDeterministicUnemploymentView.swift */,
-				7935BBED27DF660F0079F39C /* ModelUpdateAlerts.swift */,
 				7935BBD927DF660F0079F39C /* Fiscal Model */,
 				7935BBF027DF660F0079F39C /* Retirement Model */,
 				7935BBFA27DF660F0079F39C /* Unemployment Model */,
@@ -2079,7 +2075,6 @@
 				7935BDB127DF66100079F39C /* CategoryBarChartBalanceSheetVisitor.swift in Sources */,
 				7935BCEB27DF66100079F39C /* DiscreteRandomizerEditView.swift in Sources */,
 				7935BCB127DF66100079F39C /* ModelFiscalImmobilierTaxeView.swift in Sources */,
-				7935BCB927DF66100079F39C /* ModelUpdateAlerts.swift in Sources */,
 				7935BD1D27DF66100079F39C /* RecipientsListView.swift in Sources */,
 				7935BD9F27DF66100079F39C /* BarChartCashFlowVisitor.swift in Sources */,
 				7935BD5727DF66100079F39C /* DossierBrowserView.swift in Sources */,
@@ -2181,7 +2176,6 @@
 				7935BD1C27DF66100079F39C /* ClauseView.swift in Sources */,
 				7935BD4227DF66100079F39C /* SuccessorListView.swift in Sources */,
 				7935BDBA27DF66100079F39C /* ComputationView.swift in Sources */,
-				7935BCBA27DF66100079F39C /* ModelUpdateAlerts.swift in Sources */,
 				7935BD1627DF66100079F39C /* FreeInvestDetailedView.swift in Sources */,
 				7935BCDE27DF66100079F39C /* UniformDistributionView.swift in Sources */,
 				7935BD5627DF66100079F39C /* ShareSheetView.swift in Sources */,
@@ -2461,7 +2455,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.6.0;
+				MARKETING_VERSION = 4.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.michaud.lionel.Patrimonio;
 				PRODUCT_NAME = Patrimonio;
 				SDKROOT = iphoneos;
@@ -2485,7 +2479,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.6.0;
+				MARKETING_VERSION = 4.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.michaud.lionel.Patrimonio;
 				PRODUCT_NAME = Patrimonio;
 				SDKROOT = iphoneos;

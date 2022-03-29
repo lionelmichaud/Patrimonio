@@ -35,7 +35,7 @@ struct DiscreteRandomizerEditView: View {
             DiscreteRandomizerView(randomizer: discreteRandomizer)
         }
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar2(subModel                  : $discreteRandomizer,
+        .modelChangesToolbar(subModel                  : $discreteRandomizer,
                               updateDependenciesToModel : updateDependenciesToModel)
     }
 }
@@ -43,6 +43,6 @@ struct DiscreteRandomizerEditView: View {
 struct DiscreteRandomizerEditView_Previews: PreviewProvider {
     static var previews: some View {
         DiscreteRandomizerEditView(updateDependenciesToModel: { },
-                                   discreteRandomizer: .init(source: TestEnvir.model.socioEconomyModel.nbTrimTauxPlein))
+                                   discreteRandomizer: .init(source: TestEnvir.model.socioEconomyModel.randomizers.nbTrimTauxPlein))
     }
 }

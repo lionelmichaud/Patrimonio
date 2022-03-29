@@ -13,7 +13,7 @@ import HelpersView
 typealias DurationSlice = UnemploymentCompensation.DurationSlice
 typealias DurationGrid = [DurationSlice]
 
-typealias UnemploymentAreDurationGridView = GridView2<DurationSlice,
+typealias UnemploymentAreDurationGridView = GridView<DurationSlice,
                                                       DurationSliceView,
                                                       DurationSliceAddView,
                                                       DurationSliceEditView>

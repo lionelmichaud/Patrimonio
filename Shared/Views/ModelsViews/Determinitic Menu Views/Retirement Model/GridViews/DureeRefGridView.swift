@@ -15,7 +15,7 @@ typealias GridRegimeLegal = [SliceRegimeLegal]
 
 // MARK: - Editeur de GridRegimeLegal [année naissance, nb trimestre, age taux plein]
 
-typealias DureeRefGridView = GridView2<SliceRegimeLegal,
+typealias DureeRefGridView = GridView<SliceRegimeLegal,
                                       DureeRefSliceView,
                                       DureeRefSliceAddView,
                                       DureeRefSliceEditView>

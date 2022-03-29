@@ -28,15 +28,15 @@ struct ModelStatisticSociologyView: View {
             switch modelChoice {
                 case .pensionDevaluationRate:
                     BetaRandomizerEditView(updateDependenciesToModel: updateDependenciesToModel,
-                                           betaRandomizer: $model.socioEconomyModel.pensionDevaluationRate.transaction()) //{ viewModel in
+                                           betaRandomizer: $model.socioEconomyModel.randomizers.pensionDevaluationRate.transaction()) //{ viewModel in
 
                 case .nbTrimTauxPlein:
                     DiscreteRandomizerEditView(updateDependenciesToModel: updateDependenciesToModel,
-                                               discreteRandomizer: $model.socioEconomyModel.nbTrimTauxPlein.transaction())
+                                               discreteRandomizer: $model.socioEconomyModel.randomizers.nbTrimTauxPlein.transaction())
 
                 case .expensesUnderEvaluationRate:
                     BetaRandomizerEditView(updateDependenciesToModel: updateDependenciesToModel,
-                                           betaRandomizer: $model.socioEconomyModel.expensesUnderEvaluationRate.transaction()) //{ viewModel in
+                                           betaRandomizer: $model.socioEconomyModel.randomizers.expensesUnderEvaluationRate.transaction()) //{ viewModel in
             }
         }
         .navigationTitle("Modèle Sociologique")

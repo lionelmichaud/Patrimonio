@@ -104,7 +104,7 @@ struct VerifiedPointGridView : View {
     
 }
 
-typealias PointGridView = GridView2<Point,
+typealias PointGridView = GridView<Point,
                                     PointView,
                                     PointAddView,
                                     PointEditView>

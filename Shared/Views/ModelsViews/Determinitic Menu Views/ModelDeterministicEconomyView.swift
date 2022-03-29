@@ -89,7 +89,7 @@ struct ModelDeterministicEconomyView: View {
         .navigationTitle("Modèle Economique")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar2(subModel                  : $subModel,
+        .modelChangesToolbar(subModel                  : $subModel,
                               updateDependenciesToModel : updateDependenciesToModel)
     }
 }
@@ -97,7 +97,7 @@ struct ModelDeterministicEconomyView: View {
 struct ModelDeterministicEconomyView_Previews: PreviewProvider {
     static var previews: some View {
         ModelDeterministicEconomyView(updateDependenciesToModel: { },
-                                             subModel: .init(source: TestEnvir.model.economy.model!.randomizers))
-            .preferredColorScheme(.dark)
+                                      subModel: .init(source: TestEnvir.model.economy.model!.randomizers))
+        .preferredColorScheme(.dark)
     }
 }

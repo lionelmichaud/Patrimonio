@@ -49,55 +49,61 @@ public struct SocioEconomy: PersistableModelP {
     
     public typealias DictionaryOfRandomVariable = [RandomVariable: Double]
     
-    public final class Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP, SocioEconomyModelProviderP {
+    // MARK: - Modèles statistiques de générateurs aléatoires
+    public struct RandomizersModel: Codable, Equatable {
 
         // MARK: - Properties
-        
+
         public var pensionDevaluationRate     : ModelRandomizer<BetaRandomGenerator>
         public var nbTrimTauxPlein            : ModelRandomizer<DiscreteRandomGenerator>
         public var expensesUnderEvaluationRate: ModelRandomizer<BetaRandomGenerator>
-        
-        // MARK: - Iitializers
-        
-        /// Créer un clone
-        /// - Parameter original: l'original à cloner
-        public init?(from original: SocioEconomy.Model?) {
-            guard let original = original else {
-                return nil
-            }
-            self.pensionDevaluationRate      = original.pensionDevaluationRate
-            self.nbTrimTauxPlein             = original.nbTrimTauxPlein
-            self.expensesUnderEvaluationRate = original.expensesUnderEvaluationRate
+
+        // MARK: - Initializers
+
+        /// Lit le modèle dans un fichier JSON du Bundle Main
+        mutating func initialize() {
+            pensionDevaluationRate.rndGenerator.initialize()
+            nbTrimTauxPlein.rndGenerator.initialize()
+            expensesUnderEvaluationRate.rndGenerator.initialize()
         }
-        
+
         // MARK: - Methods
-        
-        /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
-        public final func initialized() -> Self {
-            self.pensionDevaluationRate.rndGenerator.initialize()
-            self.nbTrimTauxPlein.rndGenerator.initialize()
-            self.expensesUnderEvaluationRate.rndGenerator.initialize()
-            return self
-        }
-        
-        /// Vide l'historique des tirages de chaque variable aléatoire du modèle
-        public final func resetRandomHistory() {
+
+        /// Vide l'ihistorique des tirages de chaque variable aléatoire du modèle
+        fileprivate mutating func resetRandomHistory() {
             pensionDevaluationRate.resetRandomHistory()
             nbTrimTauxPlein.resetRandomHistory()
             expensesUnderEvaluationRate.resetRandomHistory()
         }
-        
-        public final func currentRandomizersValues(withMode: SimulationModeEnum) -> DictionaryOfRandomVariable {
+
+        /// Générer les nombres aléatoires suivants et retourner leur valeur pour historisation
+        fileprivate mutating func next() -> DictionaryOfRandomVariable {
             var dicoOfRandomVariable = DictionaryOfRandomVariable()
-            dicoOfRandomVariable[.pensionDevaluationRate]      = pensionDevaluationRate.value(withMode: withMode)
-            dicoOfRandomVariable[.nbTrimTauxPlein]             = nbTrimTauxPlein.value(withMode: withMode)
-            dicoOfRandomVariable[.expensesUnderEvaluationRate] = expensesUnderEvaluationRate.value(withMode: withMode)
+            dicoOfRandomVariable[.pensionDevaluationRate]      = pensionDevaluationRate.next()
+            dicoOfRandomVariable[.nbTrimTauxPlein]             = nbTrimTauxPlein.next()
+            dicoOfRandomVariable[.expensesUnderEvaluationRate] = expensesUnderEvaluationRate.next()
             return dicoOfRandomVariable
         }
-        
+
+        fileprivate func current(withMode mode : SimulationModeEnum) -> DictionaryOfRandomVariable {
+            var dicoOfRandomVariable = DictionaryOfRandomVariable()
+            dicoOfRandomVariable[.pensionDevaluationRate]      = pensionDevaluationRate.value(withMode: mode)
+            dicoOfRandomVariable[.nbTrimTauxPlein]             = nbTrimTauxPlein.value(withMode: mode)
+            dicoOfRandomVariable[.expensesUnderEvaluationRate] = expensesUnderEvaluationRate.value(withMode: mode)
+            return dicoOfRandomVariable
+        }
+
+        /// Définir une valeur pour la variable aléatoire avant un rejeu
+        /// - Parameter value: nouvelle valeure à rejouer
+        fileprivate mutating func setRandomValue(to values: DictionaryOfRandomVariable) {
+            pensionDevaluationRate.setRandomValue(to: values[.pensionDevaluationRate]!)
+            nbTrimTauxPlein.setRandomValue(to: values[.nbTrimTauxPlein]!)
+            expensesUnderEvaluationRate.setRandomValue(to: values[.expensesUnderEvaluationRate]!)
+        }
+
         /// Retourne un dictionnaire donnant pour chaque variable aléatoire son historique de tirage
         /// Retourne la suite de valeurs aléatoires tirées pour chaque Run d'un Monté-Carlo
-        final func randomHistories() -> [RandomVariable: [Double]?] {
+        func randomHistories() -> [RandomVariable: [Double]?] {
             var dico = [RandomVariable: [Double]?]()
             for randomVariable in RandomVariable.allCases {
                 switch randomVariable {
@@ -111,35 +117,68 @@ public struct SocioEconomy: PersistableModelP {
             }
             return dico
         }
+    }
+
+    public final class Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP, SocioEconomyModelProviderP {
+
+        // MARK: - Properties
+        
+        public var randomizers : RandomizersModel // les modèles de générateurs aléatoires
+
+        // MARK: - Iitializers
+        
+        /// Créer un clone
+        /// - Parameter original: l'original à cloner
+        public init?(from original: SocioEconomy.Model?) {
+            guard let original = original else {
+                return nil
+            }
+            self.randomizers = original.randomizers
+        }
+        
+        // MARK: - Methods
+        
+        /// Initialise le modèle après l'avoir chargé à partir d'un fichier JSON du Bundle Main
+        public final func initialized() -> Self {
+            self.randomizers.initialize()
+            return self
+        }
+        
+        /// Vide l'historique des tirages de chaque variable aléatoire du modèle
+        public final func resetRandomHistory() {
+            randomizers.resetRandomHistory()
+        }
+        
+        public final func current(withMode: SimulationModeEnum) -> DictionaryOfRandomVariable {
+            randomizers.current(withMode: withMode)
+        }
+        
+        /// Retourne un dictionnaire donnant pour chaque variable aléatoire son historique de tirage
+        /// Retourne la suite de valeurs aléatoires tirées pour chaque Run d'un Monté-Carlo
+        final func randomHistories() -> [RandomVariable: [Double]?] {
+            randomizers.randomHistories()
+        }
         
         /// Générer les nombres aléatoires suivants et retourner leur valeur pour historisation
         @discardableResult
-        public final func nextRun() -> DictionaryOfRandomVariable {
-            var dicoOfRandomVariable = DictionaryOfRandomVariable()
-            dicoOfRandomVariable[.pensionDevaluationRate]      = pensionDevaluationRate.next()
-            dicoOfRandomVariable[.nbTrimTauxPlein]             = nbTrimTauxPlein.next()
-            dicoOfRandomVariable[.expensesUnderEvaluationRate] = expensesUnderEvaluationRate.next()
-            return dicoOfRandomVariable
+        public final func next() -> DictionaryOfRandomVariable {
+            randomizers.next()
         }
-        
-        /// Définir une valeur pour la variable aléaoitre avant un rejeu
-        /// - Parameter value: nouvelle valeure à rejouer
-        public final func setRandomValue(to values: DictionaryOfRandomVariable) {
-            pensionDevaluationRate.setRandomValue(to: values[.pensionDevaluationRate]!)
-            nbTrimTauxPlein.setRandomValue(to: values[.nbTrimTauxPlein]!)
-            expensesUnderEvaluationRate.setRandomValue(to: values[.expensesUnderEvaluationRate]!)
+
+        public func setRandomValue(to values: DictionaryOfRandomVariable) {
+            randomizers.setRandomValue(to: values)
         }
-        
-        public final func pensionDevaluationRate(withMode simulationMode: SimulationModeEnum) -> Double {
-            pensionDevaluationRate.value(withMode: simulationMode)
+
+        public func pensionDevaluationRate(withMode simulationMode: SimulationModeEnum) -> Double {
+            randomizers.pensionDevaluationRate.value(withMode: simulationMode)
         }
-        
-        public final func nbTrimTauxPlein(withMode simulationMode: SimulationModeEnum) -> Double {
-            nbTrimTauxPlein.value(withMode: simulationMode)
+
+        public func nbTrimTauxPlein(withMode simulationMode: SimulationModeEnum) -> Double {
+            randomizers.nbTrimTauxPlein.value(withMode: simulationMode)
         }
-        
-        public final func expensesUnderEvaluationRate(withMode simulationMode: SimulationModeEnum) -> Double {
-            expensesUnderEvaluationRate.value(withMode: simulationMode)
+
+        public func expensesUnderEvaluationRate(withMode simulationMode: SimulationModeEnum) -> Double {
+            randomizers.expensesUnderEvaluationRate.value(withMode: simulationMode)
         }
     }
     

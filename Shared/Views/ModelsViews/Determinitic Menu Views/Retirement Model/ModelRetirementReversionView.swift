@@ -87,7 +87,7 @@ struct ModelRetirementReversionView : View {
         }
         .navigationTitle("Régime Général")
         .alert(item: $alertItem, content: newAlert)
-        .modelChangesToolbar2(subModel                  : $subModel,
+        .modelChangesToolbar(subModel                  : $subModel,
                               updateDependenciesToModel : updateDependenciesToModel)
     }
 }

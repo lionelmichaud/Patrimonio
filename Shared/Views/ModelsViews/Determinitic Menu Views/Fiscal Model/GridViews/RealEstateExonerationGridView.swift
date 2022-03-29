@@ -12,7 +12,7 @@ import HelpersView
 
 // MARK: - Editeur de ExonerationSlice [année, discount %, sum %]
 
-typealias RealEstateExonerationGridView = GridView2<ExonerationSlice,
+typealias RealEstateExonerationGridView = GridView<ExonerationSlice,
                                                     RealEstateExonerationSliceView,
                                                     RealEstateExonerationSliceAddView,
                                                     RealEstateExonerationSliceEditView>

@@ -12,7 +12,7 @@ import HelpersView
 
 // MARK: - Editeur de Demembrement [age, usuFruit %, nueProp %]
 
-typealias DemembrementGridView = GridView2<DemembrementSlice,
+typealias DemembrementGridView = GridView<DemembrementSlice,
                                           DemembrementSliceView,
                                           DemembrementSliceAddView,
                                           DemembrementSliceEditView>

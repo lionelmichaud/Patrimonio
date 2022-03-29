@@ -61,7 +61,7 @@ struct ModelDeterministicHumanView: View {
         .navigationTitle("Modèle Humain")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar2(subModel                  : $subModel,
+        .modelChangesToolbar(subModel                  : $subModel,
                               updateDependenciesToModel : updateDependenciesToModel)
     }
 }

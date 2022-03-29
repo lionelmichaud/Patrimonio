@@ -7,6 +7,11 @@
     
     "revisionHistory" : [
         {
+            "version" : "4.7.0",
+            "date"    : "2022-03-30T23:00:00+01:00",
+            "comment" : "Modification du format de fichier JSON pour les randomizers du modèle Sociologique"
+        },
+        {
             "version" : "4.6.0",
             "date"    : "2022-03-23T23:00:00+01:00",
             "comment" : "Modification du format de fichier JSON pour le enum avec valeurs associées"

@@ -12,7 +12,7 @@ import HelpersView
 
 // MARK: - Editeur de Barême [seuil €, taux %]
 
-typealias RateGridView = GridView2<RateSlice,
+typealias RateGridView = GridView<RateSlice,
                                     RateSliceView,
                                     RateSliceAddView,
                                     RateSliceEditView>

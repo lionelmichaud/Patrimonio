@@ -69,7 +69,7 @@ struct ModelUnemploymentAmountView: View {
         .navigationTitle("Calcul du montant de l'indemnité de recherche d'emploi")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar2(subModel                  : $subModel,
+        .modelChangesToolbar(subModel                  : $subModel,
                               updateDependenciesToModel : updateDependenciesToModel)
     }
 }

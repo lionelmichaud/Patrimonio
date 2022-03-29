@@ -86,7 +86,7 @@ struct BetaRandomizerEditView : View {
             BetaRandomizerView(randomizer: betaRandomizer)
         }
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar2(subModel                  : $betaRandomizer,
+        .modelChangesToolbar(subModel                  : $betaRandomizer,
                               updateDependenciesToModel : updateDependenciesToModel)
     }
 }

@@ -66,11 +66,11 @@ struct ScenarioSummaryView: View {
                 // Modèle Sociologique
                 Section(header: Text("Modèle Sociologique")) {
                     PercentView(label   : "Dévaluation anuelle des pensions par rapport à l'inflation",
-                                percent : -model.socioEconomyModel.pensionDevaluationRate.value(withMode: simulationMode))
+                                percent : -model.socioEconomyModel.randomizers.pensionDevaluationRate.value(withMode: simulationMode))
                     IntegerView(label   : "Nombre de trimestres additionels pour obtenir le taux plein",
-                                integer : Int(model.socioEconomyModel.nbTrimTauxPlein.value(withMode: simulationMode)))
+                                integer : Int(model.socioEconomyModel.randomizers.nbTrimTauxPlein.value(withMode: simulationMode)))
                     PercentView(label   : "Pénalisation des dépenses",
-                                percent : model.socioEconomyModel.expensesUnderEvaluationRate.value(withMode: simulationMode))
+                                percent : model.socioEconomyModel.randomizers.expensesUnderEvaluationRate.value(withMode: simulationMode))
                 }
             }
             .navigationTitle("Résumé")

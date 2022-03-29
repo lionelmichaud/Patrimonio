@@ -27,7 +27,7 @@ struct ModelFiscalLifeInsuranceView: View {
         .navigationTitle("Revenus d'Assurance Vie")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar2(subModel                  : $subModel,
+        .modelChangesToolbar(subModel                  : $subModel,
                               updateDependenciesToModel : updateDependenciesToModel)
     }
 }

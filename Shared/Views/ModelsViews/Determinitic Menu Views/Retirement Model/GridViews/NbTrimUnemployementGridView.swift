@@ -13,7 +13,7 @@ import HelpersView
 typealias SliceNbTrimUnemployement = RegimeGeneral.SliceUnemployement
 typealias GridNbTrimUnemployement = [SliceNbTrimUnemployement]
 
-typealias NbTrimUnemployementGridView = GridView2<SliceNbTrimUnemployement,
+typealias NbTrimUnemployementGridView = GridView<SliceNbTrimUnemployement,
                                                  NbTrimUnemployementSliceView,
                                                  NbTrimUnemployementSliceAddView,
                                                  NbTrimUnemployementSliceEditView>

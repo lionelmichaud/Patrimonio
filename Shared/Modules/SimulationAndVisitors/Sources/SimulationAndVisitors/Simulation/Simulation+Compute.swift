@@ -168,7 +168,7 @@ extension Simulation {
                                             _ dicoOfSocioEconomyRandomVariables : inout SocioEconomy.DictionaryOfRandomVariable) {
         dicoOfAdultsRandomProperties      = family.currentRandomProperties()
         dicoOfEconomyRandomVariables      = model.economyModel.currentRandomizersValues(withMode: mode)
-        dicoOfSocioEconomyRandomVariables = model.socioEconomyModel.currentRandomizersValues(withMode: mode)
+        dicoOfSocioEconomyRandomVariables = model.socioEconomyModel.current(withMode: mode)
     }
     
     /// Re-générer les propriétés aléatoires à chaque run si on est en mode Aléatoire
@@ -185,6 +185,6 @@ extension Simulation {
                                                                        firstYear          : firstYear!,
                                                                        lastYear           : lastYear!)
         // re-générer les propriétés aléatoires du modèle socio économique
-        dicoOfSocioEconomyRandomVariables = model.socioEconomyModel.nextRun()
+        dicoOfSocioEconomyRandomVariables = model.socioEconomyModel.next()
     }
 }
