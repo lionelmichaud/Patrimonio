@@ -19,11 +19,11 @@ public protocol LayOffTaxesProviderP {
 // MARK: - Charges sociales sur l'indemnité de licenciement
 // https://www.service-public.fr/particuliers/vosdroits/F987
 
-public struct LayOffTaxes: Codable, LayOffTaxesProviderP {
+public struct LayOffTaxes: Codable, Equatable, LayOffTaxesProviderP {
     
     // MARK: - Nested types
 
-    struct SocialTaxes: Codable {
+    struct SocialTaxes: Codable, Equatable {
         var PASS          : Double? // injecté à l'initialization par le père FiscalModel
         let maxRebateCoef : Double // 2 x PASS
         var maxRebate     : Double {
@@ -32,7 +32,7 @@ public struct LayOffTaxes: Codable, LayOffTaxesProviderP {
         }
         let rate          : Double // 13 % (le même que sur le salaire)
     }
-    struct CsgCrds: Codable {
+    struct CsgCrds: Codable, Equatable {
         let rateDeductible    : Double // 6.5 %
         let rateNonDeductible : Double // 2.9 %
         var total             : Double {
@@ -40,7 +40,7 @@ public struct LayOffTaxes: Codable, LayOffTaxesProviderP {
         }
     }
     /// Ne contient aucune Class
-    struct Model: JsonCodableToBundleP, VersionableP {
+    struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         static var defaultFileName : String = "LayOffTaxesModel.json"
         
         var version     : Version

@@ -7,11 +7,7 @@
 
 import SwiftUI
 import AppFoundation
-import Persistence
-import ModelEnvironment
 import UnemployementModel
-import FamilyModel
-import SimulationAndVisitors
 import HelpersView
 
 struct ModelDeterministicUnemploymentView: View {

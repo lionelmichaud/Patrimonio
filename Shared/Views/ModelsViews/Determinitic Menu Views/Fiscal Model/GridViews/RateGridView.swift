@@ -7,20 +7,26 @@
 
 import SwiftUI
 import AppFoundation
+import FiscalModel
 import HelpersView
 
 // MARK: - Editeur de Barême [seuil €, taux %]
 
-typealias RateGridView = GridView<RateSlice, RateSliceView, RateSliceAddView, RateSliceEditView>
+typealias RateGridView = GridView2<RateSlice,
+                                    RateSliceView,
+                                    RateSliceAddView,
+                                    RateSliceEditView>
 extension RateGridView {
     init(label : String,
-         grid  : Binding<[RateSlice]>) {
+         grid  : Transac<[RateSlice]>,
+         updateDependenciesToModel : @escaping ( ) -> Void) {
         self = RateGridView(label          : label,
                             grid           : grid,
                             initializeGrid : { grid in try! grid.initialize() },
                             displayView    : { slice in RateSliceView(slice: slice) },
                             addView        : { grid in RateSliceAddView(grid: grid) },
-                            editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) })
+                            editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) },
+                            updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
@@ -43,13 +49,13 @@ struct RateSliceView: View {
 // MARK: - Edit a RateSlice of the Grid [seuil €, taux %]
 
 struct RateSliceEditView: View {
-    @Binding private var grid: RateGrid
+    @Transac private var grid: RateGrid
     private var idx: Int
     @Environment(\.presentationMode) var presentationMode
     @State private var modifiedSlice : RateSlice
     @State private var alertItem     : AlertItem?
     
-    init(grid : Binding<RateGrid>,
+    init(grid : Transac<RateGrid>,
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
@@ -111,7 +117,7 @@ struct RateSliceEditView: View {
 // MARK: - Add a RateSlice to the Grid [seuil €, taux %]
 
 struct RateSliceAddView: View {
-    @Binding var grid: RateGrid
+    @Transac var grid: RateGrid
     @Environment(\.presentationMode) var presentationMode
     @State private var newSlice = RateSlice(floor: 0, rate: 10)
     @State private var alertItem : AlertItem?
@@ -193,15 +199,10 @@ struct RateGridView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return
             NavigationView {
                 NavigationLink("Test", destination: RateGridView(label: "Nom",
-                                                                 grid: .constant(grid()))
-                                .environmentObject(TestEnvir.dataStore)
-                                .environmentObject(TestEnvir.model)
-                                .environmentObject(TestEnvir.family)
-                                .environmentObject(TestEnvir.simulation))
+                                                                 grid : .init(source: grid()),
+                                                                 updateDependenciesToModel: { }))
             }
             .preferredColorScheme(.dark)
             .previewLayout(.fixed(width: 700.0, height: 400.0))

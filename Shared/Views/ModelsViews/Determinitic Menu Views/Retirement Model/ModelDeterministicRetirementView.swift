@@ -6,20 +6,14 @@
 //
 
 import SwiftUI
-import Persistence
 import ModelEnvironment
-import FamilyModel
 import HelpersView
-import SimulationAndVisitors
 
 // MARK: - Deterministic Retirement View
 
 struct ModelDeterministicRetirementView: View {
     let updateDependenciesToModel: ( ) -> Void
-    @EnvironmentObject private var dataStore  : Store
     @EnvironmentObject private var model      : Model
-    @EnvironmentObject private var family     : Family
-    @EnvironmentObject private var simulation : Simulation
     @State private var alertItem              : AlertItem?
 
     var body: some View {

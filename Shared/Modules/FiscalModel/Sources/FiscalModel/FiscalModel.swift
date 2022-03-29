@@ -18,7 +18,7 @@ public struct Fiscal: PersistableModelP {
     // MARK: - Nested types
 
     /// Ne contient aucune Class
-    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP {
+    public struct Model: JsonCodableToFolderP, JsonCodableToBundleP, InitializableP, Equatable {
         
         // MARK: - Static Properties
         

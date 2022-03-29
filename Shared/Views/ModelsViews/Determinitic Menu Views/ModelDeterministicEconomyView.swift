@@ -7,8 +7,6 @@
 
 import SwiftUI
 import AppFoundation
-import Persistence
-import ModelEnvironment
 import EconomyModel
 import HelpersView
 
@@ -98,13 +96,8 @@ struct ModelDeterministicEconomyView: View {
 
 struct ModelDeterministicEconomyView_Previews: PreviewProvider {
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return ModelDeterministicEconomyView(updateDependenciesToModel: { },
+        ModelDeterministicEconomyView(updateDependenciesToModel: { },
                                              subModel: .init(source: TestEnvir.model.economy.model!.randomizers))
-            .environmentObject(TestEnvir.dataStore)
-            .environmentObject(TestEnvir.model)
-            .environmentObject(TestEnvir.family)
-            .environmentObject(TestEnvir.simulation)
             .preferredColorScheme(.dark)
     }
 }

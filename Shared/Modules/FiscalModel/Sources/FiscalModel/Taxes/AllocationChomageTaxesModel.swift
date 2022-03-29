@@ -14,7 +14,7 @@ public protocol AllocationChomageTaxesProviderP {
 }
 
 // MARK: - Charges sociales sur allocation chomage
-public struct AllocationChomageTaxesModel: Codable, AllocationChomageTaxesProviderP {
+public struct AllocationChomageTaxesModel: Codable, Equatable, AllocationChomageTaxesProviderP {
     
     // MARK: Nested types
     

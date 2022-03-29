@@ -7,8 +7,6 @@
 
 import SwiftUI
 import AppFoundation
-import Persistence
-import ModelEnvironment
 import HumanLifeModel
 import HelpersView
 
@@ -70,13 +68,8 @@ struct ModelDeterministicHumanView: View {
 
 struct ModelDeterministicHumanView_Previews: PreviewProvider {
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return ModelDeterministicHumanView(updateDependenciesToModel: { },
-                                           subModel: .init(source: TestEnvir.model.humanLifeModel))
-            .environmentObject(TestEnvir.dataStore)
-            .environmentObject(TestEnvir.model)
-            .environmentObject(TestEnvir.family)
-            .environmentObject(TestEnvir.simulation)
-            .preferredColorScheme(.dark)
+        ModelDeterministicHumanView(updateDependenciesToModel: { },
+                                    subModel: .init(source: TestEnvir.model.humanLifeModel))
+        .preferredColorScheme(.dark)
     }
 }

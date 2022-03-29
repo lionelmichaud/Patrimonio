@@ -10,7 +10,7 @@ import Foundation
 import AppFoundation
 
 // MARK: - Impots sur les sociétés (SCI)
-public struct CompanyProfitTaxesModel: Codable {
+public struct CompanyProfitTaxesModel: Codable, Equatable {
     
     // MARK: Nested types
     

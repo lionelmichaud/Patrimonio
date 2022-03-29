@@ -6,104 +6,69 @@
 //
 
 import SwiftUI
-import ModelEnvironment
-import Persistence
-import FamilyModel
-import SimulationAndVisitors
+import AppFoundation
+import FiscalModel
 import HelpersView
 
 struct ModelFiscalImmobilierImpotView: View {
-    @EnvironmentObject private var dataStore  : Store
-    @EnvironmentObject private var model      : Model
-    @EnvironmentObject private var family     : Family
-    @EnvironmentObject private var simulation : Simulation
-    @State private var alertItem              : AlertItem?
+    let updateDependenciesToModel: ( ) -> Void
+    @Transac var subModel: RealEstateCapitalGainIrppModel.Model
+    @State private var alertItem: AlertItem?
+    @State private var showingSheet = false
 
     var body: some View {
         Form {
             Section {
-                VersionEditableViewInForm(version: $model.fiscalModel.estateCapitalGainIrpp.model.version)
+                VersionEditableViewInForm(version: $subModel.version)
             }
             
             NavigationLink(destination: RealEstateExonerationGridView(label: "Barême de l'Impôts sur Plus-Values Immobilières",
-                                                                      grid: $model.fiscalModel.estateCapitalGainIrpp.model.exoGrid)
-                            .environmentObject(model)) {
+                                                                      grid: $subModel.exoGrid.transaction(),
+                                                                      updateDependenciesToModel: updateDependenciesToModel)) {
                 Text("Barême de l'Impôts sur Plus-Values Immobilières")
             }.isDetailLink(true)
 
-            Stepper(value : $model.fiscalModel.estateCapitalGainIrpp.model.irpp,
+            Stepper(value : $subModel.irpp,
                     in    : 0 ... 100.0,
                     step  : 1.0) {
                 HStack {
                     Text("Taux d'impôt sur les plus-values")
                     Spacer()
-                    Text("\(model.fiscalModel.estateCapitalGainIrpp.model.irpp.percentString(digit: 0))")
+                    Text("\(subModel.irpp.percentString(digit: 0))")
                         .foregroundColor(.secondary)
                 }
             }
 
             Section(header: Text("Abattement").font(.headline)) {
-                Stepper(value : $model.fiscalModel.estateCapitalGainIrpp.model.discountTravaux,
+                Stepper(value : $subModel.discountTravaux,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
                     HStack {
                         Text("Abattement forfaitaire pour travaux")
                         Spacer()
-                        Text("\(model.fiscalModel.estateCapitalGainIrpp.model.discountTravaux.percentString(digit: 0))")
+                        Text("\(subModel.discountTravaux.percentString(digit: 0))")
                             .foregroundColor(.secondary)
                     }
                 }
 
                 IntegerEditView(label   : "Abattement possible après",
                                 comment : "ans",
-                                integer : $model.fiscalModel.estateCapitalGainIrpp.model.discountAfter)
+                                integer : $subModel.discountAfter)
             }
-        }
-        .onChange(of: model.fiscalModel.estateCapitalGainIrpp.model) { _ in
-            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-            model.manageInternalDependencies()
         }
         .navigationTitle("Plus-Value Immobilière")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar(
-            applyChangesToTemplate: {
-                alertItem = applyChangesToTemplateAlert(
-                    model     : model,
-                    notifyTemplatFolderMissing: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    },
-                    notifyFailure: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Echec de l'enregistrement"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    })
-            },
-            cancelChanges: {
-                alertItem = cancelChanges(
-                    to         : model,
-                    family     : family,
-                    simulation : simulation,
-                    dataStore  : dataStore)
-            },
-            isModified: model.isModified)
+        .modelChangesToolbar2(subModel                  : $subModel,
+                              updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
 struct ModelFiscalImmobilierImpot_Previews: PreviewProvider {
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return ModelFiscalImmobilierImpotView()
+        ModelFiscalImmobilierImpotView(updateDependenciesToModel: { },
+                                       subModel: .init(source: TestEnvir.model.fiscalModel.estateCapitalGainIrpp.model))
             .preferredColorScheme(.dark)
-            .environmentObject(TestEnvir.dataStore)
-            .environmentObject(TestEnvir.model)
-            .environmentObject(TestEnvir.family)
-            .environmentObject(TestEnvir.simulation)
+            .previewLayout(.fixed(width: 700.0, height: 400.0))
     }
 }

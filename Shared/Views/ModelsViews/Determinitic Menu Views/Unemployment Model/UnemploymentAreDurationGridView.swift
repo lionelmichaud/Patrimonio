@@ -227,15 +227,10 @@ struct UnemploymentAreDurationGridView_Previews: PreviewProvider {
     }
 
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return NavigationView {
+        NavigationView {
             NavigationLink("Test", destination: UnemploymentAreDurationGridView(label: "Nom",
                                                                                 grid : .init(source: grid()),
-                                                                                updateDependenciesToModel: { })
-                .environmentObject(TestEnvir.dataStore)
-                .environmentObject(TestEnvir.model)
-                .environmentObject(TestEnvir.family)
-                .environmentObject(TestEnvir.simulation))
+                                                                                updateDependenciesToModel: { }))
         }
         .preferredColorScheme(.dark)
         .previewLayout(.fixed(width: 700.0, height: 400.0))

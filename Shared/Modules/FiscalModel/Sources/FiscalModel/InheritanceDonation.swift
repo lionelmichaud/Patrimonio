@@ -86,7 +86,7 @@ public enum InheritanceFiscalOption: String, PickableEnumP, Codable {
 ///  - Note:
 ///   - [service-public.fr](https://www.service-public.fr/particuliers/vosdroits/F14198)
 ///   - [capital.fr](https://www.capital.fr/votre-argent/succession-les-mesures-a-prendre-pour-proteger-son-conjoint-1027822)
-public struct InheritanceDonation: Codable {
+public struct InheritanceDonation: Codable, Equatable {
     
     // MARK: - Nested types
 
@@ -169,7 +169,7 @@ public struct InheritanceDonation: Codable {
 
 // MARK: - Droits de succession sur assurance vie
 ///  - Note: [Reference](https://www.impots.gouv.fr/portail/international-particulier/questions/comment-sont-imposees-les-assurances-vie-en-cas-de-deces-du)
-public struct LifeInsuranceInheritance: Codable {
+public struct LifeInsuranceInheritance: Codable, Equatable {
 
     // MARK: - Nested types
 

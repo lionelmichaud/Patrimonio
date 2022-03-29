@@ -12,19 +12,20 @@ import HelpersView
 
 // MARK: - Editeur de Demembrement [age, usuFruit %, nueProp %]
 
-typealias DemembrementGridView = GridView<DemembrementSlice,
+typealias DemembrementGridView = GridView2<DemembrementSlice,
                                           DemembrementSliceView,
                                           DemembrementSliceAddView,
                                           DemembrementSliceEditView>
 extension DemembrementGridView {
     init(label : String,
-         grid  : Binding<[DemembrementSlice]>) {
+         grid  : Transac<[DemembrementSlice]>,
+         updateDependenciesToModel : @escaping ( ) -> Void) {
         self = DemembrementGridView(label          : label,
                                     grid           : grid,
-                                    initializeGrid : { _ in },
                                     displayView    : { slice in DemembrementSliceView(slice: slice) },
                                     addView        : { grid in DemembrementSliceAddView(grid: grid) },
-                                    editView       : { grid, idx in DemembrementSliceEditView(grid: grid, idx: idx) })
+                                    editView       : { grid, idx in DemembrementSliceEditView(grid: grid, idx: idx) },
+                                    updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
@@ -53,13 +54,13 @@ struct DemembrementSliceView: View {
 // MARK: - Edit a Demembrement [age, usuFruit %]
 
 struct DemembrementSliceEditView: View {
-    @Binding private var grid: DemembrementGrid
+    @Transac private var grid: DemembrementGrid
     private var idx: Int
     @Environment(\.presentationMode) var presentationMode
     @State private var modifiedSlice : DemembrementSlice
     @State private var alertItem     : AlertItem?
 
-    init(grid : Binding<DemembrementGrid>,
+    init(grid : Transac<DemembrementGrid>,
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
@@ -123,7 +124,7 @@ struct DemembrementSliceEditView: View {
 // MARK: - Add a Demembrement [age, usuFruit %]
 
 struct DemembrementSliceAddView: View {
-    @Binding var grid: DemembrementGrid
+    @Transac var grid: DemembrementGrid
     @Environment(\.presentationMode) var presentationMode
     @State private var newSlice = DemembrementSlice(floor    : 0,
                                                     usuFruit : 0)
@@ -199,13 +200,12 @@ struct DemembrementGridView_Previews: PreviewProvider {
 
     static var previews: some View {
         TestEnvir.loadTestFilesFromBundle()
-        return DemembrementGridView(label: "Nom",
-                                    grid : .constant(grid()))
-            .environmentObject(TestEnvir.dataStore)
-            .environmentObject(TestEnvir.model)
-            .environmentObject(TestEnvir.family)
-            .environmentObject(TestEnvir.simulation)
+        return NavigationView {
+            NavigationLink("Test", destination: DemembrementGridView(label: "Nom",
+                                                                     grid : .init(source: grid()),
+                                                                     updateDependenciesToModel: { }))
             .preferredColorScheme(.dark)
             .previewLayout(.fixed(width: 1000.0, height: 400.0))
+        }
     }
 }

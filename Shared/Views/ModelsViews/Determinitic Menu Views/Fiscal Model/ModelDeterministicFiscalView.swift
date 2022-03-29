@@ -6,178 +6,142 @@
 //
 
 import SwiftUI
-import Persistence
-import ModelEnvironment
-import FamilyModel
-import SimulationAndVisitors
+import AppFoundation
+import FiscalModel
 import HelpersView
 
 struct ModelDeterministicFiscalView: View {
-    @EnvironmentObject private var dataStore  : Store
-    @EnvironmentObject private var model      : Model
-    @EnvironmentObject private var family     : Family
-    @EnvironmentObject private var simulation : Simulation
-    @State private var alertItem              : AlertItem?
+    let updateDependenciesToModel: ( ) -> Void
+    @Transac var subModel: Fiscal.Model
+    @State private var alertItem: AlertItem?
 
     var body: some View {
         Form {
             AmountEditView(label  : "Plafond Annuel de la Sécurité Sociale",
                            comment: "PASS",
-                           amount : $model.fiscalModel.PASS)
-                .onChange(of: model.fiscalModel.PASS) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
-                }
-            
+                           amount : $subModel.PASS)
+
             Section(header: Text("Impôts").font(.headline)) {
-                NavigationLink(destination: ModelFiscalIrppView()
-                                .environmentObject(model)) {
+                NavigationLink(destination: ModelFiscalIrppView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                subModel: $subModel.incomeTaxes.model.transaction())) {
                     Text("Revenus du Travail (IRPP)")
                     Spacer()
-                    VersionVStackView(version: model.fiscalModel.incomeTaxes.model.version,
-                                withDetails: false)
+                    VersionVStackView(version: subModel.incomeTaxes.model.version,
+                                      withDetails: false)
                 }
                 
-                NavigationLink(destination: ModelFiscalIsfView()
-                                .environmentObject(model)) {
+                NavigationLink(destination: ModelFiscalIsfView(updateDependenciesToModel: updateDependenciesToModel,
+                                                               subModel: $subModel.isf.model.transaction())) {
                     Text("Capital (IFI)")
                     Spacer()
-                    VersionVStackView(version: model.fiscalModel.isf.model.version,
-                                withDetails: false)
+                    VersionVStackView(version: subModel.isf.model.version,
+                                      withDetails: false)
                 }
                 
-                NavigationLink(destination: ModelFiscalImpotSocieteView()
-                                .environmentObject(model)) {
+                NavigationLink(destination: ModelFiscalImpotSocieteView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                        subModel: $subModel.companyProfitTaxes.model.transaction())) {
                     Text("Bénéfice des Sociétés (IS)")
                     Spacer()
-                    VersionVStackView(version: model.fiscalModel.companyProfitTaxes.model.version,
-                                withDetails: false)
+                    VersionVStackView(version: subModel.companyProfitTaxes.model.version,
+                                      withDetails: false)
                 }
                 
-                NavigationLink(destination: ModelFiscalImmobilierImpotView()
-                                .environmentObject(model)) {
+                NavigationLink(destination: ModelFiscalImmobilierImpotView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                           subModel: $subModel.estateCapitalGainIrpp.model.transaction())) {
                     Text("Plus-Value Immobilière")
                     Spacer()
-                    VersionVStackView(version: model.fiscalModel.estateCapitalGainIrpp.model.version,
-                                withDetails: false)
+                    VersionVStackView(version: subModel.estateCapitalGainIrpp.model.version,
+                                      withDetails: false)
                 }
             }
             
             Section(header: Text("Charges Sociales").font(.headline)) {
-                NavigationLink(destination: ModelFiscalPensionView()
-                                .environmentObject(model)) {
-                    Text("Pensions de Retraite")
-                    Spacer()
-                    VersionVStackView(version: model.fiscalModel.pensionTaxes.model.version,
-                                withDetails: false)
-                }
+                NavigationLink(destination: ModelFiscalPensionView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                   subModel: $subModel.pensionTaxes.model.transaction())) {
+                        Text("Pensions de Retraite")
+                        Spacer()
+                        VersionVStackView(version: subModel.pensionTaxes.model.version,
+                                          withDetails: false)
+                    }
                 
-                NavigationLink(destination: ModelFiscalChomageChargeView()
-                                .environmentObject(model)) {
-                    Text("Allocation Chômage")
-                    Spacer()
-                    VersionVStackView(version: model.fiscalModel.allocationChomageTaxes.model.version,
-                                withDetails: false)
-                }
+                NavigationLink(destination: ModelFiscalChomageChargeView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                         subModel: $subModel.allocationChomageTaxes.model.transaction())) {
+                        Text("Allocation Chômage")
+                        Spacer()
+                        VersionVStackView(version: subModel.allocationChomageTaxes.model.version,
+                                          withDetails: false)
+                    }
                 
-                NavigationLink(destination: ModelFiscalFinancialView()
-                                .environmentObject(model)) {
-                    Text("Revenus Financiers")
-                    Spacer()
-                    VersionVStackView(version: model.fiscalModel.financialRevenuTaxes.model.version,
-                                withDetails: false)
-                }
+                NavigationLink(destination: ModelFiscalFinancialView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                     subModel: $subModel.financialRevenuTaxes.model.transaction())) {
+                        Text("Revenus Financiers")
+                        Spacer()
+                        VersionVStackView(version: subModel.financialRevenuTaxes.model.version,
+                                          withDetails: false)
+                    }
                 
-                NavigationLink(destination: ModelFiscalLifeInsuranceView()
-                                .environmentObject(model)) {
-                    Text("Revenus d'Assurance Vie")
-                    Spacer()
-                    VersionVStackView(version: model.fiscalModel.lifeInsuranceTaxes.model.version,
-                                withDetails: false)
-                }
+                NavigationLink(destination: ModelFiscalLifeInsuranceView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                         subModel: $subModel.lifeInsuranceTaxes.model.transaction())) {
+                        Text("Revenus d'Assurance Vie")
+                        Spacer()
+                        VersionVStackView(version: subModel.lifeInsuranceTaxes.model.version,
+                                          withDetails: false)
+                    }
                 
-                NavigationLink(destination: ModelFiscalTurnoverView()
-                                .environmentObject(model)) {
-                    Text("Bénéfices Non Commerciaux (BNC)")
-                    Spacer()
-                    VersionVStackView(version: model.fiscalModel.turnoverTaxes.model.version,
-                                withDetails: false)
-                }
+                NavigationLink(destination: ModelFiscalTurnoverView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                    subModel: $subModel.turnoverTaxes.model.transaction())) {
+                        Text("Bénéfices Non Commerciaux (BNC)")
+                        Spacer()
+                        VersionVStackView(version: subModel.turnoverTaxes.model.version,
+                                          withDetails: false)
+                    }
                 
-                NavigationLink(destination: ModelFiscalImmobilierTaxeView()
-                                .environmentObject(model)) {
-                    Text("Plus-Value Immobilière")
-                    Spacer()
-                    VersionVStackView(version: model.fiscalModel.estateCapitalGainTaxes.model.version,
-                                withDetails: false)
-                }
+                NavigationLink(destination: ModelFiscalImmobilierTaxeView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                          subModel: $subModel.estateCapitalGainTaxes.model.transaction())) {
+                        Text("Plus-Value Immobilière")
+                        Spacer()
+                        VersionVStackView(version: subModel.estateCapitalGainTaxes.model.version,
+                                          withDetails: false)
+                    }
             }
             
             Section(header: Text("Taxes").font(.headline)) {
                 NavigationLink(destination: DemembrementGridView(label: "Barême de Démembrement",
-                                                                 grid: $model.fiscalModel.demembrement.model.grid)
-                                .environmentObject(model)) {
+                                                                 grid: $subModel.demembrement.model.grid.transaction(),
+                                                                 updateDependenciesToModel: updateDependenciesToModel)) {
                     Text("Barême de Démembrement")
                 }.isDetailLink(true)
                 
-                NavigationLink(destination: ModelFiscalInheritanceDonationView()
-                                .environmentObject(model)) {
+                NavigationLink(destination: ModelFiscalInheritanceDonationView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                               subModel: $subModel.inheritanceDonation.model.transaction())) {
                     Text("Succession et Donation")
                     Spacer()
-                    VersionVStackView(version: model.fiscalModel.inheritanceDonation.model.version,
-                                withDetails: false)
+                    VersionVStackView(version: subModel.inheritanceDonation.model.version,
+                                      withDetails: false)
                 }
                 
-                NavigationLink(destination: ModelFiscalLifeInsInheritanceView()
-                                .environmentObject(model)) {
+                NavigationLink(destination: ModelFiscalLifeInsInheritanceView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                              subModel: $subModel.lifeInsuranceInheritance.model.transaction())) {
                     Text("Transmission des Assurances Vie")
                     Spacer()
-                    VersionVStackView(version: model.fiscalModel.lifeInsuranceInheritance.model.version,
-                                withDetails: false)
+                    VersionVStackView(version: subModel.lifeInsuranceInheritance.model.version,
+                                      withDetails: false)
                 }
             }
         }
         .navigationTitle("Modèle Fiscal")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar(
-            applyChangesToTemplate: {
-                alertItem = applyChangesToTemplateAlert(
-                    model     : model,
-                    notifyTemplatFolderMissing: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    },
-                    notifyFailure: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Echec de l'enregistrement"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    })
-            },
-            cancelChanges: {
-                alertItem = cancelChanges(
-                    to         : model,
-                    family     : family,
-                    simulation : simulation,
-                    dataStore  : dataStore)
-            },
-            isModified: model.isModified)
+        .modelChangesToolbar2(subModel                  : $subModel,
+                              updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
 struct ModelDeterministicFiscalView_Previews: PreviewProvider {
     static var previews: some View {
         TestEnvir.loadTestFilesFromBundle()
-        return ModelDeterministicFiscalView()
-            .environmentObject(TestEnvir.dataStore)
-            .environmentObject(TestEnvir.model)
-            .environmentObject(TestEnvir.family)
-            .environmentObject(TestEnvir.simulation)
-            .preferredColorScheme(.dark)
+        return ModelDeterministicFiscalView(updateDependenciesToModel: { },
+                                            subModel: .init(source: TestEnvir.model.fiscalModel))
+        .preferredColorScheme(.dark)
     }
 }

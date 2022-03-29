@@ -11,7 +11,7 @@ import AppFoundation
 
 // MARK: - Impôt sur les plus-values d'assurance vie-Assurance vies
 /// Ne contient aucune Class
-public struct LifeInsuranceTaxes: Codable {
+public struct LifeInsuranceTaxes: Codable, Equatable {
     
     // MARK: Nested types
     

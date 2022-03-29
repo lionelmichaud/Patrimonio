@@ -86,7 +86,8 @@ struct VerifiedPointGridView : View {
 
             }
             PointGridView(label: label,
-                          grid: $grid)
+                          grid: $grid.transaction(),
+                          updateDependenciesToModel: { })
         }
     }
     
@@ -103,17 +104,22 @@ struct VerifiedPointGridView : View {
     
 }
 
-typealias PointGridView = GridView<Point, PointView, PointAddView, PointEditView>
+typealias PointGridView = GridView2<Point,
+                                    PointView,
+                                    PointAddView,
+                                    PointEditView>
 extension PointGridView {
     init(label : String,
-         grid  : Binding<ArrayOfPoint>) {
+         grid  : Transac<ArrayOfPoint>,
+         updateDependenciesToModel : @escaping ( ) -> Void) {
         self = PointGridView(label          : label,
                              grid           : grid,
                              gridIsValid    : { grid in grid.sum(for: \.y) == 1.0 },
                              initializeGrid : { grid in grid.normalizeY()},
                              displayView    : { point in PointView(point: point) },
                              addView        : { grid in PointAddView(grid: grid) },
-                             editView       : { grid, idx in PointEditView(grid: grid, idx: idx) })
+                             editView       : { grid, idx in PointEditView(grid: grid, idx: idx) },
+                             updateDependenciesToModel: updateDependenciesToModel)
     }
 }
 
@@ -134,13 +140,13 @@ struct PointView: View {
 // MARK: - Edit a Point of a curve [x, p]
 
 struct PointEditView: View {
-    @Binding private var grid: ArrayOfPoint
+    @Transac private var grid: ArrayOfPoint
     private var idx: Int
     @Environment(\.presentationMode) var presentationMode
     @State private var modifiedSlice : Point
     @State private var alertItem     : AlertItem?
     
-    init(grid : Binding<ArrayOfPoint>,
+    init(grid : Transac<ArrayOfPoint>,
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
@@ -216,7 +222,7 @@ struct PointEditView: View {
 // MARK: - Add a Point of a curve [x, p]
 
 struct PointAddView: View {
-    @Binding var grid: ArrayOfPoint
+    @Transac var grid: ArrayOfPoint
     @Environment(\.presentationMode) var presentationMode
     @State private var newSlice = Point(0, 0)
     @State private var alertItem : AlertItem?
@@ -225,13 +231,13 @@ struct PointAddView: View {
         HStack {
             Button(action: { self.presentationMode.wrappedValue.dismiss() },
                    label: { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
             Button(action: addSlice,
                    label: { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 .alert(item: $alertItem, content: newAlert)
         }
         .padding(.horizontal)
@@ -293,11 +299,8 @@ struct PointGridView_Previews: PreviewProvider {
         return
             NavigationView {
                 NavigationLink("Test", destination: PointGridView(label: "Nom",
-                                                                  grid: .constant(grid()))
-                                .environmentObject(TestEnvir.dataStore)
-                                .environmentObject(TestEnvir.model)
-                                .environmentObject(TestEnvir.family)
-                                .environmentObject(TestEnvir.simulation))
+                                                                  grid : .init(source: grid()),
+                                                                  updateDependenciesToModel: { }))
             }
             .preferredColorScheme(.dark)
             .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/500.0/*@END_MENU_TOKEN@*/, height: 300.0))
@@ -312,16 +315,10 @@ struct VerifiedPointGridView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return
-            NavigationView {
-                NavigationLink("Test", destination: VerifiedPointGridView(label: "Courbe",
-                                                                          grid: .constant(grid()))
-                                .environmentObject(TestEnvir.dataStore)
-                                .environmentObject(TestEnvir.model)
-                                .environmentObject(TestEnvir.family)
-                                .environmentObject(TestEnvir.simulation))
-            }
+        NavigationView {
+            NavigationLink("Test", destination: VerifiedPointGridView(label: "Courbe",
+                                                                      grid: .constant(grid())))
+        }
         .preferredColorScheme(.dark)
         .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/500.0/*@END_MENU_TOKEN@*/, height: 300.0))
     }

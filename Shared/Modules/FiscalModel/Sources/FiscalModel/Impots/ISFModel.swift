@@ -11,7 +11,7 @@ import AppFoundation
 
 // MARK: - Impôts sur la fortune
 
-public struct IsfModel: Codable {
+public struct IsfModel: Codable, Equatable {
     
     // MARK: - Nested types
     

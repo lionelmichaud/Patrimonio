@@ -10,7 +10,7 @@ import Foundation
 import AppFoundation
 
 // MARK: - Charges sociales sur plus-values immobilières
-public struct RealEstateCapitalGainTaxesModel: Codable {
+public struct RealEstateCapitalGainTaxesModel: Codable, Equatable {
     
     // MARK: - Nested types
     

@@ -138,35 +138,35 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
     }
 }
 
-struct GridView_Previews: PreviewProvider {
-    static func grid() -> RateGrid {
-        [ RateSlice(floor:    0.0, rate: 10.0),
-          RateSlice(floor: 1000.0, rate: 20.0),
-          RateSlice(floor: 2000.0, rate: 30.0)]
-    }
-
-    static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return NavigationView {
-            EmptyView()
-            GridView(label          : "label",
-                     grid           : .constant(grid()),
-                     gridIsValid    : { _ in true },
-                     initializeGrid : { grid in try! grid.initialize() },
-                     displayView    : { slice in RateSliceView(slice: slice) },
-                     addView        : { grid in RateSliceAddView(grid: grid) },
-                     editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) })
-            .preferredColorScheme(.dark)
-            .environmentObject(TestEnvir.dataStore)
-            .environmentObject(TestEnvir.model)
-            .environmentObject(TestEnvir.family)
-            .environmentObject(TestEnvir.simulation)
-
-        }
-        .preferredColorScheme(.dark)
-        .previewLayout(.fixed(width: 700.0, height: 400.0))
-    }
-}
+//struct GridView_Previews: PreviewProvider {
+//    static func grid() -> RateGrid {
+//        [ RateSlice(floor:    0.0, rate: 10.0),
+//          RateSlice(floor: 1000.0, rate: 20.0),
+//          RateSlice(floor: 2000.0, rate: 30.0)]
+//    }
+//
+//    static var previews: some View {
+//        TestEnvir.loadTestFilesFromBundle()
+//        return NavigationView {
+//            EmptyView()
+//            GridView(label          : "label",
+//                     grid           : .constant(grid()),
+//                     gridIsValid    : { _ in true },
+//                     initializeGrid : { grid in try! grid.initialize() },
+//                     displayView    : { slice in RateSliceView(slice: slice) },
+//                     addView        : { grid in RateSliceAddView(grid: grid) },
+//                     editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) })
+//            .preferredColorScheme(.dark)
+//            .environmentObject(TestEnvir.dataStore)
+//            .environmentObject(TestEnvir.model)
+//            .environmentObject(TestEnvir.family)
+//            .environmentObject(TestEnvir.simulation)
+//
+//        }
+//        .preferredColorScheme(.dark)
+//        .previewLayout(.fixed(width: 700.0, height: 400.0))
+//    }
+//}
 
 /// Editeur de Grille Générique
 /// - Parameters:
@@ -284,33 +284,27 @@ struct GridView2<S: Hashable, DisplayView: View, AddView: View, EditView: View> 
     }
 }
 
-//struct GridView2_Previews: PreviewProvider {
-//    static func grid() -> RateGrid {
-//        [ RateSlice(floor:    0.0, rate: 10.0),
-//          RateSlice(floor: 1000.0, rate: 20.0),
-//          RateSlice(floor: 2000.0, rate: 30.0)]
-//    }
-//
-//    static var previews: some View {
-//        TestEnvir.loadTestFilesFromBundle()
-//        return
-//            NavigationView {
-//                EmptyView()
-//                GridView2(label          : "label",
-//                         grid           : .init(source: grid()), // .constant(grid()),
-//                         gridIsValid    : { _ in true },
-//                         initializeGrid : { grid in try! grid.initialize() },
-//                         displayView    : { slice in RateSliceView(slice: slice) },
-//                         addView        : { grid in RateSliceAddView(grid: grid) },
-//                         editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) })
-//                    .preferredColorScheme(.dark)
-//                    .environmentObject(TestEnvir.dataStore)
-//                    .environmentObject(TestEnvir.model)
-//                    .environmentObject(TestEnvir.family)
-//                    .environmentObject(TestEnvir.simulation)
-//
-//            }
-//            .preferredColorScheme(.dark)
-//            .previewLayout(.fixed(width: 700.0, height: 400.0))
-//    }
-//}
+struct GridView2_Previews: PreviewProvider {
+    static func grid() -> RateGrid {
+        [ RateSlice(floor:    0.0, rate: 10.0),
+          RateSlice(floor: 1000.0, rate: 20.0),
+          RateSlice(floor: 2000.0, rate: 30.0)]
+    }
+
+    static var previews: some View {
+        NavigationView {
+            EmptyView()
+            GridView2(label          : "label",
+                      grid           : .init(source: grid()), // .constant(grid()),
+                      gridIsValid    : { _ in true },
+                      initializeGrid : { grid in try! grid.initialize() },
+                      displayView    : { slice in RateSliceView(slice: slice) },
+                      addView        : { grid in RateSliceAddView(grid: grid) },
+                      editView       : { grid, idx in RateSliceEditView(grid: grid, idx: idx) },
+                      updateDependenciesToModel: { })
+            .preferredColorScheme(.dark)
+        }
+        .preferredColorScheme(.dark)
+        .previewLayout(.fixed(width: 700.0, height: 400.0))
+    }
+}

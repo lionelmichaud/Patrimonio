@@ -7,7 +7,6 @@
 
 import SwiftUI
 import ModelEnvironment
-import Persistence
 import PatrimoineModel
 import SimulationAndVisitors
 import FamilyModel
@@ -55,7 +54,8 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle sociologie
-            NavigationLink(destination: ModelDeterministicFiscalView(),
+            NavigationLink(destination: ModelDeterministicFiscalView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                     subModel: $model.fiscalModel.transaction()),
                            tag         : .detFiscalModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Label("Modèle Fiscal", systemImage: "slider.horizontal.3")

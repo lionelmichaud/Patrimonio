@@ -49,7 +49,7 @@ public extension ExonerationGrid {
 
 // MARK: - Impôts sur plus-values immobilières
 /// impôts sur plus-values immobilières
-public struct RealEstateCapitalGainIrppModel: Codable {
+public struct RealEstateCapitalGainIrppModel: Codable, Equatable {
     
     // MARK: - Nested types
 

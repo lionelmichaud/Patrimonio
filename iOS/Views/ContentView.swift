@@ -64,6 +64,7 @@ struct ContentView: View {
     }
     
     func checkCompatibility() {
+        print("selected tab = \(selection)")
         if !PersistenceManager.templateDirIsCompatibleWithAppVersion {
             self.alertItem =
             AlertItem(title         : Text("Attention").foregroundColor(.red),
