@@ -18,15 +18,13 @@ public struct Debt: Codable, Identifiable, NameableValuableP, OwnableP {
     
     // MARK: - Type Properties
 
-    public static let prototype = Debt(name: "",
-                                       note: "",
-                                       value: 0.0)
+    public static let prototype = Debt()
 
     // MARK: - Properties
 
-    public var id    = UUID()
-    public var name  : String = ""
-    public var note  : String = ""
+    public var id   = UUID()
+    public var name : String = ""
+    public var note : String = ""
     // propriétaires
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire

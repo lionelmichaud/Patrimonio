@@ -15,10 +15,11 @@ import Files
 // MARK: - Table d'Item Generic Valuable and Nameable
 
 public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, PersistableP where
-    E: Codable,
-    E: Identifiable,
-    E: CustomStringConvertible,
-    E: NameableValuableP {
+E: Codable,
+E: Identifiable,
+E: Equatable,
+E: CustomStringConvertible,
+E: NameableValuableP {
     
     private enum CodingKeys: String, CodingKey {
         case version, items
@@ -26,11 +27,11 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, Pe
     
     // MARK: - Properties
 
-    public  var items           = [E]()
-    public  var version         = Version()
-    private var fileNamePrefix  : String?
-    public  var persistenceSM   = PersistenceStateMachine()
-    
+    public  var items          = [E]()
+    public  var version        = Version()
+    private var fileNamePrefix : String?
+    public  var persistenceSM  = PersistenceStateMachine()
+
     // MARK: - Computed Properties
     
     public var currentValue    : Double {
@@ -70,7 +71,7 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, Pe
 
         // exécuter la transition
         persistenceSM.process(event: .onLoad)
-   }
+    }
     
     public init(for aClass     : AnyClass,
                 fileNamePrefix : String = "") {
@@ -124,13 +125,19 @@ public struct ArrayOfNameableValuable<E>: JsonCodableToFolderP, VersionableP, Pe
                               to destination : Int) {
         items.move(fromOffsets: indexes, toOffset: destination)
     }
-    
+
     public mutating func delete(at offsets: IndexSet) {
         items.remove(atOffsets: offsets)
         // exécuter la transition
         persistenceSM.process(event: .onModify)
     }
-    
+
+    public mutating func delete(_ item: E) {
+        items.removeAll(where: { $0 == item })
+        // exécuter la transition
+        persistenceSM.process(event: .onModify)
+    }
+
     public mutating func add(_ item: E) {
         items.append(item)
         // exécuter la transition

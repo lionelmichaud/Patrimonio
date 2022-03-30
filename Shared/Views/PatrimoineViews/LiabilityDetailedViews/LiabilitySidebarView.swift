@@ -102,7 +102,6 @@ struct DebtSidebarView: View {
     @EnvironmentObject var uiState    : UIState
 
     var body: some View {
-        ScrollViewReader { proxy in
             Section {
                 // label
                 LabeledValueRowView(colapse     : $uiState.patrimoineViewState.liabViewState.colapseDetteListe,
@@ -113,9 +112,10 @@ struct DebtSidebarView: View {
 
                 // items
                 if !uiState.patrimoineViewState.liabViewState.colapseDetteListe {
+                    //ScrollViewReader { proxy in
                     // ajout d'un nouvel item à la liste
                     Button(
-                        action: { addItem(proxy: proxy) },
+                        action: addItem,
                         label: {
                             Label(title: { Text("Ajouter un élément...") },
                                   icon : { Image(systemName: "plus.circle.fill").imageScale(.large) })
@@ -131,13 +131,32 @@ struct DebtSidebarView: View {
                                                 indentLevel : 3,
                                                 header      : false,
                                                 icon        : Image(systemName: "eurosign.circle.fill"))
+                            .id(item.id)
+                            // duppliquer l'item
+                            .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                                Button {
+                                    duplicateItem(item)
+                                } label: {
+                                    Label("Duppliquer", systemImage: "doc.on.doc")
+                                }
+                                .tint(.indigo)
+                            }
+                            // supprimer l'item
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                Button(role: .destructive) {
+                                    withAnimation(.linear(duration: 0.4)) {
+                                        deleteItem(item)
+                                    }
+                                } label: {
+                                    Label("Supprimer", systemImage: "trash")
+                                }
+                            }
                         }
-                                                                      .isDetailLink(true)
-                                                                      .id(item.id)
+                        .isDetailLink(true)
                     }
                     .onDelete(perform: removeItems)
                     .onMove(perform: move)
-                }
+                //}
             }
         }
     }
@@ -149,27 +168,41 @@ struct DebtSidebarView: View {
         uiState.resetSimulationView()
     }
 
+    func addItem() {
+        // ajouter un nouvel item à la liste
+        let newItem = Debt(name: "Nouvel élément",
+                           delegateForAgeOf: family.ageOf)
+        patrimoine.liabilities.debts.add(newItem)
+        // remettre à zéro la simulation et sa vue
+        resetSimulation()
+    }
+
+    func duplicateItem(_ item: Debt) {
+        var newItem = item
+        // générer un nouvel identifiant pour la copie
+        newItem.id = UUID()
+        newItem.name += "-copie"
+        // duppliquer l'item de la liste
+        patrimoine.liabilities.debts.add(newItem)
+        // remettre à zéro la simulation et sa vue
+        resetSimulation()
+    }
+
+    func deleteItem(_ item: Debt) {
+        // supprimer l'item de la liste
+        patrimoine.liabilities.debts.delete(item)
+        // remettre à zéro la simulation et sa vue
+        resetSimulation()
+    }
+
     func removeItems(at offsets: IndexSet) {
         patrimoine.liabilities.debts.delete(at: offsets)
-
         // remettre à zéro la simulation et sa vue
-        simulation.notifyComputationInputsModification()
-        uiState.resetSimulationView()
+        resetSimulation()
     }
 
     func move(from source: IndexSet, to destination: Int) {
         patrimoine.liabilities.debts.move(from: source, to: destination)
-    }
-
-    func addItem(proxy: ScrollViewProxy) {
-        // ajouter un nouvel item ) la liste
-        let newItem = Debt(name: "Nouvel élément",
-                           delegateForAgeOf: family.ageOf)
-        // réinitialiser la simulation
-        patrimoine.liabilities.debts.add(newItem)
-        // scroller jusqu'au nouvel item
-        proxy.scrollTo(newItem.id, anchor: .bottom)
-        resetSimulation()
     }
 }
 
