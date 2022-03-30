@@ -181,13 +181,13 @@ public struct VersionEditSheet : View {
         HStack {
             Button(action : { self.presentationMode.wrappedValue.dismiss() },
                    label  : { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
             Spacer()
             Text("Version").font(.title).fontWeight(.bold)
             Spacer()
             Button(action : updateVersion,
                    label  : { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 .disabled(!formIsValid())
         }
         .padding(.horizontal)

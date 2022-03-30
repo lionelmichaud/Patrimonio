@@ -29,7 +29,7 @@ struct PatrimoineSidebarView: View {
                 if dataStore.activeDossier != nil {
                     Button("Réinitialiser à partir du dossier",
                            action: reinitialize)
-                        //.capsuleButtonStyle()
+                        //.buttonStyle(.bordered)
                         .disabled(dataStore.activeDossier!.folder == nil)
                     
                     PatrimoineTotalView()
@@ -38,7 +38,7 @@ struct PatrimoineSidebarView: View {
                     AssetView()
                     
                     // passifs
-                    LiabilityView()
+                    LiabilitySidebarView()
                 }
             }
             .defaultSideBarListStyle()

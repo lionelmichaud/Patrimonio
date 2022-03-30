@@ -73,13 +73,13 @@ struct DemembrementSliceEditView: View {
         HStack {
             Button(action : { self.presentationMode.wrappedValue.dismiss() },
                    label  : { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
             Button(action : updateSlice,
                    label  : { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
         }
@@ -134,13 +134,13 @@ struct DemembrementSliceAddView: View {
         HStack {
             Button(action: { self.presentationMode.wrappedValue.dismiss() },
                    label: { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
             Button(action: addSlice,
                    label: { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
         }

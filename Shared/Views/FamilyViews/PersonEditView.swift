@@ -65,13 +65,13 @@ struct PersonEditView: View {
             HStack {
                 Button(action: { presentationMode.wrappedValue.dismiss() },
                        label : { Text("Annuler") })
-                    .capsuleButtonStyle()
+                    .buttonStyle(.bordered)
                 Spacer()
                 Text("Modifier...").font(.title).fontWeight(.bold)
                 Spacer()
                 Button(action: applyChanges,
                        label : { Text("OK") })
-                    .capsuleButtonStyle()
+                    .buttonStyle(.bordered)
                     .disabled(false)
             }.padding(.horizontal).padding(.top)
             

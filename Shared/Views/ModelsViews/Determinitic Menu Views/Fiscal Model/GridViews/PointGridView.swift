@@ -158,13 +158,13 @@ struct PointEditView: View {
         HStack {
             Button(action : { self.presentationMode.wrappedValue.dismiss() },
                    label  : { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
             Button(action : updateSlice,
                    label  : { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 //.disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
         }

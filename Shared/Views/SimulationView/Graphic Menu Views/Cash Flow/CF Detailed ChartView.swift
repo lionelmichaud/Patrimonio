@@ -122,7 +122,7 @@ struct CashFlowDetailedChartView: View {
                     } else {
                         Image(systemName: "magnifyingglass.circle.fill")
                     }
-                   })//.capsuleButtonStyle()
+                   })//.buttonStyle(.bordered)
         }
         // afficher/masquer le grpahique des événemnts de vie
         ToolbarItemGroup(placement: .automatic) {

@@ -89,7 +89,7 @@ struct DossierDetailView: View {
                             Image(systemName: dossier.isActive ? "arrowshape.turn.up.backward" : "square.and.arrow.down.on.square")
                                 .imageScale(.large)
                         })
-                    .capsuleButtonStyle()
+                    .buttonStyle(.bordered)
                     .disabled(!activable)
 
                     /// Bouton: Sauvegarder
@@ -110,7 +110,7 @@ struct DossierDetailView: View {
                             Image(systemName: "square.and.pencil")
                                 .imageScale(.large)
                         })
-                    .capsuleButtonStyle()
+                    .buttonStyle(.bordered)
                     .disabled(!dossier.isActive)
                     
                     /// Bouton: Exporter fichiers du dossier actif
@@ -119,7 +119,7 @@ struct DossierDetailView: View {
                         Image(systemName: "square.and.arrow.up.on.square")
                             .imageScale(.large)
                     })
-                    .capsuleButtonStyle()
+                    .buttonStyle(.bordered)
                     .disabled(!dossier.isActive)
                 }
             }

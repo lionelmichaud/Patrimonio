@@ -39,7 +39,7 @@ struct DossiersSidebarView: View {
         // alerte si on a pas pu trouver le répertoire des dossiers
         .onAppear(perform: onAppear)
         .alert(item: $alertItem, content: newAlert)
-        // Vue modale de saisie d'un nouveau membre de la famille
+        // Vue modale de saisie d'un nouveau dossier
         .sheet(isPresented: $showingSheet) {
             DossierEditView(title: "Créer un nouveau dossier")
                 .environmentObject(self.dataStore)

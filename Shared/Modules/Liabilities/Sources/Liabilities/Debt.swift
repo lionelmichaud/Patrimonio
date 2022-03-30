@@ -16,8 +16,14 @@ public typealias DebtArray = ArrayOfNameableValuable<Debt>
 /// stock de dette incrémentable ou diminuable
 public struct Debt: Codable, Identifiable, NameableValuableP, OwnableP {
     
+    // MARK: - Type Properties
+
+    public static let prototype = Debt(name: "",
+                                       note: "",
+                                       value: 0.0)
+
     // MARK: - Properties
-    
+
     public var id    = UUID()
     public var name  : String = ""
     public var note  : String = ""
@@ -25,16 +31,18 @@ public struct Debt: Codable, Identifiable, NameableValuableP, OwnableP {
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
     public var ownership : Ownership = Ownership()
-    public var value     : Double
+    public var value     : Double = 0
     
     // MARK: - Initializers
     
-    public init(name  : String = "",
-                note  : String = "",
-                value : Double) {
+    public init(name             : String = "",
+                note             : String = "",
+                value            : Double = 0,
+                delegateForAgeOf : ((_ name : String, _ year : Int) -> Int)? = nil) {
         self.name = name
         self.note = note
         self.value = value
+        self.ownership.setDelegateForAgeOf(delegate: delegateForAgeOf)
     }
     
     // MARK: - Methods

@@ -19,23 +19,23 @@ struct DebtDetailedView: View {
     @EnvironmentObject var patrimoine : Patrimoin
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
-    
+
     // commun
     private var originalItem     : Debt?
     @State private var localItem : Debt
     @State private var alertItem : AlertItem?
     @State private var index     : Int?
     // à adapter
-    
+
     var body: some View {
         Form {
             LabeledTextField(label: "Nom", defaultText: "obligatoire", text: $localItem.name)
             LabeledTextEditor(label: "Note", text: $localItem.note)
-            
+
             /// propriété
             OwnershipView(ownership  : $localItem.ownership,
                           totalValue : localItem.value(atEndOf : CalendarCst.thisYear))
-            
+
             /// acquisition
             Section(header: Text("CARCTERISTIQUES")) {
                 AmountEditView(label  : "Montant emprunté",
@@ -54,7 +54,7 @@ struct DebtDetailedView: View {
         }
         .alert(item: $alertItem, content: newAlert)
     }
-    
+
     init(item       : Debt?,
          family     : Family,
          patrimoine : Patrimoin) {
@@ -73,13 +73,13 @@ struct DebtDetailedView: View {
             index = nil
         }
     }
-    
+
     private func resetSimulation() {
         // remettre à zéro la simulation et sa vue
         simulation.notifyComputationInputsModification()
         uiState.resetSimulationView()
     }
-    
+
     private func duplicate() {
         // générer un nouvel identifiant pour la copie
         localItem.id = UUID()
@@ -88,11 +88,11 @@ struct DebtDetailedView: View {
         patrimoine.liabilities.debts.add(localItem)
         // revenir à l'élement avant duplication
         localItem = originalItem!
-        
+
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
-    
+
     // sauvegarder les changements
     private func applyChanges() {
         guard self.isValid else { return }
@@ -111,11 +111,11 @@ struct DebtDetailedView: View {
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
-    
+
     private var changeOccured: Bool {
         return localItem != originalItem
     }
-    
+
     private var isValid: Bool {
         if localItem.value > 0 {
             self.alertItem = AlertItem(title         : Text("Erreur"),
@@ -123,21 +123,77 @@ struct DebtDetailedView: View {
                                        dismissButton : .default(Text("OK")))
             return false
         }
-        
+
         /// vérifier que le nom n'est pas vide
         guard localItem.name != "" else {
             self.alertItem = AlertItem(title         : Text("Donner un nom"),
                                        dismissButton : .default(Text("OK")))
             return false
         }
-        
+
         /// vérifier que les propriétaires sont correctements définis
         guard localItem.ownership.isValid else {
             self.alertItem = AlertItem(title         : Text("Les propriétaires ne sont pas correctements définis"),
                                        dismissButton : .default(Text("OK")))
             return false
         }
-        
+
+        return true
+    }
+}
+
+struct DebtDetailedView2: View {
+    let updateDependenciesToModel : () -> Void
+    @Transac var item : Debt
+
+    var body: some View {
+        Form {
+            LabeledTextField(label: "Nom",
+                             defaultText: "obligatoire",
+                             text: $item.name)
+            .foregroundColor(item.name.isEmpty ? .red : .primary)
+            LabeledTextEditor(label: "Note", text: $item.note)
+
+            /// propriété
+            OwnershipView(ownership  : $item.ownership,
+                          totalValue : item.value(atEndOf : CalendarCst.thisYear))
+
+            /// acquisition
+            Section(header: Text("CARCTERISTIQUES")) {
+                AmountEditView(label  : "Montant emprunté",
+                               amount : $item.value)
+                .foregroundColor(item.value > 0 ? .red : .primary)
+                if item.value > 0 {
+                    Label("Le montant emprunté doit être négatif", systemImage: "exclamationmark.triangle")
+                        .foregroundColor(.red)
+                        .padding(.trailing)
+                }
+            }
+        }
+        .textFieldStyle(.roundedBorder)
+        .navigationTitle("Dette")
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(subModel                  : $item,
+                             isValid                   : isValid,
+                             updateDependenciesToModel : updateDependenciesToModel)
+    }
+
+    private var isValid: Bool {
+        /// vérifier que la valeure est négative ou nulle
+        guard item.value.isNOZ else {
+            return false
+        }
+
+        /// vérifier que le nom n'est pas vide
+        guard item.name != "" else {
+            return false
+        }
+
+        /// vérifier que les propriétaires sont correctements définis
+        guard item.ownership.isValid else {
+            return false
+        }
+
         return true
     }
 }
