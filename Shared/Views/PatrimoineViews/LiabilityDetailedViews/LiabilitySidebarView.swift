@@ -26,8 +26,8 @@ struct LiabilitySidebarView: View {
                                 header      : true)
 
             if !uiState.patrimoineViewState.liabViewState.colapseLiab {
-                    LoanSidebarView()
-                    DebtSidebarView()
+                LoanSidebarView()
+                DebtSidebarView()
             }
         }
     }
@@ -86,7 +86,7 @@ struct LoanSidebarView: View {
                                             header      : false,
                                             icon        : Image(systemName: "eurosign.circle.fill"))
                     }
-                    .isDetailLink(true)
+                                                                 .isDetailLink(true)
                 }
                 .onDelete(perform: removeItems)
                 .onMove(perform: move)
@@ -102,60 +102,42 @@ struct DebtSidebarView: View {
     @EnvironmentObject var uiState    : UIState
 
     var body: some View {
-            Section {
-                // label
-                LabeledValueRowView(colapse     : $uiState.patrimoineViewState.liabViewState.colapseDetteListe,
-                                    label       : "Dette",
-                                    value       : patrimoine.liabilities.debts.value(atEndOf: CalendarCst.thisYear),
-                                    indentLevel : 1,
-                                    header      : true)
+        Section {
+            // label
+            LabeledValueRowView(colapse     : $uiState.patrimoineViewState.liabViewState.colapseDetteListe,
+                                label       : "Dette",
+                                value       : patrimoine.liabilities.debts.value(atEndOf: CalendarCst.thisYear),
+                                indentLevel : 1,
+                                header      : true)
 
-                // items
-                if !uiState.patrimoineViewState.liabViewState.colapseDetteListe {
-                    //ScrollViewReader { proxy in
-                    // ajout d'un nouvel item à la liste
-                    Button(
-                        action: addItem,
-                        label: {
-                            Label(title: { Text("Ajouter un élément...") },
-                                  icon : { Image(systemName: "plus.circle.fill").imageScale(.large) })
-                        })
+            // items
+            if !uiState.patrimoineViewState.liabViewState.colapseDetteListe {
+                //ScrollViewReader { proxy in
+                // ajout d'un nouvel item à la liste
+                Button(
+                    action: addItem,
+                    label: {
+                        Label(title: { Text("Ajouter un élément...") },
+                              icon : { Image(systemName: "plus.circle.fill").imageScale(.large) })
+                    })
 
-                    // liste des items
-                    ForEach($patrimoine.liabilities.debts.items) { $item in
-                        NavigationLink(destination: DebtDetailedView2(updateDependenciesToModel: resetSimulation,
-                                                                      item: $item.transaction())) {
-                            LabeledValueRowView(colapse     : self.$uiState.patrimoineViewState.liabViewState.colapseDetteListe,
-                                                label       : item.name,
-                                                value       : item.value(atEndOf: CalendarCst.thisYear),
-                                                indentLevel : 3,
-                                                header      : false,
-                                                icon        : Image(systemName: "eurosign.circle.fill"))
-                            .id(item.id)
-                            // duppliquer l'item
-                            .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                                Button {
-                                    duplicateItem(item)
-                                } label: {
-                                    Label("Duppliquer", systemImage: "doc.on.doc")
-                                }
-                                .tint(.indigo)
-                            }
-                            // supprimer l'item
-                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                Button(role: .destructive) {
-                                    withAnimation(.linear(duration: 0.4)) {
-                                        deleteItem(item)
-                                    }
-                                } label: {
-                                    Label("Supprimer", systemImage: "trash")
-                                }
-                            }
-                        }
-                        .isDetailLink(true)
-                    }
-                    .onDelete(perform: removeItems)
-                    .onMove(perform: move)
+                // liste des items
+                ForEach($patrimoine.liabilities.debts.items) { $item in
+                    NavigationLink(destination: DebtDetailedView(updateDependenciesToModel: resetSimulation,
+                                                                 item: $item.transaction())) {
+                        LabeledValueRowView(colapse     : self.$uiState.patrimoineViewState.liabViewState.colapseDetteListe,
+                                            label       : item.name,
+                                            value       : item.value(atEndOf: CalendarCst.thisYear),
+                                            indentLevel : 3,
+                                            header      : false,
+                                            icon        : Image(systemName: "eurosign.circle.fill"))
+                        .id(item.id)
+                        .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
+                                                  deleteItem    : { deleteItem(item) })
+                    }.isDetailLink(true)
+                }
+                .onDelete(perform: removeItems)
+                .onMove(perform: move)
                 //}
             }
         }
@@ -207,19 +189,15 @@ struct DebtSidebarView: View {
 }
 
 struct LiabilityView_Previews: PreviewProvider {
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-    static var simulation = Simulation()
-    static var uiState    = UIState()
-
     static var previews: some View {
-        NavigationView {
+        TestEnvir.loadTestFilesFromTemplate()
+        return NavigationView {
             List {
                 LiabilitySidebarView()
-                    .environmentObject(family)
-                    .environmentObject(patrimoine)
-                    .environmentObject(simulation)
-                    .environmentObject(uiState)
+                    .environmentObject(TestEnvir.family)
+                    .environmentObject(TestEnvir.patrimoine)
+                    .environmentObject(TestEnvir.simulation)
+                    .environmentObject(TestEnvir.uiState)
                     .previewDisplayName("LiabilityView")
             }
         }

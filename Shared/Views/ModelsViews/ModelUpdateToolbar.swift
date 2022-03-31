@@ -62,4 +62,27 @@ extension View {
                 }
             }
         }
+
+    func modelChangesSwipeActions(duplicateItem : @escaping () -> Void,
+                                  deleteItem    : @escaping () -> Void) -> some View {
+        // duppliquer l'item
+        self.swipeActions(edge: .leading, allowsFullSwipe: false) {
+            Button {
+                duplicateItem()
+            } label: {
+                Label("Duppliquer", systemImage: "doc.on.doc")
+            }
+            .tint(.indigo)
+        }
+        // supprimer l'item
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            Button(role: .destructive) {
+                withAnimation(.linear(duration: 0.4)) {
+                    deleteItem()
+                }
+            } label: {
+                Label("Supprimer", systemImage: "trash")
+            }
+        }
+    }
 }

@@ -306,7 +306,6 @@ extension Ownership: Equatable {
         lhs.isDismembered  == rhs.isDismembered &&
             lhs.fullOwners     == rhs.fullOwners &&
             lhs.bareOwners     == rhs.bareOwners &&
-            lhs.usufructOwners == rhs.usufructOwners &&
-            lhs.isValid        == rhs.isValid
+            lhs.usufructOwners == rhs.usufructOwners
     }
 }
