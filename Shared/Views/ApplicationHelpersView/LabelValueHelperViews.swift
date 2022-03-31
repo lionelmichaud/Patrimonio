@@ -16,7 +16,7 @@ struct LabeledValueRowView: View {
     let indentLevel     : Int
     let header          : Bool
     let icon            : Image
-    
+
     var body: some View {
         HStack {
             if header {
@@ -26,17 +26,17 @@ struct LabeledValueRowView: View {
                         self.colapse.toggle()
                     }
                 },
-                label: {
+                       label: {
                     Image(systemName: "chevron.right")
                         .foregroundColor(.accentColor)
                         .rotationEffect(.degrees(colapse ? 0 : 90))
-                        //.scaleEffect(colapse ? 1 : 1.5)
+                    //.scaleEffect(colapse ? 1 : 1.5)
                 })
                 Text(label)
                     .font(Font.system(size: ListTheme[indentLevel].labelFontSize,
                                       design: Font.Design.default))
                     .fontWeight(.bold)
-                
+
             } else {
                 HStack {
                     // symbol document en tête de ligne
@@ -71,6 +71,38 @@ struct LabeledValueRowView: View {
         self.indentLevel = indentLevel
         self.header      = header
         self.icon        = icon
+    }
+}
+
+struct LabeledValueRowView2: View {
+    let label           : String
+    let value           : Double
+    let indentLevel     : Int
+    let header          : Bool
+    let iconItem        : Image?
+
+    var body: some View {
+        HStack {
+            if header {
+                Text(label)
+                    .font(.system(size   : ListTheme[indentLevel].valueFontSize,
+                                  design : .default))
+                    .fontWeight(.bold)
+                    .foregroundColor(ListTheme.rowsBaseColor.opacity(ListTheme[indentLevel].opacity))
+            } else {
+                // symbol document en tête de ligne
+                if let iconItem = iconItem {
+                    iconItem.imageScale(.large)
+                }
+                Text(label)
+                    .font(.system(size   : ListTheme[indentLevel].valueFontSize,
+                                  design : .default))
+            }
+            Spacer()
+            Text(value.€String)
+                .font(Font.system(size: ListTheme[indentLevel].valueFontSize,
+                                  design: Font.Design.default))
+        }
     }
 }
 

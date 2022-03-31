@@ -12,113 +12,45 @@ import PatrimoineModel
 import FamilyModel
 import SimulationAndVisitors
 
-struct AssetView: View {
+struct AssetSidebarView: View {
     @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var uiState    : UIState
+    private let indentLevel = 0
+    private let label = "Actif"
 
     var body: some View {
         Section {
-            LabeledValueRowView(colapse     : $uiState.patrimoineViewState.assetViewState.colapseAsset,
-                                label       : "Actif",
-                                value       : patrimoine.assets.value(atEndOf: CalendarCst.thisYear),
-                                indentLevel : 0,
-                                header      : true)
-            
-            if !uiState.patrimoineViewState.assetViewState.colapseAsset {
-                // immobilier
-                LabeledValueRowView(colapse     : $uiState.patrimoineViewState.assetViewState.colapseImmobilier,
-                                    label       : "Immobilier",
-                                    value       : patrimoine.assets.realEstates.value(atEndOf: CalendarCst.thisYear) +
-                                        patrimoine.assets.scpis.value(atEndOf: CalendarCst.thisYear),
-                                    indentLevel : 1,
-                                    header      : true)
-                if !uiState.patrimoineViewState.assetViewState.colapseImmobilier {
-                    RealEstateView()
-                    ScpiView()
-                }
-                
-                // financier
-                LabeledValueRowView(colapse     : $uiState.patrimoineViewState.assetViewState.colapseFinancier,
-                                    label       : "Financier",
-                                    value       : patrimoine.assets.periodicInvests.value(atEndOf: CalendarCst.thisYear) +
-                                        patrimoine.assets.freeInvests.value(atEndOf: CalendarCst.thisYear),
-                                    indentLevel : 1,
-                                    header      : true)
-                if !uiState.patrimoineViewState.assetViewState.colapseFinancier {
-                    PeriodicInvestView()
-                    FreeInvestView()
-                }
-                
-                // SCI
-                LabeledValueRowView(colapse     : $uiState.patrimoineViewState.assetViewState.colapseSCI,
-                                    label       : "SCI",
-                                    value       : patrimoine.assets.sci.scpis.value(atEndOf: CalendarCst.thisYear) +
-                                        patrimoine.assets.sci.bankAccount,
-                                    indentLevel : 1,
-                                    header      : true)
-                if !uiState.patrimoineViewState.assetViewState.colapseSCI {
-                    SciScpiView()
-                }
-            }
-        }
-    }
-}
-struct RealEstateView: View {
-    @EnvironmentObject var family     : Family
-    @EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var uiState    : UIState
+            // immobilier
+            LabeledValueRowView2(label       : "Immobilier",
+                                 value       : patrimoine.assets.realEstates.value(atEndOf: CalendarCst.thisYear) +
+                                 patrimoine.assets.scpis.value(atEndOf: CalendarCst.thisYear),
+                                 indentLevel : 1,
+                                 header      : true,
+                                 iconItem    : nil)
+            RealEstateSidebarView()
+            //ScpiView()
 
-    func removeItems(at offsets: IndexSet) {
-        // remettre à zéro la simulation et sa vue
-        simulation.notifyComputationInputsModification()
-        uiState.resetSimulationView()
+            // financier
+//            LabeledValueRowView(label       : "Financier",
+//                                value       : patrimoine.assets.periodicInvests.value(atEndOf: CalendarCst.thisYear) +
+//                                patrimoine.assets.freeInvests.value(atEndOf: CalendarCst.thisYear),
+//                                indentLevel : 1,
+//                                header      : true)
+//            PeriodicInvestView()
+//            FreeInvestView()
 
-        patrimoine.assets.realEstates.delete(at: offsets)
-    }
-    
-    func move(from source: IndexSet, to destination: Int) {
-        patrimoine.assets.realEstates.move(from: source, to: destination)
-    }
-    
-    var body: some View {
-        Group {
-            // label
-            LabeledValueRowView(colapse     : $uiState.patrimoineViewState.assetViewState.colapseEstate,
-                                label       : "Immeuble",
-                                value       : patrimoine.assets.realEstates.currentValue,
-                                indentLevel : 2,
-                                header      : true)
-            if !uiState.patrimoineViewState.assetViewState.colapseEstate {
-                // ajout d'un nouvel item à la liste
-                NavigationLink(destination : RealEstateDetailedView(item      : nil,
-                                                                    family     : family,
-                                                                    patrimoine : patrimoine)) {
-                    HStack {
-                        Image(systemName: "plus.circle.fill")
-                            .imageScale(.large)
-                        Text("Ajouter un élément...")
-                    }
-                    .foregroundColor(.accentColor)
-                }
-                
-                // liste des items
-                ForEach(patrimoine.assets.realEstates.items) { item in
-                    NavigationLink(destination: RealEstateDetailedView(item       : item,
-                                                                       family     : family,
-                                                                       patrimoine : patrimoine)) {
-                        LabeledValueRowView(colapse     : self.$uiState.patrimoineViewState.assetViewState.colapseEstate,
-                                            label       : item.name,
-                                            value       : item.value(atEndOf: CalendarCst.thisYear),
-                                            indentLevel : 3,
-                                            header      : false,
-                                            icon        : Image(systemName: "building.2.crop.circle"))
-                    }
-                    .isDetailLink(true)
-                }
-                .onDelete(perform: removeItems)
-                .onMove(perform: move)
-            }
+            // SCI
+//            LabeledValueRowView(label       : "SCI",
+//                                value       : patrimoine.assets.sci.scpis.value(atEndOf: CalendarCst.thisYear) +
+//                                patrimoine.assets.sci.bankAccount,
+//                                indentLevel : 1,
+//                                header      : true)
+//            SciScpiView()
+        } header: {
+            LabeledValueRowView2(label       : label,
+                                 value       : patrimoine.assets.value(atEndOf: CalendarCst.thisYear),
+                                 indentLevel : 0,
+                                 header      : true,
+                                 iconItem    : nil)
         }
     }
 }
@@ -403,7 +335,7 @@ struct AssetView_Previews: PreviewProvider {
             Group {
                     NavigationView {
                         List {
-                        AssetView()
+                        AssetSidebarView()
                             .environmentObject(family)
                             .environmentObject(patrimoine)
                             .environmentObject(simulation)
@@ -415,7 +347,7 @@ struct AssetView_Previews: PreviewProvider {
 
                 NavigationView {
                     List {
-                        AssetView()
+                        AssetSidebarView()
                             .environmentObject(family)
                             .environmentObject(patrimoine)
                             .environmentObject(simulation)

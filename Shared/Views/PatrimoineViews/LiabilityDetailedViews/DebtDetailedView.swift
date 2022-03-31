@@ -52,17 +52,14 @@ struct DebtDetailedView: View {
         guard item.value.isNOZ else {
             return false
         }
-
         /// vérifier que le nom n'est pas vide
         guard item.name != "" else {
             return false
         }
-
         /// vérifier que les propriétaires sont correctements définis
         guard item.ownership.isValid else {
             return false
         }
-
         return true
     }
 }

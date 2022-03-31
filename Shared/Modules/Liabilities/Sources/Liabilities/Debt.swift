@@ -39,8 +39,8 @@ public struct Debt: Codable, Identifiable, NameableValuableP, OwnableP {
                 delegateForAgeOf : ((_ name : String, _ year : Int) -> Int)? = nil) {
         self.name = name
         self.note = note
-        self.value = value
         self.ownership.setDelegateForAgeOf(delegate: delegateForAgeOf)
+        self.value = value
     }
     
     // MARK: - Methods

@@ -29,20 +29,20 @@ struct PatrimoineSidebarView: View {
                 if dataStore.activeDossier != nil {
                     Button("Réinitialiser à partir du dossier",
                            action: reinitialize)
-                        //.buttonStyle(.bordered)
                         .disabled(dataStore.activeDossier!.folder == nil)
-                    
+                        .buttonStyle(.bordered)
+
                     PatrimoineTotalView()
-                    
+
                     // actifs
-                    AssetView()
+                    AssetSidebarView()
                     
                     // passifs
                     LiabilitySidebarView()
+
                 }
             }
-            .defaultSideBarListStyle()
-            //.listStyle(GroupedListStyle())
+            .listStyle(.sidebar)
             .environment(\.horizontalSizeClass, .regular)
             .navigationTitle("Patrimoine")
             .toolbar {
@@ -71,19 +71,11 @@ struct PatrimoineTotalView: View {
     @EnvironmentObject private var patrimoine : Patrimoin
 
     var body: some View {
-        Section {
-            HStack {
-                Text("Actif Net")
-                    .font(Font.system(size: 17,
-                                      design: Font.Design.default))
-                    .fontWeight(.bold)
-                Spacer()
-                Text(patrimoine.value(atEndOf: CalendarCst.thisYear).€String)
-                    .font(Font.system(size: 17,
-                                      design: Font.Design.default))
-            }
-            .listRowBackground(ListTheme.rowsBaseColor)
-        }
+        LabeledValueRowView2(label       : "Actif Net",
+                             value       : patrimoine.value(atEndOf: CalendarCst.thisYear),
+                             indentLevel : 0,
+                             header      : true,
+                             iconItem    : nil)
     }
 }
 
@@ -91,13 +83,11 @@ struct PatrimoineHeaderView: View {
     @EnvironmentObject var patrimoine: Patrimoin
     
     var body: some View {
-        Section {
-            NavigationLink(destination: PatrimoineSummaryView()) {
-                Label(title: { Text("Synthèse") },
-                      icon : { Image(systemName: "eurosign.circle.fill").imageScale(.large) })
-                .font(.title3)
-            }.isDetailLink(true)
-        }
+        NavigationLink(destination: PatrimoineSummaryView()) {
+            Label(title: { Text("Synthèse") },
+                  icon : { Image(systemName: "eurosign.circle.fill").imageScale(.large) })
+            .font(.title3)
+        }.isDetailLink(true)
     }
 }
 
