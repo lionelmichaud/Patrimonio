@@ -1157,18 +1157,15 @@
 			isa = PBXGroup;
 			children = (
 				7935BC2327DF660F0079F39C /* AssetSidebarView.swift */,
-				79A4624527F66E8A008B3157 /* RealEstateSidebarView.swift */,
-				79FC573E27F72EA90057A91C /* ScpiSidebarView.swift */,
-				79FC574127F734EA0057A91C /* SciScpiSidebarView.swift */,
-				7935BC2227DF660F0079F39C /* PeriodicInvestDetailedView.swift */,
+				79EC914127F776E5002C4F72 /* SCPI */,
+				79EC914227F77734002C4F72 /* RealEstate */,
+				79EC914327F77749002C4F72 /* FreeInvestment */,
+				79EC914427F7776A002C4F72 /* PeriodicInvestment */,
 				7935BC2427DF660F0079F39C /* TypeInvestEditView.swift */,
 				7935BC2527DF660F0079F39C /* DonationView.swift */,
-				7935BC2627DF660F0079F39C /* FreeInvestDetailedView.swift */,
 				7935BC2727DF660F0079F39C /* InterestRateTypeView.swift */,
-				7935BC2827DF660F0079F39C /* EstateDetailedView.swift */,
 				7935BC2927DF660F0079F39C /* ClauseView.swift */,
 				7935BC2A27DF660F0079F39C /* RecipientsListView.swift */,
-				7935BC2B27DF660F0079F39C /* scpiDetailedView.swift */,
 			);
 			path = AssetDetailedViews;
 			sourceTree = "<group>";
@@ -1177,10 +1174,8 @@
 			isa = PBXGroup;
 			children = (
 				7935BC3127DF660F0079F39C /* LiabilitySidebarView.swift */,
-				798C236427F611F20079916A /* DebtSidebarView.swift */,
-				7935BC3227DF660F0079F39C /* LoanDetailedView.swift */,
-				7935BC3027DF660F0079F39C /* DebtDetailedView.swift */,
-				798C236727F612860079916A /* LoanSidebarView.swift */,
+				79EC914527F77800002C4F72 /* Loan */,
+				79EC914627F77809002C4F72 /* Debt */,
 			);
 			path = LiabilityDetailedViews;
 			sourceTree = "<group>";
@@ -1606,6 +1601,59 @@
 				79E78C77274967F000A8A1C3 /* KPI.json */,
 			);
 			path = SimulationConfig;
+			sourceTree = "<group>";
+		};
+		79EC914127F776E5002C4F72 /* SCPI */ = {
+			isa = PBXGroup;
+			children = (
+				79FC573E27F72EA90057A91C /* ScpiSidebarView.swift */,
+				79FC574127F734EA0057A91C /* SciScpiSidebarView.swift */,
+				7935BC2B27DF660F0079F39C /* scpiDetailedView.swift */,
+			);
+			path = SCPI;
+			sourceTree = "<group>";
+		};
+		79EC914227F77734002C4F72 /* RealEstate */ = {
+			isa = PBXGroup;
+			children = (
+				79A4624527F66E8A008B3157 /* RealEstateSidebarView.swift */,
+				7935BC2827DF660F0079F39C /* EstateDetailedView.swift */,
+			);
+			path = RealEstate;
+			sourceTree = "<group>";
+		};
+		79EC914327F77749002C4F72 /* FreeInvestment */ = {
+			isa = PBXGroup;
+			children = (
+				7935BC2627DF660F0079F39C /* FreeInvestDetailedView.swift */,
+			);
+			path = FreeInvestment;
+			sourceTree = "<group>";
+		};
+		79EC914427F7776A002C4F72 /* PeriodicInvestment */ = {
+			isa = PBXGroup;
+			children = (
+				7935BC2227DF660F0079F39C /* PeriodicInvestDetailedView.swift */,
+			);
+			path = PeriodicInvestment;
+			sourceTree = "<group>";
+		};
+		79EC914527F77800002C4F72 /* Loan */ = {
+			isa = PBXGroup;
+			children = (
+				798C236727F612860079916A /* LoanSidebarView.swift */,
+				7935BC3227DF660F0079F39C /* LoanDetailedView.swift */,
+			);
+			path = Loan;
+			sourceTree = "<group>";
+		};
+		79EC914627F77809002C4F72 /* Debt */ = {
+			isa = PBXGroup;
+			children = (
+				798C236427F611F20079916A /* DebtSidebarView.swift */,
+				7935BC3027DF660F0079F39C /* DebtDetailedView.swift */,
+			);
+			path = Debt;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
