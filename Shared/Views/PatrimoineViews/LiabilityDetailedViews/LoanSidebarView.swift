@@ -13,17 +13,21 @@ import FamilyModel
 import SimulationAndVisitors
 
 struct LoanSidebarView: View {
-    @EnvironmentObject var family     : Family
-    @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var uiState    : UIState
-    private let indentLevel = 1
+    @EnvironmentObject private var uiState    : UIState
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var patrimoine : Patrimoin
+    @EnvironmentObject private var simulation : Simulation
+    private let indentLevel = 2
     private let label       = "Emprunt"
     private let iconAdd     = Image(systemName : "plus.circle.fill")
     private let icon€       = Image(systemName   : "eurosign.circle.fill")
 
+    private var totalLoan: Double {
+        patrimoine.liabilities.loans.value(atEndOf: CalendarCst.thisYear)
+    }
+
     var body: some View {
-        DisclosureGroup {
+        DisclosureGroup(isExpanded: $uiState.patrimoineViewState.liabViewState.expandEmprunts) {
             // ajout d'un nouvel item à la liste
             Button(
                 action: addItem,
@@ -51,12 +55,12 @@ struct LoanSidebarView: View {
             //}
         } label: {
             LabeledValueRowView2(label       : label,
-                                 value       : patrimoine.liabilities.loans.value(atEndOf: CalendarCst.thisYear),
+                                 value       : totalLoan,
                                  indentLevel : indentLevel,
                                  header      : true,
                                  iconItem    : icon€)
         }
-        .listRowInsets(EdgeInsets(top: 0, leading: ListTheme[indentLevel].indent, bottom: 0, trailing: 0))
+        //.listRowInsets(EdgeInsets(top: 0, leading: ListTheme[indentLevel].indent, bottom: 0, trailing: 0))
 #if os(macOS)
         .collapsible(true)
 #endif

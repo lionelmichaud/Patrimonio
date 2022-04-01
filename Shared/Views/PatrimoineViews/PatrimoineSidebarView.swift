@@ -22,31 +22,36 @@ struct PatrimoineSidebarView: View {
     var body: some View {
         NavigationView {
             /// Primary view
-            List {
-                // entête
-                PatrimoineHeaderView()
-                
+            Group {
                 if dataStore.activeDossier != nil {
                     Button("Réinitialiser à partir du dossier",
                            action: reinitialize)
-                        .disabled(dataStore.activeDossier!.folder == nil)
-                        .buttonStyle(.bordered)
-
-                    PatrimoineTotalView()
-
-                    // actifs
-                    AssetSidebarView()
-                    
-                    // passifs
-                    LiabilitySidebarView()
-
+                    .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
+                    .buttonStyle(.bordered)
                 }
-            }
-            .listStyle(.sidebar)
-            .environment(\.horizontalSizeClass, .regular)
-            .navigationTitle("Patrimoine")
-            .toolbar {
-                EditButton()
+
+                List {
+                    // entête
+                    PatrimoineHeaderView()
+
+                    if dataStore.activeDossier != nil {
+                        // Bilan net = Actif - Passif
+                        PatrimoineTotalView()
+
+                        // actifs
+                        AssetSidebarView()
+
+                        // passifs
+                        LiabilitySidebarView()
+
+                    }
+                }
+                .listStyle(.sidebar)
+                .environment(\.horizontalSizeClass, .regular)
+                .navigationTitle("Patrimoine")
+                .toolbar {
+                    EditButton()
+                }
             }
 
             /// vue par défaut

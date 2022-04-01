@@ -21,6 +21,8 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
     
     // MARK: - Static Properties
     
+    public static let prototype = RealEstateAsset()
+
     static var defaultFileName : String = "RealEstateAsset.json"
     // dependencies
     private static var fiscalModel: Fiscal.Model!
@@ -40,20 +42,20 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
     
     // MARK: - Properties
     
-    public var id                   = UUID()
-    public var name                 : String
-    public var note                 : String = ""
-    public var website              : URL?
+    public var id      = UUID()
+    public var name    : String = ""
+    public var note    : String = ""
+    public var website : URL?
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
     /// Droits de propriété sur le bien
-    public var ownership            : Ownership = Ownership()
+    public var ownership : Ownership = Ownership()
     /// Niveau de risque sur la valorisation du bien
-    public var riskLevel            : RiskLevel? {
+    public var riskLevel : RiskLevel? {
         .low
     }
     /// Niveau de liquidité du bien
-    public var liquidityLevel       : LiquidityLevel? {
+    public var liquidityLevel : LiquidityLevel? {
         .low
     }
     /// Type de l'investissement
@@ -109,7 +111,7 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
     // MARK: - Initializers
     
     public init(id                      : UUID         = UUID(),
-                name                    : String,
+                name                    : String       = "",
                 note                    : String       = "",
                 ownership               : Ownership    = Ownership(),
                 buyingYear              : DateBoundary = DateBoundary.empty,
@@ -127,7 +129,8 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
                 rentalFrom              : DateBoundary = DateBoundary.empty,
                 rentalTo                : DateBoundary = DateBoundary.empty,
                 monthlyRentAfterCharges : Double       = 0.0,
-                website                 : URL?         = nil) {
+                website                 : URL?         = nil,
+                delegateForAgeOf        : ((_ name : String, _ year : Int) -> Int)? = nil) {
         self.id                      = id
         self.name                    = name
         self.note                    = note
@@ -148,6 +151,9 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
         self.rentalTo                = rentalTo
         self.monthlyRentAfterCharges = monthlyRentAfterCharges
         self.website                 = website
+        if let delegateForAgeOf = delegateForAgeOf {
+            self.ownership.setDelegateForAgeOf(delegate: delegateForAgeOf)
+        }
     }
     
     // MARK: - Methods

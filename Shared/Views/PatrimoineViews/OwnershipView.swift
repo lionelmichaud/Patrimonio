@@ -21,7 +21,7 @@ struct OwnershipView: View {
     let nuPropStr       = "Nu-Propriétaire"
 
     var body: some View {
-        Section(header: Text("PROPRIETE")) {
+        Section {
             Toggle("Démembrement de propriété", isOn: $ownership.isDismembered)
             
             if ownership.isDismembered {
@@ -73,6 +73,8 @@ struct OwnershipView: View {
                     }
                 }.padding(.leading)
             }
+        } header: {
+            Text("PROPRIETE")
         }
     }
 

@@ -100,8 +100,7 @@ struct LoanDetailedView: View {
 struct LoanDetailedView_Previews: PreviewProvider {
     static var previews: some View {
         TestEnvir.loadTestFilesFromBundle()
-        return
-            NavigationView {
+        return NavigationView {
                 LoanDetailedView(updateDependenciesToModel: { },
                                  item: .init(source: TestEnvir.patrimoine.liabilities.loans.items.first!))
                 EmptyView()

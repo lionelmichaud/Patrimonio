@@ -21,22 +21,20 @@ final class UIState: ObservableObject {
     
     // MARK: - Etat de la vue Patrimoine
     struct AssetsViewState {
-        var colapseAsset      : Bool = false
-        var colapseImmobilier : Bool = true
-        var colapseFinancier  : Bool = true
-        var colapseSCI        : Bool = true
-        var colapseEstate     : Bool = true
-        var colapseSCPI       : Bool = true
-        var colapsePeriodic   : Bool = true
-        var colapseFree       : Bool = true
-        var colapseSCISCPI    : Bool = true
+        var expandAsset      : Bool = true
+        var expandImmobilier : Bool = true
+        var expandFinancier  : Bool = true
+        var expandSCI        : Bool = true
+        var expandEstate     : Bool = false
+        var expandSCPI       : Bool = false
+        var expandPeriodic   : Bool = false
+        var expandFree       : Bool = false
+        var expandSCISCPI    : Bool = false
     }
     struct LiabilitiesViewState {
-        var colapseLiab        : Bool = false
-        var colapseEmprunts    : Bool = true
-        var colapseDettes      : Bool = true
-        var colapseEmpruntlist : Bool = true
-        var colapseDetteListe  : Bool = true
+        var expandLiab        : Bool = true
+        var expandEmprunts    : Bool = false
+        var expandDettes      : Bool = false
     }
     struct PatrimoineViewState {
         var evalDate       : Double = CalendarCst.thisYear.double()

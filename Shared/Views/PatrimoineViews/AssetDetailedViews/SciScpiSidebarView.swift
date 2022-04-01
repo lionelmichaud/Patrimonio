@@ -1,33 +1,29 @@
 //
-//  DebtSidebarView.swift
+//  SciScpiSidebarView.swift
 //  Patrimonio
 //
-//  Created by Lionel MICHAUD on 31/03/2022.
+//  Created by Lionel MICHAUD on 01/04/2022.
 //
 
 import SwiftUI
 import AppFoundation
-import Liabilities
+import AssetsModel
 import PatrimoineModel
 import FamilyModel
 import SimulationAndVisitors
 
-struct DebtSidebarView: View {
+struct SciScpiSidebarView: View {
     @EnvironmentObject private var family     : Family
-    @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var simulation : Simulation
+    @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var uiState    : UIState
     private let indentLevel = 2
-    private let label       = "Dette"
+    private let label       = "SCPI"
     private let iconAdd     = Image(systemName : "plus.circle.fill")
-    private let icon€       = Image(systemName   : "eurosign.circle.fill")
-
-    var totalDebt: Double {
-        patrimoine.liabilities.debts.value(atEndOf: CalendarCst.thisYear)
-    }
+    private let icon€       = Image(systemName   : "building.2.crop.circle")
 
     var body: some View {
-        DisclosureGroup(isExpanded: $uiState.patrimoineViewState.liabViewState.expandDettes) {
+        DisclosureGroup(isExpanded: $uiState.patrimoineViewState.assetViewState.expandSCISCPI) {
             // ajout d'un nouvel item à la liste
             Button(
                 action: addItem,
@@ -37,8 +33,8 @@ struct DebtSidebarView: View {
                 })
 
             // liste des items
-            ForEach($patrimoine.liabilities.debts.items) { $item in
-                NavigationLink(destination: DebtDetailedView(updateDependenciesToModel: resetSimulation,
+            ForEach($patrimoine.assets.sci.scpis.items) { $item in
+                NavigationLink(destination: ScpiDetailedView(updateDependenciesToModel: resetSimulation,
                                                              item: $item.transaction())) {
                     LabeledValueRowView2(label       : item.name,
                                          value       : item.value(atEndOf: CalendarCst.thisYear),
@@ -47,17 +43,16 @@ struct DebtSidebarView: View {
                                          iconItem    : icon€)
                     .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
                                               deleteItem    : { deleteItem(item) })
-
-                }.isDetailLink(true)
+                    } .isDetailLink(true)
             }
             .onDelete(perform: removeItems)
             .onMove(perform: move)
         } label: {
             LabeledValueRowView2(label       : label,
-                                 value       : totalDebt,
+                                 value       : patrimoine.assets.sci.scpis.currentValue,
                                  indentLevel : indentLevel,
                                  header      : true,
-                                 iconItem    : nil)
+                                 iconItem    : icon€)
         }
         //.listRowInsets(EdgeInsets(top: 0, leading: ListTheme[indentLevel].indent, bottom: 0, trailing: 0))
 #if os(macOS)
@@ -74,38 +69,39 @@ struct DebtSidebarView: View {
 
     func addItem() {
         // ajouter un nouvel item à la liste
-        let newItem = Debt(name: "Nouvel élément",
+        let newItem = SCPI(name: "Nouvel élément",
                            delegateForAgeOf: family.ageOf)
-        patrimoine.liabilities.debts.add(newItem)
+        patrimoine.assets.scpis.add(newItem)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
-    func duplicateItem(_ item: Debt) {
+    func duplicateItem(_ item: SCPI) {
         var newItem = item
         // générer un nouvel identifiant pour la copie
         newItem.id = UUID()
         newItem.name += "-copie"
         // duppliquer l'item de la liste
-        patrimoine.liabilities.debts.add(newItem)
+        patrimoine.assets.scpis.add(newItem)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
-    func deleteItem(_ item: Debt) {
+    func deleteItem(_ item: SCPI) {
         // supprimer l'item de la liste
-        patrimoine.liabilities.debts.delete(item)
+        patrimoine.assets.scpis.delete(item)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
     func removeItems(at offsets: IndexSet) {
-        patrimoine.liabilities.debts.delete(at: offsets)
+        patrimoine.assets.scpis.delete(at: offsets)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
     func move(from source: IndexSet, to destination: Int) {
-        patrimoine.liabilities.debts.move(from: source, to: destination)
+        patrimoine.assets.scpis.move(from: source, to: destination)
     }
 }
+

@@ -14,17 +14,22 @@ import FamilyModel
 import SimulationAndVisitors
 
 struct LiabilitySidebarView: View {
-    @EnvironmentObject var patrimoine : Patrimoin
+    @EnvironmentObject private var uiState    : UIState
+    @EnvironmentObject private var patrimoine : Patrimoin
     private let indentLevel = 0
     private let label = "Passif"
 
+    var totalDebt: Double {
+        patrimoine.liabilities.value(atEndOf: CalendarCst.thisYear)
+    }
+
     var body: some View {
-        Section {
+        DisclosureGroup(isExpanded: $uiState.patrimoineViewState.liabViewState.expandLiab) {
             LoanSidebarView()
             DebtSidebarView()
-        } header: {
+        } label: {
             LabeledValueRowView2(label       : label,
-                                 value       : patrimoine.liabilities.value(atEndOf: CalendarCst.thisYear),
+                                 value       : totalDebt,
                                  indentLevel : indentLevel,
                                  header      : true,
                                  iconItem    : nil)

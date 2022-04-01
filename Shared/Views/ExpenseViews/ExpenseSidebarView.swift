@@ -75,7 +75,7 @@ struct ExpenseTotalView: View {
                     .font(Font.system(size: 21,
                                       design: Font.Design.default))
             }
-            .listRowBackground(ListTheme.rowsBaseColor)
+            .listRowBackground(ListTheme.listRowsBaseColor)
         }
     }
 }
