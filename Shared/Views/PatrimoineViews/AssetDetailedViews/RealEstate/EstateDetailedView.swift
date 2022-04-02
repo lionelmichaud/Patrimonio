@@ -74,7 +74,7 @@ struct RealEstateDetailedView: View {
             
             /// habitation
             Section {
-                Toggle("Période d'occupation", isOn: $item.willBeInhabited.animation())
+                Toggle("Période d'occupation", isOn: $item.willBeInhabited)
                 if item.willBeInhabited {
                     FromToEditView(from : $item.inhabitedFrom,
                                    to   : $item.inhabitedTo)
@@ -86,7 +86,7 @@ struct RealEstateDetailedView: View {
             
             /// location
             Section {
-                Toggle("Période de location", isOn: $item.willBeRented.animation())
+                Toggle("Période de location", isOn: $item.willBeRented)
                 if item.willBeRented {
                     Group {
                         FromToEditView(from : $item.rentalFrom,
@@ -111,7 +111,7 @@ struct RealEstateDetailedView: View {
             
             /// vente
             Section {
-                Toggle("Sera vendue", isOn: $item.willBeSold.animation())
+                Toggle("Sera vendue", isOn: $item.willBeSold)
                 if item.willBeSold {
                     Group {
                         NavigationLink(destination: Form { BoundaryEditView2(label    : "Dernière année de possession",
