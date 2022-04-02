@@ -69,6 +69,24 @@ extension Debt: Comparable {
     }
 }
 
+extension Debt {
+    /// Vérifie que l'objet est valide
+    /// - Warning: Override la méthode par défaut `isValid` du protocole `OwnableP`
+    public var isValid: Bool {
+        /// vérifier que le nom n'est pas vide
+        guard name != "" else {
+            return false
+        }
+        guard ownership.isValid else {
+            return false
+        }
+        guard value.isNOZ else {
+            return false
+        }
+        return true
+    }
+}
+
 extension Debt: CustomStringConvertible {
     public var description: String {
         """

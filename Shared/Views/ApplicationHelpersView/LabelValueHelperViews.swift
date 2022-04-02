@@ -99,7 +99,7 @@ struct LabeledValueRowView2: View {
                                   design : .default))
             }
             Spacer()
-            Text(value.€String)
+            Text(value.k€String)
                 .font(.system(size: ListTheme[indentLevel].valueFontSize,
                               design: .default))
         }

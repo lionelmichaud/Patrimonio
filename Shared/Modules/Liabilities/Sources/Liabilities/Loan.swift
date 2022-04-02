@@ -94,6 +94,30 @@ extension Loan: Comparable {
     }
 }
 
+extension Loan {
+    /// Vérifie que l'objet est valide
+    /// - Warning: Override la méthode par défaut `isValid` du protocole `OwnableP`
+    public var isValid: Bool {
+        /// vérifier que le nom n'est pas vide
+        guard name != "" else {
+            return false
+        }
+        guard ownership.isValid else {
+            return false
+        }
+        guard loanedValue <= 0 else {
+            return false
+        }
+        guard interestRate >= 0 else {
+            return false
+        }
+        guard monthlyInsurance >= 0 else {
+            return false
+        }
+        return true
+    }
+}
+
 extension Loan: CustomStringConvertible {
     public var description: String {
         """

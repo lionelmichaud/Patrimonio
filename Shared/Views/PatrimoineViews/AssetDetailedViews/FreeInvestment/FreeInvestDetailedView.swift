@@ -21,9 +21,10 @@ struct FreeInvestDetailedView: View {
 
     var body: some View {
         Form {
-            LabeledTextField(label: "Nom",
-                             defaultText: "obligatoire",
-                             text: $item.name)
+            LabeledTextField(label       : "Nom",
+                             defaultText : "obligatoire",
+                             text        : $item.name,
+                             validity    : .notEmpty)
             LabeledTextEditor(label: "Note", text: $item.note)
             WebsiteEditView(website: $item.website)
 
@@ -41,8 +42,9 @@ struct FreeInvestDetailedView: View {
                 YearPicker(title    : "Année d'actualisation",
                            inRange  : CalendarCst.thisYear - 20...CalendarCst.thisYear + 100,
                            selection: $item.lastKnownState.year)
-                AmountEditView(label : "Valeure actualisée",
-                               amount: $totalValue)
+                AmountEditView(label    : "Valeure actualisée",
+                               amount   : $totalValue,
+                               validity : .poz)
                     .onChange(of: totalValue) { newValue in
                         item.lastKnownState.investment = newValue - item.lastKnownState.interest
                     }
@@ -68,32 +70,8 @@ struct FreeInvestDetailedView: View {
         .navigationTitle("Invest. Libre")
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(subModel                  : $item,
-                             isValid                   : isValid,
+                             isValid                   : item.isValid,
                              updateDependenciesToModel : updateDependenciesToModel)
-    }
-    
-    private var isValid: Bool {
-        /// vérifier que le nom n'est pas vide
-        guard item.name != "" else {
-            return false
-        }
-        
-        /// vérifier que les propriétaires sont correctements définis
-        guard item.ownership.isValid else {
-            return false
-        }
-        
-        /// vérifier que la clause bénéficiaire est valide
-        switch item.type {
-            case .lifeInsurance(_, let clause):
-                guard clause.isValid else {
-                    return false
-                }
-
-            default: ()
-        }
-        
-        return true
     }
 }
 

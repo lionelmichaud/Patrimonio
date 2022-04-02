@@ -460,6 +460,24 @@ extension FreeInvestement: Comparable {
     }
 }
 
+extension FreeInvestement {
+    /// Vérifie que l'objet est valide
+    /// - Warning: Override la méthode par défaut `isValid` du protocole `FinancialEnvelopP`
+    public var isValid: Bool {
+        /// vérifier que le nom n'est pas vide
+        guard name != "" else {
+            return false
+        }
+        guard type.isValid else {
+            return false
+        }
+        guard ownership.isValid else {
+            return false
+        }
+        return true
+    }
+}
+
 extension FreeInvestement: CustomStringConvertible {
     public var description: String {
         """

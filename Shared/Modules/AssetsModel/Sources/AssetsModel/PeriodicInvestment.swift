@@ -509,6 +509,27 @@ extension PeriodicInvestement: Comparable {
     }
 }
 
+extension PeriodicInvestement {
+    /// Vérifie que l'objet est valide
+    /// - Warning: Override la méthode par défaut `isValid` du protocole `FinancialEnvelopP`
+    public var isValid: Bool {
+        /// vérifier que le nom n'est pas vide
+        guard name != "" else {
+            return false
+        }
+        guard yearlyPayement >= 0 && yearlyCost >= 0 && initialValue >= 0 else {
+            return false
+        }
+        guard type.isValid else {
+            return false
+        }
+        guard ownership.isValid else {
+            return false
+        }
+        return true
+    }
+}
+
 extension PeriodicInvestement: CustomStringConvertible {
     public var description: String {
         """

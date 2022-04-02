@@ -17,10 +17,10 @@ struct DebtDetailedView: View {
 
     var body: some View {
         Form {
-            LabeledTextField(label: "Nom",
-                             defaultText: "obligatoire",
-                             text: $item.name)
-            .foregroundColor(item.name.isEmpty ? .red : .primary)
+            LabeledTextField(label       : "Nom",
+                             defaultText : "obligatoire",
+                             text        : $item.name,
+                             validity    : .notEmpty)
             LabeledTextEditor(label: "Note", text: $item.note)
 
             /// propriété
@@ -29,9 +29,9 @@ struct DebtDetailedView: View {
 
             /// acquisition
             Section(header: Text("CARCTERISTIQUES")) {
-                AmountEditView(label  : "Montant de la dette à date",
-                               amount : $item.value)
-                .foregroundColor(item.value > 0 ? .red : .primary)
+                AmountEditView(label    : "Montant de la dette à date",
+                               amount   : $item.value,
+                               validity : .noz)
                 if item.value > 0 {
                     Label("Le montant emprunté doit être négatif", systemImage: "exclamationmark.triangle")
                         .foregroundColor(.red)
@@ -43,24 +43,8 @@ struct DebtDetailedView: View {
         .navigationTitle("Dette")
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(subModel                  : $item,
-                             isValid                   : isValid,
+                             isValid                   : item.isValid,
                              updateDependenciesToModel : updateDependenciesToModel)
-    }
-
-    private var isValid: Bool {
-        /// vérifier que la valeure est négative ou nulle
-        guard item.value.isNOZ else {
-            return false
-        }
-        /// vérifier que le nom n'est pas vide
-        guard item.name != "" else {
-            return false
-        }
-        /// vérifier que les propriétaires sont correctements définis
-        guard item.ownership.isValid else {
-            return false
-        }
-        return true
     }
 }
 

@@ -18,33 +18,37 @@ struct PeriodicInvestDetailedView: View {
 
     var body: some View {
         Form {
-            LabeledTextField(label: "Nom",
-                             defaultText: "obligatoire",
-                             text: $item.name)
+            LabeledTextField(label       : "Nom",
+                             defaultText : "obligatoire",
+                             text        : $item.name,
+                             validity    : .notEmpty)
             LabeledTextEditor(label: "Note", text: $item.note)
             WebsiteEditView(website: $item.website)
 
             /// propriété
             OwnershipView(ownership  : $item.ownership,
-                          totalValue : item.value(atEndOf  : CalendarCst.thisYear))
+                          totalValue : item.value(atEndOf: CalendarCst.thisYear))
             
             // acquisition
             Section(header: Text("TYPE")) {
                 TypeInvestEditView(investType: $item.type)
-                AmountEditView(label: "Versement annuel - net de frais",
-                               amount: $item.yearlyPayement)
-                AmountEditView(label: "Frais annuels sur versements",
-                               amount: $item.yearlyCost)
+                AmountEditView(label    : "Versement annuel - net de frais",
+                               amount   : $item.yearlyPayement,
+                               validity : .poz)
+                AmountEditView(label    : "Frais annuels sur versements",
+                               amount   : $item.yearlyCost,
+                               validity : .poz)
             }
             
             Section(header: Text("INITIALISATION")) {
-                YearPicker(title: "Année de départ (fin d'année)",
-                           inRange: CalendarCst.thisYear - 20...CalendarCst.thisYear + 100,
-                           selection: $item.firstYear)
-                AmountEditView(label: "Valeure initiale",
-                               amount: $item.initialValue)
-                AmountEditView(label: "Intérêts initiaux",
-                               amount: $item.initialInterest)
+                YearPicker(title     : "Année de départ (fin d'année)",
+                           inRange   : CalendarCst.thisYear - 20...CalendarCst.thisYear + 100,
+                           selection : $item.firstYear)
+                AmountEditView(label    : "Valeure initiale",
+                               amount   : $item.initialValue,
+                               validity : .poz)
+                AmountEditView(label  : "Intérêts initiaux",
+                               amount : $item.initialInterest)
             }
             
             Section(header: Text("RENTABILITE")) {
@@ -82,32 +86,8 @@ struct PeriodicInvestDetailedView: View {
         .navigationTitle("Invest. Périodique")
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(subModel                  : $item,
-                             isValid                   : isValid,
+                             isValid                   : item.isValid,
                              updateDependenciesToModel : updateDependenciesToModel)
-    }
-    
-    private var isValid: Bool {
-        /// vérifier que le nom n'est pas vide
-        guard item.name != "" else {
-            return false
-        }
-        
-        /// vérifier que les propriétaires sont correctements définis
-        guard item.ownership.isValid else {
-            return false
-        }
-        
-        /// vérifier que la clause bénéficiaire est valide
-        switch item.type {
-            case .lifeInsurance(_, let clause):
-                guard clause.isValid else {
-                    return false
-                }
-                
-            default: ()
-        }
-        
-        return true
     }
     
     private var liquidatedValue: Double {
