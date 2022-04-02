@@ -160,7 +160,7 @@ struct BoundaryEditView: View {
     var body: some View {
         Section {
             /// la date est-elle liée à un événement ?
-            Toggle(isOn: $boundaryVM.isLinkedToEvent.animation()) { Text("Associé à un événement") }
+            Toggle(isOn: $boundaryVM.isLinkedToEvent) { Text("Associé à un événement") }
                 .onChange(of: boundaryVM.isLinkedToEvent, perform: updateIsLinkedToEvent)
 
             if boundaryVM.isLinkedToEvent {
@@ -171,7 +171,7 @@ struct BoundaryEditView: View {
                         .onChange(of: boundaryVM.event, perform: updateGroup)
 
                     /// choisir à quoi associer l'événement: personne ou groupe
-                    Toggle(isOn: $boundaryVM.isLinkedToGroup.animation()) { Text("Associer cet évenement à un groupe") }
+                    Toggle(isOn: $boundaryVM.isLinkedToGroup) { Text("Associer cet évenement à un groupe") }
                         .onChange(of: boundaryVM.isLinkedToGroup, perform: updateGroup)
 
                     if boundaryVM.isLinkedToGroup {
