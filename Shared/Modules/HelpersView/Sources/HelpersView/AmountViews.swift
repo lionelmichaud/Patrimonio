@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 
 // MARK: - Edition d'un montant en €
 
@@ -19,6 +20,7 @@ public struct AmountEditView: View {
     private let label    : String
     private let comment  : String?
     private let currency : Bool
+    private let validity : DoubleValidityRule
     @Binding
     private var amount   : Double
     @State
@@ -68,6 +70,7 @@ public struct AmountEditView: View {
             }
         }
         .textFieldStyle(.roundedBorder)
+        .foregroundColor(validity.isValid(number: amount) ? .primary : .red)
     }
     
     /// Création
@@ -79,10 +82,12 @@ public struct AmountEditView: View {
     public init(label    : String,
                 comment  : String?  = nil,
                 amount   : Binding<Double>,
+                validity : DoubleValidityRule = .none,
                 currency : Bool = true) {
         self.label    = label
         self.comment  = comment
         self.currency = currency
+        self.validity = validity
         self._amount  = amount
         _text = State(initialValue: String(amount.wrappedValue).replacingOccurrences(of: ".", with: ","))
         //        print("created: value = \(amount); text = \(text)")

@@ -69,7 +69,8 @@ struct OwnershipView: View {
                         Text(proprietaireStr+"s")
                             .foregroundColor(ownership.isValid ? .blue : .red)
                         Spacer()
-                        Text(ownersSummary(owners: ownership.fullOwners)).foregroundColor(.secondary)
+                        Text(ownersSummary(owners: ownership.fullOwners))
+                            .foregroundColor((ownership.fullOwners.isEmpty || !ownership.isValid) ? .red : .secondary)
                     }
                 }.padding(.leading)
             }
@@ -82,11 +83,9 @@ struct OwnershipView: View {
 
     private func ownersSummary(owners: Owners) -> String {
         if owners.isEmpty {
-            return ""
-        } else if owners.count == 1 {
-            return owners.first!.name
+            return "Aucun"
         } else {
-            return "\(owners.count) personnes"
+            return (owners.map(\.name)).formatted()
         }
     }
 }

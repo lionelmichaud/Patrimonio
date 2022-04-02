@@ -13,17 +13,21 @@ import FamilyModel
 import SimulationAndVisitors
 
 struct RealEstateSidebarView: View {
-    @EnvironmentObject var family     : Family
-    @EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var uiState    : UIState
-    private let indentLevel = 1
+    @EnvironmentObject private var uiState    : UIState
+    @EnvironmentObject private var family     : Family
+    @EnvironmentObject private var simulation : Simulation
+    @EnvironmentObject private var patrimoine : Patrimoin
+    private let indentLevel = 2
     private let label       = "Immeuble"
     private let iconAdd     = Image(systemName : "plus.circle.fill")
     private let icon€       = Image(systemName   : "building.2.crop.circle")
 
+    private var totalRealEstates: Double {
+        patrimoine.assets.realEstates.value(atEndOf: CalendarCst.thisYear)
+    }
+
     var body: some View {
-        DisclosureGroup {
+        DisclosureGroup(isExpanded: $uiState.patrimoineViewState.assetViewState.expandEstate) {
             // ajout d'un nouvel item à la liste
             Button(
                 action: addItem,
@@ -32,22 +36,10 @@ struct RealEstateSidebarView: View {
                           icon : { iconAdd.imageScale(.large) })
                 })
 
-                NavigationLink(destination : RealEstateDetailedView(item       : nil,
-                                                                    family     : family,
-                                                                    patrimoine : patrimoine)) {
-                    HStack {
-                        Image(systemName: "plus.circle.fill")
-                            .imageScale(.large)
-                        Text("Ajouter un élément...")
-                    }
-                    .foregroundColor(.accentColor)
-                }
-
                 // liste des items
-                ForEach(patrimoine.assets.realEstates.items) { item in
-                    NavigationLink(destination: RealEstateDetailedView(item       : item,
-                                                                       family     : family,
-                                                                       patrimoine : patrimoine)) {
+                ForEach($patrimoine.assets.realEstates.items) { $item in
+                    NavigationLink(destination: RealEstateDetailedView(updateDependenciesToModel: resetSimulation,
+                                                                       item: $item.transaction())) {
                         LabeledValueRowView2(label       : item.name,
                                              value       : item.value(atEndOf: CalendarCst.thisYear),
                                              indentLevel : 3,
@@ -61,7 +53,7 @@ struct RealEstateSidebarView: View {
                 .onMove(perform: move)
         } label: {
             LabeledValueRowView2(label       : label,
-                                 value       : patrimoine.assets.realEstates.value(atEndOf: CalendarCst.thisYear),
+                                 value       : totalRealEstates,
                                  indentLevel : indentLevel,
                                  header      : true,
                                  iconItem    : icon€)

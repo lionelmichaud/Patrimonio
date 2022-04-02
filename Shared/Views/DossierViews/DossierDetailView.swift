@@ -245,10 +245,10 @@ struct DossierDetailView: View {
 
                 do {
                     try model.loadFromJSON(fromFolder: folder)
-                    try patrimoine.loadFromJSON(fromFolder: folder)
-                    try expenses.loadFromJSON(fromFolder: folder)
                     try family.loadFromJSON(fromFolder: folder,
                                             using     : model)
+                    try patrimoine.loadFromJSON(fromFolder: folder)
+                    try expenses.loadFromJSON(fromFolder: folder)
                     try simulation.loadFromJSON(fromFolder: folder)
 
                     /// gérer les dépendances entre le Modèle et les objets applicatifs

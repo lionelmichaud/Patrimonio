@@ -71,7 +71,7 @@ public struct ProgressBar: View {
                                                        width: geometryReader.size.width),
                                        height: 20)
                                 .foregroundColor(self.foregroundColor)
-                                .animation(.linear)
+                                .animation(.linear, value: value)
                             if internalLabels {
                                 if valuePercent {
                                     Text("\(percentageValue(value: value))%")
@@ -205,7 +205,7 @@ public struct ProgressCircle: View {
                 .stroke(style: style.strokeStyle(lineWidth: lineWidth))
                 .foregroundColor(foregroundColor)
                 .rotationEffect(Angle(degrees: -90))
-                .animation(.easeIn)
+                .animation(.easeIn, value: value)
             Text("\(percentage(value: value))%")
                 .font(.system(size: 14))
                 .fontWeight(.bold)

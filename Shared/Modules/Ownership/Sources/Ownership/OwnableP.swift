@@ -7,11 +7,12 @@
 //
 
 import Foundation
+import AppFoundation
 import NamedValue
 
 // MARK: Protocol d'Item qui peut être Possédé, Valuable et Nameable
 
-public protocol OwnableP: NameableValuableP {
+public protocol OwnableP: NameableValuableP, ValidableP {
     var ownership: Ownership { get set }
     var isValid: Bool { get }
     var isOwnedBySomebody: Bool { get }

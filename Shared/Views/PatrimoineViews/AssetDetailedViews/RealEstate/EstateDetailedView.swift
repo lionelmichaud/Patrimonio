@@ -8,388 +8,189 @@
 
 import SwiftUI
 import AppFoundation
+import DateBoundary
 import AssetsModel
 import PatrimoineModel
 import FamilyModel
 import SimulationAndVisitors
 import HelpersView
 
-// MARK: - View Model for RealEstateAsset
-
-final class RealEstateViewModel: ObservableObject {
-    
-    // MARK: - Properties
-    
-    @Published var inhabitedFromVM : DateBoundaryViewModel
-    @Published var inhabitedToVM   : DateBoundaryViewModel
-    @Published var rentalFromVM    : DateBoundaryViewModel
-    @Published var rentalToVM      : DateBoundaryViewModel
-    @Published var buyingYearVM    : DateBoundaryViewModel
-    @Published var sellingYearVM   : DateBoundaryViewModel
-
-    // MARK: - Initializers of ViewModel from Model
-    
-    internal init(from asset: RealEstateAsset) {
-        self.inhabitedFromVM = DateBoundaryViewModel(from: asset.inhabitedFrom)
-        self.inhabitedToVM   = DateBoundaryViewModel(from: asset.inhabitedTo)
-        self.rentalFromVM    = DateBoundaryViewModel(from: asset.rentalFrom)
-        self.rentalToVM      = DateBoundaryViewModel(from: asset.rentalTo  )
-        self.buyingYearVM    = DateBoundaryViewModel(from: asset.buyingYear )
-        self.sellingYearVM   = DateBoundaryViewModel(from: asset.sellingYear)
-    }
-    
-    // MARK: - Methods
-    
-    // construire l'objet de type LifeExpenseTimeSpan correspondant au ViewModel
-    func update(thisAsset asset: inout RealEstateAsset) {
-        asset.inhabitedFrom = self.inhabitedFromVM.dateBoundary
-        asset.inhabitedTo   = self.inhabitedToVM.dateBoundary
-        asset.rentalFrom    = self.rentalFromVM.dateBoundary
-        asset.rentalTo      = self.rentalToVM.dateBoundary
-        asset.buyingYear    = self.buyingYearVM.dateBoundary
-        asset.sellingYear   = self.sellingYearVM.dateBoundary
-    }
-    
-    func differs(from thisAsset: RealEstateAsset) -> Bool {
-        return
-            self.inhabitedFromVM != DateBoundaryViewModel(from: thisAsset.inhabitedFrom) ||
-            self.inhabitedToVM   != DateBoundaryViewModel(from: thisAsset.inhabitedTo) ||
-            self.rentalFromVM    != DateBoundaryViewModel(from: thisAsset.rentalFrom) ||
-            self.rentalToVM      != DateBoundaryViewModel(from: thisAsset.rentalTo) ||
-            self.buyingYearVM    != DateBoundaryViewModel(from: thisAsset.buyingYear ) ||
-            self.sellingYearVM   != DateBoundaryViewModel(from: thisAsset.sellingYear)
-    }
-}
-
 // MARK: - View
 
 struct RealEstateDetailedView: View {
-    @EnvironmentObject var family     : Family
-    @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var uiState    : UIState
-
-    // commun
-    private var originalItem     : RealEstateAsset?
-    @State private var localItem : RealEstateAsset
-    @State private var alertItem : AlertItem?
-    @State private var index     : Int?
-    // à adapter
-    @StateObject private var assetVM : RealEstateViewModel
+    let updateDependenciesToModel : () -> Void
+    @Transac var item : RealEstateAsset
 
     var body: some View {
         Form {
-            LabeledTextField(label: "Nom", defaultText: "obligatoire", text: $localItem.name)
-            LabeledTextEditor(label: "Note", text: $localItem.note)
-            WebsiteEditView(website: $localItem.website)
+            LabeledTextField(label       : "Nom",
+                             defaultText : "obligatoire",
+                             text        : $item.name,
+                             validity    : .notEmpty)
+            LabeledTextEditor(label: "Note", text: $item.note)
+            WebsiteEditView(website: $item.website)
 
             /// acquisition
-            Section(header: Text("ACQUISITION")) {
-                Group {
-                    NavigationLink(destination: Form { BoundaryEditView(label    : "Première année de possession",
-                                                                        boundary : $assetVM.buyingYearVM) }) {
-                        HStack {
-                            Text("Première année de possession")
-                            Spacer()
-                            Text(String((assetVM.buyingYearVM.description)))
-                        }.foregroundColor(.blue)
-                    }
-                    AmountEditView(label: "Prix d'acquisition",
-                                   amount: $localItem.buyingPrice)
-                }//.padding(.leading)
+            Section {
+                NavigationLink(destination: Form { BoundaryEditView2(label    : "Première année de possession",
+                                                                    boundary : $item.buyingYear) }) {
+                    HStack {
+                        Text("Première année de possession")
+                        Spacer()
+                        Text(String((item.buyingYear.description)))
+                    }.foregroundColor(item.buyingYear.isValid ? .blue : .red)
+                }
+                AmountEditView(label    : "Prix d'acquisition",
+                               amount   : $item.buyingPrice,
+                               validity : .poz)
+            } header: {
+                Text("ACQUISITION")
             }
 
             /// valeur vénale courante estimée
-            Section(header: Text("VALEUR VENALE")) {
-                AmountEditView(label: "Valeur vénale courante estimée",
-                               amount: $localItem.estimatedValue)
+            Section {
+                AmountEditView(label    : "Valeur vénale courante estimée",
+                               amount   : $item.estimatedValue,
+                               validity : .poz)
+            } header: {
+                Text("VALEUR VENALE")
             }
             
             /// propriété
-            OwnershipView(ownership  : $localItem.ownership,
-                          totalValue : localItem.value(atEndOf : CalendarCst.thisYear))
+            OwnershipView(ownership  : $item.ownership,
+                          totalValue : item.value(atEndOf : CalendarCst.thisYear))
             
             /// taxe
-            Section(header: Text("TAXES")) {
-                AmountEditView(label: "Taxe d'habitation annuelle",
-                               amount: $localItem.yearlyTaxeHabitation)
-                AmountEditView(label: "Taxe fonçière annuelle",
-                               amount: $localItem.yearlyTaxeFonciere)
+            Section {
+                AmountEditView(label    : "Taxe d'habitation annuelle",
+                               amount   : $item.yearlyTaxeHabitation,
+                               validity : .poz)
+                AmountEditView(label    : "Taxe fonçière annuelle",
+                               amount   : $item.yearlyTaxeFonciere,
+                               validity : .poz)
+            } header: {
+                Text("TAXES")
             }
             
             /// habitation
-            Section(header: Text("HABITATION")) {
-                Toggle("Période d'occupation", isOn: $localItem.willBeInhabited)
-                if localItem.willBeInhabited {
-                    FromToEditView(from : $assetVM.inhabitedFromVM,
-                                   to   : $assetVM.inhabitedToVM)
+            Section {
+                Toggle("Période d'occupation", isOn: $item.willBeInhabited.animation())
+                if item.willBeInhabited {
+                    FromToEditView(from : $item.inhabitedFrom,
+                                   to   : $item.inhabitedTo)
                         .padding(.leading)
                 }
+            } header: {
+                Text("HABITATION")
             }
             
             /// location
-            Section(header: Text("LOCATION")) {
-                Toggle("Période de location", isOn: $localItem.willBeRented)
-                if localItem.willBeRented {
+            Section {
+                Toggle("Période de location", isOn: $item.willBeRented.animation())
+                if item.willBeRented {
                     Group {
-                        FromToEditView(from : $assetVM.rentalFromVM,
-                                       to   : $assetVM.rentalToVM)
-                        AmountEditView(label : "Loyer mensuel net de frais",
-                                       amount: $localItem.monthlyRentAfterCharges)
+                        FromToEditView(from : $item.rentalFrom,
+                                       to   : $item.rentalTo)
+                        AmountEditView(label    : "Loyer mensuel net de frais",
+                                       amount   : $item.monthlyRentAfterCharges,
+                                       validity : .poz)
                         AmountView(label : "Charges sociales annuelles sur loyers",
-                                   amount: localItem.yearlyRentSocialTaxes)
-                            .foregroundColor(.secondary)
+                                   amount: item.yearlyRentSocialTaxes)
+                        .foregroundColor(.secondary)
                         AmountView(label : "Loyer annuel net de charges sociales",
-                                   amount: localItem.yearlyRentAfterCharges)
+                                   amount: item.yearlyRentAfterCharges)
+                        .foregroundColor(.secondary)
                         PercentNormView(label : "Rendement locatif net de charges sociales",
-                                    percent   : localItem.profitability)
-                            .foregroundColor(.secondary)
+                                        percent   : item.profitability)
+                        .foregroundColor(.secondary)
                     }.padding(.leading)
                 }
+            } header: {
+                Text("LOCATION")
             }
             
             /// vente
-            Section(header: Text("VENTE")) {
-                Toggle("Sera vendue", isOn: $localItem.willBeSold)
-                if localItem.willBeSold {
+            Section {
+                Toggle("Sera vendue", isOn: $item.willBeSold.animation())
+                if item.willBeSold {
                     Group {
-                        NavigationLink(destination: Form { BoundaryEditView(label    : "Dernière année de possession",
-                                                                            boundary : $assetVM.sellingYearVM) }) {
+                        NavigationLink(destination: Form { BoundaryEditView2(label    : "Dernière année de possession",
+                                                                            boundary : $item.sellingYear) }) {
                             HStack {
                                 Text("Dernière année de possession")
                                 Spacer()
-                                Text(String((assetVM.sellingYearVM.description)))
+                                Text(String((item.sellingYear.description)))
                             }.foregroundColor(.blue)
                         }
-                        AmountEditView(label: "Prix de vente net de frais",
-                                       amount: $localItem.sellingNetPrice)
+                        AmountEditView(label    : "Prix de vente net de frais",
+                                       amount   : $item.sellingNetPrice,
+                                       validity : .poz)
                         AmountView(label: "Produit net de charges et impôts",
-                                   amount: localItem.sellingPriceAfterTaxes)
+                                   amount: item.sellingPriceAfterTaxes)
                             .foregroundColor(.secondary)
                     }.padding(.leading)
                 }
+            } header: {
+                Text("VENTE")
             }
         }
         .textFieldStyle(.roundedBorder)
         .navigationTitle("Immeuble")
-        //.navigationBarTitleDisplayModeInline()
-        .toolbar {
-            ToolbarItemGroup(placement: .automatic) {
-                DuplicateButton { duplicate() }
-                    .disabled((index == nil) || changeOccured)
-                FolderButton(action : applyChanges)
-                    .disabled(!changeOccured)
-            }
-        }
-        .alert(item: $alertItem, content: newAlert)
-    }
-    
-    init(item       : RealEstateAsset?,
-         family     : Family,
-         patrimoine : Patrimoin) {
-        self.originalItem = item
-        if let initialItemValue = item {
-            // modification d'un élément existant
-            _localItem = State(initialValue: initialItemValue)
-            _assetVM   = StateObject(wrappedValue: RealEstateViewModel(from: initialItemValue))
-            _index     = State(initialValue: patrimoine.assets.realEstates.items.firstIndex(of: initialItemValue))
-            // specific
-        } else {
-            // création d'un nouvel élément
-            var newItem = RealEstateAsset(name: "")
-            // définir le délégué pour la méthode ageOf qui par défaut est nil à la création de l'objet
-            newItem.ownership.setDelegateForAgeOf(delegate: family.ageOf)
-            _localItem = State(initialValue: newItem)
-            _assetVM   = StateObject(wrappedValue : RealEstateViewModel(from : newItem))
-            index      = nil
-        }
-    }
-
-    private func resetSimulation() {
-        // remettre à zéro la simulation et sa vue
-        simulation.notifyComputationInputsModification()
-        uiState.resetSimulationView()
-    }
-    
-    private func duplicate() {
-        // générer un nouvel identifiant pour la copie
-        localItem.id = UUID()
-        localItem.name += "-copie"
-        // ajouter un élément à la liste
-        patrimoine.assets.realEstates.add(localItem)
-        // revenir à l'élement avant duplication
-        localItem = originalItem!
-        
-        // remettre à zéro la simulation et sa vue
-        resetSimulation()
-    }
-    
-    // sauvegarder les changements
-    private func applyChanges() {
-        // validation avant sauvegarde
-        guard self.isValid else { return }
-
-        // mettre à jour l'item à partir du ViewModel
-        assetVM.update(thisAsset: &localItem)
-        
-        if let index = index {
-            // modifier un éléménet existant
-            patrimoine.assets.realEstates.update(with: localItem, at: index)
-        } else {
-            // générer un nouvel identifiant pour le nouvel item
-            localItem.id = UUID()
-            // définir le délégué pour la méthode ageOf qui par défaut est nil à la création de l'objet
-            localItem.ownership.setDelegateForAgeOf(delegate: family.ageOf)
-            // ajouter le nouvel élément à la liste
-            patrimoine.assets.realEstates.add(localItem)
-        }
-        
-        // remettre à zéro la simulation et sa vue
-        resetSimulation()
-    }
-    
-    private var isValid: Bool {
-        /// vérifier que toutes les dates sont définies
-        guard assetVM.buyingYearVM.year != nil else {
-            self.alertItem = AlertItem(title         : Text("La date d'achat doit être définie"),
-                                       dismissButton : .default(Text("OK")))
-            return false
-        }
-        if localItem.willBeInhabited {
-            guard assetVM.inhabitedFromVM.year != nil else {
-                self.alertItem = AlertItem(title         : Text("La date de début d'habitation doit être définie"),
-                                           dismissButton : .default(Text("OK")))
-                return false
-            }
-            guard assetVM.inhabitedToVM.year != nil else {
-                self.alertItem = AlertItem(title         : Text("La date de fin d'habitation doit être définie"),
-                                           dismissButton : .default(Text("OK")))
-                return false
-            }
-        }
-        if localItem.willBeRented {
-            guard assetVM.rentalFromVM.year != nil else {
-                self.alertItem = AlertItem(title         : Text("La date de début de location doit être définie"),
-                                           dismissButton : .default(Text("OK")))
-                return false
-            }
-            guard assetVM.rentalToVM.year != nil else {
-                self.alertItem = AlertItem(title         : Text("La date de fin de location doit être définie"),
-                                           dismissButton : .default(Text("OK")))
-                return false
-            }
-        }
-        if localItem.willBeSold {
-            guard assetVM.sellingYearVM.year != nil else {
-                self.alertItem = AlertItem(title         : Text("La date de vente doit être définie"),
-                                           dismissButton : .default(Text("OK")))
-                return false
-            }
-        }
-        
-        /// vérifier que les dates sont dans le bon ordre
-        if localItem.willBeSold {
-            if assetVM.buyingYearVM.year! > assetVM.sellingYearVM.year! {
-                self.alertItem = AlertItem(title         : Text("La date d'achat doit précéder la date de vente"),
-                                           dismissButton : .default(Text("OK")))
-                return false
-            }
-        }
-        if localItem.willBeInhabited {
-            if assetVM.inhabitedFromVM.year! > assetVM.inhabitedToVM.year! {
-                self.alertItem = AlertItem(title         : Text("La date de début doit précéder la date de fin"),
-                                           dismissButton : .default(Text("OK")))
-                return false
-            }
-        }
-        if localItem.willBeRented {
-            if assetVM.rentalFromVM.year! > assetVM.rentalToVM.year! {
-                self.alertItem = AlertItem(title         : Text("La date de début doit précéder la date de fin"),
-                                           dismissButton : .default(Text("OK")))
-                return false
-            }
-        }
-        if localItem.willBeRented && localItem.willBeInhabited {
-            if (assetVM.rentalFromVM.year! ... assetVM.rentalToVM.year!)
-                .hasIntersection(with: assetVM.inhabitedFromVM.year! ... assetVM.inhabitedToVM.year!) {
-                self.alertItem = AlertItem(title         : Text("Les périodes de location et d'habitation ne doivent pas avoir de recouvrement"),
-                                           dismissButton : .default(Text("OK")))
-                return false
-            }
-        }
-        
-        /// vérifier que le nom n'est pas vide
-        guard localItem.name != "" else {
-            self.alertItem = AlertItem(title         : Text("Donner un nom"),
-                                       dismissButton : .default(Text("OK")))
-            return false
-        }
-        
-        /// vérifier que les propriétaires sont correctements définis
-        guard localItem.ownership.isValid else {
-            self.alertItem = AlertItem(title         : Text("Les propriétaires ne sont pas correctements définis"),
-                                       dismissButton : .default(Text("OK")))
-            return false
-        }
-        
-        return true
-    }
-
-    private var changeOccured: Bool {
-        if localItem != originalItem {
-            return true
-        } else {
-            return assetVM.differs(from: originalItem!)
-        }
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(subModel                  : $item,
+                             isValid                   : item.isValid,
+                             updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
 struct FromToEditView: View {
-    @Binding var from : DateBoundaryViewModel
-    @Binding var to   : DateBoundaryViewModel
+    @Binding var from : DateBoundary
+    @Binding var to   : DateBoundary
+
+    var correctOrder: Bool? {
+        if let from = from.year, let to = to.year {
+            return from < to
+        } else {
+            return nil
+        }
+    }
 
     var body: some View {
         Group {
-            NavigationLink(destination: Form { BoundaryEditView(label    : "Début",
-                                                                boundary : $from) }) {
+            NavigationLink(destination: Form { BoundaryEditView2(label    : "Début",
+                                                                 boundary : $from) }) {
                 HStack {
                     Text("Début (année inclue)")
                     Spacer()
                     Text(String((from.description)))
-                }.foregroundColor(.blue)
+                }.foregroundColor(from.isValid ? .blue : .red)
             }
-            NavigationLink(destination: Form { BoundaryEditView(label    : "Fin",
-                                                                boundary : $to) }) {
+            NavigationLink(destination: Form { BoundaryEditView2(label    : "Fin",
+                                                                 boundary : $to) }) {
                 HStack {
                     Text("Fin (année exclue)")
                     Spacer()
                     Text(String((to.description)))
-                }.foregroundColor(.blue)
+                }.foregroundColor(to.isValid ? .blue : .red)
             }
-            
+            if let correctOrder = correctOrder {
+                if !correctOrder {
+                    Text("L'année de fin doit être postérieure à l'année de début")
+                        .foregroundColor(.red)
+                }
+            }
         }
     }
 }
 
 struct RealEstateDetailedView_Previews: PreviewProvider {
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-    static var simulation = Simulation()
-    static var uiState    = UIState()
-
     static var previews: some View {
-        return
-            Group {
-                //                NavigationView {
-                RealEstateDetailedView(item       : patrimoine.assets.realEstates[0],
-                                       family     : family,
-                                       patrimoine : patrimoine)
-                    .environmentObject(family)
-                    .environmentObject(patrimoine)
-                    .environmentObject(simulation)
-                    .environmentObject(uiState)
+        TestEnvir.loadTestFilesFromBundle()
+        return NavigationView {
+            RealEstateDetailedView(updateDependenciesToModel: { },
+                                   item: .init(source: TestEnvir.patrimoine.assets.realEstates.items.first!))
+                .environmentObject(TestEnvir.model)
             }
             .previewDisplayName("RealEstateDetailedView")
-        //            }
     }
 }

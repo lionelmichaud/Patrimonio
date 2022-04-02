@@ -19,10 +19,10 @@ struct ScpiDetailedView: View {
 
     var body: some View {
         Form {
-            LabeledTextField(label: "Nom",
-                             defaultText: "obligatoire",
-                             text: $item.name)
-                .foregroundColor(item.name.isEmpty ? .red : .primary)
+            LabeledTextField(label       : "Nom",
+                             defaultText : "obligatoire",
+                             text        : $item.name,
+                             validity    : .notEmpty)
             LabeledTextEditor(label: "Note", text: $item.note)
             WebsiteEditView(website: $item.website)
 
@@ -31,9 +31,9 @@ struct ScpiDetailedView: View {
                 DatePicker(selection: $item.buyingDate,
                            displayedComponents: .date,
                            label: { Text("Date d'acquisition") })
-                AmountEditView(label: "Prix d'acquisition",
-                               amount: $item.buyingPrice)
-                .foregroundColor(item.buyingPrice < 0 ? .red : .primary)
+                AmountEditView(label    : "Prix d'acquisition",
+                               amount   : $item.buyingPrice,
+                               validity : .poz)
             } header: {
                 Text("ACQUISITION")
             }
@@ -44,9 +44,9 @@ struct ScpiDetailedView: View {
             
             /// Rendement
             Section {
-                PercentEditView(label: "Taux de rendement annuel brut",
-                                percent: $item.interestRate)
-                .foregroundColor(item.interestRate < 0 ? .red : .primary)
+                PercentEditView(label    : "Taux de rendement annuel brut",
+                                percent  : $item.interestRate,
+                                validity : .poz)
                 AmountView(label: "Revenu annuel brut déflaté (avant prélèvements sociaux et IRPP)",
                            amount: item.yearlyRevenueIRPP(during: CalendarCst.thisYear).revenue)
                 .foregroundColor(.secondary)
@@ -59,8 +59,9 @@ struct ScpiDetailedView: View {
                 AmountView(label: "Revenu annuel déflaté net d'IS (si imposable à l'IS)",
                            amount: model.fiscalModel.companyProfitTaxes.net(item.yearlyRevenueIRPP(during: CalendarCst.thisYear).revenue))
                 .foregroundColor(.secondary)
-                PercentEditView(label: "Taux de réévaluation annuel",
-                                percent: $item.revaluatRate)
+                PercentEditView(label    : "Taux de réévaluation annuel",
+                                percent  : $item.revaluatRate,
+                                validity : .none)
             } header: {
                 Text("RENDEMENT")
             }
@@ -73,7 +74,10 @@ struct ScpiDetailedView: View {
                         DatePicker(selection: $item.sellingDate,
                                    in: item.buyingDate...100.years.fromNow!,
                                    displayedComponents: .date,
-                                   label: { Text("Date de vente") })
+                                   label: {
+                            Text("Date de vente")
+                                .foregroundColor(item.buyingDate > item.sellingDate ? .red : .primary)
+                        })
                         AmountView(label: "Valeur à la date de vente (net de commission de vente)",
                                    amount: item.value(atEndOf: item.sellingDate.year))
                         .foregroundColor(.secondary)
@@ -94,27 +98,8 @@ struct ScpiDetailedView: View {
         .navigationTitle("SCPI")
         /// barre d'outils de la NavigationView
         .modelChangesToolbar(subModel                  : $item,
-                             isValid                   : isValid,
+                             isValid                   : item.isValid,
                              updateDependenciesToModel : updateDependenciesToModel)
-    }
-
-    private var isValid: Bool {
-        /// vérifier que le nom n'est pas vide
-        guard item.name != "" else {
-            return false
-        }
-        if item.interestRate < 0 {
-            return false
-        }
-        if item.buyingPrice < 0 {
-            return false
-        }
-        /// vérifier que les propriétaires sont correctements définis
-        guard item.ownership.isValid else {
-            return false
-        }
-        
-        return true
     }
 }
 

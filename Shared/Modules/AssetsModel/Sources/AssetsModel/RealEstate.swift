@@ -35,9 +35,9 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
         RealEstateAsset.fiscalModel = fiscalModel
     }
     
-    // pas utilisé
-    // on suppose que les loyers des biens immobiliers physiques sont réévalués de l'inflation
-    // on suppose que les valeurs de vente des biens immobiliers physiques et papier sont réévalués de l'inflation
+    // pas utilisé:
+    // car on suppose que les loyers des biens immobiliers physiques sont réévalués de l'inflation
+    // et on suppose que les valeurs de vente des biens immobiliers physiques et papier sont réévalués de l'inflation
     //    static var inflation: Double { Economy.model.inflation.value(withMode: simulationMode) }
     
     // MARK: - Properties
@@ -110,8 +110,7 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
     
     // MARK: - Initializers
     
-    public init(id                      : UUID         = UUID(),
-                name                    : String       = "",
+    public init(name                    : String       = "",
                 note                    : String       = "",
                 ownership               : Ownership    = Ownership(),
                 buyingYear              : DateBoundary = DateBoundary.empty,
@@ -131,7 +130,6 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
                 monthlyRentAfterCharges : Double       = 0.0,
                 website                 : URL?         = nil,
                 delegateForAgeOf        : ((_ name : String, _ year : Int) -> Int)? = nil) {
-        self.id                      = id
         self.name                    = name
         self.note                    = note
         self.ownership               = ownership
@@ -386,6 +384,72 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
 extension RealEstateAsset: Comparable {
     public static func < (lhs: RealEstateAsset, rhs: RealEstateAsset) -> Bool {
         return (lhs.name < rhs.name)
+    }
+}
+
+extension RealEstateAsset {
+    /// Vérifie que l'objet est valide
+    /// - Warning: Override la méthode par défaut `isValid` du protocole `OwnableP`
+    public var isValid: Bool {
+        /// vérifier que le nom n'est pas vide
+        guard name != "" else {
+            return false
+        }
+        guard ownership.isValid else {
+            return false
+        }
+
+        guard buyingPrice >= 0 && yearlyTaxeHabitation >= 0 && yearlyTaxeFonciere >= 0 else {
+            return false
+        }
+
+        guard sellingNetPrice >= 0 && estimatedValue >= 0 && monthlyRentAfterCharges >= 0 else {
+            return false
+        }
+
+        /// vérifier que toutes les dates sont définies
+        guard buyingYear.isValid else {
+            return false
+        }
+        if willBeInhabited {
+            guard inhabitedFrom.isValid else {
+                return false
+            }
+            guard inhabitedTo.isValid else {
+                return false
+            }
+            if inhabitedFrom.year! > inhabitedTo.year! {
+                return false
+            }
+        }
+        if willBeRented {
+            guard rentalFrom.isValid else {
+                return false
+            }
+            guard rentalTo.isValid else {
+                return false
+            }
+            if rentalFrom.year! > rentalTo.year! {
+                return false
+            }
+        }
+        if willBeSold {
+            guard sellingYear.isValid else {
+                return false
+            }
+            if buyingYear.year! > sellingYear.year! {
+                return false
+            }
+        }
+
+        /// vérifier que les dates sont dans le bon ordre
+        if willBeRented && willBeInhabited {
+            if (rentalFrom.year! ... rentalTo.year!)
+                .hasIntersection(with: inhabitedFrom.year! ... inhabitedTo.year!) {
+                return false
+            }
+        }
+        return true
     }
 }
 

@@ -280,6 +280,30 @@ extension SCPI: Comparable {
     }
 }
 
+extension SCPI {
+    /// Vérifie que l'objet est valide
+    /// - Warning: Override la méthode par défaut `isValid` du protocole `OwnableP`
+    public var isValid: Bool {
+        /// vérifier que le nom n'est pas vide
+        guard name != "" else {
+            return false
+        }
+        guard ownership.isValid else {
+            return false
+        }
+
+        guard buyingPrice >= 0 && interestRate >= 0 else {
+            return false
+        }
+
+        /// vérifier que toutes les dates sont définies
+        guard sellingDate > buyingDate else {
+            return false
+        }
+        return true
+    }
+}
+
 extension SCPI: CustomStringConvertible {
     public var description: String {
         """

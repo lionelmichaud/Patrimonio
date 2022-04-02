@@ -10,6 +10,15 @@ import SwiftUI
 import Combine
 
 public extension Binding {
+    /// Créer un Binding sur un Optional
+    ///
+    /// Usage:
+    ///
+    ///     init(label    : String,
+    ///          boundary : Binding<DateBoundaryViewModel?>) {
+    ///         self.label  = label
+    ///         _boundaryVM = boundary ?? DateBoundaryViewModel(from: DateBoundary.empty)
+    ///     }
     static func ?? (lhs: Binding<Value?>, rhs: Value) -> Binding<Value> {
         return Binding(get: { lhs.wrappedValue ?? rhs },
                        set: { lhs.wrappedValue = $0 })
@@ -83,7 +92,11 @@ public struct Transac<Value>: DynamicProperty {
 }
 
 extension Transac where Value: Equatable {
-    public var hasChanges: Bool { return source != derived }
+    public var hasChanges: Bool { source != derived }
+}
+
+extension Transac where Value: Equatable, Value: ValidableP {
+    public var hasValidChanges: Bool { source != derived && derived.isValid }
 }
 
 extension Binding {

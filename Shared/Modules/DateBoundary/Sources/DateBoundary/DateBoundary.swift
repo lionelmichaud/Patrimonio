@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import AppFoundation
 
 // MARK: - Limite temporelle fixe ou liée à un événement de vie
 
-/// Limite temporelle d'une dépense: début ou fin.
+/// Limite temporelle: de début ou de fin.
+///
 /// Date fixe ou calculée à partir d'un éventuel événement de vie d'une personne
 public struct DateBoundary: Hashable, Codable {
     
@@ -24,7 +26,7 @@ public struct DateBoundary: Hashable, Codable {
     public static func setPersonEventYearProvider(_ personEventYearProvider : PersonEventYearProviderP) {
         DateBoundary.personEventYearProvider = personEventYearProvider
     }
-    
+
     public static func yearOf(lifeEvent : LifeEvent,
                               for name  : String) -> Int? {
         DateBoundary.personEventYearProvider.yearOf(lifeEvent : lifeEvent,
@@ -41,20 +43,20 @@ public struct DateBoundary: Hashable, Codable {
 
     // MARK: - Properties
     
-    // date fixe ou calculée à partir d'un éventuel événement de vie d'une personne
+    /// Date fixe ou calculée à partir d'un éventuel événement de vie d'une personne
     public var fixedYear : Int = 0
-    // non nil si la date est liée à un événement de vie d'une personne
+    /// Non nil si la date est liée à un événement de vie d'une personne
     public var event : LifeEvent?
-    // personne associée à l'évenement
+    /// Personne associée à l'évenement
     public var name  : String?
-    // groupe de personnes associées à l'événement
+    /// Groupe de personnes associées à l'événement
     public var group : GroupOfPersons?
-    // date au plus tôt ou au plus tard du groupe
+    /// Date au plus tôt ou au plus tard du groupe
     public var order : SoonestLatest?
     
     // MARK: - Computed Properties
     
-    // date fixe ou calculée à partir d'un événement de vie d'une personne ou d'un groupe
+    /// Date fixe ou calculée à partir d'un événement de vie d'une personne ou d'un groupe
     public var year  : Int? {
         if let lifeEvent = self.event {
             // la borne temporelle est accrochée à un événement
@@ -109,9 +111,16 @@ extension DateBoundary: CustomStringConvertible {
     public var description: String {
         if let lifeEvent = self.event {
             let yearString = (year == nil ? "`nil`" : String(year!))
-            return "\(lifeEvent.description) de \(name ?? group?.description ?? "`nil`") en \(yearString)"
+            return "\(lifeEvent.description) de \"\(name ?? group?.description.lowercased() ?? "`nil`")\" en \(yearString)"
         } else {
             return String(fixedYear)
         }
+    }
+}
+
+extension DateBoundary: ValidableP {
+    /// Retourne True si une date peut être calculée à partir de la définition de l'objet
+    public var isValid: Bool {
+        year != nil
     }
 }

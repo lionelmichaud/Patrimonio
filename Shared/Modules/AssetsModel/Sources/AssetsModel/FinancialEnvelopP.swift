@@ -36,6 +36,7 @@ public extension FinancialEnvelopP {
                 return nil
         }
     }
+    /// Retourne True si le `Type` d'investissement est valide & si le `Ownership` est valide
     var isValid: Bool {
         type.isValid && ownership.isValid
     }
