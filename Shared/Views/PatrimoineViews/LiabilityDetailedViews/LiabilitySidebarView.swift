@@ -28,7 +28,7 @@ struct LiabilitySidebarView: View {
             LoanSidebarView()
             DebtSidebarView()
         } label: {
-            LabeledValueRowView2(label       : label,
+            LabeledValueRowView(label       : label,
                                  value       : totalDebt,
                                  indentLevel : indentLevel,
                                  header      : true,

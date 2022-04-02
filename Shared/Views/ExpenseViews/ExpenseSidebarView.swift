@@ -59,7 +59,7 @@ struct ExpenseTotalView: View {
     @EnvironmentObject private var expenses: LifeExpensesDic
 
     var body: some View {
-        LabeledValueRowView2(label       : "Total",
+        LabeledValueRowView(label       : "Total",
                              value       : expenses.value(atEndOf: CalendarCst.thisYear),
                              indentLevel : 0,
                              header      : true,
@@ -107,7 +107,7 @@ struct ExpenseListInCategory: View {
                                                                 item              : expense,
                                                                 expenses          : expenses,
                                                                 simulationReseter : simulationReseter)) {
-                    LabeledValueRowView2(label       : expense.name,
+                    LabeledValueRowView(label       : expense.name,
                                          value       : expense.value(atEndOf: CalendarCst.thisYear),
                                          indentLevel : indentLevel + 2,
                                          header      : false,
@@ -118,7 +118,7 @@ struct ExpenseListInCategory: View {
             .onDelete(perform: removeItems)
             .onMove(perform: move)
         } label: {
-            LabeledValueRowView2(label       : category.displayString,
+            LabeledValueRowView(label       : category.displayString,
                                  value       : expenses.perCategory[category]?.value(atEndOf: CalendarCst.thisYear) ?? 0,
                                  indentLevel : indentLevel,
                                  header      : true,

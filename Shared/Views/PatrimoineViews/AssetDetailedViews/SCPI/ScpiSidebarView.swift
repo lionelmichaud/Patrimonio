@@ -40,7 +40,7 @@ struct ScpiSidebarView: View {
             ForEach($patrimoine.assets.scpis.items) { $item in
                 NavigationLink(destination: ScpiDetailedView(updateDependenciesToModel: resetSimulation,
                                                              item: $item.transaction())) {
-                    LabeledValueRowView2(label       : item.name,
+                    LabeledValueRowView(label       : item.name,
                                          value       : item.value(atEndOf: CalendarCst.thisYear),
                                          indentLevel : 3,
                                          header      : false,
@@ -52,7 +52,7 @@ struct ScpiSidebarView: View {
             .onDelete(perform: removeItems)
             .onMove(perform: move)
         } label: {
-            LabeledValueRowView2(label       : label,
+            LabeledValueRowView(label       : label,
                                  value       : totalSCPI,
                                  indentLevel : indentLevel,
                                  header      : true,

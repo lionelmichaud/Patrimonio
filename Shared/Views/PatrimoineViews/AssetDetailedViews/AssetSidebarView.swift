@@ -44,7 +44,7 @@ struct AssetSidebarView: View {
                 RealEstateSidebarView()
                 ScpiSidebarView()
             } label: {
-                LabeledValueRowView2(label       : "Immobilier",
+                LabeledValueRowView(label       : "Immobilier",
                                      value       : totalImmobilier,
                                      indentLevel : indentLevel + 1,
                                      header      : true,
@@ -56,7 +56,7 @@ struct AssetSidebarView: View {
                 PeriodicInvestSidebarView()
                 FreeInvestSidebarView()
             } label: {
-                LabeledValueRowView2(label       : "Financier",
+                LabeledValueRowView(label       : "Financier",
                                      value       : totalFinancier,
                                      indentLevel : indentLevel + 1,
                                      header      : true,
@@ -67,14 +67,14 @@ struct AssetSidebarView: View {
             DisclosureGroup(isExpanded: $uiState.patrimoineViewState.assetViewState.expandSCI) {
                 SciScpiSidebarView()
             } label: {
-                LabeledValueRowView2(label       : "SCI",
+                LabeledValueRowView(label       : "SCI",
                                      value       : totalSCI,
                                      indentLevel : indentLevel + 1,
                                      header      : true,
                                      iconItem    : nil)
             }
         } label: {
-            LabeledValueRowView2(label       : label,
+            LabeledValueRowView(label       : label,
                                  value       : netAsset,
                                  indentLevel : indentLevel,
                                  header      : true,

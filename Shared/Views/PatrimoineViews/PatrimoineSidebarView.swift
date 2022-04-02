@@ -76,7 +76,7 @@ struct PatrimoineTotalView: View {
     @EnvironmentObject private var patrimoine : Patrimoin
 
     var body: some View {
-        LabeledValueRowView2(label       : "Actif Net",
+        LabeledValueRowView(label       : "Actif Net",
                              value       : patrimoine.value(atEndOf: CalendarCst.thisYear),
                              indentLevel : 0,
                              header      : true,

@@ -40,7 +40,7 @@ struct DebtSidebarView: View {
             ForEach($patrimoine.liabilities.debts.items) { $item in
                 NavigationLink(destination: DebtDetailedView(updateDependenciesToModel: resetSimulation,
                                                              item: $item.transaction())) {
-                    LabeledValueRowView2(label       : item.name,
+                    LabeledValueRowView(label       : item.name,
                                          value       : item.value(atEndOf: CalendarCst.thisYear),
                                          indentLevel : 3,
                                          header      : false,
@@ -53,7 +53,7 @@ struct DebtSidebarView: View {
             .onDelete(perform: removeItems)
             .onMove(perform: move)
         } label: {
-            LabeledValueRowView2(label       : label,
+            LabeledValueRowView(label       : label,
                                  value       : totalDebt,
                                  indentLevel : indentLevel,
                                  header      : true,
