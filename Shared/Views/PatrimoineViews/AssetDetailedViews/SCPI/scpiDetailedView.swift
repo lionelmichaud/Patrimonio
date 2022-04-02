@@ -122,7 +122,6 @@ struct SCPIDetailedView_Previews: PreviewProvider {
     static var previews: some View {
         TestEnvir.loadTestFilesFromBundle()
         return NavigationView {
-            //                NavigationView {
             ScpiDetailedView(updateDependenciesToModel: { },
                              item: .init(source: TestEnvir.patrimoine.assets.scpis.items.first!))
             .environmentObject(TestEnvir.model)

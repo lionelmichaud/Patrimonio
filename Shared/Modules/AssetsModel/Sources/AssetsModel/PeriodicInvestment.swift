@@ -57,6 +57,8 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
 
     // MARK: - Static Properties
     
+    public static let prototype = PeriodicInvestement()
+
     static var defaultFileName: String = "PeriodicInvestement.json"
     
     private static var simulationMode: SimulationModeEnum = .deterministic
@@ -196,19 +198,22 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
 
     // MARK: - Initializers
     
-    public init(name             : String,
-                note             : String,
-                type             : InvestementKind,
-                firstYear        : Int,
-                lastYear         : Int,
-                interestRateType : InterestRateKind,
-                initialValue     : Double = 0.0,
-                initialInterest  : Double = 0.0,
-                yearlyPayement   : Double = 0.0,
-                yearlyCost       : Double = 0.0,
-                website          : URL?   = nil) {
+    public init(name             : String           = "",
+                note             : String           = "",
+                ownership        : Ownership        = Ownership(),
+                type             : InvestementKind  = .other,
+                firstYear        : Int              = CalendarCst.thisYear,
+                lastYear         : Int              = CalendarCst.thisYear + 100,
+                interestRateType : InterestRateKind = .contractualRate(fixedRate: 0.0),
+                initialValue     : Double           = 0.0,
+                initialInterest  : Double           = 0.0,
+                yearlyPayement   : Double           = 0.0,
+                yearlyCost       : Double           = 0.0,
+                website          : URL?             = nil,
+                delegateForAgeOf : ((_ name : String, _ year : Int) -> Int)? = nil) {
         self.name             = name
         self.note             = note
+        self.ownership        = ownership
         self.type             = type
         self.firstYear        = firstYear
         self.lastYear         = lastYear
@@ -221,6 +226,9 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
                                       initialInterest   : initialInterest,
                                       initialInvestment : initialValue - initialInterest)
         self.website         = website
+        if let delegateForAgeOf = delegateForAgeOf {
+            self.ownership.setDelegateForAgeOf(delegate: delegateForAgeOf)
+        }
     }
     
     // MARK: - Methods

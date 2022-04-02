@@ -8,65 +8,56 @@
 
 import SwiftUI
 import AppFoundation
+import ModelEnvironment
 import AssetsModel
-import PatrimoineModel
-import FamilyModel
-import SimulationAndVisitors
 import HelpersView
 
 struct PeriodicInvestDetailedView: View {
-    @EnvironmentObject var family     : Family
-    @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var uiState    : UIState
-    
-    // commun
-    private var originalItem     : PeriodicInvestement?
-    @State private var localItem : PeriodicInvestement
-    @State private var alertItem : AlertItem?
-    @State private var index     : Int?
-    // à adapter
+    let updateDependenciesToModel : () -> Void
+    @Transac var item : PeriodicInvestement
 
     var body: some View {
         Form {
-            LabeledTextField(label: "Nom", defaultText: "obligatoire", text: $localItem.name)
-            LabeledTextEditor(label: "Note", text: $localItem.note)
-            WebsiteEditView(website: $localItem.website)
+            LabeledTextField(label: "Nom",
+                             defaultText: "obligatoire",
+                             text: $item.name)
+            LabeledTextEditor(label: "Note", text: $item.note)
+            WebsiteEditView(website: $item.website)
 
             /// propriété
-            OwnershipView(ownership  : $localItem.ownership,
-                          totalValue : localItem.value(atEndOf  : CalendarCst.thisYear))
+            OwnershipView(ownership  : $item.ownership,
+                          totalValue : item.value(atEndOf  : CalendarCst.thisYear))
             
             // acquisition
             Section(header: Text("TYPE")) {
-                TypeInvestEditView(investType: $localItem.type)
+                TypeInvestEditView(investType: $item.type)
                 AmountEditView(label: "Versement annuel - net de frais",
-                               amount: $localItem.yearlyPayement)
+                               amount: $item.yearlyPayement)
                 AmountEditView(label: "Frais annuels sur versements",
-                               amount: $localItem.yearlyCost)
+                               amount: $item.yearlyCost)
             }
             
             Section(header: Text("INITIALISATION")) {
                 YearPicker(title: "Année de départ (fin d'année)",
                            inRange: CalendarCst.thisYear - 20...CalendarCst.thisYear + 100,
-                           selection: $localItem.firstYear)
+                           selection: $item.firstYear)
                 AmountEditView(label: "Valeure initiale",
-                               amount: $localItem.initialValue)
+                               amount: $item.initialValue)
                 AmountEditView(label: "Intérêts initiaux",
-                               amount: $localItem.initialInterest)
+                               amount: $item.initialInterest)
             }
             
             Section(header: Text("RENTABILITE")) {
-                InterestRateTypeEditView(rateType: $localItem.interestRateType)
+                InterestRateTypeEditView(rateType: $item.interestRateType)
                 PercentView(label   : "Rendement moyen net d'inflation",
-                            percent : localItem.averageInterestRateNetOfTaxesAndInflation)
+                            percent : item.averageInterestRateNetOfTaxesAndInflation)
                     .foregroundColor(.secondary)
             }
             
             Section(header: Text("LIQUIDATION")) {
                 YearPicker(title: "Année de liquidation (fin d'année)",
-                           inRange: localItem.firstYear...localItem.firstYear + 100,
-                           selection: $localItem.lastYear)
+                           inRange: item.firstYear...item.firstYear + 100,
+                           selection: $item.lastYear)
                 AmountView(label: "Valeur liquidative avant prélèvements sociaux et IRPP",
                            amount: liquidatedValue)
                     .foregroundColor(.secondary)
@@ -89,103 +80,27 @@ struct PeriodicInvestDetailedView: View {
         }
         .textFieldStyle(.roundedBorder)
         .navigationTitle("Invest. Périodique")
-        .toolbar {
-            ToolbarItemGroup(placement: .automatic) {
-                DuplicateButton { duplicate() }
-                    .disabled((index == nil) || changeOccured)
-                FolderButton(action : applyChanges)
-                    .disabled(!changeOccured)
-            }
-        }
-        .alert(item: $alertItem, content: newAlert)
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(subModel                  : $item,
+                             isValid                   : isValid,
+                             updateDependenciesToModel : updateDependenciesToModel)
     }
     
-    init(item       : PeriodicInvestement?,
-         family     : Family,
-         patrimoine : Patrimoin) {
-        self.originalItem = item
-        if let initialItemValue = item {
-            // modification d'un élément existant
-            _localItem = State(initialValue: initialItemValue)
-            _index     = State(initialValue: patrimoine.assets.periodicInvests.items.firstIndex(of: initialItemValue))
-            // specific
-        } else {
-            // création d'un nouvel élément
-            var newItem = PeriodicInvestement(name             : "",
-                                              note             : "",
-                                              type             : .other,
-                                              firstYear        : CalendarCst.thisYear,
-                                              lastYear         : CalendarCst.thisYear + 100,
-                                              interestRateType : .contractualRate(fixedRate: 0.0))
-            // définir le délégué pour la méthode ageOf qui par défaut est nil à la création de l'objet
-            newItem.ownership.setDelegateForAgeOf(delegate: family.ageOf)
-            _localItem = State(initialValue: newItem)
-            // création d'un nouvel élément
-            index = nil
-        }
-    }
-    
-    private func resetSimulation() {
-        // remettre à zéro la simulation et sa vue
-        simulation.notifyComputationInputsModification()
-        uiState.resetSimulationView()
-    }
-    
-    private func duplicate() {
-        // générer un nouvel identifiant pour la copie
-        localItem.id = UUID()
-        localItem.name += "-copie"
-        // ajouter la copie
-        patrimoine.assets.periodicInvests.add(localItem)
-        // revenir à l'élement avant duplication
-        localItem = originalItem!
-        
-        // remettre à zéro la simulation et sa vue
-        resetSimulation()
-   }
-    
-    // sauvegarder les changements
-    private func applyChanges() {
-        // validation avant sauvegarde
-        guard self.isValid() else { return }
-        
-        if let index = index {
-            // modifier un éléménet existant
-            patrimoine.assets.periodicInvests.update(with: localItem, at: index)
-        } else {
-            // générer un nouvel identifiant pour le nouvel item
-            localItem.id = UUID()
-            // définir le délégué pour la méthode ageOf qui par défaut est nil à la création de l'objet
-            localItem.ownership.setDelegateForAgeOf(delegate: family.ageOf)
-            // ajouter le nouvel élément à la liste
-            patrimoine.assets.periodicInvests.add(localItem)
-        }
-        
-        // remettre à zéro la simulation et sa vue
-        resetSimulation()
-    }
-    
-    private func isValid() -> Bool {
+    private var isValid: Bool {
         /// vérifier que le nom n'est pas vide
-        guard localItem.name != "" else {
-            self.alertItem = AlertItem(title         : Text("Donner un nom"),
-                                       dismissButton : .default(Text("OK")))
+        guard item.name != "" else {
             return false
         }
         
         /// vérifier que les propriétaires sont correctements définis
-        guard localItem.ownership.isValid else {
-            self.alertItem = AlertItem(title         : Text("Les propriétaires ne sont pas correctements définis"),
-                                       dismissButton : .default(Text("OK")))
+        guard item.ownership.isValid else {
             return false
         }
         
         /// vérifier que la clause bénéficiaire est valide
-        switch localItem.type {
+        switch item.type {
             case .lifeInsurance(_, let clause):
                 guard clause.isValid else {
-                    self.alertItem = AlertItem(title         : Text("La clause bénéficiare n'est pas valide"),
-                                               dismissButton : .default(Text("OK")))
                     return false
                 }
                 
@@ -195,56 +110,40 @@ struct PeriodicInvestDetailedView: View {
         return true
     }
     
-    private var changeOccured: Bool {
-        return localItem != originalItem
-    }
-    
     private var liquidatedValue: Double {
-        let liquidationDate = self.localItem.lastYear
-        return self.localItem.value(atEndOf: liquidationDate)
+        let liquidationDate = self.item.lastYear
+        return self.item.value(atEndOf: liquidationDate)
     }
     private var cumulatedInterests: Double {
-        let liquidationDate = self.localItem.lastYear
-        return self.localItem.cumulatedInterestsNetOfInflation(atEndOf: liquidationDate)
+        let liquidationDate = self.item.lastYear
+        return self.item.cumulatedInterestsNetOfInflation(atEndOf: liquidationDate)
     }
     private var netCmulatedInterests: Double {
-        let liquidationDate = self.localItem.lastYear
-        return self.localItem.liquidatedValue(atEndOf: liquidationDate).netInterests
+        let liquidationDate = self.item.lastYear
+        return self.item.liquidatedValue(atEndOf: liquidationDate).netInterests
     }
     private var taxableCmulatedInterests: Double {
-        let liquidationDate = self.localItem.lastYear
-        return self.localItem.liquidatedValue(atEndOf: liquidationDate).taxableIrppInterests
+        let liquidationDate = self.item.lastYear
+        return self.item.liquidatedValue(atEndOf: liquidationDate).taxableIrppInterests
     }
     private var socialTaxes: Double {
-        let liquidationDate = self.localItem.lastYear
-        return self.localItem.liquidatedValue(atEndOf: liquidationDate).socialTaxes
+        let liquidationDate = self.item.lastYear
+        return self.item.liquidatedValue(atEndOf: liquidationDate).socialTaxes
     }
     private var liquidatedValueAfterSocialTaxes: Double {
-        let liquidationDate = self.localItem.lastYear
-        let liquidatedValue = self.localItem.liquidatedValue(atEndOf: liquidationDate)
+        let liquidationDate = self.item.lastYear
+        let liquidatedValue = self.item.liquidatedValue(atEndOf: liquidationDate)
         return liquidatedValue.revenue - liquidatedValue.socialTaxes
     }
 }
 
 struct PeriodicInvestDetailedView_Previews: PreviewProvider {
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-    static var simulation = Simulation()
-    static var uiState    = UIState()
-
     static var previews: some View {
-        return
-            Group {
-//                NavigationView() {
-                    PeriodicInvestDetailedView(item       : patrimoine.assets.periodicInvests[0],
-                                               family     : family,
-                                               patrimoine : patrimoine)
-                        .environmentObject(family)
-                        .environmentObject(patrimoine)
-                        .environmentObject(simulation)
-                        .environmentObject(uiState)
+        TestEnvir.loadTestFilesFromBundle()
+        return NavigationView {
+            PeriodicInvestDetailedView(updateDependenciesToModel: { },
+                                       item: .init(source: TestEnvir.patrimoine.assets.periodicInvests.items.first!))
                 }
                 .previewDisplayName("PeriodicInvestDetailedView")
-//            }
     }
 }
