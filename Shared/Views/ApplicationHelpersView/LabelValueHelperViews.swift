@@ -75,11 +75,12 @@ struct LabeledValueRowView: View {
 }
 
 struct LabeledValueRowView2: View {
-    let label           : String
-    let value           : Double
-    let indentLevel     : Int
-    let header          : Bool
-    let iconItem        : Image?
+    let label       : String
+    let value       : Double
+    let indentLevel : Int
+    let header      : Bool
+    let iconItem    : Image?
+    let kEuro       : Bool
 
     var body: some View {
         HStack {
@@ -99,11 +100,26 @@ struct LabeledValueRowView2: View {
                                   design : .default))
             }
             Spacer()
-            Text(value.k€String)
+            Text(kEuro ? value.k€String : value.€String)
                 .font(.system(size: ListTheme[indentLevel].valueFontSize,
                               design: .default))
         }
     }
+
+    init(label       : String,
+         value       : Double,
+         indentLevel : Int,
+         header      : Bool,
+         iconItem    : Image?,
+         kEuro       : Bool = true) {
+        self.label       = label
+        self.value       = value
+        self.indentLevel = indentLevel
+        self.header      = header
+        self.iconItem    = iconItem
+        self.kEuro       = kEuro
+    }
+
 }
 
 // MARK: - Tests & Previews

@@ -20,7 +20,7 @@ struct RealEstateSidebarView: View {
     private let indentLevel = 2
     private let label       = "Immeuble"
     private let iconAdd     = Image(systemName : "plus.circle.fill")
-    private let icon€       = Image(systemName   : "building.2.crop.circle")
+    private let icon€       = Image(systemName : "building.2.crop.circle")
 
     private var totalRealEstates: Double {
         patrimoine.assets.realEstates.value(atEndOf: CalendarCst.thisYear)

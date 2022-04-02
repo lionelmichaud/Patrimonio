@@ -44,7 +44,7 @@ final class UIState: ObservableObject {
     
     // MARK: - Etat de la vue Expense
     struct ExpenseViewState {
-        var colapseCategories : [Bool] = []
+        var expandCategories  : [Bool] = []
         var endDate           : Double = (CalendarCst.thisYear + 25).double()
         var evalDate          : Double = CalendarCst.thisYear.double()
         var selectedCategory  : LifeExpenseCategory = .abonnements
@@ -104,17 +104,17 @@ final class UIState: ObservableObject {
     // MARK: - Initializers
     
     init() {
-        expenseViewState.colapseCategories = Array(repeating: true, count: LifeExpenseCategory.allCases.count)
+        expenseViewState.expandCategories = Array(repeating: false, count: LifeExpenseCategory.allCases.count)
     }
     
     // MARK: - Subscripts
     
     subscript(category: LifeExpenseCategory) -> Bool {
         get {
-            self.expenseViewState.colapseCategories[category.rawValue]
+            self.expenseViewState.expandCategories[category.rawValue]
         }
         set {
-            self.expenseViewState.colapseCategories[category.rawValue] = newValue
+            self.expenseViewState.expandCategories[category.rawValue] = newValue
         }
     }
 

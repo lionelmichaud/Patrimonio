@@ -85,8 +85,6 @@ struct PatrimoineTotalView: View {
 }
 
 struct PatrimoineHeaderView: View {
-    @EnvironmentObject var patrimoine: Patrimoin
-    
     var body: some View {
         NavigationLink(destination: PatrimoineSummaryView()) {
             Label(title: { Text("Synthèse") },

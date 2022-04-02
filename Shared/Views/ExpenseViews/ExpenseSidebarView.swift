@@ -41,18 +41,13 @@ struct ExpenseSidebarView: View {
                     }
                 }
             }
-            .defaultSideBarListStyle()
-            //.listStyle(GroupedListStyle())
+            .listStyle(.sidebar)
             .environment(\.horizontalSizeClass, .regular)
             .navigationTitle("Dépenses")
             .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    #if os(iOS) || os(tvOS)
-                    EditButton()
-                    #endif
-                }
+                EditButton()
             }
-            
+
             /// vue par défaut
             ExpenseSummaryView()
         }
@@ -64,35 +59,21 @@ struct ExpenseTotalView: View {
     @EnvironmentObject private var expenses: LifeExpensesDic
 
     var body: some View {
-        Section {
-            HStack {
-                Text("Total")
-                    .font(Font.system(size: 21,
-                                      design: Font.Design.default))
-                    .fontWeight(.bold)
-                Spacer()
-                Text(expenses.value(atEndOf: CalendarCst.thisYear).€String)
-                    .font(Font.system(size: 21,
-                                      design: Font.Design.default))
-            }
-            .listRowBackground(ListTheme.listRowsBaseColor)
-        }
+        LabeledValueRowView2(label       : "Total",
+                             value       : expenses.value(atEndOf: CalendarCst.thisYear),
+                             indentLevel : 0,
+                             header      : true,
+                             iconItem    : nil)
     }
 }
 
 struct ExpenseHeaderView: View {
-    @EnvironmentObject var family: Family
-    
     var body: some View {
-        Section {
-            NavigationLink(destination: ExpenseSummaryView()) {
-                Label(title: { Text("Synthèse") },
-                      icon : { Image(systemName: "cart.fill").imageScale(.large) })
-                .font(.title3)
-                //Text("Synthèse").fontWeight(.bold)
-            }
-            .isiOSDetailLink(true)
-        }
+        NavigationLink(destination: ExpenseSummaryView()) {
+            Label(title: { Text("Synthèse") },
+                  icon : { Image(systemName: "cart.fill").imageScale(.large) })
+            .font(.title3)
+        }.isDetailLink(true)
     }
 }
 
@@ -104,43 +85,44 @@ struct ExpenseListInCategory: View {
     let simulationReseter : CanResetSimulationP
     let category          : LifeExpenseCategory
     var expensesInCategory: LifeExpenseArray
+    private let indentLevel = 0
+    private let iconAdd     = Image(systemName : "plus.circle.fill")
+    private let iconCart    = Image(systemName : "cart")
 
     var body: some View {
-        Section {
-            LabeledValueRowView(colapse     : $uiState.expenseViewState.colapseCategories[category.rawValue],
-                                label       : category.displayString,
-                                value       : expenses.perCategory[category]?.value(atEndOf: CalendarCst.thisYear) ?? 0,
-                                indentLevel : 0,
-                                header      : true)
-            if !uiState.expenseViewState.colapseCategories[category.rawValue] {
-                // ajouter un nouvel item à liste des items
+        DisclosureGroup(isExpanded: $uiState.expenseViewState.expandCategories[category.rawValue]) {
+            // ajouter un nouvel item à liste des items
+            NavigationLink(destination: ExpenseDetailedView(category          : category,
+                                                            item              : nil,
+                                                            expenses          : expenses,
+                                                            simulationReseter : simulationReseter)) {
+                Label(title: { Text("Ajouter un élément...") },
+                      icon : { iconAdd.imageScale(.large) })
+                .foregroundColor(.accentColor)
+            }
+
+            // liste des items existants
+            ForEach(expensesInCategory.items) { expense in
                 NavigationLink(destination: ExpenseDetailedView(category          : category,
-                                                                item              : nil,
+                                                                item              : expense,
                                                                 expenses          : expenses,
                                                                 simulationReseter : simulationReseter)) {
-                    Label(title: { Text("Ajouter un élément...") },
-                          icon : { Image(systemName: "plus.circle.fill").imageScale(.large) })
-                        .foregroundColor(.accentColor)
-                }
-                
-                // liste des items existants
-                ForEach(expensesInCategory.items) { expense in
-                    NavigationLink(destination: ExpenseDetailedView(category          : category,
-                                                                    item              : expense,
-                                                                    expenses          : expenses,
-                                                                    simulationReseter : simulationReseter)) {
-                        LabeledValueRowView(colapse     : .constant(true),
-                                            label       : expense.name,
-                                            value       : expense.value(atEndOf: CalendarCst.thisYear),
-                                            indentLevel : 3,
-                                            header      : false,
-                                            icon        : Image(systemName: "cart.fill"))
-                    }
-                    .isiOSDetailLink(true)
-                }
-                .onDelete(perform: removeItems)
-                .onMove(perform: move)
+                    LabeledValueRowView2(label       : expense.name,
+                                         value       : expense.value(atEndOf: CalendarCst.thisYear),
+                                         indentLevel : indentLevel + 2,
+                                         header      : false,
+                                         iconItem    : iconCart,
+                                         kEuro       : false)
+                }.isDetailLink(true)
             }
+            .onDelete(perform: removeItems)
+            .onMove(perform: move)
+        } label: {
+            LabeledValueRowView2(label       : category.displayString,
+                                 value       : expenses.perCategory[category]?.value(atEndOf: CalendarCst.thisYear) ?? 0,
+                                 indentLevel : indentLevel,
+                                 header      : true,
+                                 iconItem    : nil)
         }
     }
     
