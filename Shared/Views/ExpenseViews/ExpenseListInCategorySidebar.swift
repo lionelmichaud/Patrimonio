@@ -42,10 +42,9 @@ struct ExpenseListInCategorySidebar: View {
 
             // liste des items existants
             ForEach(expensesInCategory.items) { $expense in
-                NavigationLink(destination: ExpenseDetailedView(category          : category,
-                                                                item              : expense,
-                                                                expenses          : expenses,
-                                                                simulationReseter : simulationReseter)) {
+                NavigationLink(destination: ExpenseDetailedView(updateDependenciesToModel: resetSimulation,
+                                                                category : category,
+                                                                item     : $expense.transaction())) {
                     LabeledValueRowView(label       : expense.name,
                                         value       : expense.value(atEndOf: CalendarCst.thisYear),
                                         indentLevel : indentLevel + 2,

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import LifeExpense
 import PatrimoineModel
 import SimulationAndVisitors
@@ -64,178 +65,55 @@ final class LifeExpenseViewModel: ObservableObject {
 // MARK: - View
 
 struct ExpenseDetailedView: View {
-    @EnvironmentObject var expenses    : LifeExpensesDic
-    //@EnvironmentObject var simulation : Simulation
-    @EnvironmentObject var patrimoine  : Patrimoin
-    @EnvironmentObject var uiState     : UIState
-    @Environment(\.presentationMode) var presentationMode
-    private let simulationReseter      : CanResetSimulationP
-    private var originalItem           : LifeExpense?
-    private let category               : LifeExpenseCategory
-    @StateObject private var expenseVM : LifeExpenseViewModel
-    @State private var alertItem       : AlertItem?
-    @State private var index           : Int?
+    let updateDependenciesToModel : () -> Void
+    let category      : LifeExpenseCategory
+    @Transac var item : LifeExpense
 
     // MARK: - Computed Properties
     
     var body: some View {
         Form {
             /// nom
-            HStack {
-                Text("Nom")
-                    .frame(width: 70, alignment: .leading)
-                TextField("obligatoire", text: $expenseVM.name)
-            }
-            LabeledTextEditor(label: "Note", text: $expenseVM.note)
+            LabeledTextField(label       : "Nom",
+                             defaultText : "obligatoire",
+                             text        : $item.name,
+                             validity    : .notEmpty)
+            LabeledTextEditor(label: "Note", text: $item.note)
 
             /// montant de la dépense
-            AmountEditView(label: "Montant annuel",
-                           amount: $expenseVM.value)
+            AmountEditView(label    : "Montant annuel",
+                           amount   : $item.value,
+                           validity : .poz)
             
             /// proportionnalité de la dépense aux nb de membres de la famille
             Toggle("Proportionnel au nombre de membres à charge de la famille",
-                   isOn: $expenseVM.proportional)
+                   isOn: $item.proportional)
             
             /// plage de temps
-            TimeSpanEditView(timeSpanVM: $expenseVM.timeSpanVM)
+            TimeSpanEditView(timeSpan: $item.timeSpan)
         }
         .textFieldStyle(.roundedBorder)
-        .navigationTitle(Text("Poste: " + category.displayString))
-        .toolbar {
-            ToolbarItemGroup(placement: .automatic) {
-                DuplicateButton { duplicate() }
-                    .disabled((index == nil) || changeOccured)
-                FolderButton(action : applyChanges)
-                    .disabled(!changeOccured)
-            }
-        }
-        .alert(item: $alertItem, content: newAlert)
-    }
-    
-    // MARK: - Initializers
-    
-    init(category          : LifeExpenseCategory,
-         item              : LifeExpense?,
-         expenses          : LifeExpensesDic,
-         simulationReseter : CanResetSimulationP) {
-        self.originalItem = item
-        self.category     = category
-        self.simulationReseter = simulationReseter
-        if let initialItemValue = item {
-            // modification d'un élément existant
-            _expenseVM = StateObject(wrappedValue: LifeExpenseViewModel(from: initialItemValue))
-            _index     = State(initialValue: expenses.perCategory[category]?.items.firstIndex(of: initialItemValue))
-        } else {
-            // création d'un nouvel élément
-            _expenseVM = StateObject(wrappedValue: LifeExpenseViewModel(from: LifeExpense.prototype))
-            index = nil
-        }
-    }
-    
-    // MARK: - Methods
-    
-    private func resetSimulation() {
-        // remettre à zéro la simulation et sa vue
-        simulationReseter.notifyComputationInputsModification()
-        uiState.resetSimulationView()
-    }
-    
-    private func duplicate() {
-        var localItem = expenseVM.lifeExpense
-        // générer un nouvel identifiant pour la copie
-        localItem.id = UUID()
-        localItem.name += "-copie"
-        // ajouter la copie créée
-        expenses.perCategory[self.category]?.add(localItem)
-        // remettre à zéro la simulation et sa vue
-        resetSimulation()
-    }
-    
-    // sauvegarder les changements
-    private func applyChanges() {
-        /// vérifier que le nom ne fait pas doublon si l'élément est nouveau ou si le nom a été modifié
-        if (originalItem == nil) || (expenseVM.name != originalItem?.name) {
-            let nameAlreadyExists = expenses.perCategory.values.contains { arrayOfExpenses in
-                return arrayOfExpenses.items.contains { expense in
-                    return expense.name == expenseVM.name
-                }
-            }
-            if nameAlreadyExists {
-                self.alertItem = AlertItem(title         : Text("Le nom existe déjà. Choisissez en un autre."),
-                                           dismissButton : .default(Text("OK")))
-                return
-            }
-        }
-        guard expenseVM.name != "" else {
-            self.alertItem = AlertItem(title         : Text("Le nom est obligatoire"),
-                                       dismissButton : .default(Text("OK")))
-            return
-        }
-        /// valider les dates
-        guard let firstYear = expenseVM.timeSpanVM.timeSpan.firstYear else {
-            self.alertItem = AlertItem(title         : Text("La date de début doit être définie"),
-                                       dismissButton : .default(Text("OK")))
-            return
-        }
-        guard let lastYear = expenseVM.timeSpanVM.timeSpan.lastYear else {
-            self.alertItem = AlertItem(title         : Text("La date de fin doit être définie"),
-                                       dismissButton : .default(Text("OK")))
-            return
-        }
-        guard expenseVM.timeSpanVM.timeSpan.isValid else {
-            self.alertItem = AlertItem(title         : Text("La date de début (\(firstYear)) doit être antérieure à la date de fin (exclue) (\(lastYear))"),
-                                       dismissButton : .default(Text("OK")))
-            return
-        }
-        
-        // tous les tests sont OK
-        if let index = index {
-            // modifier un éléménet existant
-            expenses.perCategory[self.category]?.update(with : expenseVM.lifeExpense,
-                                                        at   : index)
-        } else {
-            // créer un nouvel élément
-            expenses.perCategory[self.category]?.add(expenseVM.lifeExpense)
-        }
-        
-        // remettre à zéro la simulation et sa vue
-        resetSimulation()
-        
-        self.presentationMode.wrappedValue.dismiss()
-    }
-    
-    private var changeOccured: Bool {
-        if originalItem == nil {
-            return true
-        } else {
-            return expenseVM.differs(from: originalItem!)
-        }
+        .navigationTitle(Text("Catégorie: " + category.displayString))
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(subModel                  : $item,
+                             isValid                   : item.isValid,
+                             updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
 struct ExpenseDetailedView_Previews: PreviewProvider {
-    struct FakeSimulationReseter: CanResetSimulationP {
-        func notifyComputationInputsModification() {
-            print("simluation.reset")
-        }
+    static func notifyComputationInputsModification() {
+        print("simluation.reset")
     }
-    static var simulationReseter = FakeSimulationReseter()
-    static var expenses   = LifeExpensesDic()
-    static var simulation = Simulation()
-    static var patrimoine = Patrimoin()
-    static var uiState    = UIState()
-    
+
     static var previews: some View {
-        ExpenseDetailedView(category : .autres,
-                            item     : LifeExpense(name    : "Un nom",
-                                                   note    : "une note",
-                                                   timeSpan: .permanent,
-                                                   value   : 1234.0),
-                            expenses : expenses,
-                            simulationReseter: simulationReseter)
-            .environmentObject(expenses)
-            .environmentObject(simulation)
-            .environmentObject(patrimoine)
-            .environmentObject(uiState)
+        TestEnvir.loadTestFilesFromBundle()
+        return NavigationView {
+            ExpenseDetailedView(updateDependenciesToModel: notifyComputationInputsModification,
+                                category : .autres,
+                                item: .init(source: TestEnvir.expenses[.autres]!.items.first!))
+            EmptyView()
+        }
+        .previewDisplayName("ExpenseDetailedView")
     }
 }

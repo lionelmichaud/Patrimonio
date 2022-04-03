@@ -66,6 +66,7 @@ struct ExpenseTotalView: View {
                             indentLevel : 0,
                             header      : true,
                             iconItem    : nil)
+        .padding([.top, .bottom])
     }
 }
 

@@ -155,27 +155,6 @@ public enum TimeSpan: Hashable, Codable {
                 return inYear
         }
     }
-    
-    public var isValid: Bool {
-        switch self {
-            case .permanent:
-                return true
-                
-            case .periodic(let from, _, let to),
-                 .spanning(let from,    let to):
-                guard let fromYear = from.year, let toYear = to.year else { return false }
-                return fromYear < toYear
-                
-            case .starting(from: _):
-                return true
-                
-            case .ending(to: _):
-                return true
-                
-            case .exceptional(inYear: _):
-                return true
-        }
-    }
 }
 
 // MARK: - Extensions
@@ -203,7 +182,31 @@ extension TimeSpan: PickableIdentifiableEnumP {
     }
 }
 
-// MARK: - Extension: Description
+extension TimeSpan: ValidableP {
+    public var isValid: Bool {
+        switch self {
+            case .permanent:
+                return true
+
+            case .spanning(let from,    let to):
+                guard let fromYear = from.year, let toYear = to.year else { return false }
+                return fromYear < toYear
+
+            case .periodic(let from, let period, let to):
+                guard let fromYear = from.year, let toYear = to.year else { return false }
+                return fromYear < toYear && period.isPOZ
+
+            case .starting(let from):
+                return from.isValid
+
+            case .ending(let to):
+                return to.isValid
+
+            case .exceptional(inYear: _):
+                return true
+        }
+    }
+}
 
 extension TimeSpan: CustomStringConvertible {
     public var description: String {

@@ -190,6 +190,7 @@ struct RealEstateDetailedView_Previews: PreviewProvider {
             RealEstateDetailedView(updateDependenciesToModel: { },
                                    item: .init(source: TestEnvir.patrimoine.assets.realEstates.items.first!))
                 .environmentObject(TestEnvir.model)
+            EmptyView()
             }
             .previewDisplayName("RealEstateDetailedView")
     }

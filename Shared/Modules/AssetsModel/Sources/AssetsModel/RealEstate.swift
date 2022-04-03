@@ -398,15 +398,12 @@ extension RealEstateAsset {
         guard ownership.isValid else {
             return false
         }
-
         guard buyingPrice >= 0 && yearlyTaxeHabitation >= 0 && yearlyTaxeFonciere >= 0 else {
             return false
         }
-
         guard sellingNetPrice >= 0 && estimatedValue >= 0 && monthlyRentAfterCharges >= 0 else {
             return false
         }
-
         /// vérifier que toutes les dates sont définies
         guard buyingYear.isValid else {
             return false

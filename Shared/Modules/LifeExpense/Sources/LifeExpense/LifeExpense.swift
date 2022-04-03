@@ -8,6 +8,7 @@
 
 import Foundation
 import os
+import AppFoundation
 import Persistable
 import Statistics
 import SocioEconomyModel
@@ -140,6 +141,24 @@ public struct LifeExpense: Identifiable, Codable, Hashable, NameableValuableP {
 
 extension LifeExpense: Comparable {
     public static func < (lhs: LifeExpense, rhs: LifeExpense) -> Bool { (lhs.name < rhs.name) }
+}
+
+extension LifeExpense: ValidableP {
+    public var isValid: Bool {
+        /// vérifier que le nom n'est pas vide
+        guard name != "" else {
+            return false
+        }
+        /// vérifier que le montant de dépense est >= 0
+        guard value.isPOZ else {
+            return false
+        }
+       /// vérifier que la plage de temps est valide
+        guard timeSpan.isValid else {
+            return false
+        }
+        return true
+    }
 }
 
 extension LifeExpense: CustomStringConvertible {
