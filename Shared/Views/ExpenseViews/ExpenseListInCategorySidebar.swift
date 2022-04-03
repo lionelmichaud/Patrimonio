@@ -116,4 +116,3 @@ struct ExpenseListInCategorySidebar: View {
                                                   to   : destination)
     }
 }
-
