@@ -38,7 +38,7 @@ struct ExpenseSidebarView: View {
                     // pour chaque catégorie de dépense, afficher la liste des dépenses
                     ForEach(sortedCategories, id: \.displayString) { category in
                         ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-                                              category          : category)
+                                                     category          : category)
                     }
 
                 }

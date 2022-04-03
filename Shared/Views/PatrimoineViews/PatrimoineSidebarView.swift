@@ -19,7 +19,7 @@ struct PatrimoineSidebarView: View {
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var dataStore  : Store
     let simulationReseter: CanResetSimulationP
-    @State private var alertItem              : AlertItem?
+    @State private var alertItem: AlertItem?
     
     var body: some View {
         NavigationView {

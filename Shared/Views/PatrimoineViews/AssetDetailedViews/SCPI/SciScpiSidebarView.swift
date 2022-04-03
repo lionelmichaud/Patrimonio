@@ -34,7 +34,7 @@ struct SciScpiSidebarView: View {
 
             // liste des items
             ForEach($patrimoine.assets.sci.scpis.items) { $item in
-                NavigationLink(destination: ScpiDetailedView(updateDependenciesToModel: resetSimulation,
+                NavigationLink(destination: ScpiDetailedView(updateDependenciesToModel: updateDependenciesToModel,
                                                              item: $item.transaction())) {
                     LabeledValueRowView(label       : item.name,
                                          value       : item.value(atEndOf: CalendarCst.thisYear),
@@ -67,11 +67,17 @@ struct SciScpiSidebarView: View {
         uiState.resetSimulationView()
     }
 
+    private func updateDependenciesToModel() {
+        // indiquer que les dépenses ont été modifiées
+        patrimoine.assets.sci.scpis.persistenceSM.process(event: .onModify)
+        resetSimulation()
+    }
+
     func addItem() {
         // ajouter un nouvel item à la liste
         let newItem = SCPI(name: "Nouvel élément",
                            delegateForAgeOf: family.ageOf)
-        patrimoine.assets.scpis.add(newItem)
+        patrimoine.assets.sci.scpis.add(newItem)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
@@ -82,25 +88,25 @@ struct SciScpiSidebarView: View {
         newItem.id = UUID()
         newItem.name += "-copie"
         // duppliquer l'item de la liste
-        patrimoine.assets.scpis.add(newItem)
+        patrimoine.assets.sci.scpis.add(newItem)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
     func deleteItem(_ item: SCPI) {
         // supprimer l'item de la liste
-        patrimoine.assets.scpis.delete(item)
+        patrimoine.assets.sci.scpis.delete(item)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
     func removeItems(at offsets: IndexSet) {
-        patrimoine.assets.scpis.delete(at: offsets)
+        patrimoine.assets.sci.scpis.delete(at: offsets)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
     func move(from source: IndexSet, to destination: Int) {
-        patrimoine.assets.scpis.move(from: source, to: destination)
+        patrimoine.assets.sci.scpis.move(from: source, to: destination)
     }
 }

@@ -38,7 +38,7 @@ struct RealEstateSidebarView: View {
 
             // liste des items
             ForEach($patrimoine.assets.realEstates.items) { $item in
-                NavigationLink(destination: RealEstateDetailedView(updateDependenciesToModel: resetSimulation,
+                NavigationLink(destination: RealEstateDetailedView(updateDependenciesToModel: updateDependenciesToModel,
                                                                    item: $item.transaction())) {
                     LabeledValueRowView(label       : item.name,
                                         value       : item.value(atEndOf: CalendarCst.thisYear),
@@ -69,6 +69,12 @@ struct RealEstateSidebarView: View {
         // remettre à zéro la simulation et sa vue
         simulationReseter.notifyComputationInputsModification()
         uiState.resetSimulationView()
+    }
+
+    private func updateDependenciesToModel() {
+        // indiquer que les dépenses ont été modifiées
+        patrimoine.assets.realEstates.persistenceSM.process(event: .onModify)
+        resetSimulation()
     }
 
     func addItem() {

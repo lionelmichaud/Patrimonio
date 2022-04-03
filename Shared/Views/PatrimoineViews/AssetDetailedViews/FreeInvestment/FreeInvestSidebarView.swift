@@ -38,7 +38,7 @@ struct FreeInvestSidebarView: View {
 
             // liste des items
             ForEach($patrimoine.assets.freeInvests.items) { $item in
-                NavigationLink(destination: FreeInvestDetailedView(updateDependenciesToModel: resetSimulation,
+                NavigationLink(destination: FreeInvestDetailedView(updateDependenciesToModel: updateDependenciesToModel,
                                                                    item: $item.transaction())) {
                     LabeledValueRowView(label       : item.name,
                                          value       : item.value(atEndOf: CalendarCst.thisYear),
@@ -69,6 +69,12 @@ struct FreeInvestSidebarView: View {
         // remettre à zéro la simulation et sa vue
         simulationReseter.notifyComputationInputsModification()
         uiState.resetSimulationView()
+    }
+
+    private func updateDependenciesToModel() {
+        // indiquer que les dépenses ont été modifiées
+        patrimoine.assets.freeInvests.persistenceSM.process(event: .onModify)
+        resetSimulation()
     }
 
     func addItem() {

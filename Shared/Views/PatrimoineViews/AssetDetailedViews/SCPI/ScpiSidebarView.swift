@@ -38,7 +38,7 @@ struct ScpiSidebarView: View {
 
             // liste des items
             ForEach($patrimoine.assets.scpis.items) { $item in
-                NavigationLink(destination: ScpiDetailedView(updateDependenciesToModel: resetSimulation,
+                NavigationLink(destination: ScpiDetailedView(updateDependenciesToModel: updateDependenciesToModel,
                                                              item: $item.transaction())) {
                     LabeledValueRowView(label       : item.name,
                                          value       : item.value(atEndOf: CalendarCst.thisYear),
@@ -69,6 +69,12 @@ struct ScpiSidebarView: View {
         // remettre à zéro la simulation et sa vue
         simulationReseter.notifyComputationInputsModification()
         uiState.resetSimulationView()
+    }
+
+    private func updateDependenciesToModel() {
+        // indiquer que les dépenses ont été modifiées
+        patrimoine.assets.scpis.persistenceSM.process(event: .onModify)
+        resetSimulation()
     }
 
     func addItem() {

@@ -38,7 +38,7 @@ struct PeriodicInvestSidebarView: View {
 
             // liste des items
             ForEach($patrimoine.assets.periodicInvests.items) { $item in
-                NavigationLink(destination: PeriodicInvestDetailedView(updateDependenciesToModel: resetSimulation,
+                NavigationLink(destination: PeriodicInvestDetailedView(updateDependenciesToModel: updateDependenciesToModel,
                                                                        item: $item.transaction())) {
                     LabeledValueRowView(label       : item.name,
                                          value       : item.value(atEndOf: CalendarCst.thisYear),
@@ -69,6 +69,12 @@ struct PeriodicInvestSidebarView: View {
         // remettre à zéro la simulation et sa vue
         simulationReseter.notifyComputationInputsModification()
         uiState.resetSimulationView()
+    }
+
+    private func updateDependenciesToModel() {
+        // indiquer que les dépenses ont été modifiées
+        patrimoine.assets.periodicInvests.persistenceSM.process(event: .onModify)
+        resetSimulation()
     }
 
     func addItem() {

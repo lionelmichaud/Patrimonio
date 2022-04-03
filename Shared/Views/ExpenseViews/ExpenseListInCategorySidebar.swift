@@ -42,7 +42,7 @@ struct ExpenseListInCategorySidebar: View {
 
             // liste des items existants
             ForEach(expensesInCategory.items) { $expense in
-                NavigationLink(destination: ExpenseDetailedView(updateDependenciesToModel: resetSimulation,
+                NavigationLink(destination: ExpenseDetailedView(updateDependenciesToModel: updateDependenciesToModel,
                                                                 category : category,
                                                                 item     : $expense.transaction())) {
                     LabeledValueRowView(label       : expense.name,
@@ -77,7 +77,13 @@ struct ExpenseListInCategorySidebar: View {
         uiState.resetSimulationView()
     }
 
-    func addItem() {
+    private func updateDependenciesToModel() {
+        // indiquer que les dépenses ont été modifiées
+        expenses.perCategory[self.category]?.persistenceSM.process(event: .onModify)
+        resetSimulation()
+    }
+
+    private func addItem() {
         // ajouter un nouvel item à la liste
         let newItem = LifeExpense(name: "Nouvel élément")
         expenses.perCategory[self.category]?.add(newItem)
@@ -85,7 +91,7 @@ struct ExpenseListInCategorySidebar: View {
         resetSimulation()
     }
 
-    func duplicateItem(_ item: LifeExpense) {
+    private func duplicateItem(_ item: LifeExpense) {
         var newItem = item
         // générer un nouvel identifiant pour la copie
         newItem.id = UUID()
@@ -96,21 +102,21 @@ struct ExpenseListInCategorySidebar: View {
         resetSimulation()
     }
 
-    func deleteItem(_ item: LifeExpense) {
+    private func deleteItem(_ item: LifeExpense) {
         // supprimer l'item de la liste
         expenses.perCategory[self.category]?.delete(item)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
-    func removeItems(at offsets: IndexSet) {
+    private func removeItems(at offsets: IndexSet) {
         // supprimer la dépense
         expenses.perCategory[self.category]?.delete(at: offsets)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
-    func move(from source : IndexSet, to destination : Int) {
+    private func move(from source : IndexSet, to destination : Int) {
         expenses.perCategory[self.category]?.move(from : source,
                                                   to   : destination)
     }

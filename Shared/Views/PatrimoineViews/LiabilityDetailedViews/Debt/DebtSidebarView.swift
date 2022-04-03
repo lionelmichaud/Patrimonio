@@ -38,7 +38,7 @@ struct DebtSidebarView: View {
 
             // liste des items
             ForEach($patrimoine.liabilities.debts.items) { $item in
-                NavigationLink(destination: DebtDetailedView(updateDependenciesToModel: resetSimulation,
+                NavigationLink(destination: DebtDetailedView(updateDependenciesToModel: updateDependenciesToModel,
                                                              item: $item.transaction())) {
                     LabeledValueRowView(label       : item.name,
                                          value       : item.value(atEndOf: CalendarCst.thisYear),
@@ -70,6 +70,12 @@ struct DebtSidebarView: View {
         // remettre à zéro la simulation et sa vue
         simulationReseter.notifyComputationInputsModification()
         uiState.resetSimulationView()
+    }
+
+    private func updateDependenciesToModel() {
+        // indiquer que les dépenses ont été modifiées
+        patrimoine.liabilities.debts.persistenceSM.process(event: .onModify)
+        resetSimulation()
     }
 
     func addItem() {
