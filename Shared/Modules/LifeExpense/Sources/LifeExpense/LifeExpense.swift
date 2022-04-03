@@ -19,6 +19,8 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", catego
 // MARK: - Tableau de Dépenses
 
 public struct LifeExpenseArray: NameableValuableArrayP {
+
+    public static var empty = LifeExpenseArray(items: [], persistenceSM: PersistenceStateMachine(initialState : .created))
     
     private enum CodingKeys: String, CodingKey {
         case items
@@ -102,13 +104,11 @@ public struct LifeExpense: Identifiable, Codable, Hashable, NameableValuableP {
     
     // MARK: - Initializers
     
-    public init() { }
-    
-    public init(name         : String,
-                note         : String,
-                timeSpan     : TimeSpan,
-                proportional : Bool = false,
-                value        : Double) {
+    public init(name         : String   = "",
+                note         : String   = "",
+                timeSpan     : TimeSpan = .permanent,
+                proportional : Bool     = false,
+                value        : Double   = 0.0) {
         self.name         = name
         self.value        = value
         self.note         = note

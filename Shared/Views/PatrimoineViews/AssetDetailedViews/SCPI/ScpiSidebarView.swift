@@ -16,7 +16,7 @@ struct ScpiSidebarView: View {
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
-    @EnvironmentObject private var simulation : Simulation
+    let simulationReseter: CanResetSimulationP
     private let indentLevel = 2
     private let label       = "SCPI"
     private let iconAdd     = Image(systemName : "plus.circle.fill")
@@ -67,7 +67,7 @@ struct ScpiSidebarView: View {
     /// actualiser toutes les dépendances au Model
     private func resetSimulation() {
         // remettre à zéro la simulation et sa vue
-        simulation.notifyComputationInputsModification()
+        simulationReseter.notifyComputationInputsModification()
         uiState.resetSimulationView()
     }
 

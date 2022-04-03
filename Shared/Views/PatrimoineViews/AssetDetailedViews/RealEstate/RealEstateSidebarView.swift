@@ -15,8 +15,8 @@ import SimulationAndVisitors
 struct RealEstateSidebarView: View {
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var family     : Family
-    @EnvironmentObject private var simulation : Simulation
     @EnvironmentObject private var patrimoine : Patrimoin
+    let simulationReseter: CanResetSimulationP
     private let indentLevel = 2
     private let label       = "Immeuble"
     private let iconAdd     = Image(systemName : "plus.circle.fill")
@@ -36,27 +36,27 @@ struct RealEstateSidebarView: View {
                           icon : { iconAdd.imageScale(.large) })
                 })
 
-                // liste des items
-                ForEach($patrimoine.assets.realEstates.items) { $item in
-                    NavigationLink(destination: RealEstateDetailedView(updateDependenciesToModel: resetSimulation,
-                                                                       item: $item.transaction())) {
-                        LabeledValueRowView(label       : item.name,
-                                             value       : item.value(atEndOf: CalendarCst.thisYear),
-                                             indentLevel : 3,
-                                             header      : false,
-                                             iconItem    : icon€)
-                        .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
-                                                  deleteItem    : { deleteItem(item) })
-                    }.isDetailLink(true)
-                }
-                .onDelete(perform: removeItems)
-                .onMove(perform: move)
+            // liste des items
+            ForEach($patrimoine.assets.realEstates.items) { $item in
+                NavigationLink(destination: RealEstateDetailedView(updateDependenciesToModel: resetSimulation,
+                                                                   item: $item.transaction())) {
+                    LabeledValueRowView(label       : item.name,
+                                        value       : item.value(atEndOf: CalendarCst.thisYear),
+                                        indentLevel : 3,
+                                        header      : false,
+                                        iconItem    : icon€)
+                    .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
+                                              deleteItem    : { deleteItem(item) })
+                }.isDetailLink(true)
+            }
+            .onDelete(perform: removeItems)
+            .onMove(perform: move)
         } label: {
             LabeledValueRowView(label       : label,
-                                 value       : totalRealEstates,
-                                 indentLevel : indentLevel,
-                                 header      : true,
-                                 iconItem    : icon€)
+                                value       : totalRealEstates,
+                                indentLevel : indentLevel,
+                                header      : true,
+                                iconItem    : icon€)
         }
         //.listRowInsets(EdgeInsets(top: 0, leading: ListTheme[indentLevel].indent, bottom: 0, trailing: 0))
 #if os(macOS)
@@ -67,7 +67,7 @@ struct RealEstateSidebarView: View {
     /// actualiser toutes les dépendances au Model
     private func resetSimulation() {
         // remettre à zéro la simulation et sa vue
-        simulation.notifyComputationInputsModification()
+        simulationReseter.notifyComputationInputsModification()
         uiState.resetSimulationView()
     }
 

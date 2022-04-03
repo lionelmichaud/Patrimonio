@@ -12,11 +12,13 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 import HelpersView
+import SimulationAndVisitors
 
 struct PatrimoineSidebarView: View {
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var dataStore  : Store
+    let simulationReseter: CanResetSimulationP
     @State private var alertItem              : AlertItem?
     
     var body: some View {
@@ -39,10 +41,10 @@ struct PatrimoineSidebarView: View {
                         PatrimoineTotalView()
 
                         // actifs
-                        AssetSidebarView()
+                        AssetSidebarView(simulationReseter: simulationReseter)
 
                         // passifs
-                        LiabilitySidebarView()
+                        LiabilitySidebarView(simulationReseter: simulationReseter)
 
                     }
                 }
@@ -98,7 +100,7 @@ struct PatrimoineSidebarView_Previews: PreviewProvider {
     static var previews: some View {
         TestEnvir.loadTestFilesFromBundle()
         return TabView {
-            PatrimoineSidebarView()
+            PatrimoineSidebarView(simulationReseter: TestEnvir.simulation)
                 .tabItem { Label("Patrimoine", systemImage: "dollarsign.circle.fill") }
                 .tag(UIState.Tab.asset)
                 .environmentObject(TestEnvir.dataStore)

@@ -15,6 +15,7 @@ import SimulationAndVisitors
 struct AssetSidebarView: View {
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var patrimoine : Patrimoin
+    let simulationReseter: CanResetSimulationP
     private let indentLevel = 0
     private let label = "Actif"
 
@@ -41,8 +42,8 @@ struct AssetSidebarView: View {
         DisclosureGroup(isExpanded: $uiState.patrimoineViewState.assetViewState.expandAsset) {
             /// Immobilier
             DisclosureGroup(isExpanded: $uiState.patrimoineViewState.assetViewState.expandImmobilier) {
-                RealEstateSidebarView()
-                ScpiSidebarView()
+                RealEstateSidebarView(simulationReseter: simulationReseter)
+                ScpiSidebarView(simulationReseter: simulationReseter)
             } label: {
                 LabeledValueRowView(label       : "Immobilier",
                                      value       : totalImmobilier,
@@ -53,8 +54,8 @@ struct AssetSidebarView: View {
 
             /// Financier
             DisclosureGroup(isExpanded: $uiState.patrimoineViewState.assetViewState.expandFinancier) {
-                PeriodicInvestSidebarView()
-                FreeInvestSidebarView()
+                PeriodicInvestSidebarView(simulationReseter: simulationReseter)
+                FreeInvestSidebarView(simulationReseter: simulationReseter)
             } label: {
                 LabeledValueRowView(label       : "Financier",
                                      value       : totalFinancier,
@@ -65,7 +66,7 @@ struct AssetSidebarView: View {
 
             /// SCI
             DisclosureGroup(isExpanded: $uiState.patrimoineViewState.assetViewState.expandSCI) {
-                SciScpiSidebarView()
+                SciScpiSidebarView(simulationReseter: simulationReseter)
             } label: {
                 LabeledValueRowView(label       : "SCI",
                                      value       : totalSCI,
@@ -84,37 +85,32 @@ struct AssetSidebarView: View {
 }
 
 struct AssetView_Previews: PreviewProvider {
-    static var family     = Family()
-    static var patrimoine = Patrimoin()
-    static var simulation = Simulation()
-    static var uiState    = UIState()
-
     static var previews: some View {
-        return
-            Group {
-                    NavigationView {
-                        List {
-                        AssetSidebarView()
-                            .environmentObject(family)
-                            .environmentObject(patrimoine)
-                            .environmentObject(simulation)
-                            .environmentObject(uiState)
-                        }
+        TestEnvir.loadTestFilesFromTemplate()
+        return Group {
+            NavigationView {
+                List {
+                    AssetSidebarView(simulationReseter: TestEnvir.simulation)
+                        .environmentObject(TestEnvir.family)
+                        .environmentObject(TestEnvir.patrimoine)
+                        .environmentObject(TestEnvir.uiState)
                 }
-                    .colorScheme(.dark)
-                    .previewDisplayName("AssetView")
-
-                NavigationView {
-                    List {
-                        AssetSidebarView()
-                            .environmentObject(family)
-                            .environmentObject(patrimoine)
-                            .environmentObject(simulation)
-                            .environmentObject(uiState)
-                    }
-                }
-                    .colorScheme(.light)
-                    .previewDisplayName("AssetView")
+                EmptyView()
             }
+            .colorScheme(.dark)
+            .previewDisplayName("AssetView")
+
+            NavigationView {
+                List {
+                    AssetSidebarView(simulationReseter: TestEnvir.simulation)
+                        .environmentObject(TestEnvir.family)
+                        .environmentObject(TestEnvir.patrimoine)
+                        .environmentObject(TestEnvir.uiState)
+                }
+                EmptyView()
+            }
+            .colorScheme(.light)
+            .previewDisplayName("AssetView")
+        }
     }
 }

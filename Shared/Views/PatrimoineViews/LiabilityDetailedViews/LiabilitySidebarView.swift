@@ -16,6 +16,7 @@ import SimulationAndVisitors
 struct LiabilitySidebarView: View {
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var patrimoine : Patrimoin
+    let simulationReseter: CanResetSimulationP
     private let indentLevel = 0
     private let label = "Passif"
 
@@ -25,8 +26,8 @@ struct LiabilitySidebarView: View {
 
     var body: some View {
         DisclosureGroup(isExpanded: $uiState.patrimoineViewState.liabViewState.expandLiab) {
-            LoanSidebarView()
-            DebtSidebarView()
+            LoanSidebarView(simulationReseter: simulationReseter)
+            DebtSidebarView(simulationReseter: simulationReseter)
         } label: {
             LabeledValueRowView(label       : label,
                                  value       : totalDebt,
@@ -42,13 +43,13 @@ struct LiabilityView_Previews: PreviewProvider {
         TestEnvir.loadTestFilesFromTemplate()
         return NavigationView {
             List {
-                LiabilitySidebarView()
+                LiabilitySidebarView(simulationReseter: TestEnvir.simulation)
                     .environmentObject(TestEnvir.family)
                     .environmentObject(TestEnvir.patrimoine)
-                    .environmentObject(TestEnvir.simulation)
                     .environmentObject(TestEnvir.uiState)
                     .previewDisplayName("LiabilityView")
             }
+            EmptyView()
         }
     }
 }

@@ -16,7 +16,7 @@ struct PeriodicInvestSidebarView: View {
     @EnvironmentObject var uiState    : UIState
     @EnvironmentObject var family     : Family
     @EnvironmentObject var patrimoine : Patrimoin
-    @EnvironmentObject var simulation : Simulation
+    let simulationReseter: CanResetSimulationP
     private let indentLevel = 2
     private let label       = "Investissement Périodique"
     private let iconAdd     = Image(systemName : "plus.circle.fill")
@@ -67,7 +67,7 @@ struct PeriodicInvestSidebarView: View {
     /// actualiser toutes les dépendances au Model
     private func resetSimulation() {
         // remettre à zéro la simulation et sa vue
-        simulation.notifyComputationInputsModification()
+        simulationReseter.notifyComputationInputsModification()
         uiState.resetSimulationView()
     }
 

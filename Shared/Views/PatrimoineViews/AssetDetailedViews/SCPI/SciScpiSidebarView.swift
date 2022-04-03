@@ -14,9 +14,9 @@ import SimulationAndVisitors
 
 struct SciScpiSidebarView: View {
     @EnvironmentObject private var family     : Family
-    @EnvironmentObject private var simulation : Simulation
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var uiState    : UIState
+    let simulationReseter: CanResetSimulationP
     private let indentLevel = 2
     private let label       = "SCPI"
     private let iconAdd     = Image(systemName : "plus.circle.fill")
@@ -63,7 +63,7 @@ struct SciScpiSidebarView: View {
     /// actualiser toutes les dépendances au Model
     private func resetSimulation() {
         // remettre à zéro la simulation et sa vue
-        simulation.notifyComputationInputsModification()
+        simulationReseter.notifyComputationInputsModification()
         uiState.resetSimulationView()
     }
 
@@ -104,4 +104,3 @@ struct SciScpiSidebarView: View {
         patrimoine.assets.scpis.move(from: source, to: destination)
     }
 }
-

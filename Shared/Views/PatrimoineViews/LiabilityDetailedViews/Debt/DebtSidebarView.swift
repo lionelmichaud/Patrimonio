@@ -15,8 +15,8 @@ import SimulationAndVisitors
 struct DebtSidebarView: View {
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var patrimoine : Patrimoin
-    @EnvironmentObject private var simulation : Simulation
     @EnvironmentObject private var uiState    : UIState
+    let simulationReseter: CanResetSimulationP
     private let indentLevel = 2
     private let label       = "Dette"
     private let iconAdd     = Image(systemName : "plus.circle.fill")
@@ -68,7 +68,7 @@ struct DebtSidebarView: View {
     /// actualiser toutes les dépendances au Model
     private func resetSimulation() {
         // remettre à zéro la simulation et sa vue
-        simulation.notifyComputationInputsModification()
+        simulationReseter.notifyComputationInputsModification()
         uiState.resetSimulationView()
     }
 

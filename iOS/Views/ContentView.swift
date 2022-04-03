@@ -40,7 +40,7 @@ struct ContentView: View {
                 .tag(UIState.Tab.expense)
 
             /// actifs & passifs du patrimoine de la famille
-            PatrimoineSidebarView()
+            PatrimoineSidebarView(simulationReseter: simulation)
                 .tabItem { Label("Patrimoine", systemImage: "eurosign.circle").symbolVariant(.none) }
                 .tag(UIState.Tab.asset)
 
