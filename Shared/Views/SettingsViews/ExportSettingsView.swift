@@ -34,40 +34,38 @@ struct ExportSettingsView: View {
             if shareCsvFiles || shareImageFiles {
                 Section(header: Text("Contexte de Simulation").font(.subheadline),
                         footer: Text("Sélectionner les autres données à partager avec les résultats de simulation")) {
-                    Toggle("Partager tous les fichiers de votre dossier",
-                           isOn: $shareAllDossierFilesWithSimuResults)
-                        .onChange(of: shareAllDossierFilesWithSimuResults) { newValue in
-                            shareAllDossierFilesWithSimuResults = newValue
-                            if newValue {
+                    Toggle("Partager **tous** les fichiers de votre dossier (membres de la famille, dépenses et patrimoine associés)",
+                           isOn: $shareAllDossierFilesWithSimuResults.animation(.easeInOut))
+                        .onChange(of: shareAllDossierFilesWithSimuResults) { share in
+                            if share {
                                 shareFamilyFilesWithSimuResults     = true
                                 shareExpensesFilesWithSimuResults   = true
                                 sharePatrimoineFilesWithSimuResults = true
                             }
                         }
-                    Toggle("Partager les données des membres de la famille",
-                           isOn: $shareFamilyFilesWithSimuResults)
-                        .onChange(of: shareFamilyFilesWithSimuResults) { newValue in
-                            shareFamilyFilesWithSimuResults = newValue
-                            if !newValue {
+                    if !shareAllDossierFilesWithSimuResults {
+                        Toggle("Partager les données des **membres** de la famille",
+                               isOn: $shareFamilyFilesWithSimuResults)
+                        .onChange(of: shareFamilyFilesWithSimuResults) { share in
+                            if !share {
                                 shareAllDossierFilesWithSimuResults = false
                             }
                         }
-                    Toggle("Partager les données des dépenses de la famille",
-                           isOn: $shareExpensesFilesWithSimuResults)
-                        .onChange(of: shareExpensesFilesWithSimuResults) { newValue in
-                            shareExpensesFilesWithSimuResults = newValue
-                            if !newValue {
+                        Toggle("Partager les données de **dépenses** de la famille",
+                               isOn: $shareExpensesFilesWithSimuResults)
+                        .onChange(of: shareExpensesFilesWithSimuResults) { share in
+                            if !share {
                                 shareAllDossierFilesWithSimuResults = false
                             }
                         }
-                    Toggle("Partager les données patrimoniales de la famille",
-                           isOn: $sharePatrimoineFilesWithSimuResults)
-                        .onChange(of: sharePatrimoineFilesWithSimuResults) { newValue in
-                            sharePatrimoineFilesWithSimuResults = newValue
-                            if !newValue {
+                        Toggle("Partager les données sur le **patrimoniales** de la famille",
+                               isOn: $sharePatrimoineFilesWithSimuResults)
+                        .onChange(of: sharePatrimoineFilesWithSimuResults) { share in
+                            if !share {
                                 shareAllDossierFilesWithSimuResults = false
                             }
                         }
+                    }
                 }
             }
         }
