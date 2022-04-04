@@ -7,6 +7,11 @@
     
     "revisionHistory" : [
         {
+            "version" : "4.7.1",
+            "date"    : "2022-04-04T23:00:00+01:00",
+            "comment" : "Introduction de Transac pour la modification/création réversibles d'objets Expense, Patrimoine, Model"
+        },
+        {
             "version" : "4.7.0",
             "date"    : "2022-03-30T23:00:00+01:00",
             "comment" : "Modification du format de fichier JSON pour les randomizers du modèle Sociologique"
