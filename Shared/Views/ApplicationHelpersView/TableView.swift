@@ -59,7 +59,7 @@ struct ListTableRowView<RatingView1: View, RatingView2: View>: View {
                                 leading: ListTheme[indentLevel].indent,
                                 bottom: 0,
                                 trailing: 0))
-            .listRowBackground(ListTheme.rowsBaseColor.opacity(header ? ListTheme[indentLevel].opacity:0.0))
+            .listRowBackground(ListTheme.tableRowsBaseColor.opacity(header ? ListTheme[indentLevel].opacity:0.0))
     }
 }
 

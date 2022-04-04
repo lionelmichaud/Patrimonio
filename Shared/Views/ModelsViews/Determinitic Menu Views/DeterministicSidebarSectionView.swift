@@ -7,20 +7,21 @@
 
 import SwiftUI
 import ModelEnvironment
-import Persistence
 import PatrimoineModel
 import SimulationAndVisitors
 import FamilyModel
 
 struct DeterministicSidebarSectionView: View {
     @EnvironmentObject private var model      : Model
+    @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
     @EnvironmentObject private var uiState    : UIState
     
     var body: some View {
         Section(header: Text("Modèles Déterministe")) {
             // modèle vie humaine
-            NavigationLink(destination: ModelDeterministicHumanView(),
+            NavigationLink(destination: ModelDeterministicHumanView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                    subModel: $model.humanLifeModel.transaction()),
                            tag         : .detHumanModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Label("Modèle Humain", systemImage: "slider.horizontal.3")
@@ -28,7 +29,8 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle économie
-            NavigationLink(destination: ModelDeterministicEconomyView(),
+            NavigationLink(destination: ModelDeterministicEconomyView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                      subModel: $model.economyModel.randomizers.transaction()),
                            tag         : .detEconomyModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Label("Modèle Economique", systemImage: "slider.horizontal.3")
@@ -36,7 +38,8 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle sociologie
-            NavigationLink(destination: ModelDeterministicSociologyView(),
+            NavigationLink(destination: ModelDeterministicSociologyView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                        subModel: $model.socioEconomyModel.randomizers.transaction()),
                            tag         : .detSociologyModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Label("Modèle Sociologique", systemImage: "slider.horizontal.3")
@@ -44,7 +47,7 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle sociologie
-            NavigationLink(destination: ModelDeterministicRetirementView(),
+            NavigationLink(destination: ModelDeterministicRetirementView(updateDependenciesToModel: updateDependenciesToModel),
                            tag         : .detRetirementModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Label("Modèle Retraite", systemImage: "slider.horizontal.3")
@@ -52,7 +55,8 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle sociologie
-            NavigationLink(destination: ModelDeterministicFiscalView(),
+            NavigationLink(destination: ModelDeterministicFiscalView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                     subModel: $model.fiscalModel.transaction()),
                            tag         : .detFiscalModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Label("Modèle Fiscal", systemImage: "slider.horizontal.3")
@@ -60,14 +64,20 @@ struct DeterministicSidebarSectionView: View {
             .isDetailLink(true)
             
             // modèle sociologie
-            NavigationLink(destination: ModelDeterministicUnemploymentView(),
+            NavigationLink(destination: ModelDeterministicUnemploymentView(updateDependenciesToModel: updateDependenciesToModel,
+                                                                           subModel: $model.unemploymentModel.allocationChomage.model.transaction()),
                            tag         : .detUnemploymentModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Label("Modèle Chômage", systemImage: "slider.horizontal.3")
             }
             .isDetailLink(true)
+        }
+    }
 
-       }
+    /// actualiser toutes les dépendances au Model
+    private func updateDependenciesToModel() {
+        DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
+        model.manageInternalDependencies()
     }
 }
 
@@ -78,8 +88,9 @@ struct DeterministicSectionView_Previews: PreviewProvider {
             NavigationView {
                 DeterministicSidebarSectionView()
                     .environmentObject(TestEnvir.model)
-                    .environmentObject(TestEnvir.uiState)
+                    .environmentObject(TestEnvir.family)
                     .environmentObject(TestEnvir.simulation)
+                    .environmentObject(TestEnvir.uiState)
                 EmptyView()
             }
     }

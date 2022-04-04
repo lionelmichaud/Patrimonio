@@ -16,24 +16,30 @@ public typealias DebtArray = ArrayOfNameableValuable<Debt>
 /// stock de dette incrémentable ou diminuable
 public struct Debt: Codable, Identifiable, NameableValuableP, OwnableP {
     
+    // MARK: - Type Properties
+
+    public static let prototype = Debt()
+
     // MARK: - Properties
-    
-    public var id    = UUID()
-    public var name  : String = ""
-    public var note  : String = ""
+
+    public var id   = UUID()
+    public var name : String = ""
+    public var note : String = ""
     // propriétaires
     // attention: par défaut la méthode delegate pour ageOf = nil
     // c'est au créateur de l'objet (View ou autre objet du Model) de le faire
     public var ownership : Ownership = Ownership()
-    public var value     : Double
+    public var value     : Double = 0
     
     // MARK: - Initializers
     
-    public init(name  : String = "",
-                note  : String = "",
-                value : Double) {
+    public init(name             : String = "",
+                note             : String = "",
+                value            : Double = 0,
+                delegateForAgeOf : ((_ name : String, _ year : Int) -> Int)? = nil) {
         self.name = name
         self.note = note
+        self.ownership.setDelegateForAgeOf(delegate: delegateForAgeOf)
         self.value = value
     }
     
@@ -60,6 +66,24 @@ public struct Debt: Codable, Identifiable, NameableValuableP, OwnableP {
 extension Debt: Comparable {
     public static func < (lhs: Debt, rhs: Debt) -> Bool {
         (lhs.name < rhs.name)
+    }
+}
+
+extension Debt {
+    /// Vérifie que l'objet est valide
+    /// - Warning: Override la méthode par défaut `isValid` du protocole `OwnableP`
+    public var isValid: Bool {
+        /// vérifier que le nom n'est pas vide
+        guard name != "" else {
+            return false
+        }
+        guard ownership.isValid else {
+            return false
+        }
+        guard value.isNOZ else {
+            return false
+        }
+        return true
     }
 }
 

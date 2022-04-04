@@ -23,7 +23,7 @@ public typealias DemembrementSlice = DemembrementModel.Slice
 public typealias DemembrementGrid = [DemembrementModel.Slice]
 
 ///  - Note: [Reference](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006310173/)
-public struct DemembrementModel: Codable, DemembrementProviderP {
+public struct DemembrementModel: Codable, Equatable, DemembrementProviderP {
 
     // MARK: - Nested types
 
@@ -46,7 +46,7 @@ public struct DemembrementModel: Codable, DemembrementProviderP {
     }
     
     /// Ne contient aucune Class
-    public struct Model: JsonCodableToBundleP, VersionableP {
+    public struct Model: JsonCodableToBundleP, VersionableP, Equatable {
         public static var defaultFileName : String = "DemembrementModel.json"
         public var version : Version
         public var grid    : [Slice]

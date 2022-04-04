@@ -46,7 +46,7 @@ struct PersonAddView: View {
             HStack {
                 Button(action: { self.presentationMode.wrappedValue.dismiss() },
                        label: { Text("Annuler") })
-                    .capsuleButtonStyle()
+                    .buttonStyle(.bordered)
                 
                 Spacer()
                 Text("Ajouter...").font(.title).fontWeight(.bold)
@@ -54,7 +54,7 @@ struct PersonAddView: View {
                 
                 Button(action: addMember,
                        label: { Text("OK") })
-                    .capsuleButtonStyle()
+                    .buttonStyle(.bordered)
                     .disabled(!formIsValid())
             }
             .padding(.horizontal)

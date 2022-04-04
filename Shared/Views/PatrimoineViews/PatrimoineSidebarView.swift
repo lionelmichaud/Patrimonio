@@ -12,47 +12,54 @@ import Persistence
 import PatrimoineModel
 import FamilyModel
 import HelpersView
+import SimulationAndVisitors
 
 struct PatrimoineSidebarView: View {
     @EnvironmentObject private var uiState    : UIState
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var dataStore  : Store
-    @State private var alertItem              : AlertItem?
+    let simulationReseter: CanResetSimulationP
+    @State private var alertItem: AlertItem?
     
     var body: some View {
         NavigationView {
             /// Primary view
-            List {
-                // entête
-                PatrimoineHeaderView()
-                
+            Group {
                 if dataStore.activeDossier != nil {
                     Button("Réinitialiser à partir du dossier",
                            action: reinitialize)
-                        //.capsuleButtonStyle()
-                        .disabled(dataStore.activeDossier!.folder == nil)
-                    
-                    PatrimoineTotalView()
-                    
-                    // actifs
-                    AssetView()
-                    
-                    // passifs
-                    LiabilityView()
+                    .disabled(dataStore.activeDossier == nil || dataStore.activeDossier!.folder == nil)
+                    .buttonStyle(.bordered)
                 }
-            }
-            .defaultSideBarListStyle()
-            //.listStyle(GroupedListStyle())
-            .environment(\.horizontalSizeClass, .regular)
-            .navigationTitle("Patrimoine")
-            .toolbar {
-                EditButton()
+
+                List {
+                    // entête
+                    PatrimoineHeaderView()
+
+                    if dataStore.activeDossier != nil {
+                        // Bilan net = Actif - Passif
+                        PatrimoineTotalView()
+
+                        // actifs
+                        AssetSidebarView(simulationReseter: simulationReseter)
+
+                        // passifs
+                        LiabilitySidebarView(simulationReseter: simulationReseter)
+
+                    }
+                }
+                .listStyle(.sidebar)
             }
 
             /// vue par défaut
             PatrimoineSummaryView()
         }
+        .environment(\.horizontalSizeClass, .regular)
         .navigationViewStyle(.columns)
+        .navigationTitle("Patrimoine")
+        .toolbar {
+            EditButton()
+        }
     }
     
     private func reinitialize() {
@@ -71,33 +78,22 @@ struct PatrimoineTotalView: View {
     @EnvironmentObject private var patrimoine : Patrimoin
 
     var body: some View {
-        Section {
-            HStack {
-                Text("Actif Net")
-                    .font(Font.system(size: 17,
-                                      design: Font.Design.default))
-                    .fontWeight(.bold)
-                Spacer()
-                Text(patrimoine.value(atEndOf: CalendarCst.thisYear).€String)
-                    .font(Font.system(size: 17,
-                                      design: Font.Design.default))
-            }
-            .listRowBackground(ListTheme.rowsBaseColor)
-        }
+        LabeledValueRowView(label       : "Actif Net",
+                             value       : patrimoine.value(atEndOf: CalendarCst.thisYear),
+                             indentLevel : 0,
+                             header      : true,
+                             iconItem    : nil)
+        .padding([.top, .bottom])
     }
 }
 
 struct PatrimoineHeaderView: View {
-    @EnvironmentObject var patrimoine: Patrimoin
-    
     var body: some View {
-        Section {
-            NavigationLink(destination: PatrimoineSummaryView()) {
-                Label(title: { Text("Synthèse") },
-                      icon : { Image(systemName: "eurosign.circle.fill").imageScale(.large) })
-                .font(.title3)
-            }.isDetailLink(true)
-        }
+        NavigationLink(destination: PatrimoineSummaryView()) {
+            Label(title: { Text("Synthèse") },
+                  icon : { Image(systemName: "eurosign.circle.fill").imageScale(.large) })
+            .font(.title3)
+        }.isDetailLink(true)
     }
 }
 
@@ -105,7 +101,7 @@ struct PatrimoineSidebarView_Previews: PreviewProvider {
     static var previews: some View {
         TestEnvir.loadTestFilesFromBundle()
         return TabView {
-            PatrimoineSidebarView()
+            PatrimoineSidebarView(simulationReseter: TestEnvir.simulation)
                 .tabItem { Label("Patrimoine", systemImage: "dollarsign.circle.fill") }
                 .tag(UIState.Tab.asset)
                 .environmentObject(TestEnvir.dataStore)

@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import AppFoundation
 import ModelEnvironment
 import Statistics
 import HelpersView
 
 struct DiscreteRandomizerEditView: View {
-    @EnvironmentObject private var model : Model
-    @Binding var discreteRandomizer: ModelRandomizer<DiscreteRandomGenerator>
+    let updateDependenciesToModel: ( ) -> Void
+    @Transac var discreteRandomizer: ModelRandomizer<DiscreteRandomGenerator>
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -23,21 +24,25 @@ struct DiscreteRandomizerEditView: View {
             
             // édition des paramètres de la loi discrète
             NavigationLink(destination: PointGridView(label: "Probability Density Function",
-                                                      grid: $discreteRandomizer.rndGenerator.pdf),
+                                                      grid: $discreteRandomizer.rndGenerator.pdf.transaction(),
+                                                      updateDependenciesToModel: updateDependenciesToModel),
                            label: {
-                            Text("Editer la distribution statistique")
-                                .padding([.leading, .top])
+                                Text("Editer la distribution statistique")
+                                    .padding([.leading, .top])
                            })
             
             // graphique
             DiscreteRandomizerView(randomizer: discreteRandomizer)
         }
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(subModel                  : $discreteRandomizer,
+                              updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
 struct DiscreteRandomizerEditView_Previews: PreviewProvider {
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return DiscreteRandomizerEditView(discreteRandomizer: .constant(TestEnvir.model.socioEconomyModel.nbTrimTauxPlein))
+        DiscreteRandomizerEditView(updateDependenciesToModel: { },
+                                   discreteRandomizer: .init(source: TestEnvir.model.socioEconomyModel.randomizers.nbTrimTauxPlein))
     }
 }

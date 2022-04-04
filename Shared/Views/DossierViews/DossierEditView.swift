@@ -23,7 +23,7 @@ struct DossierEditView: View {
         HStack {
             Button(action: { self.presentationMode.wrappedValue.dismiss() },
                    label: { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
 
             Spacer()
             Text(title).font(.title).fontWeight(.bold)
@@ -31,7 +31,7 @@ struct DossierEditView: View {
 
             Button(action: commit,
                    label: { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 .disabled(!dossierVM.isValid())
         }
         .padding(.horizontal)

@@ -15,8 +15,6 @@ import SimulationAndVisitors
 
 struct ModelsSidebarView: View {
     @EnvironmentObject private var dataStore : Store
-    @EnvironmentObject private var model     : Model
-    @EnvironmentObject private var uiState   : UIState
     
     enum PushedItem {
         case deterministicModel,
@@ -56,7 +54,7 @@ struct ModelsSidebarView: View {
             
             /// vue par défaut
             if dataStore.activeDossier != nil {
-                ModelDeterministicHumanView()
+                ModelManagerView()
             } else {
                 NoLoadedDossierView()
             }

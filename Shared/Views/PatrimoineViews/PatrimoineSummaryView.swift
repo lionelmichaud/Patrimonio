@@ -60,7 +60,7 @@ struct PatrimoineSummaryView: View {
                             Image(systemName: "square.and.arrow.up.on.square")
                                 .imageScale(.large)
                         })
-                            .capsuleButtonStyle()
+                            .buttonStyle(.bordered)
                     }
                 }
             }

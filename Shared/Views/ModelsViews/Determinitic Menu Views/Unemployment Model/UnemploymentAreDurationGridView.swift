@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import UnemployementModel
 import HelpersView
 
@@ -13,18 +14,19 @@ typealias DurationSlice = UnemploymentCompensation.DurationSlice
 typealias DurationGrid = [DurationSlice]
 
 typealias UnemploymentAreDurationGridView = GridView<DurationSlice,
-                                                     DurationSliceView,
-                                                     DurationSliceAddView,
-                                                     DurationSliceEditView>
+                                                      DurationSliceView,
+                                                      DurationSliceAddView,
+                                                      DurationSliceEditView>
 extension UnemploymentAreDurationGridView {
-    init(label : String,
-         grid  : Binding<[DurationSlice]>) {
-        self = UnemploymentAreDurationGridView(label          : label,
-                                               grid           : grid,
-                                               initializeGrid : { _ in },
-                                               displayView    : { slice in DurationSliceView(slice: slice) },
-                                               addView        : { grid in DurationSliceAddView(grid: grid) },
-                                               editView       : { grid, idx in DurationSliceEditView(grid: grid, idx: idx) })
+    init(label                     : String,
+         grid                      : Transac<[DurationSlice]>,
+         updateDependenciesToModel : @escaping ( ) -> Void) {
+        self = UnemploymentAreDurationGridView(label        : label,
+                                               grid         : grid,
+                                               displayView  : { slice in DurationSliceView(slice: slice) },
+                                               addView      : { grid in DurationSliceAddView(grid: grid) },
+                                               editView     : { grid, idx in DurationSliceEditView(grid: grid, idx: idx) },
+                                               updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
@@ -54,13 +56,13 @@ struct DurationSliceView: View {
 // MARK: - Edit a DurationSlice of the Grid [année naissance, nb trimestre, age taux plein]
 
 struct DurationSliceEditView: View {
-    @Binding private var grid: DurationGrid
+    @Transac private var grid: DurationGrid
     private var idx: Int
     @Environment(\.presentationMode) var presentationMode
     @State private var modifiedSlice : DurationSlice
     @State private var alertItem     : AlertItem?
 
-    init(grid : Binding<DurationGrid>,
+    init(grid : Transac<DurationGrid>,
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
@@ -76,13 +78,13 @@ struct DurationSliceEditView: View {
         HStack {
             Button(action : { self.presentationMode.wrappedValue.dismiss() },
                    label  : { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
             Button(action : updateSlice,
                    label  : { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
         }
@@ -131,7 +133,7 @@ struct DurationSliceEditView: View {
 // MARK: - Add a ExonerationSlice to the Grid [année naissance, nb trimestre, age taux plein]
 
 struct DurationSliceAddView: View {
-    @Binding var grid: DurationGrid
+    @Transac var grid: DurationGrid
     @Environment(\.presentationMode) var presentationMode
     @State private var newSlice = DurationSlice(fromAge             : 0,
                                                 maxDuration         : 0,
@@ -144,13 +146,13 @@ struct DurationSliceAddView: View {
         HStack {
             Button(action: { self.presentationMode.wrappedValue.dismiss() },
                    label: { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
             Button(action: addSlice,
                    label: { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
         }
@@ -225,15 +227,10 @@ struct UnemploymentAreDurationGridView_Previews: PreviewProvider {
     }
 
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return
-            NavigationView {
-                NavigationLink("Test", destination: UnemploymentAreDurationGridView(label: "Nom",
-                                                                           grid : .constant(grid()))
-                                .environmentObject(TestEnvir.dataStore)
-                                .environmentObject(TestEnvir.model)
-                                .environmentObject(TestEnvir.family)
-                                .environmentObject(TestEnvir.simulation))
+        NavigationView {
+            NavigationLink("Test", destination: UnemploymentAreDurationGridView(label: "Nom",
+                                                                                grid : .init(source: grid()),
+                                                                                updateDependenciesToModel: { }))
         }
         .preferredColorScheme(.dark)
         .previewLayout(.fixed(width: 700.0, height: 400.0))

@@ -16,28 +16,29 @@ struct ListTheme {
         let opacity         : Double
     }
     
-    static let rowsBaseColor = Color("listRowBaseColor")
+    static let listRowsBaseColor = Color("listRowBaseColor")
+    static let tableRowsBaseColor = Color("tableRowBaseColor")
     static var shared: [ListRowTheme] = [
         // 0
         ListRowTheme(indent          : 0,
-                     labelFontSize   : 17,
-                     valueFontSize   : 17,
+                     labelFontSize   : 20,
+                     valueFontSize   : 20,
                      opacity         : 1.0),
         // 1
-        ListRowTheme(indent          : 0,
+        ListRowTheme(indent          : 20,
+                     labelFontSize   : 18,
+                     valueFontSize   : 18,
+                     opacity         : 0.8),
+        // 2
+        ListRowTheme(indent          : 25,
                      labelFontSize   : 16,
                      valueFontSize   : 16,
-                     opacity         : 0.5),
-        // 2
-        ListRowTheme(indent          : 0,
+                     opacity         : 0.6),
+        // 3
+        ListRowTheme(indent          : 30,
                      labelFontSize   : 15,
                      valueFontSize   : 15,
-                     opacity         : 0.25),
-        // 3
-        ListRowTheme(indent          : 0,
-                     labelFontSize   : 14,
-                     valueFontSize   : 14,
-                     opacity         : 0.0)
+                     opacity         : 0.4)
     ]
     static subscript(idx: Int) -> ListRowTheme {
         ListTheme.shared[idx]

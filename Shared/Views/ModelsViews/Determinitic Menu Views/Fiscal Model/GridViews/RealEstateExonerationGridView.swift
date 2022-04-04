@@ -13,18 +13,20 @@ import HelpersView
 // MARK: - Editeur de ExonerationSlice [année, discount %, sum %]
 
 typealias RealEstateExonerationGridView = GridView<ExonerationSlice,
-                                                   RealEstateExonerationSliceView,
-                                                   RealEstateExonerationSliceAddView,
-                                                   RealEstateExonerationSliceEditView>
+                                                    RealEstateExonerationSliceView,
+                                                    RealEstateExonerationSliceAddView,
+                                                    RealEstateExonerationSliceEditView>
 extension RealEstateExonerationGridView {
     init(label : String,
-         grid  : Binding<[ExonerationSlice]>) {
+         grid  : Transac<[ExonerationSlice]>,
+         updateDependenciesToModel : @escaping ( ) -> Void) {
         self = RealEstateExonerationGridView(label          : label,
                                              grid           : grid,
                                              initializeGrid : { grid in grid.initialize()},
                                              displayView    : { slice in RealEstateExonerationSliceView(slice: slice) },
                                              addView        : { grid in RealEstateExonerationSliceAddView(grid: grid) },
-                                             editView       : { grid, idx in RealEstateExonerationSliceEditView(grid: grid, idx: idx) })
+                                             editView       : { grid, idx in RealEstateExonerationSliceEditView(grid: grid, idx: idx) },
+                                             updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
@@ -52,13 +54,13 @@ struct RealEstateExonerationSliceView: View {
 // MARK: - Edit a ExonerationSlice of the Grid [année, discount %, sum %]
 
 struct RealEstateExonerationSliceEditView: View {
-    @Binding private var grid: ExonerationGrid
+    @Transac private var grid: ExonerationGrid
     private var idx: Int
     @Environment(\.presentationMode) var presentationMode
     @State private var modifiedSlice : ExonerationSlice
     @State private var alertItem     : AlertItem?
 
-    init(grid : Binding<ExonerationGrid>,
+    init(grid : Transac<ExonerationGrid>,
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
@@ -72,13 +74,13 @@ struct RealEstateExonerationSliceEditView: View {
         HStack {
             Button(action : { self.presentationMode.wrappedValue.dismiss() },
                    label  : { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
             Button(action : updateSlice,
                    label  : { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
         }
@@ -121,7 +123,7 @@ struct RealEstateExonerationSliceEditView: View {
 // MARK: - Add a ExonerationSlice to the Grid [année, discount %, sum %]
 
 struct RealEstateExonerationSliceAddView: View {
-    @Binding var grid: ExonerationGrid
+    @Transac var grid: ExonerationGrid
     @Environment(\.presentationMode) var presentationMode
     @State private var newSlice = ExonerationSlice(floor        : 0,
                                                    discountRate : 0,
@@ -132,13 +134,13 @@ struct RealEstateExonerationSliceAddView: View {
         HStack {
             Button(action: { self.presentationMode.wrappedValue.dismiss() },
                    label: { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
             Button(action: addSlice,
                    label: { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
         }
@@ -199,17 +201,12 @@ struct RealEstateExonerationGridView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return
-            NavigationView {
-                NavigationLink("Test", destination: RealEstateExonerationGridView(label: "Nom",
-                                                                                  grid : .constant(grid()))
-                                .environmentObject(TestEnvir.dataStore)
-                                .environmentObject(TestEnvir.model)
-                                .environmentObject(TestEnvir.family)
-                                .environmentObject(TestEnvir.simulation))
-            }
-            .preferredColorScheme(.dark)
-            .previewLayout(.fixed(width: 700.0, height: 400.0))
+        NavigationView {
+            NavigationLink("Test", destination: RealEstateExonerationGridView(label: "Nom",
+                                                                              grid : .init(source: grid()),
+                                                                              updateDependenciesToModel: { }))
+        }
+        .preferredColorScheme(.dark)
+        .previewLayout(.fixed(width: 700.0, height: 400.0))
     }
 }

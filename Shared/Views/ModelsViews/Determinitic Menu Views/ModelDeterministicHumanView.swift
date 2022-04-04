@@ -6,107 +6,70 @@
 //
 
 import SwiftUI
-import Persistence
-import ModelEnvironment
-import FamilyModel
-import SimulationAndVisitors
+import AppFoundation
+import HumanLifeModel
 import HelpersView
 
 // MARK: - Deterministic HumanLife View
 
 struct ModelDeterministicHumanView: View {
-    @EnvironmentObject private var dataStore  : Store
-    @EnvironmentObject private var model      : Model
-    @EnvironmentObject private var family     : Family
-    @EnvironmentObject private var simulation : Simulation
-    @State private var alertItem              : AlertItem?
+    let updateDependenciesToModel: ( ) -> Void
+    @Transac var subModel: HumanLife.Model
+    @State private var alertItem: AlertItem?
     
     var body: some View {
         Form {
             Section(header: Text("Homme").font(.headline)) {
-                VersionEditableViewInForm(version: $model.humanLifeModel.menLifeExpectation.version)
+                VersionEditableViewInForm(version: $subModel.menLifeExpectation.version)
 
-                Stepper(value : $model.humanLifeModel.menLifeExpectation.defaultValue,
+                Stepper(value : $subModel.menLifeExpectation.defaultValue,
                         in    : 50 ... 100) {
                     HStack {
                         Text("Espérance de vie d'un Homme")
                         Spacer()
-                        Text("\(Int(model.humanLifeModel.menLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
+                        Text("\(Int(subModel.menLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
                     }
                 }
             }
 
             Section(header: Text("Femme").font(.headline)) {
-                VersionEditableViewInForm(version: $model.humanLifeModel.womenLifeExpectation.version)
+                VersionEditableViewInForm(version: $subModel.womenLifeExpectation.version)
 
-                Stepper(value : $model.humanLifeModel.womenLifeExpectation.defaultValue,
+                Stepper(value : $subModel.womenLifeExpectation.defaultValue,
                         in    : 50 ... 100) {
                     HStack {
                         Text("Espérance de vie d'une Femme")
                         Spacer()
-                        Text("\(Int(model.humanLifeModel.womenLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
+                        Text("\(Int(subModel.womenLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
                     }
                 }
             }
 
             Section(header: Text("Dépendance").font(.headline)) {
-                VersionEditableViewInForm(version: $model.humanLifeModel.nbOfYearsOfdependency.version)
+                VersionEditableViewInForm(version: $subModel.nbOfYearsOfdependency.version)
 
-                Stepper(value : $model.humanLifeModel.nbOfYearsOfdependency.defaultValue,
+                Stepper(value : $subModel.nbOfYearsOfdependency.defaultValue,
                         in    : 0 ... 10) {
                     HStack {
                         Text("Nombre d'années de dépendance")
                         Spacer()
-                        Text("\(Int(model.humanLifeModel.nbOfYearsOfdependency.defaultValue)) ans").foregroundColor(.secondary)
+                        Text("\(Int(subModel.nbOfYearsOfdependency.defaultValue)) ans").foregroundColor(.secondary)
                     }
                 }
             }
         }
-        .onChange(of: model.humanLifeModel) { _ in
-            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-            model.manageInternalDependencies()
-        }
         .navigationTitle("Modèle Humain")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar(
-            applyChangesToTemplate: {
-                alertItem = applyChangesToTemplateAlert(
-                    model     : model,
-                    notifyTemplatFolderMissing: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    },
-                    notifyFailure: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Echec de l'enregistrement"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    })
-            },
-            cancelChanges: {
-                alertItem = cancelChanges(
-                    to         : model,
-                    family     : family,
-                    simulation : simulation,
-                    dataStore  : dataStore)
-            },
-            isModified: model.isModified)
+        .modelChangesToolbar(subModel                  : $subModel,
+                              updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
 struct ModelDeterministicHumanView_Previews: PreviewProvider {
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return ModelDeterministicHumanView()
-            .environmentObject(TestEnvir.dataStore)
-            .environmentObject(TestEnvir.model)
-            .environmentObject(TestEnvir.family)
-            .environmentObject(TestEnvir.simulation)
-            .preferredColorScheme(.dark)
+        ModelDeterministicHumanView(updateDependenciesToModel: { },
+                                    subModel: .init(source: TestEnvir.model.humanLifeModel))
+        .preferredColorScheme(.dark)
     }
 }

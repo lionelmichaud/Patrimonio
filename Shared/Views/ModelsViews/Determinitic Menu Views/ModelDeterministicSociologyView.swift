@@ -6,120 +6,78 @@
 //
 
 import SwiftUI
-import Persistence
-import ModelEnvironment
-import FamilyModel
+import AppFoundation
+import SocioEconomyModel
 import HelpersView
-import SimulationAndVisitors
 
 // MARK: - Deterministic SocioEconomy View
 
 struct ModelDeterministicSociologyView: View {
-    @EnvironmentObject private var dataStore  : Store
-    @EnvironmentObject private var model      : Model
-    @EnvironmentObject private var family     : Family
-    @EnvironmentObject private var simulation : Simulation
-    @State private var alertItem              : AlertItem?
-    
+    let updateDependenciesToModel: ( ) -> Void
+    @Transac var subModel: SocioEconomy.RandomizersModel
+    @State private var alertItem: AlertItem?
+
     var body: some View {
         Form {
             Section(header: Text("Dévaluation des pensions").font(.headline)) {
-                VersionEditableViewInForm(version: $model.socioEconomyModel.pensionDevaluationRate.version)
+                VersionEditableViewInForm(version: $subModel.pensionDevaluationRate.version)
 
-                Stepper(value : $model.socioEconomyModel.pensionDevaluationRate.defaultValue,
+                Stepper(value : $subModel.pensionDevaluationRate.defaultValue,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Évolution anuelle des pensions de retraite")
                         Spacer()
-                        Text("\(model.socioEconomyModel.pensionDevaluationRate.defaultValue.percentString(digit: 1))")
+                        Text("\(subModel.pensionDevaluationRate.defaultValue.percentString(digit: 1))")
                             .foregroundColor(.secondary)
                     }
-                }
-                .onChange(of: model.socioEconomyModel.pensionDevaluationRate) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
                 }
             }
             
             Section(header: Text("Évolution du nombre de trimestres requis").font(.headline)) {
-                VersionEditableViewInForm(version: $model.socioEconomyModel.nbTrimTauxPlein.version)
+                VersionEditableViewInForm(version: $subModel.nbTrimTauxPlein.version)
 
-                Stepper(value : $model.socioEconomyModel.nbTrimTauxPlein.defaultValue,
+                Stepper(value : $subModel.nbTrimTauxPlein.defaultValue,
                         in    : 0 ... 12) {
                     HStack {
                         Text("Nombre de trimestres additionels pour obtenir le taux plein")
                         Spacer()
-                        Text("\(Int(model.socioEconomyModel.nbTrimTauxPlein.defaultValue)) ans")
+                        Text("\(Int(subModel.nbTrimTauxPlein.defaultValue)) ans")
                             .foregroundColor(.secondary)
                     }
-                }
-                .onChange(of: model.socioEconomyModel.nbTrimTauxPlein) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
                 }
             }
             
             Section(header: Text("Sous-estimation du niveau des dépenses").font(.headline)) {
-                VersionEditableViewInForm(version: $model.socioEconomyModel.expensesUnderEvaluationRate.version)
+                VersionEditableViewInForm(version: $subModel.expensesUnderEvaluationRate.version)
                 
-                Stepper(value : $model.socioEconomyModel.expensesUnderEvaluationRate.defaultValue,
+                Stepper(value : $subModel.expensesUnderEvaluationRate.defaultValue,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Pénalisation des dépenses")
                         Spacer()
-                        Text("\(model.socioEconomyModel.expensesUnderEvaluationRate.defaultValue.percentString(digit: 1))")
+                        Text("\(subModel.expensesUnderEvaluationRate.defaultValue.percentString(digit: 1))")
                             .foregroundColor(.secondary)
                     }
                 }
-                .onChange(of: model.socioEconomyModel.expensesUnderEvaluationRate) { _ in
-                    DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-                    model.manageInternalDependencies()
+                .onChange(of: subModel.expensesUnderEvaluationRate) { _ in
+                    updateDependenciesToModel()
                 }
             }
         }
         .navigationTitle("Modèle Sociologique")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar(
-            applyChangesToTemplate: {
-                alertItem = applyChangesToTemplateAlert(
-                    model     : model,
-                    notifyTemplatFolderMissing: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    },
-                    notifyFailure: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Echec de l'enregistrement"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    })
-            },
-            cancelChanges: {
-                alertItem = cancelChanges(
-                    to         : model,
-                    family     : family,
-                    simulation : simulation,
-                    dataStore  : dataStore)
-            },
-            isModified: model.isModified)
+        .modelChangesToolbar(subModel                  : $subModel,
+                              updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
 struct ModelDeterministicSociologyView_Previews: PreviewProvider {
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return ModelDeterministicSociologyView()
-            .environmentObject(TestEnvir.dataStore)
-            .environmentObject(TestEnvir.model)
-            .environmentObject(TestEnvir.family)
-            .environmentObject(TestEnvir.simulation)
+        ModelDeterministicSociologyView(updateDependenciesToModel: { },
+                                        subModel: .init(source: TestEnvir.model.socioEconomy.model!.randomizers))
             .preferredColorScheme(.dark)
     }
 }

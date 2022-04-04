@@ -102,9 +102,9 @@ struct PatrimoineSummaryTableView: View {
                     Text("Actif Net").fontWeight(.bold)
                     Spacer()
                     Text(patrimoine.value(atEndOf: year).€String)
-                }
+                }.font(.title3)
             }
-            .listRowBackground(ListTheme.rowsBaseColor)
+            .listRowBackground(ListTheme.tableRowsBaseColor)
             
             Section(header: header("ACTIF", year: year)) {
                 Group {

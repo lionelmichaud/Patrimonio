@@ -24,7 +24,7 @@ struct DossierAddView: View {
         HStack {
             Button(action: { self.presentationMode.wrappedValue.dismiss() },
                    label: { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
 
             Spacer()
             Text("Créer...").font(.title).fontWeight(.bold)
@@ -32,7 +32,7 @@ struct DossierAddView: View {
 
             Button(action: createDossier,
                    label: { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 .disabled(!formIsValid())
         }
         .padding(.horizontal)

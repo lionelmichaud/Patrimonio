@@ -13,9 +13,8 @@ import Persistence
 import HelpersView
 
 struct BetaRandomizerEditView : View {
-    @Binding var betaRandomizer: ModelRandomizer<BetaRandomGenerator>
-    @State var minX: Double
-    @State var maxX: Double
+    let updateDependenciesToModel: ( ) -> Void
+    @Transac var betaRandomizer: ModelRandomizer<BetaRandomGenerator>
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -26,33 +25,31 @@ struct BetaRandomizerEditView : View {
 
             // édition des paramètres de la loi beta
             HStack {
-                Stepper(value : $minX,
+                Stepper(value : $betaRandomizer.rndGenerator.minX ?? 1.0,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Minimum")
                         Spacer()
-                        Text("\(minX.percentString(digit: 1))")
+                        Text(betaRandomizer.rndGenerator.minX!.percentString(digit: 1))
                             .foregroundColor(.secondary)
                     }
                 }.padding(.trailing)
-                .onChange(of: minX) { value in
-                    betaRandomizer.rndGenerator.minX = value
+                .onChange(of: betaRandomizer.rndGenerator.minX) { _ in
                     betaRandomizer.rndGenerator.initialize()
                 }
                 
-                Stepper(value : $maxX,
+                Stepper(value : $betaRandomizer.rndGenerator.maxX ?? 1.0,
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
                         Text("Maximum")
                         Spacer()
-                        Text("\(maxX.percentString(digit: 1))")
+                        Text(betaRandomizer.rndGenerator.maxX!.percentString(digit: 1))
                             .foregroundColor(.secondary)
                     }
                 }.padding(.trailing)
-                .onChange(of: maxX) { value in
-                    betaRandomizer.rndGenerator.maxX = value
+                .onChange(of: betaRandomizer.rndGenerator.maxX) { _ in
                     betaRandomizer.rndGenerator.initialize()
                 }
                 
@@ -62,7 +59,8 @@ struct BetaRandomizerEditView : View {
                     HStack {
                         Text("Alpha")
                         Spacer()
-                        Text("\(betaRandomizer.rndGenerator.alpha as NSNumber, formatter: decimalFormatter)").foregroundColor(.secondary)
+                        Text("\(betaRandomizer.rndGenerator.alpha as NSNumber, formatter: decimalFormatter)")
+                            .foregroundColor(.secondary)
                     }
                 }.padding(.trailing)
                 .onChange(of: betaRandomizer.rndGenerator.alpha) { _ in
@@ -75,7 +73,8 @@ struct BetaRandomizerEditView : View {
                     HStack {
                         Text("Beta")
                         Spacer()
-                        Text("\(betaRandomizer.rndGenerator.beta as NSNumber, formatter: decimalFormatter)").foregroundColor(.secondary)
+                        Text("\(betaRandomizer.rndGenerator.beta as NSNumber, formatter: decimalFormatter)")
+                            .foregroundColor(.secondary)
                     }
                 }.onChange(of: betaRandomizer.rndGenerator.beta) { _ in
                     betaRandomizer.rndGenerator.initialize()
@@ -86,18 +85,15 @@ struct BetaRandomizerEditView : View {
             // graphique
             BetaRandomizerView(randomizer: betaRandomizer)
         }
-    }
-    
-    init(betaRandomizer: Binding<ModelRandomizer<BetaRandomGenerator>>) {
-        self._betaRandomizer = betaRandomizer
-        self._minX = State(initialValue: betaRandomizer.wrappedValue.rndGenerator.minX ?? 0)
-        self._maxX = State(initialValue: betaRandomizer.wrappedValue.rndGenerator.maxX ?? 1)
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(subModel                  : $betaRandomizer,
+                              updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
 struct BetaRandomizerEditView_Previews: PreviewProvider {
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return BetaRandomizerEditView(betaRandomizer: .constant(TestEnvir.model.economyModel.randomizers.inflation))
+        BetaRandomizerEditView(updateDependenciesToModel: { },
+                               betaRandomizer: .init(source: TestEnvir.model.economyModel.randomizers.inflation))
     }
 }

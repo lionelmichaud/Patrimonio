@@ -6,144 +6,108 @@
 //
 
 import SwiftUI
-import ModelEnvironment
-import Persistence
-import FamilyModel
-import SimulationAndVisitors
+import AppFoundation
+import FiscalModel
 import HelpersView
 
 struct ModelFiscalPensionView: View {
-    @EnvironmentObject private var dataStore  : Store
-    @EnvironmentObject private var model      : Model
-    @EnvironmentObject private var family     : Family
-    @EnvironmentObject private var simulation : Simulation
-    @State private var alertItem              : AlertItem?
+    let updateDependenciesToModel: ( ) -> Void
+    @Transac var subModel: PensionTaxesModel.Model
+    @State private var alertItem: AlertItem?
+    @State private var showingSheet = false
 
     var body: some View {
         Form {
-            VersionEditableViewInForm(version: $model.fiscalModel.pensionTaxes.model.version)
+            VersionEditableViewInForm(version: $subModel.version)
 
             Section(header: Text("Abattement").font(.headline)) {
-                Stepper(value : $model.fiscalModel.pensionTaxes.model.rebate,
+                Stepper(value : $subModel.rebate,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
                     HStack {
                         Text("Abattement")
                         Spacer()
-                        Text("\(model.fiscalModel.pensionTaxes.model.rebate.percentString(digit: 0))")
+                        Text("\(subModel.rebate.percentString(digit: 0))")
                             .foregroundColor(.secondary)
                     }
                 }
 
                 AmountEditView(label  : "Abattement minimum",
-                               amount : $model.fiscalModel.pensionTaxes.model.minRebate)
+                               amount : $subModel.minRebate)
 
                 AmountEditView(label  : "Abattement maximum",
-                               amount : $model.fiscalModel.pensionTaxes.model.maxRebate)
+                               amount : $subModel.maxRebate)
             }
             
             Section(header: Text("Taux de Cotisation").font(.headline)) {
-                Stepper(value : $model.fiscalModel.pensionTaxes.model.CSGdeductible,
+                Stepper(value : $subModel.CSGdeductible,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
                     HStack {
                         Text("CSG déductible")
                         Spacer()
-                        Text("\(model.fiscalModel.pensionTaxes.model.CSGdeductible.percentString(digit: 1))")
+                        Text("\(subModel.CSGdeductible.percentString(digit: 1))")
                             .foregroundColor(.secondary)
                     }
                 }
 
-                Stepper(value : $model.fiscalModel.pensionTaxes.model.CRDS,
+                Stepper(value : $subModel.CRDS,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
                     HStack {
                         Text("CRDS")
                         Spacer()
-                        Text("\(model.fiscalModel.pensionTaxes.model.CRDS.percentString(digit: 1))")
+                        Text("\(subModel.CRDS.percentString(digit: 1))")
                             .foregroundColor(.secondary)
                     }
                 }
 
-                Stepper(value : $model.fiscalModel.pensionTaxes.model.CSG,
+                Stepper(value : $subModel.CSG,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
                     HStack {
                         Text("CSG")
                         Spacer()
-                        Text("\(model.fiscalModel.pensionTaxes.model.CSG.percentString(digit: 1))")
+                        Text("\(subModel.CSG.percentString(digit: 1))")
                             .foregroundColor(.secondary)
                     }
                 }
 
-                Stepper(value : $model.fiscalModel.pensionTaxes.model.additionalContrib,
+                Stepper(value : $subModel.additionalContrib,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
                     HStack {
                         Text("Contribution additionnelle")
                         Spacer()
-                        Text("\(model.fiscalModel.pensionTaxes.model.additionalContrib.percentString(digit: 1))")
+                        Text("\(subModel.additionalContrib.percentString(digit: 1))")
                             .foregroundColor(.secondary)
                     }
                 }
 
-                Stepper(value : $model.fiscalModel.pensionTaxes.model.healthInsurance,
+                Stepper(value : $subModel.healthInsurance,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
                     HStack {
                         Text("Cotisation Assurance Santé")
                         Spacer()
-                        Text("\(model.fiscalModel.pensionTaxes.model.healthInsurance.percentString(digit: 1))")
+                        Text("\(subModel.healthInsurance.percentString(digit: 1))")
                             .foregroundColor(.secondary)
                     }
                 }
             }
         }
-        .onChange(of: model.fiscalModel.pensionTaxes.model) { _ in
-            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-            model.manageInternalDependencies()
-        }
         .navigationTitle("Plus-Value Immobilière")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar(
-            applyChangesToTemplate: {
-                alertItem = applyChangesToTemplateAlert(
-                    model     : model,
-                    notifyTemplatFolderMissing: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    },
-                    notifyFailure: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Echec de l'enregistrement"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    })
-            },
-            cancelChanges: {
-                alertItem = cancelChanges(
-                    to         : model,
-                    family     : family,
-                    simulation : simulation,
-                    dataStore  : dataStore)
-            },
-            isModified: model.isModified)
+        .modelChangesToolbar(subModel                  : $subModel,
+                              updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
 struct ModelFiscalPensionView_Previews: PreviewProvider {
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return ModelFiscalPensionView()
+        ModelFiscalPensionView(updateDependenciesToModel: { },
+                               subModel: .init(source: TestEnvir.model.fiscalModel.pensionTaxes.model))
             .preferredColorScheme(.dark)
-            .environmentObject(TestEnvir.dataStore)
-            .environmentObject(TestEnvir.model)
-            .environmentObject(TestEnvir.family)
-            .environmentObject(TestEnvir.simulation)
     }
 }

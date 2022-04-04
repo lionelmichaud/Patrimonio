@@ -1,61 +1,64 @@
 {
-    "pensionDevaluationRate" :
+    "randomizers" :
     {
-        "name"    : "Taux de dévaluation annuel des pensions de retraite",
-        "version" :
+        "pensionDevaluationRate" :
         {
-            "version" : "0.1",
-            "date"    : "2020-10-12T23:00:00+01:00",
-            "comment" : null
+            "name"    : "Taux de dévaluation annuel des pensions de retraite",
+            "version" :
+            {
+                "version" : "0.1",
+                "date"    : "2020-10-12T23:00:00+01:00",
+                "comment" : null
+            },
+            "rndGenerator":
+            {
+                "minX"     : 0.5,
+                "maxX"     : 1.25,
+                "alpha"    : 3.2,
+                "beta"     : 1.5
+            },
+            "defaultValue" : 1.0
         },
-        "rndGenerator":
+
+        "nbTrimTauxPlein":
         {
-            "minX"     : 0.5,
-            "maxX"     : 1.25,
-            "alpha"    : 3.2,
-            "beta"     : 1.5
+            "name"    : "Incrément de nb de trimestres pour obtenir le taux plein",
+            "version" :
+            {
+                "version" : "0.2",
+                "date"    : "2021-12-30T23:00:00+01:00",
+                "comment" : null
+            },
+            "rndGenerator":
+            {
+                "pdf" :
+                [
+                    { "x": 0, "y": 0.20 },
+                    { "x": 4, "y": 0.30 },
+                    { "x": 8, "y": 0.50 }
+                ]
+            },
+            "defaultValue" : 8
         },
-        "defaultValue" : 1.0
-    },
-    
-    "nbTrimTauxPlein":
-    {
-        "name"    : "Incrément de nb de trimestres pour obtenir le taux plein",
-        "version" :
+
+        "expensesUnderEvaluationRate" :
         {
-            "version" : "0.2",
-            "date"    : "2021-12-30T23:00:00+01:00",
-            "comment" : null
-        },
-        "rndGenerator":
-        {
-            "pdf" :
-            [
-                { "x": 0, "y": 0.20 },
-                { "x": 4, "y": 0.30 },
-                { "x": 8, "y": 0.50 }
-            ]
-        },
-        "defaultValue" : 8
-    },
-    
-    "expensesUnderEvaluationRate" :
-    {
-        "name"    : "Taux de sévérisation des dépenses",
-        "version" :
-        {
-            "version" : "0.1",
-            "date"    : "2020-10-12T23:00:00+01:00",
-            "comment" : null
-        },
-        "rndGenerator":
-        {
-            "minX"     : 0.0,
-            "maxX"     : 7.0,
-            "alpha"    : 1.0,
-            "beta"     : 1.5
-        },
-        "defaultValue" : 5.0
+            "name"    : "Taux de sévérisation des dépenses",
+            "version" :
+            {
+                "version" : "0.1",
+                "date"    : "2020-10-12T23:00:00+01:00",
+                "comment" : null
+            },
+            "rndGenerator":
+            {
+                "minX"     : 0.0,
+                "maxX"     : 7.0,
+                "alpha"    : 1.0,
+                "beta"     : 1.5
+            },
+            "defaultValue" : 5.0
+        }
     }
 }
 

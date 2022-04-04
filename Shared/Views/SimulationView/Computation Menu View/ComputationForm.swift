@@ -178,7 +178,7 @@ struct EditKpisButtonView: View {
                 })
             .buttonStyle(.borderedProminent)
 
-            //.capsuleButtonStyle()
+            //.buttonStyle(.bordered)
             NavigationLink(destination: KpisParametersEditView(), isActive: $showKpiEditView) {
                 EmptyView()
             }

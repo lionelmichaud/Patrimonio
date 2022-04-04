@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import RetirementModel
 import HelpersView
 
@@ -18,13 +19,14 @@ typealias AgircApresAgeLegalGridView = GridView<SliceAgircApresAgeLegal,
                                                 AgircApresAgeLegalSliceEditView>
 extension AgircApresAgeLegalGridView {
     init(label : String,
-         grid  : Binding<[SliceAgircApresAgeLegal]>) {
+         grid  : Transac<[SliceAgircApresAgeLegal]>,
+         updateDependenciesToModel : @escaping ( ) -> Void) {
         self = AgircApresAgeLegalGridView(label          : label,
                                           grid           : grid,
-                                          initializeGrid : { _ in },
                                           displayView    : { slice in AgircApresAgeLegalSliceView(slice: slice) },
                                           addView        : { grid in AgircApresAgeLegalSliceAddView(grid: grid) },
-                                          editView       : { grid, idx in AgircApresAgeLegalSliceEditView(grid: grid, idx: idx) })
+                                          editView       : { grid, idx in AgircApresAgeLegalSliceEditView(grid: grid, idx: idx) },
+                                          updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
@@ -49,13 +51,13 @@ struct AgircApresAgeLegalSliceView: View {
 // MARK: - Edit a SliceAgircApresAgeLegal of the Grid [année naissance, nb trimestre, age taux plein]
 
 struct AgircApresAgeLegalSliceEditView: View {
-    @Binding private var grid: GridAgircApresAgeLegal
+    @Transac private var grid: GridAgircApresAgeLegal
     private var idx: Int
     @Environment(\.presentationMode) var presentationMode
     @State private var modifiedSlice : SliceAgircApresAgeLegal
     @State private var alertItem     : AlertItem?
 
-    init(grid : Binding<GridAgircApresAgeLegal>,
+    init(grid : Transac<GridAgircApresAgeLegal>,
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
@@ -68,13 +70,13 @@ struct AgircApresAgeLegalSliceEditView: View {
         HStack {
             Button(action : { self.presentationMode.wrappedValue.dismiss() },
                    label  : { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
             Button(action : updateSlice,
                    label  : { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
         }
@@ -119,7 +121,7 @@ struct AgircApresAgeLegalSliceEditView: View {
 // MARK: - Add a ExonerationSlice to the Grid [année naissance, nb trimestre, age taux plein]
 
 struct AgircApresAgeLegalSliceAddView: View {
-    @Binding var grid: GridAgircApresAgeLegal
+    @Transac var grid: GridAgircApresAgeLegal
     @Environment(\.presentationMode) var presentationMode
     @State private var newSlice = SliceAgircApresAgeLegal(nbTrimManquant     : 0,
                                                           ndTrimPostAgeLegal : 0,
@@ -130,13 +132,13 @@ struct AgircApresAgeLegalSliceAddView: View {
         HStack {
             Button(action: { self.presentationMode.wrappedValue.dismiss() },
                    label: { Text("Annuler") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
             Button(action: addSlice,
                    label: { Text("OK") })
-                .capsuleButtonStyle()
+                .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
         }
@@ -205,7 +207,8 @@ struct AgircApresAgeLegalGridView_Previews: PreviewProvider {
         return
             NavigationView {
                 NavigationLink("Test", destination: AgircApresAgeLegalGridView(label: "Nom",
-                                                                           grid : .constant(grid()))
+                                                                               grid : .init(source: grid()),
+                                                                               updateDependenciesToModel: { })
                                 .environmentObject(TestEnvir.dataStore)
                                 .environmentObject(TestEnvir.model)
                                 .environmentObject(TestEnvir.family)

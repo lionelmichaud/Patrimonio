@@ -10,7 +10,7 @@ import Foundation
 import AppFoundation
 
 // MARK: - Charges sociales sur chiffre d'affaire
-public struct TurnoverTaxesModel: Codable {
+public struct TurnoverTaxesModel: Codable, Equatable {
     
     // MARK: Nested types
     

@@ -11,7 +11,7 @@ import AppFoundation
 
 // MARK: - Impôts sur le revenu
 
-public struct IncomeTaxesModel: Codable {
+public struct IncomeTaxesModel: Codable, Equatable {
     
     // MARK: - Nested types
     

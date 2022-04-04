@@ -23,7 +23,7 @@ struct DiskButton: View {
                     }
                 }
             })
-            .capsuleButtonStyle()
+            .buttonStyle(.bordered)
     }
     
     init(text   : String? = "Enregistrer",
@@ -49,7 +49,8 @@ struct TemplateButton: View {
                     }
                 }
             })
-            .capsuleButtonStyle()
+        .buttonStyle(.bordered)
+            //.buttonStyle(.bordered)
     }
     
     init(text   : String? = "Enregistrer",
@@ -73,7 +74,7 @@ struct FolderButton: View {
                     Text(butonText)
                 }
             })
-            .capsuleButtonStyle()
+            .buttonStyle(.bordered)
     }
     
     init(text   : String = "Appliquer",
@@ -96,7 +97,7 @@ struct DuplicateButton: View {
                     //Text("Dupliquer")
                 }
             })
-            .capsuleButtonStyle()
+            .buttonStyle(.bordered)
     }
     
     init(action: @escaping () -> Void) {

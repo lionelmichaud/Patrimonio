@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 
 // MARK: - Saisie d'un text "TextEditor"
 
@@ -17,6 +18,7 @@ import SwiftUI
 public struct LabeledTextEditor : View {
     private let label      : String
     private let labelWidth : Int
+    private let validity   : StringValidityRule
     @Binding
     private var text       : String
 
@@ -27,6 +29,8 @@ public struct LabeledTextEditor : View {
             TextEditor(text: $text)
                 .border(Color("borderTextColor"), width: 1)
         }
+        .textFieldStyle(.roundedBorder)
+        .foregroundColor(validity.isValid(text: text) ? .primary : .red)
     }
     
     /// Editer un texte d'une ligne
@@ -36,9 +40,11 @@ public struct LabeledTextEditor : View {
     ///   - text: texte éditable à droite
     public init(label       : String,
                 labelWidth  : Int = 70,
-                text        : Binding<String>) {
+                text        : Binding<String>,
+                validity    : StringValidityRule = .none) {
         self.label       = label
         self.labelWidth  = labelWidth > 0 ? labelWidth : 70
+        self.validity    = validity
         self._text       = text
     }
 }
@@ -55,6 +61,7 @@ public struct LabeledTextField : View {
     private let label       : String
     private let labelWidth  : Int
     private let defaultText : String?
+    private let validity    : StringValidityRule
     @Binding
     private var text        : String
 
@@ -64,6 +71,7 @@ public struct LabeledTextField : View {
                 .frame(width: Double(labelWidth), alignment: .leading)
             TextField(defaultText ?? "", text: $text)
         }
+        .foregroundColor(validity.isValid(text: text) ? .primary : .red)
     }
     
     /// Editer un texte de plusieurs lignes
@@ -75,10 +83,12 @@ public struct LabeledTextField : View {
     public init(label       : String,
                 labelWidth  : Int = 70,
                 defaultText : String? = nil,
-                text        : Binding<String>) {
+                text        : Binding<String>,
+                validity    : StringValidityRule = .none) {
         self.label       = label
         self.labelWidth  = labelWidth > 0 ? labelWidth : 70
         self.defaultText = defaultText
+        self.validity    = validity
         self._text       = text
     }
     

@@ -60,7 +60,14 @@ public extension Int {
     var isPOZ: Bool {
         return ( self.isPositive || self.isZero )
     }
-    
+
+    /**
+     :returns: *true* if self is negative or zero
+     */
+    var isNOZ: Bool {
+        return ( self.isNegative || self.isZero )
+    }
+
     /**
      :returns: cast self to Double
      */

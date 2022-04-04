@@ -53,6 +53,8 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
 
     // MARK: - Static Properties
     
+    public static let prototype = FreeInvestement()
+
     static var defaultFileName : String = "FreeInvestement.json"
     
     private static var simulationMode: SimulationModeEnum = .deterministic
@@ -209,21 +211,28 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
 
     // MARK: - Initialization
     
-    public init(year             : Int,
-                name             : String,
-                note             : String,
-                type             : InvestementKind,
-                interestRateType : InterestRateKind,
-                initialValue     : Double = 0.0,
-                initialInterest  : Double = 0.0) {
+    public init(lastKnownStateYear : Int              = CalendarCst.thisYear,
+                name               : String           = "",
+                note               : String           = "",
+                ownership          : Ownership        = Ownership(),
+                type               : InvestementKind  = .other,
+                interestRateType   : InterestRateKind = .contractualRate(fixedRate  : 0.0),
+                initialValue       : Double           = 0.0,
+                initialInterest    : Double           = 0.0,
+                website            : URL?             = nil,
+                delegateForAgeOf   : ((_ name: String, _ year: Int) -> Int)?  = nil) {
         self.name             = name
         self.note             = note
         self.type             = type
         self.interestRateType = interestRateType
-        self.lastKnownState = State(year       : year,
+        self.lastKnownState = State(year       : lastKnownStateYear,
                                     interest   : initialInterest,
                                     investment : initialValue - initialInterest)
         self.currentState   = self.lastKnownState
+        self.website        = website
+        if let delegateForAgeOf = delegateForAgeOf {
+            self.ownership.setDelegateForAgeOf(delegate: delegateForAgeOf)
+        }
     }
     
     // MARK: - Methods
@@ -448,6 +457,24 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
 extension FreeInvestement: Comparable {
     public static func < (lhs: FreeInvestement, rhs: FreeInvestement) -> Bool {
         return (lhs.name < rhs.name)
+    }
+}
+
+extension FreeInvestement {
+    /// Vérifie que l'objet est valide
+    /// - Warning: Override la méthode par défaut `isValid` du protocole `FinancialEnvelopP`
+    public var isValid: Bool {
+        /// vérifier que le nom n'est pas vide
+        guard name != "" else {
+            return false
+        }
+        guard type.isValid else {
+            return false
+        }
+        guard ownership.isValid else {
+            return false
+        }
+        return true
     }
 }
 

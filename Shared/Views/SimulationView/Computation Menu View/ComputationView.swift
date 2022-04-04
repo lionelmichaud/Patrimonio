@@ -54,7 +54,7 @@ struct ComputationView: View {
                                     }
                                    }
                             )
-                            .capsuleButtonStyle()
+                            .buttonStyle(.bordered)
                             .shareContextMenu(items: ["Hello world!", "coucou"])
                             .disabled(!savingIsPossible())
                         }

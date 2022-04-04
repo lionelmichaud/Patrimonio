@@ -17,7 +17,7 @@ import Files
 // utilisé uniquement par LifeExpense
 // les autres utilisent le generic ArrayOfNameableValuable
 public protocol NameableValuableArrayP: JsonCodableToFolderP, PersistableP {
-    associatedtype Item: Codable, Identifiable, NameableValuableP
+    associatedtype Item: Equatable, Codable, Identifiable, NameableValuableP
     
     // MARK: - Properties
     
@@ -57,13 +57,15 @@ public protocol NameableValuableArrayP: JsonCodableToFolderP, PersistableP {
     mutating func move(from indexes   : IndexSet,
                        to destination : Int)
     
-    mutating func delete(at offsets     : IndexSet)
+    mutating func delete(at offsets: IndexSet)
     
-    mutating func add(_ item         : Item)
+    mutating func delete(_ item: Item)
+
+    mutating func add(_ item: Item)
     
-    mutating func update(with item      : Item,
-                         at index       : Int)
-    
+    mutating func update(with item : Item,
+                         at index  : Int)
+
     func value(atEndOf: Int) -> Double
     
     func namedValueTable(atEndOf: Int) -> NamedValueArray
@@ -156,6 +158,12 @@ public extension NameableValuableArrayP {
         persistenceSM.process(event: .onModify)
     }
     
+    mutating func delete(_ item: Item) {
+        items.removeAll(where: { $0 == item })
+        // exécuter la transition
+        persistenceSM.process(event: .onModify)
+    }
+
     mutating func add(_ item : Item) {
         items.append(item)
         // exécuter la transition

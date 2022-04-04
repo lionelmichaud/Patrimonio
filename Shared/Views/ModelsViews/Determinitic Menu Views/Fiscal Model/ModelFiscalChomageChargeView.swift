@@ -6,122 +6,86 @@
 //
 
 import SwiftUI
-import ModelEnvironment
-import Persistence
-import FamilyModel
-import SimulationAndVisitors
+import AppFoundation
+import FiscalModel
 import HelpersView
 
 struct ModelFiscalChomageChargeView: View {
-    @EnvironmentObject private var dataStore  : Store
-    @EnvironmentObject private var model      : Model
-    @EnvironmentObject private var family     : Family
-    @EnvironmentObject private var simulation : Simulation
-    @State private var alertItem              : AlertItem?
+    let updateDependenciesToModel: ( ) -> Void
+    @Transac var subModel: AllocationChomageTaxesModel.Model
+    @State private var alertItem: AlertItem?
+    @State private var showingSheet = false
 
     var body: some View {
         Form {
             Section {
-                VersionEditableViewInForm(version: $model.fiscalModel.allocationChomageTaxes.model.version)
+                VersionEditableViewInForm(version: $subModel.version)
             }
             
-            Stepper(value : $model.fiscalModel.allocationChomageTaxes.model.assiette,
+            Stepper(value : $subModel.assiette,
                     in    : 0 ... 100.0,
                     step  : 0.1) {
                 HStack {
                     Text("Assiette")
                     Spacer()
-                    Text("\(model.fiscalModel.allocationChomageTaxes.model.assiette.percentString(digit: 1))")
+                    Text("\(subModel.assiette.percentString(digit: 1))")
                         .foregroundColor(.secondary)
                 }
             }
 
             AmountEditView(label  : "Seuil de Taxation CSG/CRDS",
                            comment: "journalier",
-                           amount : $model.fiscalModel.allocationChomageTaxes.model.seuilCsgCrds)
+                           amount : $subModel.seuilCsgCrds)
 
-            Stepper(value : $model.fiscalModel.allocationChomageTaxes.model.CRDS,
+            Stepper(value : $subModel.CRDS,
                     in    : 0 ... 100.0,
                     step  : 0.1) {
                 HStack {
                     Text("CRDS")
                     Spacer()
-                    Text("\(model.fiscalModel.allocationChomageTaxes.model.CRDS.percentString(digit: 1))")
+                    Text("\(subModel.CRDS.percentString(digit: 1))")
                         .foregroundColor(.secondary)
                 }
             }
 
-            Stepper(value : $model.fiscalModel.allocationChomageTaxes.model.CSG,
+            Stepper(value : $subModel.CSG,
                     in    : 0 ... 100.0,
                     step  : 0.1) {
                 HStack {
                     Text("CSG")
                     Spacer()
-                    Text("\(model.fiscalModel.allocationChomageTaxes.model.CSG.percentString(digit: 1))")
+                    Text("\(subModel.CSG.percentString(digit: 1))")
                         .foregroundColor(.secondary)
                 }
             }
 
-            Stepper(value : $model.fiscalModel.allocationChomageTaxes.model.retraiteCompl,
+            Stepper(value : $subModel.retraiteCompl,
                     in    : 0 ... 100.0,
                     step  : 0.1) {
                 HStack {
                     Text("Cotisation de Retraite Complémentaire")
                     Spacer()
-                    Text("\(model.fiscalModel.allocationChomageTaxes.model.retraiteCompl.percentString(digit: 1))")
+                    Text("\(subModel.retraiteCompl.percentString(digit: 1))")
                         .foregroundColor(.secondary)
                 }
             }
 
             AmountEditView(label  : "Seuil de Taxation Retraite Complémentaire",
                            comment: "journalier",
-                           amount : $model.fiscalModel.allocationChomageTaxes.model.seuilRetCompl)
-        }
-        .onChange(of: model.fiscalModel.allocationChomageTaxes.model) { _ in
-            DependencyInjector.updateDependenciesToModel(model: model, family: family, simulation: simulation)
-            model.manageInternalDependencies()
+                           amount : $subModel.seuilRetCompl)
         }
         .navigationTitle("Allocation Chômage")
         .alert(item: $alertItem, content: newAlert)
         /// barre d'outils de la NavigationView
-        .modelChangesToolbar(
-            applyChangesToTemplate: {
-                alertItem = applyChangesToTemplateAlert(
-                    model     : model,
-                    notifyTemplatFolderMissing: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Répertoire 'Patron' absent"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    },
-                    notifyFailure: {
-                        DispatchQueue.main.async {
-                            alertItem =
-                            AlertItem(title         : Text("Echec de l'enregistrement"),
-                                      dismissButton : .default(Text("OK")))
-                        }
-                    })
-            },
-            cancelChanges: {
-                alertItem = cancelChanges(
-                    to         : model,
-                    family     : family,
-                    simulation : simulation,
-                    dataStore  : dataStore)
-            },
-            isModified: model.isModified)
+        .modelChangesToolbar(subModel                  : $subModel,
+                              updateDependenciesToModel : updateDependenciesToModel)
     }
 }
 
 struct ModelFiscalChomageChargeView_Previews: PreviewProvider {
     static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return ModelFiscalChomageChargeView()
+        ModelFiscalChomageChargeView(updateDependenciesToModel: { },
+                                     subModel: .init(source: TestEnvir.model.fiscalModel.allocationChomageTaxes.model))
             .preferredColorScheme(.dark)
-            .environmentObject(TestEnvir.dataStore)
-            .environmentObject(TestEnvir.model)
-            .environmentObject(TestEnvir.family)
-            .environmentObject(TestEnvir.simulation)
     }
 }

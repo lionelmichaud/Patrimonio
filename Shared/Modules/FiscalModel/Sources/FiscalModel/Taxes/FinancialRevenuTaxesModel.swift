@@ -10,7 +10,7 @@ import Foundation
 import AppFoundation
 
 // MARK: - Charges sociales sur revenus financiers (dividendes, plus values, loyers...)
-public struct FinancialRevenuTaxesModel: Codable {
+public struct FinancialRevenuTaxesModel: Codable, Equatable {
     
     // MARK: Nested types
     

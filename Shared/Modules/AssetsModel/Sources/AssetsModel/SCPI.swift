@@ -38,6 +38,8 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
 
     // MARK: - Static Properties
     
+    public static let prototype = SCPI()
+
     static var defaultFileName : String = "SCPI.json"
     
     private static var saleCommission    : Double             = 10.0 // %
@@ -101,26 +103,26 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     
     // MARK: - Initializer
     
-    public init(id           : UUID      = UUID(),
-                name         : String,
+    public init(name         : String    = "",
                 note         : String    = "",
                 ownership    : Ownership = Ownership(),
-                buyingDate   : Date,
+                buyingDate   : Date      = CalendarCst.now,
                 buyingPrice  : Double    = 0.0,
                 interestRate : Double    = 0.0,
                 revaluatRate : Double    = 0.0,
                 willBeSold   : Bool      = false,
-                sellingDate  : Date      = 100.years.fromNow!) {
-        self.id = id
-        self.name = name
-        self.note = note
-        self.ownership = ownership
-        self.buyingDate = buyingDate
-        self.buyingPrice = buyingPrice
+                sellingDate  : Date      = 100.years.fromNow!,
+                delegateForAgeOf : ((_ name : String, _ year : Int) -> Int)? = nil) {
+        self.name         = name
+        self.note         = note
+        self.ownership    = ownership
+        self.buyingDate   = buyingDate
+        self.buyingPrice  = buyingPrice
         self.interestRate = interestRate
         self.revaluatRate = revaluatRate
-        self.willBeSold = willBeSold
-        self.sellingDate = sellingDate
+        self.willBeSold   = willBeSold
+        self.sellingDate  = sellingDate
+        self.ownership.setDelegateForAgeOf(delegate: delegateForAgeOf)
     }
     
     // MARK: - Methods
@@ -275,6 +277,30 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
 extension SCPI: Comparable {
     public static func < (lhs: SCPI, rhs: SCPI) -> Bool {
         return (lhs.name < rhs.name)
+    }
+}
+
+extension SCPI {
+    /// Vérifie que l'objet est valide
+    /// - Warning: Override la méthode par défaut `isValid` du protocole `OwnableP`
+    public var isValid: Bool {
+        /// vérifier que le nom n'est pas vide
+        guard name != "" else {
+            return false
+        }
+        guard ownership.isValid else {
+            return false
+        }
+
+        guard buyingPrice >= 0 && interestRate >= 0 else {
+            return false
+        }
+
+        /// vérifier que toutes les dates sont définies
+        guard sellingDate > buyingDate else {
+            return false
+        }
+        return true
     }
 }
 

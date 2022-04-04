@@ -65,7 +65,7 @@ struct PersonDetailView: View {
                             Text("Modifier")
                         }
                     })
-                    .capsuleButtonStyle()
+                    .buttonStyle(.bordered)
             }
         }
     }

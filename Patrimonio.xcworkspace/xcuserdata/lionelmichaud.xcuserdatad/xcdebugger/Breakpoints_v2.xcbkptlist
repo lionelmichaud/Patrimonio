@@ -44,22 +44,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "10C61380-D489-4B77-8CBA-0590FC735138"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Views/PatrimoineViews/OwnershipView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36"
-            landmarkName = "body"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "4D896981-DFB1-407B-8581-80E30D128162"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -108,33 +92,49 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "17CE176A-53A4-4C29-B081-03605F9FC197"
-            shouldBeEnabled = "Yes"
+            uuid = "B9BB3AAD-CFD7-42FD-B6AD-0BCB3185EE49"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Shared/Modules/ModelEnvironment/Sources/ModelEnvironment/Model.swift"
+            filePath = "Shared/Modules/AppFoundation/Sources/Foundations/Extensions/Extensions+Binding.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
-            landmarkName = "economyModel"
-            landmarkType = "24">
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "Transac"
+            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D47717F3-69C2-4BBD-B171-8A025985762C"
-            shouldBeEnabled = "Yes"
+            uuid = "D003C8D6-7553-4300-93A1-515B045E0F0B"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Shared/Views/ModelsViews/Determinitic Menu Views/Unemployment Model/ModelUnemploymentAmountView.swift"
+            filePath = "Shared/Modules/AppFoundation/Sources/Foundations/Extensions/Extensions+Binding.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "body"
-            landmarkType = "24">
+            startingLineNumber = "99"
+            endingLineNumber = "99"
+            landmarkName = "Transac"
+            landmarkType = "21">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DC7181C0-EB5F-403C-BF77-4100994B87F5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Modules/AssetsModel/Sources/AssetsModel/Assets.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
+            landmarkName = "checkValidity()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

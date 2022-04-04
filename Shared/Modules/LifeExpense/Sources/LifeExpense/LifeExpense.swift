@@ -8,6 +8,7 @@
 
 import Foundation
 import os
+import AppFoundation
 import Persistable
 import Statistics
 import SocioEconomyModel
@@ -19,6 +20,8 @@ private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimonio", catego
 // MARK: - Tableau de Dépenses
 
 public struct LifeExpenseArray: NameableValuableArrayP {
+
+    public static var empty = LifeExpenseArray(items: [], persistenceSM: PersistenceStateMachine(initialState : .created))
     
     private enum CodingKeys: String, CodingKey {
         case items
@@ -102,13 +105,11 @@ public struct LifeExpense: Identifiable, Codable, Hashable, NameableValuableP {
     
     // MARK: - Initializers
     
-    public init() { }
-    
-    public init(name         : String,
-                note         : String,
-                timeSpan     : TimeSpan,
-                proportional : Bool = false,
-                value        : Double) {
+    public init(name         : String   = "",
+                note         : String   = "",
+                timeSpan     : TimeSpan = .permanent,
+                proportional : Bool     = false,
+                value        : Double   = 0.0) {
         self.name         = name
         self.value        = value
         self.note         = note
@@ -140,6 +141,24 @@ public struct LifeExpense: Identifiable, Codable, Hashable, NameableValuableP {
 
 extension LifeExpense: Comparable {
     public static func < (lhs: LifeExpense, rhs: LifeExpense) -> Bool { (lhs.name < rhs.name) }
+}
+
+extension LifeExpense: ValidableP {
+    public var isValid: Bool {
+        /// vérifier que le nom n'est pas vide
+        guard name != "" else {
+            return false
+        }
+        /// vérifier que le montant de dépense est >= 0
+        guard value.isPOZ else {
+            return false
+        }
+       /// vérifier que la plage de temps est valide
+        guard timeSpan.isValid else {
+            return false
+        }
+        return true
+    }
 }
 
 extension LifeExpense: CustomStringConvertible {

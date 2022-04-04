@@ -18,6 +18,10 @@ public typealias LoanArray = ArrayOfNameableValuable<Loan>
 /// Emprunt à remboursement constant, périodique, annuel et à taux fixe
 public struct Loan: Codable, Identifiable, NameableValuableP, OwnableP {
     
+    // MARK: - Type Properties
+
+    public static let prototype = Loan()
+
     // MARK: - Properties
     
     public var id                = UUID()
@@ -51,10 +55,19 @@ public struct Loan: Codable, Identifiable, NameableValuableP, OwnableP {
     
     // MARK: - Initializers
     
-    public init(firstYear : Int,
-                lastYear  : Int) {
-        self.firstYear = firstYear
-        self.lastYear = lastYear
+    public init(name             : String  = "",
+                note             : String  = "",
+                value            : Double  = 0,
+                interestRate     : Double  = 1,
+                delegateForAgeOf : ((_ name : String, _ year : Int) -> Int)?  = nil,
+                firstYear        : Int = CalendarCst.thisYear,
+                lastYear         : Int = CalendarCst.thisYear) {
+        self.name         = name
+        self.note         = note
+        self.ownership.setDelegateForAgeOf(delegate : delegateForAgeOf)
+        self.firstYear    = firstYear
+        self.lastYear     = lastYear
+        self.interestRate = interestRate
     }
     
     // MARK: - Methods
@@ -78,6 +91,30 @@ public struct Loan: Codable, Identifiable, NameableValuableP, OwnableP {
 extension Loan: Comparable {
     public static func < (lhs: Loan, rhs: Loan) -> Bool {
         (lhs.name < rhs.name)
+    }
+}
+
+extension Loan {
+    /// Vérifie que l'objet est valide
+    /// - Warning: Override la méthode par défaut `isValid` du protocole `OwnableP`
+    public var isValid: Bool {
+        /// vérifier que le nom n'est pas vide
+        guard name != "" else {
+            return false
+        }
+        guard ownership.isValid else {
+            return false
+        }
+        guard loanedValue <= 0 else {
+            return false
+        }
+        guard interestRate >= 0 else {
+            return false
+        }
+        guard monthlyInsurance >= 0 else {
+            return false
+        }
+        return true
     }
 }
 

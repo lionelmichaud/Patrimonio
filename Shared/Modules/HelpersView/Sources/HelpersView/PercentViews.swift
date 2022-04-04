@@ -18,6 +18,7 @@ import AppFoundation
 public struct PercentEditView: View {
     private let label       : String
     private let comment     : String?
+    private let validity    : DoubleValidityRule
     @Binding
     private var percent     : Double // [0% ... 100%]
     @State
@@ -60,6 +61,7 @@ public struct PercentEditView: View {
             Text("%")
         }
         .textFieldStyle(.roundedBorder)
+        .foregroundColor(validity.isValid(number: percent) ? .primary : .red)
     }
     
     /// Création
@@ -67,11 +69,13 @@ public struct PercentEditView: View {
     ///   - label: libellé
     ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
     ///   - percent: valeur
-    public init(label   : String,
-                comment : String?  = nil,
-                percent : Binding<Double>) {
+    public init(label    : String,
+                comment  : String?  = nil,
+                percent  : Binding<Double>,
+                validity : DoubleValidityRule = .none) {
         self.label  = label
         self.comment = comment
+        self.validity = validity
         _percent     = percent
         _textPercent = State(initialValue: String(percent.wrappedValue).replacingOccurrences(of: ".", with: ","))
     }

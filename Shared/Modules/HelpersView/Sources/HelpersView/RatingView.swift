@@ -9,7 +9,7 @@ import SwiftUI
 
 public struct RatingView: View {
     private let rating    : Int
-    private var minRating : Int = 0
+    private let minRating : Int
     private let maxRating : Int
     private var label     : String?
     private var font      : Font = .body
@@ -27,7 +27,7 @@ public struct RatingView: View {
                     .font(font)
                     .padding(.trailing, 4)
             }
-            ForEach(minRating ..< maxRating + 1) { number in
+            ForEach(minRating ..< maxRating + 1, id: \.self) { number in
                 if onColor.count == 1 {
                     self.image(for: number)
                         .font(font)

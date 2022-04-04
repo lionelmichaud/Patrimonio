@@ -340,7 +340,7 @@ extension Family: PersonEventYearProviderP {
             case .allPersons:
                 persons = members.items
         }
-        if let years = persons?.map({ $0.yearOf(event: lifeEvent)! }) {
+        if let years = persons?.compactMap({ $0.yearOf(event: lifeEvent) }) {
             switch order {
                 case .soonest:
                     return years.min()

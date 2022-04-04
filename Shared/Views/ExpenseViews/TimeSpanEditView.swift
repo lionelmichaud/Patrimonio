@@ -20,9 +20,9 @@ struct TimeSpanViewModel: Equatable {
     var caseIndex : Int
     var period    : Int
     var inYear    : Int
-    var fromVM    : DateBoundaryViewModel?
-    var toVM      : DateBoundaryViewModel?
-    
+    var from      : DateBoundary?
+    var to        : DateBoundary?
+
     // MARK: - Computed Properties
     
     // construire l'objet de type LifeExpenseTimeSpan correspondant au ViewModel
@@ -32,19 +32,19 @@ struct TimeSpanViewModel: Equatable {
                 return .permanent
                 
             case TimeSpan.periodic(from: DateBoundary.empty, period: 0, to: DateBoundary.empty).id:
-                return .periodic(from   : fromVM!.dateBoundary,
+                return .periodic(from   : self.from ?? DateBoundary(fixedYear : CalendarCst.thisYear),
                                  period : self.period,
-                                 to     : toVM!.dateBoundary)
+                                 to     : self.to ?? DateBoundary(fixedYear : CalendarCst.thisYear + 1))
                 
             case TimeSpan.starting(from: DateBoundary.empty).id:
-                return .starting(from: fromVM!.dateBoundary)
+                return .starting(from: self.from ?? DateBoundary(fixedYear : CalendarCst.thisYear))
                 
             case TimeSpan.ending(to: DateBoundary.empty).id:
-                return .ending(to: toVM!.dateBoundary)
+                return .ending(to: self.to ?? DateBoundary(fixedYear : CalendarCst.thisYear + 1))
                 
             case TimeSpan.spanning(from: DateBoundary.empty, to: DateBoundary.empty).id:
-                return .spanning(from : fromVM!.dateBoundary,
-                                 to   : toVM!.dateBoundary)
+                return .spanning(from : self.from ?? DateBoundary(fixedYear : CalendarCst.thisYear),
+                                 to   : self.to  ?? DateBoundary(fixedYear : CalendarCst.thisYear + 1))
                 
             case TimeSpan.exceptional(inYear:0).id:
                 return .exceptional(inYear: self.inYear)
@@ -72,19 +72,19 @@ struct TimeSpanViewModel: Equatable {
         }
         switch timeSpan {
             case .starting (let from),
-                 .periodic(let from, _, _),
-                 .spanning(let from, _):
-                self.fromVM = DateBoundaryViewModel(from: from)
+                    .periodic(let from, _, _),
+                    .spanning(let from, _):
+                self.from = from
             default:
-                self.fromVM = nil
+                self.from = nil
         }
         switch timeSpan {
             case .ending (let to),
-                 .periodic(_, _, let to),
-                 .spanning(_, let to):
-                self.toVM = DateBoundaryViewModel(from: to)
+                    .periodic(_, _, let to),
+                    .spanning(_, let to):
+                self.to = to
             default:
-                self.toVM = nil
+                self.to = nil
         }
     }
     
@@ -99,88 +99,76 @@ struct TimeSpanEditView: View {
     
     // MARK: - Properties
     
-    @Binding var timeSpanVM : TimeSpanViewModel
-    
+    @Binding var timeSpan : TimeSpan
+    private var timeSpanVM : Binding<TimeSpanViewModel> {
+        Binding(
+            get: {
+                TimeSpanViewModel(from: self.timeSpan)
+            },
+            set: {
+                self.timeSpan = $0.timeSpan
+            }
+        )
+    }
+
     // MARK: - Computed Properties
     
     var body: some View {
         Group {
             Section(header: Text("PLAGE DE TEMPS")) {
                 // choisir le type de TimeFrame pour la dépense
-                CaseWithAssociatedValuePicker<TimeSpan>(caseIndex: $timeSpanVM.caseIndex, label: "")
+                CaseWithAssociatedValuePicker<TimeSpan>(caseIndex: timeSpanVM.caseIndex, label: "")
                     .pickerStyle(SegmentedPickerStyle())
-                    .onChange(of: timeSpanVM.caseIndex, perform: updateLifeExpenseTimeSpanEnum)
             }
             // en fonction du type choisi
-            if timeSpanVM.caseIndex == TimeSpan.ending(to: DateBoundary.empty).id {
-                // TimeSpan = .ending
-                BoundaryEditView(label    : "Fin (exclue)",
-                                 boundary : $timeSpanVM.toVM)
-                
-            } else if timeSpanVM.caseIndex == TimeSpan.starting(from: DateBoundary.empty).id {
-                // TimeSpan = .starting
-                BoundaryEditView(label    : "Début",
-                                 boundary : $timeSpanVM.fromVM)
-                
-            } else if timeSpanVM.caseIndex == TimeSpan.spanning(from: DateBoundary.empty,
-                                                                           to: DateBoundary.empty).id {
-                // TimeSpan = .spanning
-                BoundaryEditView(label    : "Début",
-                                 boundary : $timeSpanVM.fromVM)
-                BoundaryEditView(label    : "Fin (exclue)",
-                                 boundary : $timeSpanVM.toVM)
-                
-            } else if timeSpanVM.caseIndex == TimeSpan.periodic(from: DateBoundary.empty,
-                                                                           period: 0,
-                                                                           to: DateBoundary.empty).id {
-                // TimeSpan = .periodic
-                BoundaryEditView(label    : "Début",
-                                 boundary : $timeSpanVM.fromVM)
-                BoundaryEditView(label     : "Fin (exclue)",
-                                 boundary : $timeSpanVM.toVM)
-                Section(header: Text("Période")) {
-                    Stepper(value: $timeSpanVM.period, in: 0...100, step: 1, label: {
-                        HStack {
-                            Text("Période")
-                            Spacer()
-                            Text("\(timeSpanVM.period) ans").foregroundColor(.secondary)
-                        }
-                    })
-                }
-                
-            } else if timeSpanVM.caseIndex == TimeSpan.exceptional(inYear: 0).id {
-                // TimeSpan = .exceptional
-                IntegerEditView(label: "Durant l'année", integer: $timeSpanVM.inYear)
+            switch timeSpanVM.wrappedValue.caseIndex {
+                case TimeSpan.permanent.id :
+                    // TimeSpan = .ending
+                    EmptyView()
+
+                case TimeSpan.ending(to: DateBoundary.empty).id :
+                    // TimeSpan = .ending
+                    BoundaryEditView2(label    : "Fin (exclue)",
+                                      boundary : timeSpanVM.to)
+
+                case TimeSpan.starting(from: DateBoundary.empty).id :
+                    // TimeSpan = .starting
+                    BoundaryEditView2(label    : "Début",
+                                      boundary : timeSpanVM.from)
+
+                case TimeSpan.spanning(from: DateBoundary.empty,
+                                       to: DateBoundary.empty).id :
+                    // TimeSpan = .spanning
+                    BoundaryEditView2(label    : "Début",
+                                      boundary : timeSpanVM.from)
+                    BoundaryEditView2(label    : "Fin (exclue)",
+                                      boundary : timeSpanVM.to)
+
+                case TimeSpan.periodic(from: DateBoundary.empty,
+                                       period: 1,
+                                       to: DateBoundary.empty).id :
+                    // TimeSpan = .periodic
+                    BoundaryEditView2(label    : "Début",
+                                      boundary : timeSpanVM.from)
+                    BoundaryEditView2(label     : "Fin (exclue)",
+                                      boundary : timeSpanVM.to)
+                    Section(header: Text("Période")) {
+                        Stepper(value: timeSpanVM.period, in: 0...100, step: 1, label: {
+                            HStack {
+                                Text("Période")
+                                Spacer()
+                                Text("\(timeSpanVM.wrappedValue.period) ans").foregroundColor(.secondary)
+                            }
+                        })
+                    }
+
+                case TimeSpan.exceptional(inYear: 0).id :
+                    // TimeSpan = .exceptional
+                    IntegerEditView(label: "Durant l'année", integer: timeSpanVM.inYear)
+                    
+                default:
+                    Text("Cas inconnu: ceci est un bug").foregroundColor(.red)
             }
-        }
-    }
-    
-    // MARK: - Methods
-    
-    func updateLifeExpenseTimeSpanEnum(id: Int) {
-        switch id {
-            case TimeSpan.permanent.id:
-                ()
-                
-            case TimeSpan.periodic(from: DateBoundary.empty, period: 0, to: DateBoundary.empty).id:
-                self.timeSpanVM.fromVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: CalendarCst.thisYear))
-                self.timeSpanVM.toVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: CalendarCst.thisYear))
-                
-            case TimeSpan.starting(from: DateBoundary.empty).id:
-                self.timeSpanVM.fromVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: CalendarCst.thisYear))
-                
-            case TimeSpan.ending(to: DateBoundary.empty).id:
-                self.timeSpanVM.toVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: CalendarCst.thisYear))
-                
-            case TimeSpan.spanning(from: DateBoundary.empty, to: DateBoundary.empty).id:
-                self.timeSpanVM.fromVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: CalendarCst.thisYear))
-                self.timeSpanVM.toVM = DateBoundaryViewModel(from: DateBoundary(fixedYear: CalendarCst.thisYear))
-                
-            case TimeSpan.exceptional(inYear:0).id:
-                self.timeSpanVM.inYear = CalendarCst.thisYear
-                
-            default:
-                ()
         }
     }
 }
@@ -189,7 +177,8 @@ struct TimeSpanEditView_Previews: PreviewProvider {
     static var previews: some View {
         Form {
             TimeSpanEditView(
-                timeSpanVM: .constant(TimeSpanViewModel(from: TimeSpan.permanent))
+                timeSpan: .constant(TimeSpan.periodic(from: DateBoundary(fixedYear: 2021),
+                                                      period: 5, to: DateBoundary(fixedYear: 2031)))
             )
             .previewLayout(PreviewLayout.sizeThatFits)
             .padding([.bottom, .top])

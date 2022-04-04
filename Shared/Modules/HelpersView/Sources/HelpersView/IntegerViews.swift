@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import AppFoundation
 
 // MARK: - Saisie d'un Integer
 
 public struct IntegerEditView: View {
-    private let label   : String
-    private let comment : String?
+    private let label    : String
+    private let comment  : String?
+    private let validity : IntegerValidityRule
     @Binding
     private var integer : Int
     
@@ -39,14 +41,17 @@ public struct IntegerEditView: View {
                 .multilineTextAlignment(.trailing)
         }
         .textFieldStyle(.roundedBorder)
+        .foregroundColor(validity.isValid(number: integer) ? .primary : .red)
     }
     
-    public init(label   : String,
-                comment : String? = nil,
-                integer : Binding<Int>) {
-        self.label   = label
-        self.comment = comment
-        _integer     = integer
+    public init(label    : String,
+                comment  : String?            = nil,
+                integer  : Binding<Int>,
+                validity : IntegerValidityRule = .none) {
+        self.label    = label
+        self.comment  = comment
+        self.validity = validity
+        _integer      = integer
     }
 }
 
