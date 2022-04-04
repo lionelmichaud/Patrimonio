@@ -49,6 +49,8 @@ struct DossierBrowserView: View {
                                     $0.foregroundColor(savable(dossier) ? .red : .green)
                                 }
                     })
+                    .modelChangesSwipeActions(duplicateItem : { duplicate(dossier) },
+                                              deleteItem    : { delete(dossier) })
                 }
                 .isDetailLink(true)
             }
@@ -59,8 +61,55 @@ struct DossierBrowserView: View {
         }
         .alert(item: $alertItem, content: newAlert)
     }
-    
-    func deleteDossier(at offsets: IndexSet) {
+
+    /// Dupliquer le Dossier sélectionné
+    private func duplicate(_ dossier: Dossier) {
+        guard !savable(dossier) else {
+            self.alertItem = AlertItem(title         : Text("Attention"),
+                                       message       : Text("Toutes les modifications sur le dossier ouvert seront perdues"),
+                                       primaryButton : .default(Text("Continuer"),
+                                                                action: {
+                do {
+                    try dataStore.duplicate(dossier)
+                } catch {
+                    DispatchQueue.main.async {
+                        self.alertItem = AlertItem(title         : Text("Echec de la duplication du dossier !"),
+                                                   dismissButton : .default(Text("OK")))
+                    }
+                }
+            }),
+                                       secondaryButton: .cancel())
+            return
+        }
+
+        do {
+            try dataStore.duplicate(dossier)
+        } catch {
+            self.alertItem = AlertItem(title         : Text("Echec de la duplication du dossier !"),
+                                       dismissButton : .default(Text("OK")))
+        }
+    }
+
+    func delete(_ dossier: Dossier) {
+        alertItem =
+        AlertItem(title         : Text("Attention").foregroundColor(.red),
+                  message       : Text("La destruction du dossier est irréversible"),
+                  primaryButton : .destructive(Text("Supprimer"),
+                                               action: {
+            /// insert alert 1 action here
+            do {
+                try dataStore.delete(dossier)
+            } catch {
+                DispatchQueue.main.async {
+                    alertItem = AlertItem(title         : Text("Echec de la suppression du dossier"),
+                                          dismissButton : .default(Text("OK")))
+                }
+            }
+        }),
+                  secondaryButton: .cancel())
+    }
+
+    private func deleteDossier(at offsets: IndexSet) {
         alertItem =
         AlertItem(title         : Text("Attention").foregroundColor(.red),
                   message       : Text("La destruction du dossier est irréversible"),
@@ -79,12 +128,12 @@ struct DossierBrowserView: View {
                   secondaryButton: .cancel())
     }
     
-    func moveDossier(from indexes: IndexSet, to destination: Int) {
+    private func moveDossier(from indexes: IndexSet, to destination: Int) {
         dataStore.dossiers.move(fromOffsets: indexes, toOffset: destination)
     }
 
     /// True si le dossier est actif et a été modifié
-    func savable(_ dossier: Dossier) -> Bool {
+    private func savable(_ dossier: Dossier) -> Bool {
         dossier.isActive &&
             (family.isModified ||
                 expenses.isModified ||

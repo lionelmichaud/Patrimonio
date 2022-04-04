@@ -81,7 +81,13 @@ public final class Store: ObservableObject {
         let newDossier = try dossier.duplicate()
         dossiers.append(newDossier)
     }
-    
+
+    /// Supprimer le contenu du dossier et le directory associé
+    public func delete(_ dossier: Dossier) throws {
+        try dossier.delete()
+        dossiers.removeAll(where: { $0 == dossier })
+    }
+
     /// Supprimer le contenu du dossier et le directory associé
     public func deleteDossier(atOffsets offsets: IndexSet) throws {
         try dossiers[offsets.first!].delete()

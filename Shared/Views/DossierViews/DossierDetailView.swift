@@ -96,9 +96,6 @@ struct DossierDetailView: View {
                     DiskButton(text: nil) { save(dossier) }
                         .disabled(!savable)
 
-                    /// Bouton: Dupliquer
-                    DuplicateButton { duplicate() }
-
                     /// Bouton: Modifier
                     Button(
                         action : {
@@ -321,34 +318,6 @@ struct DossierDetailView: View {
             }
         } catch {
             self.alertItem = AlertItem(title         : Text("Echec de la mise à jour"),
-                                       dismissButton : .default(Text("OK")))
-        }
-    }
-
-    /// Dupliquer le Dossier sélectionné
-    private func duplicate() {
-        guard !savable else {
-            self.alertItem = AlertItem(title         : Text("Attention"),
-                                       message       : Text("Toutes les modifications sur le dossier ouvert seront perdues"),
-                                       primaryButton : .default(Text("Continuer"),
-                                                                action: {
-                                                                    do {
-                                                                        try dataStore.duplicate(dossier)
-                                                                    } catch {
-                                                                        DispatchQueue.main.async {
-                                                                            self.alertItem = AlertItem(title         : Text("Echec de la duplication du dossier !"),
-                                                                                                       dismissButton : .default(Text("OK")))
-                                                                        }
-                                                                    }
-                                                                }),
-                                       secondaryButton: .cancel())
-            return
-        }
-        
-        do {
-            try dataStore.duplicate(dossier)
-        } catch {
-            self.alertItem = AlertItem(title         : Text("Echec de la duplication du dossier !"),
                                        dismissButton : .default(Text("OK")))
         }
     }
