@@ -18,7 +18,7 @@ struct FreeInvestSidebarView: View {
     @EnvironmentObject var patrimoine : Patrimoin
     let simulationReseter: CanResetSimulationP
     private let indentLevel = 2
-    private let label       = "Investissement Libre"
+    private let label       = "Invest. Libre"
     private let iconAdd     = Image(systemName : "plus.circle.fill")
     private let icon€       = Image(systemName   : "eurosign.circle.fill")
 

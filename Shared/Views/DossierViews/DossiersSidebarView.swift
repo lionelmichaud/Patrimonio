@@ -1,5 +1,5 @@
 //
-//  DossiersView.swift
+//  DossiersSidebarView.swift
 //  Patrimonio (iOS)
 //
 //  Created by Lionel MICHAUD on 18/05/2021.
