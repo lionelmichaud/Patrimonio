@@ -70,9 +70,8 @@ struct ExpenseListInCategorySidebar: View {
 #endif
     }
 
-    /// actualiser toutes les dépendances au Model
+    /// Remettre à zéro la simulation et sa vue
     private func resetSimulation() {
-        // remettre à zéro la simulation et sa vue
         simulationReseter.notifyComputationInputsModification()
         uiState.resetSimulationView()
     }
@@ -80,6 +79,7 @@ struct ExpenseListInCategorySidebar: View {
     private func updateDependenciesToModel() {
         // indiquer que les dépenses ont été modifiées
         expenses.perCategory[self.category]?.persistenceSM.process(event: .onModify)
+        // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 

@@ -44,16 +44,16 @@ struct ExpenseSidebarView: View {
                 }
             }
             .listStyle(.sidebar)
-            .environment(\.horizontalSizeClass, .regular)
-            .navigationTitle("Dépenses")
-            .toolbar {
-                EditButton()
-            }
 
             /// vue par défaut
             ExpenseSummaryView()
         }
+        .environment(\.horizontalSizeClass, .regular)
         .navigationViewStyle(.columns)
+        .navigationTitle("Dépenses")
+        .toolbar {
+            EditButton()
+        }
     }
 }
 

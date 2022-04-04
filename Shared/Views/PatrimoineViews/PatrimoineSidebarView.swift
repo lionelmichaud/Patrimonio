@@ -49,17 +49,17 @@ struct PatrimoineSidebarView: View {
                     }
                 }
                 .listStyle(.sidebar)
-                .environment(\.horizontalSizeClass, .regular)
-                .navigationTitle("Patrimoine")
-                .toolbar {
-                    EditButton()
-                }
             }
 
             /// vue par défaut
             PatrimoineSummaryView()
         }
+        .environment(\.horizontalSizeClass, .regular)
         .navigationViewStyle(.columns)
+        .navigationTitle("Patrimoine")
+        .toolbar {
+            EditButton()
+        }
     }
     
     private func reinitialize() {
