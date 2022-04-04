@@ -39,7 +39,7 @@ struct DossierBrowserView: View {
             })
 
         /// liste des dossiers
-        Section(header: Text("Dossiers existants")) {
+        Section {
             ForEach(dataStore.dossiers) { dossier in
                 NavigationLink(destination: DossierDetailView(dossier: dossier)) {
                     Label(title: { DossierRowView(dossier: dossier) },
@@ -54,6 +54,8 @@ struct DossierBrowserView: View {
             }
             .onDelete(perform: deleteDossier)
             .onMove(perform: moveDossier)
+        } header: {
+            Text("Dossiers existants")
         }
         .alert(item: $alertItem, content: newAlert)
     }

@@ -33,8 +33,7 @@ struct ModelFiscalIsfView: View {
                 Text("Barême")
             }.isDetailLink(true)
             
-            Section(header: Text("Calcul").font(.headline),
-                    footer: Text(footnote)) {
+            Section {
                 AmountEditView(label  : "Seuil d'imposition",
                                amount : $subModel.seuil)
 
@@ -54,9 +53,13 @@ struct ModelFiscalIsfView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Calcul").font(.headline)
+            } footer: {
+                Text(footnote)
             }
             
-            Section(header: Text("Décotes Spécifiques").font(.headline)) {
+            Section {
                 Stepper(value : $subModel.decoteResidence,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
@@ -89,6 +92,8 @@ struct ModelFiscalIsfView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Décotes Spécifiques").font(.headline)
             }
         }
         .navigationTitle("Imposition sur le Capital")

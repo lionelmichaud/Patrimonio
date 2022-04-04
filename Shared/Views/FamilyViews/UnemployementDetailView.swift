@@ -63,7 +63,7 @@ struct UnemployementDetailView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Indemnité de licenciement").font(.subheadline)) {
+            Section {
                 if viewModel.allocationBonnified {
                     AmountView(label: "Montant brut légal", amount: viewModel.compensationLegal).foregroundColor(.gray)
                     AmountView(label: "Montant brut conventionnel", amount: viewModel.compensationConvention).foregroundColor(.gray)
@@ -78,8 +78,11 @@ struct UnemployementDetailView: View {
                 }
                 AmountView(label: "Montant net", amount: viewModel.compensationNet, weight: .bold)
                 AmountView(label: "Montant imposable", amount: viewModel.compensationTaxable)
+            } header: {
+                Text("Indemnité de licenciement").font(.subheadline)
             }
-            Section(header: Text("Allocation chômage").font(.subheadline)) {
+
+            Section {
                 if let differe = viewModel.differe {
                     HStack {
                         IntegerView(label: "Différé spécifique (car indemn. supralégale)", integer: differe)
@@ -91,13 +94,19 @@ struct UnemployementDetailView: View {
                     Text("mois")
                 }
                 AmountView(label: "Montant total perçu net (sur \(viewModel.durationInMonth) mois)", amount: viewModel.totalAllocationNet, weight: .bold)
+            } header: {
+                Text("Allocation chômage").font(.subheadline)
             }
-            Section(header: Text("Allocation chômage non réduite").font(.subheadline)) {
+
+            Section {
                 AmountView(label: "Montant annuel brut", amount: viewModel.allocationBrut)
                 AmountView(label: "Montant annuel net", amount: viewModel.allocationNet, weight: .bold)
+            } header: {
+                Text("Allocation chômage non réduite").font(.subheadline)
             }
+
             if let afterMonth = viewModel.afterMonth {
-                Section(header: Text("Allocation chômage réduite").font(.subheadline)) {
+                Section {
                     HStack {
                         IntegerView(label: "Réduction de l'allocation après", integer: afterMonth)
                         Text("mois")
@@ -105,6 +114,8 @@ struct UnemployementDetailView: View {
                     PercentView(label: "Coefficient de réduction", percent: viewModel.percentReduc)
                     AmountView(label: "Montant annuel réduit brut", amount: viewModel.allocationReducedBrut)
                     AmountView(label: "Montant annuel réduit net", amount: viewModel.allocationReducedNet, weight: .bold)
+                } header: {
+                    Text("Allocation chômage réduite").font(.subheadline)
                 }
             }
         }

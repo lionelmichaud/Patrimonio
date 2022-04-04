@@ -28,7 +28,7 @@ struct DebtDetailedView: View {
                           totalValue : item.value(atEndOf : CalendarCst.thisYear))
 
             /// acquisition
-            Section(header: Text("CARCTERISTIQUES")) {
+            Section {
                 AmountEditView(label    : "Montant de la dette à date",
                                amount   : $item.value,
                                validity : .noz)
@@ -37,6 +37,8 @@ struct DebtDetailedView: View {
                         .foregroundColor(.red)
                         .padding(.trailing)
                 }
+            } header: {
+                Text("CARCTERISTIQUES")
             }
         }
         .textFieldStyle(.roundedBorder)

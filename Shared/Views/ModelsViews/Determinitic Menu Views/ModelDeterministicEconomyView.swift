@@ -19,7 +19,7 @@ struct ModelDeterministicEconomyView: View {
 
     var body: some View {
         Form {
-            Section(header: Text("Inflation").font(.headline)) {
+            Section {
                 VersionEditableViewInForm(version: $subModel.inflation.version)
 
                 Stepper(value : $subModel.inflation.defaultValue,
@@ -32,9 +32,11 @@ struct ModelDeterministicEconomyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Inflation").font(.headline)
             }
             
-            Section(header: Text("Placements sans Risque").font(.headline)) {
+            Section {
                 VersionEditableViewInForm(version: $subModel.securedRate.version)
 
                 Stepper(value : $subModel.securedRate.defaultValue,
@@ -58,9 +60,11 @@ struct ModelDeterministicEconomyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Placements sans Risque").font(.headline)
             }
             
-            Section(header: Text("Placements Actions").font(.headline)) {
+            Section {
                 VersionEditableViewInForm(version: $subModel.stockRate.version)
 
                 Stepper(value : $subModel.stockRate.defaultValue,
@@ -84,6 +88,8 @@ struct ModelDeterministicEconomyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Placements Actions").font(.headline)
             }
         }
         .navigationTitle("Modèle Economique")

@@ -15,13 +15,14 @@ struct UpdateSettingsView: View {
     
     var body: some View {
         Form {
-            Section(header:
-                        Text("Remplacer votre dossier patron par la version par défaut fournie par l'application")
-                        .textCase(.none)) {
+            Section {
                 Button(action: updateTemplateDirectoryFromApp,
                        label: { Text("Remplacer tout le dossier patron") })
                 Button(action: updateModelFilesFromApp,
                        label: { Text("Remplacer seulement le modèle environemental du dossier patron") })
+            } header: {
+                Text("Remplacer votre dossier patron par la version par défaut fournie par l'application")
+                    .textCase(.none)
             }
             .alert(item: $alertItem, content: newAlert)
         }

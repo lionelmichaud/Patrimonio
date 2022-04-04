@@ -55,7 +55,7 @@ struct ModelRetirementGeneralView: View {
                 }
             }
 
-            Section(header: Text("Décote / Surcote").font(.headline)) {
+            Section {
                 Stepper(value : $subModel.decoteParTrimestre,
                         in    : 0 ... 1.5,
                         step  : 0.025) {
@@ -99,6 +99,8 @@ struct ModelRetirementGeneralView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Décote / Surcote").font(.headline)
             }
         }
         .navigationTitle("Régime Général")

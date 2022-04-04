@@ -115,10 +115,12 @@ struct TimeSpanEditView: View {
     
     var body: some View {
         Group {
-            Section(header: Text("PLAGE DE TEMPS")) {
+            Section {
                 // choisir le type de TimeFrame pour la dépense
                 CaseWithAssociatedValuePicker<TimeSpan>(caseIndex: timeSpanVM.caseIndex, label: "")
                     .pickerStyle(SegmentedPickerStyle())
+            } header: {
+                Text("PLAGE DE TEMPS")
             }
             // en fonction du type choisi
             switch timeSpanVM.wrappedValue.caseIndex {
@@ -152,7 +154,7 @@ struct TimeSpanEditView: View {
                                       boundary : timeSpanVM.from)
                     BoundaryEditView2(label     : "Fin (exclue)",
                                       boundary : timeSpanVM.to)
-                    Section(header: Text("Période")) {
+                    Section {
                         Stepper(value: timeSpanVM.period, in: 0...100, step: 1, label: {
                             HStack {
                                 Text("Période")
@@ -160,6 +162,8 @@ struct TimeSpanEditView: View {
                                 Text("\(timeSpanVM.wrappedValue.period) ans").foregroundColor(.secondary)
                             }
                         })
+                    } header: {
+                        Text("Période")
                     }
 
                 case TimeSpan.exceptional(inYear: 0).id :

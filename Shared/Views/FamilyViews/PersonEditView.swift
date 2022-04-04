@@ -166,7 +166,7 @@ private struct ScenarioSection: View {
     @ObservedObject var adultViewModel  : AdultViewModel
 
     var body: some View {
-        Section(header: Text("SCENARIO").font(.subheadline)) {
+        Section {
             if authorizeDeathAgeModification {
                 Stepper(value: $personViewModel.deathAge, in: Date().year - personViewModel.birthDate.year ... 100) {
                     HStack {
@@ -182,6 +182,8 @@ private struct ScenarioSection: View {
                 CasePicker(pickedCase: $adultViewModel.fiscalOption, label: "Option fiscale retenue en cas d'héritage")
                     .pickerStyle(SegmentedPickerStyle())
             }
+        } header: {
+            Text("SCENARIO").font(.subheadline)
         }
     }
 }
@@ -191,7 +193,7 @@ struct DepedanceSection: View {
     @ObservedObject var adultViewModel: AdultViewModel
     
     var body: some View {
-        Section(header:Text("DEPENDANCE")) {
+        Section {
             Stepper(value: $adultViewModel.nbYearOfDepend, in: 0 ... 15) {
                 HStack {
                     Text("Nombre d'année de dépendance ")
@@ -199,6 +201,8 @@ struct DepedanceSection: View {
                     Text("\(adultViewModel.nbYearOfDepend) ans").foregroundColor(.secondary)
                 }
             }
+        } header: {
+            Text("DEPENDANCE")
         }
     }
 }
@@ -208,9 +212,11 @@ struct ActivitySection: View {
     @ObservedObject var adultViewModel: AdultViewModel
     
     var body: some View {
-        Section(header: Text("ACTIVITE")) {
+        Section {
             RevenueEditView(adultViewModel: adultViewModel)
             EndOfWorkingPeriodEditView(adultViewModel: adultViewModel)
+        } header: {
+            Text("ACTIVITE")
         }
     }
 }
@@ -280,7 +286,7 @@ struct ChildEditView : View {
     
     var body: some View {
         Group {
-            Section(header: Text("SCENARIO").font(.subheadline)) {
+            Section {
                 if authorizeDeathAgeModification {
                     Stepper(value: $deathAge, in: Date().year - birthDate.year ... 100) {
                         HStack {
@@ -306,6 +312,8 @@ struct ChildEditView : View {
                         Text("\(ageIndependance) ans").foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("SCENARIO").font(.subheadline)
             }
         }
     }

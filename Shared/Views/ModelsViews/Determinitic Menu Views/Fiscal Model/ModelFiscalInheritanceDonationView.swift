@@ -20,7 +20,7 @@ struct ModelFiscalInheritanceDonationView: View {
         Form {
             VersionEditableViewInForm(version: $subModel.version)
 
-            Section(header: Text("Entre Conjoint").font(.headline)) {
+            Section {
                 NavigationLink(destination: RateGridView(label: "Barême Donation Conjoint",
                                                          grid: $subModel.gridDonationConjoint.transaction(),
                                                          updateDependenciesToModel: updateDependenciesToModel)) {
@@ -29,9 +29,11 @@ struct ModelFiscalInheritanceDonationView: View {
                 
                 AmountEditView(label  : "Abattement sur Donation au Conjoint",
                                amount : $subModel.abatConjoint)
+            } header: {
+                Text("Entre Conjoint").font(.headline)
             }
             
-            Section(header: Text("En Ligne Directe").font(.headline)) {
+            Section {
                 NavigationLink(destination: RateGridView(label: "Barême Donation Ligne Directe",
                                                          grid: $subModel.gridLigneDirecte.transaction(),
                                                          updateDependenciesToModel: updateDependenciesToModel)) {
@@ -40,6 +42,8 @@ struct ModelFiscalInheritanceDonationView: View {
                 
                 AmountEditView(label  : "Abattement sur Donation/Succession en ligne directe",
                                amount : $subModel.abatLigneDirecte)
+            } header: {
+                Text("En Ligne Directe").font(.headline)
             }
             
             AmountEditView(label  : "Abattement sur Succession pour frais Funéraires",

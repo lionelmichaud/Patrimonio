@@ -20,7 +20,7 @@ struct ModelFiscalPensionView: View {
         Form {
             VersionEditableViewInForm(version: $subModel.version)
 
-            Section(header: Text("Abattement").font(.headline)) {
+            Section {
                 Stepper(value : $subModel.rebate,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
@@ -37,9 +37,11 @@ struct ModelFiscalPensionView: View {
 
                 AmountEditView(label  : "Abattement maximum",
                                amount : $subModel.maxRebate)
+            } header: {
+                Text("Abattement").font(.headline)
             }
             
-            Section(header: Text("Taux de Cotisation").font(.headline)) {
+            Section {
                 Stepper(value : $subModel.CSGdeductible,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
@@ -94,6 +96,8 @@ struct ModelFiscalPensionView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Taux de Cotisation").font(.headline)
             }
         }
         .navigationTitle("Plus-Value Immobilière")

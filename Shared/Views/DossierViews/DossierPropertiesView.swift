@@ -25,7 +25,7 @@ struct DossierPropertiesView: View {
     var sectionHeader: String
 
     var body: some View {
-        Section(header: Text(sectionHeader)) {
+        Section {
             LabeledText(label: "Nom du dossier",
                         text : dossier.name)
             if dossier.isActive {
@@ -46,6 +46,8 @@ struct DossierPropertiesView: View {
                         text : "\(dossier.dateModificationStr) à \(dossier.hourModificationStr)")
             LabeledText(label: "Nom du répertoire associé",
                         text : dossier.folderName)
+        } header: {
+            Text(sectionHeader)
         }
     }
     

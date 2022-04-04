@@ -21,7 +21,7 @@ struct ModelDeterministicFiscalView: View {
                            comment: "PASS",
                            amount : $subModel.PASS)
 
-            Section(header: Text("Impôts").font(.headline)) {
+            Section {
                 NavigationLink(destination: ModelFiscalIrppView(updateDependenciesToModel: updateDependenciesToModel,
                                                                 subModel: $subModel.incomeTaxes.model.transaction())) {
                     Text("Revenus du Travail (IRPP)")
@@ -53,9 +53,11 @@ struct ModelDeterministicFiscalView: View {
                     VersionVStackView(version: subModel.estateCapitalGainIrpp.model.version,
                                       withDetails: false)
                 }
+            } header: {
+                Text("Impôts").font(.headline)
             }
             
-            Section(header: Text("Charges Sociales").font(.headline)) {
+            Section {
                 NavigationLink(destination: ModelFiscalPensionView(updateDependenciesToModel: updateDependenciesToModel,
                                                                    subModel: $subModel.pensionTaxes.model.transaction())) {
                         Text("Pensions de Retraite")
@@ -103,9 +105,11 @@ struct ModelDeterministicFiscalView: View {
                         VersionVStackView(version: subModel.estateCapitalGainTaxes.model.version,
                                           withDetails: false)
                     }
+            } header: {
+                Text("Charges Sociales").font(.headline)
             }
             
-            Section(header: Text("Taxes").font(.headline)) {
+            Section {
                 NavigationLink(destination: DemembrementGridView(label: "Barême de Démembrement",
                                                                  grid: $subModel.demembrement.model.grid.transaction(),
                                                                  updateDependenciesToModel: updateDependenciesToModel)) {
@@ -127,6 +131,8 @@ struct ModelDeterministicFiscalView: View {
                     VersionVStackView(version: subModel.lifeInsuranceInheritance.model.version,
                                       withDetails: false)
                 }
+            } header: {
+                Text("Taxes").font(.headline)
             }
         }
         .navigationTitle("Modèle Fiscal")

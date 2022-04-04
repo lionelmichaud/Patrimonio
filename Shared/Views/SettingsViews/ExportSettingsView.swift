@@ -18,22 +18,24 @@ struct ExportSettingsView: View {
 
     var body: some View {
         Form {
-            Section(header: Text("Résulats de Simulation").font(.subheadline),
-                    footer: Text("Sélectionner les résultats de simulation à partager")) {
+            Section {
                 Toggle("Partager les résultas de simulation au format CSV",
                        isOn: $shareCsvFiles)
-                    .onChange(of: shareCsvFiles) { newValue in
-                        shareCsvFiles = newValue
-                    }
+                .onChange(of: shareCsvFiles) { newValue in
+                    shareCsvFiles = newValue
+                }
                 Toggle("Partager les copies d'écran",
                        isOn: $shareImageFiles)
-                    .onChange(of: shareImageFiles) { newValue in
-                        shareImageFiles = newValue
-                    }
+                .onChange(of: shareImageFiles) { newValue in
+                    shareImageFiles = newValue
+                }
+            } header: {
+                Text("Résulats de Simulation").font(.subheadline)
+            } footer: {
+                Text("Sélectionner les résultats de simulation à partager")
             }
             if shareCsvFiles || shareImageFiles {
-                Section(header: Text("Contexte de Simulation").font(.subheadline),
-                        footer: Text("Sélectionner les autres données à partager avec les résultats de simulation")) {
+                Section {
                     Toggle("Partager **tous** les fichiers de votre dossier (membres de la famille, dépenses et patrimoine associés)",
                            isOn: $shareAllDossierFilesWithSimuResults.animation(.easeInOut))
                         .onChange(of: shareAllDossierFilesWithSimuResults) { share in
@@ -66,6 +68,10 @@ struct ExportSettingsView: View {
                             }
                         }
                     }
+                } header: {
+                    Text("Contexte de Simulation").font(.subheadline)
+                } footer: {
+                    Text("Sélectionner les autres données à partager avec les résultats de simulation")
                 }
             }
         }

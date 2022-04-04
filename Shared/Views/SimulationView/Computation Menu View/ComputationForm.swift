@@ -48,7 +48,7 @@ struct ComputationForm: View {
     }
     
     var resultsSectionView: some View {
-        Section(header: Text("Résultats").font(.headline)) {
+        Section {
             // affichage du statut de la simulation
             if simulation.isComputed {
                 HStack {
@@ -78,6 +78,8 @@ struct ComputationForm: View {
                     Text("Calculer une simulation au préalable").foregroundColor(.red)
                 }
             }
+        } header: {
+            Text("Résultats").font(.headline)
         }
     }
     
@@ -85,7 +87,7 @@ struct ComputationForm: View {
         Group {
             if simulation.isComputed {
                 ForEach(simulation.kpis.values) { kpi in
-                    Section(header: Text(kpi.name)) {
+                    Section {
                         if kpi.value(withMode: simulation.mode) != nil {
                             KpiSummaryView(kpi            : kpi,
                                            simulationMode : simulation.mode,
@@ -95,6 +97,8 @@ struct ComputationForm: View {
                             Text("Valeure indéfinie")
                                 .foregroundColor(.red)
                         }
+                    } header: {
+                        Text(kpi.name)
                     }
                 }
             }

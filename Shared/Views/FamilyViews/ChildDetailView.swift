@@ -19,7 +19,7 @@ struct ChildDetailView: View {
 
     var body: some View {
         let child = member as! Child
-        return Section(header: Text("SCENARIO").font(.subheadline)) {
+        return Section {
             HStack {
                 Text("Age de décès estimé")
                 Spacer()
@@ -38,6 +38,8 @@ struct ChildDetailView: View {
             NavigationLink(destination: PersonLifeLineView(from: self.member, using: model)) {
                 Text("Ligne de vie").foregroundColor(.blue)
             }
+        } header: {
+            Text("SCENARIO").font(.subheadline)
         }
     }
 }

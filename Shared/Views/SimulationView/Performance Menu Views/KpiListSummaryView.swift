@@ -28,11 +28,13 @@ struct KpiListSummaryView: View {
                 .padding()
             Form {
                 ForEach(simulation.kpis.values) { kpi in
-                    Section(header: Text(kpi.name)) {
+                    Section {
                         KpiSummaryView(kpi            : kpi,
                                        simulationMode : simulation.mode,
                                        withPadding    : false,
                                        withDetails    : false)
+                    } header: {
+                        Text(kpi.name)
                     }
                 }
             }

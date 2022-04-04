@@ -17,7 +17,7 @@ struct ModelUnemploymentDiffereView: View {
 
     var body: some View {
         Form {
-            Section(header: Text("Délai").font(.headline)) {
+            Section {
                 Stepper(value : $subModel.delaiAttente,
                         in    : 0 ... 100) {
                     HStack {
@@ -27,9 +27,11 @@ struct ModelUnemploymentDiffereView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Délai").font(.headline)
             }
 
-            Section(header: Text("Différé Spécifique").font(.headline)) {
+            Section {
                 Stepper(value : $subModel.ratioDiffereSpecifique,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
@@ -60,6 +62,8 @@ struct ModelUnemploymentDiffereView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Différé Spécifique").font(.headline)
             }
         }
         .navigationTitle("Calcul du Différé d'indemnisation")

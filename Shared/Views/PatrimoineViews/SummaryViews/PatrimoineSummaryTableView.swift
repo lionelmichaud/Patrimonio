@@ -97,16 +97,18 @@ struct PatrimoineSummaryTableView: View {
 
     var body: some View {
         Form {
-            Section(header: header("", year: year)) {
+            Section {
                 HStack {
                     Text("Actif Net").fontWeight(.bold)
                     Spacer()
                     Text(patrimoine.value(atEndOf: year).€String)
                 }.font(.title3)
+            } header: {
+                header("", year: year)
             }
             .listRowBackground(ListTheme.tableRowsBaseColor)
             
-            Section(header: header("ACTIF", year: year)) {
+            Section {
                 Group {
                     // (0) Immobilier
                     ListTableRowView(label       : "Immobilier",
@@ -254,9 +256,11 @@ struct PatrimoineSummaryTableView: View {
                                                                onColor   : PatrimoineSummaryTableView.liquidityColors) })
                     }
                 }
+            } header: {
+                header("ACTIF", year: year)
             }
             
-            Section(header: header("PASSIF", year: year)) {
+            Section {
                 Group {
                     // (0) Emprunts
                     ListTableRowView(label       : "Emprunt",
@@ -292,6 +296,8 @@ struct PatrimoineSummaryTableView: View {
                                          rating2     : { EmptyView() })
                     }
                 }
+            } header: {
+                header("PASSIF", year: year)
             }
         }
         .listStyle(GroupedListStyle())

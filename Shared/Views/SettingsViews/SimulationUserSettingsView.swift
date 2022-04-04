@@ -20,16 +20,19 @@ struct SimulationUserSettingsView: View {
 
     var body: some View {
         Form {
-            Section(header: Text("Modèle Macro-Économique".uppercased()),
-                    footer: Text("En mode Monté-Carlo seulement: simuler la volatilité du cours des actions et des obligations")) {
+            Section {
                 Toggle("Simuler la volatilité des marchés financiers (actions et obligations)",
                        isOn: $simulateVolatility)
-                    .onChange(of     : simulateVolatility,
-                              perform: { _ in
-                                // remettre à zéro la simulation et sa vue
-                                simulation.notifyComputationInputsModification()
-                                uiState.resetSimulationView()
-                              })
+                .onChange(of     : simulateVolatility,
+                          perform: { _ in
+                    // remettre à zéro la simulation et sa vue
+                    simulation.notifyComputationInputsModification()
+                    uiState.resetSimulationView()
+                })
+            } header: {
+                Text("Modèle Macro-Économique".uppercased())
+            } footer: {
+                Text("En mode Monté-Carlo seulement: simuler la volatilité du cours des actions et des obligations")
             }
         }
         .navigationTitle(Text("Simulation"))

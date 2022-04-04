@@ -18,7 +18,7 @@ struct StatisticSidebarSectionView: View {
     @EnvironmentObject private var uiState    : UIState
     
     var body: some View {
-        Section(header: Text("Modèles Statistiques")) {
+        Section {
             NavigationLink(destination: ModelStatisticHumanView(updateDependenciesToModel: updateDependenciesToModel),
                            tag         : .statHumanModel,
                            selection   : $uiState.modelsViewState.selectedItem) {
@@ -40,6 +40,8 @@ struct StatisticSidebarSectionView: View {
                 Label("Modèle Sociologique", systemImage: "slider.horizontal.3")
             }
             .isDetailLink(true)
+        } header: {
+            Text("Modèles Statistiques")
         }
     }
 

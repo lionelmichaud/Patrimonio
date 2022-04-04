@@ -15,7 +15,7 @@ struct ModelAssistantSidebarSectionView: View {
     @EnvironmentObject private var uiState: UIState
     
     var body: some View {
-        Section(header: Text("Assistants")) {
+        Section {
             // Vue gestion des modèles
             NavigationLink(destination : ModelManagerView(),
                            tag         : .modelManager,
@@ -29,6 +29,8 @@ struct ModelAssistantSidebarSectionView: View {
                            selection   : $uiState.modelsViewState.selectedItem) {
                 Label("Assistant Distributions", systemImage: "chart.xyaxis.line")
             }.isDetailLink(true)
+        } header: {
+            Text("Assistants")
         }
     }
 }

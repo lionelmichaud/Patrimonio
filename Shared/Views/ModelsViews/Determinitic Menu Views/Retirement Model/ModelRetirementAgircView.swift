@@ -48,7 +48,7 @@ struct ModelRetirementAgircView: View {
                 Text("Réduction pour trimestres manquant après l'âge légale")
             }.isDetailLink(true)
 
-            Section(header: Text("Majoration pour Enfants").font(.headline)) {
+            Section {
                 Stepper(value : $subModel.majorationPourEnfant.majorPourEnfantsNes,
                         in    : 0 ... 20.0,
                         step  : 1.0) {
@@ -85,6 +85,8 @@ struct ModelRetirementAgircView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Majoration pour Enfants").font(.headline)
             }
         }
         .navigationTitle("Régime Général")

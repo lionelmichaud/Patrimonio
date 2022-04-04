@@ -17,13 +17,15 @@ struct ScenarioSidebarSectionView: View {
 
     var body: some View {
         if simulationIsComputed {
-            Section(header: Text("Scénario") ) {
+            Section {
                 NavigationLink(destination : ScenarioSummaryView(simulationMode: simulationMode),
                                tag         : .lastScenarioUsed,
                                selection   : $uiState.simulationViewState.selectedItem) {
                     Label("Dernier Scénario Exécuté", systemImage: "film")
                 }
                 .isDetailLink(true)
+            } header: {
+                Text("Scénario")
             }
         }
     }

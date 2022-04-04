@@ -80,7 +80,7 @@ public struct VersionSectionView: View {
     private var version: Version
 
     public var body: some View {
-        Section(header: Text("Version").font(.headline)) {
+        Section {
             if let name = version.name {
                 Text(name)
             }
@@ -93,6 +93,8 @@ public struct VersionSectionView: View {
             if let comment = version.comment {
                 Text("Note: " + comment)
             }
+        } header: {
+            Text("Version").font(.headline)
         }
     }
     

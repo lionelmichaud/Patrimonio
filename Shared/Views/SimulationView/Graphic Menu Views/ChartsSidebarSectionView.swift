@@ -23,7 +23,7 @@ struct ChartsSidebarSectionView: View {
 
     var body: some View {
         if simulation.isComputed {
-            Section(header: Text("Graphiques") ) {
+            Section {
                 DisclosureGroup(isExpanded: $isBsExpanded,
                                 content: {
                                     NavigationLink(destination : BalanceSheetGlobalChartView(),
@@ -96,6 +96,8 @@ struct ChartsSidebarSectionView: View {
                                 label: {
                                     Label("Impôt sur la Fortune", systemImage: "chart.bar.xaxis")
                                 })
+            } header: {
+                Text("Graphiques")
             }
         } else {
             EmptyView()

@@ -19,7 +19,7 @@ struct SuccessionsSidebarSectionView: View {
     
     var body: some View {
         if simulation.isComputed {
-            Section(header: Text("Successions") ) {
+            Section {
                 NavigationLink(destination: SuccessionsView(title       : "Successions Légales",
                                                             successions : simulation.occuredLegalSuccessions),
                                tag         : .successionsLegal,
@@ -43,6 +43,8 @@ struct SuccessionsSidebarSectionView: View {
                     Label("Cumul", systemImage: "person.fill.xmark")
                 }
                 .isDetailLink(true)
+            } header: {
+                Text("Successions")
             }
         }
     }

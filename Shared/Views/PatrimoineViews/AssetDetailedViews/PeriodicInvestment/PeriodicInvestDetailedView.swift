@@ -30,7 +30,7 @@ struct PeriodicInvestDetailedView: View {
                           totalValue : item.value(atEndOf: CalendarCst.thisYear))
             
             // acquisition
-            Section(header: Text("TYPE")) {
+            Section {
                 TypeInvestEditView(investType: $item.type)
                 AmountEditView(label    : "Versement annuel - net de frais",
                                amount   : $item.yearlyPayement,
@@ -38,9 +38,11 @@ struct PeriodicInvestDetailedView: View {
                 AmountEditView(label    : "Frais annuels sur versements",
                                amount   : $item.yearlyCost,
                                validity : .poz)
+            } header: {
+                Text("TYPE")
             }
             
-            Section(header: Text("INITIALISATION")) {
+            Section {
                 YearPicker(title     : "Année de départ (fin d'année)",
                            inRange   : CalendarCst.thisYear - 20...CalendarCst.thisYear + 100,
                            selection : $item.firstYear)
@@ -49,16 +51,20 @@ struct PeriodicInvestDetailedView: View {
                                validity : .poz)
                 AmountEditView(label  : "Intérêts initiaux",
                                amount : $item.initialInterest)
+            } header: {
+                Text("INITIALISATION")
             }
             
-            Section(header: Text("RENTABILITE")) {
+            Section {
                 InterestRateTypeEditView(rateType: $item.interestRateType)
                 PercentView(label   : "Rendement moyen net d'inflation",
                             percent : item.averageInterestRateNetOfTaxesAndInflation)
                     .foregroundColor(.secondary)
+            } header: {
+                Text("RENTABILITE")
             }
             
-            Section(header: Text("LIQUIDATION")) {
+            Section {
                 YearPicker(title: "Année de liquidation (fin d'année)",
                            inRange: item.firstYear...item.firstYear + 100,
                            selection: $item.lastYear)
@@ -80,6 +86,8 @@ struct PeriodicInvestDetailedView: View {
                 AmountView(label: "Intérêts cumulés taxables à l'IRPP",
                            amount: netCmulatedInterests)
                     .foregroundColor(.secondary)
+            } header: {
+                Text("LIQUIDATION")
             }
         }
         .textFieldStyle(.roundedBorder)

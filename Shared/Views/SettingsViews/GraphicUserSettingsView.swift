@@ -24,13 +24,16 @@ struct GraphicUserSettingsView: View {
     var body: some View {
         Form {
             // Graphique Bilan
-            Section(header: Text("Graphique Bilan".uppercased()),
-                    footer: Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu ne prendra en compte que les biens satisfaisant à ce critère")) {
+            Section {
                 CasePicker(pickedCase: $ownershipGraphicSelection, label: "Filtrage des actifs et passifs du Bilan individuel")
                     .pickerStyle(DefaultPickerStyle())
                     .onChange(of: ownershipGraphicSelection) { newValue in
                         Preferences.standard.ownershipGraphicSelection = newValue
                     }
+            } header: {
+                Text("Graphique Bilan".uppercased())
+            } footer: {
+                Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu ne prendra en compte que les biens satisfaisant à ce critère")
             }
             
             Section(footer: Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu prendra en compte cette valorisation")) {

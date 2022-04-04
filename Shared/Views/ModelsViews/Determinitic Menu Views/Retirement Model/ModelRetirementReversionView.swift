@@ -28,7 +28,7 @@ struct ModelRetirementReversionView : View {
             Toggle("Utiliser la réforme des retraites",
                    isOn: $subModel.newModelSelected)
 
-            Section(header: Text("Système Réformé Futur").font(.headline)) {
+            Section {
                 Stepper(value : $subModel.tauxReversion,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
@@ -39,9 +39,11 @@ struct ModelRetirementReversionView : View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Système Réformé Futur").font(.headline)
             }
             
-            Section(header: Text("Système Actuel").font(.headline)) {
+            Section {
                 DisclosureGroup("Régime Général",
                                 isExpanded: $isExpandedCurrentGeneral) {
                     AmountEditView(label: "Minimum",
@@ -83,6 +85,8 @@ struct ModelRetirementReversionView : View {
                     }
 
                 }
+            } header: {
+                Text("Système Actuel").font(.headline)
             }
         }
         .navigationTitle("Régime Général")

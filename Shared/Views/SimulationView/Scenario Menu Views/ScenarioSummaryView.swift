@@ -29,7 +29,7 @@ struct ScenarioSummaryView: View {
             Text("Derniers paramètres de simulation utilisés").bold()
             Form {
                 // Modèle Humain
-                Section(header: Text("Modèle Humain")) {
+                Section {
                     ForEach(family.members.items) { member in
                         if let adult = member as? Adult {
                             Text(adult.displayName)
@@ -43,10 +43,12 @@ struct ScenarioSummaryView: View {
                             }
                         }
                     }
+                } header: {
+                    Text("Modèle Humain")
                 }
 
                 // Modèle Economique
-                Section(header: Text("Modèle Economique")) {
+                Section {
                     PercentView(label   : "Inflation",
                                 percent : model.economyModel.randomizers.inflation.value(withMode: simulationMode))
                     PercentView(label   : "Rendement annuel moyen des Obligations sans risque",
@@ -61,16 +63,20 @@ struct ScenarioSummaryView: View {
                         PercentView(label   : "Volatilité des Actions",
                                     percent : model.economyModel.randomizers.stockVolatility)
                     }
+                } header: {
+                    Text("Modèle Economique")
                 }
 
                 // Modèle Sociologique
-                Section(header: Text("Modèle Sociologique")) {
+                Section {
                     PercentView(label   : "Dévaluation anuelle des pensions par rapport à l'inflation",
                                 percent : -model.socioEconomyModel.randomizers.pensionDevaluationRate.value(withMode: simulationMode))
                     IntegerView(label   : "Nombre de trimestres additionels pour obtenir le taux plein",
                                 integer : Int(model.socioEconomyModel.randomizers.nbTrimTauxPlein.value(withMode: simulationMode)))
                     PercentView(label   : "Pénalisation des dépenses",
                                 percent : model.socioEconomyModel.randomizers.expensesUnderEvaluationRate.value(withMode: simulationMode))
+                } header: {
+                    Text("Modèle Sociologique")
                 }
             }
             .navigationTitle("Résumé")

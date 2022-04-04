@@ -20,7 +20,7 @@ struct KpiSidebarSectionView: View {
     
     var body: some View {
         if simulation.isComputed {
-            Section(header: Text("Performance")) {
+            Section {
                 // synthèse des KPIs
                 DisclosureGroup(isExpanded: $isKpiExpanded,
                                 content: {
@@ -48,6 +48,8 @@ struct KpiSidebarSectionView: View {
                 
                 // Résultats tabulés des runs de MontéCarlo
                 GridsView()
+            } header: {
+                Text("Performance")
             }
         }
     }

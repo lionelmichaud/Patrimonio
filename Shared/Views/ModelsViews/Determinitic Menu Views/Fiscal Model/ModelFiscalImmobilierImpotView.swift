@@ -39,7 +39,7 @@ struct ModelFiscalImmobilierImpotView: View {
                 }
             }
 
-            Section(header: Text("Abattement").font(.headline)) {
+            Section {
                 Stepper(value : $subModel.discountTravaux,
                         in    : 0 ... 100.0,
                         step  : 1.0) {
@@ -54,6 +54,8 @@ struct ModelFiscalImmobilierImpotView: View {
                 IntegerEditView(label   : "Abattement possible après",
                                 comment : "ans",
                                 integer : $subModel.discountAfter)
+            } header: {
+                Text("Abattement").font(.headline)
             }
         }
         .navigationTitle("Plus-Value Immobilière")

@@ -19,7 +19,7 @@ struct ModelDeterministicSociologyView: View {
 
     var body: some View {
         Form {
-            Section(header: Text("Dévaluation des pensions").font(.headline)) {
+            Section {
                 VersionEditableViewInForm(version: $subModel.pensionDevaluationRate.version)
 
                 Stepper(value : $subModel.pensionDevaluationRate.defaultValue,
@@ -32,9 +32,11 @@ struct ModelDeterministicSociologyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Dévaluation des pensions").font(.headline)
             }
             
-            Section(header: Text("Évolution du nombre de trimestres requis").font(.headline)) {
+            Section {
                 VersionEditableViewInForm(version: $subModel.nbTrimTauxPlein.version)
 
                 Stepper(value : $subModel.nbTrimTauxPlein.defaultValue,
@@ -46,9 +48,11 @@ struct ModelDeterministicSociologyView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Évolution du nombre de trimestres requis").font(.headline)
             }
             
-            Section(header: Text("Sous-estimation du niveau des dépenses").font(.headline)) {
+            Section {
                 VersionEditableViewInForm(version: $subModel.expensesUnderEvaluationRate.version)
                 
                 Stepper(value : $subModel.expensesUnderEvaluationRate.defaultValue,
@@ -64,6 +68,8 @@ struct ModelDeterministicSociologyView: View {
                 .onChange(of: subModel.expensesUnderEvaluationRate) { _ in
                     updateDependenciesToModel()
                 }
+            } header: {
+                Text("Sous-estimation du niveau des dépenses").font(.headline)
             }
         }
         .navigationTitle("Modèle Sociologique")

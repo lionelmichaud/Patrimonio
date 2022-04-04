@@ -33,7 +33,7 @@ struct FamilySectionView : View {
                     .foregroundColor(.accentColor)
             })
 
-        Section(header: Text("Membres de la Famille")) {
+        Section {
             // liste des membres de la famille
             ForEach(family.members.items) { member in
                 NavigationLink(destination: PersonDetailView().environmentObject(member)) {
@@ -45,6 +45,8 @@ struct FamilySectionView : View {
             .onDelete(perform: deleteMembers)
             .onMove(perform: family.moveMembers)
             .listStyle(.sidebar)
+        } header: {
+            Text("Membres de la Famille")
         }
     }
     

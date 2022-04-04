@@ -18,7 +18,7 @@ struct DeterministicSidebarSectionView: View {
     @EnvironmentObject private var uiState    : UIState
     
     var body: some View {
-        Section(header: Text("Modèles Déterministe")) {
+        Section {
             // modèle vie humaine
             NavigationLink(destination: ModelDeterministicHumanView(updateDependenciesToModel: updateDependenciesToModel,
                                                                     subModel: $model.humanLifeModel.transaction()),
@@ -71,6 +71,8 @@ struct DeterministicSidebarSectionView: View {
                 Label("Modèle Chômage", systemImage: "slider.horizontal.3")
             }
             .isDetailLink(true)
+        } header: {
+            Text("Modèles Déterministe")
         }
     }
 

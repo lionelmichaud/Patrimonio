@@ -20,7 +20,7 @@ struct ModelFiscalIrppView: View {
         Form {
             VersionEditableViewInForm(version: $subModel.version)
 
-            Section(header: Text("Salaire").font(.headline)) {
+            Section {
                 NavigationLink(destination: RateGridView(label: "Barême IRPP",
                                                          grid: $subModel.grid.transaction(),
                                                          updateDependenciesToModel: updateDependenciesToModel)) {
@@ -46,9 +46,11 @@ struct ModelFiscalIrppView: View {
 
                 AmountEditView(label  : "Plafond de Réduction d'Impôt par Enfant",
                                amount : $subModel.childRebate)
+            } header: {
+                Text("Salaire").font(.headline)
             }
             
-            Section(header: Text("BNC").font(.headline)) {
+            Section {
                 Stepper(value : $subModel.turnOverRebate,
                         in    : 0 ... 100.0) {
                     HStack {
@@ -61,6 +63,8 @@ struct ModelFiscalIrppView: View {
 
                 AmountEditView(label  : "Abattement minimum",
                                amount : $subModel.minTurnOverRebate)
+            } header: {
+                Text("BNC").font(.headline)
             }
         }
         .navigationTitle("Revenus du Travail")

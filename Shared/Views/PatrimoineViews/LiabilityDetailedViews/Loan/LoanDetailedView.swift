@@ -28,7 +28,7 @@ struct LoanDetailedView: View {
                           totalValue : item.value(atEndOf : CalendarCst.thisYear))
             
             // acquisition
-            Section(header: Text("CARCTERISTIQUES")) {
+            Section {
                 AmountEditView(label    : "Montant emprunté",
                                amount   : $item.loanedValue,
                                validity : .noz)
@@ -41,9 +41,11 @@ struct LoanDetailedView: View {
                 LabeledText(label: "Durée du prêt",
                                 text : "\(item.lastYear - item.firstYear + 1) ans")
                     .foregroundColor(.secondary)
+            } header: {
+                Text("CARCTERISTIQUES")
             }
             
-            Section(header: Text("CONDITIONS")) {
+            Section {
                 PercentEditView(label    : "Taux d'intérêt annuel",
                                 percent  : $item.interestRate,
                                 validity : .poz)
@@ -67,6 +69,8 @@ struct LoanDetailedView: View {
                 AmountView(label  : "Coût total du crédit",
                            amount : item.costOfCredit)
                 .foregroundColor(.secondary)
+            } header: {
+                Text("CONDITIONS")
             }
         }
         .textFieldStyle(.roundedBorder)

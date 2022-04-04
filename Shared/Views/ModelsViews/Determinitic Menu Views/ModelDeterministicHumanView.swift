@@ -19,7 +19,7 @@ struct ModelDeterministicHumanView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Homme").font(.headline)) {
+            Section {
                 VersionEditableViewInForm(version: $subModel.menLifeExpectation.version)
 
                 Stepper(value : $subModel.menLifeExpectation.defaultValue,
@@ -30,9 +30,11 @@ struct ModelDeterministicHumanView: View {
                         Text("\(Int(subModel.menLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Homme").font(.headline)
             }
 
-            Section(header: Text("Femme").font(.headline)) {
+            Section {
                 VersionEditableViewInForm(version: $subModel.womenLifeExpectation.version)
 
                 Stepper(value : $subModel.womenLifeExpectation.defaultValue,
@@ -43,9 +45,11 @@ struct ModelDeterministicHumanView: View {
                         Text("\(Int(subModel.womenLifeExpectation.defaultValue)) ans").foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Femme").font(.headline)
             }
 
-            Section(header: Text("Dépendance").font(.headline)) {
+            Section {
                 VersionEditableViewInForm(version: $subModel.nbOfYearsOfdependency.version)
 
                 Stepper(value : $subModel.nbOfYearsOfdependency.defaultValue,
@@ -56,6 +60,8 @@ struct ModelDeterministicHumanView: View {
                         Text("\(Int(subModel.nbOfYearsOfdependency.defaultValue)) ans").foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Dépendance").font(.headline)
             }
         }
         .navigationTitle("Modèle Humain")

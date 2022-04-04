@@ -17,7 +17,7 @@ struct ModelUnemploymentAmountView: View {
 
     var body: some View {
         Form {
-            Section(header: Text("Cas n°1").font(.headline)) {
+            Section {
                 Stepper(value : $subModel.case1Rate,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
@@ -31,10 +31,11 @@ struct ModelUnemploymentAmountView: View {
                 
                 AmountEditView(label  : "Cas 1: Indemnité journalière",
                                amount : $subModel.case1Fix)
+            } header: {
+                Text("Cas n°1").font(.headline)
             }
 
-            Section(header: Text("Cas n°2").font(.headline),
-                    footer: Text("Le cas le plus favorable au demandeur d'emploi est retenu")) {
+            Section {
                 Stepper(value : $subModel.case2Rate,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
@@ -45,9 +46,13 @@ struct ModelUnemploymentAmountView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Cas n°2").font(.headline)
+            } footer: {
+                Text("Le cas le plus favorable au demandeur d'emploi est retenu")
             }
 
-            Section(header: Text("Limites").font(.headline)) {
+            Section {
                 AmountEditView(label  : "Allocation minimale",
                                amount : $subModel.minAllocationEuro)
 
@@ -64,6 +69,8 @@ struct ModelUnemploymentAmountView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("Limites").font(.headline)
             }
         }
         .navigationTitle("Calcul du montant de l'indemnité de recherche d'emploi")
