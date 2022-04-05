@@ -38,40 +38,40 @@ public var valueKilo€Formatter: NumberFormatter = {
     return numFormatter
 }()
 
-public var value€Formatter: NumberFormatter = {
-    let numFormatter = NumberFormatter()
-    numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
-    numFormatter.isLenient             = true
-    numFormatter.maximumFractionDigits = 0
-    numFormatter.numberStyle           = .currency
-    return numFormatter
-}()
+//public var value€Formatter: NumberFormatter = {
+//    let numFormatter = NumberFormatter()
+//    numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
+//    numFormatter.isLenient             = true
+//    numFormatter.maximumFractionDigits = 0
+//    numFormatter.numberStyle           = .currency
+//    return numFormatter
+//}()
 
-public var percentFormatter: NumberFormatter = {
-    let numFormatter = NumberFormatter()
-    numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
-    numFormatter.isLenient             = true
-    numFormatter.numberStyle           = .percent
-    numFormatter.minimumIntegerDigits  = 1
-    numFormatter.maximumIntegerDigits  = 3
-    numFormatter.minimumFractionDigits = 2
-    numFormatter.maximumFractionDigits = 2
-    // numFormatter.positivePrefix      = "+"
-    return numFormatter
-}()
+//public var percentFormatter: NumberFormatter = {
+//    let numFormatter = NumberFormatter()
+//    numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
+//    numFormatter.isLenient             = true
+//    numFormatter.numberStyle           = .percent
+//    numFormatter.minimumIntegerDigits  = 1
+//    numFormatter.maximumIntegerDigits  = 3
+//    numFormatter.minimumFractionDigits = 2
+//    numFormatter.maximumFractionDigits = 2
+//    // numFormatter.positivePrefix      = "+"
+//    return numFormatter
+//}()
 
-public var percentIntegerFormatter: NumberFormatter = {
-    let numFormatter = NumberFormatter()
-    numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
-    numFormatter.isLenient             = true
-    numFormatter.numberStyle           = .percent
-    numFormatter.minimumIntegerDigits  = 1
-    numFormatter.maximumIntegerDigits  = 3
-    numFormatter.minimumFractionDigits = 0
-    numFormatter.maximumFractionDigits = 0
-    // numFormatter.positivePrefix      = "+"
-    return numFormatter
-}()
+//public var percentIntegerFormatter: NumberFormatter = {
+//    let numFormatter = NumberFormatter()
+//    numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
+//    numFormatter.isLenient             = true
+//    numFormatter.numberStyle           = .percent
+//    numFormatter.minimumIntegerDigits  = 1
+//    numFormatter.maximumIntegerDigits  = 3
+//    numFormatter.minimumFractionDigits = 0
+//    numFormatter.maximumFractionDigits = 0
+//    // numFormatter.positivePrefix      = "+"
+//    return numFormatter
+//}()
 
 public var decimalFormatter: NumberFormatter = {
     let numFormatter = NumberFormatter()
@@ -109,50 +109,3 @@ public var decimalX100IntegerFormatter: NumberFormatter = {
     // numFormatter.positivePrefix      = "+"
     return numFormatter
 }()
-
-public extension Double {
-    var €String: String {
-        value€Formatter.string(from: self as NSNumber) ?? ""
-    }
-
-    func €String(digit: Int = 0) -> String {
-        guard digit >= 0 else {
-            return "??"
-        }
-        let numFormatter = NumberFormatter()
-        numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
-        numFormatter.isLenient             = true
-        numFormatter.numberStyle           = .currency
-        numFormatter.minimumIntegerDigits  = 1
-        numFormatter.minimumFractionDigits = 0
-        numFormatter.maximumFractionDigits = digit
-        return numFormatter.string(from: self as NSNumber) ?? ""
-    }
-
-    var k€String: String {
-        valueKilo€Formatter.string(from: self as NSNumber) ?? ""
-    }
-
-    var percentStringRounded: String {
-        percentIntegerFormatter.string(from: self as NSNumber) ?? ""
-    }
-
-    func percentNormString(digit: Int = 0) -> String {
-        guard digit >= 0 else {
-            return "??"
-        }
-        let numFormatter = NumberFormatter()
-        numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
-        numFormatter.isLenient             = true
-        numFormatter.numberStyle           = .percent
-        numFormatter.minimumIntegerDigits  = 1
-        numFormatter.maximumIntegerDigits  = 3
-        numFormatter.minimumFractionDigits = 0
-        numFormatter.maximumFractionDigits = digit
-        return numFormatter.string(from: self as NSNumber) ?? ""
-    }
-
-    func percentString(digit: Int = 0) -> String {
-        (self/100.0).percentNormString(digit: digit)
-    }
-}

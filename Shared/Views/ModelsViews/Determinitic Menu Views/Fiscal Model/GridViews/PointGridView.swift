@@ -132,7 +132,7 @@ struct PointView: View {
         HStack {
             Group { Text("X = ") + Text(point.x as NSObject, formatter: decimalFormatter) }
                 .padding(.trailing)
-            Text("Probabilité(X) = ") + Text((point.y) as NSObject, formatter: percentFormatter)
+            Text("Probabilité(X) = ") + Text(point.y.percentNormString(digit: 2))
         }
     }
 }

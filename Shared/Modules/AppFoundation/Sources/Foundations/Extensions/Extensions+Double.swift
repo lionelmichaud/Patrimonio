@@ -47,5 +47,36 @@ public extension Double {
     var isNOZ: Bool {
         return ( self.isNegative || self.isZero )
     }
+}
 
+public extension Double {
+    var €String: String {
+        formatted(.currency(code: "eur").precision(.fractionLength(0)))
+    }
+
+    func €String(digit: Int = 0) -> String {
+        guard digit >= 0 else {
+            return "??"
+        }
+        formatted(.currency(code: "eur").precision(.fractionLength(digit)))
+    }
+
+    var k€String: String {
+        valueKilo€Formatter.string(from: self as NSNumber) ?? ""
+    }
+
+    var percentStringRounded: String {
+        formatted(.percent.precision(.fractionLength(0)))
+    }
+
+    func percentNormString(digit: Int = 0) -> String {
+        guard digit >= 0 else {
+            return "??"
+        }
+        return self.formatted(.percent.precision(.fractionLength(digit)))
+    }
+
+    func percentString(digit: Int = 0) -> String {
+        (self/100.0).percentNormString(digit: digit)
+    }
 }

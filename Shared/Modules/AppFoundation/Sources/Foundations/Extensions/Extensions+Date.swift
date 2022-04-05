@@ -22,6 +22,7 @@ public extension Int {
     var quarters : DateComponents { .init(month  : self * 3) }
     var years    : DateComponents { .init(year   : self) }
 }
+
 // MARK: - Relative Dates from Now or from a another date
 // https://medium.com/@rserentill/dealing-with-relative-dates-in-swift-the-cool-way-5903a7af2461
 public extension DateComponents {
@@ -285,12 +286,28 @@ public extension Optional where Wrapped == Date {
     }
 }
 
-public func min(_ date1: Date, _ date2: Date) -> Date {
-    if date1 <= date2 { return date1 } else { return date2 }
+//public func min(_ date1: Date, _ date2: Date) -> Date {
+//    if date1 <= date2 { return date1 } else { return date2 }
+//}
+
+public func min(_ dates: Date...) -> Date {
+    var minDate = Date.distantFuture
+    for date in dates where date < minDate {
+        minDate = date
+    }
+    return minDate
 }
 
-public func max(_ date1: Date, _ date2: Date) -> Date {
-    if date1 <= date2 { return date2 } else { return date1 }
+//public func max(_ date1: Date, _ date2: Date) -> Date {
+//    if date1 <= date2 { return date2 } else { return date1 }
+//}
+
+public func max(_ dates: Date...) -> Date {
+    var maxDate = Date.distantPast
+    for date in dates where date > maxDate {
+        maxDate = date
+    }
+    return maxDate
 }
 
 public func firstDayOf(year: Int) -> Date {
