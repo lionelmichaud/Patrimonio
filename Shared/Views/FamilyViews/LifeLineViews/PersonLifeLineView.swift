@@ -21,7 +21,7 @@ struct PersonLifeLineView: View {
         @Published var pitStops   : [PitStopStep]                    = []
         let spacing  = 40.0
         let radius   = 45.0
-        let fontSize = 14.0
+        let fontSize = 16.0
 
         init(from member: Person, using model: Model) {
             personName = member.displayName

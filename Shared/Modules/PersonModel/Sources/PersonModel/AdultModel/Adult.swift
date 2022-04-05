@@ -129,7 +129,7 @@ public final class Adult: Person {
             """
         - Nombre d'années de dépendance: \(nbOfYearOfDependency)
         - Cessation d'activité - age :  \(ageOfRetirementComp)
-        - Cessation d'activité - date: \(mediumDateFormatter.string(from: dateOfRetirement))
+        - Cessation d'activité - date: \(dateOfRetirement.stringMediumDate)
         - AGIRC pension liquidation - age :  \(ageOfAgircPensionLiquidComp)
         - AGIRC pension liquidation - date: \(dateOfAgircPensionLiquid.stringMediumDate)
         - Pension liquidation - age :  \(ageOfPensionLiquidComp)

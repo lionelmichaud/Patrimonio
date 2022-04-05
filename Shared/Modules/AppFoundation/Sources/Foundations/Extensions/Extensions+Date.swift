@@ -168,10 +168,6 @@ public extension Date {
 // MARK: - Date Utility
 // https://gist.github.com/Rawnly/2d0d8cf85048f0bc533afb19bdef5c1c
 public extension Date {
-//    static var now: Date {
-//        return self.init()
-//    }
-
     /// "HH:MM"
     var stringTime: String {
         return getStringTime(showSeconds: false)
@@ -211,32 +207,48 @@ public extension Date {
 public extension Date {
     /// 02/01/2001
     var stringShortDate: String {
-        return shortDateFormatter.string(from: self)
+        //return formatted(.dateTime.locale(Locale(identifier: "fr")).year().month(.twoDigits).day())
+        formatted(.dateTime.year().month(.twoDigits).day())
     }
     
     /// 2 janv. 2001
     var stringMediumDate: String {
-        return mediumDateFormatter.string(from: self)
+        formatted(date: .abbreviated, time: .omitted)
     }
     
     /// 2 janvier 2001
     var stringLongDate: String {
-        return longDateFormatter.string(from: self)
+        formatted(date: .long, time: .omitted)
     }
 
     /// 02/01
     var stringShortDayMonth: String {
-        return dayMonthShortFormatter.string(from: self)
+        formatted(.dateTime.day(.twoDigits).month(.twoDigits))
     }
     
     /// 2 janv.
     var stringMediumDayMonth: String {
-        return dayMonthMediumFormatter.string(from: self)
+        formatted(.dateTime.month().day())
     }
     
     /// 2 janvier
     var stringLongDayMonth: String {
-        return dayMonthLongFormatter.string(from: self)
+        formatted(.dateTime.month(.wide))
+    }
+
+    /// 01
+    var stringShortMonth: String {
+        formatted(.dateTime.day(.twoDigits).month(.twoDigits))
+    }
+
+    /// janv.
+    var stringMediumMonth: String {
+        formatted(.dateTime.month().day())
+    }
+
+    /// janvier
+    var stringLongMonth: String {
+        formatted(.dateTime.month(.wide))
     }
 }
 

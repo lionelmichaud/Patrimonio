@@ -57,7 +57,7 @@ public class Person : ObservableObject, Identifiable, Codable, CustomStringConve
     @Published public var displayName : String = ""
     public var birthDate : Date = Date() {
         didSet {
-            displayBirthDate = mediumDateFormatter.string(from: birthDate)
+            displayBirthDate = birthDate.stringMediumDate
             birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate)
         }
     }
@@ -100,7 +100,7 @@ public class Person : ObservableObject, Identifiable, Codable, CustomStringConve
     
     public init() {
         self.displayName         = personNameFormatter.string(from: name) // disSet not executed during init
-        self.displayBirthDate    = mediumDateFormatter.string(from: birthDate) // disSet not executed during init
+        self.displayBirthDate    = birthDate.stringMediumDate // disSet not executed during init
         self.birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate) // disSet not executed during init
         self.yearOfDeath         = birthDateComponents.year! + ageOfDeath // disSet not executed during init
     }
@@ -115,7 +115,7 @@ public class Person : ObservableObject, Identifiable, Codable, CustomStringConve
         self.birthDate           = try container.decode(Date.self, forKey: .birth_Date)
         
         self.displayName         = personNameFormatter.string(from: name) // disSet not executed during init
-        self.displayBirthDate    = mediumDateFormatter.string(from: birthDate) // disSet not executed during init
+        self.displayBirthDate    = birthDate.stringMediumDate // disSet not executed during init
         self.birthDateComponents = Date.calendar.dateComponents([.year, .month, .day], from : birthDate) // disSet not executed during init
         self.yearOfDeath         = birthDateComponents.year! + self.ageOfDeath // disSet not executed during init
     }

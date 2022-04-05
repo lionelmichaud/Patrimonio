@@ -288,7 +288,7 @@ struct RetirementGeneralSectionView: View {
             if viewModel.general.dateTauxPlein == nil || viewModel.general.ageTauxPlein == nil {
                 EmptyView()
             } else {
-                Text(mediumDateFormatter.string(from: viewModel.general.dateTauxPlein!) +
+                Text(viewModel.general.dateTauxPlein!.stringMediumDate +
                         " à l'age de \(viewModel.general.ageTauxPlein!.year!) ans \(viewModel.general.ageTauxPlein!.month!) mois")
             }
         }

@@ -49,31 +49,31 @@ private struct LifeScenarioSectionView: View {
                         LabeledText(label: "Age de décès estimé",
                                     text : "\(member.ageOfDeath) ans en \(String(member.yearOfDeath))")
                         LabeledText(label: "Cessation d'activité",
-                                    text : "\(adult.age(atDate: adult.dateOfRetirement).year!) ans \(adult.age(atDate: adult.dateOfRetirement).month!) mois au \(mediumDateFormatter.string(from: adult.dateOfRetirement))")
+                                    text : "\(adult.age(atDate: adult.dateOfRetirement).year!) ans \(adult.age(atDate: adult.dateOfRetirement).month!) mois au \(adult.dateOfRetirement.stringMediumDate))")
                         LabeledText(label: "Cause",
                                     text : adult.causeOfRetirement.displayString)
                             .padding(.leading)
                         if adult.hasUnemployementAllocationPeriod {
                             if let date = adult.dateOfStartOfUnemployementAllocation(using: model) {
                                 LabeledText(label: "Début de la période d'allocation chômage",
-                                            text : "\(adult.age(atDate: date).year!) ans \(adult.age(atDate: date).month!) mois au \(mediumDateFormatter.string(from: date))")
+                                            text : "\(adult.age(atDate: date).year!) ans \(adult.age(atDate: date).month!) mois au \(date.stringMediumDate))")
                                     .padding(.leading)
                             }
                             if let date = adult.dateOfStartOfAllocationReduction(using: model) {
                                 LabeledText(label: "Début de la période de réduction d'allocation chômage",
-                                            text : "\(adult.age(atDate: date).year!) ans \(adult.age(atDate: date).month!) mois au \(mediumDateFormatter.string(from: date))")
+                                            text : "\(adult.age(atDate: date).year!) ans \(adult.age(atDate: date).month!) mois au \(date.stringMediumDate)")
                                     .padding(.leading)
                             }
                             if let date = adult.dateOfEndOfUnemployementAllocation(using: model) {
                                 LabeledText(label: "Fin de la période d'allocation chômage",
-                                            text : "\(adult.age(atDate: date).year!) ans \(adult.age(atDate: date).month!) mois au \(mediumDateFormatter.string(from: date))")
+                                            text : "\(adult.age(atDate: date).year!) ans \(adult.age(atDate: date).month!) mois au \(date.stringMediumDate)")
                                     .padding(.leading)
                             }
                         }
                         LabeledText(label: "Liquidation de pension - régime complém.",
-                                    text : "\(adult.ageOfAgircPensionLiquidComp.year!) ans \(adult.ageOfAgircPensionLiquidComp.month!) mois fin \(monthMediumFormatter.string(from: adult.dateOfAgircPensionLiquid)) \(String(adult.dateOfAgircPensionLiquid.year))")
+                                    text : "\(adult.ageOfAgircPensionLiquidComp.year!) ans \(adult.ageOfAgircPensionLiquidComp.month!) mois fin \(adult.dateOfAgircPensionLiquid.stringMediumMonth) \(String(adult.dateOfAgircPensionLiquid.year))")
                         LabeledText(label: "Liquidation de pension - régime général",
-                                    text : "\(adult.ageOfPensionLiquidComp.year!) ans \(adult.ageOfPensionLiquidComp.month!) mois fin \(monthMediumFormatter.string(from: adult.dateOfPensionLiquid)) \(String(adult.dateOfPensionLiquid.year))")
+                                    text : "\(adult.ageOfPensionLiquidComp.year!) ans \(adult.ageOfPensionLiquidComp.month!) mois fin \(adult.dateOfPensionLiquid.stringMediumMonth) \(String(adult.dateOfPensionLiquid.year))")
                         HStack {
                             Text("Dépendance")
                             Spacer()

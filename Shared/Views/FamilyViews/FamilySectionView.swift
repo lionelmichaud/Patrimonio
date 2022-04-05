@@ -67,7 +67,7 @@ struct MemberRowView : View {
             Text(member.displayName)
                 .font(.headline)
             MemberAgeDateView(member: member)
-                .font(.caption)
+                .font(.footnote)
         }
     }
 }
@@ -76,7 +76,7 @@ struct MemberAgeDateView : View {
     var member    : Person
     
     var body: some View {
-        AgeDateView(ageLabel  : (member.sexe == .male ? "Agé de"   : "Agée de"),
+        AgeDateView(ageLabel  : (member.sexe == .male ? "Agé de" : "Agée de"),
                     dateLabel : (member.sexe == .male ? "Né le"  : "Née le"),
                     age       : member.ageComponents.year!,
                     date      : member.displayBirthDate)

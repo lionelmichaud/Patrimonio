@@ -66,9 +66,9 @@ public final class Child: Person {
         super.description +
             """
         - age at university:  \(ageOfUniversity) ans
-        - date of university: \(mediumDateFormatter.string(from: dateOfUniversity))
+        - date of university: \(dateOfUniversity.stringMediumDate)
         - age of independance:  \(ageOfIndependence) ans
-        - date of independance: \(mediumDateFormatter.string(from: dateOfIndependence)) \n
+        - date of independance: \(dateOfIndependence.stringMediumDate) \n
         """
     }
     
