@@ -241,7 +241,7 @@ public struct VersionEditSheet : View {
     }
 
     private func updateVersion() {
-        version = Version().dated(CalendarCst.now)
+        version = Version().dated(Date.now)
         version = version.versioned(major: major, minor: minor, patch: patch)
         if name != "" {
             version = version.named(name)
@@ -257,7 +257,7 @@ struct VersionView_Previews: PreviewProvider {
     static let version = Version()
         .named("Nom de la version")
         .versioned(major: 1, minor: 2, patch: 3)
-        .dated(CalendarCst.now)
+        .dated(Date.now)
         .commented(with: "Commentaire de version")
 
     static var previews: some View {

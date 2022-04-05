@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import AppFoundation
 
 // MARK: - Saisie d'un intervalle de Dates
 
@@ -50,9 +49,9 @@ public struct DateRangeEditView: View {
 struct DateRangeEditView_Previews: PreviewProvider {
     static var previews: some View {
         DateRangeEditView(fromLabel: "Label1",
-                          fromDate: .constant(CalendarCst.now),
+                          fromDate: .constant(Date.now),
                           toLabel: "Label2",
-                          toDate: .constant(CalendarCst.now),
+                          toDate: .constant(Date.now),
                           in: 1.months.ago!...3.years.fromNow!)
             .previewLayout(PreviewLayout.sizeThatFits)
             .padding([.bottom, .top])
@@ -65,9 +64,9 @@ struct DateRangeEditView_Previews: PreviewProvider {
 struct DateRangeEditView_Library: LibraryContentProvider { // swiftlint:disable:this type_name
     @LibraryContentBuilder var views: [LibraryItem] {
         LibraryItem(DateRangeEditView(fromLabel: "Label1",
-                                      fromDate: .constant(CalendarCst.now),
+                                      fromDate: .constant(Date.now),
                                       toLabel: "Label2",
-                                      toDate: .constant(CalendarCst.now),
+                                      toDate: .constant(Date.now),
                                       in: 1.months.ago!...3.years.fromNow!),
                     title: "Date Range Edit View",
                     category: .control,

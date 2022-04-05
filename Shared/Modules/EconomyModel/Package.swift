@@ -1,11 +1,11 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "EconomyModel",
-    platforms: [.macOS(.v11), .iOS(.v14)], // Our minimum deployment target is 12
+    platforms: [.macOS(.v12), .iOS(.v15)], // Our minimum deployment target is 12
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(

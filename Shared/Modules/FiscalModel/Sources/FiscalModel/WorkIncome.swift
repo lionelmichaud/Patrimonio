@@ -19,7 +19,7 @@ public enum WorkIncomeType: Codable {
     case all
     
     public static var allCases: [WorkIncomeType] {
-        return [.salary(brutSalary: 0, taxableSalary: 0, netSalary: 0, fromDate: CalendarCst.now, healthInsurance: 0),
+        return [.salary(brutSalary: 0, taxableSalary: 0, netSalary: 0, fromDate: Date.now, healthInsurance: 0),
                 .turnOver(BNC: 0, incomeLossInsurance: 0)]
     }
     
@@ -27,7 +27,7 @@ public enum WorkIncomeType: Codable {
         WorkIncomeType.salary(brutSalary      : 0,
                               taxableSalary   : 0,
                               netSalary       : 0,
-                              fromDate        : CalendarCst.now,
+                              fromDate        : Date.now,
                               healthInsurance : 0).id
     }
     

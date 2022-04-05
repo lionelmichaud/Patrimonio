@@ -7,7 +7,6 @@
 
 import Foundation
 import os
-import AppFoundation
 import FileAndFolder
 import Files
 
@@ -147,7 +146,7 @@ public struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
                   pointingTo    : targetFolder,
                   with          : name,
                   annotatedBy   : note,
-                  createdOn     : CalendarCst.now,
+                  createdOn     : Date.now,
                   isUserDossier : true)
         
         // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier
@@ -181,7 +180,7 @@ public struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
         return _dossier
     }
     
-    public func createdOn(_ date: Date = CalendarCst.now) -> Dossier {
+    public func createdOn(_ date: Date = Date.now) -> Dossier {
         var _dossier = self
         _dossier._dateCreation = date
         return _dossier
@@ -234,7 +233,7 @@ public struct Dossier: JsonCodableToFolderP, Identifiable, Equatable {
             .pointingTo(targetFolder)
             .namedAs(name + "-copie")
             .annotatedBy(note)
-            .createdOn(CalendarCst.now)
+            .createdOn(Date.now)
             .ownedByUser()
         
         // enregistrer les propriétés du Dossier dans le répertoire associé au Dossier clone

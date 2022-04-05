@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import AppFoundation
 
 /// Builder pour la Class Child
 ///
@@ -57,7 +56,7 @@ public class ChildBuilder {
     }
     
     public func wasBorn(on birthDate: Date) -> ChildBuilder {
-        guard birthDate < CalendarCst.now else {
+        guard birthDate < Date.now else {
             fatalError("Cannot create a person born in the future")
         }
         child.birthDate = birthDate

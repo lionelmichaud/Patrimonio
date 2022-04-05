@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import AppFoundation
 import FiscalModel
 import UnemployementModel
 import RetirementModel
@@ -31,7 +30,7 @@ final class AdultViewModel: ObservableObject {
     @Published var revenueBrut               = 0.0
     @Published var revenueTaxable            = 0.0
     @Published var revenueNet                = 0.0
-    @Published var fromDate                  = CalendarCst.now
+    @Published var fromDate                  = Date.now
     @Published var insurance                 = 0.0
     @Published var lastKnownPensionSituation = RegimeGeneralSituation()
     @Published var lastKnownAgircSituation   = RegimeAgircSituation()

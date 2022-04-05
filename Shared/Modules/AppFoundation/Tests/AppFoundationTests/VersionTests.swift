@@ -18,7 +18,7 @@ class VersionTest: XCTestCase {
     }
 
     func test_fromVersion() {
-        let date = CalendarCst.now
+        let date = Date.now
         let vers = Version.toVersion(major: 1,
                                      minor: 2,
                                      patch: 3)

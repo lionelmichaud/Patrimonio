@@ -581,7 +581,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
     }
     
     func test_calcul_nb_Trimestre_de_Decote() {
-        let now = CalendarCst.now
+        let now = now
         var dureeAssurance      : Int
         var dureeDeReference    : Int
         var birthDate           : Date

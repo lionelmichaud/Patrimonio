@@ -75,7 +75,7 @@ class IncomeTaxesModelTests: XCTestCase {
         var personalIncome: WorkIncomeType = .salary(brutSalary: 0,
                                                      taxableSalary: -400,
                                                      netSalary: 0,
-                                                     fromDate: CalendarCst.now,
+                                                     fromDate: now,
                                                      healthInsurance: 0)
         XCTAssertEqual(0, IncomeTaxesModelTests.incomeTaxes.taxableIncome(from: personalIncome))
         
@@ -83,7 +83,7 @@ class IncomeTaxesModelTests: XCTestCase {
         personalIncome = .salary(brutSalary: 0,
                                  taxableSalary: 400,
                                  netSalary: 0,
-                                 fromDate: CalendarCst.now,
+                                 fromDate: now,
                                  healthInsurance: 0)
         XCTAssertEqual(0, IncomeTaxesModelTests.incomeTaxes.taxableIncome(from: personalIncome))
         
@@ -91,7 +91,7 @@ class IncomeTaxesModelTests: XCTestCase {
         personalIncome = .salary(brutSalary: 0,
                                  taxableSalary: 10_000,
                                  netSalary: 0,
-                                 fromDate: CalendarCst.now,
+                                 fromDate: now,
                                  healthInsurance: 0)
         XCTAssertEqual(9_000, IncomeTaxesModelTests.incomeTaxes.taxableIncome(from: personalIncome))
         
@@ -99,7 +99,7 @@ class IncomeTaxesModelTests: XCTestCase {
         personalIncome = .salary(brutSalary: 0,
                                  taxableSalary: 150_000,
                                  netSalary: 0,
-                                 fromDate: CalendarCst.now,
+                                 fromDate: now,
                                  healthInsurance: 0)
         XCTAssertEqual(150_000.0 - 12627.0, IncomeTaxesModelTests.incomeTaxes.taxableIncome(from: personalIncome))
     }

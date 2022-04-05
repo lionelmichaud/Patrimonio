@@ -106,7 +106,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     public init(name         : String    = "",
                 note         : String    = "",
                 ownership    : Ownership = Ownership(),
-                buyingDate   : Date      = CalendarCst.now,
+                buyingDate   : Date      = Date.now,
                 buyingPrice  : Double    = 0.0,
                 interestRate : Double    = 0.0,
                 revaluatRate : Double    = 0.0,

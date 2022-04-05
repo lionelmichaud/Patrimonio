@@ -23,7 +23,7 @@ struct DossierViewModel {
             name = dossier.name
             note = dossier.note
         } else {
-            name = CalendarCst.now.stringShortDate
+            name = Date.now.stringShortDate
             note = ""
         }
     }

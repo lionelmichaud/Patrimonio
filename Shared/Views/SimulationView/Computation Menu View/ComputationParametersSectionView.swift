@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import AppFoundation
 import Persistence
 import RetirementModel
 import LifeExpense
@@ -30,7 +29,7 @@ struct ComputationParametersSectionView : View {
                         .textFieldStyle(.roundedBorder)
                     Button(action: { simulation.title += " \(dataStore.activeDossier!.name)" },
                            label: { Image(systemName: "folder.fill.badge.person.crop") })
-                    Button(action: { simulation.title += " le \(CalendarCst.now.stringShortDate)" },
+                    Button(action: { simulation.title += " le \(Date.now.stringShortDate)" },
                            label: { Image(systemName: "calendar") })
                 }
                 LabeledTextEditor(label: "Note", text: $simulation.note)

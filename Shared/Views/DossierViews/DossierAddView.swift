@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import AppFoundation
 import Persistence
 import HelpersView
 
@@ -51,7 +50,7 @@ struct DossierAddView: View {
                         HStack {
                             Text("Nom")
                                 .frame(width: 70, alignment: .leading)
-                            TextField(CalendarCst.now.stringShortDate, text: $dossierVM.name)
+                            TextField(Date.now.stringShortDate, text: $dossierVM.name)
                         }
                         LabeledTextEditor(label: "Note", text: $dossierVM.note)
                     }

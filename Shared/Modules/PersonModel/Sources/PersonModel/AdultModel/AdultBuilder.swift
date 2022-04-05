@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import AppFoundation
+//import AppFoundation
 import FiscalModel
 import UnemployementModel
 import RetirementModel
@@ -60,7 +60,7 @@ public class AdultBuilder {
     }
     
     public func wasBorn(on birthDate: Date) -> AdultBuilder {
-        guard birthDate < CalendarCst.now else {
+        guard birthDate < Date.now else {
             fatalError("Cannot create a person born in the future")
         }
         adult.birthDate = birthDate
