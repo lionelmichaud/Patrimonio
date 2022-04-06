@@ -16,7 +16,7 @@ import AppFoundation
 ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
 ///   - amount: valeur
 ///   - currency: affiche le symbole € après la valeur si Vrai
-public struct AmountEditView: View {
+public struct AmountEditView2: View {
     private let label    : String
     private let comment  : String?
     private let currency : Bool
@@ -39,7 +39,7 @@ public struct AmountEditView: View {
     }
     
     public var body: some View {
-        return HStack {
+        HStack {
             Text(label)
             Spacer()
             if comment != nil { Text(comment!).foregroundColor(.secondary) }
@@ -72,7 +72,6 @@ public struct AmountEditView: View {
         .textFieldStyle(.roundedBorder)
         .foregroundColor(validity.isValid(number: amount) ? .primary : .red)
     }
-    
     /// Création
     /// - Parameters:
     ///   - label: libellé
@@ -91,6 +90,56 @@ public struct AmountEditView: View {
         self._amount  = amount
         _text = State(initialValue: String(amount.wrappedValue).replacingOccurrences(of: ".", with: ","))
         //        print("created: value = \(amount); text = \(text)")
+    }
+}
+
+/// Saisie d'un montant en €
+/// - Parameters:
+///   - label: libellé
+///   - comment: Commentaire à afficher en grisé à gauche de la valeur
+///   - amount: valeur
+///   - currency: affiche le symbole € après la valeur si Vrai
+///
+/// - Note: [Reference](https://github.com/nsscreencast/397-swiftui-tip-calculator/blob/master/TipCalculator/TipCalculator/ContentView.swift)
+///
+public struct AmountEditView: View {
+    private let label    : String
+    private let comment  : String?
+    @Binding
+    private var amount: Double
+    private let currency : Bool
+    private let validity : DoubleValidityRule
+
+    public var body: some View {
+        HStack {
+            Text(label)
+            Spacer()
+            if comment != nil { Text(comment!).foregroundColor(.secondary) }
+            TextField("Montant", value: $amount, formatter: currency ? value€Formatter : decimalIntegerFormatter)
+                .multilineTextAlignment(.trailing)
+                .textFieldStyle(.roundedBorder)
+                .frame(maxWidth: 100)
+                .numbersAndPunctuationKeyboardType()
+        }
+        .foregroundColor(validity.isValid(number: amount) ? .primary : .red)
+    }
+
+    /// Saisie d'un montant en €
+    /// - Parameters:
+    ///   - label: libellé
+    ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
+    ///   - amount: valeur
+    ///   - currency: affiche le symbole € après la valeur si Vrai
+    public init(label    : String,
+                comment  : String?            = nil,
+                amount   : Binding<Double>,
+                validity : DoubleValidityRule = .none,
+                currency : Bool               = true) {
+        self.label    = label
+        self.comment  = comment
+        self._amount  = amount
+        self.currency = currency
+        self.validity = validity
     }
 }
 

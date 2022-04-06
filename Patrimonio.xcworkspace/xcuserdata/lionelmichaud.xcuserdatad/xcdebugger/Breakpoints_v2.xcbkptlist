@@ -99,8 +99,8 @@
             filePath = "Shared/Modules/AppFoundation/Sources/Foundations/Extensions/Extensions+Binding.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
             landmarkName = "Transac"
             landmarkType = "21">
          </BreakpointContent>
@@ -115,8 +115,8 @@
             filePath = "Shared/Modules/AppFoundation/Sources/Foundations/Extensions/Extensions+Binding.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
             landmarkName = "Transac"
             landmarkType = "21">
          </BreakpointContent>

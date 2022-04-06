@@ -16,7 +16,7 @@ public struct IntegerEditView: View {
     private let validity : IntegerValidityRule
     @Binding
     private var integer : Int
-    
+
     public var body: some View {
         let numberFormatter = NumberFormatter()
         let textValueBinding = Binding<String>(
@@ -28,7 +28,7 @@ public struct IntegerEditView: View {
                     self.integer = value.intValue
                 }
             })
-        
+
         HStack {
             Text(label)
             Spacer()
@@ -43,7 +43,7 @@ public struct IntegerEditView: View {
         .textFieldStyle(.roundedBorder)
         .foregroundColor(validity.isValid(number: integer) ? .primary : .red)
     }
-    
+
     public init(label    : String,
                 comment  : String?            = nil,
                 integer  : Binding<Int>,
@@ -52,6 +52,38 @@ public struct IntegerEditView: View {
         self.comment  = comment
         self.validity = validity
         _integer      = integer
+    }
+}
+
+public struct IntegerEditView2: View {
+    private let label    : String
+    private let comment  : String?
+    private let validity : IntegerValidityRule
+    @Binding
+    private var integer : Int
+
+    public var body: some View {
+        HStack {
+            Text(label)
+            Spacer()
+            if comment != nil { Text(comment!).foregroundColor(.secondary) }
+            TextField("entier", value: $integer, format: .number.precision(.fractionLength(0)))
+            .multilineTextAlignment(.trailing)
+            .textFieldStyle(.roundedBorder)
+            .frame(maxWidth: 88)
+            .numbersAndPunctuationKeyboardType()
+        }
+        .foregroundColor(validity.isValid(number: integer) ? .primary : .red)
+    }
+
+    public init(label    : String,
+                comment  : String?            = nil,
+                integer  : Binding<Int>,
+                validity : IntegerValidityRule = .none) {
+        self.label    = label
+        self.comment  = comment
+        _integer      = integer
+        self.validity = validity
     }
 }
 

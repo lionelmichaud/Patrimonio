@@ -53,6 +53,26 @@ public extension Binding {
     }
 }
 
+/// PropertyWrapper: `@Transac` binding for SwiftUI to make changes to data supporting commit/rollback
+///
+/// Usage:
+///
+///     struct UserEditView: View {
+///     @Transac var value: User
+///
+///     var body: some View {
+///         VStack {
+///             TextField("First Name", text: $value.firstName)
+///             TextField("Last Name", text: $value.lastName)
+///             Divider()
+///             Button("Commit", action: $value.commit).disabled(!$value.hasChanges)
+///             Button("Rollback", action: $value.rollback).disabled(!$value.hasChanges)
+///         }
+///      }
+///    }
+///
+/// - Note: [Reference](https://github.com/nsscreencast/397-swiftui-tip-calculator/blob/master/TipCalculator/TipCalculator/ContentView.swift)
+///
 @propertyWrapper
 @dynamicMemberLookup
 public struct Transac<Value>: DynamicProperty {

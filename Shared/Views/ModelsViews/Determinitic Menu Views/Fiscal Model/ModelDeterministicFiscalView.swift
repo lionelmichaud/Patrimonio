@@ -19,7 +19,8 @@ struct ModelDeterministicFiscalView: View {
         Form {
             AmountEditView(label  : "Plafond Annuel de la Sécurité Sociale",
                            comment: "PASS",
-                           amount : $subModel.PASS)
+                           amount : $subModel.PASS,
+                           validity: .poz)
 
             Section {
                 NavigationLink(destination: ModelFiscalIrppView(updateDependenciesToModel: updateDependenciesToModel,

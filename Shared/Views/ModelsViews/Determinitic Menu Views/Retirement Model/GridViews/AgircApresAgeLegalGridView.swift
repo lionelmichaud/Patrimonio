@@ -44,7 +44,7 @@ struct AgircApresAgeLegalSliceView: View {
                         integer : slice.ndTrimPostAgeLegal)
             PercentNormView(label   : "Coefficient de réduction",
                             percent : slice.coef)
-        }
+        }.padding([.top, .bottom])
     }
 }
 
@@ -62,7 +62,7 @@ struct AgircApresAgeLegalSliceEditView: View {
         self.idx       = idx
         _grid          = grid
         _modifiedSlice = State(initialValue: SliceAgircApresAgeLegal(nbTrimManquant  : grid[idx].wrappedValue.nbTrimManquant,
-                                                                     ndTrimPostAgeLegal : grid[idx].wrappedValue.nbTrimManquant,
+                                                                     ndTrimPostAgeLegal : grid[idx].wrappedValue.ndTrimPostAgeLegal,
                                                                      coef: grid[idx].wrappedValue.coef * 100.0))
     }
 
@@ -174,7 +174,7 @@ struct AgircApresAgeLegalSliceAddView: View {
     private func addSlice() {
         // vérifier que le nouveau seuil n'existe pas déjà dans la grille
         guard grid.allSatisfy({ $0.nbTrimManquant != newSlice.nbTrimManquant }) else {
-            self.alertItem = AlertItem(title         : Text("Le seuil existe déjà dans la grille"),
+            self.alertItem = AlertItem(title         : Text("L'élément existe déjà dans la grille"),
                                        dismissButton : .default(Text("OK")))
             return
         }

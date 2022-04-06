@@ -1016,6 +1016,7 @@
 		7935BBD927DF660F0079F39C /* Fiscal Model */ = {
 			isa = PBXGroup;
 			children = (
+				7935BBE827DF660F0079F39C /* ModelDeterministicFiscalView.swift */,
 				7935BBDA27DF660F0079F39C /* ModelFiscalTurnoverView.swift */,
 				7935BBDB27DF660F0079F39C /* ModelFiscalIrppView.swift */,
 				7935BBDC27DF660F0079F39C /* ModelFiscalIsfView.swift */,
@@ -1026,7 +1027,6 @@
 				7935BBE127DF660F0079F39C /* ModelFiscalLifeInsInheritanceView.swift */,
 				7935BBE227DF660F0079F39C /* GridViews */,
 				7935BBE727DF660F0079F39C /* ModelFiscalFinancialView.swift */,
-				7935BBE827DF660F0079F39C /* ModelDeterministicFiscalView.swift */,
 				7935BBE927DF660F0079F39C /* ModelFiscalImmobilierTaxeView.swift */,
 				7935BBEA27DF660F0079F39C /* ModelFiscalChomageChargeView.swift */,
 				7935BBEB27DF660F0079F39C /* ModelFiscalPensionView.swift */,

@@ -38,14 +38,15 @@ public var valueKilo€Formatter: NumberFormatter = {
     return numFormatter
 }()
 
-//public var value€Formatter: NumberFormatter = {
-//    let numFormatter = NumberFormatter()
-//    numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
-//    numFormatter.isLenient             = true
-//    numFormatter.maximumFractionDigits = 0
-//    numFormatter.numberStyle           = .currency
-//    return numFormatter
-//}()
+public var value€Formatter: NumberFormatter = {
+    let numFormatter = NumberFormatter()
+    numFormatter.locale                = Locale(identifier : "fr_FR") // French Locale (fr_FR)
+    numFormatter.isLenient             = true
+    numFormatter.numberStyle           = .currency
+    numFormatter.minimumIntegerDigits  = 1
+    numFormatter.maximumFractionDigits = 0
+    return numFormatter
+}()
 
 //public var percentFormatter: NumberFormatter = {
 //    let numFormatter = NumberFormatter()
