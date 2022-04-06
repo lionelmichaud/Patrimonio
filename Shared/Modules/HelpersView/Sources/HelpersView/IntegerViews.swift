@@ -10,7 +10,7 @@ import AppFoundation
 
 // MARK: - Saisie d'un Integer
 
-public struct IntegerEditView: View {
+public struct IntegerEditView2: View {
     private let label    : String
     private let comment  : String?
     private let validity : IntegerValidityRule
@@ -55,7 +55,15 @@ public struct IntegerEditView: View {
     }
 }
 
-public struct IntegerEditView2: View {
+/// Saisie d'un nombre Entier
+/// - Parameters:
+///   - label: libellé
+///   - comment: Commentaire à afficher en grisé à gauche de la valeur
+///   - integer: valeur entière
+///
+/// - Note: [Reference](https://github.com/nsscreencast/397-swiftui-tip-calculator/blob/master/TipCalculator/TipCalculator/ContentView.swift)
+///
+public struct IntegerEditView: View {
     private let label    : String
     private let comment  : String?
     private let validity : IntegerValidityRule
@@ -101,7 +109,7 @@ public struct IntegerView: View {
                 .fontWeight(weight)
             Spacer()
             if comment != nil { Text(comment!).foregroundColor(.secondary) }
-            Text(String(integer))
+            Text(integer, format: .number.precision(.fractionLength(0)))
                 .fontWeight(weight)
                 .frame(maxWidth: 100, alignment: .trailing)
         }
