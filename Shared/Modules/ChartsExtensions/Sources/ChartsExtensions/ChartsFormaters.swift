@@ -16,18 +16,6 @@ public class Kilo€Formatter: NSObject, IAxisValueFormatter, IValueFormatter {
     // swiftlint:enable type_name
 
     public override init() {
-//        numFormatter = NumberFormatter()
-//
-//        // if number is less than 1 add 0 before decimal
-//        numFormatter.minimumIntegerDigits = 1 // how many digits do want before decimal
-//        numFormatter.multiplier = 0.001
-//        //numFormatter.thousandSeparator = " "
-//        numFormatter.positiveSuffix = " k€"
-//        numFormatter.negativeSuffix = " k€"
-//        numFormatter.paddingPosition = .beforePrefix
-//        numFormatter.paddingCharacter = "0"
-//        //numFormatter.zeroSymbol = ""
-        
         numFormatter = valueKilo€Formatter
     }
 

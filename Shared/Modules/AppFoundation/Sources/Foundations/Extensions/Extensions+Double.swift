@@ -58,11 +58,11 @@ public extension Double {
         guard digit >= 0 else {
             return "??"
         }
-        formatted(.currency(code: "eur").precision(.fractionLength(digit)))
+        return formatted(.currency(code: "eur").precision(.fractionLength(digit)))
     }
 
     var k€String: String {
-        valueKilo€Formatter.string(from: self as NSNumber) ?? ""
+        return self.formatted(.number.scale(0.001).precision(.fractionLength(0))) + " k€"
     }
 
     var percentStringRounded: String {
