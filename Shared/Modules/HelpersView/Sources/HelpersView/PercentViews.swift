@@ -86,6 +86,9 @@ public struct PercentEditView2: View {
 ///   - label: libellé
 ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
 ///   - percent: valeur [0% ... 100%]
+///
+/// - Note: [Reference](https://github.com/nsscreencast/397-swiftui-tip-calculator/blob/master/TipCalculator/TipCalculator/ContentView.swift)
+///
 public struct PercentEditView: View {
     private let label    : String
     private let comment  : String?
@@ -135,6 +138,9 @@ public struct PercentEditView: View {
 ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
 ///   - percent: valeur [0 ... 1]
 ///   - digit: Nombre de chifrre après la virgule à afficher
+///
+/// - Note: [Reference](https://github.com/nsscreencast/397-swiftui-tip-calculator/blob/master/TipCalculator/TipCalculator/ContentView.swift)
+///
 public struct PercentNormEditView: View {
     private let label    : String
     private let comment  : String?

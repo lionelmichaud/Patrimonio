@@ -66,12 +66,7 @@ struct DurationSliceEditView: View {
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
-        _modifiedSlice =
-        State(initialValue: DurationSlice(fromAge             : grid[idx].wrappedValue.fromAge,
-                                          maxDuration         : grid[idx].wrappedValue.maxDuration,
-                                          reduction           : grid[idx].wrappedValue.reduction,
-                                          reductionAfter      : grid[idx].wrappedValue.reductionAfter,
-                                          reductionSeuilAlloc : grid[idx].wrappedValue.reductionSeuilAlloc * 100.0))
+        _modifiedSlice = State(initialValue: grid[idx].wrappedValue)
     }
 
     private var toolBar: some View {
@@ -107,8 +102,8 @@ struct DurationSliceEditView: View {
                                    amount : $modifiedSlice.reductionSeuilAlloc)
                     IntegerEditView(label   : "Nombre de mois d'indemnisation avant dégressivité",
                                     integer : $modifiedSlice.reductionAfter)
-                    PercentEditView(label   : "Dégressivité après ce délai",
-                                    percent : $modifiedSlice.reduction)
+                    PercentNormEditView(label   : "Dégressivité après ce délai",
+                                        percent : $modifiedSlice.reduction)
                 }
             }
             .textFieldStyle(.roundedBorder)
@@ -122,7 +117,6 @@ struct DurationSliceEditView: View {
     }
 
     private func updateSlice() {
-        modifiedSlice.reduction /= 100.0 // [0, 100%] => [0, 1.0]
         grid[idx] = modifiedSlice
         grid.sort(by: { $0.fromAge < $1.fromAge })
 
@@ -175,8 +169,8 @@ struct DurationSliceAddView: View {
                                    amount : $newSlice.reductionSeuilAlloc)
                     IntegerEditView(label   : "Nombre de mois d'indemnisation avant dégressivité",
                                     integer : $newSlice.reductionAfter)
-                    PercentEditView(label   : "Dégressivité après ce délai",
-                                    percent : $newSlice.reduction)
+                    PercentNormEditView(label   : "Dégressivité après ce délai",
+                                        percent : $newSlice.reduction)
                 }
             }
             .textFieldStyle(.roundedBorder)
@@ -197,7 +191,6 @@ struct DurationSliceAddView: View {
             return
         }
 
-        newSlice.reduction /= 100.0 // [0, 100%] => [0, 1.0]
         grid.append(newSlice)
         grid.sort(by: { $0.fromAge < $1.fromAge })
 

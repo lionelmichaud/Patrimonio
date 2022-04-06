@@ -64,9 +64,7 @@ struct DemembrementSliceEditView: View {
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
-        _modifiedSlice = State(
-            initialValue : DemembrementSlice(floor    : grid[idx].wrappedValue.floor,
-                                             usuFruit : grid[idx].wrappedValue.usuFruit * 100.0))
+        _modifiedSlice = State(initialValue: grid[idx].wrappedValue)
     }
 
     private var toolBar: some View {
@@ -98,8 +96,8 @@ struct DemembrementSliceEditView: View {
                                     comment : "ans",
                                     integer : $modifiedSlice.floor)
                     Spacer(minLength: 50)
-                    PercentEditView(label   : "Usufruit",
-                                    percent : $modifiedSlice.usuFruit)
+                    PercentNormEditView(label   : "Usufruit",
+                                        percent : $modifiedSlice.usuFruit)
                 }
             }
             .textFieldStyle(.roundedBorder)
@@ -113,7 +111,6 @@ struct DemembrementSliceEditView: View {
     }
 
     private func updateSlice() {
-        modifiedSlice.usuFruit /= 100.0 // [0, 100%] => [0, 1.0]
         grid[idx] = modifiedSlice
         grid.sort(by: { $0.floor < $1.floor })
 
@@ -158,8 +155,8 @@ struct DemembrementSliceAddView: View {
                     IntegerEditView(label   : "A partir de",
                                     comment : "ans",
                                     integer : $newSlice.floor)
-                    PercentEditView(label   : "Usufruit",
-                                    percent : $newSlice.usuFruit)
+                    PercentNormEditView(label   : "Usufruit",
+                                        percent : $newSlice.usuFruit)
                 }
             }
             .textFieldStyle(.roundedBorder)
@@ -180,7 +177,6 @@ struct DemembrementSliceAddView: View {
             return
         }
 
-        newSlice.usuFruit /= 100.0 // [0, 100%] => [0, 1.0]
         grid.append(newSlice)
         grid.sort(by: { $0.floor < $1.floor })
 

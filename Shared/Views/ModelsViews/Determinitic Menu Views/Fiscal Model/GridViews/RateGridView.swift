@@ -59,8 +59,7 @@ struct RateSliceEditView: View {
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
-        _modifiedSlice = State(initialValue : RateSlice(floor : grid[idx].wrappedValue.floor,
-                                                        rate  : grid[idx].wrappedValue.rate * 100.0))
+        _modifiedSlice = State(initialValue : grid[idx].wrappedValue)
     }
     
     private var toolBar: some View {
@@ -90,8 +89,8 @@ struct RateSliceEditView: View {
                 VStack {
                     AmountEditView(label  : "Seuil",
                                    amount : $modifiedSlice.floor)
-                    PercentEditView(label   : "Taux",
-                                    percent : $modifiedSlice.rate)
+                    PercentNormEditView(label   : "Taux",
+                                        percent : $modifiedSlice.rate)
                 }
             }
             .textFieldStyle(.roundedBorder)
@@ -105,7 +104,6 @@ struct RateSliceEditView: View {
     }
     
     private func updateSlice() {
-        modifiedSlice.rate /= 100.0 // [0, 100%] => [0, 1.0]
         grid[idx] = modifiedSlice
         grid.sort(by: { $0.floor < $1.floor })
         //try! grid.initialize()
@@ -119,7 +117,7 @@ struct RateSliceEditView: View {
 struct RateSliceAddView: View {
     @Transac var grid: RateGrid
     @Environment(\.presentationMode) var presentationMode
-    @State private var newSlice = RateSlice(floor: 0, rate: 10)
+    @State private var newSlice = RateSlice(floor: 0, rate: 0)
     @State private var alertItem : AlertItem?
     
     private var toolBar: some View {
@@ -149,8 +147,8 @@ struct RateSliceAddView: View {
                 VStack {
                     AmountEditView(label   : "Seuil",
                                    amount  : $newSlice.floor)
-                    PercentEditView(label   : "Taux",
-                                    percent : $newSlice.rate)
+                    PercentNormEditView(label   : "Taux",
+                                        percent : $newSlice.rate)
                 }
             }
             .textFieldStyle(.roundedBorder)
@@ -171,7 +169,6 @@ struct RateSliceAddView: View {
             return
         }
         
-        newSlice.rate /= 100.0 // [0, 100%] => [0, 1.0]
         grid.append(newSlice)
         grid.sort(by: { $0.floor < $1.floor })
         //try! grid.initialize()

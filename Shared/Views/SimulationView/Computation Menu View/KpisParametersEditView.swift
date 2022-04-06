@@ -99,13 +99,11 @@ struct KpiGroupBox : View {
                     Spacer()
                 }
                 HStack {
-                    PercentEditView(label   : "Avec une probabilité ≥ à",
-                                    percent : $kpi.probaObjective)
+                    PercentNormEditView(label   : "Avec une probabilité ≥ à",
+                                        percent : $kpi.probaObjective)
                         .onChange(of: kpi.probaObjective) { value in
-                            var kpiCopy = kpi
-                            kpiCopy.probaObjective = value / 100.0
                             simulation.setKpi(key   : KpiEnum(rawValue: kpi.name)!,
-                                              value : kpiCopy)
+                                              value : kpi)
                             // le dossier reste modifié tant qu'on ne l'a pas enregistré dans son propre répertoire
                             //simulation.persistenceSM.process(event: .onModify)
                         }
@@ -117,9 +115,7 @@ struct KpiGroupBox : View {
     }
     
     internal init(kpi: KPI) {
-        var kpiModified = kpi
-        kpiModified.probaObjective *= 100.0
-        self._kpi  = State(initialValue : kpiModified)
+        self._kpi  = State(initialValue : kpi)
     }
     
     private func kpiNoteSubstituted(_ note: String) -> String {

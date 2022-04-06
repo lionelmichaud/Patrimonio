@@ -58,8 +58,7 @@ struct AgircAvantAgeLegalSliceEditView: View {
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
-        _modifiedSlice = State(initialValue: SliceAgircAvantAgeLegal(ndTrimAvantAgeLegal : grid[idx].wrappedValue.ndTrimAvantAgeLegal,
-                                                                     coef: grid[idx].wrappedValue.coef * 100.0))
+        _modifiedSlice = State(initialValue: grid[idx].wrappedValue)
     }
 
     private var toolBar: some View {
@@ -89,8 +88,8 @@ struct AgircAvantAgeLegalSliceEditView: View {
                 VStack {
                     IntegerEditView(label   : "Nombre de trimestres jusqu'à l'âge légal de départ à la retraite",
                                     integer : $modifiedSlice.ndTrimAvantAgeLegal)
-                    PercentEditView(label   : "Coefficient de réduction",
-                                    percent : $modifiedSlice.coef)
+                    PercentNormEditView(label   : "Coefficient de réduction",
+                                        percent : $modifiedSlice.coef)
                 }
             }
             .textFieldStyle(.roundedBorder)
@@ -104,7 +103,6 @@ struct AgircAvantAgeLegalSliceEditView: View {
     }
 
     private func updateSlice() {
-        modifiedSlice.coef /= 100.0 // [0, 100%] => [0, 1.0]
         grid[idx] = modifiedSlice
         grid.sort(by: { $0.ndTrimAvantAgeLegal < $1.ndTrimAvantAgeLegal })
 
@@ -148,8 +146,8 @@ struct AgircAvantAgeLegalSliceAddView: View {
                 VStack {
                     IntegerEditView(label   : "Nombre de trimestres jusqu'à l'âge légal de départ à la retraite",
                                     integer : $newSlice.ndTrimAvantAgeLegal)
-                    PercentEditView(label   : "Coefficient de réduction",
-                                    percent : $newSlice.coef)
+                    PercentNormEditView(label   : "Coefficient de réduction",
+                                        percent : $newSlice.coef)
                 }
             }
             .textFieldStyle(.roundedBorder)
@@ -170,7 +168,6 @@ struct AgircAvantAgeLegalSliceAddView: View {
             return
         }
 
-        newSlice.coef /= 100.0 // [0, 100%] => [0, 1.0]
         grid.append(newSlice)
         grid.sort(by: { $0.ndTrimAvantAgeLegal < $1.ndTrimAvantAgeLegal })
 

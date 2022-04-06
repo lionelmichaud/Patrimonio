@@ -150,8 +150,7 @@ struct PointEditView: View {
          idx  : Int) {
         self.idx       = idx
         _grid          = grid
-        _modifiedSlice = State(initialValue : Point(grid[idx].wrappedValue.x,
-                                                    grid[idx].wrappedValue.y * 100.0))
+        _modifiedSlice = State(initialValue : grid[idx].wrappedValue)
     }
     
     private var toolBar: some View {
@@ -182,8 +181,8 @@ struct PointEditView: View {
                     AmountEditView(label    : "X",
                                    amount   : $modifiedSlice.x,
                                    currency : false)
-                    PercentEditView(label  : "Probabilité(X)",
-                                   percent : $modifiedSlice.y)
+                    PercentNormEditView(label  : "Probabilité(X)",
+                                        percent : $modifiedSlice.y)
                 }
             }
             .textFieldStyle(.roundedBorder)
@@ -201,7 +200,7 @@ struct PointEditView: View {
         }
 
         var gridCopy = grid
-        gridCopy[idx] = Point(modifiedSlice.x, modifiedSlice.y / 100.0) // [0, 100%] => [0, 1.0]
+        gridCopy[idx] = modifiedSlice
         // garantir que la sommes des probabilités = 1.0
         gridCopy.normalizeY(idx: idx)
         gridCopy.sort(by: { $0.x < $1.x })
@@ -254,6 +253,8 @@ struct PointAddView: View {
                     AmountEditView(label    : "X",
                                    amount   : $newSlice.x,
                                    currency : false)
+                    PercentNormEditView(label   : "Probabilité(X)",
+                                        percent : $newSlice.y)
                 }
             }
             .textFieldStyle(.roundedBorder)
@@ -267,7 +268,6 @@ struct PointAddView: View {
                                        dismissButton : .default(Text("OK")))
             return
         }
-        newSlice.y /= 100.0 // [0, 100%] => [0, 1.0]
         var gridCopy = grid
         gridCopy.append(newSlice)
         gridCopy.sort(by: { $0.x < $1.x })

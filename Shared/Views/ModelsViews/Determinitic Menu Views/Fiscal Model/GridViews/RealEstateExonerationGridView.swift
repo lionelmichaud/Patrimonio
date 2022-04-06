@@ -65,9 +65,7 @@ struct RealEstateExonerationSliceEditView: View {
         self.idx       = idx
         _grid          = grid
         _modifiedSlice = State(
-            initialValue : ExonerationSlice(floor        : grid[idx].wrappedValue.floor,
-                                            discountRate : grid[idx].wrappedValue.discountRate,
-                                            prevDiscount : grid[idx].wrappedValue.prevDiscount))
+            initialValue : grid[idx].wrappedValue)
     }
 
     private var toolBar: some View {
