@@ -115,7 +115,9 @@ public struct AmountEditView: View {
             Text(label)
             Spacer()
             if comment != nil { Text(comment!).foregroundColor(.secondary) }
-            TextField("Montant", value: $amount, formatter: currency ? value€Formatter : decimalIntegerFormatter)
+            TextField("Montant",
+                      value: $amount,
+                      formatter: currency ? value€Formatter : decimalIntegerFormatter)
                 .multilineTextAlignment(.trailing)
                 .textFieldStyle(.roundedBorder)
                 .frame(maxWidth: 100)

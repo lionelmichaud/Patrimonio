@@ -15,7 +15,7 @@ import AppFoundation
 ///   - label: libellé
 ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
 ///   - percent: valeur
-public struct PercentEditView: View {
+public struct PercentEditView2: View {
     private let label       : String
     private let comment     : String?
     private let validity    : DoubleValidityRule
@@ -78,6 +78,103 @@ public struct PercentEditView: View {
         self.validity = validity
         _percent     = percent
         _textPercent = State(initialValue: String(percent.wrappedValue).replacingOccurrences(of: ".", with: ","))
+    }
+}
+
+/// Affichage d'un pourcentage % [0% ... 100%]
+/// - Parameters:
+///   - label: libellé
+///   - comment: Commentaire à afficher en grisé à gauche de la valeur
+///   - percent: valeur [0% ... 100%]
+public struct PercentEditView: View {
+    private let label    : String
+    private let comment  : String?
+    private let validity : DoubleValidityRule
+    @Binding
+    private var percent  : Double // [0% ... 100%]
+    private let digit    : Int
+
+    public var body: some View {
+        HStack {
+            Text(label)
+            Spacer()
+            if comment != nil { Text(comment!).foregroundColor(.secondary) }
+            TextField("montant",
+                      value: $percent,
+                      format: .number.precision(.fractionLength(digit)))
+            .multilineTextAlignment(.trailing)
+            .textFieldStyle(.roundedBorder)
+            .frame(maxWidth: 88)
+            .numbersAndPunctuationKeyboardType()
+            Text("%")
+        }
+        .foregroundColor(validity.isValid(number: percent) ? .primary : .red)
+    }
+
+    /// Création
+    /// - Parameters:
+    ///   - label: libellé
+    ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
+    ///   - percent: valeur [0% ... 100%]
+    public init(label    : String,
+                comment  : String?            = nil,
+                percent  : Binding<Double>,
+                digit    : Int                = 2,
+                validity : DoubleValidityRule = .none) {
+        self.label    = label
+        self.comment  = comment
+        _percent      = percent
+        self.digit    = digit
+        self.validity = validity
+    }
+}
+
+/// Affichage d'un pourcentage % [0 ... 1]
+/// - Parameters:
+///   - label: libellé
+///   - comment: Commentaire à afficher en grisé à gauche de la valeur
+///   - percent: valeur [0 ... 1]
+///   - digit: Nombre de chifrre après la virgule à afficher
+public struct PercentNormEditView: View {
+    private let label    : String
+    private let comment  : String?
+    private let validity : DoubleValidityRule
+    @Binding
+    private var percent  : Double // [0 ... 1]
+    private let digit    : Int
+
+    public var body: some View {
+        HStack {
+            Text(label)
+            Spacer()
+            if comment != nil { Text(comment!).foregroundColor(.secondary) }
+            TextField("montant",
+                      value: $percent,
+                      format: .percent.precision(.fractionLength(digit)))
+            .multilineTextAlignment(.trailing)
+            .textFieldStyle(.roundedBorder)
+            .frame(maxWidth: 88)
+            .numbersAndPunctuationKeyboardType()
+        }
+        .foregroundColor(validity.isValid(number: percent) ? .primary : .red)
+    }
+
+    /// Création
+    /// - Parameters:
+    ///   - label: libellé
+    ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
+    ///   - percent: valeur [0 ... 1]
+    ///   - digit: Nombre de chifrre après la virgule à afficher
+    public init(label    : String,
+                comment  : String?            = nil,
+                percent  : Binding<Double>,
+                digit    : Int                = 2,
+                validity : DoubleValidityRule = .none) {
+        self.label    = label
+        self.comment  = comment
+        _percent      = percent
+        self.digit    = digit
+        self.validity = validity
     }
 }
 
