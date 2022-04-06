@@ -51,14 +51,14 @@ struct PatrimoineSidebarView: View {
                 .listStyle(.sidebar)
                 .navigationViewStyle(.columns)
                 .navigationTitle("Patrimoine")
+                .environment(\.horizontalSizeClass, .regular)
+                .toolbar {
+                    EditButton()
+                }
             }
 
             /// vue par défaut
             PatrimoineSummaryView()
-        }
-        .environment(\.horizontalSizeClass, .regular)
-        .toolbar {
-            EditButton()
         }
     }
     

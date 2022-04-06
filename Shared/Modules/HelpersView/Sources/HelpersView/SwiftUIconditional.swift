@@ -104,12 +104,12 @@ public extension View {
     ///
     /// - Note: [reference](https://www.fivestars.blog/articles/conditional-modifiers/)
     @ViewBuilder
-    func `if`<Transform: View>(
+    func `if`<Content: View>(
         _ condition: Bool,
-        transform: (Self) -> Transform
+        modifier: (Self) -> Content
     ) -> some View {
         if condition {
-            transform(self)
+            modifier(self)
         } else {
             self
         }
@@ -128,13 +128,13 @@ public extension View {
     @ViewBuilder
     func `if`<TrueContent: View, FalseContent: View>(
         _ condition: Bool,
-        if ifTransform: (Self) -> TrueContent,
-        else elseTransform: (Self) -> FalseContent
+        if ifModifier: (Self) -> TrueContent,
+        else elseModifier: (Self) -> FalseContent
     ) -> some View {
         if condition {
-            ifTransform(self)
+            ifModifier(self)
         } else {
-            elseTransform(self)
+            elseModifier(self)
         }
     }
     
@@ -149,12 +149,12 @@ public extension View {
     ///
     /// - Note: [reference](https://www.fivestars.blog/articles/conditional-modifiers/)
     @ViewBuilder
-    func ifLet<V, Transform: View>(
+    func ifLet<V, Content: View>(
         _ value: V?,
-        transform: (Self, V) -> Transform
+        modifier: (Self, V) -> Content
     ) -> some View {
         if let value = value {
-            transform(self, value)
+            modifier(self, value)
         } else {
             self
         }
@@ -171,9 +171,9 @@ public extension View {
     ///
     /// - Note: [reference](https://www.fivestars.blog/articles/conditional-modifiers/)
     @ViewBuilder
-    func ifmacOS<Transform: View>(transform: (Self) -> Transform) -> some View {
+    func ifmacOS<Content: View>(modifier: (Self) -> Content) -> some View {
         #if os(macOS)
-        transform(self)
+        modifier(self)
         #else
         self
         #endif
@@ -190,9 +190,9 @@ public extension View {
     ///
     /// - Note: [reference](https://www.fivestars.blog/articles/conditional-modifiers/)
     @ViewBuilder
-    func ifiOS<Transform: View>(transform: (Self) -> Transform) -> some View {
+    func ifiOS<Content: View>(modifier: (Self) -> Content) -> some View {
         #if os(iOS) || os(tvOS)
-        transform(self)
+        modifier(self)
         #else
         self
         #endif

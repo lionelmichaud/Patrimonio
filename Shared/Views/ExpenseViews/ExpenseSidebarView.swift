@@ -31,28 +31,27 @@ struct ExpenseSidebarView: View {
             List {
                 // résumé
                 ExpenseHeaderView()
-                
+
                 if dataStore.activeDossier != nil {
                     ExpenseTotalView()
-                    
+
                     // pour chaque catégorie de dépense, afficher la liste des dépenses
                     ForEach(sortedCategories, id: \.displayString) { category in
                         ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
                                                      category          : category)
                     }
-
                 }
             }
             .listStyle(.sidebar)
             .navigationViewStyle(.columns)
             .navigationTitle("Dépenses")
+            .environment(\.horizontalSizeClass, .regular)
+            .toolbar {
+                EditButton()
+            }
 
             /// vue par défaut
             ExpenseSummaryView()
-        }
-        .environment(\.horizontalSizeClass, .regular)
-        .toolbar {
-            EditButton()
         }
     }
 }
