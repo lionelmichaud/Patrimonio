@@ -145,13 +145,13 @@ final class LifeInsSuccessionManagerTests: XCTestCase { // swiftlint:disable:thi
         var type = InvestementKind.lifeInsurance(periodicSocialTaxes: true,
                                                  clause: clause)
         
-        var invest = FreeInvestement(year            : 2020,
-                                     name            : "Assurance Vie",
-                                     note            : "note",
-                                     type            : type,
-                                     interestRateType: InterestRateKind.contractualRate(fixedRate: 0.0),
-                                     initialValue    : 100,
-                                     initialInterest : 0)
+        var invest = FreeInvestement(lastKnownStateYear : 2020,
+                                     name               : "Assurance Vie",
+                                     note               : "note",
+                                     type               : type,
+                                     interestRateType   : InterestRateKind.contractualRate(fixedRate   : 0.0),
+                                     initialValue       : 100,
+                                     initialInterest    : 0)
         invest.ownership = ownership
         
         var capitalDeces = Tests.manager
@@ -278,13 +278,13 @@ final class LifeInsSuccessionManagerTests: XCTestCase { // swiftlint:disable:thi
         let type = InvestementKind.lifeInsurance(periodicSocialTaxes: true,
                                                  clause: clause)
         
-        var invest = FreeInvestement(year            : 2020,
-                                     name            : "Assurance Vie",
-                                     note            : "note",
-                                     type            : type,
-                                     interestRateType: InterestRateKind.contractualRate(fixedRate: 0.0),
-                                     initialValue    : 100,
-                                     initialInterest : 0)
+        var invest = FreeInvestement(lastKnownStateYear : 2020,
+                                     name               : "Assurance Vie",
+                                     note               : "note",
+                                     type               : type,
+                                     interestRateType   : InterestRateKind.contractualRate(fixedRate   : 0.0),
+                                     initialValue       : 100,
+                                     initialInterest    : 0)
         invest.ownership = ownership
         
         var capitalDeces = Tests.manager

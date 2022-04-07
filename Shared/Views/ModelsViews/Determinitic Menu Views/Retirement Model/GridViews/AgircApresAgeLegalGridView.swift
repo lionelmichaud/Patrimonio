@@ -44,7 +44,7 @@ struct AgircApresAgeLegalSliceView: View {
                         integer : slice.ndTrimPostAgeLegal)
             PercentNormView(label   : "Coefficient de réduction",
                             percent : slice.coef)
-        }.padding([.top, .bottom])
+        }
     }
 }
 

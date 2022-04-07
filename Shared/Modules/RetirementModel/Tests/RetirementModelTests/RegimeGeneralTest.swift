@@ -581,7 +581,7 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
     }
     
     func test_calcul_nb_Trimestre_de_Decote() {
-        let now = now
+        let currentDate = Date.now
         var dureeAssurance      : Int
         var dureeDeReference    : Int
         var birthDate           : Date
@@ -589,8 +589,8 @@ class RegimeGeneralTest: XCTestCase { // swiftlint:disable:this type_body_length
         var result: Result<Int, RegimeGeneral.ModelError>
         
         // pas de decote
-        birthDate           = now
-        dateOfPensionLiquid = now
+        birthDate           = currentDate
+        dateOfPensionLiquid = currentDate
         dureeAssurance      = 145
         dureeDeReference    = 140
         result = RegimeGeneralTest.regimeGeneral.nbTrimestreDecote(birthDate           : birthDate,

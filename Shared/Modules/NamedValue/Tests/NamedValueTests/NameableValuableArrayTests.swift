@@ -13,7 +13,7 @@ import Persistable
 
 class NameableValuableArrayTests: XCTestCase {
     
-    struct Item: NameableValuableP, Identifiable, Codable {
+    struct Item: NameableValuableP, Identifiable, Codable, Equatable {
         var id   = UUID()
         var name : String
         
@@ -32,19 +32,22 @@ class NameableValuableArrayTests: XCTestCase {
     static var tableNV = [Item]()
     
     struct TableOfItems: NameableValuableArrayP {
-        private enum CodingKeys: String, CodingKey { // swiftlint:disable:this nesting
+        private enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
             case items
         }
 
-       var persistenceSM = PersistenceStateMachine(initialState : .created)
-
         var items: [Item]
+        var persistenceSM = PersistenceStateMachine(initialState : .created)
+        var persistenceState : PersistenceState = .created
+        var currentValue     : Double = 0
         var description: String {
             items.description
         }
         
         init(fileNamePrefix: String) {
-            self.items = NameableValuableArrayTests.names.map { Item(name: fileNamePrefix + $0) }
+            self.items = NameableValuableArrayTests.names.map {
+                NameableValuableArrayTests.Item(name: fileNamePrefix + $0)
+            }
         }
         init(for aClass: AnyClass, fileNamePrefix: String) {
             self.init(fileNamePrefix: fileNamePrefix)

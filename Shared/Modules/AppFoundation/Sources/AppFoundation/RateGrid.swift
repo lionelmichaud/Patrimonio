@@ -15,7 +15,7 @@ enum RateGridError: Error {
 }
 
 // MARK: - Tranche de barême
-public struct RateSlice: Codable, Hashable {
+public struct RateSlice: Codable, Hashable, Equatable {
 
     // MARK: - Properties
 

@@ -42,11 +42,60 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
     private var editView       : (Transac<[S]>, Int) -> EditView
     /// Closure qui met à jour toutes les dépendances vis-à-vis de S
     let updateDependenciesToModel: ( ) -> Void
-    @State private var selection : S?
+    //@State private var selection : S?
     @State private var alertItem : AlertItem?
     @State private var showingAddSheet  = false
     @State private var showingEditSheet = false
     @State private var selectedSliceIdx : Int = 0
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            /// barre d'outils de la Liste
+            Button { showingAddSheet = true } label : {
+                Label("Ajouter une ligne", systemImage: "plus.circle.fill")
+            }
+            .padding([.leading, .trailing, .top])
+            .sheet(isPresented: $showingAddSheet) {
+                addView($grid)
+            }
+
+            /// Liste
+            List {
+                ForEach(grid, id: \.self) { slice in
+                    displayView(slice).padding([.top, .bottom])
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                withAnimation {
+                                    grid.removeAll(where: { $0 == slice })
+                                }
+                            } label: {
+                                Label("Supprimer", systemImage: "trash")
+                            }
+                        }
+                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                            Button(role: .none) {
+                                selectedSliceIdx = grid.firstIndex(of: slice)!
+                                showingEditSheet = true
+                            } label: {
+                                Label("Modifier", systemImage: "square.and.pencil")
+                            }
+                            .tint(.indigo)
+                        }
+                        .sheet(isPresented: $showingEditSheet) {
+                            editView($grid,
+                                     selectedSliceIdx)
+                        }
+                }
+            }
+            Spacer()
+        }
+        .alert(item: $alertItem, content: newAlert)
+        .navigationTitle(label)
+        /// barre d'outils de la NavigationView
+        .modelChangesToolbar(subModel                  : $grid,
+                             isValid                   : gridIsValid(grid),
+                             updateDependenciesToModel : onChange)
+    }
 
     /// Création
     /// - Parameters:
@@ -76,66 +125,17 @@ struct GridView<S: Hashable, DisplayView: View, AddView: View, EditView: View> :
         self.updateDependenciesToModel = updateDependenciesToModel
     }
 
-    var body: some View {
-        VStack(alignment: .leading) {
-            /// barre d'outils de la Liste
-            Button(action : { withAnimation { showingAddSheet = true } },
-                   label  : {
-                Label("Ajouter une ligne", systemImage: "plus.circle.fill")
-            })
-            .sheet(isPresented: $showingAddSheet) {
-                addView($grid)
-            }
-            .padding()
-
-            Text("Double cliquer sur une ligne pour la modifier.")
-                .foregroundColor(.secondary)
-                .padding(.horizontal)
-
-            /// Liste
-            List(selection: $selection) {
-                ForEach(grid, id: \.self) { slice in
-                    displayView(slice)
-                        .onTapGesture(count   : 2,
-                                      perform : {
-                            selectedSliceIdx = grid.firstIndex(of: slice)!
-                            showingEditSheet = true
-                        })
-                        .sheet(isPresented: $showingEditSheet) {
-                            editView($grid,
-                                     selectedSliceIdx)
-                        }
-                }
-                .onDelete(perform: deleteSlices)
-            }
-            Spacer()
-        }
-        .alert(item: $alertItem, content: newAlert)
-        .navigationTitle(label)
-        /// barre d'outils de la NavigationView
-        .modelChangesToolbar(subModel                  : $grid,
-                              isValid                   : gridIsValid(grid),
-                              updateDependenciesToModel : onChange)
-    }
-
     private func onChange() {
         initializeGrid(&grid)
         updateDependenciesToModel()
-    }
-
-    private func deleteSlices(at offsets: IndexSet) {
-        var copy = grid
-        copy.remove(atOffsets: offsets)
-        initializeGrid(&copy)
-        grid = copy
     }
 }
 
 struct GridView_Previews: PreviewProvider {
     static func grid() -> RateGrid {
-        [ RateSlice(floor:    0.0, rate: 10.0),
-          RateSlice(floor: 1000.0, rate: 20.0),
-          RateSlice(floor: 2000.0, rate: 30.0)]
+        [ RateSlice(floor:    0.0, rate: 0.1),
+          RateSlice(floor: 1000.0, rate: 0.2),
+          RateSlice(floor: 2000.0, rate: 0.3)]
     }
 
     static var previews: some View {
