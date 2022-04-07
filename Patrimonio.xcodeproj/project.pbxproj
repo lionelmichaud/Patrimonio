@@ -1208,15 +1208,15 @@
 				7935BC4427DF660F0079F39C /* FamilySidebarView.swift */,
 				7935BC4727DF660F0079F39C /* FamilySummaryView.swift */,
 				7935BC4927DF660F0079F39C /* FamilySectionView.swift */,
-				7935BC4527DF660F0079F39C /* PersonDetailView.swift */,
 				7935BC4227DF660F0079F39C /* PersonViewModel.swift */,
+				7935BC4527DF660F0079F39C /* PersonDetailView.swift */,
+				7935BC4A27DF660F0079F39C /* PersonEditView.swift */,
+				7935BC4027DF660F0079F39C /* PersonAddView.swift */,
 				7935BC3A27DF660F0079F39C /* AdultViewModel.swift */,
 				7935BC4127DF660F0079F39C /* SuccessorListView.swift */,
 				7935BC4327DF660F0079F39C /* AdultDetailView.swift */,
-				7935BC4027DF660F0079F39C /* PersonAddView.swift */,
 				7935BC4627DF660F0079F39C /* UnemployementDetailView.swift */,
 				7935BC4827DF660F0079F39C /* ChildDetailView.swift */,
-				7935BC4A27DF660F0079F39C /* PersonEditView.swift */,
 			);
 			path = FamilyViews;
 			sourceTree = "<group>";

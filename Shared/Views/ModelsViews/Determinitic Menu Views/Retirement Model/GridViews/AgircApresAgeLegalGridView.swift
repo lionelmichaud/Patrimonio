@@ -66,18 +66,18 @@ struct AgircApresAgeLegalSliceEditView: View {
 
     private var toolBar: some View {
         HStack {
-            Button(action : { self.presentationMode.wrappedValue.dismiss() },
-                   label  : { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler",
+                   role: .cancel,
+                   action : { self.presentationMode.wrappedValue.dismiss() })
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action : updateSlice,
-                   label  : { Text("OK") })
-                .buttonStyle(.bordered)
+            Button("OK",
+                   action : updateSlice)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
         }
+        .buttonStyle(.bordered)
         .padding(.horizontal)
         .padding(.top)
     }
@@ -90,11 +90,13 @@ struct AgircApresAgeLegalSliceEditView: View {
             Form {
                 VStack {
                     IntegerEditView(label   : "Nombre de trimestres manquant",
-                                    integer : $modifiedSlice.nbTrimManquant)
+                                    integer : $modifiedSlice.nbTrimManquant,
+                                    validity: .poz)
                     IntegerEditView(label   : "Nombre de trimestres au-delà de l'âge légal de départ à la retraite",
-                                    integer : $modifiedSlice.ndTrimPostAgeLegal)
+                                    integer : $modifiedSlice.ndTrimPostAgeLegal,
+                                    validity: .poz)
                     PercentNormEditView(label   : "Coefficient de réduction",
-                                    percent : $modifiedSlice.coef)
+                                        percent : $modifiedSlice.coef)
                 }
             }
             .textFieldStyle(.roundedBorder)
@@ -127,18 +129,18 @@ struct AgircApresAgeLegalSliceAddView: View {
 
     private var toolBar: some View {
         HStack {
-            Button(action: { self.presentationMode.wrappedValue.dismiss() },
-                   label: { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler",
+                   role: .cancel,
+                   action : { self.presentationMode.wrappedValue.dismiss() })
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action: addSlice,
-                   label: { Text("OK") })
-                .buttonStyle(.bordered)
+            Button("OK",
+                   action: addSlice)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
         }
+        .buttonStyle(.bordered)
         .padding(.horizontal)
         .padding(.top)
     }

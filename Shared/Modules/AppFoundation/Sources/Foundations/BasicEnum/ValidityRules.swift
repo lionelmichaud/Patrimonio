@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  ValidityRules.swift
 //  
 //
 //  Created by Lionel MICHAUD on 02/04/2022.
@@ -18,8 +18,11 @@ public enum DoubleValidityRule {
     case lessThanOrEqualTo(limit: Double)
     case greaterThan(limit: Double)
     case greaterThanOrEqualTo(limit: Double)
+    case within(range: ClosedRange<Double>)
+    case isNormalizedPercentage
+    case isPercentage
 
-    public func isValid(number: Double) -> Bool {
+    public func isValid(number: Double) -> Bool { // swiftlint:disable:this cyclomatic_complexity
         switch self {
             case .none:
                 return true
@@ -39,6 +42,12 @@ public enum DoubleValidityRule {
                 return number > limit
             case .greaterThanOrEqualTo(let limit):
                 return number >= limit
+            case .within(let range):
+                return range.contains(number)
+            case .isNormalizedPercentage:
+                return (0...1).contains(number)
+            case .isPercentage:
+                return (0...100).contains(number)
         }
     }
 }
@@ -54,6 +63,7 @@ public enum IntegerValidityRule {
     case lessThanOrEqualTo(limit: Int)
     case greaterThan(limit: Int)
     case greaterThanOrEqualTo(limit: Int)
+    case within(range: ClosedRange<Int>)
 
     public func isValid(number: Int) -> Bool {
         switch self {
@@ -75,6 +85,8 @@ public enum IntegerValidityRule {
                 return number > limit
             case .greaterThanOrEqualTo(let limit):
                 return number >= limit
+            case .within(let range):
+                return range.contains(number)
         }
     }
 }
@@ -85,8 +97,8 @@ public enum StringValidityRule {
     case notEmpty
     case lessThan(character: Int)
     case lessThanOrEqualTo(character: Int)
-    case greaterThan(character: Int)
-    case greaterThanOrEqualTo(character: Int)
+    case moreThan(character: Int)
+    case moreThanOrEqualTo(character: Int)
 
     public func isValid(text: String) -> Bool {
         switch self {
@@ -98,9 +110,9 @@ public enum StringValidityRule {
                 return text.count < character
             case .lessThanOrEqualTo(let character):
                 return text.count <= character
-            case .greaterThan(let character):
+            case .moreThan(let character):
                 return text.count > character
-            case .greaterThanOrEqualTo(let character):
+            case .moreThanOrEqualTo(let character):
                 return text.count >= character
         }
     }

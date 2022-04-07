@@ -92,7 +92,6 @@ public struct PercentEditView2: View {
 public struct PercentEditView: View {
     private let label    : String
     private let comment  : String?
-    private let validity : DoubleValidityRule
     @Binding
     private var percent  : Double // [0% ... 100%]
     private let digit    : Int
@@ -111,7 +110,7 @@ public struct PercentEditView: View {
             .numbersAndPunctuationKeyboardType()
             Text("%")
         }
-        .foregroundColor(validity.isValid(number: percent) ? .primary : .red)
+        .foregroundColor(DoubleValidityRule.isPercentage.isValid(number: percent) ? .primary : .red)
     }
 
     /// Création
@@ -119,16 +118,14 @@ public struct PercentEditView: View {
     ///   - label: libellé
     ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
     ///   - percent: valeur [0% ... 100%]
-    public init(label    : String,
-                comment  : String?            = nil,
-                percent  : Binding<Double>,
-                digit    : Int                = 2,
-                validity : DoubleValidityRule = .none) {
-        self.label    = label
-        self.comment  = comment
-        _percent      = percent
-        self.digit    = digit
-        self.validity = validity
+    public init(label   : String,
+                comment : String?  = nil,
+                percent : Binding<Double>,
+                digit   : Int      = 2) {
+        self.label   = label
+        self.comment = comment
+        _percent     = percent
+        self.digit   = digit
     }
 }
 
@@ -144,7 +141,6 @@ public struct PercentEditView: View {
 public struct PercentNormEditView: View {
     private let label    : String
     private let comment  : String?
-    private let validity : DoubleValidityRule
     @Binding
     private var percent  : Double // [0 ... 1]
     private let digit    : Int
@@ -162,7 +158,7 @@ public struct PercentNormEditView: View {
             .frame(maxWidth: 88)
             .numbersAndPunctuationKeyboardType()
         }
-        .foregroundColor(validity.isValid(number: percent) ? .primary : .red)
+        .foregroundColor(DoubleValidityRule.isNormalizedPercentage.isValid(number: percent) ? .primary : .red)
     }
 
     /// Création
@@ -171,16 +167,14 @@ public struct PercentNormEditView: View {
     ///   - comment: Commentaire à afficher en grisé à gauche de la valeur
     ///   - percent: valeur [0 ... 1]
     ///   - digit: Nombre de chifrre après la virgule à afficher
-    public init(label    : String,
-                comment  : String?            = nil,
-                percent  : Binding<Double>,
-                digit    : Int                = 2,
-                validity : DoubleValidityRule = .none) {
-        self.label    = label
-        self.comment  = comment
-        _percent      = percent
-        self.digit    = digit
-        self.validity = validity
+    public init(label   : String,
+                comment : String?  = nil,
+                percent : Binding<Double>,
+                digit   : Int      = 2) {
+        self.label   = label
+        self.comment = comment
+        _percent     = percent
+        self.digit   = digit
     }
 }
 
