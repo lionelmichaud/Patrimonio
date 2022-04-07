@@ -72,9 +72,10 @@ struct ModelFiscalImmobilierTaxeView: View {
                 }
             }
 
-            IntegerEditView(label   : "Abattement possible après",
-                            comment : "ans",
-                            integer : $subModel.discountAfter)
+            IntegerEditView(label    : "Abattement possible après",
+                            comment  : "ans",
+                            integer  : $subModel.discountAfter,
+                            validity : .poz)
         }
         .navigationTitle("Plus-Value Immobilière")
         .alert(item: $alertItem, content: newAlert)

@@ -32,11 +32,13 @@ struct ModelFiscalPensionView: View {
                     }
                 }
 
-                AmountEditView(label  : "Abattement minimum",
-                               amount : $subModel.minRebate)
+                AmountEditView(label    : "Abattement minimum",
+                               amount   : $subModel.minRebate,
+                               validity : .poz)
 
-                AmountEditView(label  : "Abattement maximum",
-                               amount : $subModel.maxRebate)
+                AmountEditView(label    : "Abattement maximum",
+                               amount   : $subModel.maxRebate,
+                               validity : .poz)
             } header: {
                 Text("Abattement").font(.headline)
             }

@@ -22,7 +22,8 @@ struct ModelFiscalLifeInsuranceView: View {
 
             AmountEditView(label   : "Abattement par personne",
                            comment : "annuel",
-                           amount  : $subModel.rebatePerPerson)
+                           amount  : $subModel.rebatePerPerson,
+                           validity: .poz)
         }
         .navigationTitle("Revenus d'Assurance Vie")
         .alert(item: $alertItem, content: newAlert)

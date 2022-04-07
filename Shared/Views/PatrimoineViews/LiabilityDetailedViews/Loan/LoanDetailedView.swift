@@ -47,8 +47,7 @@ struct LoanDetailedView: View {
             
             Section {
                 PercentEditView(label    : "Taux d'intérêt annuel",
-                                percent  : $item.interestRate,
-                                validity : .poz)
+                                percent  : $item.interestRate)
                 .foregroundColor(item.interestRate < 0 ? .red : .primary)
                 AmountEditView(label    : "Montant mensuel de l'assurance",
                                amount   : $item.monthlyInsurance,

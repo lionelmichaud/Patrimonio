@@ -200,7 +200,9 @@ struct BoundaryEditView: View {
 
             } else {
                 /// choisir une date absolue
-                IntegerEditView(label: "\(label) (année inclue)", integer: $boundaryVM.fixedYear)
+                IntegerEditView(label    : "\(label) (année inclue)",
+                                integer  : $boundaryVM.fixedYear,
+                                validity : .poz)
             }
         } header: {
             Text("\(label) de période")
@@ -334,7 +336,9 @@ struct BoundaryEditView2: View {
 
             } else {
                 /// choisir une date absolue
-                IntegerEditView(label: "\(label) (année inclue)", integer: boundaryVM.fixedYear)
+                IntegerEditView(label    : "\(label) (année inclue)",
+                                integer  : boundaryVM.fixedYear,
+                                validity : .poz)
             }
         } header: {
             Text("\(label) de période")
@@ -471,7 +475,9 @@ struct BoundaryEditNavigationView: View {
 
             } else {
                 /// choisir une date absolue
-                IntegerEditView(label: "\(label) (année inclue)", integer: boundaryVM.fixedYear)
+                IntegerEditView(label    : "\(label) (année inclue)",
+                                integer  : boundaryVM.fixedYear,
+                                validity : .poz)
             }
         }
         .textFieldStyle(.roundedBorder)

@@ -92,9 +92,10 @@ struct DemembrementSliceEditView: View {
             /// Formulaire
             Form {
                 HStack {
-                    IntegerEditView(label   : "A partir de",
-                                    comment : "ans",
-                                    integer : $modifiedSlice.floor)
+                    IntegerEditView(label    : "A partir de",
+                                    comment  : "ans",
+                                    integer  : $modifiedSlice.floor,
+                                    validity : .poz)
                     Spacer(minLength: 50)
                     PercentNormEditView(label   : "Usufruit",
                                         percent : $modifiedSlice.usuFruit)
@@ -152,9 +153,10 @@ struct DemembrementSliceAddView: View {
             /// Formulaire
             Form {
                 VStack {
-                    IntegerEditView(label   : "A partir de",
-                                    comment : "ans",
-                                    integer : $newSlice.floor)
+                    IntegerEditView(label    : "A partir de",
+                                    comment  : "ans",
+                                    integer  : $newSlice.floor,
+                                    validity : .poz)
                     PercentNormEditView(label   : "Usufruit",
                                         percent : $newSlice.usuFruit)
                 }

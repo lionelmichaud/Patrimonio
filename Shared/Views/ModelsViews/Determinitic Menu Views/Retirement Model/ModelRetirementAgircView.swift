@@ -33,8 +33,9 @@ struct ModelRetirementAgircView: View {
                 }
             }
 
-            AmountEditView(label  : "Valeur du point",
-                           amount : $subModel.valeurDuPoint)
+            AmountEditView(label    : "Valeur du point",
+                           amount   : $subModel.valeurDuPoint,
+                           validity : .poz)
 
             NavigationLink(destination: AgircAvantAgeLegalGridView(label: "Réduction pour trimestres manquant avant l'âge légale",
                                                                    grid: $subModel.gridAvantAgeLegal.transaction(),
@@ -71,9 +72,10 @@ struct ModelRetirementAgircView: View {
                     }
                 }
 
-                AmountEditView(label   : "Plafond pour enfants nés",
-                               comment : "annuel",
-                               amount  : $subModel.majorationPourEnfant.plafondMajoEnfantNe)
+                AmountEditView(label    : "Plafond pour enfants nés",
+                               comment  : "annuel",
+                               amount   : $subModel.majorationPourEnfant.plafondMajoEnfantNe,
+                               validity : .poz)
 
                 Stepper(value : $subModel.majorationPourEnfant.majorParEnfantACharge,
                         in    : 0 ... 20.0,

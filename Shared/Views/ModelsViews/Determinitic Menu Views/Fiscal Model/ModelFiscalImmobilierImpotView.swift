@@ -51,9 +51,10 @@ struct ModelFiscalImmobilierImpotView: View {
                     }
                 }
 
-                IntegerEditView(label   : "Abattement possible après",
-                                comment : "ans",
-                                integer : $subModel.discountAfter)
+                IntegerEditView(label    : "Abattement possible après",
+                                comment  : "ans",
+                                integer  : $subModel.discountAfter,
+                                validity : .poz)
             } header: {
                 Text("Abattement").font(.headline)
             }

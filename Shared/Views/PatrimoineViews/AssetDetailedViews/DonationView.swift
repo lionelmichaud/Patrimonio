@@ -16,9 +16,10 @@ struct DonationView: View {
     @Binding var donation: Donation
     
     var body: some View {
-        IntegerEditView(label: "Année de la donation",
-                        comment: "Fin d'année",
-                        integer: $donation.atEndOfYear)
+        IntegerEditView(label    : "Année de la donation",
+                        comment  : "Fin d'année",
+                        integer  : $donation.atEndOfYear,
+                        validity : .poz)
         ClauseView(clause: $donation.clause)
     }
 }

@@ -94,14 +94,18 @@ struct DurationSliceEditView: View {
             /// Formulaire
             Form {
                 VStack {
-                    IntegerEditView(label   : "A partir de",
-                                    integer : $modifiedSlice.fromAge)
-                    IntegerEditView(label   : "Nombre de mois d'indemnisation",
-                                    integer : $modifiedSlice.maxDuration)
-                    AmountEditView(label   : "Indemnité journalière minimale pour se voir appliqué la dégressivité",
-                                   amount : $modifiedSlice.reductionSeuilAlloc)
-                    IntegerEditView(label   : "Nombre de mois d'indemnisation avant dégressivité",
-                                    integer : $modifiedSlice.reductionAfter)
+                    IntegerEditView(label    : "A partir de",
+                                    integer  : $modifiedSlice.fromAge,
+                                    validity : .poz)
+                    IntegerEditView(label    : "Nombre de mois d'indemnisation",
+                                    integer  : $modifiedSlice.maxDuration,
+                                    validity : .poz)
+                    AmountEditView(label    : "Indemnité journalière minimale pour se voir appliqué la dégressivité",
+                                   amount   : $modifiedSlice.reductionSeuilAlloc,
+                                   validity : .poz)
+                    IntegerEditView(label    : "Nombre de mois d'indemnisation avant dégressivité",
+                                    integer  : $modifiedSlice.reductionAfter,
+                                    validity : .poz)
                     PercentNormEditView(label   : "Dégressivité après ce délai",
                                         percent : $modifiedSlice.reduction)
                 }
@@ -162,13 +166,17 @@ struct DurationSliceAddView: View {
             Form {
                 VStack {
                     IntegerEditView(label   : "A partir de",
-                                    integer : $newSlice.fromAge)
+                                    integer : $newSlice.fromAge,
+                                    validity: .poz)
                     IntegerEditView(label   : "Nombre de mois d'indemnisation",
-                                    integer : $newSlice.maxDuration)
-                    AmountEditView(label   : "Indemnité journalière minimale pour se voir appliqué la dégressivité",
-                                   amount : $newSlice.reductionSeuilAlloc)
+                                    integer : $newSlice.maxDuration,
+                                    validity: .poz)
+                    AmountEditView(label    : "Indemnité journalière minimale pour se voir appliqué la dégressivité",
+                                   amount   : $newSlice.reductionSeuilAlloc,
+                                   validity : .poz)
                     IntegerEditView(label   : "Nombre de mois d'indemnisation avant dégressivité",
-                                    integer : $newSlice.reductionAfter)
+                                    integer : $newSlice.reductionAfter,
+                                    validity: .poz)
                     PercentNormEditView(label   : "Dégressivité après ce délai",
                                         percent : $newSlice.reduction)
                 }

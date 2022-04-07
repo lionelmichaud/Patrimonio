@@ -152,10 +152,12 @@ struct AgircApresAgeLegalSliceAddView: View {
             /// Formulaire
             Form {
                 VStack {
-                    IntegerEditView(label   : "Nombre de trimestres manquant",
-                                    integer : $newSlice.nbTrimManquant)
-                    IntegerEditView(label   : "Nombre de trimestres au-delà de l'âge légal de départ à la retraite",
-                                    integer : $newSlice.ndTrimPostAgeLegal)
+                    IntegerEditView(label    : "Nombre de trimestres manquant",
+                                    integer  : $newSlice.nbTrimManquant,
+                                    validity : .poz)
+                    IntegerEditView(label    : "Nombre de trimestres au-delà de l'âge légal de départ à la retraite",
+                                    integer  : $newSlice.ndTrimPostAgeLegal,
+                                    validity : .poz)
                     PercentNormEditView(label   : "Coefficient de réduction",
                                     percent : $newSlice.coef)
                 }

@@ -33,9 +33,10 @@ struct ModelFiscalChomageChargeView: View {
                 }
             }
 
-            AmountEditView(label  : "Seuil de Taxation CSG/CRDS",
-                           comment: "journalier",
-                           amount : $subModel.seuilCsgCrds)
+            AmountEditView(label    : "Seuil de Taxation CSG/CRDS",
+                           comment  : "journalier",
+                           amount   : $subModel.seuilCsgCrds,
+                           validity : .poz)
 
             Stepper(value : $subModel.CRDS,
                     in    : 0 ... 100.0,
@@ -70,9 +71,10 @@ struct ModelFiscalChomageChargeView: View {
                 }
             }
 
-            AmountEditView(label  : "Seuil de Taxation Retraite Complémentaire",
-                           comment: "journalier",
-                           amount : $subModel.seuilRetCompl)
+            AmountEditView(label    : "Seuil de Taxation Retraite Complémentaire",
+                           comment  : "journalier",
+                           amount   : $subModel.seuilRetCompl,
+                           validity : .poz)
         }
         .navigationTitle("Allocation Chômage")
         .alert(item: $alertItem, content: newAlert)

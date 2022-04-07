@@ -34,14 +34,17 @@ struct ModelFiscalIsfView: View {
             }.isDetailLink(true)
             
             Section {
-                AmountEditView(label  : "Seuil d'imposition",
-                               amount : $subModel.seuil)
+                AmountEditView(label    : "Seuil d'imposition",
+                               amount   : $subModel.seuil,
+                               validity : .poz)
 
-                AmountEditView(label  : "Limite supérieure de la tranche de transition",
-                               amount : $subModel.seuil2)
+                AmountEditView(label    : "Limite supérieure de la tranche de transition",
+                               amount   : $subModel.seuil2,
+                               validity : .poz)
 
-                AmountEditView(label  : "Décote maximale",
-                               amount : $subModel.decote€)
+                AmountEditView(label    : "Décote maximale",
+                               amount   : $subModel.decote€,
+                               validity : .poz)
 
                 Stepper(value : $subModel.decoteCoef,
                         in    : 0 ... 100.0,

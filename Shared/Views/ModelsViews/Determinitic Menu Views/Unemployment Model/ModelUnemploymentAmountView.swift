@@ -29,8 +29,9 @@ struct ModelUnemploymentAmountView: View {
                     }
                 }
                 
-                AmountEditView(label  : "Cas 1: Indemnité journalière",
-                               amount : $subModel.case1Fix)
+                AmountEditView(label    : "Cas 1  : Indemnité journalière",
+                               amount   : $subModel.case1Fix,
+                               validity : .poz)
             } header: {
                 Text("Cas n°1").font(.headline)
             }
@@ -53,11 +54,13 @@ struct ModelUnemploymentAmountView: View {
             }
 
             Section {
-                AmountEditView(label  : "Allocation minimale",
-                               amount : $subModel.minAllocationEuro)
+                AmountEditView(label    : "Allocation minimale",
+                               amount   : $subModel.minAllocationEuro,
+                               validity : .poz)
 
-                AmountEditView(label  : "Allocation maximale",
-                               amount : $subModel.maxAllocationEuro)
+                AmountEditView(label    : "Allocation maximale",
+                               amount   : $subModel.maxAllocationEuro,
+                               validity : .poz)
 
                 Stepper(value : $subModel.maxAllocationPcent,
                         in    : 0 ... 100.0,

@@ -86,11 +86,13 @@ struct NbTrimUnemployementSliceEditView: View {
             /// Formulaire
             Form {
                 VStack {
-                    IntegerEditView(label   : "Nombre de trimestres acquis",
-                                    integer : $modifiedSlice.nbTrimestreAcquis)
+                    IntegerEditView(label    : "Nombre de trimestres acquis",
+                                    integer  : $modifiedSlice.nbTrimestreAcquis,
+                                    validity : .poz)
                     //Spacer(minLength: 50)
-                    IntegerEditView(label   : "Nombre de trimestres de chômage non indemnisés",
-                                    integer : $modifiedSlice.nbTrimNonIndemnise)
+                    IntegerEditView(label    : "Nombre de trimestres de chômage non indemnisés",
+                                    integer  : $modifiedSlice.nbTrimNonIndemnise,
+                                    validity : .poz)
                     //Spacer(minLength: 50)
                 }
             }
@@ -146,10 +148,12 @@ struct NbTrimUnemployementSliceAddView: View {
             /// Formulaire
             Form {
                 VStack {
-                    IntegerEditView(label   : "Nombre de trimestres acquis",
-                                    integer : $newSlice.nbTrimestreAcquis)
-                    IntegerEditView(label   : "Nb trimestre",
-                                    integer : $newSlice.nbTrimNonIndemnise)
+                    IntegerEditView(label    : "Nombre de trimestres acquis",
+                                    integer  : $newSlice.nbTrimestreAcquis,
+                                    validity : .poz)
+                    IntegerEditView(label    : "Nb trimestre",
+                                    integer  : $newSlice.nbTrimNonIndemnise,
+                                    validity : .poz)
                 }
             }
             .textFieldStyle(.roundedBorder)

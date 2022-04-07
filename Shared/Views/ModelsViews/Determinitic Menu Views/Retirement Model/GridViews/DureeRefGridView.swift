@@ -91,14 +91,17 @@ struct DureeRefSliceEditView: View {
             /// Formulaire
             Form {
                 VStack {
-                    IntegerEditView(label   : "Année de naissance",
-                                    integer : $modifiedSlice.birthYear)
-                    //Spacer(minLength: 50)
-                    IntegerEditView(label   : "Nb trimestre",
-                                    integer : $modifiedSlice.ndTrimestre)
-                    //Spacer(minLength: 50)
-                    IntegerEditView(label   : "Age taux plein",
-                                    integer : $modifiedSlice.ageTauxPlein)
+                    IntegerEditView(label    : "Année de naissance",
+                                    integer  : $modifiedSlice.birthYear,
+                                    validity : .poz)
+                    //Spacer(minLength       : 50)
+                    IntegerEditView(label    : "Nb trimestre",
+                                    integer  : $modifiedSlice.ndTrimestre,
+                                    validity : .poz)
+                    //Spacer(minLength       : 50)
+                    IntegerEditView(label    : "Age taux plein",
+                                    integer  : $modifiedSlice.ageTauxPlein,
+                                    validity : .poz)
                 }
             }
             .textFieldStyle(.roundedBorder)
@@ -154,14 +157,17 @@ struct DureeRefSliceAddView: View {
             /// Formulaire
             Form {
                 VStack {
-                    IntegerEditView(label   : "Année de naissance",
-                                    integer : $newSlice.birthYear)
+                    IntegerEditView(label    : "Année de naissance",
+                                    integer  : $newSlice.birthYear,
+                                    validity : .poz)
                     //Spacer(minLength: 50)
-                    IntegerEditView(label   : "Nb trimestre",
-                                    integer : $newSlice.ndTrimestre)
+                    IntegerEditView(label    : "Nb trimestre",
+                                    integer  : $newSlice.ndTrimestre,
+                                    validity : .poz)
                     //Spacer(minLength: 50)
-                    IntegerEditView(label   : "Age taux plein",
-                                    integer : $newSlice.ageTauxPlein)
+                    IntegerEditView(label    : "Age taux plein",
+                                    integer  : $newSlice.ageTauxPlein,
+                                    validity : .poz)
                 }
             }
             .textFieldStyle(.roundedBorder)

@@ -45,8 +45,7 @@ struct ScpiDetailedView: View {
             /// Rendement
             Section {
                 PercentEditView(label    : "Taux de rendement annuel brut",
-                                percent  : $item.interestRate,
-                                validity : .poz)
+                                percent  : $item.interestRate)
                 AmountView(label: "Revenu annuel brut déflaté (avant prélèvements sociaux et IRPP)",
                            amount: item.yearlyRevenueIRPP(during: CalendarCst.thisYear).revenue)
                 .foregroundColor(.secondary)
@@ -60,8 +59,7 @@ struct ScpiDetailedView: View {
                            amount: model.fiscalModel.companyProfitTaxes.net(item.yearlyRevenueIRPP(during: CalendarCst.thisYear).revenue))
                 .foregroundColor(.secondary)
                 PercentEditView(label    : "Taux de réévaluation annuel",
-                                percent  : $item.revaluatRate,
-                                validity : .none)
+                                percent  : $item.revaluatRate)
             } header: {
                 Text("RENDEMENT")
             }

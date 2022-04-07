@@ -101,11 +101,14 @@ struct RegimeAgircSituationEditView : View {
     var body: some View {
         Group {
             IntegerEditView(label   : "Date de la dernière situation connue",
-                            integer : $lastKnownAgircSituation.atEndOf)
+                            integer : $lastKnownAgircSituation.atEndOf,
+                            validity: .poz)
             IntegerEditView(label   : "Nombre de points total acquis",
-                            integer : $lastKnownAgircSituation.nbPoints)
+                            integer : $lastKnownAgircSituation.nbPoints,
+                            validity: .poz)
             IntegerEditView(label   : "Nombre de points acquis par an",
-                            integer : $lastKnownAgircSituation.pointsParAn)
+                            integer : $lastKnownAgircSituation.pointsParAn,
+                            validity: .poz)
         }
     }
 }
@@ -146,12 +149,15 @@ struct RegimeGeneralSituationEditView : View {
     
     var body: some View {
         Group {
-            AmountEditView(label  : "Salaire annuel moyen",
-                           amount : $lastKnownPensionSituation.sam)
-            IntegerEditView(label   : "Date de la dernière situation connue",
-                            integer : $lastKnownPensionSituation.atEndOf)
-            IntegerEditView(label   : "Nombre de trimestre acquis",
-                            integer : $lastKnownPensionSituation.nbTrimestreAcquis)
+            AmountEditView(label    : "Salaire annuel moyen",
+                           amount   : $lastKnownPensionSituation.sam,
+                           validity : .poz)
+            IntegerEditView(label    : "Date de la dernière situation connue",
+                            integer  : $lastKnownPensionSituation.atEndOf,
+                            validity : .poz)
+            IntegerEditView(label    : "Nombre de trimestre acquis",
+                            integer  : $lastKnownPensionSituation.nbTrimestreAcquis,
+                            validity : .poz)
         }
     }
 }

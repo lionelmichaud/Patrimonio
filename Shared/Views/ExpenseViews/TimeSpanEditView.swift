@@ -168,8 +168,10 @@ struct TimeSpanEditView: View {
 
                 case TimeSpan.exceptional(inYear: 0).id :
                     // TimeSpan = .exceptional
-                    IntegerEditView(label: "Durant l'année", integer: timeSpanVM.inYear)
-                    
+                    IntegerEditView(label    : "Durant l'année",
+                                    integer  : timeSpanVM.inYear,
+                                    validity : .poz)
+
                 default:
                     Text("Cas inconnu: ceci est un bug").foregroundColor(.red)
             }

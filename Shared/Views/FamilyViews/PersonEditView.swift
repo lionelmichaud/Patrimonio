@@ -231,17 +231,29 @@ private struct RevenueEditView : View {
             CaseWithAssociatedValuePicker<WorkIncomeType>(caseIndex: $adultViewModel.revIndex, label: "")
                 .pickerStyle(SegmentedPickerStyle())
             if salary {
-                AmountEditView(label: "Salaire brut", amount: $adultViewModel.revenueBrut)
-                AmountEditView(label: "Salaire net de feuille de paye", amount: $adultViewModel.revenueNet)
-                AmountEditView(label: "Salaire imposable", amount: $adultViewModel.revenueTaxable)
-                AmountEditView(label: "Coût de la mutuelle (protec. sup.)", amount: $adultViewModel.insurance)
+                AmountEditView(label    : "Salaire brut",
+                               amount   : $adultViewModel.revenueBrut,
+                               validity : .poz)
+                AmountEditView(label    : "Salaire net de feuille de paye",
+                               amount   : $adultViewModel.revenueNet,
+                               validity : .poz)
+                AmountEditView(label    : "Salaire imposable",
+                               amount   : $adultViewModel.revenueTaxable,
+                               validity : .poz)
+                AmountEditView(label    : "Coût de la mutuelle (protec. sup.)",
+                               amount   : $adultViewModel.insurance,
+                               validity : .poz)
                 DatePicker(selection           : $adultViewModel.fromDate,
                            in                  : 50.years.ago!...Date.now,
                            displayedComponents : .date,
                            label               : { HStack { Text("Date d'embauche"); Spacer() } })
             } else {
-                AmountEditView(label: "BNC", amount: $adultViewModel.revenueBrut)
-                AmountEditView(label: "Charges (assurance, frais bancaires, services, CFE)", amount: $adultViewModel.insurance)
+                AmountEditView(label    : "BNC",
+                               amount   : $adultViewModel.revenueBrut,
+                               validity : .poz)
+                AmountEditView(label    : "Charges (assurance, frais bancaires, services, CFE)",
+                               amount   : $adultViewModel.insurance,
+                               validity : .poz)
             }
         }
     }
@@ -263,11 +275,16 @@ private struct EndOfWorkingPeriodEditView: View {
         //                        }
         //                    }
         //                    .alert(item: $alertItem) { alertItem in myAlert(alertItem: alertItem) }
-        CasePicker(pickedCase: $adultViewModel.causeOfRetirement, label: "Cause").pickerStyle(SegmentedPickerStyle())
+        CasePicker(pickedCase : $adultViewModel.causeOfRetirement,
+                   label      : "Cause")
+        .pickerStyle(SegmentedPickerStyle())
         if adultViewModel.causeOfRetirement != Unemployment.Cause.demission {
             Toggle(isOn: $adultViewModel.hasAllocationSupraLegale, label: { Text("Indemnité de licenciement non conventionnelle (supra convention)") })
             if adultViewModel.hasAllocationSupraLegale {
-                AmountEditView(label: "Montant total brut", amount: $adultViewModel.allocationSupraLegale).padding(.leading)
+                AmountEditView(label    : "Montant total brut",
+                               amount   : $adultViewModel.allocationSupraLegale,
+                               validity : .poz)
+                .padding(.leading)
             }
         }
     }

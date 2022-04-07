@@ -27,8 +27,9 @@ struct ModelFiscalInheritanceDonationView: View {
                     Text("Barême pour Donation entre Conjoint")
                 }.isDetailLink(true)
                 
-                AmountEditView(label  : "Abattement sur Donation au Conjoint",
-                               amount : $subModel.abatConjoint)
+                AmountEditView(label    : "Abattement sur Donation au Conjoint",
+                               amount   : $subModel.abatConjoint,
+                               validity : .poz)
             } header: {
                 Text("Entre Conjoint").font(.headline)
             }
@@ -40,14 +41,16 @@ struct ModelFiscalInheritanceDonationView: View {
                     Text("Barême pour Donation en Ligne Directe")
                 }.isDetailLink(true)
                 
-                AmountEditView(label  : "Abattement sur Donation/Succession en ligne directe",
-                               amount : $subModel.abatLigneDirecte)
+                AmountEditView(label    : "Abattement sur Donation/Succession en ligne directe",
+                               amount   : $subModel.abatLigneDirecte,
+                               validity : .poz)
             } header: {
                 Text("En Ligne Directe").font(.headline)
             }
             
-            AmountEditView(label  : "Abattement sur Succession pour frais Funéraires",
-                           amount : $subModel.fraisFunéraires)
+            AmountEditView(label    : "Abattement sur Succession pour frais Funéraires",
+                           amount   : $subModel.fraisFunéraires,
+                           validity : .poz)
 
             Stepper(value : $subModel.decoteResidence,
                     in    : 0 ... 100.0,

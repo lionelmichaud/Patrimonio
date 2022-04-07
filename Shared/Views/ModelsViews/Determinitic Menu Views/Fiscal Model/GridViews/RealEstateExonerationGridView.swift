@@ -93,9 +93,10 @@ struct RealEstateExonerationSliceEditView: View {
             /// Formulaire
             Form {
                 VStack {
-                    IntegerEditView(label   : "A partir de",
-                                    comment : "ans",
-                                    integer : $modifiedSlice.floor)
+                    IntegerEditView(label    : "A partir de",
+                                    comment  : "ans",
+                                    integer  : $modifiedSlice.floor,
+                                    validity : .poz)
                     PercentEditView(label   : "Décote",
                                     percent : $modifiedSlice.discountRate)
                 }
@@ -153,9 +154,10 @@ struct RealEstateExonerationSliceAddView: View {
             /// Formulaire
             Form {
                 VStack {
-                    IntegerEditView(label   : "A partir de",
-                                    comment : "ans",
-                                    integer : $newSlice.floor)
+                    IntegerEditView(label    : "A partir de",
+                                    comment  : "ans",
+                                    integer  : $newSlice.floor,
+                                    validity : .poz)
                     PercentEditView(label   : "Décote",
                                     percent : $newSlice.discountRate)
                 }

@@ -38,14 +38,17 @@ struct ModelFiscalIrppView: View {
                     }
                 }
 
-                AmountEditView(label  : "Abattement minimum",
-                               amount : $subModel.minSalaryRebate)
+                AmountEditView(label    : "Abattement minimum",
+                               amount   : $subModel.minSalaryRebate,
+                               validity : .poz)
 
-                AmountEditView(label  : "Abattement maximum",
-                               amount : $subModel.maxSalaryRebate)
+                AmountEditView(label    : "Abattement maximum",
+                               amount   : $subModel.maxSalaryRebate,
+                               validity : .poz)
 
-                AmountEditView(label  : "Plafond de Réduction d'Impôt par Enfant",
-                               amount : $subModel.childRebate)
+                AmountEditView(label    : "Plafond de Réduction d'Impôt par Enfant",
+                               amount   : $subModel.childRebate,
+                               validity : .poz)
             } header: {
                 Text("Salaire").font(.headline)
             }
@@ -61,8 +64,9 @@ struct ModelFiscalIrppView: View {
                     }
                 }
 
-                AmountEditView(label  : "Abattement minimum",
-                               amount : $subModel.minTurnOverRebate)
+                AmountEditView(label    : "Abattement minimum",
+                               amount   : $subModel.minTurnOverRebate,
+                               validity : .poz)
             } header: {
                 Text("BNC").font(.headline)
             }
