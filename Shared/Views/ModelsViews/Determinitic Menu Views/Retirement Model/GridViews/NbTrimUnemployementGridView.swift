@@ -50,7 +50,7 @@ struct NbTrimUnemployementSliceView: View {
 struct NbTrimUnemployementSliceEditView: View {
     @Transac private var grid: GridNbTrimUnemployement
     private var idx: Int
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var modifiedSlice : SliceNbTrimUnemployement
     @State private var alertItem     : AlertItem?
 
@@ -63,14 +63,13 @@ struct NbTrimUnemployementSliceEditView: View {
 
     private var toolBar: some View {
         HStack {
-            Button(action : { self.presentationMode.wrappedValue.dismiss() },
-                   label  : { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action : updateSlice,
-                   label  : { Text("OK") })
+            Button("OK", action : updateSlice)
                 .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
@@ -110,7 +109,7 @@ struct NbTrimUnemployementSliceEditView: View {
         grid[idx] = modifiedSlice
         grid.sort(by: { $0.nbTrimestreAcquis < $1.nbTrimestreAcquis })
 
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 
@@ -118,21 +117,20 @@ struct NbTrimUnemployementSliceEditView: View {
 
 struct NbTrimUnemployementSliceAddView: View {
     @Transac var grid: GridNbTrimUnemployement
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var newSlice = SliceNbTrimUnemployement(nbTrimestreAcquis  : 0,
                                                            nbTrimNonIndemnise : 0)
     @State private var alertItem : AlertItem?
 
     private var toolBar: some View {
         HStack {
-            Button(action: { self.presentationMode.wrappedValue.dismiss() },
-                   label: { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action: addSlice,
-                   label: { Text("OK") })
+            Button("OK", action: addSlice)
                 .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
@@ -177,7 +175,7 @@ struct NbTrimUnemployementSliceAddView: View {
         grid.append(newSlice)
         grid.sort(by: { $0.nbTrimestreAcquis < $1.nbTrimestreAcquis })
 
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 

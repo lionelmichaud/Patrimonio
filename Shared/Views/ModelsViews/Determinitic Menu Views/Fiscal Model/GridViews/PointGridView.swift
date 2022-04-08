@@ -142,7 +142,7 @@ struct PointView: View {
 struct PointEditView: View {
     @Transac private var grid: ArrayOfPoint
     private var idx: Int
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var modifiedSlice : Point
     @State private var alertItem     : AlertItem?
     
@@ -155,14 +155,13 @@ struct PointEditView: View {
     
     private var toolBar: some View {
         HStack {
-            Button(action : { self.presentationMode.wrappedValue.dismiss() },
-                   label  : { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action : updateSlice,
-                   label  : { Text("OK") })
+            Button("OK", action : updateSlice)
                 .buttonStyle(.bordered)
                 //.disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
@@ -214,7 +213,7 @@ struct PointEditView: View {
 
         grid = gridCopy
 
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 
@@ -222,20 +221,19 @@ struct PointEditView: View {
 
 struct PointAddView: View {
     @Transac var grid: ArrayOfPoint
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var newSlice = Point(0, 0)
     @State private var alertItem : AlertItem?
     
     private var toolBar: some View {
         HStack {
-            Button(action: { self.presentationMode.wrappedValue.dismiss() },
-                   label: { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action: addSlice,
-                   label: { Text("OK") })
+            Button("OK", action: addSlice)
                 .buttonStyle(.bordered)
                 .alert(item: $alertItem, content: newAlert)
         }
@@ -274,7 +272,7 @@ struct PointAddView: View {
 
         grid = gridCopy
         
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 

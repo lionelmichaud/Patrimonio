@@ -28,6 +28,8 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>This app requires access to the document folder to save user data.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This app requires access to the photo library to store shots of charts there.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

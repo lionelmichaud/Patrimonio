@@ -22,8 +22,8 @@ struct PersonEditView: View {
     @EnvironmentObject var patrimoine : Patrimoin
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
-    @Environment(\.presentationMode) var presentationMode
-    
+    @Environment(\.dismiss) private var dismiss
+
     private let member: Person
     
     @State private var showingSheet = false
@@ -62,14 +62,13 @@ struct PersonEditView: View {
         VStack {
             /// Barre de titre
             HStack {
-                Button(action: { presentationMode.wrappedValue.dismiss() },
-                       label : { Text("Annuler") })
-                    .buttonStyle(.bordered)
+                Button("Annuler") {
+                    dismiss()
+                }.buttonStyle(.bordered)
                 Spacer()
                 Text("Modifier...").font(.title).fontWeight(.bold)
                 Spacer()
-                Button(action: applyChanges,
-                       label : { Text("OK") })
+                Button("OK", action: applyChanges)
                     .buttonStyle(.bordered)
                     .disabled(false)
             }.padding(.horizontal).padding(.top)
@@ -126,7 +125,7 @@ struct PersonEditView: View {
         simulation.notifyComputationInputsModification()
         uiState.resetSimulationView()
         
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 

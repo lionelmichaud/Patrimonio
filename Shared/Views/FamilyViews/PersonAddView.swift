@@ -18,13 +18,12 @@ import HelpersView
 // MARK: - Saisie du nouveau membre de la famille
 
 struct PersonAddView: View {
-    //@Environment(\.managedObjectContext) var moc
     @EnvironmentObject private var model      : Model
     @EnvironmentObject private var family     : Family
     @EnvironmentObject private var simulation : Simulation
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var uiState    : UIState
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var alertItem : AlertItem?
     // Person
     @StateObject var personViewModel = PersonViewModel()
@@ -44,16 +43,15 @@ struct PersonAddView: View {
         VStack {
             /// Barre de titre et boutons
             HStack {
-                Button(action: { self.presentationMode.wrappedValue.dismiss() },
-                       label: { Text("Annuler") })
-                    .buttonStyle(.bordered)
-                
+                Button("Annuler") {
+                    dismiss()
+                }.buttonStyle(.bordered)
+
                 Spacer()
                 Text("Ajouter...").font(.title).fontWeight(.bold)
                 Spacer()
                 
-                Button(action: addMember,
-                       label: { Text("OK") })
+                Button("OK", action: addMember)
                     .buttonStyle(.bordered)
                     .disabled(!formIsValid())
             }
@@ -138,7 +136,7 @@ struct PersonAddView: View {
                 family.addMember(newMember)
         }
         
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
     
     /// Vérifie que la formulaire est valide

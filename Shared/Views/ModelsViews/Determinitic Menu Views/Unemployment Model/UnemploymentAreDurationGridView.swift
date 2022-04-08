@@ -58,7 +58,7 @@ struct DurationSliceView: View {
 struct DurationSliceEditView: View {
     @Transac private var grid: DurationGrid
     private var idx: Int
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var modifiedSlice : DurationSlice
     @State private var alertItem     : AlertItem?
 
@@ -71,14 +71,13 @@ struct DurationSliceEditView: View {
 
     private var toolBar: some View {
         HStack {
-            Button(action : { self.presentationMode.wrappedValue.dismiss() },
-                   label  : { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action : updateSlice,
-                   label  : { Text("OK") })
+            Button("OK", action : updateSlice)
                 .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
@@ -124,7 +123,7 @@ struct DurationSliceEditView: View {
         grid[idx] = modifiedSlice
         grid.sort(by: { $0.fromAge < $1.fromAge })
 
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 
@@ -132,7 +131,7 @@ struct DurationSliceEditView: View {
 
 struct DurationSliceAddView: View {
     @Transac var grid: DurationGrid
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var newSlice = DurationSlice(fromAge             : 0,
                                                 maxDuration         : 0,
                                                 reduction           : 0,
@@ -142,14 +141,13 @@ struct DurationSliceAddView: View {
 
     private var toolBar: some View {
         HStack {
-            Button(action: { self.presentationMode.wrappedValue.dismiss() },
-                   label: { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action: addSlice,
-                   label: { Text("OK") })
+            Button("OK", action: addSlice)
                 .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
@@ -202,7 +200,7 @@ struct DurationSliceAddView: View {
         grid.append(newSlice)
         grid.sort(by: { $0.fromAge < $1.fromAge })
 
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 

@@ -11,7 +11,7 @@ import HelpersView
 
 struct DossierEditView: View {
     @EnvironmentObject private var dataStore: Store
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     var title        : String
     var originalItem : Dossier?
     @State private var dossierVM = DossierViewModel()
@@ -20,16 +20,15 @@ struct DossierEditView: View {
     var toolBar: some View {
         /// Barre de titre
         HStack {
-            Button(action: { self.presentationMode.wrappedValue.dismiss() },
-                   label: { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
 
             Spacer()
             Text(title).font(.title).fontWeight(.bold)
             Spacer()
 
-            Button(action: commit,
-                   label: { Text("OK") })
+            Button("OK", action: commit)
                 .buttonStyle(.bordered)
                 .disabled(!dossierVM.isValid())
         }
@@ -75,7 +74,7 @@ struct DossierEditView: View {
                 // on a modifié un item existant
                 updateItem(with: modifiedItem)
             } else {
-                self.presentationMode.wrappedValue.dismiss()
+                dismiss()
             }
         } else {
             // on créé un nouvel item
@@ -93,7 +92,7 @@ struct DossierEditView: View {
                                        dismissButton : .default(Text("OK")))
         }
 
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
     
     /// Modification d'un dossier existant. L'utilisateur a réellement modifié quelque chose.
@@ -111,7 +110,7 @@ struct DossierEditView: View {
             self.alertItem = AlertItem(title         : Text("Echec de la modification du dossier"),
                                        dismissButton : .default(Text("OK")))
         }
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 

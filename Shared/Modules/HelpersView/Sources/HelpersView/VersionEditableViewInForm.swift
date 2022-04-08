@@ -163,7 +163,7 @@ public struct VersionListView : View {
 
 public struct VersionEditSheet : View {
     @Binding private var version: Version
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var name    : String
     @State private var comment : String
     @State private var major   : Int
@@ -181,16 +181,16 @@ public struct VersionEditSheet : View {
 
     private var toolBar: some View {
         HStack {
-            Button(action : { self.presentationMode.wrappedValue.dismiss() },
-                   label  : { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Version").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action : updateVersion,
-                   label  : { Text("OK") })
-                .buttonStyle(.bordered)
-                .disabled(!formIsValid())
+            Button("OK",
+                   action : updateVersion)
+            .buttonStyle(.bordered)
+            .disabled(!formIsValid())
         }
         .padding(.horizontal)
         .padding(.top)
@@ -249,7 +249,7 @@ public struct VersionEditSheet : View {
         if comment != "" {
             version = version.commented(with: comment)
         }
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 

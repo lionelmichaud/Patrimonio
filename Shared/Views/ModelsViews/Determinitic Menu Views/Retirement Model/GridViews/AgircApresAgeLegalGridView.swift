@@ -53,7 +53,7 @@ struct AgircApresAgeLegalSliceView: View {
 struct AgircApresAgeLegalSliceEditView: View {
     @Transac private var grid: GridAgircApresAgeLegal
     private var idx: Int
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var modifiedSlice : SliceAgircApresAgeLegal
     @State private var alertItem     : AlertItem?
 
@@ -66,9 +66,9 @@ struct AgircApresAgeLegalSliceEditView: View {
 
     private var toolBar: some View {
         HStack {
-            Button("Annuler",
-                   role: .cancel,
-                   action : { self.presentationMode.wrappedValue.dismiss() })
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
@@ -113,7 +113,7 @@ struct AgircApresAgeLegalSliceEditView: View {
         grid[idx] = modifiedSlice
         grid.sort(by: { $0.nbTrimManquant < $1.nbTrimManquant })
 
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 
@@ -121,7 +121,7 @@ struct AgircApresAgeLegalSliceEditView: View {
 
 struct AgircApresAgeLegalSliceAddView: View {
     @Transac var grid: GridAgircApresAgeLegal
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var newSlice = SliceAgircApresAgeLegal(nbTrimManquant     : 0,
                                                           ndTrimPostAgeLegal : 0,
                                                           coef               : 0)
@@ -129,9 +129,9 @@ struct AgircApresAgeLegalSliceAddView: View {
 
     private var toolBar: some View {
         HStack {
-            Button("Annuler",
-                   role: .cancel,
-                   action : { self.presentationMode.wrappedValue.dismiss() })
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
@@ -183,7 +183,7 @@ struct AgircApresAgeLegalSliceAddView: View {
         grid.append(newSlice)
         grid.sort(by: { $0.nbTrimManquant < $1.nbTrimManquant })
 
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 

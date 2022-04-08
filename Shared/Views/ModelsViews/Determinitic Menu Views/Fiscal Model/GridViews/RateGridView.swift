@@ -51,7 +51,7 @@ struct RateSliceView: View {
 struct RateSliceEditView: View {
     @Transac private var grid: RateGrid
     private var idx: Int
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var modifiedSlice : RateSlice
     @State private var alertItem     : AlertItem?
     
@@ -64,14 +64,13 @@ struct RateSliceEditView: View {
     
     private var toolBar: some View {
         HStack {
-            Button(action : { self.presentationMode.wrappedValue.dismiss() },
-                   label  : { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action : updateSlice,
-                   label  : { Text("OK") })
+            Button("OK", action : updateSlice)
                 .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
@@ -108,7 +107,7 @@ struct RateSliceEditView: View {
         grid.sort(by: { $0.floor < $1.floor })
         //try! grid.initialize()
         
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 
@@ -116,20 +115,19 @@ struct RateSliceEditView: View {
 
 struct RateSliceAddView: View {
     @Transac var grid: RateGrid
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var newSlice = RateSlice(floor: 0, rate: 0)
     @State private var alertItem : AlertItem?
     
     private var toolBar: some View {
         HStack {
-            Button(action: { self.presentationMode.wrappedValue.dismiss() },
-                   label: { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action: addSlice,
-                   label: { Text("OK") })
+            Button("OK", action: addSlice)
                 .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
@@ -173,7 +171,7 @@ struct RateSliceAddView: View {
         grid.sort(by: { $0.floor < $1.floor })
         //try! grid.initialize()
         
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 

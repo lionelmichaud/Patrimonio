@@ -13,7 +13,7 @@ import HelpersView
 
 struct DossierAddView: View {
     @EnvironmentObject private var dataStore: Store
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var dossierVM             = DossierViewModel()
     @State private var alertItem             : AlertItem?
     @State private var failedToCreateDossier : Bool   = false
@@ -21,16 +21,15 @@ struct DossierAddView: View {
     var toolBar: some View {
         /// Barre de titre
         HStack {
-            Button(action: { self.presentationMode.wrappedValue.dismiss() },
-                   label: { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
 
             Spacer()
             Text("Créer...").font(.title).fontWeight(.bold)
             Spacer()
 
-            Button(action: createDossier,
-                   label: { Text("OK") })
+            Button("OK", action: createDossier)
                 .buttonStyle(.bordered)
                 .disabled(!formIsValid())
         }
@@ -73,7 +72,7 @@ struct DossierAddView: View {
             failedToCreateDossier = true
         }
 
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 
     /// Vérifie que la formulaire est valide

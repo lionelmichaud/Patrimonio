@@ -56,7 +56,7 @@ struct RealEstateExonerationSliceView: View {
 struct RealEstateExonerationSliceEditView: View {
     @Transac private var grid: ExonerationGrid
     private var idx: Int
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var modifiedSlice : ExonerationSlice
     @State private var alertItem     : AlertItem?
 
@@ -70,14 +70,13 @@ struct RealEstateExonerationSliceEditView: View {
 
     private var toolBar: some View {
         HStack {
-            Button(action : { self.presentationMode.wrappedValue.dismiss() },
-                   label  : { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Modifier").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action : updateSlice,
-                   label  : { Text("OK") })
+            Button("OK", action : updateSlice)
                 .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
@@ -115,7 +114,7 @@ struct RealEstateExonerationSliceEditView: View {
         grid[idx] = modifiedSlice
         grid.sort(by: { $0.floor < $1.floor })
 
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 
@@ -123,7 +122,7 @@ struct RealEstateExonerationSliceEditView: View {
 
 struct RealEstateExonerationSliceAddView: View {
     @Transac var grid: ExonerationGrid
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var newSlice = ExonerationSlice(floor        : 0,
                                                    discountRate : 0,
                                                    prevDiscount : 0)
@@ -131,14 +130,13 @@ struct RealEstateExonerationSliceAddView: View {
 
     private var toolBar: some View {
         HStack {
-            Button(action: { self.presentationMode.wrappedValue.dismiss() },
-                   label: { Text("Annuler") })
-                .buttonStyle(.bordered)
+            Button("Annuler") {
+                dismiss()
+            }.buttonStyle(.bordered)
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
-            Button(action: addSlice,
-                   label: { Text("OK") })
+            Button("OK", action: addSlice)
                 .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
@@ -183,7 +181,7 @@ struct RealEstateExonerationSliceAddView: View {
         grid.append(newSlice)
         grid.sort(by: { $0.floor < $1.floor })
 
-        self.presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 
