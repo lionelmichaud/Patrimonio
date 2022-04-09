@@ -6,14 +6,51 @@
 //  Copyright © 2021 Lionel MICHAUD. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 import NamedValue
 
 // MARK: - Dictionnaire de Dépenses par catégorie (un tableau de dépenses par catégorie)
 
 public typealias LifeExpensesDic = DictionaryOfNameableValuableArray<LifeExpenseCategory, LifeExpenseArray>
 
+public struct LifeExpenseArrayWithCategory: Identifiable {
+    public var id = UUID()
+    public var category: LifeExpenseCategory
+    public var expenses: LifeExpenseArray
+}
+
+public typealias ArrayOfLifeExpenseArray = [LifeExpenseArrayWithCategory]
+
 public extension LifeExpensesDic {
+    func expensesInCategory(_ category: LifeExpenseCategory) -> Binding<LifeExpenseArray> {
+        Binding(
+            get: {
+                self.perCategory[category] ?? LifeExpenseArray.empty
+            },
+            set: {
+                self.perCategory[category] = $0
+            }
+        )
+    }
+
+    var categoriesOfExpenses: Binding<ArrayOfLifeExpenseArray> {
+        return Binding(
+            get: {
+                var array = ArrayOfLifeExpenseArray()
+                for category in LifeExpenseCategory.allCases {
+                    array.append(LifeExpenseArrayWithCategory(category: category,
+                                                              expenses: self.perCategory[category] ?? LifeExpenseArray.empty))
+                }
+                return array
+            },
+            set: {
+                $0.forEach { expensesWithCategory in
+                    self.perCategory[expensesWithCategory.category] = expensesWithCategory.expenses
+                }
+            }
+        )
+    }
+
     /// Retourne un tableau des noms des dépenses dans une catégorie donnée
     func expensesNameArray(of thisCategory: LifeExpenseCategory) -> [String] {
         var table = [String]()

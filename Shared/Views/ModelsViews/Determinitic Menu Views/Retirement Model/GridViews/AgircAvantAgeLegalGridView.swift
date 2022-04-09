@@ -127,7 +127,7 @@ struct AgircAvantAgeLegalSliceAddView: View {
             Spacer()
             Text("Ajouter...").font(.title).fontWeight(.bold)
             Spacer()
-            Button(OK", "action: addSlice)
+            Button("OK", action: addSlice)
                 .buttonStyle(.bordered)
                 .disabled(!formIsValid())
                 .alert(item: $alertItem, content: newAlert)
