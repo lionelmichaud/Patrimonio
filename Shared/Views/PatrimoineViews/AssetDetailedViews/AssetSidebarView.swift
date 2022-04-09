@@ -39,7 +39,7 @@ struct AssetSidebarView: View {
     }
 
     var body: some View {
-        DisclosureGroup(isExpanded: $uiState.patrimoineViewState.assetViewState.expandAsset) {
+        Section() {
             /// Immobilier
             DisclosureGroup(isExpanded: $uiState.patrimoineViewState.assetViewState.expandImmobilier) {
                 RealEstateSidebarView(simulationReseter: simulationReseter)
@@ -74,7 +74,7 @@ struct AssetSidebarView: View {
                                      header      : true,
                                      iconItem    : nil)
             }
-        } label: {
+        } header: {
             LabeledValueRowView(label       : label,
                                  value       : netAsset,
                                  indentLevel : indentLevel,

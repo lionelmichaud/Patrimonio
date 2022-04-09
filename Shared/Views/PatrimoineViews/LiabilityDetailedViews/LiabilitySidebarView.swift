@@ -25,10 +25,10 @@ struct LiabilitySidebarView: View {
     }
 
     var body: some View {
-        DisclosureGroup(isExpanded: $uiState.patrimoineViewState.liabViewState.expandLiab) {
+        Section() {
             LoanSidebarView(simulationReseter: simulationReseter)
             DebtSidebarView(simulationReseter: simulationReseter)
-        } label: {
+        } header: {
             LabeledValueRowView(label       : label,
                                  value       : totalDebt,
                                  indentLevel : indentLevel,
