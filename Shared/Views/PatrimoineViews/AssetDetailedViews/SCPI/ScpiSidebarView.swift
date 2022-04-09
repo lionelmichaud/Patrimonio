@@ -81,7 +81,9 @@ struct ScpiSidebarView: View {
         // ajouter un nouvel item à la liste
         let newItem = SCPI(name: "Nouvel élément",
                            delegateForAgeOf: family.ageOf)
-        patrimoine.assets.scpis.add(newItem)
+        withAnimation {
+            patrimoine.assets.scpis.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
@@ -92,14 +94,18 @@ struct ScpiSidebarView: View {
         newItem.id = UUID()
         newItem.name += "-copie"
         // duppliquer l'item de la liste
-        patrimoine.assets.scpis.add(newItem)
+        withAnimation {
+            patrimoine.assets.scpis.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
     func deleteItem(_ item: SCPI) {
         // supprimer l'item de la liste
-        patrimoine.assets.scpis.delete(item)
+        withAnimation {
+            patrimoine.assets.scpis.delete(item)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }

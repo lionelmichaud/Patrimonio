@@ -81,7 +81,9 @@ struct FreeInvestSidebarView: View {
         // ajouter un nouvel item à la liste
         let newItem = FreeInvestement(name: "Nouvel élément",
                                       delegateForAgeOf: family.ageOf)
-        patrimoine.assets.freeInvests.add(newItem)
+        withAnimation {
+            patrimoine.assets.freeInvests.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
@@ -92,14 +94,18 @@ struct FreeInvestSidebarView: View {
         newItem.id = UUID()
         newItem.name += "-copie"
         // duppliquer l'item de la liste
-        patrimoine.assets.freeInvests.add(newItem)
+        withAnimation {
+            patrimoine.assets.freeInvests.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
     func deleteItem(_ item: FreeInvestement) {
         // supprimer l'item de la liste
-        patrimoine.assets.freeInvests.delete(item)
+        withAnimation {
+            patrimoine.assets.freeInvests.delete(item)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }

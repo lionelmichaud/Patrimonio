@@ -84,7 +84,9 @@ struct LoanSidebarView: View {
         var newItem = Loan(name: "Nouvel élément",
                            delegateForAgeOf: family.ageOf)
         newItem.id = UUID()
-        patrimoine.liabilities.loans.add(newItem)
+        withAnimation {
+            patrimoine.liabilities.loans.add(newItem)
+        }
         //        duplicateItem(patrimoine.liabilities.loans.items.last!)
         // remettre à zéro la simulation et sa vue
         resetSimulation()
@@ -96,14 +98,18 @@ struct LoanSidebarView: View {
         newItem.id = UUID()
         newItem.name += "-copie"
         // duppliquer l'item de la liste
-        patrimoine.liabilities.loans.add(newItem)
+        withAnimation {
+            patrimoine.liabilities.loans.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
     func deleteItem(_ item: Loan) {
         // supprimer l'item de la liste
+        withAnimation {
         patrimoine.liabilities.loans.delete(item)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }

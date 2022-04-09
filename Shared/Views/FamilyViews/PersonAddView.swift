@@ -133,7 +133,9 @@ struct PersonAddView: View {
                     .willBeIndependantAtAgeOf(ageIndependance)
                     .build()
                 // ajout du nouveau membre à la famille
-                family.addMember(newMember)
+                withAnimation {
+                    family.addMember(newMember)
+                }
         }
         
         dismiss()

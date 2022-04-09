@@ -86,7 +86,9 @@ struct ExpenseListInCategorySidebar: View {
     private func addItem() {
         // ajouter un nouvel item à la liste
         let newItem = LifeExpense(name: "Nouvel élément")
-        expenses.perCategory[self.category]?.add(newItem)
+        withAnimation {
+            expenses.perCategory[self.category]?.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
@@ -97,14 +99,18 @@ struct ExpenseListInCategorySidebar: View {
         newItem.id = UUID()
         newItem.name += "-copie"
         // duppliquer l'item de la liste
-        expenses.perCategory[self.category]?.add(newItem)
+        withAnimation {
+            expenses.perCategory[self.category]?.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
     private func deleteItem(_ item: LifeExpense) {
         // supprimer l'item de la liste
-        expenses.perCategory[self.category]?.delete(item)
+        withAnimation {
+            expenses.perCategory[self.category]?.delete(item)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }

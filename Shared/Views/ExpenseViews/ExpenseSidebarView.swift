@@ -36,35 +36,9 @@ struct ExpenseSidebarView: View {
                     ExpenseTotalView()
 
                     // pour chaque catégorie de dépense, afficher la liste des dépenses
-//                    ForEach(sortedCategories, id: \.displayString) { category in
-//                        ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-//                                                     category          : category)
-//                    }
-                    Group {
+                    ForEach(LifeExpenseCategory.allCases) { category in
                         ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-                                                     category          : .abonnements)
-                        ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-                                                     category          : .autres)
-                        ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-                                                     category          : .cadeaux)
-                        ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-                                                     category          : .educationFamille)
-                        ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-                                                     category          : .logement)
-                        ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-                                                     category          : .loisirs)
-                    }
-                    Group {
-                        ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-                                                     category          : .sante)
-                        ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-                                                     category          : .services)
-                        ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-                                                     category          : .vehicules)
-                        ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-                                                     category          : .vieQuotidienne)
-                        ExpenseListInCategorySidebar(simulationReseter : simulationReseter,
-                                                     category          : .voyageTransport)
+                                                     category          : category)
                     }
                 }
             }

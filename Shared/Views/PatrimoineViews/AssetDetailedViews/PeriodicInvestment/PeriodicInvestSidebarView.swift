@@ -81,7 +81,9 @@ struct PeriodicInvestSidebarView: View {
         // ajouter un nouvel item à la liste
         let newItem = PeriodicInvestement(name: "Nouvel élément",
                                           delegateForAgeOf: family.ageOf)
-        patrimoine.assets.periodicInvests.add(newItem)
+        withAnimation {
+            patrimoine.assets.periodicInvests.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
@@ -92,14 +94,18 @@ struct PeriodicInvestSidebarView: View {
         newItem.id = UUID()
         newItem.name += "-copie"
         // duppliquer l'item de la liste
-        patrimoine.assets.periodicInvests.add(newItem)
+        withAnimation {
+            patrimoine.assets.periodicInvests.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
     func deleteItem(_ item: PeriodicInvestement) {
         // supprimer l'item de la liste
-        patrimoine.assets.periodicInvests.delete(item)
+        withAnimation {
+            patrimoine.assets.periodicInvests.delete(item)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }

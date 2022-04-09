@@ -81,7 +81,9 @@ struct RealEstateSidebarView: View {
         // ajouter un nouvel item à la liste
         let newItem = RealEstateAsset(name: "Nouvel élément",
                                       delegateForAgeOf: family.ageOf)
-        patrimoine.assets.realEstates.add(newItem)
+        withAnimation {
+            patrimoine.assets.realEstates.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
@@ -92,14 +94,18 @@ struct RealEstateSidebarView: View {
         newItem.id = UUID()
         newItem.name += "-copie"
         // duppliquer l'item de la liste
-        patrimoine.assets.realEstates.add(newItem)
+        withAnimation {
+            patrimoine.assets.realEstates.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
     func deleteItem(_ item: RealEstateAsset) {
         // supprimer l'item de la liste
-        patrimoine.assets.realEstates.delete(item)
+        withAnimation {
+            patrimoine.assets.realEstates.delete(item)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }

@@ -82,7 +82,9 @@ struct DebtSidebarView: View {
         // ajouter un nouvel item à la liste
         let newItem = Debt(name: "Nouvel élément",
                            delegateForAgeOf: family.ageOf)
-        patrimoine.liabilities.debts.add(newItem)
+        withAnimation {
+            patrimoine.liabilities.debts.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
@@ -93,14 +95,18 @@ struct DebtSidebarView: View {
         newItem.id = UUID()
         newItem.name += "-copie"
         // duppliquer l'item de la liste
-        patrimoine.liabilities.debts.add(newItem)
+        withAnimation {
+            patrimoine.liabilities.debts.add(newItem)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }
 
     func deleteItem(_ item: Debt) {
         // supprimer l'item de la liste
-        patrimoine.liabilities.debts.delete(item)
+        withAnimation {
+            patrimoine.liabilities.debts.delete(item)
+        }
         // remettre à zéro la simulation et sa vue
         resetSimulation()
     }

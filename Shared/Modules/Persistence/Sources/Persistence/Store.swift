@@ -5,7 +5,7 @@
 //  Created by Lionel MICHAUD on 19/05/2021.
 //
 
-import Foundation
+import SwiftUI
 import os
 
 // MARK: - STORE
@@ -72,7 +72,9 @@ public final class Store: ObservableObject {
                               annotatedBy note : String) throws {
         let newDossier = try Dossier(name: name,
                                      note: note)
-        dossiers.insert(newDossier, at: 0)
+        withAnimation {
+            dossiers.insert(newDossier, at: 0)
+        }
     }
 
     /// Dupliquer un Dossier
