@@ -300,7 +300,7 @@ struct PatrimoineSummaryTableView: View {
                 header("PASSIF", year: year)
             }
         }
-        .listStyle(GroupedListStyle())
+        .listStyle(.grouped)
     }
     
     func header(_ trailingString: String, year: Int) -> some View {

@@ -37,7 +37,7 @@ struct OwnerGroupBox: View {
             }
             .padding(.leading)
         }
-        .groupBoxStyle(DefaultGroupBoxStyle())
+        .groupBoxStyle(.automatic)
     }
     
     internal init(title              : String,

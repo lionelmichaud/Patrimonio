@@ -68,7 +68,7 @@ struct MultiSelectionView<Selectable: Identifiable & Hashable>: View {
                         }
                        }).tag(selectable.id)
             }
-        }.listStyle(GroupedListStyle())
+        }.listStyle(.grouped)
     }
     
     private func toggleSelection(selectable: Selectable) {

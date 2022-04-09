@@ -111,7 +111,7 @@ struct KpiGroupBox : View {
                 }
             }
         }
-        .groupBoxStyle(DefaultGroupBoxStyle())
+                    .groupBoxStyle(.automatic)
     }
     
     internal init(kpi: KPI) {

@@ -89,7 +89,7 @@ struct RecipientGroupBox: View {
             Label(recipient, systemImage: "person.fill").padding(.top, 8)
                 .padding(.leading)
         }
-        .groupBoxStyle(DefaultGroupBoxStyle())
+        .groupBoxStyle(.automatic)
     }
 }
 
