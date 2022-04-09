@@ -31,7 +31,7 @@ struct FamilySidebarView: View {
                 
                 if dataStore.activeDossier != nil {
                     // liste des membres de la famille
-                    FamilySectionView(showingSheet: $showingSheet)
+                    FamilyBrowserView(showingSheet: $showingSheet)
                 }
             }
             //.defaultSideBarListStyle()

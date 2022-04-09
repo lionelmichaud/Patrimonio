@@ -127,7 +127,7 @@ public struct PersistableArray<E>: JsonCodableToFolderP, PersistableP where
     }
     
     public mutating func add(_ item: E) {
-        items.append(item)
+        items.insert(item, at: 0)
         // exécuter la transition
         persistenceSM.process(event: .onModify)
     }

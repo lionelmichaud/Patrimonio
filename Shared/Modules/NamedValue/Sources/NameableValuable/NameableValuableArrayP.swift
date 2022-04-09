@@ -165,7 +165,7 @@ public extension NameableValuableArrayP {
     }
 
     mutating func add(_ item : Item) {
-        items.append(item)
+        items.insert(item, at: 0)
         // exécuter la transition
         persistenceSM.process(event: .onModify)
     }

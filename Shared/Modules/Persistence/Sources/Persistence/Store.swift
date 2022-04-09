@@ -72,14 +72,14 @@ public final class Store: ObservableObject {
                               annotatedBy note : String) throws {
         let newDossier = try Dossier(name: name,
                                      note: note)
-        dossiers.append(newDossier)
+        dossiers.insert(newDossier, at: 0)
     }
 
     /// Dupliquer un Dossier
     /// - Parameter dossier: Dossier à dupliquer
     public func duplicate(_ dossier: Dossier) throws {
         let newDossier = try dossier.duplicate()
-        dossiers.append(newDossier)
+        dossiers.insert(newDossier, at: 0)
     }
 
     /// Supprimer le contenu du dossier et le directory associé

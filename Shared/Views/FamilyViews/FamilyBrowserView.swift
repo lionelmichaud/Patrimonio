@@ -12,7 +12,7 @@ import PatrimoineModel
 import FamilyModel
 import SimulationAndVisitors
 
-struct FamilySectionView : View {
+struct FamilyBrowserView : View {
     @EnvironmentObject var family     : Family
     @EnvironmentObject var patrimoine : Patrimoin
     @EnvironmentObject var simulation : Simulation
@@ -113,7 +113,7 @@ struct FamilyListView_Previews: PreviewProvider {
         TestEnvir.loadTestFilesFromBundle()
         return NavigationView {
             List {
-                FamilySectionView(showingSheet: .constant(false))
+                FamilyBrowserView(showingSheet: .constant(false))
                     .environmentObject(TestEnvir.dataStore)
                     .environmentObject(TestEnvir.model)
                     .environmentObject(TestEnvir.uiState)
