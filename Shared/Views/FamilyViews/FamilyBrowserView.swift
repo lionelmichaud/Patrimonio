@@ -11,6 +11,7 @@ import PersonModel
 import PatrimoineModel
 import FamilyModel
 import SimulationAndVisitors
+import HelpersView
 
 struct FamilyBrowserView : View {
     @EnvironmentObject var family     : Family
@@ -18,6 +19,7 @@ struct FamilyBrowserView : View {
     @EnvironmentObject var simulation : Simulation
     @EnvironmentObject var uiState    : UIState
     @Binding var showingSheet: Bool
+    @State private var alertItem : AlertItem?
 
     var body: some View {
         // bouton "ajouter"
@@ -48,14 +50,25 @@ struct FamilyBrowserView : View {
         } header: {
             Text("Membres de la Famille")
         }
+        .alert(item: $alertItem, content: newAlert)
     }
     
     func deleteMembers(at offsets: IndexSet) {
-        // remettre à zéro la simulation et sa vue
-        simulation.notifyComputationInputsModification()
-        uiState.resetSimulationView()
-        // supprimer le membre de la famille
-        family.deleteMembers(at: offsets)
+        alertItem = AlertItem(
+            title         : Text("Attention").foregroundColor(.red),
+            message       : Text("La suppression est irréversible"),
+            primaryButton : .destructive(Text("Supprimer"),
+                                         action: {
+                                             /// insert alert 1 action here
+                                             // remettre à zéro la simulation et sa vue
+                                             simulation.notifyComputationInputsModification()
+                                             uiState.resetSimulationView()
+                                             // supprimer le membre de la famille
+                                             withAnimation {
+                                                 family.deleteMembers(at: offsets)
+                                             }
+                                         }),
+            secondaryButton: .cancel())
     }
 }
 

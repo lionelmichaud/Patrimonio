@@ -11,6 +11,7 @@ import Liabilities
 import PatrimoineModel
 import FamilyModel
 import SimulationAndVisitors
+import HelpersView
 
 struct DebtSidebarView: View {
     @EnvironmentObject private var family     : Family
@@ -21,6 +22,7 @@ struct DebtSidebarView: View {
     private let label       = "Dette"
     private let iconAdd     = Image(systemName : "plus.circle.fill")
     private let icon€       = Image(systemName   : "eurosign.circle.fill")
+    @State private var alertItem : AlertItem?
 
     var totalDebt: Double {
         patrimoine.liabilities.debts.value(atEndOf: CalendarCst.thisYear)
@@ -59,6 +61,7 @@ struct DebtSidebarView: View {
                                  header      : true,
                                  iconItem    : nil)
         }
+        .alert(item: $alertItem, content: newAlert)
         //.listRowInsets(EdgeInsets(top: 0, leading: ListTheme[indentLevel].indent, bottom: 0, trailing: 0))
 #if os(macOS)
         .collapsible(true)
@@ -103,18 +106,34 @@ struct DebtSidebarView: View {
     }
 
     func deleteItem(_ item: Debt) {
-        // supprimer l'item de la liste
-        withAnimation {
-            patrimoine.liabilities.debts.delete(item)
-        }
-        // remettre à zéro la simulation et sa vue
-        resetSimulation()
+        alertItem = AlertItem(
+            title         : Text("Attention").foregroundColor(.red),
+            message       : Text("La suppression est irréversible"),
+            primaryButton : .destructive(Text("Supprimer"),
+                                         action: {
+                                             /// insert alert 1 action here
+                                             // supprimer l'item de la liste
+                                             withAnimation {
+                                                 patrimoine.liabilities.debts.delete(item)
+                                             }
+                                             // remettre à zéro la simulation et sa vue
+                                             resetSimulation()
+                                         }),
+            secondaryButton: .cancel())
     }
 
     func removeItems(at offsets: IndexSet) {
-        patrimoine.liabilities.debts.delete(at: offsets)
-        // remettre à zéro la simulation et sa vue
-        resetSimulation()
+        alertItem = AlertItem(
+            title         : Text("Attention").foregroundColor(.red),
+            message       : Text("La suppression est irréversible"),
+            primaryButton : .destructive(Text("Supprimer"),
+                                         action: {
+                                             /// insert alert 1 action here
+                                             patrimoine.liabilities.debts.delete(at: offsets)
+                                             // remettre à zéro la simulation et sa vue
+                                             resetSimulation()
+                                         }),
+            secondaryButton: .cancel())
     }
 
     func move(from source: IndexSet, to destination: Int) {

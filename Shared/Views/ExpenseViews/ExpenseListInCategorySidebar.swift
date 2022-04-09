@@ -9,6 +9,7 @@ import SwiftUI
 import AppFoundation
 import LifeExpense
 import SimulationAndVisitors
+import HelpersView
 
 struct ExpenseListInCategorySidebar: View {
     @EnvironmentObject private var expenses : LifeExpensesDic
@@ -18,6 +19,7 @@ struct ExpenseListInCategorySidebar: View {
     private let indentLevel = 0
     private let iconAdd     = Image(systemName : "plus.circle.fill")
     private let iconCart    = Image(systemName : "cart")
+    @State private var alertItem : AlertItem?
 
     private var expensesInCategory: Binding<LifeExpenseArray> {
         Binding(
@@ -64,6 +66,7 @@ struct ExpenseListInCategorySidebar: View {
                                 header      : true,
                                 iconItem    : nil)
         }
+        .alert(item: $alertItem, content: newAlert)
         //.listRowInsets(EdgeInsets(top: 0, leading: ListTheme[indentLevel].indent, bottom: 0, trailing: 0))
 #if os(macOS)
         .collapsible(true)
@@ -107,19 +110,35 @@ struct ExpenseListInCategorySidebar: View {
     }
 
     private func deleteItem(_ item: LifeExpense) {
-        // supprimer l'item de la liste
-        withAnimation {
-            expenses.perCategory[self.category]?.delete(item)
-        }
-        // remettre à zéro la simulation et sa vue
-        resetSimulation()
+        alertItem = AlertItem(
+            title         : Text("Attention").foregroundColor(.red),
+            message       : Text("La suppression est irréversible"),
+            primaryButton : .destructive(Text("Supprimer"),
+                                         action: {
+                                             /// insert alert 1 action here
+                                             // supprimer l'item de la liste
+                                             withAnimation {
+                                                 expenses.perCategory[self.category]?.delete(item)
+                                             }
+                                             // remettre à zéro la simulation et sa vue
+                                             resetSimulation()
+                                         }),
+            secondaryButton: .cancel())
     }
 
     private func removeItems(at offsets: IndexSet) {
-        // supprimer la dépense
-        expenses.perCategory[self.category]?.delete(at: offsets)
-        // remettre à zéro la simulation et sa vue
-        resetSimulation()
+        alertItem = AlertItem(
+            title         : Text("Attention").foregroundColor(.red),
+            message       : Text("La suppression est irréversible"),
+            primaryButton : .destructive(Text("Supprimer"),
+                                         action: {
+                                             /// insert alert 1 action here
+                                             // supprimer la dépense
+                                             expenses.perCategory[self.category]?.delete(at: offsets)
+                                             // remettre à zéro la simulation et sa vue
+                                             resetSimulation()
+                                         }),
+            secondaryButton: .cancel())
     }
 
     private func move(from source : IndexSet, to destination : Int) {
