@@ -19,7 +19,7 @@ struct StatisticsChartsView: View {
             // sélecteur: Actif / Passif / Tout
             CasePicker(pickedCase: $rgType, label: "")
                 .padding(.horizontal)
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(.segmented)
             switch rgType {
                 case .uniform:
                     UniformDistributionView()

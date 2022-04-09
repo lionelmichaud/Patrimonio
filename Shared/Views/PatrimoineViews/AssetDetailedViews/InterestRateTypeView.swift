@@ -19,7 +19,7 @@ struct InterestRateTypeEditView : View {
     var body: some View {
         VStack {
             CaseWithAssociatedValuePicker<InterestRateKind>(caseIndex: $typeIndex, label: "")
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(.segmented)
                 .onChange(of: typeIndex) { newValue in
                     switch newValue {
                         case InterestRateKind.contractualRate(fixedRate: 0).id:

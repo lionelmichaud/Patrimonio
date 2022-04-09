@@ -26,7 +26,7 @@ struct GraphicUserSettingsView: View {
             // Graphique Bilan
             Section {
                 CasePicker(pickedCase: $ownershipGraphicSelection, label: "Filtrage des actifs et passifs du Bilan individuel")
-                    .pickerStyle(DefaultPickerStyle())
+                    .pickerStyle(.automatic)
                     .onChange(of: ownershipGraphicSelection) { newValue in
                         Preferences.standard.ownershipGraphicSelection = newValue
                     }
@@ -38,7 +38,7 @@ struct GraphicUserSettingsView: View {
             
             Section(footer: Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu prendra en compte cette valorisation")) {
                 CasePicker(pickedCase: $assetGraphicEvaluatedFraction, label: "Valorisation d'un bien dans un bilan individuel")
-                    .pickerStyle(DefaultPickerStyle())
+                    .pickerStyle(.automatic)
             }
         }
         .navigationTitle(Text("Graphiques"))

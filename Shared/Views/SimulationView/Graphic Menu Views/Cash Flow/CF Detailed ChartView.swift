@@ -63,17 +63,17 @@ struct CashFlowDetailedChartView: View {
                             .tag(AppSettings.shared.childrenLabel)
                     }
                     .padding(.horizontal)
-                    .pickerStyle(SegmentedPickerStyle())
+                    .pickerStyle(.segmented)
                     
                     // sélecteur: Actif / Passif / Tout
                     CasePicker(pickedCase: self.$uiState.cfChartState.combination, label: "")
                         .padding(.horizontal)
-                        .pickerStyle(SegmentedPickerStyle())
+                        .pickerStyle(.segmented)
                     if self.uiState.cfChartState.itemSelection.onlyOneCategorySelected() {
                         if let categoryName = self.uiState.cfChartState.itemSelection.firstSelectedCategory() {
                             if categoryName == "Dépenses de vie" {
                                 CasePicker(pickedCase: $uiState.cfChartState.selectedExpenseCategory, label: "Catégories de dépenses")
-                                    .pickerStyle(SegmentedPickerStyle())
+                                    .pickerStyle(.segmented)
                                     .padding(.horizontal)
                             }
                         }

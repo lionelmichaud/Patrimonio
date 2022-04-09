@@ -52,7 +52,7 @@ struct PatrimoineSummaryView: View {
                             Image(systemName: "chart.pie").tag("ShareChart")
                             Image(systemName: "exclamationmark.triangle").tag("RiskChart")
                         }
-                        .pickerStyle(SegmentedPickerStyle())
+                        .pickerStyle(.segmented)
 
                         /// bouton Exporter fichiers du dossier actif
                         Button(action: { share(geometry: geometry) },

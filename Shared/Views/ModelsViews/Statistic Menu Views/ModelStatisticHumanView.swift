@@ -22,7 +22,7 @@ struct ModelStatisticHumanView: View {
             // sélecteur: Actif / Passif / Tout
             CasePicker(pickedCase: $modelChoice, label: "")
                 .padding(.horizontal)
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(.segmented)
             
             switch modelChoice {
                 case .menLifeExpectation:

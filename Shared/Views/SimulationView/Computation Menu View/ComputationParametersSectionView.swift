@@ -49,7 +49,7 @@ struct ComputationParametersSectionView : View {
                 // choix du mode de simulation: cas spécifiques
                 // sélecteur: Déterministe / Aléatoire
                 CasePicker(pickedCase: $simulation.mode, label: "")
-                    .pickerStyle(SegmentedPickerStyle())
+                    .pickerStyle(.segmented)
                     .onChange(of: simulation.mode) { newMode in
                         Patrimoin.setSimulationMode(to: newMode)
                         Retirement.setSimulationMode(to: newMode)

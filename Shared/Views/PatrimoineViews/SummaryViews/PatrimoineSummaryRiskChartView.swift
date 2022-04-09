@@ -46,17 +46,15 @@ struct PatrimoineSummaryRiskChartView: View {
         VStack {
             HStack {
                 CasePicker(pickedCase: $evaluationContext, label: "Context d'évaluation:")
-                    .pickerStyle(MenuPickerStyle())
-                Text(evaluationContext.displayString)
+                    .pickerStyle(.menu)
                     .padding(.trailing)
                 
                 Picker("Pour:", selection: $selectedMembers) {
                     ForEach(menuItems, id: \.self) { name in
                         Text(name)
                     }
-                }.pickerStyle(MenuPickerStyle())
-                Text(selectedMembers)
-                
+                }.pickerStyle(.menu)
+
                 Spacer()
             }.padding(.horizontal)
             

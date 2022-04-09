@@ -22,7 +22,7 @@ struct ModelStatisticSociologyView: View {
             // sélecteur: Actif / Passif / Tout
             CasePicker(pickedCase: $modelChoice, label: "")
                 .padding(.horizontal)
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(.segmented)
             
             // éditeur + graphique
             switch modelChoice {

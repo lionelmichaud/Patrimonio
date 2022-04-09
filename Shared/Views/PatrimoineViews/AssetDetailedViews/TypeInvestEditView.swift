@@ -25,7 +25,7 @@ struct TypeInvestEditView : View {
     var body: some View {
         Group {
             CaseWithAssociatedValuePicker<InvestementKind>(caseIndex: $typeIndex, label: "")
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(.segmented)
                 .onChange(of: typeIndex) { newValue in
                     switch newValue {
                         case InvestementKind.pea.id:

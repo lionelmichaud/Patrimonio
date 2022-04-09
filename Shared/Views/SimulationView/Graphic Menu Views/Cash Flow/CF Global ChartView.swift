@@ -54,7 +54,7 @@ struct CashFlowGlobalChartView: View {
                         .tag(AppSettings.shared.childrenLabel)
                 }
                 .padding(.horizontal)
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(.segmented)
                 
                 CashFlowLineChartView(for            : uiState.cfChartState.parentChildrenSelection,
                                       socialAccounts : $simulation.socialAccounts,

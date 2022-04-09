@@ -178,7 +178,7 @@ private struct ScenarioSection: View {
                 Text("Option fiscale retenue en cas d'héritage")
                 Spacer()
                 CasePicker(pickedCase: $adultViewModel.fiscalOption, label: "Option fiscale retenue en cas d'héritage")
-                    .pickerStyle(SegmentedPickerStyle())
+                    .pickerStyle(.segmented)
             }
         } header: {
             Text("SCENARIO").font(.subheadline)
@@ -228,7 +228,7 @@ private struct RevenueEditView : View {
         
         return Group {
             CaseWithAssociatedValuePicker<WorkIncomeType>(caseIndex: $adultViewModel.revIndex, label: "")
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(.segmented)
             if salary {
                 AmountEditView(label    : "Salaire brut",
                                amount   : $adultViewModel.revenueBrut,
@@ -276,7 +276,7 @@ private struct EndOfWorkingPeriodEditView: View {
         //                    .alert(item: $alertItem) { alertItem in myAlert(alertItem: alertItem) }
         CasePicker(pickedCase : $adultViewModel.causeOfRetirement,
                    label      : "Cause")
-        .pickerStyle(SegmentedPickerStyle())
+        .pickerStyle(.segmented)
         if adultViewModel.causeOfRetirement != Unemployment.Cause.demission {
             Toggle(isOn: $adultViewModel.hasAllocationSupraLegale, label: { Text("Indemnité de licenciement non conventionnelle (supra convention)") })
             if adultViewModel.hasAllocationSupraLegale {

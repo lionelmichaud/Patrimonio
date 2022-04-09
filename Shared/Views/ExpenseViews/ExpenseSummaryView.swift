@@ -49,7 +49,7 @@ struct ExpenseSummaryView: View {
 
                     // choix de la catégorie des dépenses
                     CasePicker(pickedCase: $uiState.expenseViewState.selectedCategory, label: "Catégories de dépenses")
-                        .pickerStyle(SegmentedPickerStyle())
+                        .pickerStyle(.segmented)
                         .padding(.horizontal)
 
                     // graphique

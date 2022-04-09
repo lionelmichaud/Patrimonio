@@ -159,9 +159,9 @@ struct CiviliteEditView : View {
     var body: some View {
         Section {
             CasePicker(pickedCase: $personViewModel.sexe, label: "Genre")
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(.segmented)
             CasePicker(pickedCase: $personViewModel.seniority, label: "Seniorité")
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(.segmented)
             HStack {
                 Text("Nom")
                     .frame(width: 70, alignment: .leading)

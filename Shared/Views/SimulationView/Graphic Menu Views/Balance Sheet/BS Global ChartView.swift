@@ -63,7 +63,7 @@ struct BalanceSheetGlobalChartView: View {
                         .tag(AppSettings.shared.allPersonsLabel)
                 }
                 .padding(.horizontal)
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(.segmented)
                 
                 // graphique Bilan
                 BalanceSheetLineChartView(for           : uiState.bsChartState.nameSelection,

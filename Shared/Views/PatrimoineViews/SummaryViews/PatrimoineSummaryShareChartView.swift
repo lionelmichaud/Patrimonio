@@ -57,8 +57,7 @@ struct FamilyMembersPatrimoineSharesView : View {
         VStack {
             HStack {
                 CasePicker(pickedCase: $evaluationContext, label: "Context d'évaluation:")
-                    .pickerStyle(MenuPickerStyle())
-                Text(evaluationContext.displayString)
+                    .pickerStyle(.menu)
             }
             
             PieChartTemplateView(chartDescription   : nil,
@@ -106,8 +105,7 @@ struct PatrimoineCategorySharesView : View {
                     ForEach(menuItems, id: \.self) { name in
                         Text(name)
                     }
-                }.pickerStyle(MenuPickerStyle())
-                Text(selectedMembers)
+                }.pickerStyle(.menu)
             }.padding(.horizontal)
             
             PieChartTemplateView(chartDescription   : nil,
@@ -283,8 +281,7 @@ struct PatrimoineSingleCategoryView : View {
                         .padding(.top)
                     HStack {
                         CasePicker(pickedCase: $selectedCategory, label: "Categorie:")
-                            .pickerStyle(MenuPickerStyle())
-                        Text(selectedCategory.displayString)
+                            .pickerStyle(.menu)
                     }.padding(.vertical)
                 }
                 .padding(.horizontal).border(Color.secondary)

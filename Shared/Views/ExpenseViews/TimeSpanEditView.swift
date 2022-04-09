@@ -118,7 +118,7 @@ struct TimeSpanEditView: View {
             Section {
                 // choisir le type de TimeFrame pour la dépense
                 CaseWithAssociatedValuePicker<TimeSpan>(caseIndex: timeSpanVM.caseIndex, label: "")
-                    .pickerStyle(SegmentedPickerStyle())
+                    .pickerStyle(.segmented)
             } header: {
                 Text("PLAGE DE TEMPS")
             }
