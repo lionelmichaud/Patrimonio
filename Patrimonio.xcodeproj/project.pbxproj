@@ -1126,10 +1126,10 @@
 			isa = PBXGroup;
 			children = (
 				7935BC1327DF660F0079F39C /* AppVersionView.swift */,
-				7935BC1427DF660F0079F39C /* ExportSettingsView.swift */,
-				7935BC1527DF660F0079F39C /* GraphicUserSettingsView.swift */,
-				7935BC1627DF660F0079F39C /* UpdateSettingsView.swift */,
 				7935BC1727DF660F0079F39C /* SimulationUserSettingsView.swift */,
+				7935BC1527DF660F0079F39C /* GraphicUserSettingsView.swift */,
+				7935BC1427DF660F0079F39C /* ExportSettingsView.swift */,
+				7935BC1627DF660F0079F39C /* UpdateSettingsView.swift */,
 			);
 			path = SettingsViews;
 			sourceTree = "<group>";

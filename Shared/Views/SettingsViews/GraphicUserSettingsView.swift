@@ -31,7 +31,7 @@ struct GraphicUserSettingsView: View {
                         Preferences.standard.ownershipGraphicSelection = newValue
                     }
             } header: {
-                Text("Graphique Bilan".uppercased())
+                Text("Graphique Bilan").font(.subheadline)
             } footer: {
                 Text("Le graphique détaillé de l'évolution dans le temps du bilan d'un individu ne prendra en compte que les biens satisfaisant à ce critère")
             }

@@ -30,7 +30,7 @@ struct SimulationUserSettingsView: View {
                     uiState.resetSimulationView()
                 })
             } header: {
-                Text("Modèle Macro-Économique".uppercased())
+                Text("Modèle Macro-Économique").font(.subheadline)
             } footer: {
                 Text("En mode Monté-Carlo seulement: simuler la volatilité du cours des actions et des obligations")
             }

@@ -22,7 +22,7 @@ struct UpdateSettingsView: View {
                        label: { Text("Remplacer seulement le modèle environemental du dossier patron") })
             } header: {
                 Text("Remplacer votre dossier patron par la version par défaut fournie par l'application")
-                    .textCase(.none)
+                    .font(.subheadline)
             }
             .alert(item: $alertItem, content: newAlert)
         }
