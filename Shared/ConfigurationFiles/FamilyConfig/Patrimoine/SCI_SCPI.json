@@ -8,7 +8,7 @@
     "items" : [
         {
             "name" : "EPARGNE PIERRE-Voisin",
-            "note" : "353 parts\nActualisé le 29/12/2021",
+            "note" : "353 parts achetées le 04/10/2019 à 205€\n84 parts achetées le 15/02/2022 à 208€\nActualisé le 10/04/2022",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -30,17 +30,17 @@
                 [
                 ]
             },
-            "buyingDate"   : "2019-09-30T21:53:04Z",
-            "buyingPrice"  : 72365,
+            "buyingDate"   : "2019-10-04T21:53:04Z",
+            "buyingPrice"  : 89837,
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
             "revaluatRate" : 0,
-            "interestRate" : 5.19
+            "interestRate" : 5.36
         },
         
         {
             "name" : "PIERVAL SANTE-Euryale",
-            "note" : "107 parts\nActualisé le 29/12/2021",
+            "note" : "365 parts achetées le 11/10/2019 à 200€\n170 parts achetées le 11/10/2019 à 200€\nActualisé le 10/04/2022",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -72,7 +72,7 @@
         
         {
             "name" : "EFIMMO 1-Sofidy",
-            "note" : "275 parts\nActualisé le 15/02/2021",
+            "note" : "154 parts achtées le 11/10/2019 à 237€\n121 parts achtées le 31/12/2019 à 237€\nActualisé le 10/04/2022",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -94,17 +94,17 @@
                 [
                 ]
             },
-            "buyingDate"   : "2019-10-31T21:53:04Z",
+            "buyingDate"   : "2019-10-11T21:53:04Z",
             "buyingPrice"  : 65175,
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
             "revaluatRate" : 0,
-            "interestRate" : 4.5
+            "interestRate" : 4.91
         },
         
         {
             "name" : "IMMORENTE-Sofidy",
-            "note" : "195 parts\nActualisé le 29/12/2021",
+            "note" : "108 parts achetées le 15/11/2019 à 337€\n87 parts achetées le 31/12/2019 à 337€\nActualisé le 10/04/2022",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -131,12 +131,12 @@
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
             "revaluatRate" : 0,
-            "interestRate" : 4.13
+            "interestRate" : 4.64
         },
         
         {
             "name" : "PATRIMMO COMMERCE",
-            "note" : "184 parts\nActualisé le 29/12/2021",
+            "note" : "184 parts achetées le 31/10/2019 à 197€\nActualisé le 10/04/2022",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -163,12 +163,12 @@
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
             "revaluatRate" : 0,
-            "interestRate" : 3.24
+            "interestRate" : 3.19
         },
         
         {
             "name" : "FONCIÈRE DES PRATICIENS",
-            "note" : "49 parts\nActualisé le 29/12/2021",
+            "note" : "49 parts achetées le 16/10/2020 à 1100€\n28 parts achetées le 15/02/2022 à 1100€\nActualisé le 10/04/2022",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -190,17 +190,17 @@
                 [
                 ]
             },
-            "buyingDate"   : "2020-10-03T21:53:04Z",
-            "buyingPrice"  : 53900,
+            "buyingDate"   : "2020-10-16T21:53:04Z",
+            "buyingPrice"  : 84700,
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
             "revaluatRate" : 0,
-            "interestRate" : 5.09
+            "interestRate" : 5.10
         },
         
         {
             "name" : "CŒUR DE REGIONS-Sogenial",
-            "note" : "78 parts\nActualisé le 29/12/2021",
+            "note" : "78 parts achetées le 22/12/2021 à 648,5€\n57 parts achetées le 31/01/2022 à 648,5€\nActualisé le 10/04/2022",
             "ownership"               :
             {
                 "est_démembré"        : false,
@@ -223,11 +223,11 @@
                 ]
             },
             "buyingDate"   : "2021-12-22T21:53:04Z",
-            "buyingPrice"  : 50583,
+            "buyingPrice"  : 87547,
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
             "revaluatRate" : 0,
-            "interestRate" : 6.30
+            "interestRate" : 6.43
         }
     ]
 }

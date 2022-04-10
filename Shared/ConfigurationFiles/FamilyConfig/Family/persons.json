@@ -37,9 +37,9 @@
             },
         },
         "lastKnownPensionSituation" : {
-            "atEndOf"           : 2020,
-            "nbTrimestreAcquis" : 139,
-            "sam"               : 37054
+            "atEndOf"           : 2021,
+            "nbTrimestreAcquis" : 143,
+            "sam"               : 37388
         },
         "ageOfAgircPensionLiquidComp" : {
             "year" : 62,
@@ -58,12 +58,12 @@
             },
         },
         "lastKnownAgircPensionSituation" : {
-            "atEndOf"     : 2020,
-            "nbPoints"    : 19484,
-            "pointsParAn" : 789
+            "atEndOf"     : 2021,
+            "nbPoints"    : 20292,
+            "pointsParAn" : 808
         },
         "dateOfRetirement"           : "2021-12-31T23:00:00+01:00",
-        "causeOfRetirement"             : "PSE",
+        "causeOfRetirement"          : "PSE",
         "layoffCompensationBonified" : null
     },
     

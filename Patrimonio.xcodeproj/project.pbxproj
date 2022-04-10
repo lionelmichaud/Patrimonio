@@ -1412,13 +1412,13 @@
 		7935FFE6265461FA00AC1715 /* Patrimoine */ = {
 			isa = PBXGroup;
 			children = (
-				79AB53F2263241CF00FADBA7 /* FreeInvestement.json */,
-				79AB53F4263241CF00FADBA7 /* Debt.json */,
-				79AB5402263241CF00FADBA7 /* SCPI.json */,
-				79AB5403263241CF00FADBA7 /* SCI_SCPI.json */,
-				79AB5404263241CF00FADBA7 /* PeriodicInvestement.json */,
-				79AB5405263241CF00FADBA7 /* Loan.json */,
 				79AB5406263241CF00FADBA7 /* RealEstateAsset.json */,
+				79AB5402263241CF00FADBA7 /* SCPI.json */,
+				79AB5404263241CF00FADBA7 /* PeriodicInvestement.json */,
+				79AB53F2263241CF00FADBA7 /* FreeInvestement.json */,
+				79AB5403263241CF00FADBA7 /* SCI_SCPI.json */,
+				79AB53F4263241CF00FADBA7 /* Debt.json */,
+				79AB5405263241CF00FADBA7 /* Loan.json */,
 			);
 			path = Patrimoine;
 			sourceTree = "<group>";
