@@ -24,6 +24,7 @@ struct ChartsSidebarSectionView: View {
     var body: some View {
         if simulation.isComputed {
             Section {
+                // Bilan
                 DisclosureGroup(isExpanded: $isBsExpanded,
                                 content: {
                                     NavigationLink(destination : BalanceSheetGlobalChartView(),
@@ -43,7 +44,7 @@ struct ChartsSidebarSectionView: View {
                                 label: {
                                     Label("Bilan", systemImage: "chart.bar.xaxis")
                                 })
-
+                // Cash Flow
                 DisclosureGroup(isExpanded: $isCfExpanded,
                                 content: {
                                     NavigationLink(destination : CashFlowGlobalChartView(),
@@ -63,7 +64,7 @@ struct ChartsSidebarSectionView: View {
                                 label: {
                                     Label("Cash Flow", systemImage: "chart.bar.xaxis")
                                 })
-
+                // IRPP
                 DisclosureGroup(isExpanded: $isIrppExpanded,
                                 content: {
                                     NavigationLink(destination : IrppEvolutionChartView(),
@@ -83,7 +84,7 @@ struct ChartsSidebarSectionView: View {
                                 label: {
                                     Label("Impôt sur le Revenu", systemImage: "chart.bar.xaxis")
                                 })
-
+                // ISF
                 DisclosureGroup(isExpanded: $isIsfExpanded,
                                 content: {
                                     NavigationLink(destination : IsfEvolutionChartView(),

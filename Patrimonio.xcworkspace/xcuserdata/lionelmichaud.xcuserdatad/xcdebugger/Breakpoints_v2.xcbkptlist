@@ -28,22 +28,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "4B7D3BC5-4875-403F-A8A8-887B7EBD228A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Modules/SuccessionManager/Sources/SuccessionManager/OwnershipManager/OwnershipManager+ModifyClause.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "224"
-            endingLineNumber = "224"
-            landmarkName = "modifyClause(of:toGet:decedentName:conjointName:verbose:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "4D896981-DFB1-407B-8581-80E30D128162"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -134,6 +118,22 @@
             startingLineNumber = "180"
             endingLineNumber = "180"
             landmarkName = "checkValidity()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D6936B47-D28B-4D36-9CFB-5783ABAA31F4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Modules/SuccessionManager/Sources/SuccessionManager/OwnershipManager/OwnershipManager+ModifyClause.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "247"
+            endingLineNumber = "247"
+            landmarkName = "modifyClause(of:toGet:decedentName:conjointName:verbose:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

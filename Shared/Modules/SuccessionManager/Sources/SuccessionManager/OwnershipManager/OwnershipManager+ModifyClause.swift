@@ -199,7 +199,7 @@ extension OwnershipManager {
                 let decedentOwnedValue = freeInvest.ownedValue(by                : decedentName,
                                                                atEndOf           : year - 1,
                                                                evaluationContext : .patrimoine)
-                guard decedentOwnedValue >= 0 else {
+                guard decedentOwnedValue > 0 else {
                     return
                 }
                 

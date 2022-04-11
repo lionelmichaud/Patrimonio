@@ -65,13 +65,13 @@ struct CashFlowDetailedChartView: View {
                     .padding(.horizontal)
                     .pickerStyle(.segmented)
                     
-                    // sélecteur: Actif / Passif / Tout
+                    // sélecteur: Revenus / Dépenses / Tout
                     CasePicker(pickedCase: self.$uiState.cfChartState.combination, label: "")
                         .padding(.horizontal)
                         .pickerStyle(.segmented)
                     if self.uiState.cfChartState.itemSelection.onlyOneCategorySelected() {
                         if let categoryName = self.uiState.cfChartState.itemSelection.firstSelectedCategory() {
-                            if categoryName == "Dépenses de vie" {
+                            if categoryName == "Dépenses de vie des parents" {
                                 CasePicker(pickedCase: $uiState.cfChartState.selectedExpenseCategory, label: "Catégories de dépenses")
                                     .pickerStyle(.segmented)
                                     .padding(.horizontal)
