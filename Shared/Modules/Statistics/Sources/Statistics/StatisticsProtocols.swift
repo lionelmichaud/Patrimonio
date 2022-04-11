@@ -23,6 +23,12 @@ let randomizingMethod: RandomizingMethod = .inverseTransform
 
 // MARK: - Protocol Distribution statistique entre minX et maxX
 
+/// Protocol Distribution statistique entre minX et maxX
+///
+/// La distribution est caractérisée par:
+///  - Une Fonction de Densité de Probabilité `pdf` sur l'intervalle [`minX`, `maxX`]
+///  - Une Fonction de Densité Cumulée de Probabilité `cdf` sur l'intervalle [`minX`, `maxX`]
+///
 public protocol DistributionP {
     associatedtype Number: Real, Codable
     typealias Curve = [PointReal<Number>]
@@ -44,15 +50,15 @@ public protocol DistributionP {
     
     // MARK: - Methods
     
-    /// Initialiser les variables qui ne changeront jamais: pdfMax et cdfCurve
-    mutating func initialize() // impémentation par défaut
+    /// Initialiser les variables qui ne changeront jamais: `pdfMax` et `cdfCurve`
+    mutating func initialize() // voir impémentation par défaut
     
     /// Densité de probabilité en un point x
-    /// - Parameter x: x dans [minX, maxX]
+    /// - Parameter x: valeur du domaine de la distribution P(x) [`minX`, `maxX`]
     func pdf(_ x: Number) -> Number
     
     /// Retourne la probabilité P cumulée correspondant à une valeur x du domaine de la distribution P(x)
-    /// - Parameter x: valeur x du Domaine de la distribution P(x)
+    /// - Parameter x: valeur du domaine de la distribution P(x) [`minX`, `maxX`]
     /// - Returns: probabilité P cumulée correspondant à une valeur x
     func cdf(x: Number) -> Number // impémentation par défaut
     
@@ -61,8 +67,10 @@ public protocol DistributionP {
     /// - Returns: valeur x du domaine de la distribution P(X)
     func inverseCdf(p: Number) -> Number // impémentation par défaut
 }
-// implémentation par défaut
+
+/// implémentation par défaut
 public extension DistributionP {
+
     mutating func initialize() {
         
         func computedPdfMax() -> Number {
@@ -125,18 +133,18 @@ public extension DistributionP {
     }
     
     func inverseCdf(p: Number) -> Number {
-        guard let curve = cdfCurve else {
+        guard let cdfCurve = cdfCurve else {
             fatalError("Distribution.inverseCdf: CDF curve not initialized")
         }
-        guard let idx = curve.firstIndex(where: { p <= $0.y }) else {
+        guard let idx = cdfCurve.firstIndex(where: { p <= $0.y }) else {
             fatalError("Distribution.inverseCdf: p out of bound")
         }
         if idx > 0 {
             // interpolation
-            let k = (p - curve[idx-1].y) / (curve[idx].y - curve[idx-1].y)
-            return curve[idx-1].x + k * (curve[idx].x - curve[idx-1].x)
+            let k = (p - cdfCurve[idx-1].y) / (cdfCurve[idx].y - cdfCurve[idx-1].y)
+            return cdfCurve[idx-1].x + k * (cdfCurve[idx].x - cdfCurve[idx-1].x)
         } else {
-            return curve[idx].y
+            return cdfCurve[idx].y
         }
     }
     
@@ -144,6 +152,7 @@ public extension DistributionP {
 
 // MARK: - Protocol Générateur Aléatoire
 
+/// Protocol Générateur Aléatoire
 public protocol RandomGeneratorP: Equatable {
     associatedtype Number: Real
     
@@ -152,7 +161,8 @@ public protocol RandomGeneratorP: Equatable {
     mutating func next() -> Number
     mutating func sequence(of length: Int) -> [Number] // impémentation par défaut
 }
-// implémentation par défaut
+
+/// implémentation par défaut
 public extension RandomGeneratorP {
     mutating func sequence(of length: Int) -> [Number] {
         precondition(length >= 1, "RandomGenerator.sequence: length < 1")
@@ -163,7 +173,8 @@ public extension RandomGeneratorP {
         return seq
     }
 }
-// implémentation par défaut uniquement pour les RandomGenerator conformes au protocol Distribution
+
+/// implémentation par défaut uniquement pour les RandomGenerator conformes au protocol Distribution
 public extension RandomGeneratorP where Self: DistributionP, Number: RandomizableP {
     
     /// Génération aléatoire par la méthode de Rejection sampling ou Inverse Transform
@@ -223,6 +234,7 @@ public extension RandomGeneratorP where Self: DistributionP, Number: Randomizabl
 
 // MARK: - Protocol de service générateur aléatoire dans un interval
 
+/// Protocol de service générateur aléatoire dans un interval
 public protocol RandomizableP: Comparable {
     static func randomized(in range: ClosedRange<Self>) -> Self
 }

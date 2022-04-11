@@ -66,16 +66,32 @@ public struct BetaRandomGenerator: RandomGeneratorP, DistributionP, Codable {
     // MARK: - Properties
     
     /// valeur minimale de X
-    public var minX     : Number?
+    public var minX     : Number? {
+        didSet {
+            self.initialize()
+        }
+    }
     /// valeur maximale de X
-    public var maxX     : Number?
+    public var maxX     : Number? {
+        didSet {
+            self.initialize()
+        }
+    }
     /// valeur max mémorisée au premier appel de initialize()
     public var pdfMax   : Number?
     /// courbe CDF mémorisée au premier appel de initialize()
     public var cdfCurve : Curve?
 
-    public var alpha : Double
-    public var beta  : Double
+    public var alpha : Double {
+        didSet {
+            self.initialize()
+        }
+    }
+    public var beta  : Double {
+        didSet {
+            self.initialize()
+        }
+    }
     
     // MARK: - Initializer
 
