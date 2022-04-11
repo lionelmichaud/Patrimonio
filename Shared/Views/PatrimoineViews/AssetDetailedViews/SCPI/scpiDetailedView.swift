@@ -16,6 +16,7 @@ struct ScpiDetailedView: View {
     @EnvironmentObject var model  : Model
     let updateDependenciesToModel : () -> Void
     @Transac var item : SCPI
+    @State private var showingBuySheet = false
 
     var body: some View {
         Form {
@@ -34,8 +35,24 @@ struct ScpiDetailedView: View {
                 AmountEditView(label    : "Prix d'acquisition",
                                amount   : $item.buyingPrice,
                                validity : .poz)
+                /// Bouton: Acheter des SCPI
+                Button(
+                    action : {
+                        withAnimation {
+                            self.showingBuySheet = true
+                        }
+                    },
+                    label  : {
+                        Label(title: { Text("Acheter des parts") },
+                              icon : {
+                            Image(systemName : "plus.circle.fill")
+                            .imageScale(.large) })
+                    })
             } header: {
                 Text("ACQUISITION")
+            }
+            .sheet(isPresented: $showingBuySheet) {
+                BuyScpiSheet(scpi: $item)
             }
 
             /// Propriété
