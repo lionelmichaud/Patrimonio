@@ -334,6 +334,8 @@
 		7935FFE52654492500AC1715 /* Files in Frameworks */ = {isa = PBXBuildFile; productRef = 7935FFE42654492500AC1715 /* Files */; };
 		79482D092804CE990010C323 /* BuyScpiSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79482D082804CE990010C323 /* BuyScpiSheet.swift */; };
 		79482D0A2804CE990010C323 /* BuyScpiSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79482D082804CE990010C323 /* BuyScpiSheet.swift */; };
+		79482D0C2804F2130010C323 /* TransactionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79482D0B2804F2130010C323 /* TransactionHistoryView.swift */; };
+		79482D0D2804F2130010C323 /* TransactionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79482D0B2804F2130010C323 /* TransactionHistoryView.swift */; };
 		794B016126B9C12400882684 /* AssetsModel in Frameworks */ = {isa = PBXBuildFile; productRef = 794B016026B9C12400882684 /* AssetsModel */; };
 		794B016326B9C12C00882684 /* AssetsModel in Frameworks */ = {isa = PBXBuildFile; productRef = 794B016226B9C12C00882684 /* AssetsModel */; };
 		79522AD8275C17FD00926726 /* CashFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 79522AD7275C17FD00926726 /* CashFlow */; };
@@ -705,6 +707,7 @@
 		7935BC8E27DF66100079F39C /* KpisParametersEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KpisParametersEditView.swift; sourceTree = "<group>"; };
 		7935BC8F27DF66100079F39C /* ComputationForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputationForm.swift; sourceTree = "<group>"; };
 		79482D082804CE990010C323 /* BuyScpiSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyScpiSheet.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		79482D0B2804F2130010C323 /* TransactionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionHistoryView.swift; sourceTree = "<group>"; };
 		79683FD426B8995900F838BE /* LiabilitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiabilitiesTests.swift; sourceTree = "<group>"; };
 		79683FDD26B8995900F838BE /* PatrimoinTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatrimoinTests.swift; sourceTree = "<group>"; };
 		79683FE326B8995900F838BE /* SciTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SciTests.swift; sourceTree = "<group>"; };
@@ -1623,6 +1626,7 @@
 				79FC574127F734EA0057A91C /* SciScpiSidebarView.swift */,
 				7935BC2B27DF660F0079F39C /* scpiDetailedView.swift */,
 				79482D082804CE990010C323 /* BuyScpiSheet.swift */,
+				79482D0B2804F2130010C323 /* TransactionHistoryView.swift */,
 			);
 			path = SCPI;
 			sourceTree = "<group>";
@@ -2071,6 +2075,7 @@
 				7935BD5F27DF66100079F39C /* DossierPropertiesView.swift in Sources */,
 				7935BCCB27DF66100079F39C /* AgircAvantAgeLegalGridView.swift in Sources */,
 				7935BD8127DF66100079F39C /* KpiListView.swift in Sources */,
+				79482D0C2804F2130010C323 /* TransactionHistoryView.swift in Sources */,
 				7935BDAF27DF66100079F39C /* BarChartBalanceSheetVisitor.swift in Sources */,
 				799E1DE327F0F3BA0006EE01 /* ModelUpdateToolbar.swift in Sources */,
 				7935BD4727DF66100079F39C /* FamilySidebarView.swift in Sources */,
@@ -2246,6 +2251,7 @@
 				7935BD3827DF66100079F39C /* AdultViewModel.swift in Sources */,
 				7935BD0027DF66100079F39C /* PatrimoineSummaryShareChartView.swift in Sources */,
 				79735EED263242FA00CD952F /* ContentView.swift in Sources */,
+				79482D0D2804F2130010C323 /* TransactionHistoryView.swift in Sources */,
 				7935BD5227DF66100079F39C /* FamilyBrowserView.swift in Sources */,
 				799E1DE427F0F3BA0006EE01 /* ModelUpdateToolbar.swift in Sources */,
 				7935BD4627DF66100079F39C /* AdultDetailView.swift in Sources */,

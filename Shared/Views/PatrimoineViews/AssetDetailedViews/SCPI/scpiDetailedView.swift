@@ -32,10 +32,13 @@ struct ScpiDetailedView: View {
                 DatePicker(selection: $item.buyingDate,
                            displayedComponents: .date,
                            label: { Text("Date d'acquisition") })
-                AmountEditView(label    : "Prix d'acquisition",
+                AmountEditView(label    : "Valeur totale d'acquisition",
                                amount   : $item.buyingPrice,
                                validity : .poz)
-                /// Bouton: Acheter des SCPI
+                /// Historique des achats de parts
+                NavigationLink("Historique des achats",
+                               destination: TransactionHistoryView(transactionHistory: item.transactionHistory))
+                /// Bouton: Acheter des parts de SCPI
                 Button(
                     action : {
                         withAnimation {

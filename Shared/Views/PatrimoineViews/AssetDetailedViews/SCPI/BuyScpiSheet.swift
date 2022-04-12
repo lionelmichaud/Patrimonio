@@ -13,8 +13,8 @@ import HelpersView
 struct BuyScpiSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Transac var scpi: SCPI
-    @State private var quantity: Int = 0
-    @State private var unitPrice: Double = 0
+    @State private var transac = TransactionOrder()
+    @State private var unitPrice : Double = 0
 
     var toolBar: some View {
         /// Barre de titre
@@ -46,11 +46,16 @@ struct BuyScpiSheet: View {
 
             /// Formulaire
             Form {
+                DatePicker(selection           : $transac.date,
+                           displayedComponents : .date,
+                           label               : { Text("Date") })
+
                 AmountEditView(label    : "Prix d'acquisition",
-                               amount   : $unitPrice,
+                               amount   : $transac.unitPrice,
                                validity : .poz)
+
                 IntegerEditView(label    : "Quantité",
-                                integer  : $quantity,
+                                integer  : $transac.quantity,
                                 validity : .poz)
             }
         }
@@ -62,8 +67,10 @@ struct BuyScpiSheet: View {
 
     /// L'utilisateur a cliqué sur OK
     private func commit() {
+        // ajouter la transaction à l'historique
+        scpi.transactionHistory.append(transac)
         // incrémenter le prix total d'acquisition
-        scpi.buyingPrice += unitPrice * quantity.double()
+        scpi.buyingPrice += transac.unitPrice * transac.quantity.double()
 
         dismiss()
     }

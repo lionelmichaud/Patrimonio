@@ -14,6 +14,45 @@ import EconomyModel
 import NamedValue
 import Ownership
 
+/// Historique des transactions d'achat ou de vente
+public typealias TransactionHistory = [TransactionOrder]
+
+extension TransactionHistory {
+
+    public var averagePrice: Double {
+        let totalQuantity = self.sum(for: \.quantity)
+        return totalBuyingPrice / totalQuantity.double()
+    }
+
+    public var totalBuyingPrice: Double {
+        var total = 0.0
+        for transaction in self {
+            total += transaction.unitPrice * transaction.quantity.double()
+        }
+        return total
+    }
+}
+
+/// Transaction d'achat ou de vente
+public struct TransactionOrder: Identifiable, Codable, Equatable {
+    public var id = UUID()
+    public var quantity  : Int    = 0
+    public var unitPrice : Double = 0
+    public var date      : Date   = Date.now
+
+    public var amount: Double {
+        unitPrice * quantity.double()
+    }
+
+    public init(quantity  : Int    = 0,
+                unitPrice : Double = 0,
+                date      : Date   = Date.now) {
+        self.quantity = quantity
+        self.unitPrice = unitPrice
+        self.date = date
+    }
+}
+
 public typealias ScpiArray = ArrayOfNameableValuable<SCPI>
 
 // MARK: - SCPI à revenus périodiques, annuels et fixes
@@ -88,6 +127,8 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     public var liquidityLevel : LiquidityLevel? {
         .medium
     }
+    /// Historique des achats
+    public var transactionHistory = TransactionHistory()
     /// Date d'achat du bien
     public var buyingDate   : Date
     /// Prix d'achat du bien
