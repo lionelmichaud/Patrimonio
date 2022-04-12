@@ -98,7 +98,7 @@ public struct IncomeTaxesModel: Codable, Equatable {
                 // application du rabais sur le salaire imposable
                 let rebate = (taxableSalary * model.salaryRebate / 100.0).clamp(low : model.minSalaryRebate,
                                                                                 high: model.maxSalaryRebate)
-                return zeroOrPositive(taxableSalary - rebate)
+                return poz(taxableSalary - rebate)
                 
             case .turnOver(let BNC, _):
                 guard BNC >= 0 else {
@@ -107,7 +107,7 @@ public struct IncomeTaxesModel: Codable, Equatable {
                 // TODO: - prendre en compte le régime du micro-fiscal forfaitaire à 22% si le revenu fiscal de référence est < 80_000€
                 let rebate = max(model.minTurnOverRebate,
                                  BNC * model.turnOverRebate / 100.0)
-                return zeroOrPositive(BNC - rebate)
+                return poz(BNC - rebate)
         }
     }
     

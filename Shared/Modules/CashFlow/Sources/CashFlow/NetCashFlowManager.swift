@@ -239,7 +239,7 @@ struct NetCashFlowManager {
                     // IRPP: part des produit de la liquidation inscrit en compte courant imposable à l'IRPP après déduction de ce qu'il reste de franchise
                     var taxableInterests: Double
                     // apply rebate if some is remaining
-                    taxableInterests = zeroOrPositive(removal.taxableInterests - lifeInsuranceRebate)
+                    taxableInterests = poz(removal.taxableInterests - lifeInsuranceRebate)
                     lifeInsuranceRebate -= (removal.taxableInterests - taxableInterests)
                     // géré comme un revenu en report d'imposition (dette)
                     totalTaxableInterests += taxableInterests

@@ -69,9 +69,6 @@ struct BuyScpiSheet: View {
     private func commit() {
         // ajouter la transaction à l'historique
         scpi.transactionHistory.append(transac)
-        // incrémenter le prix total d'acquisition
-        scpi.buyingPrice += transac.unitPrice * transac.quantity.double()
-
         dismiss()
     }
 

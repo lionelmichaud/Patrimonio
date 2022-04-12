@@ -83,7 +83,7 @@ public struct LayOffTaxes: Codable, Equatable, LayOffTaxesProviderP {
         //   - 2 fois le montant annuel du plafond de la Sécurité sociale soit 82 272 € en 2021.
         //  1.1) base de calcul des cotisations sociales:
         let discountSocialtaxes = min(model.socialTaxes.maxRebate, irppDiscount)
-        let baseSocialtaxes = zeroOrPositive(compensationBrut - discountSocialtaxes)
+        let baseSocialtaxes = poz(compensationBrut - discountSocialtaxes)
         //  1.2) montant des charges sociales à payer
         let socialTaxes = baseSocialtaxes * model.socialTaxes.rate / 100
         //  1.3) net de charges sociales
@@ -103,15 +103,15 @@ public struct LayOffTaxes: Codable, Equatable, LayOffTaxesProviderP {
         // 2.3) plus petite des 2 limites
         let discountCsgCrds = min(discount1, discount2)
         // base de calcul de la CSG et du CRDS
-        let baseCsgCrds = zeroOrPositive(compensationBrut - discountCsgCrds)
+        let baseCsgCrds = poz(compensationBrut - discountCsgCrds)
         // montant de la CSG et du CRDS à payer
         let csgCrds = baseCsgCrds * model.csgCrds.total / 100
         
         net -= csgCrds
         
         // retirer du montant de l'indemnité taxable à l'IRPP la part déductibe de la CSG
-        let csgDeductible = zeroOrPositive(baseCsgCrds * model.csgCrds.rateDeductible / 100)
-        compensationTaxable = zeroOrPositive(compensationTaxable - csgDeductible)
+        let csgDeductible = poz(baseCsgCrds * model.csgCrds.rateDeductible / 100)
+        compensationTaxable = poz(compensationTaxable - csgDeductible)
         
         return net
     }

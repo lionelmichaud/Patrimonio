@@ -30,12 +30,27 @@
                 [
                 ]
             },
-            "buyingDate"   : "2019-10-04T21:53:04Z",
-            "buyingPrice"  : 89837,
+            "transactionHistory" : [
+                {
+                    "quantity"  : 353,
+                    "unitPrice" : 205,
+                    "date"      : "2019-10-04T21:53:04Z"
+                },
+                {
+                    "quantity"  : 84,
+                    "unitPrice" : 208,
+                    "date"      : "2022-02-15T21:53:04Z"
+                }
+            ],
+            "lastKnownState" :
+            {
+                "date"         : "2022-04-10T21:53:04Z",
+                "unitPrice"    : 208,
+                "interestRate" : 5.36
+            },
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
-            "revaluatRate" : 0,
-            "interestRate" : 5.36
+            "revaluatRate" : 0
         },
         
         {
@@ -62,12 +77,27 @@
                 [
                 ]
             },
-            "buyingDate"   : "2019-10-11T21:53:04Z",
-            "buyingPrice"  : 107000,
+            "transactionHistory" : [
+                {
+                    "quantity"  : 365,
+                    "unitPrice" : 200,
+                    "date"      : "2019-10-11T21:53:04Z"
+                },
+                {
+                    "quantity"  : 170,
+                    "unitPrice" : 200,
+                    "date"      : "2019-10-11T21:53:04Z"
+                }
+            ],
+            "lastKnownState" :
+            {
+                "date"         : "2022-04-10T21:53:04Z",
+                "unitPrice"    : 200,
+                "interestRate" : 4.8
+            },
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
-            "revaluatRate" : 0,
-            "interestRate" : 4.8
+            "revaluatRate" : 0
         },
         
         {
@@ -94,12 +124,27 @@
                 [
                 ]
             },
-            "buyingDate"   : "2019-10-11T21:53:04Z",
-            "buyingPrice"  : 65175,
+            "transactionHistory" : [
+                {
+                    "quantity"  : 154,
+                    "unitPrice" : 237,
+                    "date"      : "2019-10-11T21:53:04Z"
+                },
+                {
+                    "quantity"  : 121,
+                    "unitPrice" : 237,
+                    "date"      : "2019-12-31T21:53:04Z"
+                }
+            ],
+            "lastKnownState" :
+            {
+                "date"         : "2022-04-10T21:53:04Z",
+                "unitPrice"    : 237,
+                "interestRate" : 4.91
+            },
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
-            "revaluatRate" : 0,
-            "interestRate" : 4.91
+            "revaluatRate" : 0
         },
         
         {
@@ -126,12 +171,27 @@
                 [
                 ]
             },
-            "buyingDate"   : "2019-11-15T21:53:04Z",
-            "buyingPrice"  : 65715,
+            "transactionHistory" : [
+                {
+                    "quantity"  : 108,
+                    "unitPrice" : 337,
+                    "date"      : "2019-11-15T21:53:04Z"
+                },
+                {
+                    "quantity"  : 87,
+                    "unitPrice" : 337,
+                    "date"      : "2019-12-31T21:53:04Z"
+                }
+            ],
+            "lastKnownState" :
+            {
+                "date"         : "2022-04-10T21:53:04Z",
+                "unitPrice"    : 337,
+                "interestRate" : 4.64
+            },
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
-            "revaluatRate" : 0,
-            "interestRate" : 4.64
+            "revaluatRate" : 0
         },
         
         {
@@ -158,12 +218,22 @@
                 [
                 ]
             },
-            "buyingDate"   : "2019-10-31T21:53:04Z",
-            "buyingPrice"  : 36248,
+            "transactionHistory" : [
+                {
+                    "quantity"  : 184,
+                    "unitPrice" : 197,
+                    "date"      : "2019-10-31T21:53:04Z"
+                }
+            ],
+            "lastKnownState" :
+            {
+                "date"         : "2022-04-10T21:53:04Z",
+                "unitPrice"    : 197,
+                "interestRate" : 3.19
+            },
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
-            "revaluatRate" : 0,
-            "interestRate" : 3.19
+            "revaluatRate" : 0
         },
         
         {
@@ -190,12 +260,27 @@
                 [
                 ]
             },
-            "buyingDate"   : "2020-10-16T21:53:04Z",
-            "buyingPrice"  : 84700,
+            "transactionHistory" : [
+                {
+                    "quantity"  : 49,
+                    "unitPrice" : 1100,
+                    "date"      : "2020-10-16T21:53:04Z"
+                },
+                {
+                    "quantity"  : 28,
+                    "unitPrice" : 1100,
+                    "date"      : "2022-02-15T21:53:04Z"
+                }
+            ],
+            "lastKnownState" :
+            {
+                "date"         : "2022-04-10T21:53:04Z",
+                "unitPrice"    : 1100,
+                "interestRate" : 5.10
+            },
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
-            "revaluatRate" : 0,
-            "interestRate" : 5.10
+            "revaluatRate" : 0
         },
         
         {
@@ -222,12 +307,27 @@
                 [
                 ]
             },
-            "buyingDate"   : "2021-12-22T21:53:04Z",
-            "buyingPrice"  : 87547,
+            "transactionHistory" : [
+                {
+                    "quantity"  : 78,
+                    "unitPrice" : 648.5,
+                    "date"      : "2021-12-22T21:53:04Z"
+                },
+                {
+                    "quantity"  : 57,
+                    "unitPrice" : 648.5,
+                    "date"      : "2022-01-31T21:53:04Z"
+                }
+            ],
+            "lastKnownState" :
+            {
+                "date"         : "2022-04-10T21:53:04Z",
+                "unitPrice"    : 648.5,
+                "interestRate" : 6.43
+            },
             "willBeSold"   : false,
             "sellingDate"  : "2100-04-23T21:53:04Z",
-            "revaluatRate" : 0,
-            "interestRate" : 6.43
+            "revaluatRate" : 0
         }
     ]
 }

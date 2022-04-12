@@ -224,7 +224,7 @@ public extension Adult {
                                                              spouseAge          : spouseAge,
                                                              bornChildrenNumber : bornChildrenNumber)
         // le complément de réversion est calculé en conséquence
-        let reversionBrut = zeroOrPositive(pensionBruteApresDeces - pensionDuConjoint.brut)
+        let reversionBrut = poz(pensionBruteApresDeces - pensionDuConjoint.brut)
         let reversionNet  = reversionBrut * (pensionTotaleAvantDeces.net / pensionTotaleAvantDeces.brut)
         return (reversionBrut, reversionNet)
     }
