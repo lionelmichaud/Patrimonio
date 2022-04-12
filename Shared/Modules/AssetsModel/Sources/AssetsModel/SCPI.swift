@@ -14,26 +14,116 @@ import EconomyModel
 import NamedValue
 import Ownership
 
+/// Historique des transactions d'achat ou de vente
+public typealias TransactionHistory = [TransactionOrder]
+
+extension TransactionHistory {
+
+    public var earliestBuyingDate : Date {
+        self.min(by: { $0.date < $1.date })?.date ?? Date.distantFuture
+    }
+
+    public var latestBuyingDate : Date {
+        self.max(by: { $0.date < $1.date })?.date ?? Date.distantFuture
+    }
+
+    public var averagePrice: Double {
+        guard totalQuantity != 0 else {
+            return 0
+        }
+        return totalInvestment / totalQuantity.double()
+    }
+
+    public var totalInvestment: Double {
+        var total = 0.0
+        for transaction in self {
+            total += transaction.unitPrice * transaction.quantity.double()
+        }
+        return total
+    }
+
+    public var totalQuantity: Int {
+        self.sum(for: \.quantity)
+    }
+}
+
+extension TransactionHistory: ValidableP {
+    public var isValid: Bool {
+        self.allSatisfy { $0.isValid }
+    }
+}
+
+/// Transaction d'achat ou de vente
+public struct TransactionOrder: Identifiable, Codable, Equatable, ValidableP {
+    enum CodingKeys: CodingKey {
+        case quantity
+        case unitPrice
+        case date
+    }
+
+    public var id = UUID()
+    public var quantity  : Int    = 0
+    public var unitPrice : Double = 0
+    public var date      : Date   = Date.now
+
+    public var amount: Double {
+        unitPrice * quantity.double()
+    }
+
+    public var isValid: Bool {
+        quantity.isPOZ && unitPrice.isPOZ
+    }
+
+    public init(quantity  : Int    = 0,
+                unitPrice : Double = 0,
+                date      : Date   = Date.now) {
+        self.quantity  = quantity
+        self.unitPrice = unitPrice
+        self.date      = date
+    }
+}
+
 public typealias ScpiArray = ArrayOfNameableValuable<SCPI>
 
 // MARK: - SCPI à revenus périodiques, annuels et fixes
 
 // conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
-public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
+public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, ValidableP {
     
     // MARK: - Nested Types
     
+    /// Situation annuelle de l'investissement
+    public struct State: Codable, Equatable {
+        /// date de la dernière situation connue
+        public var date         : Date   = Date.now
+        /// Valeur de marché
+        public var unitPrice    : Double = 0.0
+        /// Rendement annuel servi sur valeur de marché
+        public var interestRate : Double = 0.0
+
+        var isValid: Bool {
+            unitPrice.isPOZ && interestRate.isPOZ
+        }
+
+        public init(date         : Date   = Date.now,
+                    unitPrice    : Double = 0.0,
+                    interestRate : Double = 0.0) {
+            self.date = date
+            self.unitPrice = unitPrice
+            self.interestRate = interestRate
+        }
+    }
+
     enum CodingKeys: CodingKey {
         case name
         case note
         case website
         case ownership
-        case buyingDate
-        case buyingPrice
+        case transactionHistory
+        case lastKnownState
+        case revaluatRate
         case willBeSold
         case sellingDate
-        case revaluatRate
-        case interestRate
     }
 
     // MARK: - Static Properties
@@ -88,12 +178,22 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     public var liquidityLevel : LiquidityLevel? {
         .medium
     }
-    /// Date d'achat du bien
-    public var buyingDate   : Date
-    /// Prix d'achat du bien
-    public var buyingPrice  : Double = 0.0
-    /// Rendement annuel servi
-    public var interestRate : Double = 0.0 // %
+    /// Historique des achats
+    public var transactionHistory = TransactionHistory()
+    /// Date d'achat des premières parts
+    public var earliestBuyingDate : Date {
+        transactionHistory.earliestBuyingDate
+    }
+    /// Date d'achat des dernères parts
+    public var latestBuyingDate : Date {
+        transactionHistory.latestBuyingDate
+    }
+    /// Prix moyen d'acquisition du bien
+    public var averageBuyingPrice  : Double {
+        transactionHistory.averagePrice
+    }
+    /// Dernier situation de marché connue
+    public var lastKnownState : State
     /// Agmentation annuelle de la valeur du bien
     public var revaluatRate : Double = 0.0 // %
     /// Le bien sera vendu
@@ -103,56 +203,65 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     
     // MARK: - Initializer
     
-    public init(name         : String    = "",
-                note         : String    = "",
-                ownership    : Ownership = Ownership(),
-                buyingDate   : Date      = Date.now,
-                buyingPrice  : Double    = 0.0,
-                interestRate : Double    = 0.0,
-                revaluatRate : Double    = 0.0,
-                willBeSold   : Bool      = false,
-                sellingDate  : Date      = 100.years.fromNow!,
+    public init(name               : String             = "",
+                note               : String             = "",
+                website            : URL?               = nil,
+                ownership          : Ownership          = Ownership(),
+                transactionHistory : TransactionHistory = TransactionHistory(),
+                lastKnownState     : State              = State(),
+                revaluatRate       : Double             = 0.0,
+                willBeSold         : Bool               = false,
+                sellingDate        : Date               = 100.years.fromNow!,
                 delegateForAgeOf : ((_ name : String, _ year : Int) -> Int)? = nil) {
-        self.name         = name
-        self.note         = note
-        self.ownership    = ownership
-        self.buyingDate   = buyingDate
-        self.buyingPrice  = buyingPrice
-        self.interestRate = interestRate
-        self.revaluatRate = revaluatRate
-        self.willBeSold   = willBeSold
-        self.sellingDate  = sellingDate
-        self.ownership.setDelegateForAgeOf(delegate: delegateForAgeOf)
+        self.name               = name
+        self.note               = note
+        self.website            = website
+        self.ownership          = ownership
+        self.transactionHistory = transactionHistory
+        self.lastKnownState     = lastKnownState
+        self.revaluatRate       = revaluatRate
+        self.willBeSold         = willBeSold
+        self.sellingDate        = sellingDate
+        self.ownership.setDelegateForAgeOf(delegate : delegateForAgeOf)
     }
     
     // MARK: - Methods
     
-    /// Valeur du bien à la fin de l'année `year`.
+    /// Valeur de vente du bien estimé à la fin de l'année `year`.
     ///
-    /// Le bien est revalorisé annuellement de `revaluatRate` % depuis sa date d'acquisition mais il n'est pas déflaté en valeur.
+    /// La valeur du bien est calculée à partir de la dernière valeur de marché connue, revalorisé annuellement de `revaluatRate` %
+    /// depuis la fin de l'année de la date d'évaluation de la valeur de marché.
+    /// De plus il est **déflaté** en valeur car sa valeur intrinsèque ne suit pas forcément l'inflation.
     ///
     /// La valeur du bien est décrémentée de la commission d'achat (frais d'acquisition).
     ///
-    /// Ce sont ses revenus qui sont déflatés de l'inflation.
+    /// - Note: Les dépenses ne sont pas inflatées. Tout ce qui suit l'inflation (salaires, BNC...) n'est pas inflaté.
+    ///         Donc ce qui ne suit pas l'inflation en valeur (actifs financiers...) doit être déflaté de l'inflation en valeur
+    ///         car lorsque ces biens seront vendus ils pourront financer moins de dépenses.
     ///
     /// - Parameter year: fin de l'année
-    /// - Returns: Valeur actualisé du bien, non déflatée de l'inflation, mais commission d'achat (frais d'acquisition)  déduite.
+    /// - Returns: Valeur actualisé du bien, déflatée de l'inflation, et commission d'achat (frais d'acquisition)  déduite.
     public func value(atEndOf year: Int) -> Double {
         if isOwned(during: year) {
-            return try! futurValue(payement     : 0,
-                                   interestRate : revaluatRate / 100.0,
-                                   nbPeriod     : year - buyingDate.year,
-                                   initialValue : buyingPrice) * (1.0 - SCPI.saleCommission / 100.0)
+            return marketValue(atEndOf: year) * (1.0 - SCPI.saleCommission / 100.0)
         } else {
             return 0.0
         }
     }
-    
-    /// Revenus annuels net d'inflation (cas taxable à l'IRPP)
+    public func marketValue(atEndOf year: Int) -> Double {
+        marketValuePerShare(atEndOf: year) * transactionHistory.totalQuantity.double()
+    }
+    public func marketValuePerShare(atEndOf year: Int) -> Double {
+        try! futurValue(payement     : 0,
+                        interestRate : (revaluatRate - SCPI.inflation) / 100.0,
+                        nbPeriod     : poz(year - lastKnownState.date.year),
+                        initialValue : lastKnownState.unitPrice)
+    }
+
+    /// Revenus annuels net d'inflation (cas taxable à l'IRPP) car calculés en prenant comme base la valeur actuelle de marché **déflatée**.
     ///
-    /// On retire l'inflation du taux de rendement annuel car côté dépenses, celles-ci ne sont pas augmentée de l'inflation chaque année.
-    ///
-    /// Le revenu est calculé comme suit: (rendement - inflation) x valeur d'acquisition
+    /// Le rendement est appliqué à la valeur de marché et non pas à la valeur de vente.
+    /// Le revenu est calculé comme suit: (rendement actuel estimé) x (valeur de marché extrapolée)
     ///
     /// - Parameters:
     ///   - year: durant l'année
@@ -165,8 +274,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
         taxableIrpp: Double,
         socialTaxes: Double) {
         let revenue     = (isOwned(during: year) ?
-                            buyingPrice * (interestRate - SCPI.inflation) / 100.0 :
-                            0.0)
+                           marketValue(atEndOf: year - 1) * lastKnownState.interestRate / 100.0 : 0.0)
         let taxableIrpp = SCPI.fiscalModel.financialRevenuTaxes.net(revenue)
         return (revenue    : revenue,
                 taxableIrpp: taxableIrpp,
@@ -175,17 +283,14 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     
     /// Revenus annuels net d'inflation (cas taxable à l'IS)
     ///
-    /// On retire l'inflation du taux de rendement annuel car côté dépenses, celles-ci ne sont pas augmentée de l'inflation chaque année.
-    ///
-    /// Le revenu est calculé comme suit: (rendement - inflation) x valeur d'acquisition
+    /// Le rendement est appliqué à la valeur de marché et non pas à la valeur de vente.
+    /// Le revenu est calculé comme suit: (rendement actuel estimé) x (valeur de marché extrapolée)
     ///
     /// - Parameters:
     ///   - year: durant l'année
     /// - Returns: revenus inscrit en compte courant avant IS mais net d'inflation
     public func yearlyRevenueIS(during year: Int) -> Double {
-        isOwned(during: year) ?
-                            buyingPrice * (interestRate - SCPI.inflation) / 100.0 :
-                            0.0
+        isOwned(during: year) ? marketValue(atEndOf: year - 1) * lastKnownState.interestRate / 100.0 : 0.0
     }
     
     /// True si l'année est postérieure à l'année de vente
@@ -203,7 +308,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
         if isSold(before: year) {
             // le bien est vendu
             return false
-        } else if (buyingDate.year...).contains(year) {
+        } else if (earliestBuyingDate.year...).contains(year) {
             return true
         } else {
             // le bien n'est pas encore acheté
@@ -229,17 +334,25 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
         guard willBeSold && year == sellingDate.year else {
             return (0, 0, 0, 0, 0)
         }
-        let detentionDuration    = sellingDate.year - buyingDate.year
-        let projectedSaleRevenue = value(atEndOf: sellingDate.year)
-        let capitalGain          = projectedSaleRevenue - buyingPrice
-        let socialTaxes          =
+        var detentionDuration    = 0
+        var projectedSaleRevenue = 0.0
+        var capitalGain          = 0.0
+        var socialTaxes          = 0.0
+        var irpp                 = 0.0
+
+        for transac in transactionHistory {
+            detentionDuration    += sellingDate.year - transac.date.year
+            projectedSaleRevenue += marketValuePerShare(atEndOf: sellingDate.year) * transac.quantity.double()
+            capitalGain          += projectedSaleRevenue - transac.amount
+            socialTaxes          +=
             SCPI.fiscalModel.estateCapitalGainTaxes.socialTaxes(
-                capitalGain      : zeroOrPositive(capitalGain),
+                capitalGain      : poz(capitalGain),
                 detentionDuration: detentionDuration)
-        let irpp              =
+            irpp +=
             SCPI.fiscalModel.estateCapitalGainIrpp.irpp(
-                capitalGain      : zeroOrPositive(capitalGain),
+                capitalGain      : poz(capitalGain),
                 detentionDuration: detentionDuration)
+        }
         return (revenue     : projectedSaleRevenue,
                 capitalGain : capitalGain,
                 netRevenue  : projectedSaleRevenue - socialTaxes - irpp,
@@ -251,7 +364,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     /// - Warning: applicable uniquement en régime de l'IS
     /// - Parameter year: année
     /// - Returns:
-    ///   - `revenue`: produit de la vente net de frais d'agence (commission de vente de 10%)
+    ///   - `revenue`: produit de la vente net de frais du gestionnaire (commission de vente de 10%)
     ///   - `capitalGain`: plus-value réalisée lors de la vente
     ///   - `IS`: IS dû sur sur la plus-value
     ///   - `netRevenue`: produit de la vente net d'`IS` sur la plus-value
@@ -264,8 +377,8 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
             return (0, 0, 0, 0)
         }
         let projectedSaleRevenue = value(atEndOf: sellingDate.year)
-        let capitalGain          = projectedSaleRevenue - buyingPrice
-        let IS                   = SCPI.fiscalModel.companyProfitTaxes.IS(zeroOrPositive(capitalGain))
+        let capitalGain          = projectedSaleRevenue - transactionHistory.totalInvestment
+        let IS                   = SCPI.fiscalModel.companyProfitTaxes.IS(poz(capitalGain))
         return (revenue     : projectedSaleRevenue,
                 capitalGain : capitalGain,
                 netRevenue  : projectedSaleRevenue - IS,
@@ -291,13 +404,14 @@ extension SCPI {
         guard ownership.isValid else {
             return false
         }
-
-        guard buyingPrice >= 0 && interestRate >= 0 else {
+        guard transactionHistory.isValid else {
             return false
         }
-
+        guard lastKnownState.isValid else {
+            return false
+        }
         /// vérifier que toutes les dates sont définies
-        guard sellingDate > buyingDate else {
+        guard sellingDate >= latestBuyingDate else {
             return false
         }
         return true
@@ -315,8 +429,8 @@ extension SCPI: CustomStringConvertible {
           - Liquidité: \(liquidityLevel?.description ?? "indéfini")
         - Droits de propriété:
         \(ownership.description.withPrefixedSplittedLines("  "))
-        - Acheté le \(buyingDate.stringShortDate) au prix d'achat de: \(buyingPrice) €
-        - Rapporte \(interestRate - SCPI.inflation) % par an net d'inflation
+        - Parts achetées entre le \(transactionHistory.earliestBuyingDate.stringShortDate) et le \(transactionHistory.latestBuyingDate.stringShortDate) au prix d'achat moyen de: \(transactionHistory.averagePrice) €
+        - Rapporte \(lastKnownState.interestRate) % par an
         - Sa valeur augmente de \(revaluatRate) % par an
         - \(willBeSold ? "Sera vendue le \(sellingDate.stringShortDate) au prix de \(value(atEndOf: sellingDate.year)) €" : "Ne sera pas vendu")
         """

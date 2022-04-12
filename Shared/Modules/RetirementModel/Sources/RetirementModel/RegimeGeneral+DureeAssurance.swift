@@ -89,7 +89,7 @@ extension RegimeGeneral {
                                                      to  : dateFinPeriodCotisationRetraite)
             let (q, _) = duree.month!.quotientAndRemainder(dividingBy: 3)
             //    Le nombre de trimestres est arrondi au chiffre inférieur
-            let nbTrimestreFutur = zeroOrPositive((duree.year! * 4) + q)
+            let nbTrimestreFutur = poz((duree.year! * 4) + q)
             
             let dureeDeplafonnee = lastKnownSituation.nbTrimestreAcquis + nbTrimestreFutur
             return (deplafonne : dureeDeplafonnee,

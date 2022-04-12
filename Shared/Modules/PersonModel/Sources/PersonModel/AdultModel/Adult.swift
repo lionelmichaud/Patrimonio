@@ -181,7 +181,7 @@ public final class Adult: Person {
         try super.init(from: decoder)
         
         // pas de dépendance avant l'âge de 65 ans
-        nbOfYearOfDependency = zeroOrPositive(ageOfDeath - 65)
+        nbOfYearOfDependency = poz(ageOfDeath - 65)
     }
     
     public override init() {
@@ -345,7 +345,7 @@ public final class Adult: Person {
         nbOfYearOfDependency = Int(model.humanLife.model!.nbOfYearsOfdependency.next())
         
         // pas de dépendance avant l'âge de 65 ans
-        nbOfYearOfDependency = min(nbOfYearOfDependency, zeroOrPositive(ageOfDeath - 65))
+        nbOfYearOfDependency = min(nbOfYearOfDependency, poz(ageOfDeath - 65))
     }
     
     /// Réinitialiser les prioriétés variables des membres de manière déterministe
@@ -357,7 +357,7 @@ public final class Adult: Person {
         // initialiser avec la valeur moyenne déterministe
         let modelValue = Int(model.humanLifeModel.nbOfYearsOfdependency.value(withMode: .deterministic))
         nbOfYearOfDependency =
-            min(modelValue, zeroOrPositive(self.ageOfDeath - 65)) // pas de dépendance avant l'âge de 65 ans
+            min(modelValue, poz(self.ageOfDeath - 65)) // pas de dépendance avant l'âge de 65 ans
         
         // vérifier la cohérence entre les âges de liquidation de pension du fichier person.json et
         // avec les âges au plus tôt du fichier RetirementModelConfig.json

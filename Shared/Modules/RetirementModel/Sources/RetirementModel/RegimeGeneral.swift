@@ -368,11 +368,11 @@ public final class RegimeGeneral: Codable {
         let (q1, r1) = duree.month!.quotientAndRemainder(dividingBy: 3)
         
         //    Le nombre de trimestres est arrondi au chiffre supérieur
-        let trimestresManquantAgeTauxPlein = zeroOrPositive((duree.year! * 4) + (r1 > 0 ? q1 + 1 : q1))
+        let trimestresManquantAgeTauxPlein = poz((duree.year! * 4) + (r1 > 0 ? q1 + 1 : q1))
         
         /// le nombre de trimestres manquant entre le nb de trimestre accumulés à la date de votre départ en retraite et
         /// la durée d'assurance retraite ouvrant droit au taux plein
-        let trimestresManquantNbTrimestreTauxPlein = zeroOrPositive(dureeDeReference - dureeAssurance)
+        let trimestresManquantNbTrimestreTauxPlein = poz(dureeDeReference - dureeAssurance)
         
         // retenir le plus favorable des deux et limiter à 20 max
         return .success(min(trimestresManquantNbTrimestreTauxPlein,
@@ -457,7 +457,7 @@ public final class RegimeGeneral: Codable {
             customLog.log(level: .default, "duree De Reference = nil")
             return nil
         }
-        let trimestreManquant = zeroOrPositive(dureeDeReference - lastKnownSituation.nbTrimestreAcquis)
+        let trimestreManquant = poz(dureeDeReference - lastKnownSituation.nbTrimestreAcquis)
         let dateRef = lastDayOf(year: lastKnownSituation.atEndOf)
         guard let dateTousTrimestre = (trimestreManquant * 3).months.from(dateRef) else {
             customLog.log(level: .default, "date Tous Trimestre = nil")

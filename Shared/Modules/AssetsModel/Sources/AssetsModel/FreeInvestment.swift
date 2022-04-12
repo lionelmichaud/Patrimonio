@@ -28,7 +28,7 @@ public typealias FreeInvestmentArray = ArrayOfNameableValuable<FreeInvestement>
 
 /// Placement à versement et retrait libres et à taux fixe
 /// Les intérêts sont capitalisés lors de l'appel à capitalize()
-// conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
+/// Conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
 public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP, QuotableP {
     
     // MARK: - Nested Types

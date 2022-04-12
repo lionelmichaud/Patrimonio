@@ -24,7 +24,7 @@ public func rawValueGeneric<T: CaseIterable >(of enu: T) -> Int where T: Equatab
     }
 }
 
-public func zeroOrPositive<T: Comparable>(_ x: T) -> T where T: SignedNumeric {
+public func poz<T: Comparable>(_ x: T) -> T where T: SignedNumeric {
     if abs(x) == -x {
         return .zero
     } else {

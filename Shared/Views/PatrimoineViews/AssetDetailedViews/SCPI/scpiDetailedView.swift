@@ -16,6 +16,7 @@ struct ScpiDetailedView: View {
     @EnvironmentObject var model  : Model
     let updateDependenciesToModel : () -> Void
     @Transac var item : SCPI
+    @State private var showingBuySheet = false
 
     var body: some View {
         Form {
@@ -28,14 +29,41 @@ struct ScpiDetailedView: View {
 
             /// Acquisition
             Section {
-                DatePicker(selection: $item.buyingDate,
-                           displayedComponents: .date,
-                           label: { Text("Date d'acquisition") })
-                AmountEditView(label    : "Prix d'acquisition",
-                               amount   : $item.buyingPrice,
-                               validity : .poz)
+                Group {
+                    DateRangeView(fromLabel : "Dates d'acquisition entre le",
+                                  fromDate  : item.earliestBuyingDate,
+                                  toLabel   : "et le",
+                                  toDate    : item.latestBuyingDate)
+                    IntegerView(label   : "Nombre de parts",
+                                integer : item.transactionHistory.totalQuantity)
+                    AmountView(label  : "Valeur moyenne d'acquisition",
+                               amount : item.transactionHistory.averagePrice)
+                    AmountView(label  : "Valeur totale d'acquisition",
+                               amount : item.transactionHistory.totalInvestment,
+                               weight : .bold)
+                }
+                .foregroundColor(.secondary)
+                /// Historique des achats de parts
+                NavigationLink("Historique des achats",
+                               destination: TransactionHistoryView(transactionHistory: item.transactionHistory))
+                /// Bouton: Acheter des parts de SCPI
+                Button(
+                    action : {
+                        withAnimation {
+                            self.showingBuySheet = true
+                        }
+                    },
+                    label  : {
+                        Label(title: { Text("Acheter des parts") },
+                              icon : {
+                            Image(systemName : "plus.circle.fill")
+                            .imageScale(.large) })
+                    })
             } header: {
                 Text("ACQUISITION")
+            }
+            .sheet(isPresented: $showingBuySheet) {
+                BuyScpiSheet(scpi: $item)
             }
 
             /// Propriété
@@ -45,8 +73,8 @@ struct ScpiDetailedView: View {
             /// Rendement
             Section {
                 PercentEditView(label    : "Taux de rendement annuel brut",
-                                percent  : $item.interestRate)
-                AmountView(label: "Revenu annuel brut déflaté (avant prélèvements sociaux et IRPP)",
+                                percent  : $item.lastKnownState.interestRate)
+                AmountView(label: "Revenu annuel brut (avant prélèvements sociaux et IRPP)",
                            amount: item.yearlyRevenueIRPP(during: CalendarCst.thisYear).revenue)
                 .foregroundColor(.secondary)
                 AmountView(label: "Charges sociales (si imposable à l'IRPP)",
@@ -55,7 +83,7 @@ struct ScpiDetailedView: View {
                 AmountView(label: "Revenu annuel déflaté net de charges sociales (imposable à l'IRPP)",
                            amount: item.yearlyRevenueIRPP(during: CalendarCst.thisYear).taxableIrpp)
                 .foregroundColor(.secondary)
-                AmountView(label: "Revenu annuel déflaté net d'IS (si imposable à l'IS)",
+                AmountView(label: "Revenu annuel net d'IS (si imposable à l'IS)",
                            amount: model.fiscalModel.companyProfitTaxes.net(item.yearlyRevenueIRPP(during: CalendarCst.thisYear).revenue))
                 .foregroundColor(.secondary)
                 PercentEditView(label    : "Taux de réévaluation annuel",
@@ -70,11 +98,11 @@ struct ScpiDetailedView: View {
                 if item.willBeSold {
                     Group {
                         DatePicker(selection: $item.sellingDate,
-                                   in: item.buyingDate...100.years.fromNow!,
+                                   in: item.latestBuyingDate...100.years.fromNow!,
                                    displayedComponents: .date,
                                    label: {
                             Text("Date de vente")
-                                .foregroundColor(item.buyingDate > item.sellingDate ? .red : .primary)
+                                .foregroundColor(item.latestBuyingDate > item.sellingDate ? .red : .primary)
                         })
                         AmountView(label: "Valeur à la date de vente (net de commission de vente)",
                                    amount: item.value(atEndOf: item.sellingDate.year))

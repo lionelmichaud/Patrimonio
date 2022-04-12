@@ -135,7 +135,7 @@ public struct InheritanceDonation: Codable, Equatable {
     -> (netAmount : Double,
         taxe      : Double) {
         // abattement avant application du barême
-        let taxable = zeroOrPositive(partSuccession - model.abatLigneDirecte)
+        let taxable = poz(partSuccession - model.abatLigneDirecte)
         
         // application du barême
         if let taxe = model.gridLigneDirecte.tax(for: taxable) {
@@ -154,7 +154,7 @@ public struct InheritanceDonation: Codable, Equatable {
     -> (netAmount : Double,
         taxe      : Double) {
         // abattement avant application du barême
-        let taxable = zeroOrPositive(donation - model.abatConjoint)
+        let taxable = poz(donation - model.abatConjoint)
         
         // application du barême
         if let taxe = model.gridLigneDirecte.tax(for: taxable) {

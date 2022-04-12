@@ -73,7 +73,7 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
     public var sellingPriceAfterTaxes  : Double {
         guard willBeSold else { return 0 }
         guard let sellingDate = sellingYear.year, let buyingDate = buyingYear.year else { return 0 }
-        let detentionDuration = zeroOrPositive(sellingDate - buyingDate)
+        let detentionDuration = poz(sellingDate - buyingDate)
         let capitalGain       = sellingNetPrice - buyingPrice
         let socialTaxes       = RealEstateAsset.fiscalModel.estateCapitalGainTaxes.socialTaxes(
             capitalGain      : capitalGain,
@@ -91,7 +91,8 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
     public var willBeRented            : Bool = false
     public var rentalFrom              : DateBoundary = DateBoundary.empty // année inclue
     public var rentalTo                : DateBoundary = DateBoundary.empty // année exclue
-    public var monthlyRentAfterCharges : Double = 0.0 // frais agence, taxe foncière et assurance déduite
+    /// Loyer mensuel, frais agence, taxe foncière et assurance déduite, supposé suivre l'inflation donc non déflaté
+    public var monthlyRentAfterCharges : Double = 0.0
     public var yearlyRentAfterCharges  : Double {
         return monthlyRentAfterCharges * 12
     }
@@ -367,10 +368,10 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
         let detentionDuration = sellingYear.year! - buyingYear.year!
         let capitalGain       = self.sellingNetPrice - buyingPrice
         let socialTaxes       = RealEstateAsset.fiscalModel.estateCapitalGainTaxes.socialTaxes(
-            capitalGain      : zeroOrPositive(capitalGain),
+            capitalGain      : poz(capitalGain),
             detentionDuration: detentionDuration)
         let irpp              = RealEstateAsset.fiscalModel.estateCapitalGainIrpp.irpp(
-            capitalGain: zeroOrPositive(capitalGain),
+            capitalGain: poz(capitalGain),
             detentionDuration: detentionDuration)
         return (revenue     : self.sellingNetPrice,
                 capitalGain : capitalGain,

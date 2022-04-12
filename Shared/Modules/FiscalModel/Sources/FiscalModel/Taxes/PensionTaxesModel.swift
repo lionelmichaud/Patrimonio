@@ -118,7 +118,7 @@ public struct PensionTaxesModel: Codable, Equatable, NetPensionProviderP {
         let base   = net + csgNonDeductibleDeIrpp(brut)
         // TODO: - il faudrait prendre en compte que le rabais maxi est par foyer et non pas par personne
         let rebate = (base * model.rebate / 100.0).clamp(low: model.minRebate, high: model.maxRebate)
-        return zeroOrPositive(base - rebate)
+        return poz(base - rebate)
     }
     
     // TODO: - Prendre en compte la CSG déductible du salaire imposable
