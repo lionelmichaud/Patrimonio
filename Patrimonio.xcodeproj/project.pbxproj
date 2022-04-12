@@ -2563,7 +2563,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.7.1;
+				MARKETING_VERSION = 4.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.michaud.lionel.Patrimonio;
 				PRODUCT_NAME = Patrimonio;
 				SDKROOT = iphoneos;
@@ -2587,7 +2587,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.7.1;
+				MARKETING_VERSION = 4.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.michaud.lionel.Patrimonio;
 				PRODUCT_NAME = Patrimonio;
 				SDKROOT = iphoneos;
