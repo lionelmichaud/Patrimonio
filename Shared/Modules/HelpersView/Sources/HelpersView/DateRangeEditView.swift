@@ -10,31 +10,56 @@ import SwiftUI
 // MARK: - Affichage d'un intervalle de Dates
 
 public struct DateRangeView: View {
-    public let fromLabel : String
-    public var fromDate  : Date
-    public let toLabel   : String
-    public var toDate    : Date
+    private let fromLabel : String
+    private var fromDate  : Date
+    private let toLabel   : String
+    private var toDate    : Date
+    private var dateStyle : Date.FormatStyle.DateStyle
 
     public var body: some View {
         HStack {
             Text(fromLabel)
             Spacer()
-            Text("\(fromDate.stringLongDate)")
+            Text("\(fromDate.formatted(date: dateStyle, time: .omitted))")
             Spacer()
             Text(toLabel)
             Spacer()
-            Text("\(toDate.stringLongDate)")
+            Text("\(toDate.formatted(date: dateStyle, time: .omitted))")
         }
     }
 
     public init(fromLabel : String,
                 fromDate  : Date,
                 toLabel   : String,
-                toDate    : Date) {
+                toDate    : Date,
+                dateStyle : Date.FormatStyle.DateStyle = .long) {
         self.fromLabel = fromLabel
         self.fromDate  = fromDate
         self.toLabel   = toLabel
         self.toDate    = toDate
+        self.dateStyle = dateStyle
+    }
+}
+
+public struct DateView: View {
+    private let label     : String
+    private var date      : Date
+    private var dateStyle : Date.FormatStyle.DateStyle
+
+    public var body: some View {
+        HStack {
+            Text(label)
+            Spacer()
+            Text("\(date.formatted(date: dateStyle, time: .omitted))")
+        }
+    }
+
+    public init(label     : String,
+                date      : Date,
+                dateStyle : Date.FormatStyle.DateStyle = .long) {
+        self.label     = label
+        self.date      = date
+        self.dateStyle = dateStyle
     }
 }
 
