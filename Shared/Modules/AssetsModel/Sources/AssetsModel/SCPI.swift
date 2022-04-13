@@ -71,7 +71,7 @@ public struct TransactionOrder: Identifiable, Codable, Equatable, ValidableP {
     }
 
     public var isValid: Bool {
-        quantity.isPOZ && unitPrice.isPOZ
+        unitPrice.isPOZ
     }
 
     public init(quantity  : Int    = 0,

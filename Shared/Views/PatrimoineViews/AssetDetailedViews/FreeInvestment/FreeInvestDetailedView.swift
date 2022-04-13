@@ -70,7 +70,7 @@ struct FreeInvestDetailedView: View {
                 AmountEditView(label: "dont plus-values",
                                amount: interests)
             } header: {
-                Text("INITIALISATION")
+                Text("VALEUR ACTUALISÉE")
             }
             
             Section {

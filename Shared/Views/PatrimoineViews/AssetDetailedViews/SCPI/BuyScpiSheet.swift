@@ -11,10 +11,10 @@ import AssetsModel
 import HelpersView
 
 struct BuyScpiSheet: View {
-    @Environment(\.dismiss) private var dismiss
+    var buyOrSell: BuySell
     @Transac var scpi: SCPI
+    @Environment(\.dismiss) private var dismiss
     @State private var transac = TransactionOrder()
-    @State private var unitPrice : Double = 0
 
     var toolBar: some View {
         /// Barre de titre
@@ -24,7 +24,7 @@ struct BuyScpiSheet: View {
             }.buttonStyle(.bordered)
 
             Spacer()
-            Text("Acheter des parts").font(.title).fontWeight(.bold)
+            Text(buyOrSell == .buy ? "Acheter des parts" : "Vendre des parts").font(.title).fontWeight(.bold)
             Spacer()
 
             Button("OK", action: commit)
@@ -50,19 +50,20 @@ struct BuyScpiSheet: View {
                            displayedComponents : .date,
                            label               : { Text("Date") })
 
-                AmountEditView(label    : "Prix d'acquisition",
+                AmountEditView(label    : buyOrSell == .buy ? "Prix unitaire d'acquisition" : "Prix unitaire de vente",
                                amount   : $transac.unitPrice,
                                validity : .poz)
 
                 IntegerEditView(label    : "Quantité",
                                 integer  : $transac.quantity,
-                                validity : .poz)
+                                validity : buyOrSell == .buy ? .poz : .noz)
             }
         }
     }
 
     private func formIsValid() -> Bool {
-        unitPrice.isPOZ && unitPrice.isPOZ
+        transac.unitPrice.isPOZ &&
+        ((buyOrSell == .buy && transac.quantity.isPOZ) || (buyOrSell == .sell && transac.quantity.isNOZ))
     }
 
     /// L'utilisateur a cliqué sur OK
@@ -76,6 +77,13 @@ struct BuyScpiSheet: View {
 
 struct BuyScpiSheet_Previews: PreviewProvider {
     static var previews: some View {
-        BuyScpiSheet(scpi: .init(source: SCPI()))
-    }
+        BuyScpiSheet(buyOrSell: .buy,
+                     scpi: .init(source: SCPI()))
+        .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/600.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/400.0/*@END_MENU_TOKEN@*/))
+        .preferredColorScheme(.dark)
+        BuyScpiSheet(buyOrSell: .sell,
+                     scpi: .init(source: SCPI()))
+        .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/600.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/400.0/*@END_MENU_TOKEN@*/))
+        .preferredColorScheme(.dark)
+   }
 }

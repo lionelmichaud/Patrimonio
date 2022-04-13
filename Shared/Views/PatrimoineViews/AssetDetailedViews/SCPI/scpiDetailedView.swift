@@ -16,7 +16,8 @@ struct ScpiDetailedView: View {
     @EnvironmentObject var model  : Model
     let updateDependenciesToModel : () -> Void
     @Transac var item : SCPI
-    @State private var showingBuySheet = false
+    @State private var showingBuySheet  = false
+    @State private var showingSellSheet = false
 
     var body: some View {
         Form {
@@ -63,11 +64,27 @@ struct ScpiDetailedView: View {
                             Image(systemName : "plus.circle.fill")
                             .imageScale(.large) })
                     })
+                /// Bouton: Vendre des parts de SCPI
+                Button(
+                    action : {
+                        withAnimation {
+                            self.showingSellSheet = true
+                        }
+                    },
+                    label  : {
+                        Label(title: { Text("Vendre des parts") },
+                              icon : {
+                            Image(systemName : "minus.circle.fill")
+                            .imageScale(.large) })
+                    })
             } header: {
                 Text("ACQUISITION")
             }
             .sheet(isPresented: $showingBuySheet) {
-                BuyScpiSheet(scpi: $item)
+                BuyScpiSheet(buyOrSell: .buy, scpi: $item)
+            }
+            .sheet(isPresented: $showingSellSheet) {
+                BuyScpiSheet(buyOrSell: .sell, scpi: $item)
             }
 
             /// Propriété

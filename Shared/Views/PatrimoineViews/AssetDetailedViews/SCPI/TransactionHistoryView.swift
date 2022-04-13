@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppFoundation
 import AssetsModel
 import HelpersView
 
@@ -17,7 +18,7 @@ struct TransactionHistoryView: View {
             Text("Aucune transaction")
         } else {
             List(transactionHistory) { transac in
-                GroupBox("Transaction") {
+                GroupBox {
                     VStack {
                         HStack {
                             Text("Date")
@@ -25,10 +26,10 @@ struct TransactionHistoryView: View {
                             Text(transac.date.stringLongDate)
                         }
                         .padding(.top, 4)
-                        IntegerView(label: "Prix unitaire d'acquisition",
+                        IntegerView(label: "Quantité",
                                     integer: transac.quantity)
                         .padding(.top, 4)
-                        AmountView(label: "Quantité",
+                        AmountView(label: transac.quantity.isPOZ ? "Prix unitaire d'acquisition" : "Prix unitaire de vente",
                                    amount: transac.unitPrice)
                         .padding(.top, 4)
                         AmountView(label: "Montant de la transaction",
@@ -37,6 +38,12 @@ struct TransactionHistoryView: View {
                         .padding(.top, 4)
                     }
                     .padding(.leading)
+                } label: {
+                    if transac.quantity.isPOZ {
+                        Text("\(Image(systemName: "plus.circle")) Achat")
+                    } else {
+                        Text("\(Image(systemName: "minus.circle")) Vente")
+                    }
                 }
             }
         }
@@ -45,6 +52,15 @@ struct TransactionHistoryView: View {
 
 struct TransactionHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionHistoryView(transactionHistory: TransactionHistory())
+        TransactionHistoryView(transactionHistory: [TransactionOrder(quantity: 10,
+                                                                     unitPrice: 1000,
+                                                                     date: Date.now)])
+        .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/600.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/300.0/*@END_MENU_TOKEN@*/))
+        .preferredColorScheme(.dark)
+        TransactionHistoryView(transactionHistory: [TransactionOrder(quantity: -10,
+                                                                     unitPrice: 1000,
+                                                                     date: Date.now)])
+        .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/600.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/300.0/*@END_MENU_TOKEN@*/))
+        .preferredColorScheme(.dark)
     }
 }
