@@ -46,6 +46,7 @@ struct TransactionHistoryView: View {
                     }
                 }
             }
+            .navigationTitle("Historique des transactions")
         }
     }
 }
