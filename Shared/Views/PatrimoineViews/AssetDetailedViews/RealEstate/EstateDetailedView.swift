@@ -122,7 +122,7 @@ struct RealEstateDetailedView: View {
                                 Text(String((item.sellingYear.description)))
                             }.foregroundColor(.blue)
                         }
-                        AmountEditView(label    : "Prix de vente net de frais",
+                        AmountEditView(label    : "Prix de vente net vendeur (net de frais d'agence)",
                                        amount   : $item.sellingNetPrice,
                                        validity : .poz)
                         AmountView(label: "Produit net de charges et impôts",

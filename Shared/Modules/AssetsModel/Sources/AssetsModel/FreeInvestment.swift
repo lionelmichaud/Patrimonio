@@ -26,9 +26,9 @@ public typealias FreeInvestmentArray = ArrayOfNameableValuable<FreeInvestement>
 
 // MARK: - Placement à versement et retrait variable et à taux fixe
 
-/// Placement à versement et retrait libres et à taux fixe
-/// Les intérêts sont capitalisés lors de l'appel à capitalize()
-/// Conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
+/// Placement à versement et retrait libres et à taux fixe.
+/// Les intérêts sont capitalisés lors de l'appel à capitalize().
+/// Conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit.
 public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP, QuotableP {
     
     // MARK: - Nested Types
@@ -148,7 +148,8 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     var currentState           : State = State()
     /// Intérêts cumulés au cours du temps depuis la transmission de l'usufruit jusqu'à l'instant présent
     var currentStateAfterTransmission: State?
-    /// Le bien est-il ouvert aux placements: un bien est fermé à l'investissement lorsque son unique propriétaire est décédé
+    /// Le bien est-il ouvert aux placements.
+    /// Un bien est fermé à l'investissement lorsque son unique propriétaire est décédé.
     var isOpen: Bool = true
     
     // MARK: - Computed Properties
@@ -242,6 +243,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     /// net d'inflation annuelle
     /// - Parameter idx: [0, nb d'années simulées - 1]
     /// - Returns: Taux d'intérêt annuel en % [0, 100%] net d'inflation annuelle et net de charges sociales si prélevées à la source annuellement
+    ///
     private func interestRate(in year: Int) -> Double {
         switch interestRateType {
             case .contractualRate(let fixedRate):
@@ -280,6 +282,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     /// net d'inflation annuelle
     /// - Parameter idx: [0, nb d'années simulées - 1]
     /// - Returns: Intérêts annuels en € net d'inflation annuelle et net de charges sociales si prélevées à la source annuellement
+    ///
     private func yearlyInterestNetOfTaxesAndInflation(in year: Int) -> Double {
         currentState.value * interestRateNetOfTaxesAndInflation(in: year) / 100.0
     }
@@ -292,7 +295,16 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         return (deltaInvestment, deltaInterest)
     }
     
-    /// Retourne la valeur estimée en fin d'année `year` = somme des versements + somme des intérêts
+    /// Retourne la valeur estimée en fin d'année `year`.
+    ///
+    /// La valeur du bien est calculée comme la somme:
+    ///  - des intérêts captiatlisée depuis la fin de l'année de la date de la dernière évaluation;
+    ///  - des versements réalisés depuis la fin de l'année de la date de la dernière évaluation;
+    ///  - De plus elle est **déflatée** en valeur car sa valeur intrinsèque ne suit pas l'inflation.
+    ///
+    /// - Note: Le taux d'inétrêt est NET d'inflation.
+    ///         Les première et dernière années sont inclues.
+    ///
     public func value(atEndOf year: Int) -> Double {
         if year == self.currentState.year {
             // valeur de la dernière année simulée
@@ -312,7 +324,9 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
 
     /// True si le bien est déjà ouvert en fin d'année `year`.
     /// Cad si `lastKnownState.year` <= `year`
+    /// Un bien est fermé à l'investissement lorsque son unique propriétaire est décédé.
     /// - Parameter year: Année
+    ///
     public func isOpen(in year: Int) -> Bool {
         (lastKnownState.year...).contains(year) && isOpen
     }
@@ -325,6 +339,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     ///   - evaluationContext: méthode d'évaluation de la valeure des bien
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
     /// - Warning: les assurance vie ne sont pas inclues car hors succession
+    ///
     public func ownedValue(by ownerName      : String,
                            atEndOf year      : Int,
                            evaluationContext : EvaluationContext) -> Double {
@@ -380,6 +395,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     /// Réaliser un dépôt
     /// - Parameter amount: Montant du dépôt
     /// - Note: Les intérêts sur le dépôt seront comptabilisés dès que `capitalize()` sera appelée.
+    ///
     public mutating func deposit(_ amount: Double) {
         currentState.investment += amount
     }

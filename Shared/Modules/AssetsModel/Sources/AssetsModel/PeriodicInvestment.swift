@@ -26,9 +26,9 @@ public typealias PeriodicInvestementArray = ArrayOfNameableValuable<PeriodicInve
 
 // MARK: - Placement à versements périodiques, fixes, annuels et à taux fixe
 
-/// Placement à versements périodiques, fixes, annuels et à taux fixe
-/// Tous les intérêts sont capitalisés
-// conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
+/// Placement à versements périodiques, fixes, annuels et à taux fixe.
+/// Tous les intérêts sont capitalisés.
+/// conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
 public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, FinancialEnvelopP, QuotableP {
     
     // MARK: - Nested Types
@@ -36,9 +36,12 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     /// Situation annuelle de l'investissement
     public struct State: Codable, Equatable {
         public var firstYear         : Int
-        public var initialInterest   : Double // portion of interests included in the Value
-        public var initialInvestment : Double // portion of investment included in the Value
-        public var initialValue      : Double { initialInterest + initialInvestment } // valeur totale
+        /// Portion of interests included in the Value
+        public var initialInterest   : Double
+        /// Portion of investment included in the Value
+        public var initialInvestment : Double
+        /// Valeur totale
+        public var initialValue      : Double { initialInterest + initialInvestment }
     }
     
     enum CodingKeys: CodingKey {
@@ -139,20 +142,22 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     }
     /// Type de l'investissement
     public var type            : InvestementKind
-    /// Versements nets de frais
+    /// Versements annuels nets de frais
     public var yearlyPayement  : Double = 0.0
-    /// Frais sur versements
+    /// Frais sur versements annuels
     public var yearlyCost      : Double = 0.0
-    /// Date d'ouverture
-    public var firstYear       : Int // au 31 décembre
+    /// Année d'ouverture (au 1er janvier)
+    public var firstYear       : Int
+    /// Année de liquidation (au 31 décembre: dernière année de possession)
+    public var lastYear        : Int
+    /// Valeur initiale de l'investissement au moment de sa création (1er versement)
     public var initialValue    : Double = 0.0
     /// Portion of interests included in the initialValue
     public var initialInterest : Double = 0.0
-    /// Date de liquidation
-    public var lastYear        : Int // au 31 décembre
     /// Type de taux de rendement
-    public var interestRateType       : InterestRateKind // type de taux de rendement
-    public var averageInterestRate: Double {// % avant charges sociales si prélevées à la source annuellement
+    public var interestRateType : InterestRateKind
+    /// Taux de rendement en % avant charges sociales si prélevées à la source annuellement
+    public var averageInterestRate: Double {
         switch interestRateType {
             case .contractualRate( let fixedRate):
                 // taux contractuel fixe
@@ -232,7 +237,10 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     }
     
     // MARK: - Methods
-    
+
+    /// True si l'investissement est ouvert aux dépôt pendant l'année.
+    /// - Note: Les première et dernière années sont inclues
+    ///
     public func isOpen(in year: Int) -> Bool {
         (firstYear...lastYear).contains(year)
     }
@@ -244,7 +252,7 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
                               initialInvestment : initialValue - initialInterest)
     }
     
-    /// Versement annuel, frais de versement inclus
+    /// Versement annuel, frais de versement inclus.
     /// - Parameter year: année
     /// - Returns: versement, frais de versement inclus
     /// - Note: Les première et dernière années sont inclues
@@ -261,10 +269,17 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     }
     
     /// Valeur capitalisée à la date spécifiée (nette d'inflation annuelle)
+    ///
+    /// La valeur du bien est calculée à partir de la dernière valeur de connue, revalorisé annuellement de:
+    ///  - des intérêts captiatlisée depuis la fin de l'année de la date de la dernière évaluation;
+    ///  - des versements réalisés depuis la fin de l'année de la date de la dernière évaluation;
+    ///  - De plus elle est **déflatée** en valeur car sa valeur intrinsèque ne suit pas l'inflation.
+    ///
     /// - Parameter year: fin de l'année
-    /// - Note:
-    ///   - Le taux d'inétrêt est NET d'inflation
-    ///   - Les première et dernière années sont inclues
+    ///
+    /// - Note: Le taux d'inétrêt est NET d'inflation.
+    ///         Les première et dernière années sont inclues.
+    ///
     public func value(atEndOf year: Int) -> Double {
         guard (firstYear...lastYear).contains(year) else {
             return 0.0
@@ -282,9 +297,9 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     
     /// Valeur capitalisée à la date spécifiée (sans tenir compte de l'inflation annuelle)
     /// - Parameter year: fin de l'année
-    /// - Note:
-    ///   - Le taux d'inétrêt est BRUT d'inflation
-    ///   - Les première et dernière années sont inclues
+    /// - Note: Le taux d'inétrêt est BRUT d'inflation.
+    ///         Les première et dernière années sont inclues
+    ///
     private func fiscalValue(atEndOf year: Int) -> Double {
         guard (firstYear...lastYear).contains(year) else {
             return 0.0
@@ -309,6 +324,7 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     /// - Returns: valeur du bien possédée (part d'usufruit + part de nue-prop)
     /// - Warning: les assurance vie ne sont pas inclues car hors succession
     /// - Note: Les première et dernière années sont inclues
+    ///
     public func ownedValue(by ownerName      : String,
                            atEndOf year      : Int,
                            evaluationContext : EvaluationContext) -> Double {
@@ -363,9 +379,8 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
     
     /// Intérêts capitalisés à la date spécifiée (net d'inflation annuelle)
     /// - Parameter year: fin de l'année
-    /// - Note:
-    ///   - Les première et dernière années sont inclues
-    ///   - Le taux d'inétrêt est NET d'inflation
+    /// - Note: Les première et dernière années sont inclues.  Le taux d'inétrêt est NET d'inflation.
+    ///
     public func cumulatedInterestsNetOfInflation(atEndOf year: Int) -> Double {
         guard (firstYear...lastYear).contains(year) else {
             return 0.0

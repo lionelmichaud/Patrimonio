@@ -18,9 +18,11 @@ public struct DateRangeView: View {
     public var body: some View {
         HStack {
             Text(fromLabel)
+            Spacer()
             Text("\(fromDate.stringLongDate)")
             Spacer()
             Text(toLabel)
+            Spacer()
             Text("\(toDate.stringLongDate)")
         }
     }
@@ -55,19 +57,31 @@ public struct DateRangeEditView: View {
                            in                  : `in`!.lowerBound...`in`!.upperBound,
                            displayedComponents : .date,
                            label               : { Text(fromLabel) })
+                .if(fromDate > toDate) {
+                    $0.foregroundColor(.red)
+                }
 
                 DatePicker(selection           : $toDate,
                            in                  : max(fromDate, `in`!.lowerBound)...Date.distantFuture,
                            displayedComponents : .date,
                            label               : { Text(toLabel) })
+                .if(fromDate > toDate) {
+                    $0.foregroundColor(.red)
+                }
             } else {
                 DatePicker(selection           : $fromDate,
                            displayedComponents : .date,
                            label               : { Text(fromLabel) })
+                .if(fromDate > toDate) {
+                    $0.foregroundColor(.red)
+                }
 
                 DatePicker(selection           : $toDate,
                            displayedComponents : .date,
                            label               : { Text(toLabel) })
+                .if(fromDate > toDate) {
+                    $0.foregroundColor(.red)
+                }
             }
         }
     }

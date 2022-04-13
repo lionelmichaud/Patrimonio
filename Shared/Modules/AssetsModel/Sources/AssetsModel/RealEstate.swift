@@ -16,7 +16,9 @@ import DateBoundary
 public typealias RealEstateArray = ArrayOfNameableValuable<RealEstateAsset>
 
 // MARK: - Actif immobilier physique
-// conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
+
+/// Bien immobilier physique. Habitable, louable et vendable.
+/// Conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
 public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP {
     
     // MARK: - Static Properties
@@ -58,17 +60,19 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
     public var liquidityLevel : LiquidityLevel? {
         .low
     }
-    /// Type de l'investissement
     // achat
-    public var buyingYear           : DateBoundary = DateBoundary.empty // première année de possession (inclue)
+    /// Années d'achat: première année de possession (inclue)
+    public var buyingYear           : DateBoundary = DateBoundary.empty
     public var buyingPrice          : Double = 0.0
     public var yearlyTaxeHabitation : Double = 0.0
     public var yearlyTaxeFonciere   : Double = 0.0
-    // valeur vénale estimée courante
+    /// Valeur vénale estimée courante
     public var estimatedValue       : Double = 0.0
     // vente
     public var willBeSold              : Bool   = false
-    public var sellingYear             : DateBoundary = DateBoundary.empty // dernière année de possession (inclue)
+    /// Dernière année de possession (inclue) avant la vente
+    public var sellingYear             : DateBoundary = DateBoundary.empty
+    /// prix de vente net vendeur
     public var sellingNetPrice         : Double = 0.0
     public var sellingPriceAfterTaxes  : Double {
         guard willBeSold else { return 0 }
@@ -104,7 +108,7 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
     public var yearlyRentSocialTaxes   : Double {
         return RealEstateAsset.fiscalModel.financialRevenuTaxes.socialTaxes(yearlyRentAfterCharges)
     }
-    // profitabilité nette de charges (frais agence, taxe foncière et assurance)
+    /// Profitabilité locative nette de charges (frais agence, taxe foncière et assurance)
     public var profitability           : Double {
         return yearlyRentAfterCharges / (estimatedValue == 0 ? buyingPrice : estimatedValue)
     }
@@ -332,6 +336,7 @@ public struct RealEstateAsset: Identifiable, JsonCodableToBundleP, OwnableP, Quo
     
     /// True si le bien est en possession au moins un jour pendant l'année demandée
     /// - Parameter year: année
+    /// - Note: Les années d'achat et de vente sont inclues.
     public func isOwned(during year: Int) -> Bool {
         guard let buyingDate = buyingYear.year else {
             return false

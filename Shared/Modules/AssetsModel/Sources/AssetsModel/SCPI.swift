@@ -87,7 +87,8 @@ public typealias ScpiArray = ArrayOfNameableValuable<SCPI>
 
 // MARK: - SCPI à revenus périodiques, annuels et fixes
 
-// conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
+/// Investissement en parts de SCPI
+/// Conformité à JsonCodableToBundleP nécessaire pour les TU; sinon Codable suffit
 public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, ValidableP {
     
     // MARK: - Nested Types
@@ -229,9 +230,10 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, Val
     
     /// Valeur de vente du bien estimé à la fin de l'année `year`.
     ///
-    /// La valeur du bien est calculée à partir de la dernière valeur de marché connue, revalorisé annuellement de `revaluatRate` %
+    /// La valeur du bien est calculée à partir de:
+    ///  - la dernière valeur de marché connue, revalorisé annuellement de `revaluatRate` %
     /// depuis la fin de l'année de la date d'évaluation de la valeur de marché.
-    /// De plus il est **déflaté** en valeur car sa valeur intrinsèque ne suit pas forcément l'inflation.
+    ///  - de plus ele est **déflatée** en valeur car sa valeur intrinsèque ne suit pas forcément l'inflation.
     ///
     /// La valeur du bien est décrémentée de la commission d'achat (frais d'acquisition).
     ///
@@ -241,6 +243,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, Val
     ///
     /// - Parameter year: fin de l'année
     /// - Returns: Valeur actualisé du bien, déflatée de l'inflation, et commission d'achat (frais d'acquisition)  déduite.
+    ///
     public func value(atEndOf year: Int) -> Double {
         if isOwned(during: year) {
             return marketValue(atEndOf: year) * (1.0 - SCPI.saleCommission / 100.0)
@@ -269,6 +272,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, Val
     ///   - revenue: revenus inscrit en compte courant avant prélèvements sociaux et IRPP mais net d'inflation
     ///   - taxableIrpp: part des revenus inscrit en compte courant imposable à l'IRPP (après charges sociales)
     ///   - socialTaxes: charges sociales
+    ///
     public func yearlyRevenueIRPP(during year: Int)
     -> (revenue    : Double,
         taxableIrpp: Double,
@@ -289,6 +293,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, Val
     /// - Parameters:
     ///   - year: durant l'année
     /// - Returns: revenus inscrit en compte courant avant IS mais net d'inflation
+    ///
     public func yearlyRevenueIS(during year: Int) -> Double {
         isOwned(during: year) ? marketValue(atEndOf: year - 1) * lastKnownState.interestRate / 100.0 : 0.0
     }
@@ -304,6 +309,8 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, Val
     
     /// True si le bien est en possession au moins un jour pendant l'année demandée
     /// - Parameter year: année
+    /// - Note: La première est inclue. L'année de la vente est inclue.
+    ///
     func isOwned(during year: Int) -> Bool {
         if isSold(before: year) {
             // le bien est vendu
@@ -325,6 +332,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, Val
     ///   - `socialTaxes`: charges sociales payées sur sur la plus-value
     ///   - `irpp`: impôt sur le revenu dû sur la plus-value
     ///   - `netRevenue`: produit de la vente net de charges sociales `socialTaxes` et d'impôt sur la plus-value `irpp`
+    ///
     public func liquidatedValueIRPP (_ year: Int)
     -> (revenue    : Double,
         capitalGain: Double,
@@ -368,6 +376,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, Val
     ///   - `capitalGain`: plus-value réalisée lors de la vente
     ///   - `IS`: IS dû sur sur la plus-value
     ///   - `netRevenue`: produit de la vente net d'`IS` sur la plus-value
+    ///
     public func liquidatedValueIS (_ year: Int)
     -> (revenue    : Double,
         capitalGain: Double,
