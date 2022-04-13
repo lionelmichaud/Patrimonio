@@ -17,7 +17,29 @@ struct FreeInvestDetailedView: View {
     let updateDependenciesToModel : () -> Void
     @Transac var item : FreeInvestement
 
-    @State private var totalValue : Double = 0.0
+    private var totalValue : Binding<Double> {
+        Binding(
+            get: {
+                item.lastKnownState.value
+            },
+            set: {
+                // ajuster le montant de l'investissement en conséquence
+                item.lastKnownState.investment = $0 - item.lastKnownState.interest
+            }
+        )
+    }
+    private var interests : Binding<Double> {
+        Binding(
+            get: {
+                item.lastKnownState.interest
+            },
+            set: {
+                // ajuster le montant de l'investissement en conséquence
+                item.lastKnownState.investment = item.lastKnownState.value - $0
+                item.lastKnownState.interest = $0
+            }
+        )
+    }
 
     var body: some View {
         Form {
@@ -42,17 +64,11 @@ struct FreeInvestDetailedView: View {
                 YearPicker(title    : "Année d'actualisation",
                            inRange  : CalendarCst.thisYear - 20...CalendarCst.thisYear + 100,
                            selection: $item.lastKnownState.year)
-                AmountEditView(label    : "Valeure actualisée",
-                               amount   : $totalValue,
+                AmountEditView(label    : "Valeure totale actualisée",
+                               amount   : totalValue,
                                validity : .poz)
-                    .onChange(of: totalValue) { newValue in
-                        item.lastKnownState.investment = newValue - item.lastKnownState.interest
-                    }
                 AmountEditView(label: "dont plus-values",
-                               amount: $item.lastKnownState.interest)
-                    .onChange(of: item.lastKnownState.interest) { newValue in
-                        item.lastKnownState.investment = totalValue - newValue
-                    }
+                               amount: interests)
             } header: {
                 Text("INITIALISATION")
             }
