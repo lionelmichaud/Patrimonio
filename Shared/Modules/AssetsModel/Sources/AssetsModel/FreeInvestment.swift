@@ -36,9 +36,12 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
     /// Situation annuelle de l'investissement
     public struct State: Codable, Equatable {
         public var year       : Int = 0
-        public var interest   : Double = 0 // portion of interests included in the Value
-        public var investment : Double = 0 // portion of investment included in the Value
-        public var value      : Double { interest + investment } // valeur totale
+        /// Portion of interests included in the Value
+        public var interest   : Double = 0
+        /// Portion of investment included in the Value
+        public var investment : Double = 0
+        /// Valeur totale = interest + investment
+        public var value      : Double { interest + investment }
     }
     
     enum CodingKeys: CodingKey {
