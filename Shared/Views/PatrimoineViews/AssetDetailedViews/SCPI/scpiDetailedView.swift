@@ -30,10 +30,14 @@ struct ScpiDetailedView: View {
             /// Acquisition
             Section {
                 Group {
-                    DateRangeView(fromLabel : "Dates d'acquisition entre le",
-                                  fromDate  : item.earliestBuyingDate,
-                                  toLabel   : "et le",
-                                  toDate    : item.latestBuyingDate)
+                    if item.earliestBuyingDate == item.latestBuyingDate {
+                        DateView(label: "Date d'acquisition", date: item.earliestBuyingDate)
+                    } else {
+                        DateRangeView(fromLabel : "Dates d'acquisition entre le",
+                                      fromDate  : item.earliestBuyingDate,
+                                      toLabel   : "et le",
+                                      toDate    : item.latestBuyingDate)
+                    }
                     IntegerView(label   : "Nombre de parts",
                                 integer : item.transactionHistory.totalQuantity)
                     AmountView(label  : "Valeur moyenne d'acquisition",
@@ -70,6 +74,16 @@ struct ScpiDetailedView: View {
             OwnershipView(ownership  : $item.ownership,
                           totalValue : item.value(atEndOf : CalendarCst.thisYear))
             
+            /// Valeur de marché
+            Section {
+                DatePicker("Date d'évaluation", selection: $item.lastKnownState.date)
+                AmountEditView(label    : "Valeur de marché unitaire",
+                               amount   : $item.lastKnownState.unitPrice,
+                               validity : .poz)
+            } header: {
+                Text("VALEUR DE MARCHÉ")
+            }
+
             /// Rendement
             Section {
                 PercentEditView(label    : "Taux de rendement annuel brut",
