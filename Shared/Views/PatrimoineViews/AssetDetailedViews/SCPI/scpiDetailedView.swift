@@ -76,7 +76,9 @@ struct ScpiDetailedView: View {
             
             /// Valeur de marché
             Section {
-                DatePicker("Date d'évaluation", selection: $item.lastKnownState.date)
+                DatePicker("Date d'évaluation",
+                           selection: $item.lastKnownState.date,
+                           displayedComponents: [.date])
                 AmountEditView(label    : "Valeur de marché unitaire",
                                amount   : $item.lastKnownState.unitPrice,
                                validity : .poz)
