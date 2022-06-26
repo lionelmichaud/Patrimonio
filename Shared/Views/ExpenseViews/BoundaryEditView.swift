@@ -191,7 +191,7 @@ struct BoundaryEditView: View {
                     }
                     /// afficher la date résultante
                     if let boundaryYear = self.boundaryYear {
-                        IntegerView(label: "\(label) (année inclue)", integer: boundaryYear).foregroundColor(.secondary)
+                        IntegerView(label: "\(label)", integer: boundaryYear).foregroundColor(.secondary)
                     } else {
                         Text("Choisir un événement et la personne ou le groupe associé")
                             .foregroundColor(.red)

@@ -35,7 +35,7 @@
             {
                 "fixedYear": 2005
             },
-            "buyingPrice"             : 135000,
+            "buyingPrice"             : 113000,
             "yearlyTaxeFonciere"      : 650,
             
             "willBeInhabited"         : false,
@@ -63,7 +63,7 @@
             "willBeSold"              : true,
             "sellingYear"             :
             {
-                "fixedYear": 2022
+                "fixedYear": 2021
             },
             "sellingNetPrice"         : 160000,
             

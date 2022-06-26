@@ -12,8 +12,8 @@ import Ownership
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.FreeInvestement.remove")
 
 extension FreeInvestement {
-    func withdrawal(netAmount        : Double,
-                    maxPermitedValue : Double)
+    public func withdrawal(netAmount        : Double,
+                           maxPermitedValue : Double)
     -> (brutAmount       : Double,
         brutAmountSplit  : (investment: Double, interest: Double),
         revenue          : Double,

@@ -68,7 +68,7 @@ struct FreeInvestDetailedView: View {
                                amount   : totalValue,
                                validity : .poz)
                 AmountEditView(label: "dont plus-values",
-                               amount: interests)
+                               amount: interests).padding(.leading)
             } header: {
                 Text("VALEUR ACTUALISÉE")
             }
@@ -80,6 +80,15 @@ struct FreeInvestDetailedView: View {
                     .foregroundColor(.secondary)
             } header: {
                 Text("RENTABILITE")
+            }
+
+            Section {
+                NavigationLink(destination: SimulationRachatView(item: item)) {
+                    Text("Rachat")
+                }
+                .isDetailLink(true)
+            } header: {
+                Text("SIMULATION DE RACHAT")
             }
         }
         .textFieldStyle(.roundedBorder)

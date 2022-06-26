@@ -1,35 +1,11 @@
 {
     "items" : [
         {
-            "id" : "562EE2A1-4FF5-450D-7BAE-3E8B803928D0",
-            "value" : 2880,
-            "proportional" : false,
-            "name" : "Argent de poche",
-            "note" : "Actualisé le 16/02/2021\n120€/mois/enfant",
-            "timeSpan" : {
-                "spanning": {
-                    "from" : {
-                        "fixedYear" : 0,
-                        "event" : "Début des études supérieurs",
-                        "group" : "Tous les Enfants",
-                        "order" : "Date au plus tôt"
-                    },
-                    "to" : {
-                        "fixedYear" : 0,
-                        "event" : "Indépendance financière",
-                        "group" : "Tous les Enfants",
-                        "order" : "Date au plus tard",
-                    }
-                }
-            }
-        },
-        
-        {
             "id" : "562EE2A1-4FF5-450D-7BAE-3E8B803928D1",
             "value" : 1870,
             "proportional" : false,
-            "name" : "Etudes Lycée+CP Lou-Ann (formation, fournitures...)",
-            "note" : "Actualisé le 16/02/2021\nJusqu'à l'entrée dans l'ensignement supérieur",
+            "name" : "Etudes Lycée Lou-Ann (scolarité, fournitures...)",
+            "note" : "Actualisé le 26/06/2022\nJusqu'à l'entrée dans l'ensignement supérieur",
             "timeSpan" : {
                 "ending" : {
                     "to" : {
@@ -41,13 +17,12 @@
                 }
             }
         },
-        
         {
             "id" : "562EE2A1-4FF5-450D-7BAE-3E8B803928D3",
-            "value" : 12000,
+            "value" : 1100,
             "proportional" : false,
-            "name" : "Etudes Université Lou-Ann (formation, fournitures...)",
-            "note" : "Actualisé le 16/02/2021",
+            "name" : "Etudes sup. Lou-Ann (scolarité, fournitures...)",
+            "note" : "Actualisé le 26/06/2021\n600€/ an pour l'UTC + 500€ de fournitures",
             "timeSpan" : {
                 "spanning": {
                     "from" : {
@@ -65,17 +40,19 @@
                 }
             }
         },
-        
         {
-            "id" : "562EE2A1-4FF5-450D-7BAE-3E8B803928D5",
-            "value" : 6400,
+            "id" : "562EE2A1-4FF5-450D-7BAE-3E8B803928D0",
+            "value" : 1800,
             "proportional" : false,
-            "name" : "Pension post-bac Lou-Ann",
-            "note" : "Actualisé le 16/02/2021\n Loyer studio 500€/mois\nEau, Gaz & Electricité 400€/an\nNourriture 10€/jour",
+            "name" : "Argent de poche études sup. Lou-Ann",
+            "note" : "Actualisé le 26/06/2022\n150€/mois/enfant",
             "timeSpan" : {
                 "spanning": {
                     "from" : {
-                        "fixedYear" : 2023
+                        "fixedYear" : 0,
+                        "event"     : "Début des études supérieurs",
+                        "group"     : null,
+                        "name"      : "Mme. Lou-Ann MICHAUD"
                     },
                     "to" : {
                         "fixedYear" : 0,
@@ -86,12 +63,35 @@
                 }
             }
         },
-        
+        {
+            "id" : "562EE2A1-4FF5-450D-7BAE-3E8B803928D5",
+            "value" : 6000,
+            "proportional" : false,
+            "name" : "Pension études sup. Lou-Ann",
+            "note" : "Actualisé le 26/06/2021\n Loyer studio 500€/mois\nEau, Gaz & Electricité 0€/an\nNourriture comptée dans le budget nourriture de la famille",
+            "timeSpan" : {
+                "spanning": {
+                    "from" : {
+                        "fixedYear" : 0,
+                        "event"     : "Début des études supérieurs",
+                        "group"     : null,
+                        "name"      : "Mme. Lou-Ann MICHAUD"
+                    },
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Indépendance financière",
+                        "group"     : null,
+                        "name"      : "Mme. Lou-Ann MICHAUD"
+                    }
+                }
+            }
+        },
+
         {
             "id" : "562EE2A1-4FF5-450D-7BAE-3E8B803928D2",
             "value" : 1870,
             "proportional" : false,
-            "name" : "Etudes Lycée+CP Arthur (formation, fournitures...)",
+            "name" : "Etudes Lycée+CP Arthur (scolarité, fournitures...)",
             "note" : "Actualisé le 16/02/2021\nJusqu'à l'entrée dans l'ensignement supérieur",
             "timeSpan" : {
                 "ending" : {
@@ -104,12 +104,11 @@
                 }
             }
         },
-        
         {
             "id" : "562EE2A1-4FF5-450D-7BAE-3E8B803928D4",
-            "value" : 12000,
+            "value" : 6000,
             "proportional" : false,
-            "name" : "Etudes Université Arthur (formation, fournitures...)",
+            "name" : "Etudes sup. Arthur (scolarité, fournitures...)",
             "note" : "Actualisé le 16/02/2021",
             "timeSpan" : {
                 "spanning": {
@@ -128,17 +127,19 @@
                 }
             }
         },
-        
         {
-            "id" : "562EE2A1-4FF5-450D-7BAE-3E8B803928D6",
-            "value" : 6400,
+            "id" : "562EE2A1-4FF5-450D-7BAE-3E8B803928D0",
+            "value" : 1800,
             "proportional" : false,
-            "name" : "Pension post-bac Arthur",
-            "note" : "Actualisé le 16/02/2021\nLoyer studio 500€/mois\nEau, Gaz & Electricité 400€/an\nNourriture comptée dans Dépense de Vie",
+            "name" : "Argent de poche études sup. Arthur",
+            "note" : "Actualisé le 26/06/2022\n150€/mois/enfant",
             "timeSpan" : {
                 "spanning": {
                     "from" : {
-                        "fixedYear" : 2024
+                        "fixedYear" : 0,
+                        "event"     : "Début des études supérieurs",
+                        "group"     : null,
+                        "name"      : "M. Arthur MICHAUD"
                     },
                     "to" : {
                         "fixedYear" : 0,
@@ -149,26 +150,25 @@
                 }
             }
         },
-        
         {
-            "id" : "562EE2A1-4FF5-450D-7BAE-3E8B803928D7",
-            "value" : 0,
+            "id" : "562EE2A1-4FF5-450D-7BAE-3E8B803928D6",
+            "value" : 6000,
             "proportional" : false,
-            "name" : "Education & Famille - Autres",
-            "note" : "Actualisé le 16/02/2021",
+            "name" : "Pension études sup. Arthur",
+            "note" : "Actualisé le 26/06/2021\n Loyer studio 500€/mois\nEau, Gaz & Electricité 0€/an\nNourriture comptée dans le budget nourriture de la famille",
             "timeSpan" : {
                 "spanning": {
                     "from" : {
                         "fixedYear" : 0,
-                        "event" : "Début des études supérieurs",
-                        "group" : "Tous les Enfants",
-                        "order" : "Date au plus tôt"
+                        "event"     : "Début des études supérieurs",
+                        "group"     : null,
+                        "name"      : "M. Arthur MICHAUD"
                     },
                     "to" : {
                         "fixedYear" : 0,
-                        "event" : "Indépendance financière",
-                        "group" : "Tous les Enfants",
-                        "order" : "Date au plus tard",
+                        "event"     : "Indépendance financière",
+                        "group"     : null,
+                        "name"      : "M. Arthur MICHAUD"
                     }
                 }
             }

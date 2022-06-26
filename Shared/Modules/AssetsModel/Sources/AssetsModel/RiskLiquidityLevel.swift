@@ -73,7 +73,7 @@ let liquidityScale = DiscreteScale(scale       : [0.0, 33.3, 66.6],
 // MARK: - Protocol d'évaluation des niveaux de risque & liquidité
 
 public typealias QuotableP = RiskQuotableP & LiquidityQuotableP
-public typealias QuotableNameableValuableP = QuotableP & NameableValuableP & OwnableP
+public typealias QuotableNameableValuableP = QuotableP & OwnableP
 
 // MARK: - Extensions de Array
 

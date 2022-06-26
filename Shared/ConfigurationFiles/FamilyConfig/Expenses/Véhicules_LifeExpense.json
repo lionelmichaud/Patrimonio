@@ -86,9 +86,9 @@
             "value" : 15000,
             "proportional" : false,
             "name" : "Achat véh Lou-Ann",
-            "note" : "Actualisé le 16/02/2021",
+            "note" : "Actualisé le 26/06/2022",
             "timeSpan" : {
-                "exceptional": { "inYear" : 2023 }
+                "exceptional": { "inYear" : 2025 }
             }
         },
         
@@ -97,9 +97,9 @@
             "value" : 15000,
             "proportional" : false,
             "name" : "Achat véh Arthur",
-            "note" : "Actualisé le 16/02/2021",
+            "note" : "Actualisé le 26/06/2022",
             "timeSpan" : {
-                "exceptional": { "inYear" : 2024 }
+                "exceptional": { "inYear" : 2026 }
             }
         },
         
@@ -146,15 +146,15 @@
             "value" : 1200,
             "proportional" : false,
             "name" : "Assurances véh Enfants",
-            "note" : "Actualisé le 16/02/2021",
+            "note" : "Actualisé le 26/06/2022",
             "timeSpan" : {
                 "spanning": {
                     "from" :
                     {
-                        "fixedYear": 0,
-                        "event"    : "Début des études supérieurs",
-                        "group"    : "Tous les Enfants",
-                        "order"    : "Date au plus tard"
+                        "fixedYear": 2025,
+                        "event"    : null,
+                        "group"    : null,
+                        "name"     : ""
                     },
                     "to" :
                     {
@@ -188,10 +188,10 @@
         
         {
             "id" : "15325B0E-331D-481F-9C34-57C088289756",
-            "value" : 350,
+            "value" : 450,
             "proportional" : false,
             "name" : "Entretien, réparation",
-            "note" : "Actualisé le 16/02/2021",
+            "note" : "Actualisé le 26/06/2022",
             "timeSpan" : {
                 "ending" : {
                     "to" :

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -397,6 +397,8 @@
 		797E57DA27DF8F7B00C9F02F /* SimulationAndVisitors in Frameworks */ = {isa = PBXBuildFile; productRef = 797E57D927DF8F7B00C9F02F /* SimulationAndVisitors */; };
 		797E95B126BACBFB000E1070 /* Succession in Frameworks */ = {isa = PBXBuildFile; productRef = 797E95B026BACBFB000E1070 /* Succession */; };
 		797E95B326BACC09000E1070 /* Succession in Frameworks */ = {isa = PBXBuildFile; productRef = 797E95B226BACC09000E1070 /* Succession */; };
+		7986E7E6282929270011FF21 /* ConfirmationDialogs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7986E7E5282929270011FF21 /* ConfirmationDialogs.swift */; };
+		7986E7E7282929270011FF21 /* ConfirmationDialogs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7986E7E5282929270011FF21 /* ConfirmationDialogs.swift */; };
 		7988A96326E178E600E00861 /* SimulationLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 7988A96226E178E600E00861 /* SimulationLogger */; };
 		7988A96526E1790800E00861 /* SimulationLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 7988A96426E1790800E00861 /* SimulationLogger */; };
 		798C236527F611F20079916A /* DebtSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798C236427F611F20079916A /* DebtSidebarView.swift */; };
@@ -486,6 +488,8 @@
 		79D4F1A127DE924200C5637D /* ChartsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 79D4F1A027DE924200C5637D /* ChartsExtensions */; };
 		79E713EC262C9886000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713EB262C9886000FD625 /* EconomyModel */; };
 		79E713EE262C9891000FD625 /* EconomyModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79E713ED262C9891000FD625 /* EconomyModel */; };
+		79E74E91280752700024E985 /* SimulationRachatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E74E90280752700024E985 /* SimulationRachatView.swift */; };
+		79E74E92280752700024E985 /* SimulationRachatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E74E90280752700024E985 /* SimulationRachatView.swift */; };
 		79E78C78274967F000A8A1C3 /* KPI.json in Resources */ = {isa = PBXBuildFile; fileRef = 79E78C77274967F000A8A1C3 /* KPI.json */; };
 		79E78C79274967F000A8A1C3 /* KPI.json in Resources */ = {isa = PBXBuildFile; fileRef = 79E78C77274967F000A8A1C3 /* KPI.json */; };
 		79E842F82764E367005A0C41 /* TestEnvir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E842F72764E367005A0C41 /* TestEnvir.swift */; };
@@ -739,6 +743,7 @@
 		7968402326B8999000F838BE /* PensionTaxesModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PensionTaxesModel.json; sourceTree = "<group>"; };
 		79735EE8263242FA00CD952F /* AppMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppMain.swift; sourceTree = "<group>"; };
 		79735EE9263242FA00CD952F /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7986E7E5282929270011FF21 /* ConfirmationDialogs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationDialogs.swift; sourceTree = "<group>"; };
 		798C236427F611F20079916A /* DebtSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebtSidebarView.swift; sourceTree = "<group>"; };
 		798C236727F612860079916A /* LoanSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoanSidebarView.swift; sourceTree = "<group>"; };
 		798E7839264209AD0094534F /* bell.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bell.wav; sourceTree = "<group>"; };
@@ -775,6 +780,7 @@
 		79AB5410263241CF00FADBA7 /* AppVersion.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AppVersion.json; sourceTree = "<group>"; };
 		79B2728B2634DBEB00298E5D /* AppThemes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppThemes.swift; sourceTree = "<group>"; };
 		79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = MonteCarlo.csv; sourceTree = "<group>"; };
+		79E74E90280752700024E985 /* SimulationRachatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationRachatView.swift; sourceTree = "<group>"; };
 		79E78C77274967F000A8A1C3 /* KPI.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = KPI.json; sourceTree = "<group>"; };
 		79E842F72764E367005A0C41 /* TestEnvir.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEnvir.swift; sourceTree = "<group>"; };
 		79EC5E702640037400FF8263 /* DependencyInjector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyInjector.swift; sourceTree = "<group>"; };
@@ -1202,6 +1208,7 @@
 				7935BC3627DF660F0079F39C /* TableView.swift */,
 				7935BC3727DF660F0079F39C /* GridView.swift */,
 				7935BC3827DF660F0079F39C /* LabelValueHelperViews.swift */,
+				7986E7E5282929270011FF21 /* ConfirmationDialogs.swift */,
 			);
 			path = ApplicationHelpersView;
 			sourceTree = "<group>";
@@ -1645,6 +1652,7 @@
 			children = (
 				79EC914A27F7BDE1002C4F72 /* FreeInvestSidebarView.swift */,
 				7935BC2627DF660F0079F39C /* FreeInvestDetailedView.swift */,
+				79E74E90280752700024E985 /* SimulationRachatView.swift */,
 			);
 			path = FreeInvestment;
 			sourceTree = "<group>";
@@ -1686,7 +1694,7 @@
 				7920DC4D262C700500536B03 /* Sources */,
 				7920DC4E262C700500536B03 /* Frameworks */,
 				7920DC4F262C700500536B03 /* Resources */,
-				7998E1D4262DC81A00DA4A12 /* ShellScript */,
+				7998E1D4262DC81A00DA4A12 /* Run Swiftlint */,
 			);
 			buildRules = (
 			);
@@ -1831,7 +1839,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1400;
 				TargetAttributes = {
 					7920DC50262C700500536B03 = {
 						CreatedOnToolsVersion = 12.4;
@@ -2007,8 +2015,9 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7998E1D4262DC81A00DA4A12 /* ShellScript */ = {
+		7998E1D4262DC81A00DA4A12 /* Run Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -2016,6 +2025,7 @@
 			);
 			inputPaths = (
 			);
+			name = "Run Swiftlint";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -2026,6 +2036,7 @@
 		};
 		7998E1D5262DC83300DA4A12 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -2096,6 +2107,7 @@
 				79EC5E712640037400FF8263 /* DependencyInjector.swift in Sources */,
 				7935BD1127DF66100079F39C /* TypeInvestEditView.swift in Sources */,
 				7935BD0127DF66100079F39C /* BarChartTemplateView.swift in Sources */,
+				79E74E91280752700024E985 /* SimulationRachatView.swift in Sources */,
 				7935BD3F27DF66100079F39C /* PersonAddView.swift in Sources */,
 				79FC573F27F72EA90057A91C /* ScpiSidebarView.swift in Sources */,
 				7935BCCD27DF66100079F39C /* ModelRetirementReversionView.swift in Sources */,
@@ -2156,6 +2168,7 @@
 				7935BD2D27DF66100079F39C /* OwnersListView.swift in Sources */,
 				798C236527F611F20079916A /* DebtSidebarView.swift in Sources */,
 				7935BC9327DF66100079F39C /* ModelDeterministicSociologyView.swift in Sources */,
+				7986E7E6282929270011FF21 /* ConfirmationDialogs.swift in Sources */,
 				7935BD3927DF66100079F39C /* RetirementDetailView.swift in Sources */,
 				7935BD2327DF66100079F39C /* PatrimoineSummaryView.swift in Sources */,
 				79A4624627F66E8B008B3157 /* RealEstateSidebarView.swift in Sources */,
@@ -2272,6 +2285,7 @@
 				7935BD2C27DF66100079F39C /* LoanDetailedView.swift in Sources */,
 				7935BD1027DF66100079F39C /* AssetSidebarView.swift in Sources */,
 				7935BCEE27DF66100079F39C /* StatisticSidebarSectionView.swift in Sources */,
+				79E74E92280752700024E985 /* SimulationRachatView.swift in Sources */,
 				7935BD4C27DF66100079F39C /* UnemployementDetailView.swift in Sources */,
 				79FC574027F72EA90057A91C /* ScpiSidebarView.swift in Sources */,
 				7935BD3C27DF66100079F39C /* RetirementEditView.swift in Sources */,
@@ -2332,6 +2346,7 @@
 				7935BCEC27DF66100079F39C /* DiscreteRandomizerEditView.swift in Sources */,
 				798C236627F611F20079916A /* DebtSidebarView.swift in Sources */,
 				7935BDA827DF66100079F39C /* IrppSliceView.swift in Sources */,
+				7986E7E7282929270011FF21 /* ConfirmationDialogs.swift in Sources */,
 				7935BDAA27DF66100079F39C /* IrppEvolutionChartView.swift in Sources */,
 				7935BD7827DF66100079F39C /* GridsView.swift in Sources */,
 				79A4624727F66E8B008B3157 /* RealEstateSidebarView.swift in Sources */,
@@ -2467,6 +2482,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -2528,6 +2544,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2607,6 +2624,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 8N9S268396;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -2634,6 +2652,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 8N9S268396;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -2704,6 +2723,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 8N9S268396;
 				INFOPLIST_FILE = "Tests macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2726,6 +2746,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 8N9S268396;
 				INFOPLIST_FILE = "Tests macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (

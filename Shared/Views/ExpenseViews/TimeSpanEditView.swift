@@ -130,29 +130,29 @@ struct TimeSpanEditView: View {
 
                 case TimeSpan.ending(to: DateBoundary.empty).id :
                     // TimeSpan = .ending
-                    BoundaryEditView2(label    : "Fin (exclue)",
+                    BoundaryEditView2(label    : "Fin (année exclue)",
                                       boundary : timeSpanVM.to)
 
                 case TimeSpan.starting(from: DateBoundary.empty).id :
                     // TimeSpan = .starting
-                    BoundaryEditView2(label    : "Début",
+                    BoundaryEditView2(label    : "Début (année inclue)",
                                       boundary : timeSpanVM.from)
 
                 case TimeSpan.spanning(from: DateBoundary.empty,
                                        to: DateBoundary.empty).id :
                     // TimeSpan = .spanning
-                    BoundaryEditView2(label    : "Début",
+                    BoundaryEditView2(label    : "Début (année inclue)",
                                       boundary : timeSpanVM.from)
-                    BoundaryEditView2(label    : "Fin (exclue)",
+                    BoundaryEditView2(label    : "Fin (année exclue)",
                                       boundary : timeSpanVM.to)
 
                 case TimeSpan.periodic(from: DateBoundary.empty,
                                        period: 1,
                                        to: DateBoundary.empty).id :
                     // TimeSpan = .periodic
-                    BoundaryEditView2(label    : "Début",
+                    BoundaryEditView2(label    : "Début (année inclue)",
                                       boundary : timeSpanVM.from)
-                    BoundaryEditView2(label     : "Fin (exclue)",
+                    BoundaryEditView2(label     : "Fin (année exclue)",
                                       boundary : timeSpanVM.to)
                     Section {
                         Stepper(value: timeSpanVM.period, in: 0...100, step: 1, label: {

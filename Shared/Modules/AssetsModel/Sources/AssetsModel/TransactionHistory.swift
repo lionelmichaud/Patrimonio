@@ -76,4 +76,3 @@ public struct TransactionOrder: Identifiable, Codable, Equatable, ValidableP {
         self.date      = date
     }
 }
-
