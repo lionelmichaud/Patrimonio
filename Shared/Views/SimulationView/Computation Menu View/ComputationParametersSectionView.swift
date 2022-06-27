@@ -64,7 +64,7 @@ struct ComputationParametersSectionView : View {
                         HStack {
                             Text("Nombre de run: ") + Text(String(Int(uiState.computationState.nbRuns)))
                             Slider(value : $uiState.computationState.nbRuns,
-                                   in    : 100 ... 1000,
+                                   in    : 10 ... 1000,
                                    step  : 100,
                                    onEditingChanged: {_ in
                                    })

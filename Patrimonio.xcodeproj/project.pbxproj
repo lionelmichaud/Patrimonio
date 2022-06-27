@@ -414,6 +414,8 @@
 		799074242660524200F224F7 /* FileAndFolder in Frameworks */ = {isa = PBXBuildFile; productRef = 799074232660524200F224F7 /* FileAndFolder */; };
 		799074262660524C00F224F7 /* FileAndFolder in Frameworks */ = {isa = PBXBuildFile; productRef = 799074252660524C00F224F7 /* FileAndFolder */; };
 		79933A0026E0F80B0081D378 /* Liabilities in Frameworks */ = {isa = PBXBuildFile; productRef = 799339FF26E0F80B0081D378 /* Liabilities */; };
+		7997C2A92869A76100642CC3 /* KpiTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7997C2A82869A76100642CC3 /* KpiTableView.swift */; };
+		7997C2AA2869A76100642CC3 /* KpiTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7997C2A82869A76100642CC3 /* KpiTableView.swift */; };
 		799E1DE327F0F3BA0006EE01 /* ModelUpdateToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E1DE227F0F3BA0006EE01 /* ModelUpdateToolbar.swift */; };
 		799E1DE427F0F3BA0006EE01 /* ModelUpdateToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E1DE227F0F3BA0006EE01 /* ModelUpdateToolbar.swift */; };
 		79A4624627F66E8B008B3157 /* RealEstateSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A4624527F66E8A008B3157 /* RealEstateSidebarView.swift */; };
@@ -748,6 +750,7 @@
 		798C236727F612860079916A /* LoanSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoanSidebarView.swift; sourceTree = "<group>"; };
 		798E7839264209AD0094534F /* bell.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bell.wav; sourceTree = "<group>"; };
 		798E783A264209AD0094534F /* ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ding.wav; sourceTree = "<group>"; };
+		7997C2A82869A76100642CC3 /* KpiTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KpiTableView.swift; sourceTree = "<group>"; };
 		799E1DE227F0F3BA0006EE01 /* ModelUpdateToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelUpdateToolbar.swift; sourceTree = "<group>"; };
 		79A4624527F66E8A008B3157 /* RealEstateSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealEstateSidebarView.swift; sourceTree = "<group>"; };
 		79AB53F2263241CF00FADBA7 /* FreeInvestement.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = FreeInvestement.json; sourceTree = "<group>"; };
@@ -1299,6 +1302,7 @@
 			isa = PBXGroup;
 			children = (
 				7935BC5F27DF660F0079F39C /* KpiSidebarSectionView.swift */,
+				7997C2A72869A74000642CC3 /* KpiTableView */,
 				7935BC6027DF660F0079F39C /* GridsView */,
 				7935BC6227DF660F0079F39C /* Chart Visitors */,
 				7935BC6627DF660F0079F39C /* HistogramView.swift */,
@@ -1528,6 +1532,14 @@
 				798E783A264209AD0094534F /* ding.wav */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		7997C2A72869A74000642CC3 /* KpiTableView */ = {
+			isa = PBXGroup;
+			children = (
+				7997C2A82869A76100642CC3 /* KpiTableView.swift */,
+			);
+			path = KpiTableView;
 			sourceTree = "<group>";
 		};
 		7998E13A262D6A0000DA4A12 /* Model */ = {
@@ -2220,6 +2232,7 @@
 				7935BCBD27DF66100079F39C /* ModelDeterministicEconomyView.swift in Sources */,
 				7935BDAD27DF66100079F39C /* LineChartBalanceSheetVisitor.swift in Sources */,
 				7935BD6327DF66100079F39C /* NoLoadedDossierView.swift in Sources */,
+				7997C2A92869A76100642CC3 /* KpiTableView.swift in Sources */,
 				79FC574227F734EA0057A91C /* SciScpiSidebarView.swift in Sources */,
 				7935BD2F27DF66100079F39C /* Buttons.swift in Sources */,
 				7935BC9B27DF66100079F39C /* ModelFiscalLifeInsuranceView.swift in Sources */,
@@ -2398,6 +2411,7 @@
 				7935BD6627DF66100079F39C /* DossierEditView.swift in Sources */,
 				7935BCFA27DF66100079F39C /* GraphicUserSettingsView.swift in Sources */,
 				7935BD6E27DF66100079F39C /* ExpenseSidebarView.swift in Sources */,
+				7997C2AA2869A76100642CC3 /* KpiTableView.swift in Sources */,
 				79FC574327F734EA0057A91C /* SciScpiSidebarView.swift in Sources */,
 				7935BD6227DF66100079F39C /* DossierSummaryView.swift in Sources */,
 				7935BD9C27DF66100079F39C /* IrppRateChartCashFlowVisitor.swift in Sources */,

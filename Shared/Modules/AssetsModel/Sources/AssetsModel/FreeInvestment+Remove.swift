@@ -12,6 +12,19 @@ import Ownership
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.FreeInvestement.remove")
 
 extension FreeInvestement {
+    /// Effectuer un retrait de `netAmount` NET de charges sociales
+    ///
+    /// - Parameters:
+    ///   - netAmount: Retrait net de charges sociales souhaité
+    ///   - maxPermitedValue: Montant maximum du retrait autorisé
+    ///
+    /// - Returns:
+    ///   revenue: retrait net de charges sociales réellement obtenu (= netAmount si le capital est suffisant, moins sinon)
+    ///   interests: intérêts bruts avant charges sociales
+    ///   netInterests: intérêts nets de charges sociales
+    ///   taxableInterests: part des netInterests imposable à l'IRPP
+    ///   socialTaxes: charges sociales sur les intérêts
+    ///
     public func withdrawal(netAmount        : Double,
                            maxPermitedValue : Double)
     -> (brutAmount       : Double,
@@ -27,58 +40,80 @@ extension FreeInvestement {
         var netInterests     : Double // intérêts nets de charges sociales
         var taxableInterests : Double // part imposable à l'IRPP des intérêts nets de charges sociales
         var socialTaxes      : Double // charges sociales sur les intérêts
-        
+
+        if currentState.interest <= 0.0 {
+            brutAmount = min(netAmount, maxPermitedValue)
+            brutAmountSplit = split(removal: brutAmount)
+            return (brutAmount       : brutAmount,
+                    brutAmountSplit  : brutAmountSplit,
+                    revenue          : brutAmount,
+                    interests        : brutAmountSplit.interest,
+                    netInterests     : brutAmountSplit.interest,
+                    taxableInterests : 0,
+                    socialTaxes      : 0)
+        }
+
         switch type {
             case .lifeInsurance(let periodicSocialTaxes, _):
-                // montant brut à retirer pour obtenir le montant net souhaité
-                brutAmount = (periodicSocialTaxes ? netAmount : FreeInvestement.fiscalModel.financialRevenuTaxes.brut(netAmount))
+                let alpha  = interestFraction()
+                let beta   = (periodicSocialTaxes ? 0 : FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(1))
+                let factor = (1.0 - alpha * beta)
+                // montant brut à retirer pour obtenir le montant net de charges sociales souhaité
+                brutAmount = netAmount / factor
                 // on ne peut pas retirer plus que la capital présent
                 if brutAmount > maxPermitedValue {
                     brutAmount = maxPermitedValue
-                    revenue    = (periodicSocialTaxes ? brutAmount : FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmount))
                 }
                 // parts d'intérêt et de capital contenues dans le brut retiré
                 brutAmountSplit = split(removal: brutAmount)
                 // intérêts nets de charges sociales
                 if periodicSocialTaxes {
+                    // les intérêts étant prélevés au fil de l'eau il n'y en a pas à la sortie
                     netInterests = brutAmountSplit.interest
                     socialTaxes  = 0.0
                 } else {
                     netInterests = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmountSplit.interest)
                     socialTaxes  = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
                 }
+                revenue = brutAmount - socialTaxes
                 // Assurance vie: les plus values sont imposables à l'IRPP (mais avec une franchise applicable à la totalité des interets retirés dans l'année: calculé ailleurs)
                 taxableInterests = netInterests
-                
+
             case .pea:
+                let alpha  = interestFraction()
+                let beta   = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(1)
+                let factor = (1.0 - alpha * beta)
                 // montant brut à retirer pour obtenir le montant net souhaité
-                brutAmount = FreeInvestement.fiscalModel.financialRevenuTaxes.brut(netAmount)
+                brutAmount = netAmount / factor
                 // on ne peut pas retirer plus que la capital présent
                 if brutAmount > maxPermitedValue {
                     brutAmount = maxPermitedValue
-                    revenue    = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmount)
                 }
                 // parts d'intérêt et de capital contenues dans le brut retiré
                 brutAmountSplit = split(removal: brutAmount)
                 // intérêts nets de charges sociales
                 netInterests = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmountSplit.interest)
                 socialTaxes  = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
+                revenue      = brutAmount - socialTaxes
                 // PEA: les plus values ne sont pas imposables à l'IRPP
                 taxableInterests = 0.0
-                
+
             case .other:
+                let alpha  = interestFraction()
+                let beta   = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(1)
+                let factor = (1.0 - alpha * beta)
                 // montant brut à retirer pour obtenir le montant net souhaité
-                brutAmount = FreeInvestement.fiscalModel.financialRevenuTaxes.brut(netAmount)
+                brutAmount = netAmount / factor
                 // on ne peut pas retirer plus que la capital présent
                 if brutAmount > maxPermitedValue {
                     brutAmount = maxPermitedValue
-                    revenue    = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmount)
                 }
                 // parts d'intérêt et de capital contenues dans le brut retiré
                 brutAmountSplit = split(removal: brutAmount)
                 // intérêts nets de charges sociales
                 netInterests = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmountSplit.interest)
                 socialTaxes  = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
+                revenue      = brutAmount - socialTaxes
                 // autre cas: les plus values sont totalement imposables à l'IRPP
                 taxableInterests = netInterests
         }
@@ -90,7 +125,7 @@ extension FreeInvestement {
                 taxableInterests : taxableInterests,
                 socialTaxes      : socialTaxes)
     }
-    
+
     /// Effectuer un retrait de `netAmount` NET de charges sociales pour le compte d'un débiteur nommé `name`.
     ///
     /// - Parameters:

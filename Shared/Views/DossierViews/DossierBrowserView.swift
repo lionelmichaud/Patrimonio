@@ -40,7 +40,7 @@ struct DossierBrowserView: View {
 
         /// liste des dossiers
         Section {
-            ForEach(dataStore.dossiers) { dossier in
+            ForEach(dataStore.dossiers.sorted(by: \.name)) { dossier in
                 NavigationLink(destination: DossierDetailView(dossier: dossier)) {
                     Label(title: { DossierRowView(dossier: dossier) },
                           icon : {
@@ -54,8 +54,6 @@ struct DossierBrowserView: View {
                 }
                 .isDetailLink(true)
             }
-            .onDelete(perform: deleteDossier)
-            .onMove(perform: moveDossier)
         } header: {
             Text("Dossiers existants")
         }
@@ -90,7 +88,7 @@ struct DossierBrowserView: View {
         }
     }
 
-    func delete(_ dossier: Dossier) {
+    private func delete(_ dossier: Dossier) {
         alertItem = AlertItem(
             title         : Text("Attention").foregroundColor(.red),
             message       : Text("La suppression du dossier est irréversible"),
@@ -109,31 +107,6 @@ struct DossierBrowserView: View {
                                              }
                                          }),
             secondaryButton: .cancel())
-    }
-
-    private func deleteDossier(at offsets: IndexSet) {
-        alertItem = AlertItem(
-            title         : Text("Attention").foregroundColor(.red),
-            message       : Text("La suppression du dossier est irréversible"),
-            primaryButton : .destructive(Text("Supprimer"),
-                                         action: {
-                                             /// insert alert 1 action here
-                                             withAnimation {
-                                                 do {
-                                                     try dataStore.deleteDossier(atOffsets: offsets)
-                                                 } catch {
-                                                     DispatchQueue.main.async {
-                                                         alertItem = AlertItem(title         : Text("Echec de la suppression du dossier"),
-                                                                               dismissButton : .default(Text("OK")))
-                                                     }
-                                                 }
-                                             }
-                                         }),
-            secondaryButton: .cancel())
-    }
-    
-    private func moveDossier(from indexes: IndexSet, to destination: Int) {
-        dataStore.dossiers.move(fromOffsets: indexes, toOffset: destination)
     }
 
     /// True si le dossier est actif et a été modifié

@@ -25,12 +25,24 @@ struct GridsView: View {
 
     var body: some View {
         if simulation.mode == .random && simulation.isComputed {
-            NavigationLink(destination : ShortGridView(),
-                           tag         : .shortGridView,
-                           selection   : $uiState.simulationViewState.selectedItem) {
-                Text("Tableau détaillé des runs")
+            if #available(iOS 16.0, *) {
+                NavigationLink(destination : KpiTableView(),
+                               tag         : .shortGridView,
+                               selection   : $uiState.simulationViewState.selectedItem) {
+                    Label("Tableau détaillé des runs", systemImage: "tablecells")
+                    //Text("Tableau détaillé des runs")
+                }
+                               .isDetailLink(true)
+            } else {
+                NavigationLink(destination : ShortGridView(),
+                               tag         : .shortGridView,
+                               selection   : $uiState.simulationViewState.selectedItem) {
+                    Label("Tableau détaillé des runs", systemImage: "tablecells")
+                    //Text("Tableau détaillé des runs")
+                }
+                               .isDetailLink(true)
             }
-            .isDetailLink(true)
+
         } else {
             EmptyView()
         }
@@ -91,10 +103,6 @@ struct ShortGridView: View {
             .navigationTitle("Résultats des Runs de la Simulation")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(content: myToolBarContent)
-            .popover(isPresented: $showInfoPopover) {
-                PopOverContentView(title       : popOverTitle,
-                                   description : popOverMessage)
-            }
             .alert(item: $alertItem, content: newAlert)
     }
     
@@ -129,9 +137,8 @@ struct ShortGridView: View {
                     .imageScale(.large)
                     .padding(.leading)
             }
-        }
-        // menu de choix de l'ordre de tri
-        ToolbarItemGroup(placement: .navigationBarLeading) {
+
+            // menu de choix de l'ordre de tri
             Button(action: { sortOrder.toggle() }) { // swiftlint:disable:this multiple_closures_with_trailing_closure
                 Image(systemName: sortOrder.imageSystemName)
                     .imageScale(.large)
@@ -147,12 +154,18 @@ struct ShortGridView: View {
                 }
             }
             .disabled(dataStore.activeDossier == nil)
-            
+        }
+
+        ToolbarItemGroup(placement: .navigationBarTrailing) {
             // afficher info-bulle
             Button(action: { self.showInfoPopover = true },
                    label : {
                     Image(systemName: "info.circle")
                    })
+            .popover(isPresented: $showInfoPopover) {
+                PopOverContentView(title       : popOverTitle,
+                                   description : popOverMessage)
+            }
         }
     }
     

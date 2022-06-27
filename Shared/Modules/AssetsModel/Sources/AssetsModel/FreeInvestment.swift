@@ -297,7 +297,12 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
         let deltaInvestment = amount - deltaInterest
         return (deltaInvestment, deltaInterest)
     }
-    
+
+    /// Part des intérêts contenu dans une fraction du capital
+    func interestFraction() -> Double {
+        poz(currentState.interest / currentState.value)
+    }
+
     /// Retourne la valeur estimée en fin d'année `year`.
     ///
     /// La valeur du bien est calculée comme la somme:

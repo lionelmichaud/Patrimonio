@@ -16,13 +16,13 @@ struct ComputationSidebarSectionView: View {
     @EnvironmentObject private var uiState    : UIState
     
     var body: some View {
-            // calcul de simulation
-            NavigationLink(destination : ComputationView(),
-                           tag         : .computationView,
-                           selection   : $uiState.simulationViewState.selectedItem) {
-                Label("Calculs", systemImage: "function")
-            }
-            .isDetailLink(true)
+        // calcul de simulation
+        NavigationLink(destination : ComputationView(),
+                       tag         : .computationView,
+                       selection   : $uiState.simulationViewState.selectedItem) {
+            Label("Calculs", systemImage: "function")
+        }
+                       .isDetailLink(true)
     }
 }
 

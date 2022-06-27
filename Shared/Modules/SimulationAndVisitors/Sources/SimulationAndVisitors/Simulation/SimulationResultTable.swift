@@ -57,7 +57,8 @@ extension DictionaryOfAdultRandomProperties: MonteCarloVisitableP {
 
 // MARK: - Synthèse d'un Run de Simulation
 
-public struct SimulationResultLine: Hashable {
+public struct SimulationResultLine: Hashable, Identifiable {
+    public var id                                : Int { runNumber }
     public var runNumber                         : Int = 1
     public var dicoOfAdultsRandomProperties      = DictionaryOfAdultRandomProperties()
     public var dicoOfEconomyRandomVariables      = Economy.DictionaryOfRandomVariable()
