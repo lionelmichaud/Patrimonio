@@ -214,6 +214,9 @@ public struct CashFlowLine {
             // Note: les intérêts des investissements financiers libres sont capitalisés
             // => ne génèrent des charges sociales et de l'IRPP qu'au moment des retraits ou de leur liquidation
             
+            /// Flat Tax: calcule de l'impot sur les plus-values
+            computeFlatTax(of: family, using: model)
+
             /// IRPP: calcule de l'impot sur l'ensemble des revenus
             computeIrpp(of: family, using: model)
             
@@ -245,6 +248,11 @@ public struct CashFlowLine {
     }
     
     // MARK: - Methods
+
+    fileprivate mutating func computeFlatTax(of family   : Family,
+                                             using model : Model) {
+        // TODO: - calculer la flat tax sur les plus-values
+    }
     
     fileprivate mutating func computeIrpp(of family   : Family,
                                           using model : Model) {
