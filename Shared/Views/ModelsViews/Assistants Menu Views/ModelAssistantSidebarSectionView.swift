@@ -20,7 +20,7 @@ struct ModelAssistantSidebarSectionView: View {
             NavigationLink(destination : ModelManagerView(),
                            tag         : .modelManager,
                            selection   : $uiState.modelsViewState.selectedItem) {
-                Label("Gestion des Modèles", systemImage: "slider.horizontal.3")
+                Label("Gestion des Modèles", systemImage: "arrow.left.arrow.right")
             }.isDetailLink(true)
             
             // Vue assistant statistiques

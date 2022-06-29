@@ -26,6 +26,7 @@ struct ModelManagerView: View {
                         .fill(Color(UIColor.systemGray3))
                         .overlay(Label("iCloud", systemImage: "icloud.fill")
                                     .font(.largeTitle))
+                        .frame(maxHeight: 100)
                 }
                 
                 HStack {
@@ -102,6 +103,7 @@ struct ModelManagerView: View {
                     .fill(Color(UIColor.systemGray))
                     .overlay(Label("Dossier Patron", systemImage: "square.stack.3d.up.fill")
                                 .font(.largeTitle))
+                    .frame(maxHeight: 100)
             }
             .alert(item: $alertItem, content: newAlert)
             .padding()
