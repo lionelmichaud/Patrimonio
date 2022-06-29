@@ -48,7 +48,7 @@ struct LoanSidebarView: View {
                                          header      : false,
                                          iconItem    : icon€)
                 }.isDetailLink(true)
-                    .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
+                    .listItemSwipeActions(duplicateItem : { duplicateItem(item) },
                                               deleteItem    : { deleteItem(item) })
             }
             //}

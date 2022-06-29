@@ -44,7 +44,7 @@ struct SciScpiSidebarView: View {
                                          header      : false,
                                          iconItem    : icon€)
                     }.isDetailLink(true)
-                    .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
+                    .listItemSwipeActions(duplicateItem : { duplicateItem(item) },
                                               deleteItem    : { deleteItem(item) })
             }
 //            .onDelete(perform: removeItems)

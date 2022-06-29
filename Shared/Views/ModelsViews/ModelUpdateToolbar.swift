@@ -71,8 +71,8 @@ extension View {
     ///   - duplicateItem: action à exécuter pour dupliquer l'élément de la liste
     ///   - deleteItem: action à exécuter pour supprimer l'élément de la liste
     /// - Returns: View
-    func modelChangesSwipeActions(duplicateItem : @escaping () -> Void,
-                                  deleteItem    : @escaping () -> Void) -> some View {
+    func listItemSwipeActions(duplicateItem : @escaping () -> Void,
+                              deleteItem    : @escaping () -> Void) -> some View {
         // duppliquer l'item
         self.swipeActions(edge: .leading, allowsFullSwipe: false) {
             Button {

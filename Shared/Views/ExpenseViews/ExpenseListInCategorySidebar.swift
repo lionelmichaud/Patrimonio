@@ -54,7 +54,7 @@ struct ExpenseListInCategorySidebar: View {
                                         iconItem    : iconCart,
                                         kEuro       : false)
                 }.isDetailLink(true)
-                    .modelChangesSwipeActions(duplicateItem : { duplicateItem(expense) },
+                    .listItemSwipeActions(duplicateItem : { duplicateItem(expense) },
                                               deleteItem    : { deleteItem(expense) })
             }
         } label: {

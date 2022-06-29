@@ -51,7 +51,7 @@ struct DossierBrowserView: View {
                     })
                 }
                 .isDetailLink(true)
-                .modelChangesSwipeActions(duplicateItem : { duplicate(dossier) },
+                .listItemSwipeActions(duplicateItem : { duplicate(dossier) },
                                           deleteItem    : { delete(dossier) })
             }
         } header: {
