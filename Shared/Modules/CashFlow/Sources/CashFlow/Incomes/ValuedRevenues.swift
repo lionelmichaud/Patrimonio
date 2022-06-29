@@ -32,7 +32,7 @@ public struct ValuedRevenues {
     }
 
     /// Total de tous les revenus nets de l'année versé en compte courant avant taxes et impots - exclus les revenus capitalisés en cours d'année (produit de ventes, intérêts courants)
-    var totalRevenueSalesExcluded: Double {
+    var totalRevenueSalesAndCapitalizedExcluded: Double {
         perCategory.reduce(.zero, { result, element in
             if element.key.isPartOfCashFlow {
                 return result + element.value.credits.total

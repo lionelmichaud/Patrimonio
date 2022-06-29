@@ -20,7 +20,7 @@ struct ModelFiscalFinancialView: View {
         Form {
             VersionEditableViewInForm(version: $subModel.version)
 
-            Section(footer: Text("Appliquable à tous les revenus financiers")) {
+            Section {
                 Stepper(value : $subModel.CRDS,
                         in    : 0 ... 100.0,
                         step  : 0.1) {
@@ -54,13 +54,38 @@ struct ModelFiscalFinancialView: View {
                     }
                 }
             }
+            header: {
+                Text("Charges sociales")
+            }
+            footer: {
+                Text("Appliquable à tous les revenus financiers")
+            }
+
+            Section {
+                Stepper(value : $subModel.flatTax,
+                        in    : 0 ... 100.0,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Flat Tax")
+                        Spacer()
+                        Text("\(subModel.flatTax.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+            header: {
+                Text("Imposition")
+            }
+            footer: {
+                Text("Appliquable à tous les revenus financiers")
+            }
         }
         .navigationTitle("Revenus Financiers")
         .alert(item: $alertItem, content: newAlert)
-        /// barre d'outils de la NavigationView
+    /// barre d'outils de la NavigationView
         .modelChangesToolbar(subModel                  : $subModel,
-                              updateDependenciesToModel : updateDependenciesToModel)
-    }
+                             updateDependenciesToModel : updateDependenciesToModel)
+}
 }
 
 struct ModelFiscalFinancialView_Previews: PreviewProvider {
@@ -68,6 +93,6 @@ struct ModelFiscalFinancialView_Previews: PreviewProvider {
         TestEnvir.loadTestFilesFromBundle()
         return ModelFiscalFinancialView(updateDependenciesToModel: { },
                                         subModel: .init(source: TestEnvir.model.fiscalModel.financialRevenuTaxes.model))
-            .preferredColorScheme(.dark)
+        .preferredColorScheme(.dark)
     }
 }

@@ -210,7 +210,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, Val
         socialTaxes: Double) {
         let revenue     = (isOwned(during: year) ?
                            marketValue(atEndOf: year - 1) * lastKnownState.interestRate / 100.0 : 0.0)
-        let taxableIrpp = SCPI.fiscalModel.financialRevenuTaxes.net(revenue)
+        let taxableIrpp = SCPI.fiscalModel.financialRevenuTaxes.netOfSocialTaxes(revenue)
         return (revenue    : revenue,
                 taxableIrpp: taxableIrpp,
                 socialTaxes: revenue - taxableIrpp)

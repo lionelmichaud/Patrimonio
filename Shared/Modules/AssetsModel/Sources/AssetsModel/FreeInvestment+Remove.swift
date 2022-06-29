@@ -72,12 +72,13 @@ extension FreeInvestement {
                     netInterests = brutAmountSplit.interest
                     socialTaxes  = 0.0
                 } else {
-                    netInterests = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmountSplit.interest)
+                    netInterests = FreeInvestement.fiscalModel.financialRevenuTaxes.netOfSocialTaxes(brutAmountSplit.interest)
                     socialTaxes  = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
                 }
+                // les charges sociales sont pélevées à la source
                 revenue = brutAmount - socialTaxes
                 // Assurance vie: les plus values sont imposables à l'IRPP (mais avec une franchise applicable à la totalité des interets retirés dans l'année: calculé ailleurs)
-                taxableInterests = netInterests
+                taxableInterests = brutAmountSplit.interest
 
             case .pea:
                 let alpha  = interestFraction()
@@ -92,8 +93,9 @@ extension FreeInvestement {
                 // parts d'intérêt et de capital contenues dans le brut retiré
                 brutAmountSplit = split(removal: brutAmount)
                 // intérêts nets de charges sociales
-                netInterests = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmountSplit.interest)
+                netInterests = FreeInvestement.fiscalModel.financialRevenuTaxes.netOfSocialTaxes(brutAmountSplit.interest)
                 socialTaxes  = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
+                // les charges sociales sont pélevées à la source
                 revenue      = brutAmount - socialTaxes
                 // PEA: les plus values ne sont pas imposables à l'IRPP
                 taxableInterests = 0.0
@@ -111,11 +113,12 @@ extension FreeInvestement {
                 // parts d'intérêt et de capital contenues dans le brut retiré
                 brutAmountSplit = split(removal: brutAmount)
                 // intérêts nets de charges sociales
-                netInterests = FreeInvestement.fiscalModel.financialRevenuTaxes.net(brutAmountSplit.interest)
+                netInterests = FreeInvestement.fiscalModel.financialRevenuTaxes.netOfSocialTaxes(brutAmountSplit.interest)
                 socialTaxes  = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
+                // les charges sociales sont pélevées à la source
                 revenue      = brutAmount - socialTaxes
                 // autre cas: les plus values sont totalement imposables à l'IRPP
-                taxableInterests = netInterests
+                taxableInterests = brutAmountSplit.interest
         }
         return (brutAmount       : brutAmount,
                 brutAmountSplit  : brutAmountSplit,
@@ -232,7 +235,8 @@ extension FreeInvestement {
         
         let _removal = withdrawal(netAmount: netAmount, maxPermitedValue: maxPermitedValue)
         
-        // décrémenter les intérêts et le capital
+        // décrémenter les intérêts et le capital du montant BRUT retiré
+        // les charges sociales sont donc prélevées à la source
         if _removal.brutAmount == currentState.value {
             // On a vidé le compte: mettre précisément le compte à 0.0 (attention à l'arrondi sinon)
             currentState.interest   = 0

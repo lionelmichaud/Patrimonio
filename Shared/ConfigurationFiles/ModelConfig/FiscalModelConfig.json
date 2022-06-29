@@ -102,7 +102,8 @@
             },
             "CRDS"         : 0.5,
             "CSG"          : 9.2,
-            "prelevSocial" : 7.5
+            "prelevSocial" : 7.5,
+            "flatTax"      : 12.8
         }
     },
     
@@ -172,7 +173,11 @@
                 "date"    : "2020-09-12T23:00:00+01:00",
                 "comment" : null
             },
-            "rebatePerPerson" : 4800.0
+            "rebatePerPerson"        : 4800.0,
+            "prelevementLiberatoire" : 7.5,
+            "flatTax"                : 12.8,
+            "datePivot"              : "2017-09-27T23:00:00+01:00",
+            "seuil"                  : 150000.0
         }
     },
     

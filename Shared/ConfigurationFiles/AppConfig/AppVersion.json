@@ -7,6 +7,11 @@
     
     "revisionHistory" : [
         {
+            "version" : "5.0.0",
+            "date"    : "2022-06-28T23:00:00+01:00",
+            "comment" : "Enrichissement du modèle fiscal LifeInsuranceTaxes"
+        },
+        {
             "version" : "4.8.0",
             "date"    : "2022-04-14T23:00:00+01:00",
             "comment" : "Refactoring complet de SCPI avec historique d'achat et valorisation déflatée"

@@ -65,7 +65,7 @@ public struct CashFlowLine {
     ///
     /// - Note: Utilisé pour calculer le Net Cash-Flow de fin d'année (à réinvestir en fin d'année)
     var sumOfAdultsRevenuesSalesExcluded: Double {
-        adultsRevenues.totalRevenueSalesExcluded +
+        adultsRevenues.totalRevenueSalesAndCapitalizedExcluded +
             sciCashFlowLine.netRevenuesSalesExcluded
     }
     
@@ -248,7 +248,7 @@ public struct CashFlowLine {
     
     fileprivate mutating func computeIrpp(of family   : Family,
                                           using model : Model) {
-        // TODO: - il faudrait traiter différement les produit finacier en report d'imposition (flat taxe et non pas IRPP)
+        // TODO: - il faudrait traiter différement les produits financiers en report d'imposition (flat taxe et non pas IRPP)
         adultTaxes.irpp = try! model.fiscalModel.incomeTaxes.irpp(taxableIncome : adultsRevenues.totalTaxableIrpp,
                                                                   nbAdults      : family.nbOfAdultAlive(atEndOf: year),
                                                                   nbChildren    : family.nbOfFiscalChildren(during: year))
@@ -301,7 +301,7 @@ public struct CashFlowLine {
     ///   On ne gère pas ici le ré-investissement des biens vendus dans l'année et détenus en propre.
     ///
     ///   Les produits de ventes de biens sont réinvestis au moment de la vente dans le patrimoine
-    ///   de ceux qui possèdente le bien (voir `investCapital`).
+    ///   de ceux qui possèdent le bien (voir `investCapital`).
     ///
     /// - Parameters:
     ///   - patrimoine: patrimoine
@@ -327,7 +327,7 @@ public struct CashFlowLine {
             
         } else {
             // Retirer le solde net d'un investissement libre: d'abord PEA ensuite Assurance vie.
-            // Les taxes dues au titre des retraits sont gérées comme un revenu en report d'imposition (dette).
+            // Les plus-values des retraits sont gérées comme un revenu en report d'imposition IRPP (dette).
             let totalTaxableInterests =
                 try netCashFlowManager.getCashFromInvestement(thisAmount          : -netCashFlowSalesExcluded,
                                                               in                  : patrimoine,

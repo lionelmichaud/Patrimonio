@@ -20,10 +20,48 @@ struct ModelFiscalLifeInsuranceView: View {
         Form {
             VersionEditableViewInForm(version: $subModel.version)
 
-            AmountEditView(label   : "Abattement par personne",
-                           comment : "annuel",
-                           amount  : $subModel.rebatePerPerson,
-                           validity: .poz)
+            Section {
+                AmountEditView(label   : "Abattement par personne",
+                               comment : "annuel",
+                               amount  : $subModel.rebatePerPerson,
+                               validity: .poz)
+                Stepper(value : $subModel.prelevementLiberatoire,
+                        in    : 0 ... 100.0,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Prélèvement Liberatoire")
+                        Spacer()
+                        Text("\(subModel.prelevementLiberatoire.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+            header: {
+                Text("Imposition")
+            }
+            footer: {
+                Text("Avant \(subModel.datePivot.formatted(.dateTime.day().month(.abbreviated).year()))")
+            }
+
+            Section {
+                AmountEditView(label   : "Seuil d'imposition à la flat tax",
+                               comment : "après la date de transition",
+                               amount  : $subModel.seuil,
+                               validity: .poz)
+                Stepper(value : $subModel.flatTax,
+                        in    : 0 ... 100.0,
+                        step  : 0.1) {
+                    HStack {
+                        Text("Flat Tax")
+                        Spacer()
+                        Text("\(subModel.flatTax.percentString(digit: 1))")
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+            footer: {
+                Text("Après \(subModel.datePivot.formatted(.dateTime.month(.narrow).day().year(.twoDigits)))")
+            }
         }
         .navigationTitle("Revenus d'Assurance Vie")
         .alert(item: $alertItem, content: newAlert)

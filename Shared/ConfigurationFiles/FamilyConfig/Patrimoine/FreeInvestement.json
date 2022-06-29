@@ -92,7 +92,7 @@
             },
             "type" : {
                 "lifeInsurance": {
-                    "periodicSocialTaxes" : true,
+                    "periodicSocialTaxes" : false,
                     "clause" : {
                         "isOptional"        : true,
                         "isDismembered"     : false,
@@ -179,7 +179,7 @@
             },
             "type" : {
                 "lifeInsurance": {
-                    "periodicSocialTaxes" : true,
+                    "periodicSocialTaxes" : false,
                     "clause" : {
                         "isOptional"        : false,
                         "isDismembered"     : true,
@@ -223,7 +223,7 @@
             },
             "type" : {
                 "lifeInsurance": {
-                    "periodicSocialTaxes" : true,
+                    "periodicSocialTaxes" : false,
                     "clause" : {
                         "isOptional"        : false,
                         "isDismembered"     : false,
@@ -273,7 +273,7 @@
             },
             "type" : {
                 "lifeInsurance": {
-                    "periodicSocialTaxes" : true,
+                    "periodicSocialTaxes" : false,
                     "clause" : {
                         "isOptional"        : false,
                         "isDismembered"     : false,

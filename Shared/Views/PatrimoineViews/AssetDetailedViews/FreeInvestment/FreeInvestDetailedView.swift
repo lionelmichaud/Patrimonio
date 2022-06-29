@@ -28,6 +28,7 @@ struct FreeInvestDetailedView: View {
             }
         )
     }
+
     private var interests : Binding<Double> {
         Binding(
             get: {

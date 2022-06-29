@@ -21,9 +21,10 @@ public struct FinancialRevenuTaxesModel: Codable, Equatable {
         public var CRDS         : Double // 0.5 // %
         public var CSG          : Double // 9.2 // %
         public var prelevSocial : Double // 7.5  // %
-        var total: Double {
+        var totalSocialTaxes: Double {
             CRDS + CSG + prelevSocial // %
         }
+        public var flatTax : Double // 17.2 // % // après le 27/09/2017 au delà du seuil
     }
     
     // MARK: Properties
@@ -34,7 +35,7 @@ public struct FinancialRevenuTaxesModel: Codable, Equatable {
     
     /// revenus financiers nets de charges sociales
     /// - Parameter brut: revenus financiers bruts
-    public func net(_ brut: Double) -> Double {
+    public func netOfSocialTaxes(_ brut: Double) -> Double {
         return brut - socialTaxes(brut)
     }
     
@@ -44,15 +45,19 @@ public struct FinancialRevenuTaxesModel: Codable, Equatable {
         guard brut > 0.0 else {
             return 0.0
         }
-        return brut * model.total / 100.0
+        return brut * model.totalSocialTaxes / 100.0
     }
     
     /// revenus financiers bruts avant charges sociales
     /// - Parameter net: revenus financiers nets
-    public func brut(_ net: Double) -> Double {
+    public func brutOfSocialTaxes(_ net: Double) -> Double {
         guard net >= 0.0 else {
             return net
         }
-        return net / (1.0 - model.total / 100.0)
+        return net / (1.0 - model.totalSocialTaxes / 100.0)
+    }
+
+    public func prelevementLiberatoire(plusValueTaxable : Double) -> Double {
+        plusValueTaxable * model.flatTax / 100.0
     }
 }

@@ -47,14 +47,15 @@ struct KpiTableView: View {
         """
 
     var body: some View {
-        Table(simulation.monteCarloResultTable.filtered(with: filter),
-              selection: $selection,
-              sortOrder: $sortRunOrder) {
-            // Colonne Run
-            TableColumn("Run number", value:\.runNumber) { line in
-                Text(String(line.runNumber))
-                    .italic()
-                    .foregroundColor(colorOfRun(withTheseKpis: line.dicoOfKpiResults))
+        EmptyView()
+//        Table(simulation.monteCarloResultTable.filtered(with: filter),
+//              selection: $selection,
+//              sortOrder: $sortRunOrder) {
+//            // Colonne Run
+//            TableColumn("Run number", value:\.runNumber) { line in
+//                Text(String(line.runNumber))
+//                    .italic()
+//                    .foregroundColor(colorOfRun(withTheseKpis: line.dicoOfKpiResults))
 //                    .frame(
 //                        maxWidth: .infinity,
 //                        maxHeight: .infinity,
@@ -66,20 +67,20 @@ struct KpiTableView: View {
 //                            Label("Rejouer", systemImage: "arrowtriangle.forward.circle")
 //                        }
 //                    }
-            }
+//            }
 //            TableColumn("Run number", value:\.runNumber) { line in
 //                Text(String(line.runNumber))
 //                    .italic()
 //                    .foregroundColor(colorOfRun(withTheseKpis: line.dicoOfKpiResults))
 //            }
-        }
-              .onChange(of: sortRunOrder) { newOrder in
-                  simulation.monteCarloResultTable.sort(using: newOrder)
-              }
-              .padding(.top)
-              .navigationTitle("Résultats des Runs de la Simulation")
-              .navigationBarTitleDisplayMode(.inline)
-              .toolbar(content: myToolBarContent)
+//        }
+//              .onChange(of: sortRunOrder) { newOrder in
+//                  simulation.monteCarloResultTable.sort(using: newOrder)
+//              }
+//              .padding(.top)
+//              .navigationTitle("Résultats des Runs de la Simulation")
+//              .navigationBarTitleDisplayMode(.inline)
+//              .toolbar(content: myToolBarContent)
     }
 
     // MARK: - Methods

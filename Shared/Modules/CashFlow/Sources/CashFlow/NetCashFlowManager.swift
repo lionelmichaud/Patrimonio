@@ -213,12 +213,13 @@ struct NetCashFlowManager {
         where patrimoine.assets.freeInvests[idx].type == .pea {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant du PEA s'il y en avait assez à la fin de l'année dernière
+            // les charges sociales sont prélevées à la source
             let removal = patrimoine.assets
                 .freeInvests[idx].withdrawal(netAmount : amountRemainingToRemove,
                                              for       : name,
                                              verbose   : true)
             amountRemainingToRemove -= removal.revenue
-            // IRPP: les plus values PEA ne sont pas imposables à l'IRPP
+            // IRPP: les plus values PEA ne sont pas imposables
             // Prélèvements sociaux: prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
             if amountRemainingToRemove <= 0.0 {
                 return
@@ -231,6 +232,7 @@ struct NetCashFlowManager {
                 case .lifeInsurance:
                     // tant que l'on a pas retiré le montant souhaité
                     // retirer le montant de l'Assurances vie s'il y en avait assez à la fin de l'année dernière
+                    // les charges sociales sont prélevées à la source
                     let removal = patrimoine.assets
                         .freeInvests[idx].withdrawal(netAmount : amountRemainingToRemove,
                                                      for       : name,
@@ -241,7 +243,7 @@ struct NetCashFlowManager {
                     // apply rebate if some is remaining
                     taxableInterests = poz(removal.taxableInterests - lifeInsuranceRebate)
                     lifeInsuranceRebate -= (removal.taxableInterests - taxableInterests)
-                    // géré comme un revenu en report d'imposition (dette)
+                    // plus values gérées comme un revenu en report d'imposition (dette)
                     totalTaxableInterests += taxableInterests
                     // Prélèvements sociaux => prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
                     if amountRemainingToRemove <= 0.0 {
@@ -257,17 +259,18 @@ struct NetCashFlowManager {
         where patrimoine.assets.freeInvests[idx].type == .other {
             // tant que l'on a pas retiré le montant souhaité
             // retirer le montant s'il y en avait assez à la fin de l'année dernière
+            // les charges sociales sont prélevées à la source
             let removal = patrimoine.assets
                 .freeInvests[idx].withdrawal(netAmount : amountRemainingToRemove,
                                              for       : name,
                                              verbose   : true)
             amountRemainingToRemove -= removal.revenue
             // IRPP: les plus values sont imposables à l'IRPP
-            // géré comme un revenu en report d'imposition (dette)
+            // plus values gérées comme un revenu en report d'imposition (dette)
             totalTaxableInterests += removal.taxableInterests
-            // Prélèvements sociaux
-            taxes[.socialTaxes]?.namedValues.append(NamedValue(name : patrimoine.assets.freeInvests[idx].name,
-                                                               value: removal.socialTaxes))
+            // Prélèvements sociaux => prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
+//            taxes[.socialTaxes]?.namedValues.append(NamedValue(name : patrimoine.assets.freeInvests[idx].name,
+//                                                               value: removal.socialTaxes))
             if amountRemainingToRemove <= 0.0 {
                 return
             }

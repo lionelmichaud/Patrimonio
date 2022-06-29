@@ -184,7 +184,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
                 return (periodicSocialTaxes ?
-                            FreeInvestement.fiscalModel.financialRevenuTaxes.net(averageInterestRateNetOfInflation) :
+                            FreeInvestement.fiscalModel.financialRevenuTaxes.netOfSocialTaxes(averageInterestRateNetOfInflation) :
                             averageInterestRateNetOfInflation)
             default:
                 // dans tous les autres cas: pas de charges sociales prélevées à la source anuellement (capitalisation et taxation à la sortie)
@@ -197,7 +197,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
                 return (periodicSocialTaxes ?
-                            FreeInvestement.fiscalModel.financialRevenuTaxes.net(averageInterestRate) :
+                            FreeInvestement.fiscalModel.financialRevenuTaxes.netOfSocialTaxes(averageInterestRate) :
                             averageInterestRate)
             default:
                 // dans tous les autres cas: pas de charges sociales prélevées à la source anuellement (capitalisation et taxation à la sortie)
@@ -272,7 +272,7 @@ public struct FreeInvestement: Identifiable, JsonCodableToBundleP, FinancialEnve
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // si assurance vie: le taux net est le taux brut - charges sociales si celles-ci sont prélèvées à la source anuellement
                 return (periodicSocialTaxes ?
-                            FreeInvestement.fiscalModel.financialRevenuTaxes.net(interestRateNetOfInflation(in: year)) :
+                            FreeInvestement.fiscalModel.financialRevenuTaxes.netOfSocialTaxes(interestRateNetOfInflation(in: year)) :
                             interestRateNetOfInflation(in: year))
             default:
                 // dans tous les autres cas: pas de charges sociales prélevées à la source anuellement (capitalisation et taxation à la sortie)

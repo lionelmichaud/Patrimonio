@@ -156,17 +156,74 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "0A1E0F6A-FF1D-4B7C-9764-D91F7194C63A"
+            uuid = "9A60EF4C-E6F4-40F0-9DFE-81183B5D7DEF"
+            shouldBeEnabled = "Yes"
+            condition = "taxableIrppRevenueDelayedFromLastYear.value(atEndOf: 0) &gt; 0"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Modules/CashFlow/Sources/CashFlow/Incomes/ValuedRevenues.swift"
+            startingColumnNumber = "49"
+            endingColumnNumber = "54"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "totalTaxableIrpp"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AD61E661-34CC-46E1-9CE6-AED70AD15EB0"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Shared/Modules/AssetsModel/Sources/AssetsModel/FreeInvestment+Remove.swift"
+            filePath = "Shared/Modules/FiscalModel/Sources/FiscalModel/FiscalModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
-            landmarkName = "FreeInvestement"
-            landmarkType = "21">
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "initialized()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5D294A55-9FE3-4FF7-9AC8-F85087D0376F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Modules/ModelEnvironment/Sources/ModelEnvironment/Model.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
+            landmarkName = "loadFromJSON(fromFolder:)"
+            landmarkType = "7">
+            <Actions>
+               <BreakpointActionProxy
+                  ActionExtensionID = "Xcode.BreakpointAction.DebuggerCommand">
+                  <ActionContent
+                     consoleCommand = "po fiscal.model!.lifeInsuranceTaxes">
+                  </ActionContent>
+               </BreakpointActionProxy>
+            </Actions>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BB6D849B-CA8A-4283-9003-98D705807845"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Shared/Views/PatrimoineViews/AssetDetailedViews/FreeInvestment/SimulationRachatView.swift"
+            startingColumnNumber = "22"
+            endingColumnNumber = "22"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "computeWithdrawal(montantRetraitNet:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
