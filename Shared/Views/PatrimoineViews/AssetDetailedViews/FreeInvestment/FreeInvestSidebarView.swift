@@ -43,22 +43,21 @@ struct FreeInvestSidebarView: View {
                 NavigationLink(destination: FreeInvestDetailedView(updateDependenciesToModel: updateDependenciesToModel,
                                                                    item: $item.transaction())) {
                     LabeledValueRowView(label       : item.name,
-                                         value       : item.value(atEndOf: CalendarCst.thisYear),
-                                         indentLevel : 3,
-                                         header      : false,
-                                         iconItem    : icon€)
-                    .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
-                                              deleteItem    : { deleteItem(item) })
-                }.isDetailLink(true)
+                                        value       : item.value(atEndOf: CalendarCst.thisYear),
+                                        indentLevel : 3,
+                                        header      : false,
+                                        iconItem    : icon€)
+                }
+                .isDetailLink(true)
+                .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
+                                          deleteItem    : { deleteItem(item) })
             }
-            .onDelete(perform: removeItems)
-            .onMove(perform: move)
         } label: {
             LabeledValueRowView(label       : label,
-                                 value       : total,
-                                 indentLevel : indentLevel,
-                                 header      : true,
-                                 iconItem    : icon€)
+                                value       : total,
+                                indentLevel : indentLevel,
+                                header      : true,
+                                iconItem    : icon€)
         }
         .alert(item: $alertItem, content: newAlert)
         //.listRowInsets(EdgeInsets(top: 0, leading: ListTheme[indentLevel].indent, bottom: 0, trailing: 0))

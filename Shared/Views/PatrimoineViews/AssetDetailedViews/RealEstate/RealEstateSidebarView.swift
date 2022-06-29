@@ -47,12 +47,10 @@ struct RealEstateSidebarView: View {
                                         indentLevel : 3,
                                         header      : false,
                                         iconItem    : icon€)
+                }.isDetailLink(true)
                     .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
                                               deleteItem    : { deleteItem(item) })
-                }.isDetailLink(true)
             }
-            .onDelete(perform: removeItems)
-            .onMove(perform: move)
         } label: {
             LabeledValueRowView(label       : label,
                                 value       : totalRealEstates,
@@ -62,9 +60,9 @@ struct RealEstateSidebarView: View {
         }
         .alert(item: $alertItem, content: newAlert)
         //.listRowInsets(EdgeInsets(top: 0, leading: ListTheme[indentLevel].indent, bottom: 0, trailing: 0))
-#if os(macOS)
+        #if os(macOS)
         .collapsible(true)
-#endif
+        #endif
     }
 
     /// actualiser toutes les dépendances au Model

@@ -43,12 +43,12 @@ struct SciScpiSidebarView: View {
                                          indentLevel : 3,
                                          header      : false,
                                          iconItem    : icon€)
+                    }.isDetailLink(true)
                     .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
                                               deleteItem    : { deleteItem(item) })
-                    } .isDetailLink(true)
             }
-            .onDelete(perform: removeItems)
-            .onMove(perform: move)
+//            .onDelete(perform: removeItems)
+//            .onMove(perform: move)
         } label: {
             LabeledValueRowView(label       : label,
                                  value       : patrimoine.assets.sci.scpis.currentValue,

@@ -53,12 +53,10 @@ struct ExpenseListInCategorySidebar: View {
                                         header      : false,
                                         iconItem    : iconCart,
                                         kEuro       : false)
+                }.isDetailLink(true)
                     .modelChangesSwipeActions(duplicateItem : { duplicateItem(expense) },
                                               deleteItem    : { deleteItem(expense) })
-                }.isDetailLink(true)
             }
-            .onDelete(perform: removeItems)
-            .onMove(perform: move)
         } label: {
             LabeledValueRowView(label       : category.displayString,
                                 value       : expenses.perCategory[category]?.value(atEndOf: CalendarCst.thisYear) ?? 0,
@@ -120,21 +118,6 @@ struct ExpenseListInCategorySidebar: View {
                                              withAnimation {
                                                  expenses.perCategory[self.category]?.delete(item)
                                              }
-                                             // remettre à zéro la simulation et sa vue
-                                             resetSimulation()
-                                         }),
-            secondaryButton: .cancel())
-    }
-
-    private func removeItems(at offsets: IndexSet) {
-        alertItem = AlertItem(
-            title         : Text("Attention").foregroundColor(.red),
-            message       : Text("La suppression est irréversible"),
-            primaryButton : .destructive(Text("Supprimer"),
-                                         action: {
-                                             /// insert alert 1 action here
-                                             // supprimer la dépense
-                                             expenses.perCategory[self.category]?.delete(at: offsets)
                                              // remettre à zéro la simulation et sa vue
                                              resetSimulation()
                                          }),

@@ -63,6 +63,14 @@ extension View {
             }
         }
 
+    /// Ajoute 2 swipe actions à gauche et à droite d'une ItemRowView dans une liste
+    ///
+    ///  - Action à gauche: **dupliquer** l'élément de la liste
+    ///  - Action à droite: **supprimer** l'élément de la liste
+    /// - Parameters:
+    ///   - duplicateItem: action à exécuter pour dupliquer l'élément de la liste
+    ///   - deleteItem: action à exécuter pour supprimer l'élément de la liste
+    /// - Returns: View
     func modelChangesSwipeActions(duplicateItem : @escaping () -> Void,
                                   deleteItem    : @escaping () -> Void) -> some View {
         // duppliquer l'item

@@ -29,9 +29,6 @@ struct DossiersSidebarView: View {
             .listStyle(.sidebar)
             .environment(\.horizontalSizeClass, .regular)
             .navigationTitle("Dossiers")
-            .toolbar { // de la sidebar
-                EditButton()
-            }
             /// vue par défaut
             NoLoadedDossierView()
         }

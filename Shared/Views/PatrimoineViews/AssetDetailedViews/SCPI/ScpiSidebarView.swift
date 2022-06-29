@@ -47,12 +47,10 @@ struct ScpiSidebarView: View {
                                          indentLevel : 3,
                                          header      : false,
                                          iconItem    : icon€)
+                }.isDetailLink(true)
                     .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
                                               deleteItem    : { deleteItem(item) })
-                }.isDetailLink(true)
             }
-            .onDelete(perform: removeItems)
-            .onMove(perform: move)
         } label: {
             LabeledValueRowView(label       : label,
                                  value       : totalSCPI,

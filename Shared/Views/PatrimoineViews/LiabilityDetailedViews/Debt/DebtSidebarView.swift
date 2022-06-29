@@ -47,13 +47,11 @@ struct DebtSidebarView: View {
                                          indentLevel : 3,
                                          header      : false,
                                          iconItem    : icon€)
-                    .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
-                                              deleteItem    : { deleteItem(item) })
 
                 }.isDetailLink(true)
+                    .modelChangesSwipeActions(duplicateItem : { duplicateItem(item) },
+                                              deleteItem    : { deleteItem(item) })
             }
-            .onDelete(perform: removeItems)
-            .onMove(perform: move)
         } label: {
             LabeledValueRowView(label       : label,
                                  value       : totalDebt,

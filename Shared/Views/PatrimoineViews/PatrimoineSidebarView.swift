@@ -52,9 +52,6 @@ struct PatrimoineSidebarView: View {
                 .navigationViewStyle(.columns)
                 .navigationTitle("Patrimoine")
                 .environment(\.horizontalSizeClass, .regular)
-                .toolbar {
-                    EditButton()
-                }
             }
 
             /// vue par défaut

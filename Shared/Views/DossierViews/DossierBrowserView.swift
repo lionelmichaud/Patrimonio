@@ -49,10 +49,10 @@ struct DossierBrowserView: View {
                                     $0.foregroundColor(savable(dossier) ? .red : .green)
                                 }
                     })
-                    .modelChangesSwipeActions(duplicateItem : { duplicate(dossier) },
-                                              deleteItem    : { delete(dossier) })
                 }
                 .isDetailLink(true)
+                .modelChangesSwipeActions(duplicateItem : { duplicate(dossier) },
+                                          deleteItem    : { delete(dossier) })
             }
         } header: {
             Text("Dossiers existants")

@@ -46,9 +46,6 @@ struct ExpenseSidebarView: View {
             .navigationViewStyle(.columns)
             .navigationTitle("Dépenses")
             .environment(\.horizontalSizeClass, .regular)
-            .toolbar {
-                EditButton()
-            }
 
             /// vue par défaut
             ExpenseSummaryView()
