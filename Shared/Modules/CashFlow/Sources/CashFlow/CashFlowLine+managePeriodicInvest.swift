@@ -68,15 +68,15 @@ public extension CashFlowLine {
                             // apply rebate if some is remaining
                             taxableInterests = liquidatedValue.taxableIrppInterests - lifeInsuranceRebate
                             lifeInsuranceRebate -= (liquidatedValue.taxableIrppInterests - taxableInterests)
-                            // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
+                            // Impôts: part des produit de la liquidation inscrit en compte courant imposable
                             taxablesIrpp = taxableInterests
                             
                         case .pea:
-                            // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
-                            taxablesIrpp = liquidatedValue.taxableIrppInterests
+                            // Impôts: les plus values PEA ne sont pas imposables
+                            taxablesIrpp = 0
                             
                         case .other:
-                            // part des produit de la liquidation inscrit en compte courant imposable à l'IRPP
+                            // Impôts: part des produit de la liquidation inscrit en compte courant imposable
                             taxablesIrpp = liquidatedValue.taxableIrppInterests
                     }
                     // populate prélèvements sociaux

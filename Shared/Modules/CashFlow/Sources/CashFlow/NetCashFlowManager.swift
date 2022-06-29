@@ -219,7 +219,7 @@ struct NetCashFlowManager {
                                              for       : name,
                                              verbose   : true)
             amountRemainingToRemove -= removal.revenue
-            // IRPP: les plus values PEA ne sont pas imposables
+            // Impôts: les plus values PEA ne sont pas imposables
             // Prélèvements sociaux: prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
             if amountRemainingToRemove <= 0.0 {
                 return
@@ -239,11 +239,11 @@ struct NetCashFlowManager {
                                                      verbose   : true)
                     amountRemainingToRemove -= removal.revenue
                     // IRPP: part des produit de la liquidation inscrit en compte courant imposable à l'IRPP après déduction de ce qu'il reste de franchise
-                    var taxableInterests: Double
+                    @ZeroOrPositive var taxableInterests: Double
                     // apply rebate if some is remaining
-                    taxableInterests = poz(removal.taxableInterests - lifeInsuranceRebate)
+                    taxableInterests = removal.taxableInterests - lifeInsuranceRebate
                     lifeInsuranceRebate -= (removal.taxableInterests - taxableInterests)
-                    // plus values gérées comme un revenu en report d'imposition (dette)
+                    // Impôts: les plus values gérées comme un revenu en report d'imposition (dette)
                     totalTaxableInterests += taxableInterests
                     // Prélèvements sociaux => prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
                     if amountRemainingToRemove <= 0.0 {
@@ -265,7 +265,7 @@ struct NetCashFlowManager {
                                              for       : name,
                                              verbose   : true)
             amountRemainingToRemove -= removal.revenue
-            // IRPP: les plus values sont imposables à l'IRPP
+            // Impôts: les plus values sont imposables
             // plus values gérées comme un revenu en report d'imposition (dette)
             totalTaxableInterests += removal.taxableInterests
             // Prélèvements sociaux => prélevés à la source sur le montant brut du retrait donc pas à payer dans le futur
