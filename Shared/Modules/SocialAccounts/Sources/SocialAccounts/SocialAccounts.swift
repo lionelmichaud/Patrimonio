@@ -79,26 +79,26 @@ public struct SocialAccounts {
         for year in firstYear ... lastYear {
             // construire la ligne annuelle de Cash Flow
             //------------------------------------------
-            /// gérer le report de revenu imposable
-            var lastYearDelayedTaxableIrppRevenue: Double
+            /// gérer le report d'imposition
+            var lastYearDelayedFlatTax: Double
             if let lastLine = cashFlowArray.last { // de l'année précédente, s'il y en a une
-                lastYearDelayedTaxableIrppRevenue = lastLine.taxableIrppRevenueDelayedToNextYear.value(atEndOf: year - 1)
+                lastYearDelayedFlatTax = lastLine.flatTaxDelayedToNextYear.value(atEndOf: year - 1)
             } else {
-                lastYearDelayedTaxableIrppRevenue = 0
+                lastYearDelayedFlatTax = 0
             }
             
             /// ajouter une nouvelle ligne pour une nouvelle année
             do {
 //                print(lifeInsSuccessions.last?.description)
                 let newCashFlowLine =
-                    try CashFlowLine(run                                   : run,
-                                     withYear                              : year,
-                                     withFamily                            : family,
-                                     withExpenses                          : expenses,
-                                     withPatrimoine                        : patrimoine,
-                                     taxableIrppRevenueDelayedFromLastyear : lastYearDelayedTaxableIrppRevenue,
-                                     previousSuccession                    : lifeInsSuccessions.last,
-                                     using                                 : model)
+                    try CashFlowLine(run                    : run,
+                                     withYear               : year,
+                                     withFamily             : family,
+                                     withExpenses           : expenses,
+                                     withPatrimoine         : patrimoine,
+                                     lastYearDelayedFlatTax : lastYearDelayedFlatTax,
+                                     previousSuccession     : lifeInsSuccessions.last,
+                                     using                  : model)
                 cashFlowArray.append(newCashFlowLine)
                 // ajouter les éventuelles successions survenues pendant l'année à la liste globale
                 legalSuccessions   += newCashFlowLine.legalSuccessions

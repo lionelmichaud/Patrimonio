@@ -48,9 +48,9 @@ public struct CashFlowLine {
     // Revenus
     
     /// Profits des Parents en report d'imposition d'une année sur l'autre
-    public var taxableIrppRevenueDelayedToNextYear = Debt(name  : "REVENU IMPOSABLE REPORTE A L'ANNEE SUIVANTE",
-                                                          note  : "",
-                                                          value : 0)
+    public var flatTaxDelayedToNextYear = Debt(name  : "REVENU IMPOSABLE REPORTE A L'ANNEE SUIVANTE",
+                                               note  : "",
+                                               value : 0)
     
     /// Agrégat des Revenus annuels des Parents (hors SCI)
     public var adultsRevenues = ValuedRevenues(name: "REVENUS PARENTS HORS SCI")
@@ -158,26 +158,28 @@ public struct CashFlowLine {
     ///   - family: la famille dont il faut faire le bilan
     ///   - expenses: dépenses de la famille
     ///   - patrimoine: le patrimoine de la famille
-    ///   - taxableIrppRevenueDelayedFromLastyear: revenus taxable à l'IRPP en report d'imposition de l'année précédente
+    ///   - lastYearDelayedFlatTax: flat taxe en report d'imposition de l'année précédente
     ///   - previousSuccession: succession précédente pour les assuarnces vies
     ///   - model: le modèle à utiliser
     /// - Throws: Si pas assez de capital -> `CashFlowError.notEnoughCash(missingCash: amountRemainingToRemove)`
-    public init(run                                   : Int,
-                withYear       year                   : Int,
-                withFamily     family                 : Family,
-                withExpenses   expenses               : LifeExpensesDic,
-                withPatrimoine patrimoine             : Patrimoin,
-                taxableIrppRevenueDelayedFromLastyear : Double,
-                previousSuccession                    : Succession?,
-                using model                           : Model) throws {
+    public init(run                       : Int,
+                withYear       year       : Int,
+                withFamily     family     : Family,
+                withExpenses   expenses   : LifeExpensesDic,
+                withPatrimoine patrimoine : Patrimoin,
+                lastYearDelayedFlatTax    : Double,
+                previousSuccession        : Succession?,
+                using model               : Model) throws {
         //        print(previousSuccession?.description)
         self.year = year
         let adultsNames   = family.adultsAliveName(atEndOf: year) ?? []
         let childrenNames = family.childrenAliveName(atEndOf: year) ?? []
-        adultsRevenues
-            .taxableIrppRevenueDelayedFromLastYear
-            .setValue(to: taxableIrppRevenueDelayedFromLastyear)
-        
+        adultTaxes
+            .perCategory[.flatTax]?
+            .namedValues
+            .append(NamedValue(name: "Report imposition",
+                               value: lastYearDelayedFlatTax.rounded()))
+
         /// initialize life insurance yearly rebate on taxes
         // TODO: mettre à jour le model de défiscalisation Asurance Vie
         var lifeInsuranceRebate =
@@ -305,7 +307,20 @@ public struct CashFlowLine {
         }
     }
     
-    /// Gérer l'excédent ou le déficit de trésorierie (commune des Parents) en fin d'année
+    /// Gérer l'excédent ou le déficit de trésorierie (commun des Parents) en fin d'année.
+    ///
+    /// Le déficit de trésorerie éventuel en année courante est compensé par une(des) liquidation(s)
+    /// d'actif(s) telle(q) que le produit NET total de(s) cession(s) compense exactement le déficit.
+    /// Net s'entend comme net de charges sociales et d'impôts.
+    ///
+    ///   1) Déficit = Liquidation - Charges(Liquidation) - Impots(Liquidation)
+    ///   2) Liquidation = Déficit + Charges(Liquidation) - Impots(Liquidation)
+    ///
+    /// L'équation (2) étant récursive, pour simplifier sa résolution on procède en 2 temps:
+    ///
+    ///   1) On liquide en année N un montant: Liquidation = Déficit + Charges(Liquidation)
+    ///   2) On reporte les impôts calculés en années N (soit Impots(Liquidation) ) sur l'année suivante.
+    ///   Ces impôts viendront s'ajouter aux dépenses de l'année N+1.
     ///
     /// - Warning:
     ///   On ne gère pas ici le ré-investissement des biens vendus dans l'année et détenus en propre.
@@ -338,14 +353,13 @@ public struct CashFlowLine {
         } else {
             // Retirer le solde net d'un investissement libre: d'abord PEA ensuite Assurance vie.
             // Les plus-values des retraits sont gérées comme un revenu en report d'imposition IRPP (dette).
-            let totalTaxableInterests =
+            let totalPlusValues =
                 try netCashFlowManager.getCashFromInvestement(thisAmount          : -netCashFlowSalesExcluded,
                                                               in                  : patrimoine,
                                                               atEndOf             : year,
                                                               for                 : adultsName,
-                                                              taxes               : &adultTaxes.perCategory,
                                                               lifeInsuranceRebate : &lifeInsuranceRebate)
-            taxableIrppRevenueDelayedToNextYear.increase(by: totalTaxableInterests.rounded())
+            flatTaxDelayedToNextYear.increase(by: totalPlusValues.totalTaxableInterests.rounded())
             
             // capitaliser les intérêts des investissements libres après avoir effectué les retraits
             netCashFlowManager.capitalizeFreeInvestments(in      : patrimoine,

@@ -22,7 +22,7 @@ extension FreeInvestement {
     ///   revenue: retrait net de charges sociales réellement obtenu (= netAmount si le capital est suffisant, moins sinon)
     ///   interests: intérêts bruts avant charges sociales
     ///   netInterests: intérêts nets de charges sociales
-    ///   taxableInterests: part des netInterests imposable à l'IRPP
+    ///   taxableInterests: part imposable des intérêts
     ///   socialTaxes: charges sociales sur les intérêts
     ///
     public func withdrawal(netAmount        : Double,
@@ -38,7 +38,7 @@ extension FreeInvestement {
         var brutAmount       : Double
         var brutAmountSplit  : (investment  : Double, interest  : Double)
         var netInterests     : Double // intérêts nets de charges sociales
-        var taxableInterests : Double // part imposable à l'IRPP des intérêts nets de charges sociales
+        var taxableInterests : Double // part imposable des intérêts
         var socialTaxes      : Double // charges sociales sur les intérêts
 
         if currentState.interest <= 0.0 {
@@ -156,6 +156,7 @@ extension FreeInvestement {
         netInterests     : Double,
         taxableInterests : Double,
         socialTaxes      : Double) {
+
         let zero = (revenue          : 0.0,
                     interests        : 0.0,
                     netInterests     : 0.0,

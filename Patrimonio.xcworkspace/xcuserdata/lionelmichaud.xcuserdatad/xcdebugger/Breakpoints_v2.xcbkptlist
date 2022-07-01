@@ -156,23 +156,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "9A60EF4C-E6F4-40F0-9DFE-81183B5D7DEF"
-            shouldBeEnabled = "Yes"
-            condition = "taxableIrppRevenueDelayedFromLastYear.value(atEndOf: 0) &gt; 0"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Modules/CashFlow/Sources/CashFlow/Incomes/ValuedRevenues.swift"
-            startingColumnNumber = "49"
-            endingColumnNumber = "54"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "totalTaxableIrpp"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "AD61E661-34CC-46E1-9CE6-AED70AD15EB0"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -229,17 +212,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F8A90DF5-0528-43F4-901E-F7D5E65D9A90"
+            uuid = "083AC5C1-B911-4676-A96B-FA9AE0337B05"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Shared/Modules/CashFlow/Sources/CashFlow/CashFlowLine+managePeriodicInvest.swift"
+            filePath = "Shared/Modules/CashFlow/Sources/CashFlow/NetCashFlowManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "managePeriodicInvestmentRevenues(of:forAdults:forChildren:lifeInsuranceRebate:using:)"
-            landmarkType = "7">
+            startingLineNumber = "282"
+            endingLineNumber = "282"
+            landmarkName = "NetCashFlowManager"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

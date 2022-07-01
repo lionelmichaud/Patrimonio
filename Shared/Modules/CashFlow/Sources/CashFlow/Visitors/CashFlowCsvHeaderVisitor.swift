@@ -115,11 +115,6 @@ public final class CashFlowCsvHeaderVisitor: CashFlowCsvVisitorP {
         header2.append("TOTAL;")
         header3.append("SOUS-TOTAL RENTRÉES;")
         header4.append("REVENU PARENTS TOTAL;")
-        // revenus reporté de l'année précédente
-        header1.append(">INFO;")
-        header2.append("DATA;")
-        header3.append("FISCAL;")
-        header4.append("\(element.taxableIrppRevenueDelayedFromLastYear.name);")
     }
     
     public func buildCsv(element: ValuedTaxes) {

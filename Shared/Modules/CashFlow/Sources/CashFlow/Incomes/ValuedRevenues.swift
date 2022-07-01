@@ -19,11 +19,6 @@ public struct ValuedRevenues {
     public var name : String
     public var perCategory: [RevenueCategory: RevenuesInCategory] = [:]
     
-    /// revenus imposable de l'année précédente et reporté à l'année courante
-    var taxableIrppRevenueDelayedFromLastYear = Debt(name  : "REVENU IMPOSABLE REPORTE DE L'ANNEE PRECEDENTE",
-                                                     note  : "",
-                                                     value : 0)
-    
     /// Total de tous les revenus nets de l'année versé en compte courant avant taxes et impots
     public var totalRevenue: Double {
         perCategory.reduce(.zero, { result, element in
@@ -48,7 +43,6 @@ public struct ValuedRevenues {
         perCategory.reduce(.zero, { result, element in
             result + element.value.taxablesIrpp.total
         })
-        + taxableIrppRevenueDelayedFromLastYear.value(atEndOf: 0)
     }
     
     /// tableau des noms de catégories et valeurs total "créditée" des revenus de cette catégorie
