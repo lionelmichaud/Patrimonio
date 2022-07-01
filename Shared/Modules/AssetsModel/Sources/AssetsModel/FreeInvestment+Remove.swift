@@ -77,7 +77,7 @@ extension FreeInvestement {
                 }
                 // les charges sociales sont pélevées à la source
                 revenue = brutAmount - socialTaxes
-                // Assurance vie: les plus values sont imposables à l'IRPP (mais avec une franchise applicable à la totalité des interets retirés dans l'année: calculé ailleurs)
+                // Assurance vie: les plus values sont imposables (mais avec une franchise applicable à la totalité des interets retirés dans l'année: calculé ailleurs)
                 taxableInterests = brutAmountSplit.interest
 
             case .pea:
@@ -97,7 +97,7 @@ extension FreeInvestement {
                 socialTaxes  = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
                 // les charges sociales sont pélevées à la source
                 revenue      = brutAmount - socialTaxes
-                // PEA: les plus values ne sont pas imposables à l'IRPP
+                // PEA: les plus values ne sont pas imposables
                 taxableInterests = 0.0
 
             case .other:

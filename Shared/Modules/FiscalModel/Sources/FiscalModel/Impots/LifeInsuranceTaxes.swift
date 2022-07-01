@@ -30,8 +30,8 @@ public struct LifeInsuranceTaxes: Codable, Equatable {
     
     public var model: Model
 
-    public func prelevementLiberatoire(plusValueTaxable : Double,
-                                       nbOfAdultAlive   : Int) -> Double {
+    public func flatTax(plusValueTaxable : Double,
+                        nbOfAdultAlive   : Int) -> Double {
         let lifeInsuranceRebate = model.rebatePerPerson * nbOfAdultAlive.double()
         if plusValueTaxable <= lifeInsuranceRebate {
             return 0

@@ -203,13 +203,15 @@ public struct CashFlowLine {
             /// SCPI: populate produit de vente, dividendes, taxes sociales des SCPI
             manageScpiRevenues(of          : patrimoine,
                                forAdults   : adultsNames,
-                               forChildren : childrenNames)
+                               forChildren : childrenNames,
+                               using       : model.fiscalModel)
             
             /// PERIODIC INVEST: populate revenue, des investissements financiers périodiques
             managePeriodicInvestmentRevenues(of                  : patrimoine,
                                              forAdults           : adultsNames,
                                              forChildren         : childrenNames,
-                                             lifeInsuranceRebate : &lifeInsuranceRebate)
+                                             lifeInsuranceRebate : &lifeInsuranceRebate,
+                                             using               : model.fiscalModel)
             
             // Note: les intérêts des investissements financiers libres sont capitalisés
             // => ne génèrent des charges sociales et de l'IRPP qu'au moment des retraits ou de leur liquidation

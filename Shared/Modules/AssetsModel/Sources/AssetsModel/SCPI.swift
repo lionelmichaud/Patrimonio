@@ -192,7 +192,7 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, Val
                         initialValue : lastKnownState.unitPrice)
     }
 
-    /// Revenus annuels net d'inflation (cas taxable à l'IRPP) car calculés en prenant comme base la valeur actuelle de marché **déflatée**.
+    /// Revenus annuels net d'inflation (cas taxable à l'IRPP ou Flat Taxe) car calculés en prenant comme base la valeur actuelle de marché **déflatée**.
     ///
     /// Le rendement est appliqué à la valeur de marché et non pas à la valeur de vente.
     /// Le revenu est calculé comme suit: (rendement actuel estimé) x (valeur de marché extrapolée)
@@ -200,8 +200,8 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, Val
     /// - Parameters:
     ///   - year: durant l'année
     /// - Returns:
-    ///   - revenue: revenus inscrit en compte courant avant prélèvements sociaux et IRPP mais net d'inflation
-    ///   - taxableIrpp: part des revenus inscrit en compte courant imposable à l'IRPP (après charges sociales)
+    ///   - revenue: revenus inscrit en compte courant avant prélèvements sociaux et Impots mais net d'inflation
+    ///   - taxableIrpp: part des revenus inscrit en compte courant imposable
     ///   - socialTaxes: charges sociales
     ///
     public func yearlyRevenueIRPP(during year: Int)
@@ -210,10 +210,10 @@ public struct SCPI: Identifiable, JsonCodableToBundleP, OwnableP, QuotableP, Val
         socialTaxes: Double) {
         let revenue     = (isOwned(during: year) ?
                            marketValue(atEndOf: year - 1) * lastKnownState.interestRate / 100.0 : 0.0)
-        let taxableIrpp = SCPI.fiscalModel.financialRevenuTaxes.netOfSocialTaxes(revenue)
+        let socialTaxes = SCPI.fiscalModel.financialRevenuTaxes.socialTaxes(revenue)
         return (revenue    : revenue,
-                taxableIrpp: taxableIrpp,
-                socialTaxes: revenue - taxableIrpp)
+                taxableIrpp: revenue,
+                socialTaxes: socialTaxes)
     }
     
     /// Revenus annuels net d'inflation (cas taxable à l'IS)

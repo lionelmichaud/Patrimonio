@@ -8,6 +8,7 @@
 
 import Foundation
 import PatrimoineModel
+import FiscalModel
 import NamedValue
 
 public extension CashFlowLine {
@@ -22,38 +23,50 @@ public extension CashFlowLine {
     ///   - childrenName: les enfants vivants de la famille
     mutating func manageScpiRevenues(of patrimoine            : Patrimoin,
                                      forAdults adultsName     : [String],
-                                     forChildren childrenName : [String]) {
+                                     forChildren childrenName : [String],
+                                     using fiscalModel        : Fiscal.Model) {
         for scpi in patrimoine.assets.scpis.items.sorted(by:<) {
             let scpiName = scpi.name
             
-            /// Revenus
+            /// Revenus annuels
             var yearlyAdultsRevenue = (revenue     : 0.0,
                                        taxableIrpp : 0.0,
                                        socialTaxes : 0.0)
             var yearlyChildrenRevenue = (revenue     : 0.0,
                                          taxableIrpp : 0.0,
                                          socialTaxes : 0.0)
+            var yearlyAdultsImpots   : Double = 0.0
+            var yearlyChildrenImpots : Double = 0.0
             if scpi.providesRevenue(to: adultsName) {
                 // populate SCPI revenues and social taxes
                 let yearlyRevenue  = scpi.yearlyRevenueIRPP(during: year)
-                let adultsFraction = scpi.ownership.ownedRevenueFraction(by: adultsName)
+                let adultsFraction = scpi.ownership.ownedRevenueFraction(by: adultsName) / 100.0
                 // dividendes inscrit en compte courant avant prélèvements sociaux et IRPP
-                // part des dividendes inscrit en compte courant imposable à l'IRPP
+                // part des dividendes inscrit en compte courant imposable
                 // prélèvements sociaux payés sur les dividendes de SCPI
-                yearlyAdultsRevenue = (revenue    : adultsFraction / 100.0 * yearlyRevenue.revenue,
-                                       taxableIrpp: adultsFraction / 100.0 * yearlyRevenue.taxableIrpp,
-                                       socialTaxes: adultsFraction / 100.0 * yearlyRevenue.socialTaxes)
+                let taxablesFlatTaxParents = adultsFraction * yearlyRevenue.taxableIrpp
+                yearlyAdultsRevenue = (revenue    : adultsFraction * yearlyRevenue.revenue,
+                                       taxableIrpp: taxablesFlatTaxParents,
+                                       socialTaxes: adultsFraction * yearlyRevenue.socialTaxes)
+                yearlyAdultsImpots = fiscalModel
+                    .financialRevenuTaxes
+                    .flatTax(plusValueTaxable: taxablesFlatTaxParents)
+
             }
             if scpi.providesRevenue(to: childrenName) {
                 // populate SCPI revenues and social taxes
                 let yearlyRevenue    = scpi.yearlyRevenueIRPP(during: year)
-                let childrenFraction = scpi.ownership.ownedRevenueFraction(by: childrenName)
+                let childrenFraction = scpi.ownership.ownedRevenueFraction(by: childrenName) / 100.0
                 // dividendes inscrit en compte courant avant prélèvements sociaux et IRPP
-                // part des dividendes inscrit en compte courant imposable à l'IRPP
+                // part des dividendes inscrit en compte courant imposable
                 // prélèvements sociaux payés sur les dividendes de SCPI
-                yearlyChildrenRevenue = (revenue    : childrenFraction / 100.0 * yearlyRevenue.revenue,
-                                         taxableIrpp: childrenFraction / 100.0 * yearlyRevenue.taxableIrpp,
-                                         socialTaxes: childrenFraction / 100.0 * yearlyRevenue.socialTaxes)
+                let taxablesFlatTaxChildren = childrenFraction * yearlyRevenue.taxableIrpp
+                yearlyChildrenRevenue = (revenue    : childrenFraction * yearlyRevenue.revenue,
+                                         taxableIrpp: taxablesFlatTaxChildren,
+                                         socialTaxes: childrenFraction * yearlyRevenue.socialTaxes)
+                yearlyChildrenImpots = fiscalModel
+                    .financialRevenuTaxes
+                    .flatTax(plusValueTaxable: taxablesFlatTaxChildren)
             }
             // Adultes
         adultsRevenues: do {
@@ -63,12 +76,17 @@ public extension CashFlowLine {
                 .namedValues
                 .append(NamedValue(name: scpiName,
                                    value: yearlyAdultsRevenue.revenue.rounded()))
-            adultsRevenues
-                .perCategory[.scpis]?
-                .taxablesIrpp
+//            adultsRevenues
+//                .perCategory[.scpis]?
+//                .taxablesIrpp
+//                .namedValues
+//                .append(NamedValue(name: scpiName,
+//                                   value: yearlyAdultsRevenue.taxableIrpp.rounded()))
+            adultTaxes
+                .perCategory[.flatTax]?
                 .namedValues
                 .append(NamedValue(name: scpiName,
-                                   value: yearlyAdultsRevenue.taxableIrpp.rounded()))
+                                   value: yearlyAdultsImpots))
             adultTaxes
                 .perCategory[.socialTaxes]?
                 .namedValues
@@ -83,12 +101,17 @@ public extension CashFlowLine {
                 .namedValues
                 .append(NamedValue(name: scpiName,
                                    value: yearlyChildrenRevenue.revenue.rounded()))
-            childrenRevenues
-                .perCategory[.scpis]?
-                .taxablesIrpp
+//            childrenRevenues
+//                .perCategory[.scpis]?
+//                .taxablesIrpp
+//                .namedValues
+//                .append(NamedValue(name: scpiName,
+//                                   value: yearlyChildrenRevenue.taxableIrpp.rounded()))
+            childrenTaxes
+                .perCategory[.flatTax]?
                 .namedValues
                 .append(NamedValue(name: scpiName,
-                                   value: yearlyChildrenRevenue.taxableIrpp.rounded()))
+                                   value: yearlyChildrenImpots))
             childrenTaxes
                 .perCategory[.socialTaxes]?
                 .namedValues

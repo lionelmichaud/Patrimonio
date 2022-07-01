@@ -83,7 +83,7 @@ struct SimulationRachatView: View {
                 FreeInvestement
                     .fiscalModel
                     .lifeInsuranceTaxes
-                    .prelevementLiberatoire(plusValueTaxable: withdrawal.taxableInterests,
+                    .flatTax(plusValueTaxable: withdrawal.taxableInterests,
                                             nbOfAdultAlive: family.nbOfAdultAlive(atEndOf: Date.now.year))
             case .pea:
                 // pas d'impôt sur les plus-values au-delà de 8 ans de détention du PEA
@@ -94,7 +94,7 @@ struct SimulationRachatView: View {
                 FreeInvestement
                     .fiscalModel
                     .financialRevenuTaxes
-                    .prelevementLiberatoire(plusValueTaxable: withdrawal.taxableInterests)
+                    .flatTax(plusValueTaxable: withdrawal.taxableInterests)
         }
     }
 }

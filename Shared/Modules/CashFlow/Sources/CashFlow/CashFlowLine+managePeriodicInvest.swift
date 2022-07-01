@@ -10,6 +10,7 @@ import Foundation
 import AppFoundation
 import PatrimoineModel
 import NamedValue
+import FiscalModel
 
 public extension CashFlowLine {
     /// Gère le produit de la vente des investissements financiers périodiques + les versements périodiques à réaliser
@@ -24,13 +25,19 @@ public extension CashFlowLine {
     mutating func managePeriodicInvestmentRevenues(of patrimoine            : Patrimoin,
                                                    forAdults adultsName     : [String],
                                                    forChildren childrenName : [String],
-                                                   lifeInsuranceRebate      : inout Double) {
+                                                   lifeInsuranceRebate      : inout Double,
+                                                   using fiscalModel        : Fiscal.Model) {
         // pour chaque investissement financier periodique
         for periodicInvestement in patrimoine.assets.periodicInvests.items.sorted(by:<) {
             let name = periodicInvestement.name
             var adultsSaleValue   : Double = 0
             var childrenSaleValue : Double = 0
-            var taxablesIrpp      : Double = 0
+            @ZeroOrPositive
+            var taxablesFlatTaxParents  : Double = 0
+            @ZeroOrPositive
+            var taxablesFlatTaxChildren : Double = 0
+            var flatTaxParents    : Double = 0
+            var flatTaxChildren   : Double = 0
             var socialTaxes       : Double = 0
             var yearlyPayement    : Double = 0
             var adultFraction     : Double = 1.0
@@ -61,23 +68,55 @@ public extension CashFlowLine {
                         childrenName.contains(key) ? value : 0.0
                     }.sum()
 
-                    // populate plus values taxables à l'IRPP
+                    // populate plus values taxables à la flat taxe
                     switch periodicInvestement.type {
                         case .lifeInsurance:
-                            @ZeroOrPositive var taxableInterests: Double
-                            // apply rebate if some is remaining
-                            taxableInterests = liquidatedValue.taxableIrppInterests - lifeInsuranceRebate
-                            lifeInsuranceRebate -= (liquidatedValue.taxableIrppInterests - taxableInterests)
+                            // PARENTS
+                            // part de plus-value des parents
+                            let parentsTaxableInterestsShare = adultFraction * liquidatedValue.taxableIrppInterests
                             // Impôts: part des produit de la liquidation inscrit en compte courant imposable
-                            taxablesIrpp = taxableInterests
+                            //   apply rebate if some is remaining
+                            taxablesFlatTaxParents = parentsTaxableInterestsShare - lifeInsuranceRebate
+                            //   update rebate
+                            lifeInsuranceRebate -= (parentsTaxableInterestsShare - taxablesFlatTaxParents)
                             
+                            flatTaxParents = fiscalModel
+                                .financialRevenuTaxes
+                                .flatTax(plusValueTaxable: taxablesFlatTaxParents)
+
+                            // ENFANTS
+                            // part de plus-value des enfants
+                            let childrenTaxableInterestsShare = (1.0 - adultFraction) * liquidatedValue.taxableIrppInterests
+                            // Impôts: part des produit de la liquidation inscrit en compte courant imposable
+                            //   apply rebate if some is remaining
+                            // TODO: - appliquer l'abattement aux enfants
+                            taxablesFlatTaxChildren = childrenTaxableInterestsShare
+                            //   update rebate
+                            // TODO: - mettre à jour l'abattement des enfants
+
+                            flatTaxChildren = fiscalModel
+                                .financialRevenuTaxes
+                                .flatTax(plusValueTaxable: taxablesFlatTaxChildren)
+
                         case .pea:
                             // Impôts: les plus values PEA ne sont pas imposables
-                            taxablesIrpp = 0
-                            
+                            taxablesFlatTaxParents  = 0
+                            taxablesFlatTaxChildren = 0
+
+                            flatTaxParents  = 0
+                            flatTaxChildren = 0
+
                         case .other:
                             // Impôts: part des produit de la liquidation inscrit en compte courant imposable
-                            taxablesIrpp = liquidatedValue.taxableIrppInterests
+                            taxablesFlatTaxParents  = adultFraction * liquidatedValue.taxableIrppInterests
+                            taxablesFlatTaxChildren = (1.0 - adultFraction) * liquidatedValue.taxableIrppInterests
+                            
+                            flatTaxParents = fiscalModel
+                                .financialRevenuTaxes
+                                .flatTax(plusValueTaxable: taxablesFlatTaxParents)
+                            flatTaxChildren = fiscalModel
+                                .financialRevenuTaxes
+                                .flatTax(plusValueTaxable: taxablesFlatTaxChildren)
                     }
                     // populate prélèvements sociaux
                     socialTaxes = liquidatedValue.socialTaxes
@@ -95,12 +134,17 @@ public extension CashFlowLine {
                 .namedValues
                 .append(NamedValue(name: name,
                                    value: adultsSaleValue.rounded()))
-            adultsRevenues
-                .perCategory[.financials]?
-                .taxablesIrpp
+//            adultsRevenues
+//                .perCategory[.financials]?
+//                .taxablesIrpp
+//                .namedValues
+//                .append(NamedValue(name: name,
+//                                   value: adultFraction * taxablesIrpp.rounded()))
+           adultTaxes
+                .perCategory[.flatTax]?
                 .namedValues
                 .append(NamedValue(name: name,
-                                   value: adultFraction * taxablesIrpp.rounded()))
+                                   value: flatTaxParents.rounded()))
             adultTaxes
                 .perCategory[.socialTaxes]?
                 .namedValues
@@ -119,12 +163,17 @@ public extension CashFlowLine {
                 .namedValues
                 .append(NamedValue(name: name,
                                    value: childrenSaleValue.rounded()))
-            childrenRevenues
-                .perCategory[.financials]?
-                .taxablesIrpp
+//            childrenRevenues
+//                .perCategory[.financials]?
+//                .taxablesIrpp
+//                .namedValues
+//                .append(NamedValue(name: name,
+//                                   value: (1.0 - adultFraction) * taxablesFlatTaxParents.rounded()))
+            childrenTaxes
+                .perCategory[.flatTax]?
                 .namedValues
                 .append(NamedValue(name: name,
-                                   value: (1.0 - adultFraction) * taxablesIrpp.rounded()))
+                                   value: flatTaxChildren.rounded()))
             childrenTaxes
                 .perCategory[.socialTaxes]?
                 .namedValues

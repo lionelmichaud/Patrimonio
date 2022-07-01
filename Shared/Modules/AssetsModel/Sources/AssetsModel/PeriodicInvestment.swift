@@ -443,13 +443,15 @@ public struct PeriodicInvestement: Identifiable, JsonCodableToBundleP, Financial
             case .lifeInsurance(let periodicSocialTaxes, _):
                 // Si les intérêts sont prélevés au fil de l'eau on les prélève pas à la liquidation
                 netInterests     = (periodicSocialTaxes ? cumulatedInterest : PeriodicInvestement.fiscalModel.financialRevenuTaxes.netOfSocialTaxes(cumulatedInterest))
-                taxableInterests = netInterests
+                // Assurance vie: les plus values sont imposables (mais avec une franchise applicable à la totalité des interets retirés dans l'année: calculé ailleurs)
+                taxableInterests = cumulatedInterest
             case .pea:
                 netInterests     = PeriodicInvestement.fiscalModel.financialRevenuTaxes.netOfSocialTaxes(cumulatedInterest)
+                // PEA: les plus values ne sont pas imposables
                 taxableInterests = 0.0
             case .other:
                 netInterests     = PeriodicInvestement.fiscalModel.financialRevenuTaxes.netOfSocialTaxes(cumulatedInterest)
-                taxableInterests = netInterests
+                taxableInterests = cumulatedInterest
         }
         return (revenue              : value(atEndOf: year),
                 interests            : cumulatedInterest,

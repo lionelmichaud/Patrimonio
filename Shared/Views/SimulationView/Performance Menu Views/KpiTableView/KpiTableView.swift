@@ -63,7 +63,7 @@ struct KpiTableView: View {
 //                    )
 //                    .contentShape(Rectangle())
 //                    .contextMenu {
-//                        Button(action: { replay(thisRun: line) }) { // swiftlint:disable:this multiple_closures_with_trailing_closure
+//                        Button(action: { replay(thisRun: line) }) { 
 //                            Label("Rejouer", systemImage: "arrowtriangle.forward.circle")
 //                        }
 //                    }
