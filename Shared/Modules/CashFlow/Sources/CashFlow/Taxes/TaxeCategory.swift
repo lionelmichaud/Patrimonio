@@ -14,6 +14,7 @@ import AppFoundation
 /// Catégories de dépenses
 public enum TaxeCategory: String, PickableEnumP, Codable, Hashable {
     case irpp            = "IRPP"
+    case flatTax         = "Flat Taxe"
     case isf             = "ISF"
     case legalSuccession = "Droits Succes. Légale"
     case liSuccession    = "Droits Succes. Ass. Vie"

@@ -22,7 +22,7 @@ extension FreeInvestement {
     ///   revenue: retrait net de charges sociales réellement obtenu (= netAmount si le capital est suffisant, moins sinon)
     ///   interests: intérêts bruts avant charges sociales
     ///   netInterests: intérêts nets de charges sociales
-    ///   taxableInterests: part des netInterests imposable à l'IRPP
+    ///   taxableInterests: part imposable des intérêts
     ///   socialTaxes: charges sociales sur les intérêts
     ///
     public func withdrawal(netAmount        : Double,
@@ -38,7 +38,7 @@ extension FreeInvestement {
         var brutAmount       : Double
         var brutAmountSplit  : (investment  : Double, interest  : Double)
         var netInterests     : Double // intérêts nets de charges sociales
-        var taxableInterests : Double // part imposable à l'IRPP des intérêts nets de charges sociales
+        var taxableInterests : Double // part imposable des intérêts
         var socialTaxes      : Double // charges sociales sur les intérêts
 
         if currentState.interest <= 0.0 {
@@ -77,7 +77,7 @@ extension FreeInvestement {
                 }
                 // les charges sociales sont pélevées à la source
                 revenue = brutAmount - socialTaxes
-                // Assurance vie: les plus values sont imposables à l'IRPP (mais avec une franchise applicable à la totalité des interets retirés dans l'année: calculé ailleurs)
+                // Assurance vie: les plus values sont imposables (mais avec une franchise applicable à la totalité des interets retirés dans l'année: calculé ailleurs)
                 taxableInterests = brutAmountSplit.interest
 
             case .pea:
@@ -97,7 +97,7 @@ extension FreeInvestement {
                 socialTaxes  = FreeInvestement.fiscalModel.financialRevenuTaxes.socialTaxes(brutAmountSplit.interest)
                 // les charges sociales sont pélevées à la source
                 revenue      = brutAmount - socialTaxes
-                // PEA: les plus values ne sont pas imposables à l'IRPP
+                // PEA: les plus values ne sont pas imposables
                 taxableInterests = 0.0
 
             case .other:
@@ -156,6 +156,7 @@ extension FreeInvestement {
         netInterests     : Double,
         taxableInterests : Double,
         socialTaxes      : Double) {
+
         let zero = (revenue          : 0.0,
                     interests        : 0.0,
                     netInterests     : 0.0,

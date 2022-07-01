@@ -78,8 +78,6 @@ public final class CashFlowCsvTableVisitor: CashFlowCsvVisitorP {
         
         // total des REVENUS
         table.append("\(element.totalRevenue.roundedString);")
-        // revenus reporté de l'année précédente
-        table.append("\(element.taxableIrppRevenueDelayedFromLastYear.value(atEndOf :0).roundedString);")
     }
 
     public func buildCsv(element: ValuedTaxes) {

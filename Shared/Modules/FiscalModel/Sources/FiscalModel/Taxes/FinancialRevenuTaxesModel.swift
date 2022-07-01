@@ -57,7 +57,7 @@ public struct FinancialRevenuTaxesModel: Codable, Equatable {
         return net / (1.0 - model.totalSocialTaxes / 100.0)
     }
 
-    public func prelevementLiberatoire(plusValueTaxable : Double) -> Double {
+    public func flatTax(plusValueTaxable : Double) -> Double {
         plusValueTaxable * model.flatTax / 100.0
     }
 }

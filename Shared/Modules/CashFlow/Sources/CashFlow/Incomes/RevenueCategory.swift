@@ -35,13 +35,21 @@ public enum RevenueCategory: String, PickableEnumP, Codable, Hashable {
     /// et donc ré-investi dans un actif sans distinction de son propriétaire
     var isPartOfCashFlow: Bool {
         switch self {
-            case .workIncomes, .pensions,
-                 .layoffCompensation, .unemployAlloc,
-                 .scpis, .realEstateRents,
-                 .legalSuccession, .liSuccession:
+                // inclus
+            case .workIncomes,
+                    .pensions,
+                    .layoffCompensation,
+                    .unemployAlloc,
+                    .scpis,
+                    .realEstateRents,
+                    .legalSuccession,
+                    .liSuccession:
                 return true
-                
-            case .financials, .scpiSale, .realEstateSale:
+
+                // exclus
+            case .financials,
+                    .scpiSale,
+                    .realEstateSale:
                 return false
         }
     }
