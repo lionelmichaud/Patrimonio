@@ -41,7 +41,7 @@ public extension PieChartView {
             
             let attrString = NSMutableAttributedString(string: centerText)
             attrString.setAttributes([.foregroundColor: ChartThemes.DarkChartColors.legendColor,
-                                      .font: ChartThemes.ChartDefaults.titleFont,
+                                      .font: ChartThemes.ChartDefaults.smallTitleFont,
                                       .paragraphStyle: paragraphStyle],
                                      range: NSRange(location: 0, length: attrString.length))
             self.centerAttributedText = attrString
@@ -69,7 +69,7 @@ public extension PieChartView {
         self.chartDescription?.enabled = descriptionEnabled
         self.chartDescription?.text    = chartDescription
         self.chartDescription?.font    = ChartThemes.ChartDefaults.largeLegendFont
-        
+
         // bulle d'info
         let marker = PieMarkerView(color               : ChartThemes.BallonColors.color,
                                    font                : ChartThemes.ChartDefaults.baloonfont,

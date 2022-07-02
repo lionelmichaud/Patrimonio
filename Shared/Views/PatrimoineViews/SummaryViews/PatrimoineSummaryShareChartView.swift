@@ -13,6 +13,21 @@ import PatrimoineModel
 import Charts
 import HelpersView
 
+struct TranslucentBackgroung: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .allowsTightening(true)
+            .padding(2)
+            .background(RoundedRectangle(cornerRadius: 4).foregroundColor(.secondary))
+    }
+}
+
+extension View {
+    public func translucentBackgroung() -> some View {
+        modifier(TranslucentBackgroung())
+    }
+}
+
 struct PatrimoineSummaryShareChartView: View {
     static let tous     = "Tous"
     static let adults   = "Adultes"
@@ -21,15 +36,23 @@ struct PatrimoineSummaryShareChartView: View {
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var uiState    : UIState
     @State private var evaluationContext      : EvaluationContext = .patrimoine
-    @State private var selectedMembers        : String            = tous
-    
+    @State private var selectedMembers        : String            = adults
+
     var body: some View {
         VStack {
+            HStack {
+                CasePicker(pickedCase: $evaluationContext, label: "Context d'évaluation:")
+                    .pickerStyle(.menu)
+                    .padding(.trailing)
+
+                Spacer()
+            }.padding(.horizontal)
+
             HStack {
                 FamilyMembersPatrimoineSharesView(family            : family,
                                                   patrimoine        : patrimoine,
                                                   year              : Int(uiState.patrimoineViewState.evalDate),
-                                                  evaluationContext : $evaluationContext)
+                                                  evaluationContext : evaluationContext)
                 PatrimoineCategorySharesView(family            : family,
                                              patrimoine        : patrimoine,
                                              year              : Int(uiState.patrimoineViewState.evalDate),
@@ -51,35 +74,33 @@ struct FamilyMembersPatrimoineSharesView : View {
     var family      : Family
     var patrimoine  : Patrimoin
     var year        : Int
-    @Binding var evaluationContext: EvaluationContext
+    var evaluationContext: EvaluationContext
     
     var body: some View {
-        VStack {
-            HStack {
-                CasePicker(pickedCase: $evaluationContext, label: "Context d'évaluation:")
-                    .pickerStyle(.menu)
-            }
-            
+        ZStack(alignment: .topLeading) {
             PieChartTemplateView(chartDescription   : nil,
                                  centerText         : "REPARTITION\nDU\nPATRIMOINE\nNET DES\nADULTES",
                                  descriptionEnabled : true,
                                  legendEnabled      : false,
                                  data               : data)
+            Text(evaluationContext.displayString)
+                .translucentBackgroung()
+                .padding([.leading, .top])
         }
-        .padding(.top).border(Color.white)
+        .border(Color.white)
     }
     
     /// Données à afficher sur le graphique
     var data : [(label: String, value: Double)] {
         let membersName = family.adultsName
         let dataEntries: [(label: String, value: Double)] =
-            membersName.map { memberName in
-                let memberActifNet = patrimoine.ownedValue(by                : memberName,
-                                                           atEndOf           : year,
-                                                           evaluationContext : evaluationContext)
-                let adultPrenom = family.member(withName: memberName)!.name.givenName!
-                return (label: adultPrenom, value: memberActifNet)
-            }
+        membersName.map { memberName in
+            let memberActifNet = patrimoine.ownedValue(by                : memberName,
+                                                       atEndOf           : year,
+                                                       evaluationContext : evaluationContext)
+            let adultPrenom = family.member(withName: memberName)!.name.givenName!
+            return (label: adultPrenom, value: memberActifNet)
+        }
         return dataEntries
     }
 }
@@ -89,32 +110,41 @@ struct PatrimoineCategorySharesView : View {
     var patrimoine             : Patrimoin
     var year                   : Int
     var evaluationContext      : EvaluationContext
-    @Binding var selectedMembers : String
+    @Binding
+    var selectedMembers : String
+
     private static let immobilier    = "Immobilier"
     private static let scpi          = "SCPI"
     private static let freeInvest    = "Invest. Libres"
     private static let perdiodInvest = "Invest. Périodiques"
-    @State private var menuItems     = [String]()
-    
+    @State
+    private var menuItems = [String]()
+
     var body: some View {
-        VStack {
-            HStack {
-                Text("\(evaluationContext.displayString)")
-                Spacer()
-                Picker("Pour:", selection: $selectedMembers) {
-                    ForEach(menuItems, id: \.self) { name in
-                        Text(name)
-                    }
-                }.pickerStyle(.menu)
-            }.padding(.horizontal)
-            
+        ZStack(alignment: .topLeading) {
             PieChartTemplateView(chartDescription   : nil,
                                  centerText         : "ACTIFS\nPAR\nCATÉGORIE",
                                  descriptionEnabled : true,
                                  legendEnabled      : false,
                                  data               : data)
+
+            HStack {
+                Text("\(evaluationContext.displayString)")
+                    .translucentBackgroung()
+                    .padding([.leading, .top])
+
+                Spacer()
+
+                Picker("Pour:", selection: $selectedMembers) {
+                    ForEach(menuItems, id: \.self) { name in
+                        Text(name)
+                    }
+                }
+                .pickerStyle(.menu)
+                .padding([.trailing, .top])
+            }
         }
-        .padding(.top).border(Color.white)
+        .border(Color.white)
         .onAppear(perform: buildMenu)
     }
     
@@ -144,26 +174,26 @@ struct PatrimoineCategorySharesView : View {
 
             membersName.forEach { name in
                 realEstatesTotal +=
-                    patrimoine.assets.realEstates
+                patrimoine.assets.realEstates
                     .ownedValue(by                : name,
                                 atEndOf           : year,
                                 evaluationContext : evaluationContext)
                 scpisTotal +=
-                    patrimoine.assets.scpis
+                patrimoine.assets.scpis
                     .ownedValue(by                : name,
                                 atEndOf           : year,
                                 evaluationContext : evaluationContext) +
-                    patrimoine.assets.sci.scpis
+                patrimoine.assets.sci.scpis
                     .ownedValue(by                : name,
                                 atEndOf           : year,
                                 evaluationContext : evaluationContext)
                 periodicInvestsTotal +=
-                    patrimoine.assets.periodicInvests
+                patrimoine.assets.periodicInvests
                     .ownedValue(by                : name,
                                 atEndOf           : year,
                                 evaluationContext : evaluationContext)
                 freeInvestsTotal +=
-                    patrimoine.assets.freeInvests
+                patrimoine.assets.freeInvests
                     .ownedValue(by                : name,
                                 atEndOf           : year,
                                 evaluationContext : evaluationContext)
@@ -205,9 +235,9 @@ struct PatrimoineCategorySharesView : View {
                          value: patrimoine.assets.scpis.ownedValue(by: selectedMembers,
                                                                    atEndOf: year,
                                                                    evaluationContext: evaluationContext) +
-                            patrimoine.assets.sci.scpis.ownedValue(by: selectedMembers,
-                                                                   atEndOf: year,
-                                                                   evaluationContext: evaluationContext))
+                         patrimoine.assets.sci.scpis.ownedValue(by: selectedMembers,
+                                                                atEndOf: year,
+                                                                evaluationContext: evaluationContext))
             if scpis.value != 0 {
                 dataEntries.append(scpis)
             }
@@ -231,7 +261,7 @@ struct PatrimoineCategorySharesView : View {
         
         return dataEntries
     }
-    
+
     private func buildMenu() {
         menuItems =
             [PatrimoineSummaryShareChartView.tous] +
@@ -264,7 +294,7 @@ struct PatrimoineSingleCategoryView : View {
     @State private var selectedCategory: PieChartAssetsCategory = .freeInvests
     
     var body: some View {
-        HStack {
+        ZStack(alignment: .topTrailing) {
             PieChartTemplateView(chartDescription   : nil,
                                  centerText         : "REPARTITION\nDANS UNE\nCATÉGORIE\nD'ACTIF",
                                  descriptionEnabled : true,
@@ -273,23 +303,19 @@ struct PatrimoineSingleCategoryView : View {
                                  smallLegend        : false,
                                  data               : data)
             
-            VStack {
-                VStack {
-                    Text("\(evaluationContext.displayString)")
-                        .padding(.top)
-                    Text("Pour: \(selectedMembers)")
-                        .padding(.top)
-                    HStack {
-                        CasePicker(pickedCase: $selectedCategory, label: "Categorie:")
-                            .pickerStyle(.menu)
-                    }.padding(.vertical)
-                }
-                .padding(.horizontal).border(Color.secondary)
-                .padding()
-                Spacer()
+            VStack(alignment: .center) {
+                Text("\(evaluationContext.displayString)")
+                    .translucentBackgroung()
+                    .padding(.top)
+
+                Text(selectedMembers)
+                    .translucentBackgroung()
+                
+                CasePicker(pickedCase: $selectedCategory, label: "Categorie:")
+                    .pickerStyle(.menu)
             }
+            .padding(.trailing)
         }.border(Color.white)
-        
     }
     
     /// Données à afficher sur le graphique
@@ -300,13 +326,13 @@ struct PatrimoineSingleCategoryView : View {
             case .periodicInvests:
                 patrimoine.assets.periodicInvests.items.sorted {
                     ($0.type.rawValue < $1.type.rawValue) ||
-                        (($0.type.rawValue == $1.type.rawValue) &&
-                            $0.ownedValue(by                : selectedMembers,
-                                          atEndOf           : year,
-                                          evaluationContext : evaluationContext) >
-                            $1.ownedValue(by                : selectedMembers,
-                                          atEndOf           : year,
-                                          evaluationContext : evaluationContext))
+                    (($0.type.rawValue == $1.type.rawValue) &&
+                     $0.ownedValue(by                : selectedMembers,
+                                   atEndOf           : year,
+                                   evaluationContext : evaluationContext) >
+                     $1.ownedValue(by                : selectedMembers,
+                                   atEndOf           : year,
+                                   evaluationContext : evaluationContext))
                 }.forEach { item in
                     var value = 0.0
                     if !family.membersName.contains(selectedMembers) {
@@ -329,13 +355,13 @@ struct PatrimoineSingleCategoryView : View {
             case .freeInvests:
                 patrimoine.assets.freeInvests.items.sorted {
                     ($0.type.rawValue < $1.type.rawValue) ||
-                        (($0.type.rawValue == $1.type.rawValue) &&
-                            $0.ownedValue(by                : selectedMembers,
-                                          atEndOf           : year,
-                                          evaluationContext : evaluationContext) >
-                            $1.ownedValue(by                : selectedMembers,
-                                          atEndOf           : year,
-                                          evaluationContext : evaluationContext))
+                    (($0.type.rawValue == $1.type.rawValue) &&
+                     $0.ownedValue(by                : selectedMembers,
+                                   atEndOf           : year,
+                                   evaluationContext : evaluationContext) >
+                     $1.ownedValue(by                : selectedMembers,
+                                   atEndOf           : year,
+                                   evaluationContext : evaluationContext))
                 }.forEach { item in
                     var value = 0.0
                     if !family.membersName.contains(selectedMembers) {

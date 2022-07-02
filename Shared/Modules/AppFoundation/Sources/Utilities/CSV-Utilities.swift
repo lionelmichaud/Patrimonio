@@ -20,13 +20,19 @@ func createCSVX(from recArray:[[String: AnyObject]]) {
     let csvString = heading + rows.joined(separator: "\n")
     
     do {
-        let path = try FileManager.default.url(for: .documentDirectory,
-                                               in: .userDomainMask,
-                                               appropriateFor: nil,
-                                               create: false)
-        
-        let fileURL = path.appendingPathComponent("TrailTime.csv")
-        try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
+        if #available(iOS 16.0, *) {
+            let fileURL = URL.documentsDirectory
+                .appending(path: "TrailTime.csv")
+            try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
+        } else {
+            let path = try FileManager.default.url(for: .documentDirectory,
+                                                   in: .userDomainMask,
+                                                   appropriateFor: nil,
+                                                   create: false)
+
+            let fileURL = path.appendingPathComponent("TrailTime.csv")
+            try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
+        }
     } catch {
         print("error creating file")
     }

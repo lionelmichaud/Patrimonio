@@ -28,70 +28,70 @@ struct PatrimoineSummaryTableView: View {
         RatingView(rating    : patrimoine.assets.realEstates.items.averageRiskLevel(atEndOf: year)?.rawValue ?? 0,
                    maxRating : RiskLevel.allCases.count - 1,
                    label     : PatrimoineSummaryTableView.riskLabel,
-                   font      : .body,
+                   font      : .callout,
                    onColor   : PatrimoineSummaryTableView.riskColors)
     }
     var realEstateLiquidityView: some View {
         RatingView(rating    : patrimoine.assets.realEstates.items.averageLiquidityLevel(atEndOf: year)?.rawValue ?? 0,
                    maxRating : LiquidityLevel.allCases.count - 1,
                    label     : PatrimoineSummaryTableView.liquidityLabel,
-                   font      : .body,
+                   font      : .callout,
                    onColor   : PatrimoineSummaryTableView.liquidityColors)
     }
     var scpiRiskView: some View {
         RatingView(rating    : patrimoine.assets.scpis.items.averageRiskLevel(atEndOf: year)?.rawValue ?? 0,
                    maxRating : RiskLevel.allCases.count - 1,
                    label     : PatrimoineSummaryTableView.riskLabel,
-                   font      : .body,
+                   font      : .callout,
                    onColor   : PatrimoineSummaryTableView.riskColors)
     }
     var scpiLiquidityView: some View {
         RatingView(rating    : patrimoine.assets.scpis.items.averageLiquidityLevel(atEndOf: year)?.rawValue ?? 0,
                    maxRating : LiquidityLevel.allCases.count - 1,
                    label     : PatrimoineSummaryTableView.liquidityLabel,
-                   font      : .body,
+                   font      : .callout,
                    onColor   : PatrimoineSummaryTableView.liquidityColors)
     }
     var periodicRiskView: some View {
         RatingView(rating    : patrimoine.assets.periodicInvests.items.averageRiskLevel(atEndOf: year)?.rawValue ?? 0,
                    maxRating : RiskLevel.allCases.count - 1,
                    label     : PatrimoineSummaryTableView.riskLabel,
-                   font      : .body,
+                   font      : .callout,
                    onColor   : PatrimoineSummaryTableView.riskColors)
     }
     var periodicLiquidityView: some View {
         RatingView(rating    : patrimoine.assets.periodicInvests.items.averageLiquidityLevel(atEndOf: year)?.rawValue ?? 0,
                    maxRating : LiquidityLevel.allCases.count - 1,
                    label     : PatrimoineSummaryTableView.liquidityLabel,
-                   font      : .body,
+                   font      : .callout,
                    onColor   : PatrimoineSummaryTableView.liquidityColors)
     }
     var freeRiskView: some View {
         RatingView(rating    : patrimoine.assets.freeInvests.items.averageRiskLevel(atEndOf: year)?.rawValue ?? 0,
                    maxRating : RiskLevel.allCases.count - 1,
                    label     : PatrimoineSummaryTableView.riskLabel,
-                   font      : .body,
+                   font      : .callout,
                    onColor   : PatrimoineSummaryTableView.riskColors)
     }
     var freeLiquidityView: some View {
         RatingView(rating    : patrimoine.assets.freeInvests.items.averageLiquidityLevel(atEndOf: year)?.rawValue ?? 0,
                    maxRating : LiquidityLevel.allCases.count - 1,
                    label     : PatrimoineSummaryTableView.liquidityLabel,
-                   font      : .body,
+                   font      : .callout,
                    onColor   : PatrimoineSummaryTableView.liquidityColors)
     }
     var sciScpiRiskView: some View {
         RatingView(rating    : patrimoine.assets.sci.scpis.items.averageRiskLevel(atEndOf: year)?.rawValue ?? 0,
                    maxRating : RiskLevel.allCases.count - 1,
                    label     : PatrimoineSummaryTableView.riskLabel,
-                   font      : .body,
+                   font      : .callout,
                    onColor   : PatrimoineSummaryTableView.riskColors)
     }
     var sciScpiLiquidityView: some View {
         RatingView(rating    : patrimoine.assets.sci.scpis.items.averageLiquidityLevel(atEndOf: year)?.rawValue ?? 0,
                    maxRating : LiquidityLevel.allCases.count - 1,
                    label     : PatrimoineSummaryTableView.liquidityLabel,
-                   font      : .body,
+                   font      : .callout,
                    onColor   : PatrimoineSummaryTableView.liquidityColors)
     }
 
@@ -102,18 +102,19 @@ struct PatrimoineSummaryTableView: View {
                     Text("Actif Net").fontWeight(.bold)
                     Spacer()
                     Text(patrimoine.value(atEndOf: year).€String)
-                }.font(.title3)
+                }
+                .font(.title3)
+                .listRowBackground(ListTheme.tableRowsBaseColor)
             } header: {
-                header("", year: year)
+                header("TOTAL", year: year)
             }
-            .listRowBackground(ListTheme.tableRowsBaseColor)
-            
+
             Section {
                 Group {
                     // (0) Immobilier
                     ListTableRowView(label       : "Immobilier",
                                      value       : patrimoine.assets.realEstates.value(atEndOf: year) +
-                                        patrimoine.assets.scpis.value(atEndOf: year),
+                                     patrimoine.assets.scpis.value(atEndOf: year),
                                      indentLevel : 0,
                                      header      : true,
                                      rating1     : { EmptyView() },
@@ -170,7 +171,7 @@ struct PatrimoineSummaryTableView: View {
                     // (0) Financier
                     ListTableRowView(label       : "Financier",
                                      value       : patrimoine.assets.periodicInvests.value(atEndOf: year) +
-                                        patrimoine.assets.freeInvests.value(atEndOf: year),
+                                     patrimoine.assets.freeInvests.value(atEndOf: year),
                                      indentLevel : 0,
                                      header      : true,
                                      rating1     : { EmptyView() },
@@ -197,8 +198,8 @@ struct PatrimoineSummaryTableView: View {
                                                                label     : PatrimoineSummaryTableView.liquidityLabel,
                                                                font      : .callout,
                                                                onColor   : PatrimoineSummaryTableView.liquidityColors) })
-                        }
-                                         //      (1) Investissement Libre
+                    }
+                    //      (1) Investissement Libre
                     ListTableRowView(label       : "Investissement Libre",
                                      value       : patrimoine.assets.freeInvests.value(atEndOf: year),
                                      indentLevel : 1,
@@ -227,7 +228,7 @@ struct PatrimoineSummaryTableView: View {
                     // (0) SCI
                     ListTableRowView(label       : "SCI",
                                      value       : patrimoine.assets.sci.scpis.value(atEndOf: year) +
-                                        patrimoine.assets.sci.bankAccount,
+                                     patrimoine.assets.sci.bankAccount,
                                      indentLevel : 0,
                                      header      : true,
                                      rating1     : { sciScpiRiskView },

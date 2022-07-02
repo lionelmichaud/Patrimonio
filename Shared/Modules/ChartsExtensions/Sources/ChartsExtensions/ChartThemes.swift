@@ -42,6 +42,7 @@ public struct ChartThemes {
         public static let xLargeLabelFont : NSUIFont = .systemFont(ofSize: 14)
         public static let smallLegendFont : NSUIFont = .systemFont(ofSize: 11)
         public static let largeLegendFont : NSUIFont = .systemFont(ofSize: 13)
+        public static let smallTitleFont  : NSUIFont = .systemFont(ofSize: 12, weight: .bold)
         public static let titleFont       : NSUIFont = .systemFont(ofSize: 16, weight: .bold)
         public static let baloonfont      : NSUIFont = .systemFont(ofSize: 14)
         public static let valueFont       : NSUIFont = .systemFont(ofSize: 14)

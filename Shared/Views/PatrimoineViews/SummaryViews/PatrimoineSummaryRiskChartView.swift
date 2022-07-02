@@ -39,7 +39,7 @@ struct PatrimoineSummaryRiskChartView: View {
     @EnvironmentObject private var patrimoine : Patrimoin
     @EnvironmentObject private var uiState    : UIState
     @State private var evaluationContext      : EvaluationContext = .patrimoine
-    @State private var selectedMembers        : String            = tous
+    @State private var selectedMembers        : String            = adults
     @State private var menuItems = [String]()
 
     var body: some View {
@@ -48,16 +48,17 @@ struct PatrimoineSummaryRiskChartView: View {
                 CasePicker(pickedCase: $evaluationContext, label: "Context d'évaluation:")
                     .pickerStyle(.menu)
                     .padding(.trailing)
-                
+
                 Picker("Pour:", selection: $selectedMembers) {
                     ForEach(menuItems, id: \.self) { name in
                         Text(name)
                     }
-                }.pickerStyle(.menu)
+                }
+                .pickerStyle(.menu)
 
                 Spacer()
             }.padding(.horizontal)
-            
+
             HStack {
                 PatrimoineRiskChartView(family            : family,
                                         patrimoine        : patrimoine,
@@ -81,7 +82,9 @@ struct PatrimoineSummaryRiskChartView: View {
         }
         .onAppear(perform: buildMenu)
     }
-    
+
+    // MARK: - Methods
+
     private func buildMenu() {
         menuItems =
             [PatrimoineSummaryRiskChartView.tous] +
