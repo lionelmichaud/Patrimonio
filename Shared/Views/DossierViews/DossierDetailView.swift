@@ -82,14 +82,14 @@ struct DossierDetailView: View {
             /// Barre d'outils
             .toolbar {
                 ToolbarItemGroup(placement: .automatic) {
-                    /// Bouton: Charger
+                    /// Bouton: Charger / Revenir
                     Button(
                         action : activate,
                         label  : {
                             Image(systemName: dossier.isActive ? "arrowshape.turn.up.backward" : "square.and.arrow.down.on.square")
                                 .imageScale(.large)
                         })
-                    .buttonStyle(.bordered)
+                    //.buttonStyle(.bordered)
                     .disabled(!activable)
 
                     /// Bouton: Sauvegarder
@@ -107,16 +107,17 @@ struct DossierDetailView: View {
                             Image(systemName: "square.and.pencil")
                                 .imageScale(.large)
                         })
-                    .buttonStyle(.bordered)
+                    //.buttonStyle(.bordered)
                     .disabled(!dossier.isActive)
                     
                     /// Bouton: Exporter fichiers du dossier actif
-                    Button(action: { share(geometry: geometry) },
-                           label: {
-                        Image(systemName: "square.and.arrow.up.on.square")
-                            .imageScale(.large)
-                    })
-                    .buttonStyle(.bordered)
+                    Button(
+                        action: { share(geometry: geometry) },
+                        label: {
+                            Image(systemName: "square.and.arrow.up.on.square")
+                                .imageScale(.large)
+                        })
+                    //.buttonStyle(.bordered)
                     .disabled(!dossier.isActive)
                 }
             }

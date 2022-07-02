@@ -23,7 +23,7 @@ struct DiskButton: View {
                     }
                 }
             })
-            .buttonStyle(.bordered)
+            //.buttonStyle(.bordered)
     }
     
     init(text   : String? = "Enregistrer",

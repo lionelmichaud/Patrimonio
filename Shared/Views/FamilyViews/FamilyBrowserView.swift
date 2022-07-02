@@ -23,19 +23,19 @@ struct FamilyBrowserView : View {
 
     var body: some View {
         // bouton "ajouter"
-        Button(
-            action: {
-                withAnimation {
-                    self.showingSheet = true
-                }
-            },
-            label: {
-                Label(title: { Text("Ajouter une personne") },
-                      icon : { Image(systemName: "person.fill.badge.plus") })
-                    .foregroundColor(.accentColor)
-            })
-
         Section {
+            Button(
+                action: {
+                    withAnimation {
+                        self.showingSheet = true
+                    }
+                },
+                label: {
+                    Label(title: { Text("Ajouter une personne") },
+                          icon : { Image(systemName: "plus.circle.fill") })
+                    .foregroundColor(.accentColor)
+                })
+
             // liste des membres de la famille
             ForEach(family.members.items) { member in
                 NavigationLink(destination: PersonDetailView().environmentObject(member)) {

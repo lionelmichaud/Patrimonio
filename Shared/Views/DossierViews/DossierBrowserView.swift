@@ -25,21 +25,21 @@ struct DossierBrowserView: View {
     @State private var alertItem : AlertItem?
 
     var body: some View {
-        /// bouton "ajouter"
-        Button(
-            action: {
-                withAnimation {
-                    self.showingSheet = true
-                }
-            },
-            label: {
-                Label(title: { Text("Créer un nouveau dosssier") },
-                      icon : { Image(systemName: "folder.fill.badge.plus") })
-                .foregroundColor(.accentColor)
-            })
-
         /// liste des dossiers
         Section {
+            /// bouton "ajouter"
+            Button(
+                action: {
+                    withAnimation {
+                        self.showingSheet = true
+                    }
+                },
+                label: {
+                    Label(title: { Text("Créer un nouveau dosssier") },
+                          icon : { Image(systemName: "plus.circle.fill") })
+                    .foregroundColor(.accentColor)
+                })
+
             ForEach(dataStore.dossiers.sorted(by: \.name)) { dossier in
                 NavigationLink(destination: DossierDetailView(dossier: dossier)) {
                     Label(title: { DossierRowView(dossier: dossier) },

@@ -64,7 +64,7 @@ struct FamilySummaryView: View {
                                 Image(systemName: "square.and.arrow.up.on.square")
                                     .imageScale(.large)
                                })
-                            .buttonStyle(.bordered)
+                            //.buttonStyle(.bordered)
                     }
                 }
             }
