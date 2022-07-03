@@ -31,7 +31,7 @@ struct DiscreteDistributionView: View {
                            onEditingChanged  : { _ in maxX = max(minX+delta, maxX) },
                            minimumValueLabel : Text("\(minmin, specifier: "%.1f")"),
                            maximumValueLabel : Text("\(maxmax, specifier: "%.1f")"),
-                           label             : {Text("Minimum")})
+                           label             : { Text("Minimum") })
                 }
                 .padding(.horizontal)
                 HStack {
@@ -43,7 +43,7 @@ struct DiscreteDistributionView: View {
                            onEditingChanged  : { _ in minX = min(minX, maxX-delta) },
                            minimumValueLabel : Text("\(minmin, specifier: "%.1f")"),
                            maximumValueLabel : Text("\(maxmax, specifier: "%.1f")"),
-                           label             : {Text("Maximum")})
+                           label             : { Text("Maximum") })
                 }
                 .padding(.horizontal)
             }

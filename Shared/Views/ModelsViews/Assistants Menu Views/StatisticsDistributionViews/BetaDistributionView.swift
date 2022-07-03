@@ -34,7 +34,7 @@ struct BetaDistributionView: View {
                                onEditingChanged  : { _ in maxX = max(minX+delta, maxX) },
                                minimumValueLabel : Text("\(minmin, specifier: "%.1f")"),
                                maximumValueLabel : Text("\(maxmax, specifier: "%.1f")"),
-                               label             : {Text("Minimum")})
+                               label             : { Text("Min") })
                     }
                     .padding(.horizontal)
                     HStack {
@@ -46,7 +46,7 @@ struct BetaDistributionView: View {
                                onEditingChanged  : { _ in minX = min(minX, maxX-delta) },
                                minimumValueLabel : Text("\(minmin, specifier: "%.1f")"),
                                maximumValueLabel : Text("\(maxmax, specifier: "%.1f")"),
-                               label             : {Text("Maximum")})
+                               label             : { Text("Max") })
                     }
                     .padding(.horizontal)
                 }
@@ -59,7 +59,7 @@ struct BetaDistributionView: View {
                                step              : 0.1,
                                minimumValueLabel : Text("\(0.0, specifier: "%.1f")"),
                                maximumValueLabel : Text("\(10.0, specifier: "%.1f")"),
-                               label             : {Text("alpha")})
+                               label             : { Text("alpha") })
                     }
                     .padding(.horizontal)
                     HStack {

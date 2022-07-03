@@ -26,10 +26,15 @@ public struct LabeledTextEditor : View {
         HStack {
             Text(label)
                 .frame(width: Double(labelWidth), alignment: .leading)
-            TextEditor(text: $text)
-                .border(Color("borderTextColor"), width: 1)
+            if #available(iOS 16.0, macOS 13.0, *) {
+                TextField("Note", text: $text, axis: .vertical)
+                    .lineLimit(5)
+                    .textFieldStyle(.roundedBorder)
+            } else {
+                TextEditor(text: $text)
+                    .textFieldStyle(.roundedBorder)
+            }
         }
-        .textFieldStyle(.roundedBorder)
         .foregroundColor(validity.isValid(text: text) ? .primary : .red)
     }
     

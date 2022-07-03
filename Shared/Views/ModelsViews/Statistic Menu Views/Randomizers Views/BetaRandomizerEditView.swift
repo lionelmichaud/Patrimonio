@@ -29,8 +29,8 @@ struct BetaRandomizerEditView : View {
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
-                        Text("Minimum")
-                        Spacer()
+                        Text("Min")
+                        //Spacer()
                         Text(betaRandomizer.rndGenerator.minX!.percentString(digit: 1))
                             .foregroundColor(.secondary)
                     }
@@ -43,8 +43,8 @@ struct BetaRandomizerEditView : View {
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
-                        Text("Maximum")
-                        Spacer()
+                        Text("Max")
+                        //Spacer()
                         Text(betaRandomizer.rndGenerator.maxX!.percentString(digit: 1))
                             .foregroundColor(.secondary)
                     }
@@ -57,8 +57,8 @@ struct BetaRandomizerEditView : View {
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
-                        Text("Alpha")
-                        Spacer()
+                        Text("⍺")
+                        //Spacer()
                         Text("\(betaRandomizer.rndGenerator.alpha as NSNumber, formatter: decimalFormatter)")
                             .foregroundColor(.secondary)
                     }
@@ -71,8 +71,8 @@ struct BetaRandomizerEditView : View {
                         in    : 0 ... 10,
                         step  : 0.1) {
                     HStack {
-                        Text("Beta")
-                        Spacer()
+                        Text("β")
+                        //Spacer()
                         Text("\(betaRandomizer.rndGenerator.beta as NSNumber, formatter: decimalFormatter)")
                             .foregroundColor(.secondary)
                     }
