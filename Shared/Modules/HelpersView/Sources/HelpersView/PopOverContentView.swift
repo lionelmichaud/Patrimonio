@@ -10,24 +10,35 @@ import SwiftUI
 
 public struct PopOverContentView: View {
     var title       : String?
-    var description : String
+    var description : String?
+    var imageName   : String?
     
     public var body: some View {
-        VStack(spacing: 10) {
-            if let title = title {
-                Text(title)
-                    .font(.title2)
-                    .foregroundColor(.blue)
+        ScrollView(.vertical, showsIndicators: true) {
+            VStack(spacing: 10) {
+                if let title {
+                    Text(title)
+                        .font(.title2)
+                        .foregroundColor(.blue)
+                }
+                if let description {
+                    Text(description)
+                }
+                if let imageName {
+                    Image(imageName)
+                        .scaledToFit()
+                }
             }
-            Text(description)
         }
         .padding()
     }
 
     public init(title       : String?  = nil,
-                description : String) {
-        self.title = title
+                description : String?  = nil,
+                imageName   : String?  = nil) {
+        self.title       = title
         self.description = description
+        self.imageName   = imageName
     }
 }
 

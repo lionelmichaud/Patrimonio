@@ -203,8 +203,8 @@
             filePath = "Shared/Views/PatrimoineViews/AssetDetailedViews/FreeInvestment/SimulationRachatView.swift"
             startingColumnNumber = "22"
             endingColumnNumber = "22"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
             landmarkName = "computeWithdrawal(montantRetraitNet:)"
             landmarkType = "7">
          </BreakpointContent>

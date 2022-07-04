@@ -34,6 +34,15 @@ public enum InvestementKind: Codable {
                 return true
         }
     }
+
+    public var isLifeInsurance: Bool {
+        switch self {
+            case .lifeInsurance(_ , _):
+                return true
+            default:
+                return false
+        }
+    }
 }
 
 // MARK: - Extensions
