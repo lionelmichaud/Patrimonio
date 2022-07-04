@@ -12,40 +12,6 @@ import ModelEnvironment
 import AssetsModel
 import HelpersView
 
-//public struct LabelTextEditor : View {
-//    let label      : String
-//    let labelWidth : Int
-//    let validity   : StringValidityRule
-//    @Binding
-//    var text       : String
-//
-//    public var body: some View {
-//        HStack {
-//            Text(label)
-//                .frame(width: Double(labelWidth), alignment: .leading)
-//            if #available(iOS 16.0, macOS 13.0, *) {
-//            TextField("Note", text: $text, axis: .vertical)
-//                .lineLimit(5)
-//                .textFieldStyle(.roundedBorder)
-//            } else {
-//                TextEditor(text: $text)
-//                    .textFieldStyle(.roundedBorder)
-//            }
-//        }
-//        .foregroundColor(validity.isValid(text: text) ? .primary : .red)
-//    }
-//
-//    public init(label       : String,
-//                labelWidth  : Int = 70,
-//                text        : Binding<String>,
-//                validity    : StringValidityRule = .none) {
-//        self.label       = label
-//        self.labelWidth  = labelWidth > 0 ? labelWidth : 70
-//        self.validity    = validity
-//        self._text       = text
-//    }
-//}
-
 struct FreeInvestDetailedView: View {
     @EnvironmentObject var model  : Model
     let updateDependenciesToModel : () -> Void

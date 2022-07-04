@@ -5,12 +5,12 @@
             "value" : 60000,
             "proportional" : false,
             "name" : "Achat Berline",
-            "note" : "Actualisé le 16/02/2021",
+            "note" : "Actualisé le 04/07/2022",
             "timeSpan" : {
                 "periodic": {
                     "from" :
                     {
-                        "fixedYear": 2024,
+                        "fixedYear": 2025,
                         "event"    : null,
                         "group"    : null,
                         "name"     : ""
@@ -29,15 +29,15 @@
         
         {
             "id" : "15325B0E-331D-481F-9C34-57C088289741",
-            "value" : 15000,
+            "value" : 18000,
             "proportional" : false,
             "name" : "Achat Moto",
-            "note" : "Actualisé le 16/02/2021",
+            "note" : "Actualisé le 04/07/2022",
             "timeSpan" : {
                 "periodic": {
                     "from" :
                     {
-                        "fixedYear": 2025,
+                        "fixedYear": 2026,
                         "event"    : null,
                         "group"    : null,
                         "name"     : ""
@@ -83,10 +83,10 @@
         
         {
             "id" : "15325B0E-331D-481F-9C34-57C088289743",
-            "value" : 15000,
+            "value" : 10000,
             "proportional" : false,
             "name" : "Achat véh Lou-Ann",
-            "note" : "Actualisé le 26/06/2022",
+            "note" : "Actualisé le 04/07/2022",
             "timeSpan" : {
                 "exceptional": { "inYear" : 2025 }
             }
@@ -94,10 +94,10 @@
         
         {
             "id" : "15325B0E-331D-481F-9C34-57C088289744",
-            "value" : 15000,
+            "value" : 10000,
             "proportional" : false,
             "name" : "Achat véh Arthur",
-            "note" : "Actualisé le 26/06/2022",
+            "note" : "Actualisé le 04/07/2022",
             "timeSpan" : {
                 "exceptional": { "inYear" : 2026 }
             }

@@ -5,13 +5,13 @@
             "value" : 1000,
             "proportional" : true,
             "name" : "Petit voyage d'été",
-            "note" : "Actualisé le 16/12/2021",
+            "note" : "Actualisé le 04/07/2022",
             "timeSpan" : {
                 "periodic": {
                     "period" : 2,
                     "from" :
                     {
-                        "fixedYear": 2022,
+                        "fixedYear": 2021,
                         "event"    : null,
                         "group"    : null,
                         "name"     : ""
@@ -32,13 +32,13 @@
             "value" : 3000,
             "proportional" : true,
             "name" : "Grand voyage d'été",
-            "note" : "Actualisé le 16/12/2021",
+            "note" : "Actualisé le 04/07/2022",
             "timeSpan" : {
                 "periodic": {
                     "period" : 2,
                     "from" :
                     {
-                        "fixedYear": 2021,
+                        "fixedYear": 2022,
                         "event"    : null,
                         "group"    : null,
                         "name"     : ""
