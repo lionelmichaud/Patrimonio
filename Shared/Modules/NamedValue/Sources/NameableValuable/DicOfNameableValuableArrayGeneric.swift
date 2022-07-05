@@ -73,6 +73,8 @@ where ItemCategory: PickableEnumP,
         try loadFromJSON(fromFolder: folder)
     }
 
+    // MARK: - Methods
+
     /// Lire toutes les dépenses dans des fichiers au format JSON.
     /// Un fichier par catégorie de dépense.
     /// nom du fichier "Category_LifeExpense.json"

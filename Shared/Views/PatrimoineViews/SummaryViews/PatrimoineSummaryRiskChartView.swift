@@ -45,19 +45,20 @@ struct PatrimoineSummaryRiskChartView: View {
     var body: some View {
         VStack {
             HStack {
+                Text("Context d'évaluation")
                 CasePicker(pickedCase: $evaluationContext, label: "Context d'évaluation:")
-                    .pickerStyle(.menu)
                     .padding(.trailing)
 
+                Text("Pour")
                 Picker("Pour:", selection: $selectedMembers) {
                     ForEach(menuItems, id: \.self) { name in
-                        Text(name)
+                        Text(name).tag(name)
                     }
                 }
-                .pickerStyle(.menu)
 
                 Spacer()
-            }.padding(.horizontal)
+            }
+            .padding(.horizontal)
 
             HStack {
                 PatrimoineRiskChartView(family            : family,
@@ -87,9 +88,9 @@ struct PatrimoineSummaryRiskChartView: View {
 
     private func buildMenu() {
         menuItems =
-            [PatrimoineSummaryRiskChartView.tous] +
-            [PatrimoineSummaryRiskChartView.adults] +
-            [PatrimoineSummaryRiskChartView.children] +
+            [PatrimoineSummaryRiskChartView.tous,
+             PatrimoineSummaryRiskChartView.adults,
+             PatrimoineSummaryRiskChartView.children] +
             family.membersName
     }
 }

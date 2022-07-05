@@ -41,12 +41,11 @@ struct PatrimoineSummaryShareChartView: View {
     var body: some View {
         VStack {
             HStack {
+                Text("Context d'évaluation")
                 CasePicker(pickedCase: $evaluationContext, label: "Context d'évaluation:")
-                    .pickerStyle(.menu)
-                    .padding(.trailing)
-
                 Spacer()
-            }.padding(.horizontal)
+            }
+            .padding(.horizontal)
 
             HStack {
                 FamilyMembersPatrimoineSharesView(family            : family,
@@ -59,6 +58,7 @@ struct PatrimoineSummaryShareChartView: View {
                                              evaluationContext : evaluationContext,
                                              selectedMembers   : $selectedMembers)
             }
+            
             HStack {
                 PatrimoineSingleCategoryView(family            : family,
                                              patrimoine        : patrimoine,
