@@ -96,8 +96,12 @@ struct ExpenseSummaryView: View {
 
                     // graphique
                     if allCategories {
-                        ExpenseSummaryChartView(evalDate : uiState.expenseViewState.evalDate)
-                            .frame(maxHeight: .infinity)
+                        if #available(iOS 16.0, *) {
+                            ExpenseSummaryChartView(evalDate : uiState.expenseViewState.evalDate)
+                                .frame(maxHeight: .infinity)
+                        } else {
+                            Text("Vue non disponible (iOS 16 seulement)")
+                        }
                     } else {
                         ExpenseDetailedChartView(endDate  : uiState.expenseViewState.endDate,
                                                  evalDate : uiState.expenseViewState.evalDate,
