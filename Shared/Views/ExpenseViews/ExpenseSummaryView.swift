@@ -12,12 +12,27 @@ import Persistence
 import LifeExpense
 import HelpersView
 
+enum ExpenseChartTypeEnum {
+    case valueChart
+    case timelineChart
+
+    var pickerImage: Image {
+        switch self {
+            case .valueChart : return Image(systemName: "chart.bar.doc.horizontal")
+            case .timelineChart : return Image(systemName: "chart.line.flattrend.xyaxis")
+        }
+    }
+}
+
 struct ExpenseSummaryView: View {
     @EnvironmentObject private var dataStore : Store
     @EnvironmentObject private var expenses  : LifeExpensesDic
     @EnvironmentObject private var uiState   : UIState
-    let minDate = CalendarCst.thisYear
-    let maxDate = CalendarCst.thisYear + 40
+    let minDate = Date.now.year
+    let maxDate = Date.now.year + 40
+
+    @State
+    private var chartType = ExpenseChartTypeEnum.valueChart
 
     @State
     private var allCategories = true
@@ -33,6 +48,7 @@ struct ExpenseSummaryView: View {
         """
         Projection dans le temps des dépenses par catégories.
         """
+
     private var totalExpense: String {
         if allCategories {
             return expenses.value(atEndOf: Int(uiState.expenseViewState.evalDate)).€String
@@ -45,69 +61,107 @@ struct ExpenseSummaryView: View {
         }
     }
 
-    var body: some View {
-        if dataStore.activeDossier != nil {
-            GeometryReader { geometry in
-                VStack {
-                    VStack {
-                        // sélection des catégories à afficher
-                        HStack {
-                            Toggle("Toutes les catégories", isOn: $allCategories)
-                                .toggleStyle(.button)
-                                .buttonStyle(.bordered)
-                                .padding(.trailing)
-                            if !allCategories {
-                                HStack {
-                                    Text("Catégorie de dépense sélectionnée")
-                                    CasePicker(pickedCase: $uiState.expenseViewState.selectedCategory, label: "Catégories de dépenses")
-                                    //.pickerStyle(.menu)
-                                }
-                            }
-                            Spacer()
-                        }
+    // choix des paramètres du graphique
+    private var chartParametersView: some View {
+        VStack {
+            HStack {
+                // sélection du type de graphique à afficher
+                Picker("Présentation", selection: $chartType.animation()) {
+                    ExpenseChartTypeEnum.valueChart.pickerImage.tag(ExpenseChartTypeEnum.valueChart)
+                    ExpenseChartTypeEnum.timelineChart.pickerImage.tag(ExpenseChartTypeEnum.timelineChart)
+                }
+                .pickerStyle(.segmented)
+                .frame(maxWidth: 100)
 
-                        // évaluation annuelle des dépenses
-                        HStack {
-                            Text("Evaluation en ") + Text(String(Int(uiState.expenseViewState.evalDate)))
-                            Slider(value : $uiState.expenseViewState.evalDate.animation(),
-                                   in    : minDate.double() ... maxDate.double(),
-                                   step  : 1,
-                                   onEditingChanged: {_ in
-                            })
-                            Text(totalExpense)
-                        }
+                // sélection des catégories à afficher: Toutes/Une
+                if chartType == .valueChart {
+                    Toggle("Toutes les catégories", isOn: $allCategories.animation())
+                        .toggleStyle(.button)
+                        .buttonStyle(.bordered)
+                }
 
-                        // paramétrage du graphique détaillé
-                        if !allCategories {
-                            HStack {
-                                Text("Période de ") + Text(String(minDate))
-                                Slider(value : $uiState.expenseViewState.endDate,
-                                       in    : minDate.double() ... maxDate.double(),
-                                       step  : 5,
-                                       onEditingChanged: {
-                                    print("\($0)")
-                                })
-                                Text("à ") + Text(String(Int(uiState.expenseViewState.endDate)))
-                            }
-                        }
+                // sélection de l'unique catégorie à afficher
+                if chartType == .timelineChart || (chartType == .valueChart && !allCategories) {
+                    HStack {
+                        Text("Catégorie de dépense sélectionnée")
+                        CasePicker(pickedCase: $uiState.expenseViewState.selectedCategory.animation(), label: "Catégories de dépenses")
                     }
-                    .padding(.horizontal)
+                }
+                Spacer()
+            }
 
-                    // graphique
-                    if allCategories {
-                        if #available(iOS 16.0, *) {
-                            ExpenseSummaryChartView(evalDate : uiState.expenseViewState.evalDate)
-                                .frame(maxHeight: .infinity)
-                        } else {
-                            Text("Vue non disponible (iOS 16 seulement)")
-                        }
+            // choix de l'année / évaluation annuelle des dépenses
+            HStack {
+                Text("Evaluation en ") + Text(String(Int(uiState.expenseViewState.evalDate)))
+                Slider(value : $uiState.expenseViewState.evalDate.animation(),
+                       in    : minDate.double() ... maxDate.double(),
+                       step  : 1,
+                       onEditingChanged: {_ in
+                })
+                Text(totalExpense)
+                    .bold()
+            }
+
+            // paramétrage du graphique détaillé
+            if chartType == .timelineChart && !allCategories {
+                HStack {
+                    Text("Période de ") + Text(String(minDate))
+                    Slider(value : $uiState.expenseViewState.endDate,
+                           in    : minDate.double() ... maxDate.double(),
+                           step  : 5,
+                           onEditingChanged: {
+                        print("\($0)")
+                    })
+                    Text("à ") + Text(String(Int(uiState.expenseViewState.endDate)))
+                }
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    // graphique
+    private var chartView: some View {
+        // graphique
+        Group {
+            switch chartType {
+                case .valueChart:
+                    if #available(iOS 16.0, *) {
+                        ExpenseSummaryChartView(evalDate      : uiState.expenseViewState.evalDate,
+                                                allCategories : allCategories,
+                                                category      : uiState.expenseViewState.selectedCategory)
+                        .frame(maxHeight: .infinity)
                     } else {
-                        ExpenseDetailedChartView(endDate  : uiState.expenseViewState.endDate,
+                        Text("Vue disponible à partir de iOS 16 seulement")
+                    }
+
+                case .timelineChart:
+                    if #available(iOS 16.0, *) {
+                        ExpenseDetailedChartUIView(endDate  : uiState.expenseViewState.endDate,
+                                                 evalDate : uiState.expenseViewState.evalDate,
+                                                 category : uiState.expenseViewState.selectedCategory)
+                        .padding()
+                        .frame(maxHeight: .infinity)
+                    } else {
+                        ExpenseDetailedChartUIView(endDate  : uiState.expenseViewState.endDate,
                                                  evalDate : uiState.expenseViewState.evalDate,
                                                  category : uiState.expenseViewState.selectedCategory)
                         .padding()
                         .frame(maxHeight: .infinity)
                     }
+
+            }
+        }
+    }
+
+    var body: some View {
+        if dataStore.activeDossier != nil {
+            GeometryReader { geometry in
+                VStack {
+                    // choix des paramètres du graphique
+                    chartParametersView
+
+                    // graphique
+                    chartView
                 }
                 .alert(item: $alertItem, content: newAlert)
                 .navigationTitle("Synthèse")

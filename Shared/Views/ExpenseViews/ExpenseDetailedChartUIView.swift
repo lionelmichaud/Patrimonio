@@ -14,7 +14,7 @@ import ChartsExtensions
 
 // MARK: - Wrappers de UIView
 
-struct ExpenseDetailedChartView: NSUIViewRepresentable {
+struct ExpenseDetailedChartUIView: NSUIViewRepresentable {
     @EnvironmentObject var expenses : LifeExpensesDic
     let endDate  : Double
     let evalDate : Double
@@ -65,7 +65,7 @@ struct ExpenseDetailedChartView: NSUIViewRepresentable {
 
         //}
         dataSet = BarChartDataSet(entries : dataEntries)
-        dataSet.colors           = ExpenseDetailedChartView.ColorsTable
+        dataSet.colors           = ExpenseDetailedChartUIView.ColorsTable
         dataSet.drawIconsEnabled = false
 
         return dataSet
