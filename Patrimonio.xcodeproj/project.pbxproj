@@ -482,8 +482,6 @@
 		79AB5448263241CF00FADBA7 /* AppVersion.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB5410263241CF00FADBA7 /* AppVersion.json */; };
 		79B2728C2634DBEB00298E5D /* AppThemes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2728B2634DBEB00298E5D /* AppThemes.swift */; };
 		79B2728D2634DBEB00298E5D /* AppThemes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2728B2634DBEB00298E5D /* AppThemes.swift */; };
-		79B2729B2634E80C00298E5D /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2729A2634E80C00298E5D /* Charts */; };
-		79B272A12634E82700298E5D /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 79B272A02634E82700298E5D /* Charts */; };
 		79B2DB80264CA51800EFCAF9 /* MonteCarlo.csv in Resources */ = {isa = PBXBuildFile; fileRef = 79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */; };
 		79B2DB81264CA51800EFCAF9 /* MonteCarlo.csv in Resources */ = {isa = PBXBuildFile; fileRef = 79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */; };
 		79B2FE2C262C7DF900EBFF56 /* RetirementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2FE2B262C7DF900EBFF56 /* RetirementModel */; };
@@ -824,7 +822,6 @@
 				7970627F262C7B7C009A18F0 /* UnemployementModel in Frameworks */,
 				797574B026C13C9600842572 /* LifeExpense in Frameworks */,
 				7956995C262F90250015AF34 /* NamedValue in Frameworks */,
-				79B2729B2634E80C00298E5D /* Charts in Frameworks */,
 				79EF42D226C2B74900EC0555 /* HumanLifeModel in Frameworks */,
 				79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */,
 				79D4F19F27DE923900C5637D /* ChartsExtensions in Frameworks */,
@@ -875,7 +872,6 @@
 				794B016326B9C12C00882684 /* AssetsModel in Frameworks */,
 				797574AE26C13C8C00842572 /* LifeExpense in Frameworks */,
 				7956995E262F90310015AF34 /* NamedValue in Frameworks */,
-				79B272A12634E82700298E5D /* Charts in Frameworks */,
 				79B2FE2C262C7DF900EBFF56 /* RetirementModel in Frameworks */,
 				791ED0ED263A0A2800701202 /* StepperView in Frameworks */,
 				79FFC12926B84BD2005DEC8D /* Persistence in Frameworks */,
@@ -1729,7 +1725,6 @@
 				79EF7E67262C8A3600E9C0FF /* FiscalModel */,
 				79E713ED262C9891000FD625 /* EconomyModel */,
 				7956995B262F90250015AF34 /* NamedValue */,
-				79B2729A2634E80C00298E5D /* Charts */,
 				791ED0EA263A0A1200701202 /* StepperView */,
 				7935FFE42654492500AC1715 /* Files */,
 				799074232660524200F224F7 /* FileAndFolder */,
@@ -1786,7 +1781,6 @@
 				79EF7E69262C8A3D00E9C0FF /* FiscalModel */,
 				79E713EB262C9886000FD625 /* EconomyModel */,
 				7956995D262F90310015AF34 /* NamedValue */,
-				79B272A02634E82700298E5D /* Charts */,
 				791ED0EC263A0A2800701202 /* StepperView */,
 				799074252660524C00F224F7 /* FileAndFolder */,
 				79D3E9EE2661A8F1006FAA3F /* Stateful */,
@@ -1887,7 +1881,6 @@
 			);
 			mainGroup = 7920DC44262C700400536B03;
 			packageReferences = (
-				79B272992634E80C00298E5D /* XCRemoteSwiftPackageReference "Charts" */,
 				791ED0E9263A0A1200701202 /* XCRemoteSwiftPackageReference "StepperView" */,
 				7935FFE32654492500AC1715 /* XCRemoteSwiftPackageReference "Files" */,
 			);
@@ -2052,7 +2045,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "#export PATH=\"$PATH:/opt/homebrew/bin\"\n#if which swiftlint >/dev/null; then\n#  swiftlint\n#else\n#  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n#fi\n";
 		};
 		7998E1D5262DC83300DA4A12 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2856,14 +2849,6 @@
 				minimumVersion = 4.2.0;
 			};
 		};
-		79B272992634E80C00298E5D /* XCRemoteSwiftPackageReference "Charts" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/danielgindi/Charts.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -3069,16 +3054,6 @@
 		799339FF26E0F80B0081D378 /* Liabilities */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Liabilities;
-		};
-		79B2729A2634E80C00298E5D /* Charts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 79B272992634E80C00298E5D /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = Charts;
-		};
-		79B272A02634E82700298E5D /* Charts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 79B272992634E80C00298E5D /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = Charts;
 		};
 		79B2FE2B262C7DF900EBFF56 /* RetirementModel */ = {
 			isa = XCSwiftPackageProductDependency;

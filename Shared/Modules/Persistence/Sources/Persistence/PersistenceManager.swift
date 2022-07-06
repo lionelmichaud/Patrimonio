@@ -12,7 +12,6 @@ import AppFoundation
 import FileAndFolder
 import NamedValue
 import Files
-//import Charts // https://github.com/danielgindi/Charts.git
 
 private let customLog = Logger(subsystem : "me.michaud.lionel.Patrimonio",
                                category  : "PersistenceManager")

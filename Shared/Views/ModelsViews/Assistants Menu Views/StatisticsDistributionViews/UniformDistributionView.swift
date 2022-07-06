@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Statistics
-import Charts // https://github.com/danielgindi/Charts.git
+import AndroidCharts // https://github.com/danielgindi/Charts.git
 import ChartsExtensions
 
 // MARK: - Loie Uniforme

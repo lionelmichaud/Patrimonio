@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Charts // https://github.com/danielgindi/Charts.git
+import AndroidCharts // https://github.com/danielgindi/Charts.git
 #if canImport(UIKit)
 import UIKit
 #endif

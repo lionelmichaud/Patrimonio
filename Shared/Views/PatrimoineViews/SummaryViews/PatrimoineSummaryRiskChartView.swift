@@ -11,7 +11,7 @@ import PatrimoineModel
 import Ownership
 import AssetsModel
 import FamilyModel
-import Charts
+import AndroidCharts
 import ChartsExtensions
 import HelpersView
 

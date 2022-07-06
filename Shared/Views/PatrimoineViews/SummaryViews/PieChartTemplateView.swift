@@ -7,7 +7,7 @@
 
 import SwiftUI
 import AppFoundation
-import Charts
+import AndroidCharts
 import ChartsExtensions
 import HelpersView
 

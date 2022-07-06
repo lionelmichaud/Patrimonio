@@ -55,11 +55,10 @@ struct ExpenseSummaryView: View {
                             Toggle("Toutes les catégories", isOn: $allCategories)
                                 .toggleStyle(.button)
                                 .buttonStyle(.bordered)
-                            Spacer()
-
+                                .padding(.trailing)
                             if !allCategories {
                                 HStack {
-                                    Text("Catégories de dépenses")
+                                    Text("Catégorie de dépense sélectionnée")
                                     CasePicker(pickedCase: $uiState.expenseViewState.selectedCategory, label: "Catégories de dépenses")
                                     //.pickerStyle(.menu)
                                 }
@@ -70,7 +69,7 @@ struct ExpenseSummaryView: View {
                         // évaluation annuelle des dépenses
                         HStack {
                             Text("Evaluation en ") + Text(String(Int(uiState.expenseViewState.evalDate)))
-                            Slider(value : $uiState.expenseViewState.evalDate,
+                            Slider(value : $uiState.expenseViewState.evalDate.animation(),
                                    in    : minDate.double() ... maxDate.double(),
                                    step  : 1,
                                    onEditingChanged: {_ in

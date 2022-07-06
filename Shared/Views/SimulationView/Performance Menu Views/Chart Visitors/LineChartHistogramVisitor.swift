@@ -7,7 +7,7 @@
 
 import Foundation
 import Statistics
-import Charts
+import AndroidCharts
 
 // MARK: - Génération de graphiques - HISTOGRAM
 

@@ -8,7 +8,7 @@
 import Foundation
 import AppFoundation
 import BalanceSheet
-import Charts
+import AndroidCharts
 
 // MARK: - Génération de graphiques - Détail par catégories - BALANCE SHEET
 

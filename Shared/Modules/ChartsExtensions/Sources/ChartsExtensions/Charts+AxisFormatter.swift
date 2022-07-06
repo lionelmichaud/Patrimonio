@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Charts // https://github.com/danielgindi/Charts.git
+import AndroidCharts // https://github.com/danielgindi/Charts.git
 
 // MARK: - Choix du formatteur de valeur à appliquer sur un axe Y
 
@@ -17,7 +17,7 @@ public enum AxisFormatterChoice {
     case name (names: [String])
     case none
 
-    public func IaxisFormatter() -> Charts.IAxisValueFormatter? {
+    public func IaxisFormatter() -> AndroidCharts.IAxisValueFormatter? {
         switch self {
             case .k€:
                 return Kilo€Formatter()

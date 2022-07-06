@@ -8,7 +8,7 @@
 
 import SwiftUI
 import AppFoundation
-import Charts // https://github.com/danielgindi/Charts.git
+import AndroidCharts // https://github.com/danielgindi/Charts.git
 import ChartsExtensions
 import DateBoundary
 import FamilyModel

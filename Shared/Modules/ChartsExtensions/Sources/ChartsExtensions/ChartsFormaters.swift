@@ -8,7 +8,7 @@
 
 import Foundation
 import AppFoundation
-import Charts // https://github.com/danielgindi/Charts.git
+import AndroidCharts // https://github.com/danielgindi/Charts.git
 
 // swiftlint:disable type_name
 public class Kilo€Formatter: NSObject, IAxisValueFormatter, IValueFormatter {

@@ -10,7 +10,7 @@ import AppFoundation
 import Ownership
 import FamilyModel
 import PatrimoineModel
-import Charts
+import AndroidCharts
 import HelpersView
 
 struct TranslucentBackgroung: ViewModifier {

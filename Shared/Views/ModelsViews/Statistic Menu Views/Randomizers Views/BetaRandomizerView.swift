@@ -9,7 +9,7 @@
 import SwiftUI
 import Statistics
 import EconomyModel
-import Charts // https://github.com/danielgindi/Charts.git
+import AndroidCharts // https://github.com/danielgindi/Charts.git
 import ChartsExtensions
 import ModelEnvironment
 

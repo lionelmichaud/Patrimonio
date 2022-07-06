@@ -9,7 +9,7 @@ import SwiftUI
 import AppFoundation
 import HelpersView
 import LifeExpense
-import Charts
+import AndroidCharts
 import ChartsExtensions
 
 // MARK: - Wrappers de UIView
