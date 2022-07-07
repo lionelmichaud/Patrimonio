@@ -156,13 +156,6 @@ struct ExpenseTimelineChartView: View {
             .foregroundStyle(.gray)
             .lineStyle(StrokeStyle(lineWidth: 3))
         }
-//        .chartXAxis {
-//            AxisMarks(values: .stride(by: .year, count: 2)) { _ in
-//                AxisTick()
-//                AxisGridLine()
-//                AxisValueLabel(format: .dateTime.year(), centered: false)
-//            }
-//        }
         .padding(.top)
         .padding(.trailing, 30)
         .overlay(alignment: .topTrailing) {
