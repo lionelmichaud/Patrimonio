@@ -107,6 +107,65 @@
             "timeSpan" : {
                 "permanent" : {}
             }
+        },
+        {
+            "id" : "E641309D-2FE2-41F4-8AC0-4548F7BE8E0A",
+            "value" : 384,
+            "proportional" : false,
+            "name" : "Abonnement internet",
+            "note" : "Actualisé le 16/02/2021\n32€/mois",
+            "timeSpan" : {
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard",
+                    }
+                }
+            }
+        },
+        {
+            "id" : "B4EFF395-7A51-47AB-AD29-E7461ECB9ADA",
+            "value" : 0,
+            "proportional" : false,
+            "name" : "Jusqu'à",
+            "note" : "Actualisé le ",
+            "timeSpan" : {
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear": 0,
+                        "event"    : "Fin d'activité professionnelle",
+                        "name"     : "Mme. Vanessa MICHAUD"
+                    }
+                }
+            }
+        },
+
+        {
+            "id" : "562EE2A1-4FF5-450D-8BAE-3E8B803928DA",
+            "value" : 0,
+            "proportional" : false,
+            "name" : "De...à...",
+            "note" : "Actualisé le ",
+            "timeSpan" : {
+                "spanning": {
+                    "from" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Fin d'activité professionnelle",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tôt"
+                    },
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Décès",
+                        "name"      : "M. Lionel MICHAUD"
+                    }
+                }
+            }
         }
     ]
 }

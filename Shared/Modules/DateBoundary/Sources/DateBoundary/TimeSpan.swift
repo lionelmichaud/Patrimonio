@@ -55,7 +55,16 @@ public enum TimeSpan: Hashable, Codable {
                 return 6
         }
     }
-    
+
+    public var isPeriodic: Bool {
+        switch self {
+            case .periodic:
+                return true
+            default:
+                return false
+        }
+    }
+
     // MARK: - Methods
     
     /// True si l'année demandée est inclue dans la plage de validité

@@ -92,7 +92,11 @@ struct ExpenseSummaryView: View {
 
             // choix de l'année / évaluation annuelle des dépenses
             HStack {
-                Text("Evaluation en ") + Text(String(Int(uiState.expenseViewState.evalDate)))
+                Text("Evaluation en ") + Text(String("\(Int(uiState.expenseViewState.evalDate))")).bold()
+                Stepper("",
+                        value: $uiState.expenseViewState.evalDate.animation(),
+                        in: minDate.double() ... maxDate.double())
+                .frame(maxWidth: 100)
                 Slider(value : $uiState.expenseViewState.evalDate.animation(),
                        in    : minDate.double() ... maxDate.double(),
                        step  : 1,

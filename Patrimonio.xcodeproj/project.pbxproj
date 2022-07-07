@@ -1593,18 +1593,18 @@
 		79AB53F5263241CF00FADBA7 /* Expenses */ = {
 			isa = PBXGroup;
 			children = (
-				79AB53F6263241CF00FADBA7 /* Abonnements_LifeExpense.json */,
-				79AB53F7263241CF00FADBA7 /* Education Famille_LifeExpense.json */,
-				79AB53F8263241CF00FADBA7 /* Voyage Transport_LifeExpense.json */,
-				79AB53F9263241CF00FADBA7 /* Cadeaux_LifeExpense.json */,
-				79AB53FA263241CF00FADBA7 /* Logement_LifeExpense.json */,
-				79AB53FB263241CF00FADBA7 /* Vie Quotidienne_LifeExpense.json */,
-				79AB53FC263241CF00FADBA7 /* Santé_LifeExpense.json */,
-				79AB53FD263241CF00FADBA7 /* Loisirs_LifeExpense.json */,
-				79AB53FE263241CF00FADBA7 /* Services_LifeExpense.json */,
 				79AB53FF263241CF00FADBA7 /* Exemples_LifeExpense.json */,
+				79AB53F6263241CF00FADBA7 /* Abonnements_LifeExpense.json */,
 				79AB5400263241CF00FADBA7 /* Autres_LifeExpense.json */,
+				79AB53F9263241CF00FADBA7 /* Cadeaux_LifeExpense.json */,
+				79AB53F7263241CF00FADBA7 /* Education Famille_LifeExpense.json */,
+				79AB53FA263241CF00FADBA7 /* Logement_LifeExpense.json */,
+				79AB53FD263241CF00FADBA7 /* Loisirs_LifeExpense.json */,
+				79AB53FC263241CF00FADBA7 /* Santé_LifeExpense.json */,
+				79AB53FE263241CF00FADBA7 /* Services_LifeExpense.json */,
 				79AB5401263241CF00FADBA7 /* Véhicules_LifeExpense.json */,
+				79AB53FB263241CF00FADBA7 /* Vie Quotidienne_LifeExpense.json */,
+				79AB53F8263241CF00FADBA7 /* Voyage Transport_LifeExpense.json */,
 			);
 			path = Expenses;
 			sourceTree = "<group>";
