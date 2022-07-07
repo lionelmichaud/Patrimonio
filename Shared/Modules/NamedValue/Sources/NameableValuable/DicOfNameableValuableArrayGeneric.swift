@@ -73,6 +73,8 @@ where ItemCategory: PickableEnumP,
         try loadFromJSON(fromFolder: folder)
     }
 
+    // MARK: - Methods
+
     /// Lire toutes les dépenses dans des fichiers au format JSON.
     /// Un fichier par catégorie de dépense.
     /// nom du fichier "Category_LifeExpense.json"
@@ -112,10 +114,24 @@ where ItemCategory: PickableEnumP,
     /// Liste complète à plat de toutes les dépenses valorisées, toutes catégories confondues
     /// - Parameter atEndOf: année de calcul
     /// - Returns: liste complète à plat de toutes les dépenses
-    public func namedValueTable(atEndOf: Int) -> NamedValueArray {
+    public func flatNamedValueTable(atEndOf: Int) -> NamedValueArray {
         var table = NamedValueArray()
         perCategory.forEach { (_, expenseArray) in
             table += expenseArray.namedValueTable(atEndOf: atEndOf)
+        }
+        return table
+    }
+
+    /// Total des dépenses valorisées  par catégorie
+    /// - Parameter atEndOf: année de calcul
+    /// - Returns: tableau des totaux des dépenses par catégorie
+    public func namedTotalValueTable(atEndOf: Int) -> NamedValueArray {
+        var table = NamedValueArray()
+        for category in ItemCategory.allCases {
+            if let exps = perCategory[category] {
+                table.append(.init(name: category.displayString,
+                                   value: exps.value(atEndOf: atEndOf)))
+            }
         }
         return table
     }

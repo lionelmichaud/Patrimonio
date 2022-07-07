@@ -7,7 +7,15 @@
             "name" : "Frais bancaires et de gestion",
             "note" : "Actualisé le 16/02/2021 \nSCI - Frais Bancaires QONTO 11€/mois",
             "timeSpan" : {
-                "permanent" : {}
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Décès",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
+                }
             }
         },
         
@@ -18,7 +26,15 @@
             "name" : "Services pro (avocat, notaire, comptable...)",
             "note" : "Actualisé le 16/02/2021 \nSCI - Expert Comptable 600€/an \nSCI - Conseil en Gestion de Patrimoine 720€/an\nAssurance protection juridique 110€/an",
             "timeSpan" : {
-                "permanent" : {}
+                "ending" : {
+                    "to" :
+                    {
+                        "fixedYear" : 0,
+                        "event"     : "Décès",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard"
+                    }
+                }
             }
         },
         

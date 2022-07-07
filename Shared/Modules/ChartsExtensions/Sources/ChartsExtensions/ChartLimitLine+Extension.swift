@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Charts // https://github.com/danielgindi/Charts.git
+import AndroidCharts // https://github.com/danielgindi/Charts.git
 
 // MARK: - Extension de ChartLimitLine pour customizer la configuration de la ligne limite
 

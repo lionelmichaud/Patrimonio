@@ -32,6 +32,17 @@ public struct LifeExpenseArray: NameableValuableArrayP {
     public var items         = [LifeExpense]()
     public var persistenceSM = PersistenceStateMachine(initialState : .created)
     
+    // MARK: - Subscript
+
+    public subscript(idx: Int) -> LifeExpense? {
+        get {
+            guard items.indices.contains(idx) else {
+                return nil
+            }
+            return items[idx]
+        }
+    }
+
     // MARK: - Initializers: voir NameableValuableArray
 }
 
@@ -95,11 +106,11 @@ public struct LifeExpense: Identifiable, Codable, Hashable, NameableValuableP {
     
     // MARK: - Computed properties
     
-    var firstYear: Int? { // computed
+    public var firstYear: Int? { // computed
         timeSpan.firstYear
     }
     
-    var lastYear: Int? { // computed
+    public var lastYear: Int? { // computed
         timeSpan.lastYear
     }
     

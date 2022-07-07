@@ -12,7 +12,7 @@ import NamedValue
 import AssetsModel
 import Liabilities
 import BalanceSheet
-import Charts // https://github.com/danielgindi/Charts.git
+import AndroidCharts // https://github.com/danielgindi/Charts.git
 import ChartsExtensions
 
 private let customLog = Logger(subsystem: "me.michaud.lionel.Patrimoine", category: "Model.CategoryBarChartBalanceSheetVisitor")

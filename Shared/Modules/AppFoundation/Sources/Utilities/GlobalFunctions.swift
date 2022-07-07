@@ -18,3 +18,7 @@ public func convertErrorToString(_ error: Error) -> String {
         Suggestions: \((error as NSError).localizedRecoverySuggestion ?? "nil")\n
         """
 }
+
+public func date(year: Int, month: Int, day: Int = 1) -> Date {
+    Calendar.current.date(from: DateComponents(year: year, month: month, day: day)) ?? Date()
+}

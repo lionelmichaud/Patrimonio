@@ -9,7 +9,7 @@ import Foundation
 #if canImport(UIKit)
 import UIKit
 #endif
-import Charts // https://github.com/danielgindi/Charts.git
+import AndroidCharts // https://github.com/danielgindi/Charts.git
 
 // MARK: - Extension de LineChartView pour customizer la configuration des Graph de l'appli
 

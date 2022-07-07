@@ -9,7 +9,7 @@ import os
 import SwiftUI
 import AppFoundation
 import NamedValue
-import Charts // https://github.com/danielgindi/Charts.git
+import AndroidCharts // https://github.com/danielgindi/Charts.git
 import Files
 import ModelEnvironment
 import Persistence

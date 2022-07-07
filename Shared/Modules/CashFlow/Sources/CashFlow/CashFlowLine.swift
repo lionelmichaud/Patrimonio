@@ -228,7 +228,7 @@ public struct CashFlowLine {
             computeISF(with: patrimoine, using: model)
             
             /// EXPENSES: compute and populate family expenses
-            lifeExpenses.namedValues = expenses.namedValueTable(atEndOf: year)
+            lifeExpenses.namedValues = expenses.flatNamedValueTable(atEndOf: year)
             
             /// LOAN: populate remboursement d'emprunts
             manageLoanCashFlow(for: adultsNames, of: patrimoine)

@@ -11,7 +11,7 @@
                     "period" : 2,
                     "from" :
                     {
-                        "fixedYear": 2021,
+                        "fixedYear": 2023,
                         "event"    : null,
                         "group"    : null,
                         "name"     : ""

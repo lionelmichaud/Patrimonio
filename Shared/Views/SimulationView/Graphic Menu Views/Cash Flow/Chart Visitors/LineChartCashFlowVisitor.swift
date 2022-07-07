@@ -9,7 +9,7 @@ import Foundation
 import AppFoundation
 import Persistence
 import CashFlow
-import Charts
+import AndroidCharts
 
 // MARK: - Génération de graphiques - Synthèse - CASH FLOW
 

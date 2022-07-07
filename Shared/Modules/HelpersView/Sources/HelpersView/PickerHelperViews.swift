@@ -41,7 +41,7 @@ public struct CasePicker<T: PickableEnumP>: View where T.AllCases: RandomAccessC
     @Binding
     private var pickedCase: T
     private let label: String
-    
+
     public var body: some View {
         Picker(label, selection: $pickedCase) {
             ForEach(T.allCases, id: \.self) { enu in

@@ -8,7 +8,7 @@
 import Foundation
 import AppFoundation
 import CashFlow
-import Charts
+import AndroidCharts
 
 // MARK: - Génération de graphiques - Synthèse - FISCALITE IRPP
 

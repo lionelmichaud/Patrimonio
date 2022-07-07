@@ -31,6 +31,10 @@ struct SimulationRachatView: View {
     @State
     private var impot: Double = 0
 
+    @State private var showInfoPopover = false
+    let popOverTitle     = "Méthode d'imposition:"
+    let popOverImageName = "fiscalite-assurance-vie"
+
     var body: some View {
         Form {
             AmountEditView(label    : "Montant souhaité net de charges sociales",
@@ -69,6 +73,21 @@ struct SimulationRachatView: View {
                        weight: .bold)
         }
         .navigationTitle("Simulation de rachat")
+        .toolbar {
+            // afficher info-bulle
+            ToolbarItemGroup(placement: .automatic) {
+                if item.isLifeInsurance {
+                    Button(action: { self.showInfoPopover = true },
+                           label : {
+                        Image(systemName: "info.circle")
+                    })
+                    .popover(isPresented: $showInfoPopover) {
+                        PopOverContentView(title     : popOverTitle,
+                                           imageName : popOverImageName)
+                    }
+                }
+            }
+        }
     }
 
     private func computeWithdrawal(montantRetraitNet: Double) {

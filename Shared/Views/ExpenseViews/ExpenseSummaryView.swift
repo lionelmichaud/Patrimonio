@@ -10,54 +10,105 @@ import SwiftUI
 import AppFoundation
 import Persistence
 import LifeExpense
-import FamilyModel
-import Charts // https://github.com/danielgindi/Charts.git
-import ChartsExtensions
 import HelpersView
 
+enum ExpenseChartTypeEnum {
+    case valueChart
+    case timelineChart
+
+    var pickerImage: Image {
+        switch self {
+            case .valueChart : return Image(systemName: "chart.bar.doc.horizontal")
+            case .timelineChart : return Image(systemName: "chart.line.flattrend.xyaxis")
+        }
+    }
+}
+
 struct ExpenseSummaryView: View {
-    @EnvironmentObject private var dataStore  : Store
-    @EnvironmentObject private var expenses   : LifeExpensesDic
-    @EnvironmentObject private var uiState    : UIState
-    let minDate = CalendarCst.thisYear
-    let maxDate = CalendarCst.thisYear + 40
-    @State private var alertItem: AlertItem?
-    @State private var showInfoPopover = false
-    let popOverTitle   = "Contenu du graphique:"
-    let popOverMessage =
+    @EnvironmentObject private var dataStore : Store
+    @EnvironmentObject private var expenses  : LifeExpensesDic
+    @EnvironmentObject private var uiState   : UIState
+    let minDate = Date.now.year
+    let maxDate = Date.now.year + 40
+
+    @State
+    private var chartType = ExpenseChartTypeEnum.valueChart
+
+    @State
+    private var allCategories = true
+
+    @State
+    private var alertItem: AlertItem?
+
+    @State
+    private var showInfoPopover = false
+
+    private let popOverTitle   = "Contenu du graphique:"
+    private let popOverMessage =
         """
-        Evolution dans le temps des dépenses par catégories.
+        Projection dans le temps des dépenses par catégories.
         """
-    
-    var body: some View {
-        if dataStore.activeDossier != nil {
-            GeometryReader { geometry in
-                VStack {
-                    // évaluation annuelle des dépenses
+
+    private var totalExpense: String {
+        if chartType == .valueChart && allCategories {
+            return expenses.value(atEndOf: Int(uiState.expenseViewState.evalDate)).€String
+
+        } else if let selectedExpenses = expenses.perCategory[uiState.expenseViewState.selectedCategory] {
+            return selectedExpenses.value(atEndOf: Int(uiState.expenseViewState.evalDate)).€String
+
+        } else {
+            return "?"
+        }
+    }
+
+    // choix des paramètres du graphique
+    private var chartParametersView: some View {
+        VStack {
+            HStack {
+                // sélection du type de graphique à afficher
+                Picker("Présentation", selection: $chartType.animation()) {
+                    ExpenseChartTypeEnum.valueChart.pickerImage.tag(ExpenseChartTypeEnum.valueChart)
+                    ExpenseChartTypeEnum.timelineChart.pickerImage.tag(ExpenseChartTypeEnum.timelineChart)
+                }
+                .pickerStyle(.segmented)
+                .frame(maxWidth: 100)
+
+                // sélection des catégories à afficher: Toutes/Une
+                if chartType == .valueChart {
+                    Toggle("Toutes les catégories", isOn: $allCategories.animation())
+                        .toggleStyle(.button)
+                        .buttonStyle(.bordered)
+                }
+
+                // sélection de l'unique catégorie à afficher
+                if chartType == .timelineChart || (chartType == .valueChart && !allCategories) {
                     HStack {
-                        Text("Evaluation en ") + Text(String(Int(uiState.expenseViewState.evalDate)))
-                        Slider(value : $uiState.expenseViewState.evalDate,
-                               in    : minDate.double() ... maxDate.double(),
-                               step  : 1,
-                               onEditingChanged: {_ in
-                        })
-                        if let expenses = self.expenses.perCategory[uiState.expenseViewState.selectedCategory] {
-                            Text(expenses.value(atEndOf: Int(self.uiState.expenseViewState.evalDate)).€String)
-                        }
+                        Text("Catégorie de dépense sélectionnée")
+                        CasePicker(pickedCase: $uiState.expenseViewState.selectedCategory.animation(), label: "Catégories de dépenses")
                     }
-                    .padding(.horizontal)
+                }
+                Spacer()
+            }
 
-                    // choix de la catégorie des dépenses
-                    CasePicker(pickedCase: $uiState.expenseViewState.selectedCategory, label: "Catégories de dépenses")
-                        .pickerStyle(.segmented)
-                        .padding(.horizontal)
+            // choix de l'année / évaluation annuelle des dépenses
+            HStack {
+                Text("Evaluation en ") + Text(String("\(Int(uiState.expenseViewState.evalDate))")).bold()
+                Stepper("",
+                        value: $uiState.expenseViewState.evalDate.animation(),
+                        in: minDate.double() ... maxDate.double())
+                .frame(maxWidth: 100)
+                Slider(value : $uiState.expenseViewState.evalDate.animation(),
+                       in    : minDate.double() ... maxDate.double(),
+                       step  : 1,
+                       onEditingChanged: {_ in
+                })
+                Text(totalExpense)
+                    .bold()
+            }
 
-                    // graphique
-                    ExpenseSummaryChartView(endDate  : uiState.expenseViewState.endDate,
-                                            evalDate : uiState.expenseViewState.evalDate,
-                                            category : uiState.expenseViewState.selectedCategory)
-                        .padding()
-                    // paramétrage du graphique
+            // paramétrage du graphique détaillé
+            if #unavailable(iOS 16.0) {
+                if chartType == .timelineChart && !allCategories {
                     HStack {
                         Text("Période de ") + Text(String(minDate))
                         Slider(value : $uiState.expenseViewState.endDate,
@@ -68,31 +119,77 @@ struct ExpenseSummaryView: View {
                         })
                         Text("à ") + Text(String(Int(uiState.expenseViewState.endDate)))
                     }
-                    .padding(.horizontal)
-                    .padding(.bottom)
-                    .alert(item: $alertItem, content: newAlert)
-                    .navigationTitle("Synthèse")
-                    .navigationBarTitleDisplayModeInline()
-                    .toolbar {
-                        // afficher info-bulle
-                        ToolbarItemGroup(placement: .automatic) {
-                            Button(action: { self.showInfoPopover = true },
-                                   label : {
-                                Image(systemName: "info.circle")
-                            })
-                            .popover(isPresented: $showInfoPopover) {
-                                PopOverContentView(title       : popOverTitle,
-                                                   description : popOverMessage)
-                            }
-                            
-                            /// bouton Exporter fichiers du dossier actif
-                            Button(action: { share(geometry: geometry) },
-                                   label: {
-                                Image(systemName: "square.and.arrow.up.on.square")
-                                    .imageScale(.large)
-                            })
-                            //.buttonStyle(.bordered)
+                }
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    // graphique
+    private var chartView: some View {
+        // graphique
+        Group {
+            switch chartType {
+                case .valueChart:
+                    if #available(iOS 16.0, *) {
+                        ExpenseValueChartView(evalYear      : uiState.expenseViewState.evalDate,
+                                              allCategories : allCategories,
+                                              category      : uiState.expenseViewState.selectedCategory)
+                        .frame(maxHeight: .infinity)
+                    } else {
+                        Text("Vue disponible à partir de iOS 16 seulement")
+                    }
+
+                case .timelineChart:
+                    if #available(iOS 16.0, *) {
+                        ExpenseTimelineChartView(evalYear : uiState.expenseViewState.evalDate,
+                                                 category : uiState.expenseViewState.selectedCategory)
+                        .frame(maxHeight: .infinity)
+                    } else {
+                        ExpenseTimelineChartUIView(endDate  : uiState.expenseViewState.endDate,
+                                                   evalDate : uiState.expenseViewState.evalDate,
+                                                   category : uiState.expenseViewState.selectedCategory)
+                        .padding()
+                        .frame(maxHeight: .infinity)
+                    }
+
+            }
+        }
+    }
+
+    var body: some View {
+        if dataStore.activeDossier != nil {
+            GeometryReader { geometry in
+                VStack {
+                    // choix des paramètres du graphique
+                    chartParametersView
+                        .controlSize(.small)
+
+                    // graphique
+                    chartView
+                }
+                .alert(item: $alertItem, content: newAlert)
+                .navigationTitle("Synthèse")
+                .navigationBarTitleDisplayModeInline()
+                .toolbar {
+                    // afficher info-bulle
+                    ToolbarItemGroup(placement: .automatic) {
+                        Button(action: { self.showInfoPopover = true },
+                               label : {
+                            Image(systemName: "info.circle")
+                        })
+                        .popover(isPresented: $showInfoPopover) {
+                            PopOverContentView(title       : popOverTitle,
+                                               description : popOverMessage)
                         }
+
+                        /// bouton Exporter fichiers du dossier actif
+                        Button(action: { share(geometry: geometry) },
+                               label: {
+                            Image(systemName: "square.and.arrow.up.on.square")
+                                .imageScale(.large)
+                        })
+                        //.buttonStyle(.bordered)
                     }
                 }
             }
@@ -100,6 +197,8 @@ struct ExpenseSummaryView: View {
             NoLoadedDossierView()
         }
     }
+
+    // MARK: - Methods
 
     private func share(geometry: GeometryProxy) {
         // collecte des URL des fichiers contenus dans le dossier
@@ -109,141 +208,6 @@ struct ExpenseSummaryView: View {
                    alertItem: &alertItem,
                    geometry: geometry)
     }
-}
-
-// MARK: - Wrappers de UIView
-
-struct ExpenseSummaryChartView: NSUIViewRepresentable {
-    @EnvironmentObject var family   : Family
-    @EnvironmentObject var expenses : LifeExpensesDic
-    let endDate  : Double
-    let evalDate : Double
-    let category : LifeExpenseCategory
-    
-    static let ColorsTable: [NSUIColor] = [#colorLiteral(red: 0.9171036869, green: 0.9171036869, blue: 0.9171036869, alpha: 0), #colorLiteral(red: 0.843980968, green: 0.4811213613, blue: 0.2574525177, alpha: 1)]
-    
-    /// Créer le dataset du graphique
-    /// - Returns: dataset
-    func getExpenseDataSet(formatter : NamedValueFormatter,
-                           marker    : IMarker?) -> BarChartDataSet {
-        var dataEntries = [ChartDataEntry]()
-        let dataSet : BarChartDataSet
-        
-        // pour chaque categorie de dépense
-        //for _ in LifeExpenseCategory.allCases {
-        // pour chaque dépense
-        //  chercher le nom de la dépense
-        //  chercher la position de la dépense dans le tableau des dépense
-        //  chercher les dates de début et de fin
-        let namedValuedTimeFrameTable = expenses.namedValuedTimeFrameTable(category: category)
-        
-        // mettre à jour les noms des dépenses dans le formatteur de l'axe X
-        formatter.names = namedValuedTimeFrameTable.map { (name, _, _, _, _) in
-            name
-        }
-        
-#if os(iOS) || os(tvOS)
-        if let baloonMarker = marker as? ExpenseMarkerView {
-            // mettre à jour les valeurs des dépenses dans le formatteur de bulle d'info
-            baloonMarker.amounts = namedValuedTimeFrameTable.map { (_, value, _, _, _) in
-                value
-            }
-            baloonMarker.prop = namedValuedTimeFrameTable.map { (_, _, prop, _, _) in
-                prop
-            }
-            baloonMarker.firstYearDuration = namedValuedTimeFrameTable.map { (_, _, _, _, firstYearDuration) in
-                firstYearDuration
-            }
-        }
-#endif
-        
-        // générer les 2 séries pour chaque dépense
-        dataEntries += namedValuedTimeFrameTable.map { (_, _, _, idx, firstYearDuration) in
-            BarChartDataEntry(x       : idx.double(),
-                              yValues : firstYearDuration.map { $0.double() })
-        }
-        
-        //}
-        dataSet = BarChartDataSet(entries : dataEntries)
-        dataSet.colors           = ExpenseSummaryChartView.ColorsTable
-        dataSet.drawIconsEnabled = false
-        
-        return dataSet
-    }
-    
-    func format(_ chartView: HorizontalBarChartView) {
-        //: ### LeftAxis
-        let leftAxis = chartView.leftAxis
-        leftAxis.granularity          = 1    // à utiliser sans dépasser .labelCount
-        leftAxis.labelCount           = 15   // nombre maxi
-        leftAxis.axisMinimum          = CalendarCst.thisYear.double()
-        leftAxis.axisMaximum          = endDate
-        
-        //: ### RightAxis
-        let rightAxis = chartView.rightAxis
-        rightAxis.granularity          = 1    // à utiliser sans dépasser .labelCount
-        rightAxis.labelCount           = 15   // nombre maxi
-        rightAxis.axisMinimum          = CalendarCst.thisYear.double()
-        rightAxis.axisMaximum          = endDate
-        
-        // animer la transition
-        chartView.animate(yAxisDuration: 0.5, easingOption: .linear)
-    }
-    
-    func updateData(of chartView: HorizontalBarChartView) {
-        chartView.clear()
-        //: ### BarChartData
-        let dataSet = getExpenseDataSet(formatter : chartView.xAxis.valueFormatter as! NamedValueFormatter,
-                                        marker    : chartView.marker)
-        
-        // ajouter le dataset au graphique
-        let data = BarChartData(dataSet: dataSet)
-        
-        data.setValueTextColor(ChartThemes.DarkChartColors.valueColor)
-        data.setValueFont(ChartThemes.ChartDefaults.valueFont)
-        data.barWidth = 0.5
-        
-        // mettre à jour en fonction de la position du slider de plage de temps à afficher
-        chartView.leftAxis.axisMaximum  = endDate
-        chartView.rightAxis.axisMaximum = endDate
-        
-        // mettre à jour en fonction de la position du slider de date d'évaluation
-        let ll1 = ChartLimitLine(limit: evalDate+0.5, label: "date d'évaluation")
-        ll1.lineWidth       = 2
-        ll1.lineDashLengths = [10, 10]
-        ll1.labelPosition   = .bottomRight
-        ll1.valueFont       = .systemFont(ofSize : 10)
-        ll1.valueTextColor  = ChartThemes.DarkChartColors.labelTextColor
-        chartView.leftAxis.removeAllLimitLines()
-        chartView.leftAxis.addLimitLine(ll1)
-        
-        chartView.data = data
-        chartView.data?.notifyDataChanged()
-        chartView.notifyDataSetChanged()
-    }
-    
-#if os(iOS) || os(tvOS)
-    func makeUIView(context: Context) -> HorizontalBarChartView {
-        let chartView = HorizontalBarChartView(title: "Dépenses", smallLegend: false)
-        format(chartView)
-        return chartView
-    }
-    
-    func updateUIView(_ uiView: HorizontalBarChartView, context: Context) {
-        updateData(of: uiView)
-    }
-    
-#else
-    func makeNSView(context: Context) -> HorizontalBarChartView {
-        let chartView = HorizontalBarChartView(title: "Dépenses", smallLegend: false)
-        format(chartView)
-        return chartView
-    }
-    
-    func updateNSView(_ nsView: HorizontalBarChartView, context: Context) {
-        updateData(of: nsView)
-    }
-#endif
 }
 
 struct ExpenseSummaryView_Previews: PreviewProvider {

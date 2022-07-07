@@ -8,7 +8,7 @@
 import Foundation
 import AppFoundation
 import ModelEnvironment
-import Charts
+import AndroidCharts
 import ChartsExtensions
 import CashFlow
 

@@ -8,7 +8,7 @@
 import Foundation
 import AppFoundation
 import CashFlow
-import Charts
+import AndroidCharts
 
 /// Dessiner un graphe à lignes : taux d'imposition marginal + taux d'imposition moyen
 /// Dessiner un graphe à barres : quotient familial

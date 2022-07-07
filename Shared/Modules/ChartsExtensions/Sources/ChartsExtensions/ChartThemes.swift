@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Charts // https://github.com/danielgindi/Charts.git
+import AndroidCharts // https://github.com/danielgindi/Charts.git
 
 // MARK: - Themes graphiques
 
