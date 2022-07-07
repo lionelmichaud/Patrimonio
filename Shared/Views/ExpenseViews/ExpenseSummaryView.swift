@@ -50,7 +50,7 @@ struct ExpenseSummaryView: View {
         """
 
     private var totalExpense: String {
-        if allCategories {
+        if chartType == .valueChart && allCategories {
             return expenses.value(atEndOf: Int(uiState.expenseViewState.evalDate)).€String
 
         } else if let selectedExpenses = expenses.perCategory[uiState.expenseViewState.selectedCategory] {
@@ -103,16 +103,18 @@ struct ExpenseSummaryView: View {
             }
 
             // paramétrage du graphique détaillé
-            if chartType == .timelineChart && !allCategories {
-                HStack {
-                    Text("Période de ") + Text(String(minDate))
-                    Slider(value : $uiState.expenseViewState.endDate,
-                           in    : minDate.double() ... maxDate.double(),
-                           step  : 5,
-                           onEditingChanged: {
-                        print("\($0)")
-                    })
-                    Text("à ") + Text(String(Int(uiState.expenseViewState.endDate)))
+            if #unavailable(iOS 16.0) {
+                if chartType == .timelineChart && !allCategories {
+                    HStack {
+                        Text("Période de ") + Text(String(minDate))
+                        Slider(value : $uiState.expenseViewState.endDate,
+                               in    : minDate.double() ... maxDate.double(),
+                               step  : 5,
+                               onEditingChanged: {
+                            print("\($0)")
+                        })
+                        Text("à ") + Text(String(Int(uiState.expenseViewState.endDate)))
+                    }
                 }
             }
         }
@@ -126,9 +128,9 @@ struct ExpenseSummaryView: View {
             switch chartType {
                 case .valueChart:
                     if #available(iOS 16.0, *) {
-                        ExpenseSummaryChartView(evalDate      : uiState.expenseViewState.evalDate,
-                                                allCategories : allCategories,
-                                                category      : uiState.expenseViewState.selectedCategory)
+                        ExpenseValueChartView(evalYear      : uiState.expenseViewState.evalDate,
+                                              allCategories : allCategories,
+                                              category      : uiState.expenseViewState.selectedCategory)
                         .frame(maxHeight: .infinity)
                     } else {
                         Text("Vue disponible à partir de iOS 16 seulement")
@@ -136,15 +138,13 @@ struct ExpenseSummaryView: View {
 
                 case .timelineChart:
                     if #available(iOS 16.0, *) {
-                        ExpenseDetailedChartUIView(endDate  : uiState.expenseViewState.endDate,
-                                                 evalDate : uiState.expenseViewState.evalDate,
+                        ExpenseTimelineChartView(evalYear : uiState.expenseViewState.evalDate,
                                                  category : uiState.expenseViewState.selectedCategory)
-                        .padding()
                         .frame(maxHeight: .infinity)
                     } else {
-                        ExpenseDetailedChartUIView(endDate  : uiState.expenseViewState.endDate,
-                                                 evalDate : uiState.expenseViewState.evalDate,
-                                                 category : uiState.expenseViewState.selectedCategory)
+                        ExpenseTimelineChartUIView(endDate  : uiState.expenseViewState.endDate,
+                                                   evalDate : uiState.expenseViewState.evalDate,
+                                                   category : uiState.expenseViewState.selectedCategory)
                         .padding()
                         .frame(maxHeight: .infinity)
                     }
@@ -159,6 +159,7 @@ struct ExpenseSummaryView: View {
                 VStack {
                     // choix des paramètres du graphique
                     chartParametersView
+                        .controlSize(.small)
 
                     // graphique
                     chartView

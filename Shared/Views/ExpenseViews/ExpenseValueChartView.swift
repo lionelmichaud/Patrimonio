@@ -25,21 +25,21 @@ enum CurrencyUnit: PickableEnumP {
 }
 
 @available(iOS 16.0, *)
-struct ExpenseSummaryChartView: View {
-    let evalDate      : Double
+struct ExpenseValueChartView: View {
+    let evalYear      : Double
     let allCategories : Bool
     let category      : LifeExpenseCategory
 
     @EnvironmentObject private var expenses : LifeExpensesDic
 
     @State
-    private var unit: CurrencyUnit = .euro
+    private var unit: CurrencyUnit = .keuro
 
     private var expenseTable: NamedValueArray {
         if allCategories {
-            return expenses.namedTotalValueTable(atEndOf: Int(evalDate))
+            return expenses.namedTotalValueTable(atEndOf: Int(evalYear))
         } else {
-            let namedValueDico = expenses.namedValueTable(atEndOf: Int(evalDate))
+            let namedValueDico = expenses.namedValueTable(atEndOf: Int(evalYear))
             return namedValueDico[category] ?? NamedValueArray()
         }
     }
@@ -53,17 +53,19 @@ struct ExpenseSummaryChartView: View {
                 )
                 .annotation(position: .overlay, alignment: .trailing) {
                     Text(unit == .keuro ? element.value.k€String : element.value.€String)
+                        .font(.callout)
                 }
             }
         }
         .foregroundStyle(Color("tableRowBaseColor"))
-        .padding()
+        .padding(.top)
         .overlay(alignment: .topTrailing) {
-            CasePicker(pickedCase: $unit.animation(), label: "Unité")
+            CasePicker(pickedCase: $unit, label: "Unité")
                 .pickerStyle(.segmented)
                 .frame(maxWidth: 100)
                 .padding(.trailing)
         }
+        .padding([.horizontal, .bottom])
     }
 }
 
@@ -71,7 +73,7 @@ struct ExpenseSummaryChartView: View {
 struct ExpenseSummaryChartView_Previews: PreviewProvider {
     static var previews: some View {
         TestEnvir.loadTestFilesFromBundle()
-        return ExpenseSummaryChartView(evalDate      : 2023,
+        return ExpenseValueChartView(evalYear      : 2023,
                                        allCategories : true,
                                        category      : .educationFamille)
             .environmentObject(TestEnvir.dataStore)

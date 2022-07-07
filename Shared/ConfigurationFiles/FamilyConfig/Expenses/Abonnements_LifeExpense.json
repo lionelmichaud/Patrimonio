@@ -7,7 +7,14 @@
             "name" : "Abonnement téléphone",
             "note" : "Actualisé le 16/02/2021\n4 x 13€/mois",
             "timeSpan" : {
-                "permanent" : {}
+                "ending" : {
+                    "to" : {
+                        "fixedYear" : 0,
+                        "event"     : "Dépendance",
+                        "group"     : "Tous les Adultes",
+                        "order"     : "Date au plus tard",
+                    }
+                }
             }
         },
         {
