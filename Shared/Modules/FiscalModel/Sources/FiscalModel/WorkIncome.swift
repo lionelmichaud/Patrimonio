@@ -93,3 +93,56 @@ extension WorkIncomeType: PickableIdentifiableEnumP {
         }
     }
 }
+
+public struct WorkIncomeManager {
+    public init() { }
+
+    /// Rrevenu du travail avant charges sociales, dépenses de mutuelle ou d'assurance perte d'emploi
+    public func workBrutIncome(from workIncome : WorkIncomeType?) -> Double {
+        switch workIncome {
+            case .salary(let brutSalary, _, _, _, _):
+                return brutSalary
+            case .turnOver(let BNC, _):
+                return BNC
+            case .none:
+                return 0
+        }
+    }
+
+    /// Revenu net de feuille de paye, net de charges sociales et mutuelle obligatore
+    public func workNetIncome(from workIncome   : WorkIncomeType?,
+                              using fiscalModel : Fiscal.Model) -> Double {
+        switch workIncome {
+            case .salary(_, _, let netSalary, _, _):
+                return netSalary
+            case .turnOver(let BNC, _):
+                return fiscalModel.turnoverTaxes.net(BNC)
+            case .none:
+                return 0
+        }
+    }
+
+    /// Revenu net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
+    public func workLivingIncome(from workIncome   : WorkIncomeType?,
+                                 using fiscalModel : Fiscal.Model) -> Double {
+        switch workIncome {
+            case .salary(_, _, let netSalary, _, let charge):
+                return netSalary - charge
+            case .turnOver(let BNC, let charge):
+                return fiscalModel.turnoverTaxes.net(BNC) - charge
+            case .none:
+                return 0
+        }
+    }
+
+    /// Revenu taxable à l'IRPP
+    public func workTaxableIncome(from workIncome   : WorkIncomeType?,
+                                  using fiscalModel : Fiscal.Model) -> Double {
+        switch workIncome {
+            case .none:
+                return 0
+            default:
+                return fiscalModel.incomeTaxes.taxableIncome(from: workIncome!)
+        }
+    }
+}

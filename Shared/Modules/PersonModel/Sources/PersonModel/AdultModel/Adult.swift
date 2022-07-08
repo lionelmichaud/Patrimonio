@@ -79,15 +79,8 @@ public final class Adult: Person {
     /// ACTIVITE: nature de revenu du travail
     @Published public var workIncome : WorkIncomeType?
     /// ACTIVITE: revenu du travail avant charges sociales, dépenses de mutuelle ou d'assurance perte d'emploi
-    public var workBrutIncome    : Double {
-        switch workIncome {
-            case .salary(let brutSalary, _, _, _, _):
-                return brutSalary
-            case .turnOver(let BNC, _):
-                return BNC
-            case .none:
-                return 0
-        }
+    public var workBrutIncome : Double {
+        WorkIncomeManager().workBrutIncome(from: workIncome)
     }
     /// ACTIVITE: cause de cessation d'activité
     @Published public var causeOfRetirement: Unemployment.Cause = .demission
@@ -247,36 +240,20 @@ public final class Adult: Person {
 
     /// Revenu net de feuille de paye, net de charges sociales et mutuelle obligatore
     public final func workNetIncome(using model: Model) -> Double {
-        switch workIncome {
-            case .salary(_, _, let netSalary, _, _):
-                return netSalary
-            case .turnOver(let BNC, _):
-                return model.fiscalModel.turnoverTaxes.net(BNC)
-            case .none:
-                return 0
-        }
+        WorkIncomeManager().workNetIncome(from: workIncome,
+                                          using: model.fiscalModel)
     }
 
     /// Revenu net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
     public final func workLivingIncome(using model: Model) -> Double {
-        switch workIncome {
-            case .salary(_, _, let netSalary, _, let charge):
-                return netSalary - charge
-            case .turnOver(let BNC, let charge):
-                return model.fiscalModel.turnoverTaxes.net(BNC) - charge
-            case .none:
-                return 0
-        }
+        WorkIncomeManager().workLivingIncome(from: workIncome,
+                                             using: model.fiscalModel)
     }
 
     /// Revenu taxable à l'IRPP
     public final func workTaxableIncome(using model: Model) -> Double {
-        switch workIncome {
-            case .none:
-                return 0
-            default:
-                return model.fiscalModel.incomeTaxes.taxableIncome(from: workIncome!)
-        }
+        WorkIncomeManager().workTaxableIncome(from: workIncome,
+                                              using: model.fiscalModel)
     }
 
     /// Définir le nombre d'enfants nés
@@ -332,8 +309,13 @@ public final class Adult: Person {
             return (0, 0)
         }
         let nbWeeks = (dateOfRetirementComp.year == year ? dateOfRetirement.weekOfYear.double() : 52)
-        return (net         : workLivingIncome(using: model)  * nbWeeks / 52,
-                taxableIrpp : workTaxableIncome(using: model) * nbWeeks / 52)
+        let workIncomeManager = WorkIncomeManager()
+        let workLivingIncome = workIncomeManager.workLivingIncome(from: workIncome,
+                                                                  using: model.fiscalModel)
+        let workTaxableIncome = workIncomeManager.workTaxableIncome(from: workIncome,
+                                                                    using: model.fiscalModel)
+        return (net         : workLivingIncome  * nbWeeks / 52,
+                taxableIrpp : workTaxableIncome * nbWeeks / 52)
     }
     
     /// Réinitialiser les prioriétés variables des membres de manière aléatoires
