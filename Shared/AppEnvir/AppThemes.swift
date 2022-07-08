@@ -16,8 +16,8 @@ struct ListTheme {
         let opacity         : Double
     }
     
-    static let listRowsBaseColor = Color("listRowBaseColor")
-    static let tableRowsBaseColor = Color("tableRowBaseColor")
+    static let listRowsBaseColor = Color("Quarterdeck-M")
+    static let tableRowsBaseColor = Color("Quarterdeck-XL")
     static var shared: [ListRowTheme] = [
         // 0
         ListRowTheme(indent          : 0,

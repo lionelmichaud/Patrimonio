@@ -44,6 +44,18 @@ struct ExpenseValueChartView: View {
         }
     }
 
+    private var totalExpense: Double? {
+        if allCategories {
+            return expenses.value(atEndOf: Int(evalYear))
+
+        } else if let selectedExpenses = expenses.perCategory[category] {
+            return selectedExpenses.value(atEndOf: Int(evalYear))
+
+        } else {
+            return nil
+        }
+    }
+
     var body: some View {
         Chart {
             ForEach(expenseTable, id: \.name) { element in
@@ -52,12 +64,20 @@ struct ExpenseValueChartView: View {
                     y: .value("Catégorie", element.name)
                 )
                 .annotation(position: .overlay, alignment: .trailing) {
-                    Text(unit == .keuro ? element.value.k€String : element.value.€String)
-                        .font(.callout)
+                    if element.value != 0 {
+                        Text(unit == .keuro ? element.value.k€String : element.value.€String)
+                            .font(.callout)
+                    }
                 }
-            }
+                .annotation(position: .trailing, alignment: .leading) {
+                    if let totalExpense, (element.value != 0) {
+                        Text((element.value / totalExpense).percentStringRounded)
+                            .font(.callout)
+                    }
+                }
+           }
         }
-        .foregroundStyle(Color("tableRowBaseColor"))
+        .foregroundStyle(Color("Quarterdeck-XL"))
         .padding(.top)
         .overlay(alignment: .topTrailing) {
             CasePicker(pickedCase: $unit, label: "Unité")

@@ -136,7 +136,7 @@ struct ExpenseTimelineChartView: View {
                         .font(.callout)
                 }
                 .foregroundStyle(
-                    Color("tableRowBaseColor")
+                    Color("Quarterdeck-XL")
                         .opacity(element.isProportional ? 0.6 : 1.0)
                 )
             }
@@ -148,6 +148,9 @@ struct ExpenseTimelineChartView: View {
                     y     : .value("Catégorie", element.name)
                 )
                 .lineStyle(StrokeStyle(lineWidth: 3))
+                .foregroundStyle(
+                    Color("Quarterdeck-XS")
+                )
             }
             // ligne verticale
             RuleMark(

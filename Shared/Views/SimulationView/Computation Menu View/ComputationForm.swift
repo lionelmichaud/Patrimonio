@@ -52,12 +52,12 @@ struct ComputationForm: View {
             // affichage du statut de la simulation
             if simulation.isComputed {
                 HStack {
-                    Text("Simulation disponible: de \(simulation.firstYear!) à \(simulation.lastYear!)")
+                    Text("Simulation disponible:\nde \(simulation.firstYear!) à \(simulation.lastYear!)")
                         .font(.callout)
                     if simulation.mode == .random {
                         // affichage du nombre de run
                         Spacer()
-                        Text("Nombre de run exécutés: \(simulation.mode == .deterministic ? 1  : simulation.currentRunNb)")
+                        Text("Nombre de run exécutés:\n\(simulation.mode == .deterministic ? 1  : simulation.currentRunNb)")
                     }
                     Spacer()
                     if let result = simulation.kpis.allObjectivesAreReached(withMode: simulation.mode) {
