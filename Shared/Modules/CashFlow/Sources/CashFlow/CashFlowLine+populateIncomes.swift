@@ -24,6 +24,7 @@ public extension CashFlowLine {
             // populate ages of family members
             let name = person.name.familyName! + " " + person.name.givenName!
             ages.persons.append((name: name, age: person.age(atEndOf: year)))
+
             // populate work, pension and unemployement incomes of family members
             if let adult = person as? Adult {
                 /// revenus du travail

@@ -10,7 +10,8 @@ import Foundation
 import AppFoundation
 
 // MARK: - Revenus du travail
-/// revenus du travail
+
+/// Revenus du travail
 public enum WorkIncomeType: Codable {
     case salary (brutSalary: Double, taxableSalary: Double, netSalary: Double, fromDate: Date, healthInsurance: Double)
     case turnOver (BNC: Double, incomeLossInsurance: Double)
@@ -37,23 +38,21 @@ public enum WorkIncomeType: Codable {
     
     public var rawValue: Int {
         rawValueGeneric(of: self)
-//        if Mirror(reflecting: self).children.count != 0 {
-//            // le swich case possède des valeurs
-//            let selfCaseName = Mirror(reflecting: self).children.first!.label!
-//
-//            return PersonalIncomeType.allCases.firstIndex(where: { swichCase in
-//                let switchingCaseName = Mirror(reflecting: swichCase).children.first!.label!
-//                return switchingCaseName == selfCaseName
-//            })!
-//        } else {
-//            return PersonalIncomeType.allCases.firstIndex(where: { swichCase in
-//                return swichCase == self
-//            })!
-//        }
+        //        if Mirror(reflecting: self).children.count != 0 {
+        //            // le swich case possède des valeurs
+        //            let selfCaseName = Mirror(reflecting: self).children.first!.label!
+        //
+        //            return PersonalIncomeType.allCases.firstIndex(where: { swichCase in
+        //                let switchingCaseName = Mirror(reflecting: swichCase).children.first!.label!
+        //                return switchingCaseName == selfCaseName
+        //            })!
+        //        } else {
+        //            return PersonalIncomeType.allCases.firstIndex(where: { swichCase in
+        //                return swichCase == self
+        //            })!
+        //        }
     }
 }
-
-// MARK: - Extensions
 
 extension WorkIncomeType: PickableIdentifiableEnumP {
     public var id: Int {
@@ -71,7 +70,7 @@ extension WorkIncomeType: PickableIdentifiableEnumP {
     
     public var description: String {
         switch self {
-            
+
             case let .salary(brutSalary, taxableSalary, netSalary, fromDate, healthInsurance):
                 return
                     """
@@ -94,6 +93,9 @@ extension WorkIncomeType: PickableIdentifiableEnumP {
     }
 }
 
+// MARK: - Calculs fiscaux relatifs aux revenus du travail
+
+/// Calculs fiscaux relatifs aux revenus du travail
 public struct WorkIncomeManager {
     public init() { }
 
@@ -144,5 +146,64 @@ public struct WorkIncomeManager {
             default:
                 return fiscalModel.incomeTaxes.taxableIncome(from: workIncome!)
         }
+    }
+}
+
+// MARK: - Activité professionnelle annexe générant du revenu
+
+/// Activité professionnelle annexe générant du revenu
+public struct SideWork: Codable {
+    public var workIncome : WorkIncomeType
+    public var startDate  : Date
+    public var endDate    : Date
+
+    // MARK: - Methods
+
+    /// Revenu net de feuille de paye, net de charges sociales et mutuelle obligatore
+    public func workNetIncome(using fiscalModel : Fiscal.Model) -> Double {
+        WorkIncomeManager().workNetIncome(from: workIncome,
+                                          using: fiscalModel)
+    }
+
+    /// Revenu net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
+    public func workLivingIncome(using fiscalModel : Fiscal.Model) -> Double {
+        WorkIncomeManager().workLivingIncome(from: workIncome,
+                                             using: fiscalModel)
+    }
+
+    /// Revenu taxable à l'IRPP
+    public func workTaxableIncome(using fiscalModel : Fiscal.Model) -> Double {
+        WorkIncomeManager().workTaxableIncome(from: workIncome,
+                                              using: fiscalModel)
+    }
+
+    /// Revenu net de charges pour vivre et revenu taxable à l'IRPP
+    /// - Parameter year: année
+    public func workIncome(during year       : Int,
+                           using fiscalModel : Fiscal.Model)
+    -> (net: Double, taxableIrpp: Double) {
+
+        let nbDays = numberOf(.day,
+                               from: max(startDate, firstDayOf(year: year)),
+                               to: min(endDate, lastDayOf(year: year))).day
+        guard let nbDays, nbDays > 0 else {
+            return (0, 0)
+        }
+        let workIncomeManager = WorkIncomeManager()
+        let workLivingIncome = workIncomeManager.workLivingIncome(from : workIncome,
+                                                                  using: fiscalModel)
+        let workTaxableIncome = workIncomeManager.workTaxableIncome(from : workIncome,
+                                                                    using: fiscalModel)
+        return (net         : workLivingIncome  * Double(nbDays) / 365,
+                taxableIrpp : workTaxableIncome * Double(nbDays) / 365)
+    }
+}
+
+extension SideWork: CustomStringConvertible {
+    public var description: String {
+        return "Activité professionnelle annexe:\n" +
+        "- Revenu:\(workIncome.description)".withPrefixedSplittedLines("  ") + "\n" +
+        "- Début :\(startDate.stringMediumDate)".withPrefixedSplittedLines("  ") + "\n" +
+        "- Fin   :\(endDate.stringMediumDate)".withPrefixedSplittedLines("  ") + "\n"
     }
 }
