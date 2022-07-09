@@ -9,8 +9,8 @@
         },
         "sexe"          : 0,
         "birth_Date"    : "1964-09-22T23:00:00+01:00",
-        "fiscalOption" : "100% Usufruit",
-        "workIncome"   : {
+        "fiscalOption"  : "100% Usufruit",
+        "workIncome" : {
             "salary": {
                 "brutSalary"      : 98400,
                 "taxableSalary"   : 80712,
@@ -19,6 +19,22 @@
                 "healthInsurance" : 700
             }
         },
+        "sideWorks": [
+            {
+                "name"       : "Professeur de technologie au collège Galilé",
+                "startDate"  : "2022-03-06T23:00:00+01:00",
+                "endDate"    : "2022-07-07T23:00:00+01:00",
+                "workIncome" : {
+                    "salary" : {
+                        "brutSalary"      : 12000,
+                        "taxableSalary"   : 11000,
+                        "netSalary"       : 10000,
+                        "fromDate"        : "1980-01-01T00:00:00+01:00",
+                        "healthInsurance" : 0
+                    }
+                }
+            }
+        ],
         "nbOfChildBirth" : 3,
         "ageOfPensionLiquidComp" : {
             "year" : 62,
@@ -84,6 +100,7 @@
                 "incomeLossInsurance" : 4046
             }
         },
+        "sideWorks": null,
         "nbOfChildBirth" : 3,
         "ageOfPensionLiquidComp" : {
             "year" : 62,

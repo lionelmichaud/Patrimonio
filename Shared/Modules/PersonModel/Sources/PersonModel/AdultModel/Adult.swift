@@ -55,7 +55,8 @@ public final class Adult: Person {
              lastKnownPensionSituation,
              ageOfAgircPensionLiquidComp,
              lastKnownAgircPensionSituation,
-             workIncome
+             workIncome,
+             sideWorks
     }
     
     // MARK: - Static Properties
@@ -93,6 +94,8 @@ public final class Adult: Person {
     public var ageOfRetirementComp         : DateComponents { // computed
         Date.calendar.dateComponents([.year, .month, .day], from: birthDateComponents, to: dateOfRetirementComp)
     } // computed
+      /// ACTIVITE: Activités professionnelles annexes générant du revenu
+    @Published public var sideWorks : [SideWork]?
 
     /// CHOMAGE
     @Published public var layoffCompensationBonified : Double? // indemnité accordée par l'entreprise > légal (supra-légale)
@@ -129,7 +132,8 @@ public final class Adult: Person {
         - Pension liquidation - date: \(dateOfPensionLiquid.stringMediumDate)
         - Nombre d'enfants: \(nbOfChildBirth)
         - Option fiscale à la succession: \(String(describing: fiscalOption))
-        - Revenu:\(workIncome?.description.withPrefixedSplittedLines("  ") ?? "aucun")\n
+        - Revenu d'activité principale:\n\(workIncome?.description.withPrefixedSplittedLines("    ") ?? "aucun\n")
+        - Revenus d'activités annexes:\n\(sideWorks?.description.withPrefixedSplittedLines("  ") ?? "aucun\n")\n
         """
     }
     
@@ -166,6 +170,9 @@ public final class Adult: Person {
         lastKnownAgircPensionSituation =
             try container.decode(RegimeAgircSituation.self,
                                  forKey: .lastKnownAgircPensionSituation)
+        sideWorks =
+        try container.decode([SideWork]?.self,
+                             forKey: .sideWorks)
         // initialiser avec la valeur moyenne déterministe
         workIncome =
             try container.decode(WorkIncomeType.self,
@@ -305,17 +312,31 @@ public final class Adult: Person {
     public final func workIncome(during year : Int,
                                  using model : Model)
     -> (net: Double, taxableIrpp: Double) {
-        guard isActive(during: year) else {
-            return (0, 0)
-        }
-        let nbWeeks = (dateOfRetirementComp.year == year ? dateOfRetirement.weekOfYear.double() : 52)
+
+        var income = (net: 0.0, taxableIrpp: 0.0)
         let workIncomeManager = WorkIncomeManager()
-        let workLivingIncome = workIncomeManager.workLivingIncome(from: workIncome,
-                                                                  using: model.fiscalModel)
-        let workTaxableIncome = workIncomeManager.workTaxableIncome(from: workIncome,
-                                                                    using: model.fiscalModel)
-        return (net         : workLivingIncome  * nbWeeks / 52,
-                taxableIrpp : workTaxableIncome * nbWeeks / 52)
+
+        // revenu de l'activité professionnelle principale
+        if isActive(during: year)  {
+            let nbWeeks = (dateOfRetirementComp.year == year ? dateOfRetirement.weekOfYear.double() : 52)
+            let workLivingIncome = workIncomeManager.workLivingIncome(from : workIncome,
+                                                                      using: model.fiscalModel)
+            let workTaxableIncome = workIncomeManager.workTaxableIncome(from : workIncome,
+                                                                        using: model.fiscalModel)
+            income.net         += workLivingIncome  * nbWeeks / 52
+            income.taxableIrpp += workTaxableIncome * nbWeeks / 52
+        }
+
+        // revenu des activités professionnelles secondaires éventuelle
+        if let sideWorks {
+            let sideWorksIncome = workIncomeManager.workIncome(from   : sideWorks,
+                                                               during : year,
+                                                               using  : model.fiscalModel)
+            income.net         += sideWorksIncome.net
+            income.taxableIrpp += sideWorksIncome.taxableIrpp
+        }
+
+        return income
     }
     
     /// Réinitialiser les prioriétés variables des membres de manière aléatoires

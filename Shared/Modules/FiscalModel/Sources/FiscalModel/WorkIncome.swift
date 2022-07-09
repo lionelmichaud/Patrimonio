@@ -96,7 +96,12 @@ extension WorkIncomeType: PickableIdentifiableEnumP {
 // MARK: - Activité professionnelle annexe générant du revenu
 
 /// Activité professionnelle annexe générant du revenu
-public struct SideWork: Codable {
+public struct SideWork: Codable, Identifiable {
+    enum CodingKeys: CodingKey { // swiftlint:disable:this nesting
+        case name, workIncome, startDate, endDate
+    }
+    public var id         = UUID() // String { name + startDate.stringMediumDate }
+    public var name       : String
     public var workIncome : WorkIncomeType
     public var startDate  : Date
     public var endDate    : Date
@@ -104,10 +109,13 @@ public struct SideWork: Codable {
 
 extension SideWork: CustomStringConvertible {
     public var description: String {
-        return "Activité professionnelle annexe:\n" +
-        "- Revenu:\(workIncome.description)".withPrefixedSplittedLines("  ") + "\n" +
-        "- Début :\(startDate.stringMediumDate)".withPrefixedSplittedLines("  ") + "\n" +
-        "- Fin   :\(endDate.stringMediumDate)".withPrefixedSplittedLines("  ") + "\n"
+        """
+        Activité professionnelle annexe:
+        - Nom   : \(name)
+        - Début : \(startDate.stringMediumDate)
+        - Fin   : \(endDate.stringMediumDate)
+        - Revenu:\n\(workIncome.description.withPrefixedSplittedLines("     "))\n
+        """
     }
 }
 
@@ -213,5 +221,32 @@ public struct WorkIncomeManager {
         return (net         : workLivingIncome  * Double(nbDays) / 365,
                 taxableIrpp : workTaxableIncome * Double(nbDays) / 365)
     }
-}
 
+    /// Revenu net de charges pour vivre et revenu taxable à l'IRPP
+    /// - Parameter year: année
+    public func workIncome(from sideWorks    : [SideWork],
+                           during year       : Int,
+                           using fiscalModel : Fiscal.Model)
+    -> (net: Double, taxableIrpp: Double) {
+
+        var income = (net: 0.0, taxableIrpp: 0.0)
+
+        sideWorks.forEach { sideWork in
+            let nbDays = numberOf(.day,
+                                  from: max(sideWork.startDate, firstDayOf(year: year)),
+                                  to: min(sideWork.endDate, lastDayOf(year: year))).day
+            guard let nbDays, nbDays > 0 else {
+                return
+            }
+            let workIncomeManager = WorkIncomeManager()
+            let workLivingIncome = workIncomeManager.workLivingIncome(from : sideWork.workIncome,
+                                                                      using: fiscalModel)
+            let workTaxableIncome = workIncomeManager.workTaxableIncome(from : sideWork.workIncome,
+                                                                        using: fiscalModel)
+            income.net         += workLivingIncome  * Double(nbDays) / 365
+            income.taxableIrpp += workTaxableIncome * Double(nbDays) / 365
+        }
+
+        return income
+    }
+}

@@ -7,6 +7,11 @@
     
     "revisionHistory" : [
         {
+            "version" : "6.0.0",
+            "date"    : "2022-07-09T23:00:00+01:00",
+            "comment" : "Ajout de revenus du travail annexes pour un adulte"
+        },
+        {
             "version" : "5.0.0",
             "date"    : "2022-06-28T23:00:00+01:00",
             "comment" : "Enrichissement du modèle fiscal LifeInsuranceTaxes"
