@@ -93,11 +93,34 @@ extension WorkIncomeType: PickableIdentifiableEnumP {
     }
 }
 
+// MARK: - Activité professionnelle annexe générant du revenu
+
+/// Activité professionnelle annexe générant du revenu
+public struct SideWork: Codable {
+    public var workIncome : WorkIncomeType
+    public var startDate  : Date
+    public var endDate    : Date
+}
+
+extension SideWork: CustomStringConvertible {
+    public var description: String {
+        return "Activité professionnelle annexe:\n" +
+        "- Revenu:\(workIncome.description)".withPrefixedSplittedLines("  ") + "\n" +
+        "- Début :\(startDate.stringMediumDate)".withPrefixedSplittedLines("  ") + "\n" +
+        "- Fin   :\(endDate.stringMediumDate)".withPrefixedSplittedLines("  ") + "\n"
+    }
+}
+
 // MARK: - Calculs fiscaux relatifs aux revenus du travail
 
 /// Calculs fiscaux relatifs aux revenus du travail
 public struct WorkIncomeManager {
+
+    // MARK: - Initializer
+
     public init() { }
+
+    // MARK: - Methods
 
     /// Rrevenu du travail avant charges sociales, dépenses de mutuelle ou d'assurance perte d'emploi
     public func workBrutIncome(from workIncome : WorkIncomeType?) -> Double {
@@ -147,63 +170,48 @@ public struct WorkIncomeManager {
                 return fiscalModel.incomeTaxes.taxableIncome(from: workIncome!)
         }
     }
-}
-
-// MARK: - Activité professionnelle annexe générant du revenu
-
-/// Activité professionnelle annexe générant du revenu
-public struct SideWork: Codable {
-    public var workIncome : WorkIncomeType
-    public var startDate  : Date
-    public var endDate    : Date
-
-    // MARK: - Methods
 
     /// Revenu net de feuille de paye, net de charges sociales et mutuelle obligatore
-    public func workNetIncome(using fiscalModel : Fiscal.Model) -> Double {
-        WorkIncomeManager().workNetIncome(from: workIncome,
-                                          using: fiscalModel)
+    public func workNetIncome(from sideWork     : SideWork,
+                              using fiscalModel : Fiscal.Model) -> Double {
+        workNetIncome(from : sideWork.workIncome,
+                      using: fiscalModel)
     }
 
     /// Revenu net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
-    public func workLivingIncome(using fiscalModel : Fiscal.Model) -> Double {
-        WorkIncomeManager().workLivingIncome(from: workIncome,
-                                             using: fiscalModel)
+    public func workLivingIncome(from sideWork     : SideWork,
+                                 using fiscalModel : Fiscal.Model) -> Double {
+        workLivingIncome(from : sideWork.workIncome,
+                         using: fiscalModel)
     }
 
     /// Revenu taxable à l'IRPP
-    public func workTaxableIncome(using fiscalModel : Fiscal.Model) -> Double {
-        WorkIncomeManager().workTaxableIncome(from: workIncome,
-                                              using: fiscalModel)
+    public func workTaxableIncome(from sideWork     : SideWork,
+                                  using fiscalModel : Fiscal.Model) -> Double {
+        workTaxableIncome(from : sideWork.workIncome,
+                          using: fiscalModel)
     }
 
     /// Revenu net de charges pour vivre et revenu taxable à l'IRPP
     /// - Parameter year: année
-    public func workIncome(during year       : Int,
+    public func workIncome(from sideWork     : SideWork,
+                           during year       : Int,
                            using fiscalModel : Fiscal.Model)
     -> (net: Double, taxableIrpp: Double) {
 
         let nbDays = numberOf(.day,
-                               from: max(startDate, firstDayOf(year: year)),
-                               to: min(endDate, lastDayOf(year: year))).day
+                              from: max(sideWork.startDate, firstDayOf(year: year)),
+                              to: min(sideWork.endDate, lastDayOf(year: year))).day
         guard let nbDays, nbDays > 0 else {
             return (0, 0)
         }
         let workIncomeManager = WorkIncomeManager()
-        let workLivingIncome = workIncomeManager.workLivingIncome(from : workIncome,
+        let workLivingIncome = workIncomeManager.workLivingIncome(from : sideWork.workIncome,
                                                                   using: fiscalModel)
-        let workTaxableIncome = workIncomeManager.workTaxableIncome(from : workIncome,
+        let workTaxableIncome = workIncomeManager.workTaxableIncome(from : sideWork.workIncome,
                                                                     using: fiscalModel)
         return (net         : workLivingIncome  * Double(nbDays) / 365,
                 taxableIrpp : workTaxableIncome * Double(nbDays) / 365)
     }
 }
 
-extension SideWork: CustomStringConvertible {
-    public var description: String {
-        return "Activité professionnelle annexe:\n" +
-        "- Revenu:\(workIncome.description)".withPrefixedSplittedLines("  ") + "\n" +
-        "- Début :\(startDate.stringMediumDate)".withPrefixedSplittedLines("  ") + "\n" +
-        "- Fin   :\(endDate.stringMediumDate)".withPrefixedSplittedLines("  ") + "\n"
-    }
-}
