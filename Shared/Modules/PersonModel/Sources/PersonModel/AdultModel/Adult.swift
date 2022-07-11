@@ -307,10 +307,11 @@ public final class Adult: Person {
         isAlive(atEndOf: year) && (yearOfDependency <= year)
     }
     
-    /// Revenu net de charges pour vivre et revenu taxable à l'IRPP
+    /// Revenu net de charges pour vivre et revenu taxable à l'IRPP.
+    /// Incluant les revenus d'activités annexes.
     /// - Parameter year: année
-    public final func workIncome(during year : Int,
-                                 using model : Model)
+    public final func totalWorkIncome(during year : Int,
+                                      using model : Model)
     -> (net: Double, taxableIrpp: Double) {
 
         var income = (net: 0.0, taxableIrpp: 0.0)

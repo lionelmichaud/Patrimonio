@@ -130,7 +130,7 @@ public struct WorkIncomeManager {
 
     // MARK: - Methods
 
-    /// Rrevenu du travail avant charges sociales, dépenses de mutuelle ou d'assurance perte d'emploi
+    /// Revenu du travail avant charges sociales, dépenses de mutuelle ou d'assurance perte d'emploi
     public func workBrutIncome(from workIncome : WorkIncomeType?) -> Double {
         switch workIncome {
             case .salary(let brutSalary, _, _, _, _):
@@ -176,6 +176,16 @@ public struct WorkIncomeManager {
                 return 0
             default:
                 return fiscalModel.incomeTaxes.taxableIncome(from: workIncome!)
+        }
+    }
+
+    /// Revenu du travail avant charges sociales, dépenses de mutuelle ou d'assurance perte d'emploi
+    public func workBrutIncome(from sideWork: SideWork) -> Double {
+        switch sideWork.workIncome {
+            case .salary(let brutSalary, _, _, _, _):
+                return brutSalary
+            case .turnOver(let BNC, _):
+                return BNC
         }
     }
 

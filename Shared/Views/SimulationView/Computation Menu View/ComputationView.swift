@@ -44,18 +44,14 @@ struct ComputationView: View {
                         ToolbarItem(placement: .automatic) {
                             Button(action: { exportSimulationResults(geometry: geometry) },
                                    label: {
-                                    HStack(alignment: .center) {
-                                        if busySaveWheelAnimate {
-                                            ProgressView()
-                                        }
-                                        Image(systemName: "square.and.arrow.up.on.square")
-                                            .imageScale(.large)
-                                        //Text("Exporter")
-                                    }
-                                   }
-                            )
-                            .buttonStyle(.bordered)
-                            .shareContextMenu(items: ["Hello world!", "coucou"])
+                                if busySaveWheelAnimate {
+                                    ProgressView()
+                                }
+                                Image(systemName: "square.and.arrow.up.on.square")
+                                    .imageScale(.large)
+                            })
+                            //.buttonStyle(.bordered)
+                            //.shareContextMenu(items: ["Hello world!", "coucou"])
                             .disabled(!savingIsPossible())
                         }
                     }

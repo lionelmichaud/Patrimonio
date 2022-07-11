@@ -28,7 +28,7 @@ public extension CashFlowLine {
             // populate work, pension and unemployement incomes of family members
             if let adult = person as? Adult {
                 /// revenus du travail
-                let workIncome = adult.workIncome(during: year, using: model)
+                let workIncome = adult.totalWorkIncome(during: year, using: model)
                 // revenus du travail inscrit en compte avant IRPP (net charges sociales, de dépenses de mutuelle ou d'assurance perte d'emploi)
                 adultsRevenues
                     .perCategory[.workIncomes]?

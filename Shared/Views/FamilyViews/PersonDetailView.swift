@@ -38,7 +38,7 @@ struct PersonDetailView: View {
                     Spacer()
                     Text("\(adult.nbOfChildBirth)")
                 }
-                AdultDetailView()
+                AdultDetailView(adult: adult)
                 
             } else if member is Child {
                 /// partie spécifique enfant

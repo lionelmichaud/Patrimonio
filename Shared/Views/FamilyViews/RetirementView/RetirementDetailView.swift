@@ -34,8 +34,7 @@ final class RetirementViewModel: ObservableObject {
         var pensionNette     : Double = 0
         
         mutating func update(with model : Model,
-                             for member : Person) {
-            let adult = member as! Adult
+                             for adult  : Adult) {
             guard let (tauxDePension,
                        majorationEnfant,
                        dureeDeReference,
@@ -62,14 +61,14 @@ final class RetirementViewModel: ObservableObject {
             }
             self.dateTauxPlein     =
                 model.retirementModel.regimeGeneral.dateAgeTauxPlein(
-                    birthDate          : member.birthDate,
-                    lastKnownSituation : (member as! Adult).lastKnownPensionSituation)
+                    birthDate          : adult.birthDate,
+                    lastKnownSituation : adult.lastKnownPensionSituation)
             if dateTauxPlein != nil {
-                self.ageTauxPlein  = member.age(atDate: dateTauxPlein!)
+                self.ageTauxPlein  = adult.age(atDate: dateTauxPlein!)
             }
-            self.dateLiquidation   = (member as! Adult).dateOfPensionLiquid
+            self.dateLiquidation   = adult.dateOfPensionLiquid
             self.ageLiquidation    = generalLiquidAge(adult)
-            self.sam               = (member as! Adult).lastKnownPensionSituation.sam
+            self.sam               = adult.lastKnownPensionSituation.sam
             self.majorationEnfant  = majorationEnfant / 100
             self.nbEnfantNe        = adult.nbOfBornChildren()
             self.tauxDePension     = tauxDePension / 100
@@ -94,8 +93,8 @@ final class RetirementViewModel: ObservableObject {
         var pensionNette        : Double = 0
         
         mutating func update(with model : Model,
-                             for member : Person) {
-            let adult = member as! Adult
+                             for adult : Person) {
+            let adult = adult as! Adult
             guard let pension =
                     model.retirementModel.regimeAgirc.pension(
                         lastAgircKnownSituation : adult.lastKnownAgircPensionSituation,
@@ -106,7 +105,7 @@ final class RetirementViewModel: ObservableObject {
                         dateOfPensionLiquid     : adult.dateOfPensionLiquid,
                         nbEnfantNe              : adult.nbOfBornChildren(),
                         nbEnfantACharge         : adult.nbOfFiscalChildren(during: adult.dateOfPensionLiquid.year)) else { return }
-            self.dateLiquidation     = (member as! Adult).dateOfAgircPensionLiquid
+            self.dateLiquidation     = adult.dateOfAgircPensionLiquid
             self.ageLiquidation      = agircLiquidAge(adult)
             self.projectedNbOfPoints = pension.projectedNbOfPoints
             self.valeurDuPoint       = model.retirementModel.regimeAgirc.valeurDuPoint
@@ -140,33 +139,37 @@ final class RetirementViewModel: ObservableObject {
     }
     
     func update(with model : Model,
-                for member : Person) {
-        self.general.update(with: model, for: member)
-        self.agirc.update(with: model, for: member)
+                for adult  : Adult) {
+        self.general.update(with: model, for: adult)
+        self.agirc.update(with: model, for: adult)
     }
 }
 
 // MARK: - RetirementDetailView
 
 struct RetirementDetailView: View {
+    var adult : Adult
 
     // MARK: - Properties
     
-    @EnvironmentObject private var model  : Model
-    @EnvironmentObject private var member : Person
-    @StateObject private var viewModel    = RetirementViewModel()
+    @EnvironmentObject private var model : Model
+    @StateObject private var viewModel = RetirementViewModel()
     
     var body: some View {
         Form {
-            // Cumul tous régimes
-            AmountView(label   : "Pension annuelle brute (non dévaluée)",
-                       amount  : viewModel.general.pensionBrute + viewModel.agirc.pensionBrute,
-                       comment : "General : \(viewModel.general.ageLiquidation) - AGIRC : \(viewModel.agirc.ageLiquidation)")
-            AmountView(label   : "Pension annuelle nette (non dévaluée)",
-                       amount  : viewModel.general.pensionNette + viewModel.agirc.pensionNette,
-                       weight  : .bold,
-                       comment : "General : \(viewModel.general.ageLiquidation) - AGIRC : \(viewModel.agirc.ageLiquidation)")
-
+            Section {
+                // Cumul tous régimes
+                AmountView(label   : "Pension annuelle brute (non dévaluée)",
+                           amount  : viewModel.general.pensionBrute + viewModel.agirc.pensionBrute,
+                           comment : "General : \(viewModel.general.ageLiquidation) - AGIRC : \(viewModel.agirc.ageLiquidation)")
+                AmountView(label   : "Pension annuelle nette (non dévaluée)",
+                           amount  : viewModel.general.pensionNette + viewModel.agirc.pensionNette,
+                           weight  : .bold,
+                           comment : "General : \(viewModel.general.ageLiquidation) - AGIRC : \(viewModel.agirc.ageLiquidation)")
+            } header: {
+                Text("PENSION").font(.subheadline)
+            }
+            
             // Régime Général
             RetirementGeneralSectionView()
                 .environmentObject(viewModel)
@@ -175,7 +178,7 @@ struct RetirementDetailView: View {
             RetirementAgircSectionView()
                 .environmentObject(viewModel)
         }
-        .navigationTitle("Retraite de \(member.displayName)")
+        .navigationTitle("Retraite de \(adult.displayName)")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: onAppear)
     }
@@ -183,7 +186,7 @@ struct RetirementDetailView: View {
     // MARK: - Methods
     
     func onAppear() {
-        viewModel.update(with: model, for: member)
+        viewModel.update(with: model, for: adult)
     }
 }
 
@@ -252,33 +255,32 @@ struct RetirementGeneralSectionView: View {
     }
     
     var body: some View {
-        DisclosureGroup(
-            content: {
-                HStack {
-                    Text("Liquidation le ")
-                    Spacer()
-                    Text("\(viewModel.general.dateLiquidation.stringShortDate) à \(viewModel.general.ageLiquidation)")
-                }
-                AmountView(label: "Salaire annuel moyen",
-                           amount: viewModel.general.sam, comment: "SAM")
-                AgeDateView(label: "Date du taux plein")
-                IntegerView(label: viewModel.general.nbTrimestreDecote >= 0 ? "Nombre de trimestres de surcote" : "Nombre de trimestres de décote",
-                            integer: viewModel.general.nbTrimestreDecote)
-                PercentNormView(label: "Taux de réversion",
-                                percent: viewModel.general.tauxDePension, comment: "Trev")
-                PercentNormView(label: "Majoration pour enfants nés (\(viewModel.general.nbEnfantNe))",
-                                percent: viewModel.general.majorationEnfant, comment: "Menf")
-                IntegerView(label: "Durée d'assurance (trimestres)",
-                            integer: viewModel.general.dureeAssurance, comment: "Da")
-                IntegerView(label: "Durée de référence (trimestres)",
-                            integer: viewModel.general.dureeDeReference, comment: "Dr")
-                AmountView(label: "Pension annuelle brute (non dévaluée)",
-                           amount: viewModel.general.pensionBrute, comment: "Brut = SAM x Trev x (1 + Menf) x Da/Dr")
-                AmountView(label: "Pension annuelle nette (non dévaluée)",
-                           amount: viewModel.general.pensionNette, weight: .bold, comment: "Net = Brut - Prélev sociaux")
-            },
-            label: { HeaderView }
-        )
+        Section {
+            HStack {
+                Text("Liquidation le ")
+                Spacer()
+                Text("\(viewModel.general.dateLiquidation.stringShortDate) à \(viewModel.general.ageLiquidation)")
+            }
+            AmountView(label: "Salaire annuel moyen",
+                       amount: viewModel.general.sam, comment: "SAM")
+            AgeDateView(label: "Date du taux plein")
+            IntegerView(label: viewModel.general.nbTrimestreDecote >= 0 ? "Nombre de trimestres de surcote" : "Nombre de trimestres de décote",
+                        integer: viewModel.general.nbTrimestreDecote)
+            PercentNormView(label: "Taux de réversion",
+                            percent: viewModel.general.tauxDePension, comment: "Trev")
+            PercentNormView(label: "Majoration pour enfants nés (\(viewModel.general.nbEnfantNe))",
+                            percent: viewModel.general.majorationEnfant, comment: "Menf")
+            IntegerView(label: "Durée d'assurance (trimestres)",
+                        integer: viewModel.general.dureeAssurance, comment: "Da")
+            IntegerView(label: "Durée de référence (trimestres)",
+                        integer: viewModel.general.dureeDeReference, comment: "Dr")
+            AmountView(label: "Pension annuelle brute (non dévaluée)",
+                       amount: viewModel.general.pensionBrute, comment: "Brut = SAM x Trev x (1 + Menf) x Da/Dr")
+            AmountView(label: "Pension annuelle nette (non dévaluée)",
+                       amount: viewModel.general.pensionNette, weight: .bold, comment: "Net = Brut - Prélev sociaux")
+        } header: {
+            HeaderView
+        }
     }
     
     func AgeDateView(label: String) -> some View {
@@ -359,34 +361,31 @@ struct RetirementAgircSectionView: View {
     }
     
     var body: some View {
-        DisclosureGroup(
-            content: {
-                HStack {
-                    Text("Liquidation le ")
-                    Spacer()
-                    Text("\(viewModel.agirc.dateLiquidation.stringShortDate) à \(viewModel.agirc.ageLiquidation)")
-                }
-                IntegerView(label   : "Nombre de points",
-                            integer : viewModel.agirc.projectedNbOfPoints,
-                            comment : "Npt")
-                AmountView(label   : "Valeur du point",
-                           amount  : viewModel.agirc.valeurDuPoint, digit  : 3,
-                           comment : "Vpt")
-                PercentNormView(label   : "Coeficient de minoration (en \(viewModel.agirc.dateLiquidation?.year ?? 0))",
-                                percent : viewModel.agirc.coefMinoration,
-                                comment : "Cmin")
-                PercentNormView(label   : "Majoration pour enfants nés (\(viewModel.agirc.nbEnfantNe)) / à charge (\(viewModel.agirc.nbEnfantACharge) en \(viewModel.agirc.dateLiquidation?.year ?? 0))",
-                                percent : (viewModel.agirc.majorationEnfant/(viewModel.agirc.pensionBrute-viewModel.agirc.majorationEnfant)),
-                                comment : "Menf")
-                AmountView(label   : "Pension annuelle brute (non dévaluée)",
-                           amount  : viewModel.agirc.pensionBrute,
-                           comment : "Brut = Npt x Vpt x Cmin x (1 + Menf)")
-                AmountView(label   : "Pension annuelle nette (non dévaluée)",
-                           amount  : viewModel.agirc.pensionNette, weight  : .bold,
-                           comment : "Net = Brut - Prélev sociaux")
-            },
-            label: { HeaderView }
-        )
+        Section {
+            HStack {
+                Text("Liquidation le ")
+                Spacer()
+                Text("\(viewModel.agirc.dateLiquidation.stringShortDate) à \(viewModel.agirc.ageLiquidation)")
+            }
+            IntegerView(label   : "Nombre de points",
+                        integer : viewModel.agirc.projectedNbOfPoints,
+                        comment : "Npt")
+            AmountView(label   : "Valeur du point",
+                       amount  : viewModel.agirc.valeurDuPoint, digit  : 3,
+                       comment : "Vpt")
+            PercentNormView(label   : "Coeficient de minoration (en \(viewModel.agirc.dateLiquidation?.year ?? 0))",
+                            percent : viewModel.agirc.coefMinoration,
+                            comment : "Cmin")
+            PercentNormView(label   : "Majoration pour enfants nés (\(viewModel.agirc.nbEnfantNe)) / à charge (\(viewModel.agirc.nbEnfantACharge) en \(viewModel.agirc.dateLiquidation?.year ?? 0))",
+                            percent : (viewModel.agirc.majorationEnfant/(viewModel.agirc.pensionBrute-viewModel.agirc.majorationEnfant)),
+                            comment : "Menf")
+            AmountView(label   : "Pension annuelle brute (non dévaluée)",
+                       amount  : viewModel.agirc.pensionBrute,
+                       comment : "Brut = Npt x Vpt x Cmin x (1 + Menf)")
+            AmountView(label   : "Pension annuelle nette (non dévaluée)",
+                       amount  : viewModel.agirc.pensionNette, weight  : .bold,
+                       comment : "Net = Brut - Prélev sociaux")
+        } header: { HeaderView }
     }
 }
 
@@ -397,7 +396,7 @@ struct RetirementDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let aMember = family.members.items.first!
         
-        return RetirementDetailView()
+        return RetirementDetailView(adult: aMember as! Adult)
             .environmentObject(model)
             .environmentObject(aMember)
         
