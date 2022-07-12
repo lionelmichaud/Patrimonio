@@ -52,7 +52,7 @@ struct DossierBrowserView: View {
                 }
                 .isDetailLink(true)
                 .listItemSwipeActions(duplicateItem : { duplicate(dossier) },
-                                          deleteItem    : { delete(dossier) })
+                                      deleteItem    : { delete(dossier) })
             }
         } header: {
             Text("Dossiers existants")

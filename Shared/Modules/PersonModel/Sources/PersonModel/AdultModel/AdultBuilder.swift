@@ -84,6 +84,12 @@ public class AdultBuilder {
     }
     
     @discardableResult
+    public func hasSideWorks(_ sideWorks: [SideWork]) -> AdultBuilder {
+        adult.sideWorks = sideWorks
+        return self
+    }
+
+    @discardableResult
     public func willCeaseActivities(on date    : Date,
                                     dueTo cause : Unemployment.Cause,
                                     withLayoffCompensationBonified: Double? = nil) -> AdultBuilder {

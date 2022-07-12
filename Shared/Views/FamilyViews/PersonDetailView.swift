@@ -59,13 +59,10 @@ struct PersonDetailView: View {
                 Button(
                     action: { withAnimation { self.showingSheet = true } },
                     label : {
-                        HStack {
-                            Image(systemName: "square.and.pencil")
-                                .imageScale(.large)
-                            Text("Modifier")
-                        }
+                        Image(systemName: "square.and.pencil")
+                            .imageScale(.large)
                     })
-                    .buttonStyle(.bordered)
+                //.buttonStyle(.bordered)
             }
         }
     }

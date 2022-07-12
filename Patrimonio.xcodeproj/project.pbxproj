@@ -262,6 +262,7 @@
 		79AB5443263241CF00FADBA7 /* RetirementModelConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB540D263241CF00FADBA7 /* RetirementModelConfig.json */; };
 		79AB5445263241CF00FADBA7 /* AppSettings.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB540F263241CF00FADBA7 /* AppSettings.json */; };
 		79AB5447263241CF00FADBA7 /* AppVersion.json in Resources */ = {isa = PBXBuildFile; fileRef = 79AB5410263241CF00FADBA7 /* AppVersion.json */; };
+		79B1F30E287CBAAA00AA2017 /* AdultEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B1F30D287CBAAA00AA2017 /* AdultEditView.swift */; };
 		79B2728C2634DBEB00298E5D /* AppThemes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2728B2634DBEB00298E5D /* AppThemes.swift */; };
 		79B2DB80264CA51800EFCAF9 /* MonteCarlo.csv in Resources */ = {isa = PBXBuildFile; fileRef = 79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */; };
 		79B2FE2E262C7E0000EBFF56 /* RetirementModel in Frameworks */ = {isa = PBXBuildFile; productRef = 79B2FE2D262C7E0000EBFF56 /* RetirementModel */; };
@@ -540,6 +541,7 @@
 		79AB540D263241CF00FADBA7 /* RetirementModelConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RetirementModelConfig.json; sourceTree = "<group>"; };
 		79AB540F263241CF00FADBA7 /* AppSettings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AppSettings.json; sourceTree = "<group>"; };
 		79AB5410263241CF00FADBA7 /* AppVersion.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AppVersion.json; sourceTree = "<group>"; };
+		79B1F30D287CBAAA00AA2017 /* AdultEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdultEditView.swift; sourceTree = "<group>"; };
 		79B2728B2634DBEB00298E5D /* AppThemes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppThemes.swift; sourceTree = "<group>"; };
 		79B2DB7F264CA51800EFCAF9 /* MonteCarlo.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = MonteCarlo.csv; sourceTree = "<group>"; };
 		79C35864287A2F8000A47AD5 /* LifeScenarioSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeScenarioSection.swift; sourceTree = "<group>"; };
@@ -616,11 +618,13 @@
 		790AD24B287A37570098F2AB /* AdultViews */ = {
 			isa = PBXGroup;
 			children = (
+				7935BC3A27DF660F0079F39C /* AdultViewModel.swift */,
 				7935BC4327DF660F0079F39C /* AdultDetailView.swift */,
 				79C35864287A2F8000A47AD5 /* LifeScenarioSection.swift */,
 				79519F67287A20E600EBAAC3 /* RevenuSection.swift */,
 				790AD24C287A38800098F2AB /* InheritanceSection.swift */,
 				790AD24E287A3EBF0098F2AB /* WorkRevenuView.swift */,
+				79B1F30D287CBAAA00AA2017 /* AdultEditView.swift */,
 			);
 			path = AdultViews;
 			sourceTree = "<group>";
@@ -947,7 +951,6 @@
 				7935BC4527DF660F0079F39C /* PersonDetailView.swift */,
 				7935BC4A27DF660F0079F39C /* PersonEditView.swift */,
 				7935BC4027DF660F0079F39C /* PersonAddView.swift */,
-				7935BC3A27DF660F0079F39C /* AdultViewModel.swift */,
 				790AD24B287A37570098F2AB /* AdultViews */,
 				7935BC3B27DF660F0079F39C /* RetirementView */,
 				7935BC4827DF660F0079F39C /* ChildDetailView.swift */,
@@ -1732,6 +1735,7 @@
 				7935BCD527DF66100079F39C /* ModelDeterministicUnemploymentView.swift in Sources */,
 				7935BD1727DF66100079F39C /* InterestRateTypeView.swift in Sources */,
 				7935BD9327DF66100079F39C /* IrppChartCashFlowVisitor.swift in Sources */,
+				79B1F30E287CBAAA00AA2017 /* AdultEditView.swift in Sources */,
 				79FC726026333350004F3BD2 /* SettingsSidebarView.swift in Sources */,
 				7935BD0727DF66100079F39C /* PatrimoineSummaryRiskChartView.swift in Sources */,
 				7935BCA527DF66100079F39C /* RealEstateExonerationGridView.swift in Sources */,

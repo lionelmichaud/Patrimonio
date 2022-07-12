@@ -32,6 +32,7 @@ final class AdultViewModel: ObservableObject {
     @Published var revenueNet                = 0.0
     @Published var fromDate                  = Date.now
     @Published var insurance                 = 0.0
+    @Published var sideWorks                 = [SideWork]()
     @Published var lastKnownPensionSituation = RegimeGeneralSituation()
     @Published var lastKnownAgircSituation   = RegimeAgircSituation()
 
@@ -55,6 +56,7 @@ final class AdultViewModel: ObservableObject {
         moisPension               = adult.ageOfPensionLiquidComp.month!
         lastKnownPensionSituation = adult.lastKnownPensionSituation
         lastKnownAgircSituation   = adult.lastKnownAgircPensionSituation
+        sideWorks                 = adult.sideWorks ?? [SideWork]()
         switch adult.workIncome {
             case let .salary(brutSalary, taxableSalary, netSalary, fromDate, healthInsurance):
                 revenueBrut    = brutSalary
@@ -111,6 +113,7 @@ final class AdultViewModel: ObservableObject {
         
         AdultBuilder(for: adult)
             .receivesWorkIncome(workIncome)
+            .hasSideWorks(sideWorks)
             .willCeaseActivities(on     : dateRetirement,
                                  dueTo  : causeOfRetirement,
                                  withLayoffCompensationBonified : layoffCompensationBonified)

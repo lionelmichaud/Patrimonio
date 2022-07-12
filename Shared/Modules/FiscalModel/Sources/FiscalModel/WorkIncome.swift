@@ -15,27 +15,35 @@ import AppFoundation
 public enum WorkIncomeType: Codable {
     case salary (brutSalary: Double, taxableSalary: Double, netSalary: Double, fromDate: Date, healthInsurance: Double)
     case turnOver (BNC: Double, incomeLossInsurance: Double)
-    
+
     @available(*, unavailable)
     case all
-    
+
     public static var allCases: [WorkIncomeType] {
         return [.salary(brutSalary: 0, taxableSalary: 0, netSalary: 0, fromDate: Date.now, healthInsurance: 0),
                 .turnOver(BNC: 0, incomeLossInsurance: 0)]
     }
-    
-    public static var salaryId: Int {
+
+    public static var salaryPrototype: WorkIncomeType {
         WorkIncomeType.salary(brutSalary      : 0,
                               taxableSalary   : 0,
                               netSalary       : 0,
                               fromDate        : Date.now,
-                              healthInsurance : 0).id
+                              healthInsurance : 0)
     }
-    
+
+    public static var salaryId: Int {
+        WorkIncomeType.salaryPrototype.id
+    }
+
+    public static var turnOverPrototype: WorkIncomeType {
+        WorkIncomeType.turnOver(BNC: 0, incomeLossInsurance: 0)
+    }
+
     public static var turnOverId: Int {
-        WorkIncomeType.turnOver(BNC: 0, incomeLossInsurance: 0).id
+        WorkIncomeType.turnOverPrototype.id
     }
-    
+
     public var rawValue: Int {
         rawValueGeneric(of: self)
         //        if Mirror(reflecting: self).children.count != 0 {
@@ -58,7 +66,7 @@ extension WorkIncomeType: PickableIdentifiableEnumP {
     public var id: Int {
         return self.rawValue
     }
-    
+
     public var pickerString: String {
         switch self {
             case .salary:
@@ -67,7 +75,7 @@ extension WorkIncomeType: PickableIdentifiableEnumP {
                 return "Chiffre d'affaire"
         }
     }
-    
+
     public var description: String {
         switch self {
 
@@ -81,7 +89,7 @@ extension WorkIncomeType: PickableIdentifiableEnumP {
                     - Coût annuel mutuelle: \(healthInsurance.€String)
                     - Imposable: \(taxableSalary.€String) (avant abattement)
                     """
-                
+
             case let .turnOver(BNC, incomeLossInsurance):
                 return
                     """
@@ -105,6 +113,18 @@ public struct SideWork: Codable, Identifiable {
     public var workIncome : WorkIncomeType
     public var startDate  : Date
     public var endDate    : Date
+
+    public init(
+        name       : String,
+        workIncome : WorkIncomeType,
+        startDate  : Date,
+        endDate    : Date
+    ) {
+        self.name       = name
+        self.workIncome = workIncome
+        self.startDate  = startDate
+        self.endDate    = endDate
+    }
 }
 
 extension SideWork: CustomStringConvertible {
