@@ -26,9 +26,52 @@
                 "endDate"    : "2022-07-07T23:00:00+01:00",
                 "workIncome" : {
                     "salary" : {
-                        "brutSalary"      : 12000,
-                        "taxableSalary"   : 11000,
-                        "netSalary"       : 10000,
+                        "brutSalary"      : 4032,
+                        "taxableSalary"   : 3300,
+                        "netSalary"       : 3225,
+                        "fromDate"        : "1980-01-01T00:00:00+01:00",
+                        "healthInsurance" : 0
+                    }
+                }
+            },
+            {
+                "name"       : "Professeur de technologie au collège Galilé",
+                "startDate"  : "2025-03-17T23:00:00+01:00",
+                "endDate"    : "2025-12-31T23:00:00+01:00",
+                "workIncome" : {
+                    "salary" : {
+                        "brutSalary"      : 9408,
+                        "taxableSalary"   : 7700,
+                        "netSalary"       : 7526,
+                        "fromDate"        : "1980-01-01T00:00:00+01:00",
+                        "healthInsurance" : 0
+                    }
+                }
+            },
+
+            {
+                "name"       : "Professeur de technologie au collège Le Caousou",
+                "startDate"  : "2022-09-01T23:00:00+01:00",
+                "endDate"    : "2023-07-07T23:00:00+01:00",
+                "workIncome" : {
+                    "salary" : {
+                        "brutSalary"      : 4032,
+                        "taxableSalary"   : 3300,
+                        "netSalary"       : 3225,
+                        "fromDate"        : "1980-01-01T00:00:00+01:00",
+                        "healthInsurance" : 0
+                    }
+                }
+            },
+            {
+                "name"       : "Professeur de technologie au collège Le Caousou",
+                "startDate"  : "2025-03-17T23:00:00+01:00",
+                "endDate"    : "2025-12-31T23:00:00+01:00",
+                "workIncome" : {
+                    "salary" : {
+                        "brutSalary"      : 9408,
+                        "taxableSalary"   : 7700,
+                        "netSalary"       : 7526,
                         "fromDate"        : "1980-01-01T00:00:00+01:00",
                         "healthInsurance" : 0
                     }
