@@ -174,7 +174,7 @@ public final class Family: ObservableObject {
         var totalTaxableIncome : Double = 0.0
         for person in members.items {
             if let adult = person as? Adult {
-                let income = adult.workIncome(during: year, using: model)
+                let income = adult.totalWorkIncome(during: year, using: model)
                 totalNetIncome     += income.net
                 totalTaxableIncome += income.taxableIrpp
             }

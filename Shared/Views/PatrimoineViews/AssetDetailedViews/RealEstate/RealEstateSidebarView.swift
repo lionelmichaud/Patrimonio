@@ -49,7 +49,7 @@ struct RealEstateSidebarView: View {
                                         iconItem    : icon€)
                 }.isDetailLink(true)
                     .listItemSwipeActions(duplicateItem : { duplicateItem(item) },
-                                              deleteItem    : { deleteItem(item) })
+                                          deleteItem    : { deleteItem(item) })
             }
         } label: {
             LabeledValueRowView(label       : label,

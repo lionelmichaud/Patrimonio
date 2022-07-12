@@ -55,7 +55,8 @@ public final class Adult: Person {
              lastKnownPensionSituation,
              ageOfAgircPensionLiquidComp,
              lastKnownAgircPensionSituation,
-             workIncome
+             workIncome,
+             sideWorks
     }
     
     // MARK: - Static Properties
@@ -79,15 +80,8 @@ public final class Adult: Person {
     /// ACTIVITE: nature de revenu du travail
     @Published public var workIncome : WorkIncomeType?
     /// ACTIVITE: revenu du travail avant charges sociales, dépenses de mutuelle ou d'assurance perte d'emploi
-    public var workBrutIncome    : Double {
-        switch workIncome {
-            case .salary(let brutSalary, _, _, _, _):
-                return brutSalary
-            case .turnOver(let BNC, _):
-                return BNC
-            case .none:
-                return 0
-        }
+    public var workBrutIncome : Double {
+        WorkIncomeManager().workBrutIncome(from: workIncome)
     }
     /// ACTIVITE: cause de cessation d'activité
     @Published public var causeOfRetirement: Unemployment.Cause = .demission
@@ -100,6 +94,8 @@ public final class Adult: Person {
     public var ageOfRetirementComp         : DateComponents { // computed
         Date.calendar.dateComponents([.year, .month, .day], from: birthDateComponents, to: dateOfRetirementComp)
     } // computed
+      /// ACTIVITE: Activités professionnelles annexes générant du revenu
+    @Published public var sideWorks : [SideWork]?
 
     /// CHOMAGE
     @Published public var layoffCompensationBonified : Double? // indemnité accordée par l'entreprise > légal (supra-légale)
@@ -136,7 +132,8 @@ public final class Adult: Person {
         - Pension liquidation - date: \(dateOfPensionLiquid.stringMediumDate)
         - Nombre d'enfants: \(nbOfChildBirth)
         - Option fiscale à la succession: \(String(describing: fiscalOption))
-        - Revenu:\(workIncome?.description.withPrefixedSplittedLines("  ") ?? "aucun")\n
+        - Revenu d'activité principale:\n\(workIncome?.description.withPrefixedSplittedLines("    ") ?? "aucun\n")
+        - Revenus d'activités annexes:\n\(sideWorks?.description.withPrefixedSplittedLines("  ") ?? "aucun\n")\n
         """
     }
     
@@ -173,6 +170,9 @@ public final class Adult: Person {
         lastKnownAgircPensionSituation =
             try container.decode(RegimeAgircSituation.self,
                                  forKey: .lastKnownAgircPensionSituation)
+        sideWorks =
+        try container.decode([SideWork]?.self,
+                             forKey: .sideWorks)
         // initialiser avec la valeur moyenne déterministe
         workIncome =
             try container.decode(WorkIncomeType.self,
@@ -247,36 +247,20 @@ public final class Adult: Person {
 
     /// Revenu net de feuille de paye, net de charges sociales et mutuelle obligatore
     public final func workNetIncome(using model: Model) -> Double {
-        switch workIncome {
-            case .salary(_, _, let netSalary, _, _):
-                return netSalary
-            case .turnOver(let BNC, _):
-                return model.fiscalModel.turnoverTaxes.net(BNC)
-            case .none:
-                return 0
-        }
+        WorkIncomeManager().workNetIncome(from: workIncome,
+                                          using: model.fiscalModel)
     }
 
     /// Revenu net de feuille de paye et de mutuelle facultative ou d'assurance perte d'emploi
     public final func workLivingIncome(using model: Model) -> Double {
-        switch workIncome {
-            case .salary(_, _, let netSalary, _, let charge):
-                return netSalary - charge
-            case .turnOver(let BNC, let charge):
-                return model.fiscalModel.turnoverTaxes.net(BNC) - charge
-            case .none:
-                return 0
-        }
+        WorkIncomeManager().workLivingIncome(from: workIncome,
+                                             using: model.fiscalModel)
     }
 
     /// Revenu taxable à l'IRPP
     public final func workTaxableIncome(using model: Model) -> Double {
-        switch workIncome {
-            case .none:
-                return 0
-            default:
-                return model.fiscalModel.incomeTaxes.taxableIncome(from: workIncome!)
-        }
+        WorkIncomeManager().workTaxableIncome(from: workIncome,
+                                              using: model.fiscalModel)
     }
 
     /// Définir le nombre d'enfants nés
@@ -323,17 +307,37 @@ public final class Adult: Person {
         isAlive(atEndOf: year) && (yearOfDependency <= year)
     }
     
-    /// Revenu net de charges pour vivre et revenu taxable à l'IRPP
+    /// Revenu net de charges pour vivre et revenu taxable à l'IRPP.
+    /// Incluant les revenus d'activités annexes.
     /// - Parameter year: année
-    public final func workIncome(during year : Int,
-                                 using model : Model)
+    public final func totalWorkIncome(during year : Int,
+                                      using model : Model)
     -> (net: Double, taxableIrpp: Double) {
-        guard isActive(during: year) else {
-            return (0, 0)
+
+        var income = (net: 0.0, taxableIrpp: 0.0)
+        let workIncomeManager = WorkIncomeManager()
+
+        // revenu de l'activité professionnelle principale
+        if isActive(during: year)  {
+            let nbWeeks = (dateOfRetirementComp.year == year ? dateOfRetirement.weekOfYear.double() : 52)
+            let workLivingIncome = workIncomeManager.workLivingIncome(from : workIncome,
+                                                                      using: model.fiscalModel)
+            let workTaxableIncome = workIncomeManager.workTaxableIncome(from : workIncome,
+                                                                        using: model.fiscalModel)
+            income.net         += workLivingIncome  * nbWeeks / 52
+            income.taxableIrpp += workTaxableIncome * nbWeeks / 52
         }
-        let nbWeeks = (dateOfRetirementComp.year == year ? dateOfRetirement.weekOfYear.double() : 52)
-        return (net         : workLivingIncome(using: model)  * nbWeeks / 52,
-                taxableIrpp : workTaxableIncome(using: model) * nbWeeks / 52)
+
+        // revenu des activités professionnelles secondaires éventuelle
+        if let sideWorks {
+            let sideWorksIncome = workIncomeManager.workIncome(from   : sideWorks,
+                                                               during : year,
+                                                               using  : model.fiscalModel)
+            income.net         += sideWorksIncome.net
+            income.taxableIrpp += sideWorksIncome.taxableIrpp
+        }
+
+        return income
     }
     
     /// Réinitialiser les prioriétés variables des membres de manière aléatoires

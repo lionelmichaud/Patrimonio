@@ -13,6 +13,7 @@ import FamilyModel
 import HelpersView
 
 struct UnemployementDetailView: View {
+    var adult : Adult
 
     // MARK: - View Model
     
@@ -57,8 +58,7 @@ struct UnemployementDetailView: View {
     
     // MARK: - Properties
     
-    @EnvironmentObject private var model  : Model
-    @EnvironmentObject private var member : Person
+    @EnvironmentObject private var model : Model
     @State var viewModel = ViewModel()
     
     var body: some View {
@@ -119,7 +119,7 @@ struct UnemployementDetailView: View {
                 }
             }
         }
-        .navigationTitle("Allocation chômage de \(member.displayName)")
+        .navigationTitle("Allocation chômage de \(adult.displayName)")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: onAppear)
     }
@@ -127,7 +127,6 @@ struct UnemployementDetailView: View {
     // MARK: - Methods
     
     func onAppear() {
-        let adult = member as! Adult
         viewModel = ViewModel(from: adult, using: model)
     }
 }
@@ -139,7 +138,7 @@ struct UnemployementDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let aMember = family.members.items.first!
         
-        return UnemployementDetailView()
+        return UnemployementDetailView(adult: aMember as! Adult)
             .environmentObject(model)
             .environmentObject(aMember)
     }

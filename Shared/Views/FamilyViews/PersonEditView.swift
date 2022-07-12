@@ -35,29 +35,6 @@ struct PersonEditView: View {
     // Adult
     @StateObject private var adultViewModel = AdultViewModel()
     
-    /// Initialise le ViewModel à partir des propriété d'un membre existant
-    /// - Parameter member: le membre de la famille
-    init(withInitialValueFrom member : Person,
-         using model                 : Model) {
-        self.member = member
-        // Initialize Person ViewModel
-        _personViewModel = StateObject(wrappedValue: PersonViewModel(from: member))
-        
-        // Child
-        if let child = member as? Child {
-            _ageUniversity   = State(initialValue: child.ageOfUniversity)
-            _ageIndependance = State(initialValue: child.ageOfIndependence)
-        } else {
-            _ageUniversity   = State(initialValue: model.humanLifeModel.minAgeUniversity)
-            _ageIndependance = State(initialValue: model.humanLifeModel.minAgeIndependance)
-        }
-        
-        // Initialize Adult ViewModel
-        if let adult = member as? Adult {
-            _adultViewModel = StateObject(wrappedValue: AdultViewModel(from: adult))
-        }
-    }
-    
     var body: some View {
         VStack {
             /// Barre de titre
@@ -100,6 +77,33 @@ struct PersonEditView: View {
             .textFieldStyle(.roundedBorder)
         }
     }
+
+    // MARK: - Initializer
+
+    /// Initialise le ViewModel à partir des propriété d'un membre existant
+    /// - Parameter member: le membre de la famille
+    init(withInitialValueFrom member : Person,
+         using model                 : Model) {
+        self.member = member
+        // Initialize Person ViewModel
+        _personViewModel = StateObject(wrappedValue: PersonViewModel(from: member))
+
+        // Child
+        if let child = member as? Child {
+            _ageUniversity   = State(initialValue: child.ageOfUniversity)
+            _ageIndependance = State(initialValue: child.ageOfIndependence)
+        } else {
+            _ageUniversity   = State(initialValue: model.humanLifeModel.minAgeUniversity)
+            _ageIndependance = State(initialValue: model.humanLifeModel.minAgeIndependance)
+        }
+
+        // Initialize Adult ViewModel
+        if let adult = member as? Adult {
+            _adultViewModel = StateObject(wrappedValue: AdultViewModel(from: adult))
+        }
+    }
+
+    // MARK: - Methods
     
     /// Applique les modifications: recopie le ViewModel dans les propriétés d'un membre existant
     func applyChanges() {
@@ -126,166 +130,6 @@ struct PersonEditView: View {
         uiState.resetSimulationView()
         
         dismiss()
-    }
-}
-
-// MARK: - Saisie Adult
-struct AdultEditView : View {
-    var authorizeDeathAgeModification: Bool
-
-    @ObservedObject var personViewModel : PersonViewModel
-    @ObservedObject var adultViewModel  : AdultViewModel
-    
-    var body: some View {
-        Group {
-            // Section scénario
-            ScenarioSection(authorizeDeathAgeModification : authorizeDeathAgeModification,
-                            personViewModel               : personViewModel,
-                            adultViewModel                : adultViewModel)
-            
-            // Section activité
-            ActivitySection(adultViewModel: adultViewModel)
-            
-            // Section retraite
-            RetirementEditView(personViewModel : personViewModel,
-                              adultViewModel   : adultViewModel)
-            
-            // Section dépendance
-            DepedanceSection(adultViewModel: adultViewModel)
-        }
-    }
-}
-
-// MARK: - Saisie Adult / Section Scenario
-private struct ScenarioSection: View {
-    var authorizeDeathAgeModification: Bool
-
-    @ObservedObject var personViewModel : PersonViewModel
-    @ObservedObject var adultViewModel  : AdultViewModel
-
-    var body: some View {
-        Section {
-            if authorizeDeathAgeModification {
-                Stepper(value: $personViewModel.deathAge, in: Date().year - personViewModel.birthDate.year ... 100) {
-                    HStack {
-                        Text("Age de décès estimé ")
-                        Spacer()
-                        Text("\(personViewModel.deathAge) ans").foregroundColor(.secondary)
-                    }
-                }
-            }
-            HStack {
-                Text("Option fiscale retenue en cas d'héritage")
-                Spacer()
-                CasePicker(pickedCase: $adultViewModel.fiscalOption, label: "Option fiscale retenue en cas d'héritage")
-                    .pickerStyle(.segmented)
-            }
-        } header: {
-            Text("SCENARIO").font(.subheadline)
-        }
-    }
-}
-
-// MARK: - Saisie Adult / Section Dépendance
-struct DepedanceSection: View {
-    @ObservedObject var adultViewModel: AdultViewModel
-    
-    var body: some View {
-        Section {
-            Stepper(value: $adultViewModel.nbYearOfDepend, in: 0 ... 15) {
-                HStack {
-                    Text("Nombre d'année de dépendance ")
-                    Spacer()
-                    Text("\(adultViewModel.nbYearOfDepend) ans").foregroundColor(.secondary)
-                }
-            }
-        } header: {
-            Text("DEPENDANCE")
-        }
-    }
-}
-
-// MARK: - Saisie Adult / Section Activité
-struct ActivitySection: View {
-    @ObservedObject var adultViewModel: AdultViewModel
-    
-    var body: some View {
-        Section {
-            RevenueEditView(adultViewModel: adultViewModel)
-            EndOfWorkingPeriodEditView(adultViewModel: adultViewModel)
-        } header: {
-            Text("ACTIVITE")
-        }
-    }
-}
-
-// MARK: - Saisie Adult / Section Activité / Saisie des revenus
-private struct RevenueEditView : View {
-    @ObservedObject var adultViewModel: AdultViewModel
-    
-    var body: some View {
-        let salary = adultViewModel.revIndex == WorkIncomeType.salaryId
-        
-        return Group {
-            CaseWithAssociatedValuePicker<WorkIncomeType>(caseIndex: $adultViewModel.revIndex, label: "")
-                .pickerStyle(.segmented)
-            if salary {
-                AmountEditView(label    : "Salaire brut",
-                               amount   : $adultViewModel.revenueBrut,
-                               validity : .poz)
-                AmountEditView(label    : "Salaire net de feuille de paye",
-                               amount   : $adultViewModel.revenueNet,
-                               validity : .poz)
-                AmountEditView(label    : "Salaire imposable",
-                               amount   : $adultViewModel.revenueTaxable,
-                               validity : .poz)
-                AmountEditView(label    : "Coût de la mutuelle (protec. sup.)",
-                               amount   : $adultViewModel.insurance,
-                               validity : .poz)
-                DatePicker(selection           : $adultViewModel.fromDate,
-                           in                  : 50.years.ago!...Date.now,
-                           displayedComponents : .date,
-                           label               : { HStack { Text("Date d'embauche"); Spacer() } })
-            } else {
-                AmountEditView(label    : "BNC",
-                               amount   : $adultViewModel.revenueBrut,
-                               validity : .poz)
-                AmountEditView(label    : "Charges (assurance, frais bancaires, services, CFE)",
-                               amount   : $adultViewModel.insurance,
-                               validity : .poz)
-            }
-        }
-    }
-}
-
-// MARK: - Saisie Adult / Section Activité / Saisie fin de période d'activité professionnelle
-private struct EndOfWorkingPeriodEditView: View {
-    @ObservedObject var adultViewModel: AdultViewModel
-    
-    var body: some View {
-        DatePicker(selection           : $adultViewModel.dateRetirement,
-                   displayedComponents : .date,
-                   label               : { HStack { Text("Date de cessation d'activité"); Spacer() } })
-        //                    .onChange(of: adultViewModel.dateRetirement) { newState in
-        //                        if (newState > (self.member as! Adult).dateOfAgircPensionLiquid) ||
-        //                            (newState > (self.member as! Adult).dateOfPensionLiquid) {
-        //                            self.alertItem = AlertItem(title         : Text("La date de cessation d'activité est postérieure à la date de liquiditaion d'une pension de retraite"),
-        //                                                       dismissButton : .default(Text("OK")))
-        //                        }
-        //                    }
-        //                    .alert(item: $alertItem) { alertItem in myAlert(alertItem: alertItem) }
-        CasePicker(pickedCase : $adultViewModel.causeOfRetirement,
-                   label      : "Cause")
-        .pickerStyle(.segmented)
-        if adultViewModel.causeOfRetirement != Unemployment.Cause.demission {
-            Toggle(isOn: $adultViewModel.hasAllocationSupraLegale, label: { Text("Indemnité de licenciement non conventionnelle (supra convention)") })
-            if adultViewModel.hasAllocationSupraLegale {
-                AmountEditView(label    : "Montant total brut",
-                               amount   : $adultViewModel.allocationSupraLegale,
-                               validity : .poz)
-                .padding(.leading)
-            }
-        }
     }
 }
 
@@ -363,66 +207,6 @@ struct PersonEditView_Previews: PreviewProvider {
                 .environmentObject(TestEnvir.patrimoine)
                 .environmentObject(TestEnvir.simulation)
                 .environmentObject(aChild)
-        }
-    }
-}
-
-struct AdultEditView_Previews: PreviewProvider {
-    static var previews: some View {
-        TestEnvir.loadTestFilesFromBundle()
-        return Form {
-            AdultEditView(authorizeDeathAgeModification : true,
-                          personViewModel               : PersonViewModel(),
-                          adultViewModel                : AdultViewModel())
-                .environmentObject(TestEnvir.dataStore)
-                .environmentObject(TestEnvir.model)
-                .environmentObject(TestEnvir.uiState)
-                .environmentObject(TestEnvir.family)
-                .environmentObject(TestEnvir.expenses)
-                .environmentObject(TestEnvir.patrimoine)
-                .environmentObject(TestEnvir.simulation)
-        }
-    }
-}
-
-struct ScenarioSection_Previews: PreviewProvider {
-    static var previews: some View {
-        Form {
-            ScenarioSection(authorizeDeathAgeModification : true,
-                            personViewModel               : PersonViewModel(),
-                            adultViewModel                : AdultViewModel())
-        }
-    }
-}
-
-struct ActivitySection_Previews: PreviewProvider {
-    static var previews: some View {
-        Form {
-            ActivitySection(adultViewModel: AdultViewModel())
-        }
-    }
-}
-
-struct RevenueEditView_Previews: PreviewProvider {
-    static var previews: some View {
-        Form {
-            RevenueEditView(adultViewModel: AdultViewModel())
-        }
-    }
-}
-
-struct EndOfWorkingPeriodEditView_Previews: PreviewProvider {
-    static var previews: some View {
-        Form {
-            EndOfWorkingPeriodEditView(adultViewModel: AdultViewModel())
-        }
-    }
-}
-
-struct DepedanceSection_Previews: PreviewProvider {
-    static var previews: some View {
-        Form {
-            DepedanceSection(adultViewModel: AdultViewModel())
         }
     }
 }
