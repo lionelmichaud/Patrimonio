@@ -8,6 +8,8 @@
 import SwiftUI
 import Persistence
 import LifeExpense
+import EconomyModel
+import SocioEconomyModel
 import ModelEnvironment
 import PatrimoineModel
 import FamilyModel
@@ -46,61 +48,82 @@ struct KpiTableView: View {
         Les ? signifient que l'indicateur de performance n'a pas pu être calculé.
         """
 
+    private var adultsName: [String] {
+        family.adultsName
+    }
+
+    private var selectedLine: SimulationResultLine? {
+        guard let selection else { return nil }
+        return simulation.monteCarloResultTable.filter { line in
+            line.id == selection
+        }.first
+    }
+
     var body: some View {
-        EmptyView()
-//        Table(simulation.monteCarloResultTable.filtered(with: filter),
-//              selection: $selection,
-//              sortOrder: $sortRunOrder) {
-//            // Colonne Run
-//            TableColumn("Run number", value:\.runNumber) { line in
-//                Text(String(line.runNumber))
-//                    .italic()
-//                    .foregroundColor(colorOfRun(withTheseKpis: line.dicoOfKpiResults))
-//                    .frame(
-//                        maxWidth: .infinity,
-//                        maxHeight: .infinity,
-//                        alignment: .leading
-//                    )
-//                    .contentShape(Rectangle())
-//                    .contextMenu {
-//                        Button(action: { replay(thisRun: line) }) { 
-//                            Label("Rejouer", systemImage: "arrowtriangle.forward.circle")
-//                        }
-//                    }
+        //        EmptyView()
+        Table(simulation.monteCarloResultTable.filtered(with: filter),
+              selection: $selection,
+              sortOrder: $sortRunOrder) {
+            // Colonne Run
+            TableColumn("Run", value:\.runNumber) { line in
+                Text(String(line.runNumber))
+                    .italic()
+                    .foregroundColor(colorOfRun(withTheseKpis: line.dicoOfKpiResults))
+            }
+
+            //            ForEach(adultsName, id: \.self) { name in
+            //            TableColumn("Décès " + family.adults.first!.name.formatted(.abbreviated)) { line in
+            TableColumn("Décès ") { line in
+                Text(String(line.dicoOfAdultsRandomProperties[adultsName.first!]!.ageOfDeath))
+            }
+//            TableColumn("DécèsVM") { line in
+//                Text(String(line.dicoOfAdultsRandomProperties[adultsName.last!]!.ageOfDeath))
 //            }
-//            TableColumn("Run number", value:\.runNumber) { line in
-//                Text(String(line.runNumber))
-//                    .italic()
-//                    .foregroundColor(colorOfRun(withTheseKpis: line.dicoOfKpiResults))
+            //            }
+
+            TableColumn("Inflation") { line in
+                Text(line.dicoOfEconomyRandomVariables[Economy.RandomVariable.inflation]?.percentString(digit: 1) ?? "NaN")
+            }
+
+            TableColumn("Tx action") { line in
+                Text(line.dicoOfEconomyRandomVariables[Economy.RandomVariable.stockRate]?.percentString(digit: 1) ?? "NaN")
+            }
+
+            TableColumn("Tx oblig") { line in
+                Text(line.dicoOfEconomyRandomVariables[Economy.RandomVariable.securedRate]?.percentString(digit: 1) ?? "NaN")
+            }
+
+//            TableColumn("Deval. pension") { line in
+//                Text((line.dicoOfSocioEconomyRandomVariables[SocioEconomy.RandomVariable.pensionDevaluationRate]?.percentString(digit: 1) ?? "NaN"))
 //            }
-//        }
-//              .onChange(of: sortRunOrder) { newOrder in
-//                  simulation.monteCarloResultTable.sort(using: newOrder)
-//              }
-//              .padding(.top)
-//              .navigationTitle("Résultats des Runs de la Simulation")
-//              .navigationBarTitleDisplayMode(.inline)
-//              .toolbar(content: myToolBarContent)
+        }
+              .onChange(of: sortRunOrder) { newOrder in
+                  simulation.monteCarloResultTable.sort(using: newOrder)
+              }
+              .padding(.top)
+              .toolbar(content: myToolBarContent)
+        //              .navigationTitle("Résultats des Runs de la Simulation")
+              .navigationBarTitleDisplayMode(.inline)
     }
 
     // MARK: - Methods
 
     @ToolbarContentBuilder
     func myToolBarContent() -> some ToolbarContent {
-        // menu de filtrage
         ToolbarItemGroup(placement: .navigationBarLeading) {
+            // menu de filtrage
             Menu {
                 Picker(selection: $filter, label: Text("Filtering options")) {
                     Label("Tous les résultats", systemImage: "checkmark.circle.fill").tag(RunFilterEnum.all)
                     Label("Résultats négatifs", systemImage: "xmark.octagon.fill").tag(RunFilterEnum.someBad)
                     Label("Résultats indéterminés", systemImage: "questionmark.circle").tag(RunFilterEnum.somUnknown)
                 }
+            } label: {
+                Image(systemName: "loupe")
+                    .imageScale(.large)
+                    .padding(.leading)
             }
-        label: {
-            Image(systemName: "loupe")
-                .imageScale(.large)
-                .padding(.leading)
-        }
+
             // sauvegarde du tableau
             Button(action: saveGrid ) {
                 HStack(alignment: .center) {
@@ -111,6 +134,14 @@ struct KpiTableView: View {
                 }
             }
             .disabled(dataStore.activeDossier == nil)
+
+            // rejeu du run sélectionné dans le tableau
+            Button {
+                replay(thisRun: selectedLine!)
+            } label: {
+                Label("Rejouer", systemImage: "arrowtriangle.forward.circle")
+            }
+            .disabled(selection == nil)
         }
 
         ToolbarItemGroup(placement: .navigationBarTrailing) {
